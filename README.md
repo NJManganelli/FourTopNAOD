@@ -1,25 +1,6 @@
 # FourTopNAOD
 UC Riverside Four Top Analysis in NanoAOD format (2016 validation, 2017 and 2018 data analysis)
 
-	#CMSSW ToolChain not yet supported:
-	#(DO ONCE:)
-	#To set up a CMSSW release (94X for 2017 data and MC):
-	#source $VO_CMS_SW_DIR/cmsset_default.sh #bash shell on T2 Belgium Mx machines (or .csh)
-	##source /cvmfs/cms.cern.ch/cmsset_default.sh #bash shell on LX Plus machines (or .csh)
-	#export SCRAM_ARCH=slc6_amd64_gcc630 #If server still runs Scientific Linux (CERN) 6, check by inspecting /etc/system-release
-	#cmsrel CMSSW_X_Y_Z #Example 94X release: CMSSW_9_4_9
-	#
-	#cd $CMSSW_BASE/src
-	#cmsenv
-	#
-	#git clone https://github.com/cms-nanoAOD/nanoAOD-tools.git NanoAODTools
-	#git clone 
-	#
-	#
-	#(DO EVERY NEW SESSION:)
-	#cd CMSSW_X_Y_Z/src #Release you chose earlier
-	#cmsenv
-
 Root/Python or Mixed Toolchain:
 (DO ONCE:)
 (Intall Python 2.7 and recent ROOT release OR CMSSW Release)
