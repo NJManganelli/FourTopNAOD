@@ -3,7 +3,7 @@ UC Riverside Four Top Analysis in NanoAOD format (2016 validation, 2017 and 2018
 
 Please read here:
 https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookNanoAOD#How_to_check_out_the_code_and_pr
-cmsDriver.py can be used to create barebones configurations, as in documentation above
+cmsDriver.py can be used to create barebones configurations, as in documentation above, for producing NanoAOD from Mini
 
 Centrally Produced NanoAOD Campaigns:
 80X MC + data: https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=%2F*%2F*05Feb2018*%2FNANOAOD*
