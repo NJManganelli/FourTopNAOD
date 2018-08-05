@@ -7,9 +7,10 @@ cmsDriver.py can be used to create barebones configurations, as in documentation
 
 Centrally Produced NanoAOD Campaigns:
 80X MC + data: https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=%2F*%2F*05Feb2018*%2FNANOAOD*
+80X Run2016 data: https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=%2F*%2F*05Feb2018*%2FNANOAOD
 94X MC: https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=%2F*%2F*12Apr2018*%2FNANOAODSIM
 94X data: https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=%2F*%2F*31Mar2018*%2FNANOAOD
-94X data not necessarily the most recently processed
+94X data not necessarily the most recently processed!
 
 Note about GitHub source code:
 There are two collections of NanoAOD source code; one is maintained within cms-sw, and the other within cms-nanoAOD.
