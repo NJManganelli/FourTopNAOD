@@ -1,6 +1,9 @@
 # FourTopNAOD
 UC Riverside Four Top Analysis in NanoAOD format (2016 validation, 2017 and 2018 data analysis)
 
+Please read here:
+https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookNanoAOD#How_to_check_out_the_code_and_pr
+
 Root/Python or Mixed Toolchain:
 (DO ONCE:)
 (Intall Python 2.7 and recent ROOT release OR CMSSW Release)
