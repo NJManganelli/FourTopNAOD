@@ -5,3 +5,6 @@ __init__.py
 #*#
 *~
 data/*
+test/scratch.ipynb
+test/tagVarAdd.ipynb
+test/.ipynb_checkpoints
