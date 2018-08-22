@@ -68,4 +68,4 @@ A stable tag of this release can be grabbed by, following the clone of this repo
 git checkout tags/<Tag-version> -b branchedFrom<Tag-version>
 
 Tag-Versions:
-V0.2	- demonstrates accessing collections, triggers, MET filters, etc. in basicAccessAndLoop.ipynb and dataTrigAndJson.ipynb
+v0.2	- demonstrates accessing collections, triggers, MET filters, etc. in basicAccessAndLoop.ipynb and dataTrigAndJson.ipynb
