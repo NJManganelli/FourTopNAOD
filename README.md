@@ -45,3 +45,27 @@ Root/Python or Mixed Toolchain:
 	(Case: CMSSW)
 	       cd CMSSW_X_Y_Z/src
 	       cmsenv
+
+####################################
+###### Using Python Notebooks ######
+####################################
+A python notebook can be started by opening another terminal, and executing the command:
+ssh -L localhost:4444:localhost:4444 <NiceLogin>@lxplus.cern.ch
+Establishing cmsenv (new session) as above
+Getting grid proxy (if accessing root files stored on servers, using CRAB, etc):
+voms-proxy-init -voms cms
+Navigate to:
+/path/to/notebook/directory
+execute:
+jupyter-notebook --no-browser --port=4444 --ip=127.0.0.1
+When it produces a token, paste in your webbrowser to connect to homepage, and open one of the notebooks or start a new one
+
+########################
+###### Stable Tag ######
+########################
+A stable tag of this release can be grabbed by, following the clone of this repository, checking out a stable tag and simultaneously creating a branch
+
+git checkout tags/<Tag-version> -b branchedFrom<Tag-version>
+
+Tag-Versions:
+V0.2	- demonstrates accessing collections, triggers, MET filters, etc. in basicAccessAndLoop.ipynb and dataTrigAndJson.ipynb
