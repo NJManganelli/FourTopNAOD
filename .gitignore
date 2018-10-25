@@ -8,4 +8,6 @@ data/*
 test/scratch.ipynb
 test/tagVarAdd.ipynb
 test/.ipynb_checkpoints
+StandaloneExample/.ipynb_checkpoints
 test/*.root*
+StandaloneExample/*.root*
