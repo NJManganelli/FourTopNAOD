@@ -1,10 +1,11 @@
-#Import Python 3-style division, print function, and 
+#Import Python 3-style division, print function
 from __future__ import (division, print_function)
 
 import ROOT 
 from importlib import import_module
 
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor 
+from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
 class ExampleModule(Module): #This line defines our class ExampleModule, and in parenthesis, we indicate it Inherits from the Module class we imported above.
@@ -13,73 +14,60 @@ class ExampleModule(Module): #This line defines our class ExampleModule, and in 
 
     def analyze(self, event):
         """process event, return True (go to next module) or False (fail, go to next event)"""
-        #Increment the counter each time we process an event
+        #First N events
         self.counting += 1 
-        
-        #Here, we return False after counting reaches a certain point, which effectively "Skips" to the next event until it reaches end of file.
-        if self.counting > 7:
+        if self.counting > 5:
             return False
         
-        #For the first N events, before this limit, we'll continue to the below code, so that we can print out the Run, Lumi, Event, and number of leptons/jets
-        run = getattr(event, "run") #run = event.run works equally well, but this method is more powerful
+        run = getattr(event, "run")
         evt = getattr(event, "event")
         lumi = getattr(event, "luminosityBlock")
 
-        #This function formats a string and prints it out
-        print("Run: {0:>8d} LuminosityBlock: {1:>8d} Event: {2:>8d}".format(run, lumi, evt) )
+        print("================================================================================================")
+        print("Run: {0:>8d} \t LuminosityBlock: {1:>8d} \t Event: {2:>8d} \n".format(run, lumi, evt) )
 
-        nEles = getattr(event, "nElectron")
-        nMus = getattr(event, "nMuon")
-        nTaus = getattr(event, "nTau")
-        nJets = getattr(event, "nJet")
-    
+        ###########################################
+        ###### Event Collections and Objects ######
+        ###########################################
         electrons = Collection(event, "Electron")
-        photons = Collection(event, "Photon")
+        #photons = Collection(event, "Photon")
         muons = Collection(event, "Muon")
-        taus = Collection(event, "Tau")
         jets = Collection(event, "Jet")
         met = Object(event, "MET")
+        
+        nEles = len(electrons)
+        nMus = len(muons)
+        nJets = len(jets)
+    
+        #The format used here is: {FormatIndex : JustificationType ReservedSpace DataType
+        #    Thus {1:>3d} means this place should have the value of nMus(nEles is index 0 in .format( arg0, arg1, arg2, arg3) inserted, 
+        #    it should be right justified (>), have a width of 3 characters,  and it's an integer (d) rather than a string (s) or float/double (f)
+        # See: https://docs.python.org/2/library/string.html#format-string-syntax
+        print("\t Electrons: {0:>3d} \t Muons: {1:>3d} \t Jets: {2:>3d} \n".format(nEles, nMus, nJets) )
 
-        HLT = Object(event, "HLT") 
-        Filters = Object(event, "Flag") 
-        PV = Object(event, "PV")
-        SV = Collection(event, "SV")
-        genParts = Collection(event, "GenPart")
-        genJets = Collection(event, "GenJet")
-        genFatJets = Collection(event, "GenJetAK8")
+        # Create a LorentzVector for the event 4-momentum:
+        eventSum = ROOT.TLorentzVector()
 
-        print("PV  X: {0: >5.3f} Y: {1: >5.3f} Z: {2:5.3f} nDoF: {3: >5f} Chi^2: {4: >5.3f}".format(
-            PV.x,PV.y, PV.z, PV.ndof, PV.chi2))
-        if len(SV) > 0:   
-            print("nSV: {0: >3d} SV[0] Decay Length:{1: >5.3f}".format(len(SV), SV[0].dlen ))
-        else:
-            print("nSV: {0: >3d}".format(len(SV)))
-        print("{0:>5s} {1:>10s} {2:>10s} {3:>10s}".format("Muon", "Pt", "Eta", "Phi"))
-        for nm, lep in enumerate(muons) :
-            eventSum += lep.p4()
-            #format_spec ::=  [[fill]align][sign][#][0][width][,][.precision][type]
-            print("{0:*<5d} {1:>10.4f} {2:>+10.3f} {3:>+10.3f}".format(nm+1, lep.pt, lep.eta, lep.phi))
-        print("{0:>5s} {1:>10s} {2:>10s} {3:>10s}".format("Electron", "Pt", "Eta", "Phi"))
-        for ne, lep in enumerate(electrons) :
-            eventSum += lep.p4()
-            print("{0:*^5d} {1:>10.4f} {2:> 10.3f} {3:> 10.3f}".format(ne+1, lep.pt, lep.eta, lep.phi))
-        #for j in filter(self.jetSel,jets):
-        print("{0:>5s} {1:>10s} {2:>10s} {3:>10s}".format("Jet", "Pt", "Eta", "Phi"))
-        for nj, j in enumerate(jets):
-            eventSum += j.p4()
-            print("{0: >5d} {1:>10.4f} {2:>-10.3f} {3:>-10.3f}".format(nj+1, j.pt, j.eta, j.phi))
-        #for nt, trig in enumerate(triggers):
-        #    if(nt < 5): print("TypeName: " + trig.GetTypeName())
-        #idea: create list of names for triggers, then check bits with "triggers.name for name in names"
-        #Use getattr(triggers, variablename) to access!
-        passTrig=["PFMETNoMu90_PFMHTNoMu90_IDTight"]
-        for trig in passTrig:
-            print("HLT_" + str(trig) + " Trigger: " + str(getattr(HLT, trig)) )
-        passFilter=["HBHENoiseFilter", "HBHENoiseIsoFilter", "EcalDeadCellTriggerPrimitiveFilter", 
-                    "globalSuperTightHalo2016Filter", "goodVertices", "METFilters"]
-        for fltr in passFilter:
-            print("Flag_" + str(fltr) + " Filter: " + str(getattr(Filters, fltr)))
-        print("Event Mass: {:<10.4f}\n".format(eventSum.M()))
+        #Use the enumerate() function to get both an index and the iterated item in the collection
+        print("\n{0:>5s} {1:>10s} {2:>10s} {3:>10s}".format("Muon", "Pt", "Eta", "Phi"))
+        for nm, muon in enumerate(muons) :
+            eventSum += muon.p4()
+            print("{0:*<5d} {1:>10.4f} {2:>+10.3f} {3:>+10.3f}".format(nm+1, muon.pt, muon.eta, muon.phi))
+
+        print("\n{0:>5s} {1:>10s} {2:>10s} {3:>10s}".format("Ele", "Pt", "Eta", "Phi"))
+        for ne, ele in enumerate(electrons) :
+            eventSum += ele.p4()
+            print("{0:*^5d} {1:>10.4f} {2:> 10.3f} {3:> 10.3f}".format(ne+1, ele.pt, ele.eta, ele.phi))
+
+        print("\n{0:>5s} {1:>10s} {2:>10s} {3:>10s}".format("Jet", "Pt", "Eta", "Phi"))
+        for nj, jet in enumerate(jets):
+            eventSum += jet.p4()
+            print("{0: >5d} {1:>10.4f} {2:>-10.3f} {3:>-10.3f}".format(nj+1, jet.pt, jet.eta, jet.phi))
+
+        #Slightly different syntax for getting the Mass, Pt, etc. from a TLorentzVector
+        print("\n\nEvent Mass: {0:<10.4f} \t Event Pt: {1:<10.4f} \t Event Eta: {2:<10.4f} \t Event Phi: {3:10.4f}\n"
+              .format(eventSum.M(), eventSum.Pt(), eventSum.Eta(), eventSum.Phi() ) )
+        print("================================================================================================")
         return True
 
 #Try commenting the first one out and uncommenting the skim made in CH01
