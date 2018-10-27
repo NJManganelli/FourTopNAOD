@@ -1,4 +1,4 @@
-#Import Python 3-style division, print function, and 
+#Import Python 3-style division, print function
 from __future__ import (division, print_function)
 
 import ROOT 
