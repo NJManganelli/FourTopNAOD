@@ -19,6 +19,7 @@ class EventSelector(Module):
         self.Selection = overrideCriteria
         #boolean for inverting isolation cut
         self.invIso = invertIsolation
+        self.counter = 0
         pass
     def beginJob(self):
         #called by the postprocessor as beginJob() if not writing a histogram file
@@ -27,7 +28,7 @@ class EventSelector(Module):
             raise RuntimeError("No channel specified for EventSelector. Use EventSelector(channel) where channel = \"SL\", \"DL\"")
         if self.std_selection:
             if self.channel == "SL":
-                raise RuntimeError("No Implementation for Single-Lepton Channel yet exists")
+                raise NotImplementedError("No Implementation for Single-Lepton Channel yet exists")
             if self.channel == "DL":
                 #This could just be spun off, and always loaded externally, with a check that the name and channel match in some way
                 self.Selection = {
@@ -114,6 +115,9 @@ class EventSelector(Module):
         pass
     def analyze(self, event): #called by the eventloop per-event
         """process event, return True (go to next module) or False (fail, go to next event)"""
+        self.counter +=1
+        if (self.counter % 10) == 0:
+            print("Processed {0:2d} Events".format(self.counter))
         electrons = Collection(event, "Electron")
         muons = Collection(event, "Muon")
         jets = Collection(event, "Jet")
