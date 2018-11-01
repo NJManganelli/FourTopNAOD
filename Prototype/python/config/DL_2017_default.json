@@ -1,0 +1,71 @@
+{
+"Electron" : {
+  	     "Select" : {
+	     	      "Pt" : 25.0,
+		      "Eta" : 2.4,
+		      "IDType" : "Cutbased", #MVA available too
+		      "IDlevel" : "Medium"
+		      },
+	     "Veto" : {
+	     	    "Pt" : 25.0,
+		    "Eta" : 2.4,
+		    "IDType" : "Cutbased",
+		    "IDlevel" : "Veto"
+		    }
+	     },
+"Muon" : {
+       "Select" : {
+       		"Pt" : 20,
+		"Eta" : 2.4,
+		"RelIso" : 0.15,
+		"IDlevel" : "Medium"
+		},
+       "Veto" : {
+       	      "Pt" : 20,
+	      "Eta" : 2.4,
+	      "RelIso" : 0.25, #FIXME
+	      "IDlevel" : "Loose"
+	      }
+	 },
+"Jet" : {
+      "PtOthJet" : 30.0,
+      "PtBJet" : 25.0,
+      "Eta" : 2.4,
+      "JetID" : "Tight", #Only Tight and Tight Lepton Veto supported in 2017 and 2018
+      "bTag" : "btagCSVV2"  #btagDeepB and #Deep Flavour also available
+      "bTagWP" : "Medium",
+      "bTagThresh" : { #Fixed values like this could probably be separated in a different way from "parameters" that might get changed freq.
+      		   "btagCSVV2" : { "Loose" : "FIXME", "Medium" : 0.8838, "Tight" : "FIXME"},
+		   "btagDeepB" : { "Loose" : "FIXME", "Medium" : 0.4941, "Tight" : "FIXME"},
+		   "DeepFlav" : { "Loose" : "FIXME", "Medium" : "FIXME", "Tight" : "FIXME"} #FIXME - bad key name for Deep Flav
+		   },
+      "CleanType" : "PartonMatch" #This is implicit in using jetIDx references, otherwise use "DeltaR"
+      },
+"HLT" : {
+    "cutOnTrigs" : False, #FIXME, default True when triggers loaded
+    "chMuMu" : ["Placeholder", "List", "of", "trigger", "names"],
+    "chElMu" : ["Placeholder", "List", "of", "trigger", "names"],
+    "chElEl" : ["Placeholder", "List", "of", "trigger", "names"]
+    },
+"PV" : { 
+    "FIXME" : "Placeholder for Primary Vertex requirements" 
+    },
+"MET" : { 
+    #FIXME, default True 
+    "cutOnFilts" : False
+    },
+"Baseline" : {
+    "HT" : 500,
+    "nSelLep" : 2,
+    "nVetoLep" : 0,
+    "LowMassReson" : {
+        "Center" : 10.0, 
+        "HalfWidth" : 20.0
+        },
+    "ZMassReson" : {
+        "Center" : 91.0, 
+        "HalfWidth" : 15.0
+        }
+    },
+"InvertIsolation" : False
+}

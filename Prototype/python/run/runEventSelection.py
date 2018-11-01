@@ -21,7 +21,7 @@ p=PostProcessor(".",
                 #modules=[EventSelector("DL")],
                 modules=[DileptonEventSelector()],
                 noOut=False,
-                justcount=True,
+#                justcount=True,
 #                histFileName="histOut.root",
 #                histDirName="plots"
                 )
