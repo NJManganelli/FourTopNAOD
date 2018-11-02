@@ -5,6 +5,7 @@ __init__.py
 .#*
 #*#
 *~
+
 data/*
 test/scratch.ipynb
 test/tagVarAdd.ipynb
@@ -12,3 +13,4 @@ test/.ipynb_checkpoints
 StandaloneExamples/.ipynb_checkpoints
 test/*.root*
 StandaloneExamples/*.root*
+*.root*

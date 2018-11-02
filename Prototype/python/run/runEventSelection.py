@@ -6,7 +6,7 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 from importlib import import_module
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor
-from FourTopNAOD.Prototype.modules.eventselector import DileptonEventSelector
+from FourTopNAOD.Prototype.modules.eventselector import defaultEventSelector
 #from FourTopNAOD.Prototype.modules.eventselector import *
 
 preselection=None
@@ -19,7 +19,7 @@ p=PostProcessor(".",
                 branchsel=None,
                 jsonInput={1 : [[10000, 10001]]},
                 #modules=[EventSelector("DL")],
-                modules=[DileptonEventSelector()],
+                modules=[defaultEventSelector()],
                 noOut=False,
 #                justcount=True,
 #                histFileName="histOut.root",
