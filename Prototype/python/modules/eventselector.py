@@ -74,12 +74,14 @@ class EventSelector(Module):
         self.addObject(self.h_medCSVV2)
         pass
 
-    def endJob(self):
+#    def endJob(self):
+#       Module.endJob()
         #called once output has been written
         #Cannot override and use pass here if objects need to be written to a histFile
         #pass
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
+        pass
         #called by the eventloop at start of new inputFile
         #Module just passes
         #wrappedOutputTree only exists if noOut=False and events are written!
@@ -98,7 +100,7 @@ class EventSelector(Module):
             print("Processed {0:2d} Events".format(self.counter))
 
         PV = Object(event, "PV")
-        otherPV = Collection(event, "otherPV")
+        otherPV = Collection(event, "OtherPV")
         SV = Collection(event, "SV")
 
         electrons = Collection(event, "Electron")
@@ -112,7 +114,7 @@ class EventSelector(Module):
         #Trigger selection
         Triggers = { "MuMu" : ["Mu17_TrkIsoVVL_Mu8_TrkIsoVVL"],
                      "ElMu" : ["Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL",
-                               "Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL"],
+                               "Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL"],
                      "ElEl" : ["Ele23_Ele12_CaloIdL_TrackIdL_IsoVL"],
                      "Mu" : ["IsoMu24"]
                      }
@@ -152,8 +154,8 @@ class EventSelector(Module):
             self.MuTrig += 1
 
         #Early cut
-        if not (passMu or passMuMu or passElMu or passElEl):
-            return False
+#        if not (passMu or passMuMu or passElMu or passElEl):
+#            return False
 
         eventSum = ROOT.TLorentzVector()
         
@@ -183,51 +185,58 @@ class EventSelector(Module):
                 #Add lepton type, location, and charge to lists
                 lepType.append("Muon")
                 lepIndex.append(mInd)
-                leptonCharge.append(muon.charge)
+                lepCharge.append(muon.charge)
                 #Store the cross-link Id of any matching jet in a list for cross-cleaning later
                 crosslinkJetIdx.append(muon.jetIdx)
             
         for eInd, ele in enumerate(electrons):
             if ele.pt < self.cfg_eSelPt:
                 continue
-            if abs(ele.eta) > sefl.cfg_eSelEta:
+            if abs(ele.eta) > self.cfg_eSelEta:
                 continue
-            if getattr(ele, self.cfg_eIdType) == self.cfg_eIdSel:
+            if getattr(ele, self.cfg_eIdType) == self.cfg_eIdSelCut:
                 #count electron and lepton
                 nSelElectrons += 1
                 nSelLeptons += 1
                 #Add lepton type, location, and charge to lists
                 lepType.append("Electron")
                 lepIndex.append(eInd)
-                leptonCharge.append(ele.charge)
+                lepCharge.append(ele.charge)
                 #Store the cross-link Id of any matching jet in a list for cross-cleaning later
                 crosslinkJetIdx.append(ele.jetIdx)
-            elif getattr(ele, self.cfg_eIdType) == self.cfg_eIdExtra:
+            elif getattr(ele, self.cfg_eIdType) == self.cfg_eIdExtraCut:
                 #count veto-level electrons
                 nExtraLeptons += 1
 
         #Dilepton event selection cuts
         if nExtraLeptons > 0:
+            if self.verbose: print("1")
             return False
         if nSelLeptons != 2:
+            if self.verbose: print("[{0:d}]".format(nSelLeptons))
             return False
 
         #Opposite-sign charges
-        if (leptonCharge[0]*leptonCharge[1] > 0):
+        if (lepCharge[0]*lepCharge[1] > 0):
+            if self.verbose: print("3")
             return False
 
         #Same-flavor low mass and Z mass resonance veto
         if nSelMuons == 2:
             diLepMass = (muons[lepIndex[0]].p4() + muons[lepIndex[1]].p4()).M()
             if abs(diLepMass - self.cfg_lowMRes_cent) < self.cfg_lowMRes_hwidth:
+                if self.verbose: print("4")
                 return False
             if abs(diLepMass - self.cfg_ZMRes_cent) < self.cfg_ZMRes_hwidth:
+                if self.verbose: print("5")
                 return False
         if nSelElectrons == 2:
             diLepMass = (electrons[lepIndex[0]].p4() + electrons[lepIndex[1]].p4()).M()
             if abs(diLepMass - self.cfg_lowMRes_cent) < self.cfg_lowMRes_hwidth:
+                if self.verbose: print("4")
                 return False
             if abs(diLepMass - self.cfg_ZMRes_cent) < self.cfg_ZMRes_hwidth:
+                if self.verbose: print("5")
                 return False
 
 
@@ -270,12 +279,15 @@ class EventSelector(Module):
 
         #Cut events that don't have minimum number of b-tagged jets
         if nBJets < self.cfg_nBJetMin:
+            if self.verbose: print("6")
             return False
         #Cut events that don't have minimum number of selected, cross-cleaned jets
         if nBJets + nOthJets < self.cfg_nTotJetMin:
+            if self.verbose: print("7")
             return False
         #Cut events that don't have minimum value of HT #BUT was calculating HT only from selected jets right? cross-checking needed
         if HT < self.cfg_HTMin:
+            if self.verbose: print("8")
             return False
 
         #The event made it! Pass to next module/write out of PostProcessor
@@ -288,3 +300,4 @@ class EventSelector(Module):
 #DileptonEventSelector = lambda : EventSelector(channel="DL")
 #SingleLepEventSelector = lambda : EventSelector(channel="SL")
 defaultEventSelector = lambda : EventSelector(selectionConfig=None, verbose=False)
+loudEventSelector = lambda : EventSelector(selectionConfig=None, verbose=True)
