@@ -7,7 +7,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collect
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
 class EventSelector(Module):
-    def __init__(self, selectionConfig=None, verbose=False):
+    def __init__(self, selectionConfig=None, verbose=False, makeHistos=False, cutOnMET=True, cutOnTrigs=True, cutOnHT=True):
         #self.jetSel = jetSelection
         self.writeHistFile=True
 
@@ -21,9 +21,12 @@ class EventSelector(Module):
         #load the criteria for brevity
         self.CFG = selectionConfig
 
-        #choose whether we want verbose output
-        #No implementation yet
+        #choose whether we want verbose output or to produce cut histograms 
         self.verbose = verbose
+        self.makeHistos = makeHistos
+        self.cutOnMET = cutOnMET
+        self.cutOnTrigs = cutOnTrigs
+        self.cutOnHT = cutOnHT
 
         #event counters
         self.counter = 0
@@ -63,15 +66,25 @@ class EventSelector(Module):
         self.cfg_HTMin = 500
         self.cfg_nBJetMin = 2
         self.cfg_nTotJetMin = 4
+        self.cfg_minMET = 50
 
     def beginJob(self, histFile=None,histDirName=None):
         #if self.writeHistFile=False, called by the postprocessor as beginJob()
         #If self.writeHistFile=True, then called as beginJob(histFile=self.histFile,histDirName=self.histDirName)
         Module.beginJob(self,histFile,histDirName)
-        self.h_jet_map = ROOT.TH2F('h_jet_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
-        self.addObject(self.h_jet_map)
-        self.h_medCSVV2 = ROOT.TH1D('h_medCSVV2', ';Medium CSVV2 btags; Events', 5, 0, 5)
-        self.addObject(self.h_medCSVV2)
+        self.h_jSel_map = ROOT.TH2F('h_jSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
+        self.addObject(self.h_jSel_map)
+        self.h_jSel_pt = ROOT.TH1F('h_jSel_pt', ';Jet Pt; Events', 20, 20, 420)
+        self.addObject(self.h_jSel_pt)
+        self.h_jBSel_map = ROOT.TH2F('h_jBSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
+        self.addObject(self.h_jBSel_map)
+        self.h_jBSel_pt = ROOT.TH1F('h_jBSel_pt', ';Jet Pt; Events', 20, 20, 420)
+        self.addObject(self.h_jBSel_pt)
+        # self.h_medCSVV2 = ROOT.TH1D('h_medCSVV2', ';Medium CSVV2 btags; Events', 5, 0, 5)
+        # self.addObject(self.h_medCSVV2)
+        if self.makeHistos:
+            self.h_cutHisto = ROOT.TH1F('h_cutHisto', ';Pruning Point in Event Selection; Events', 10, 0, 10)
+            self.addObject(self.h_cutHisto)
         pass
 
 #    def endJob(self):
@@ -96,7 +109,7 @@ class EventSelector(Module):
     def analyze(self, event): #called by the eventloop per-event
         """process event, return True (go to next module) or False (fail, go to next event)"""
         self.counter +=1
-        if (self.counter % 10) == 0:
+        if (self.counter % 1000) == 0:
             print("Processed {0:2d} Events".format(self.counter))
 
         PV = Object(event, "PV")
@@ -110,8 +123,10 @@ class EventSelector(Module):
 
         HLT = Object(event, "HLT")
         #Filters = Object(event, "Flag") #For Data
-
-        #Trigger selection
+        
+        #########################
+        ### Trigger Selection ###
+        #########################
         Triggers = { "MuMu" : ["Mu17_TrkIsoVVL_Mu8_TrkIsoVVL"],
                      "ElMu" : ["Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL",
                                "Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL"],
@@ -152,10 +167,18 @@ class EventSelector(Module):
             self.ElElTrig += 1
         if passMu:
             self.MuTrig += 1
+            
+        ##########################
+        ### Early Cut on Trigs ###
+        ##########################
+        if not (passMu or passMuMu or passElMu or passElEl):
+            if self.makeHistos: self.h_cutHisto.Fill(0.5)
+            if self.cutOnTrigs: return False
 
-        #Early cut
-#        if not (passMu or passMuMu or passElMu or passElEl):
-#            return False
+        ###########
+        ### MET ###
+        ###########
+        if self.cutOnMET and met.pt < self.cfg_minMET: return False
 
         eventSum = ROOT.TLorentzVector()
         
@@ -211,14 +234,17 @@ class EventSelector(Module):
         #Dilepton event selection cuts
         if nExtraLeptons > 0:
             if self.verbose: print("1")
+            if self.makeHistos: self.h_cutHisto.Fill(1.5)
             return False
         if nSelLeptons != 2:
             if self.verbose: print("[{0:d}]".format(nSelLeptons))
+            if self.makeHistos: self.h_cutHisto.Fill(2.5)
             return False
 
         #Opposite-sign charges
         if (lepCharge[0]*lepCharge[1] > 0):
             if self.verbose: print("3")
+            if self.makeHistos: self.h_cutHisto.Fill(3.5)
             return False
 
         #Same-flavor low mass and Z mass resonance veto
@@ -226,17 +252,21 @@ class EventSelector(Module):
             diLepMass = (muons[lepIndex[0]].p4() + muons[lepIndex[1]].p4()).M()
             if abs(diLepMass - self.cfg_lowMRes_cent) < self.cfg_lowMRes_hwidth:
                 if self.verbose: print("4")
+                if self.makeHistos: self.h_cutHisto.Fill(4.5)
                 return False
             if abs(diLepMass - self.cfg_ZMRes_cent) < self.cfg_ZMRes_hwidth:
                 if self.verbose: print("5")
+                if self.makeHistos: self.h_cutHisto.Fill(5.5)
                 return False
         if nSelElectrons == 2:
             diLepMass = (electrons[lepIndex[0]].p4() + electrons[lepIndex[1]].p4()).M()
             if abs(diLepMass - self.cfg_lowMRes_cent) < self.cfg_lowMRes_hwidth:
                 if self.verbose: print("4")
+                if self.makeHistos: self.h_cutHisto.Fill(4.5)
                 return False
             if abs(diLepMass - self.cfg_ZMRes_cent) < self.cfg_ZMRes_hwidth:
                 if self.verbose: print("5")
+                if self.makeHistos: self.h_cutHisto.Fill(5.5)
                 return False
 
 
@@ -246,8 +276,13 @@ class EventSelector(Module):
         nOthJets = 0
         nClnOthJets = 0
         HT = 0.0
-        HT2M = 0.0
         H = 0.0
+        HT2M = 0.0
+        H2M = 0.0
+        HTRat = 0.0
+        HTH = 0.0
+
+        
         for jInd, jet in enumerate(jets):
             #Skip any jets that are below the threshold chosen (pass Loose: +1, pass Tight: +2 , pass TightLepVeto: +4
             #In 2017 data, pass Loose is always a fail (doesn't exist), so pass Tight and not TLV = 2, pass both = 6
@@ -263,32 +298,53 @@ class EventSelector(Module):
                 if self.cfg_jClnTyp == "PartonMatching":
                     if jInd not in crosslinkJetIdx:
                         nClnBJets += 1
+                        if self.makeHistos: self.h_jBSel_map.Fill(jet.eta, jet.phi)
+                        if self.makeHistos: self.h_jBSel_pt.Fill(jet.pt)
                         HT += jet.pt
+                        H += (jet.p4()).P()
+                        if nClnBJets > 2:
+                            HT2M += jet.pt
+                            H2M += (jet.p4()).P()
                         #Add BJets to collection here
                         #Add momentum to HT2M, HT, H here
-                if self.cfg_jClnTyp == "DeltaR":
+                elif self.cfg_jClnTyp == "DeltaR":
                     raise NotImplementedError("In eventselector class, in jet loop, selected cleaning type of DeltaR matching has not been implemented")
                     #if DeltaR(jet, lepton) < 0.4
                         #Need to import from the tools.py the DeltaR function to test between jets and leptons
                         #Add BJets to collection here
                         #Add momentum to HT2M, HT, H here
+                else:
+                    raise RuntimeError("The requested Lepton-Jet cross-cleaning algorithm [{0:s}] is not available."
+                                       "Please use \"PartonMatching\" or \"DeltaR\"".format(self.cfg_jClnTyp))
             elif jet.pt > self.cfg_jNSelPt:
                 nOthJets +=1
+                if self.makeHistos: self.h_jSel_map.Fill(jet.eta, jet.phi)
+                if self.makeHistos: self.h_jSel_pt.Fill(jet.pt)
                 HT += jet.pt
+                H += (jet.p4()).P()
+                HT2M += jet.pt
+                H2M += (jet.p4()).P() 
                 #Add non-B jets to collection here
 
         #Cut events that don't have minimum number of b-tagged jets
         if nBJets < self.cfg_nBJetMin:
             if self.verbose: print("6")
+            if self.makeHistos: self.h_cutHisto.Fill(6.5)
             return False
         #Cut events that don't have minimum number of selected, cross-cleaned jets
         if nBJets + nOthJets < self.cfg_nTotJetMin:
             if self.verbose: print("7")
+            if self.makeHistos: self.h_cutHisto.Fill(7.5)
             return False
         #Cut events that don't have minimum value of HT #BUT was calculating HT only from selected jets right? cross-checking needed
         if HT < self.cfg_HTMin:
             if self.verbose: print("8")
-            return False
+            if self.makeHistos: self.h_cutHisto.Fill(8.5)
+            if self.cutOnHT: return False
+
+        #Calculate HTRat and HTH, since more than 4 jets in the events reaching this point
+        HTH = HT/H
+        #HTRat = Pt of two highest pt jets / HT
 
         #The event made it! Pass to next module/write out of PostProcessor
         return True
@@ -299,5 +355,7 @@ class EventSelector(Module):
 #exampleModuleConstr = lambda : exampleProducer(jetSelection= lambda j : j.pt > 30) 
 #DileptonEventSelector = lambda : EventSelector(channel="DL")
 #SingleLepEventSelector = lambda : EventSelector(channel="SL")
-defaultEventSelector = lambda : EventSelector(selectionConfig=None, verbose=False)
-loudEventSelector = lambda : EventSelector(selectionConfig=None, verbose=True)
+defaultEventSelector = lambda : EventSelector()
+loudEventSelector = lambda : EventSelector(verbose=True)
+showyEventSelector = lambda : EventSelector(makeHistos=True)
+

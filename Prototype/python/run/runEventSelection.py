@@ -6,7 +6,7 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 from importlib import import_module
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor
-from FourTopNAOD.Prototype.modules.eventselector import defaultEventSelector, loudEventSelector 
+from FourTopNAOD.Prototype.modules.eventselector import defaultEventSelector, loudEventSelector, showyEventSelector, EventSelector
 #from FourTopNAOD.Prototype.modules.eventselector import *
 
 preselection="nJet > 4 && (nMuon + nElectron) > 1"
@@ -17,11 +17,19 @@ p=PostProcessor(".",
                 files,
                 cut=preselection,
                 branchsel=None,
-                jsonInput={1 : [[10000, 10010]]},
-                modules=[loudEventSelector()],
-#                justcount=True,
+                outputbranchsel=None,
+                postfix="_PostEvtSel",
+                jsonInput=None,
+#                jsonInput={1 : [[10000, 19000]]},
+                modules=[EventSelector(makeHistos=True, cutOnTrigs=False, cutOnMET=True, cutOnHT=True, verbose=False)],
+#                modules=[showyEventSelector()],
+                justcount=False,
+                provenance=True,
+                fwkJobReport=True,
+                haddFileName="hadded.root",
                 noOut=False,
                 histFileName="histOut.root",
-                histDirName="plots"
+                histDirName="plots",
+                compression="LZMA:9"
                 )
 p.run()
