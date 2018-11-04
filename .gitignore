@@ -7,10 +7,11 @@ __init__.py
 *~
 
 data/*
+Prototype/python/tools/fileloader.py_preTest
 test/scratch.ipynb
 test/tagVarAdd.ipynb
-test/.ipynb_checkpoints
-StandaloneExamples/.ipynb_checkpoints
+.ipynb_checkpoints
+.ipynb_checkpoints
 test/*.root*
 StandaloneExamples/*.root*
 *.root*
