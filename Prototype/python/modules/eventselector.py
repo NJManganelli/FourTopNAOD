@@ -30,43 +30,82 @@ class EventSelector(Module):
 
         #event counters
         self.counter = 0
+        self.maxEventsToProcess = -1
+
+        #Trigger counters
         self.MuMuTrig = 0
         self.ElMuTrig = 0
         self.ElElTrig = 0
         self.MuTrig = 0
 
         #cfg Electron criteria (later: load from configuration dictionary
-        self.cfg_eSelPt = 25.0 #min Pt for selection
+        #self.cfg_eSelPt = 25.0 #min Pt for selection
         #self.cfg_eVetoPt = 20 #"FIXME" not clear what pt requirements are CURRENTLY for all these leptons
-        self.cfg_eSelEta = 2.4 #Max Eta acceptance
-        self.cfg_eIdType = "cutBased"
-        self.cfg_eIdSelCut = 2 #loose
-        self.cfg_eIdExtraCut = 1 #veto
+        # self.cfg_eMaxEta = 2.4 #Max Eta acceptance
+        # self.cfg_eIdType = "cutBased"
+        # self.cfg_eIdSelCut = 2 #loose
+        # self.cfg_eIdExtraCut = 1 #veto
+
+        #Electron CFG loading from config file
+        self.cfg_eMaxEta = self.CFG["Electron"]["Common"]["Eta"] #Max Eta acceptance
+        self.cfg_eIdType = self.CFG["Electron"]["Common"]["IdType"]
+        self.cfg_eSelPt = self.CFG["Electron"]["Select"]["Pt"] #min Pt for selection
+        self.cfg_eIdSelCut = self.CFG["Electron"]["Select"]["IdLevel"] #selection level
+        self.cfg_eVetoPt = self.CFG["Electron"]["Veto"]["Pt"] #min Pt for veto counting
+        self.cfg_eIdExtraCut = self.CFG["Electron"]["Veto"]["IdLevel"] #veto level
 
         #cfg Muon criteria
-        self.cfg_mSelPt = 20 #min Pt for selection
-        self.cfg_mSelEta = 2.4 #Max Eta acceptance
-        #self.cfg_mIdSel = "mediumId" #would be appropriate for SL, using "tightId"
+        #self.cfg_mSelPt = 20 #min Pt for selection
+        #self.cfg_mMaxEta = 2.4 #Max Eta acceptance
+        #self.cfg_mSelId = "mediumId" #would be appropriate for SL, using "tightId"
         #All muons in NanoAOD are loose Muons or better, so loose-only are just those failing the "mediumId"
 
+        #Muon CFG loading from config file
+        self.cfg_mMaxEta = self.CFG["Muon"]["Common"]["Eta"] #Max Eta acceptance
+        self.cfg_mSelPt = self.CFG["Muon"]["Select"]["Pt"] #min Pt for selection
+        self.cfg_mSelRelIso = self.CFG["Muon"]["Select"]["RelIso"] #Relative Isolation
+        self.cfg_mSelId = self.CFG["Muon"]["Select"]["IdLevel"]
+        #All muons in NanoAOD are loose Muons or better, so loose-only are just those failing the "mediumId"
+
+
         #cfg Individual Jet criteria
-        self.cfg_jId = 2 #Tight and Tight Lep Veto are the only supported IDs in 2017, corresponding to bits 2 and 3, respectively
-        self.cfg_jSelEta = 2.4 #Max Eta acceptance
-        self.cfg_jNSelPt = 30.0 #Non-B Jet minimum Pt
-        self.cfg_jBSelPt = 25.0 #B Jet minimum Pt
-        self.cfg_jBId = "btagCSVV2" #method of bTagging
-        self.cfg_jBWP = 0.8838 #Medium CSVv2 working point cut
-        self.cfg_jClnTyp = "PartonMatching" #As opposed to "DetlaR"
+        # self.cfg_jId = 2 #Tight and Tight Lep Veto are the only supported IDs in 2017, corresponding to bits 2 and 3, respectively
+        # self.cfg_jMaxEta = 2.4 #Max Eta acceptance
+        # self.cfg_jNSelPt = 30.0 #Non-B Jet minimum Pt
+        # self.cfg_jBSelPt = 25.0 #B Jet minimum Pt
+        # self.cfg_jBAlgo = "btagCSVV2" #method of bTagging
+        # self.cfg_jBThresh = 0.8838 #Medium CSVv2 working point cut
+        # self.cfg_jClnTyp = "PartonMatching" #As opposed to "DetlaR"
+
+        #Jet CFG loading from config file
+        self.cfg_jMaxEta = self.CFG["Jet"]["Common"]["Eta"] #Max Eta acceptance
+        self.cfg_jId = self.CFG["Jet"]["Common"]["JetId"]
+        self.cfg_jNSelPt = self.CFG["Jet"]["NonBJet"]["Pt"] #Non-B Jet minimum Pt
+        self.cfg_jBSelPt = self.CFG["Jet"]["BJet"]["Pt"] #B Jet minimum Pt
+        self.cfg_jBAlgo = self.CFG["Jet"]["Algo"] #bTagging Algorithm
+        self.cfg_jBWP = self.CFG["Jet"]["WP"] #working point, like "Medium" or "Tight"
+        self.cfg_jBThresh = self.CFG["Jet"][self.cfg_jBAlgo][self.cfg_jBWP]
+        self.cfg_jClnTyp = self.CFG["Jet"]["CleanType"]
 
         #Baseline Event-level criteria
-        self.cfg_lowMRes_cent = 10.0 #Low mass resonance veto center
-        self.cfg_lowMRes_hwidth = 10.0 #low mass resonance veto half-width
-        self.cfg_ZMRes_cent = 91.0 #Z mass resonance veto center
-        self.cfg_ZMRes_hwidth = 15 #Z mass resonance veto half-width
-        self.cfg_HTMin = 500
-        self.cfg_nBJetMin = 2
-        self.cfg_nTotJetMin = 4
-        self.cfg_minMET = 50
+        # self.cfg_lowMRes_cent = 10.0 #Low mass resonance veto center
+        # self.cfg_lowMRes_hwidth = 10.0 #low mass resonance veto half-width
+        # self.cfg_ZMRes_cent = 91.0 #Z mass resonance veto center
+        # self.cfg_ZMRes_hwidth = 15 #Z mass resonance veto half-width
+        # self.cfg_HTMin = 500
+        # self.cfg_nBJetMin = 2
+        # self.cfg_nTotJetMin = 4
+        # self.cfg_minMET = 50
+
+        #Event CFG loading from config file
+        self.cfg_lowMRes_cent = self.CFG["Event"]["LowMassReson"]["Center"] #Low mass resonance veto center
+        self.cfg_lowMRes_hwidth = self.CFG["Event"]["LowMassReson"]["HalfWidth"] #low mass resonance veto half-width
+        self.cfg_ZMRes_cent = self.CFG["Event"]["ZMassReson"]["Center"] #Z mass resonance veto center
+        self.cfg_ZMRes_hwidth = self.CFG["Event"]["ZMassReson"]["HalfWidth"] #Z mass resonance veto half-width
+        self.cfg_HTMin = self.CFG["Event"]["HTMin"] #Minimum HT
+        self.cfg_nBJetMin = self.CFG["Event"]["nBJetMin"] #Minimum bTagged jets
+        self.cfg_nTotJetMin = self.CFG["Event"]["nTotJetMin"] #Minimum total jets
+        self.cfg_minMET = self.CFG["MET"]["MinMET"] #Minimum MET
 
     def beginJob(self, histFile=None,histDirName=None):
         #if self.writeHistFile=False, called by the postprocessor as beginJob()
@@ -108,7 +147,10 @@ class EventSelector(Module):
 
     def analyze(self, event): #called by the eventloop per-event
         """process event, return True (go to next module) or False (fail, go to next event)"""
+        #Increment counter and skip events past the maxEventsToProcess, if larger than -1
         self.counter +=1
+        if -1 < self.maxEventsToProcess < self.counter:
+            return False
         if (self.counter % 1000) == 0:
             print("Processed {0:2d} Events".format(self.counter))
 
@@ -191,17 +233,23 @@ class EventSelector(Module):
         lepCharge = []
         crosslinkJetIdx = []
         
+
+        #############
+        ### MUONS ###
+        #############
         for mInd, muon in enumerate(muons):
             #above min-pt requirement
             if muon.pt < self.cfg_mSelPt:
                 continue
             #In eta acceptance
-            if abs(muon.eta) > self.cfg_mSelEta:
+            if abs(muon.eta) > self.cfg_mMaxEta:
                 continue
-            #Below not necessary, since selecting looseID, which is all muons in the collection
-            #if getattr(muon, self.cfg_mIdSel): 
+            #selection id. Only check if mediumId or tightId, all looseId by default
+            if self.cfg_mSelId != "looseId":
+                if getattr(muon, self.cfg_mSelId) == False: 
+                    continue
             #Isolated muons
-            if muon.pfRelIso04_all < 0.15:
+            if muon.pfRelIso04_all < self.cfg_mSelRelIso:
                 #Count muon and lepton
                 nSelMuons += 1
                 nSelLeptons += 1
@@ -212,12 +260,15 @@ class EventSelector(Module):
                 #Store the cross-link Id of any matching jet in a list for cross-cleaning later
                 crosslinkJetIdx.append(muon.jetIdx)
             
+        #################
+        ### ELECTRONS ###
+        #################
         for eInd, ele in enumerate(electrons):
-            if ele.pt < self.cfg_eSelPt:
+            if ele.pt < min(self.cfg_eSelPt, self.cfg_eVetoPt):
                 continue
-            if abs(ele.eta) > self.cfg_eSelEta:
+            if abs(ele.eta) > self.cfg_eMaxEta:
                 continue
-            if getattr(ele, self.cfg_eIdType) == self.cfg_eIdSelCut:
+            if getattr(ele, self.cfg_eIdType) >= self.cfg_eIdSelCut:
                 #count electron and lepton
                 nSelElectrons += 1
                 nSelLeptons += 1
@@ -289,11 +340,11 @@ class EventSelector(Module):
             if jet.jetId < self.cfg_jId:
                 continue
             #Eta acceptance
-            if abs(jet.eta) > self.cfg_jSelEta:
+            if abs(jet.eta) > self.cfg_jMaxEta:
                 continue
             #https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation94X
             ##if jet.ChosenBTag > ChosenBtagWorkingPoint's Threshold and jet.pt > BTaggedJet's minimum cut
-            if getattr(jet, self.cfg_jBId) > self.cfg_jBWP and jet.pt > self.cfg_jBSelPt:
+            if getattr(jet, self.cfg_jBAlgo) > self.cfg_jBThresh and jet.pt > self.cfg_jBSelPt:
                 nBJets += 1
                 if self.cfg_jClnTyp == "PartonMatching":
                     if jInd not in crosslinkJetIdx:
@@ -353,8 +404,6 @@ class EventSelector(Module):
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 
 #exampleModuleConstr = lambda : exampleProducer(jetSelection= lambda j : j.pt > 30) 
-#DileptonEventSelector = lambda : EventSelector(channel="DL")
-#SingleLepEventSelector = lambda : EventSelector(channel="SL")
 defaultEventSelector = lambda : EventSelector()
 loudEventSelector = lambda : EventSelector(verbose=True)
 showyEventSelector = lambda : EventSelector(makeHistos=True)

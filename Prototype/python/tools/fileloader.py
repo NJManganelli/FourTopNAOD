@@ -10,11 +10,10 @@ configName: (Optional) When specified, returns the requested configuration inste
 serverPrefix: the default prefix for files is root://cms-xrd-global.cern.ch/. Pass any other as a string in the same format. """
 
     def __init__(self, eventSet=None, era=None, channel=None, configName=None, jsonName=None, filePrefix="root://cms-xrd-global.cern.ch/"):
-        #internal variables grabbed, except jsonName
+        #internal variables grabbed, except jsonName and configName
         self._eventSet = eventSet
         self._era = era
         self._channel = channel
-        self._configName = configName
         self._filePrefix = filePrefix
         
         #Make these all named options, but still require the first three to always be passed
@@ -29,6 +28,7 @@ serverPrefix: the default prefix for files is root://cms-xrd-global.cern.ch/. Pa
         ### Data must begin with "Run"        ###
         ### Monte Carlo must NOT              ###
         #########################################
+        #Ensure JSON files are formatted properly using tool like https://jsonformatter.curiousconcept.com/
         self._jsonPath = "../json/"
         self._configPath = "../config/"
         self._filePath = "../filelists/"
@@ -98,7 +98,7 @@ serverPrefix: the default prefix for files is root://cms-xrd-global.cern.ch/. Pa
         ### Set up ToReturn variables ###
         #################################
         #name event JSON if Data and no jsonName was passed in
-        if eventSet[:3] is "Run":
+        if self._eventSet[:3] is "Run":
             if self._jsonName is None:
                 self._jsonToReturn = self._jsonPath + self_jsonDict[era]["ReReco"]
             else:
@@ -117,16 +117,15 @@ serverPrefix: the default prefix for files is root://cms-xrd-global.cern.ch/. Pa
 
     def __load__(self):
         #Open config file in read-only mode, then load the json
-        #try: #is this necessary, or implemented in "with" syntax automatically?
         with open(self._configName, "r") as inConfig:
             self._configToReturn = json.load(inConfig)
-        #finally:
-        #    inConfig.close()
 
         #Test that the JSON file can be opened, then do just close it
         if self._jsonToReturn is not None:
             try:
                 f = open(self._jsonToReturn, "r")
+            except IOError:
+                print("IOError: The Requested JSON ({0:s})file does not exist in the absolute/relative path specified by {1:s}".format(self._jsonName, self._jsonPath))
             finally:
                 f.close()
             
@@ -143,7 +142,7 @@ serverPrefix: the default prefix for files is root://cms-xrd-global.cern.ch/. Pa
         if self._hasLoaded:
             pprint(self._configToReturn)
         else:
-            print("A configuration has yet to be loaded. Invoke getConfig() first.")
+            print("A configuration has yet to be loaded. Invoke getConfig(), getFiles(), or getJSONPath() first.")
 
     def getFiles(self, indexOfFile=-1):
         if not self._hasLoaded:
@@ -161,9 +160,12 @@ serverPrefix: the default prefix for files is root://cms-xrd-global.cern.ch/. Pa
             self.__load__()
         return self._configToReturn
 
-    def getJSONpath(self):
+    def getJSONPath(self):
         if not self._hasLoaded:
             self.__load__()
         return self._jsonToReturn
+
+    def getSet(self):
+        return self._eventSet
 
 #Implement as class, create functions that return possible evensets, store internally so that these values to be returned (list of files, json) are always available through submethods...
