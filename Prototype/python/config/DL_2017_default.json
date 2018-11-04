@@ -51,7 +51,7 @@
 		 "Medium" : "FIXME", 
 		 "Tight" : "FIXME"
 		 },
-      "CleanType" : "PartonMatch"
+      "CleanType" : "PartonMatching"
       },
 "HLT" : {
     "cutOnTrigs" : "False",
