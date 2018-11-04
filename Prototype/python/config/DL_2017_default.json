@@ -3,7 +3,7 @@
   	     "Select" : {
 	     	      "Pt" : 25.0,
 		      "Eta" : 2.4,
-		      "IDType" : "Cutbased", #MVA available too
+		      "IDType" : "Cutbased",
 		      "IDlevel" : "Medium"
 		      },
 	     "Veto" : {
@@ -23,7 +23,7 @@
        "Veto" : {
        	      "Pt" : 20,
 	      "Eta" : 2.4,
-	      "RelIso" : 0.25, #FIXME
+	      "RelIso" : 0.25,
 	      "IDlevel" : "Loose"
 	      }
 	 },
@@ -31,18 +31,18 @@
       "PtOthJet" : 30.0,
       "PtBJet" : 25.0,
       "Eta" : 2.4,
-      "JetID" : "Tight", #Only Tight and Tight Lepton Veto supported in 2017 and 2018
-      "bTag" : "btagCSVV2"  #btagDeepB and #Deep Flavour also available
+      "JetID" : "Tight",
+      "bTag" : "btagCSVV2",
       "bTagWP" : "Medium",
-      "bTagThresh" : { #Fixed values like this could probably be separated in a different way from "parameters" that might get changed freq.
+      "bTagThresh" : {
       		   "btagCSVV2" : { "Loose" : "FIXME", "Medium" : 0.8838, "Tight" : "FIXME"},
 		   "btagDeepB" : { "Loose" : "FIXME", "Medium" : 0.4941, "Tight" : "FIXME"},
-		   "DeepFlav" : { "Loose" : "FIXME", "Medium" : "FIXME", "Tight" : "FIXME"} #FIXME - bad key name for Deep Flav
+		   "DeepFlav" : { "Loose" : "FIXME", "Medium" : "FIXME", "Tight" : "FIXME"}
 		   },
-      "CleanType" : "PartonMatch" #This is implicit in using jetIDx references, otherwise use "DeltaR"
+      "CleanType" : "PartonMatch"
       },
 "HLT" : {
-    "cutOnTrigs" : False, #FIXME, default True when triggers loaded
+    "cutOnTrigs" : "False",
     "chMuMu" : ["Placeholder", "List", "of", "trigger", "names"],
     "chElMu" : ["Placeholder", "List", "of", "trigger", "names"],
     "chElEl" : ["Placeholder", "List", "of", "trigger", "names"]
@@ -51,8 +51,7 @@
     "FIXME" : "Placeholder for Primary Vertex requirements" 
     },
 "MET" : { 
-    #FIXME, default True 
-    "cutOnFilts" : False
+    "cutOnFilts" : "False"
     },
 "Baseline" : {
     "HT" : 500,
@@ -67,5 +66,5 @@
         "HalfWidth" : 15.0
         }
     },
-"InvertIsolation" : False
+"InvertIsolation" : "False"	
 }
