@@ -270,7 +270,7 @@ class EventSelector(Module):
                 continue
             if abs(ele.eta) > self.cfg_eMaxEta:
                 continue
-            if getattr(ele, self.cfg_eIdType) >= self.cfg_eIdSelCut:
+            if getattr(ele, self.cfg_eIdType) >= self.cfg_eIdSelCut and ele.pt > self.cfg_eSelPt:
                 #count electron and lepton
                 nSelElectrons += 1
                 nSelLeptons += 1
@@ -280,7 +280,7 @@ class EventSelector(Module):
                 lepCharge.append(ele.charge)
                 #Store the cross-link Id of any matching jet in a list for cross-cleaning later
                 crosslinkJetIdx.append(ele.jetIdx)
-            elif getattr(ele, self.cfg_eIdType) == self.cfg_eIdExtraCut:
+            elif getattr(ele, self.cfg_eIdType) == self.cfg_eIdExtraCut and ele.pt > self.cfg_eVetoPt:
                 #count veto-level electrons
                 nExtraLeptons += 1
 
@@ -640,14 +640,18 @@ class SuperEventSelector(Module):
 
         eventSum = ROOT.TLorentzVector()
         
-        nSelMuons = 0
-        nSelElectrons = 0
-        nSelLeptons = 0
-        nExtraLeptons = 0
-        lepType = []
-        lepIndex = []
-        lepCharge = []
-        crosslinkJetIdx = []
+        nSelMuons = 0 #used for cuts and invariant mass vetos
+        nSelElectrons = 0 #used for cuts and invariant mass vetos
+        nSelLeptons = 0 #used for cuts
+        nExtraLeptons = 0 #used for cuts
+        lepType = [] #intended for small-data forwarding of event selection (only store indices/type of selected leptons to next module)
+        lepIndex = [] #Used for invariant mass veto, can be replaced with mIndex and eIndex now that they have been added for collection creation
+        mIndex = [] #For making clean muon collection
+        eIndex = [] #For making clean electron collection
+        jBIndex = [] #For making clean b jet collection
+        jNBIndex = [] #For making clean non-b jet collection
+        lepCharge = [] 
+        crosslinkJetIdx = [] #for cleaning jets with PartonMatching algorithm
         
 
         #############
@@ -660,7 +664,7 @@ class SuperEventSelector(Module):
             #In eta acceptance
             if abs(muon.eta) > self.cfg_mMaxEta:
                 continue
-            #selection id. Only check if mediumId or tightId, all looseId by default
+            #selection id. Only check if mediumId or tightId, all looseId by default...
             if self.cfg_mSelId != "looseId":
                 if getattr(muon, self.cfg_mSelId) == False: 
                     continue
@@ -669,45 +673,35 @@ class SuperEventSelector(Module):
                 #Count muon and lepton
                 nSelMuons += 1
                 nSelLeptons += 1
-                #Add lepton type, location, and charge to lists
+                #Add lepton type, location index, and charge to lists
                 lepType.append("Muon")
+                mIndex.append(mInd)
                 lepIndex.append(mInd)
                 lepCharge.append(muon.charge)
                 #Store the cross-link Id of any matching jet in a list for cross-cleaning later
                 crosslinkJetIdx.append(muon.jetIdx)
-
-                #MODEL
-                coll = [Collection(event,x) for x in self.input]
-                objects = [(coll[j][i],j,i) for j in xrange(self.nInputs) for i in xrange(len(coll[j]))]
-                if self.selector: objects=filter(lambda (obj,j,i) : self.selector[j](obj), objects)
-                objects.sort(key = self.sortkey, reverse = self.reverse)
-                if self.maxObjects: objects = objects[:self.maxObjects]
-                for bridx,br in enumerate(self.brlist_all):
-                    out = []
-                    for obj,j,i in objects:
-                        out.append(getattr(obj,br) if self.is_there[bridx][j] else 0)
-                    self.out.fillBranch("%s_%s"%(self.output,br), out)
-                #MODEL
             
         #################
         ### ELECTRONS ###
         #################
         for eInd, ele in enumerate(electrons):
+            #Early pt cut
             if ele.pt < min(self.cfg_eSelPt, self.cfg_eVetoPt):
                 continue
             if abs(ele.eta) > self.cfg_eMaxEta:
                 continue
-            if getattr(ele, self.cfg_eIdType) >= self.cfg_eIdSelCut:
+            if getattr(ele, self.cfg_eIdType) >= self.cfg_eIdSelCut and ele.pt > self.cfg_eSelPt:
                 #count electron and lepton
                 nSelElectrons += 1
                 nSelLeptons += 1
                 #Add lepton type, location, and charge to lists
                 lepType.append("Electron")
+                eIndex.append(eInd)
                 lepIndex.append(eInd)
                 lepCharge.append(ele.charge)
                 #Store the cross-link Id of any matching jet in a list for cross-cleaning later
                 crosslinkJetIdx.append(ele.jetIdx)
-            elif getattr(ele, self.cfg_eIdType) == self.cfg_eIdExtraCut:
+            elif getattr(ele, self.cfg_eIdType) == self.cfg_eIdExtraCut and ele.pt > self.cfg_eVetoPt:
                 #count veto-level electrons
                 nExtraLeptons += 1
 
@@ -727,7 +721,7 @@ class SuperEventSelector(Module):
             if self.makeHistos: self.h_cutHisto.Fill(3.5)
             return False
 
-        #Same-flavor low mass and Z mass resonance veto
+        #Same-flavor low mass and Z mass resonance veto ###Improvement: now have separate index lists for muons, electrons, just use those for counting and matching
         if nSelMuons == 2:
             diLepMass = (muons[lepIndex[0]].p4() + muons[lepIndex[1]].p4()).M()
             if abs(diLepMass - self.cfg_lowMRes_cent) < self.cfg_lowMRes_hwidth:
@@ -780,6 +774,7 @@ class SuperEventSelector(Module):
                         nClnBJets += 1
                         if self.makeHistos: self.h_jBSel_map.Fill(jet.eta, jet.phi)
                         if self.makeHistos: self.h_jBSel_pt.Fill(jet.pt)
+                        jBIndex.append(jInd)
                         HT += jet.pt
                         H += (jet.p4()).P()
                         if nClnBJets > 2:
@@ -800,6 +795,7 @@ class SuperEventSelector(Module):
                 nOthJets +=1
                 if self.makeHistos: self.h_jSel_map.Fill(jet.eta, jet.phi)
                 if self.makeHistos: self.h_jSel_pt.Fill(jet.pt)
+                jNBIndex.append(jInd)
                 HT += jet.pt
                 H += (jet.p4()).P()
                 HT2M += jet.pt
@@ -816,7 +812,7 @@ class SuperEventSelector(Module):
             if self.verbose: print("7")
             if self.makeHistos: self.h_cutHisto.Fill(7.5)
             return False
-        #Cut events that don't have minimum value of HT #BUT was calculating HT only from selected jets right? cross-checking needed
+        #Cut events that don't have minimum value of HT
         if HT < self.cfg_HTMin:
             if self.verbose: print("8")
             if self.makeHistos: self.h_cutHisto.Fill(8.5)
@@ -826,8 +822,34 @@ class SuperEventSelector(Module):
         HTH = HT/H
         #HTRat = Pt of two highest pt jets / HT
 
-        #The event made it! Pass to next module/write out of PostProcessor
+        #####################################################
+        ### Write out Selected lepton and jet collections ###
+        #####################################################
+        ### 0 input/0 output corresponds to the muons
+        for br in self.brlist_sep[0]:
+            out = []
+            for elem in mIndex:
+                out.append(getattr(muons[elem], br))
+            self.out.fillBranch("%s_%s"%(self.output[0], out))
+        ### 1 input/1 output corresponds to the electrons
+        for br in self.brlist_sep[1]:
+            out = []
+            for elem in eIndex:
+                out.append(getattr(electrons[elem], br))
+            self.out.fillBranch("%s_%s"%(self.output[1], out))
+        ### 2 input/2 output corresponds to the b jets
+        for br in self.brlist_sep[2]:
+            out = []
+            for elem in jBIndex:
+                out.append(getattr(jets[elem], br))
+            self.out.fillBranch("%s_%s"%(self.output[2], out))
+        ### 2 input/3 output corresponds to the non-b jets
+        for br in self.brlist_sep[2]:
+            out = []
+            for elem in jNBIndex:
+                out.append(getattr(jets[elem], br))
+            self.out.fillBranch("%s_%s"%(self.output[3], out)
+
         return True
-        #self.out.fillBranch("EventMass",eventSum.M())
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
