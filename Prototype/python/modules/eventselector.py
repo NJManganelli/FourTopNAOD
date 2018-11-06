@@ -417,8 +417,10 @@ class SuperEventSelector(Module):
         #Adapt collectionMerger.py for adding new branches for selected leptons, jets...
         ########################
         #self.input = input
+        #Input branches for leptons and Jets. Position one must correspond to incoming electrons, two to incoming muons, and three to AK4 jets
         self.input = ["Electron", "Muon", "Jet"]
         #self.output = output
+        #Output branches. One = electrons, Two = Muons, Three = b Jets, Four = Non-b Jets
         self.output = ["SelectedElectron", "SelectedMuon", "SelectedBJet", "SelectedNBJet"]
         self.nInputs = len(self.input)
         #self.sortkey = lambda (obj,j,i) : sortkey(obj)

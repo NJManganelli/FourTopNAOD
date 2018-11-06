@@ -10,14 +10,24 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 _rootLeafType2rootBranchType = { 'UChar_t':'b', 'Char_t':'B', 'UInt_t':'i', 'Int_t':'I', 'Float_t':'F', 'Double_t':'D', 'ULong64_t':'l', 'Long64_t':'L', 'Bool_t':'O' }
 
 class PlotDQM(Module):
-    def __init__(self, typeAK4=None, typeAK8=None, typeElectron=None, typeMuon=None, typeTrigger=None, doLepInvMass=False):
+    """This Module takes as input the names of collections of 5 different types (1 collection per type), and makes some basic DQM-style histograms.
+
+A title must be provided using title="Your Custom Title." This title helps differentiate the output of the module as-configured from the same module run at a later point.
+The collections should be passed as a string containing the Collection name, to the corresponding Type, which are typeAK4=, typeAK8=, typeElectron=,
+typeMuon=, typeTrigger=, and two boolean values, doOSDL= and doTopologyVariables=. The former triggers invariant mass histograms in same-flavor channels,
+if they exist; the latter triggers calculation and plotting of the event variables, like H, HT, HTRat, etc."""
+    def __init__(self, title=None, typeAK4=None, typeAK8=None, typeElectron=None, typeMuon=None, typeTrigger=None, doOSDL=False, doTopologyVariables=False):
+        #To Do: navigate to folder named after the title, also storing old directory first, then navigating back at the end of the file. Will this work? 
+        #Otherwise, give this as pre-title to every single histogram.... maybe equally valid
         #self.jetSel = jetSelection
         self.writeHistFile=True
 
+        self._title = title
         self._typeAK4 = typeAK4
         self._typeAK8 = typeAK8
         self._typeElectron = typeElectron
         self._typeMuon = typeMuon
+        self._doOSDL = doOSDL
 
         #event counters
         self.counter = 0
