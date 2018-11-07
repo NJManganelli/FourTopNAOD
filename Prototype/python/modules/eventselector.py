@@ -431,7 +431,8 @@ class SuperEventSelector(Module):
         for elem in self.output:
             placeholder.append({})
         #Create dictionary of empty dictionaries which will map each output collection's branches to a branchtype
-        self.branchType = dict(zip(self.output, placeholder))
+        self.branchType = dict(zip(self.input, placeholder))
+        print(self.branchType)
         ########################
 
         #self.jetSel = jetSelection
@@ -522,7 +523,9 @@ class SuperEventSelector(Module):
         branches = [_brlist.At(i) for i in xrange(_brlist.GetEntries())]
         self.brlist_sep = [self.filterBranchNames(branches,x) for x in self.input]
         self.brlist_all = set(itertools.chain(*(self.brlist_sep)))
-
+        print(self.brlist_sep[0])
+        print(self.brlist_sep[1])
+        print(self.brlist_sep[2])
         self.is_there = np.zeros(shape=(len(self.brlist_all),self.nInputs),dtype=bool)
         for bridx,br in enumerate(self.brlist_all):
             for j in xrange(self.nInputs):
@@ -569,7 +572,7 @@ class SuperEventSelector(Module):
         self.counter +=1
         if -1 < self.maxEventsToProcess < self.counter:
             return False
-        if (self.counter % 1000) == 0:
+        if (self.counter % 10) == 0:
             print("Processed {0:2d} Events".format(self.counter))
 
         PV = Object(event, "PV")
@@ -827,18 +830,18 @@ class SuperEventSelector(Module):
         #####################################################
         ### Write out Selected lepton and jet collections ###
         #####################################################
-        ### 0 input/0 output corresponds to the muons
-        for br in self.brlist_sep[0]:
-            out = []
-            for elem in mIndex:
-                out.append(getattr(muons[elem], br))
-            self.out.fillBranch("%s_%s"%(self.output[0], out))
-        ### 1 input/1 output corresponds to the electrons
+        ### 0 input/0 output corresponds to the electrons
         for br in self.brlist_sep[1]:
             out = []
             for elem in eIndex:
                 out.append(getattr(electrons[elem], br))
             self.out.fillBranch("%s_%s"%(self.output[1], out))
+        ### 1 input/1 output corresponds to the muons
+        for br in self.brlist_sep[0]:
+            out = []
+            for elem in mIndex:
+                out.append(getattr(muons[elem], br))
+            self.out.fillBranch("%s_%s"%(self.output[0], out))
         ### 2 input/2 output corresponds to the b jets
         for br in self.brlist_sep[2]:
             out = []
