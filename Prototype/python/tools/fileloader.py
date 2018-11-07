@@ -82,9 +82,9 @@ serverPrefix: the default prefix for files is root://cms-xrd-global.cern.ch/. Pa
         ### Name all necessary inputs for convenience here ###
         ######################################################
         #Name configuration, using method that makes it convenient to add many without modifying this function
-        self._configName = self._configPath + channel + "_" + era
+        self._configName = self._configPath + channel + "_" + era + "_"
         if configName is None:
-            self._configName += "_default.json"
+            self._configName += "default.json"
         else:
             self._configName += configName
         if self._configName[-5:] != ".json":
