@@ -39,6 +39,7 @@ if they exist; the latter triggers calculation and plotting of the event variabl
         self._flagElectron = False
         self._flagMuon = False
         self._flagDiLep = False
+        self._flagOSDL = False
 
         #event counters
         self.counter = 0
@@ -53,6 +54,8 @@ if they exist; the latter triggers calculation and plotting of the event variabl
     def beginJob(self, histFile=None,histDirName=None):
         #if self.writeHistFile=False, called by the postprocessor as beginJob()
         #If self.writeHistFile=True, then called as beginJob(histFile=self.histFile,histDirName=self.histDirName)
+        self.histFile = histFile
+        self.histDirName = histDirName
         Module.beginJob(self,histFile,histDirName)
         if self._typeAK4:
             self.h_ak4_map = ROOT.TH2F('h_' + self._typeAK4 + '_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
@@ -72,7 +75,7 @@ if they exist; the latter triggers calculation and plotting of the event variabl
             self.h_ak4_deepflav = ROOT.TH1F('h_' + self._typeAK4 + '_deepflav', ';btag DeepFlavB; Events', 100, -0.1, 1.0)
             self.addObject(self.h_ak4_deepflav)
         if self._typeMuon:
-            self.h_mu_Id = ROOT.TH1F('h_' + self._typeMuon + '_muonId', ';Muon ID; Events', 3, 1, 3)
+            self.h_mu_Id = ROOT.TH1F('h_' + self._typeMuon + '_muonId', ';Muon ID; Events', 3, 1, 4)
             self.addObject(self.h_mu_Id)
             self.h_mu_reliso = ROOT.TH1F('h_' + self._typeMuon + '_reliso', ';PF Relative Isolation; Events', 100, 0.0, 1.0)
             self.addObject(self.h_mu_reliso)
@@ -87,23 +90,23 @@ if they exist; the latter triggers calculation and plotting of the event variabl
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         prevdir = ROOT.gDirectory
-        self.histFile = histFile
+        if not self.histFile:
+            print("PlotDQM Requires a histFile input. Ensure a filename and directory name are specified in the PostProcessor.")
         self.histFile.cd()
         self.dir = self.histFile.mkdir( self._dirName )
         prevdir.cd()
 
-        _brlist = inputTree.GetListOfBranches()
-        branches = [_brlist.At(i) for i in xrange(_brlist.GetEntries())]
-        self.brlist_sep = [self.filterBranchNames(branches,x) for x in self.input]
-        self.brlist_all = set(itertools.chain(*(self.brlist_sep)))
-
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         prevdir = ROOT.gDirectory
-        outputFile.cd()
-        self.dirName.cd()
+        print("Beginning of endFile, directory is ... " + str(prevdir))
+        #outputFile.cd()
+        self.dir.cd()
+        currdir = ROOT.gDirectory
+        print("In endFile, switched to... " + str(currdir))
         #self.dir.cd() #Would this also work?
         #self.h_nevents.Write()
         prevdir.cd()
+        print("Current directory at end of endFile: " + str(ROOT.gDirectory))
 
     def analyze(self, event): #called by the eventloop per-event
         """process event, return True (go to next module) or False (fail, go to next event)"""
@@ -112,32 +115,36 @@ if they exist; the latter triggers calculation and plotting of the event variabl
         if -1 < self.maxEventsToProcess < self.counter:
             return False
 
+        electrons = None
+        muons = None
+        jets = None
+        fatjets = None
         if self.counter == 1:
-            if hasattr(event, self._typeElectron):
+            if self._typeElectron:
                 electrons = Collection(event, self._typeElectron)
                 self._flagElectron = True
                 if self._doOSDL: self._flagOSDL = True
             else:
-                print("Collection {0:s} is not available, histograms will not be filled".format(self._typeElectron))
-            if hasattr(event, self._typeMuon):
+                print("For typeElectron, collection {0:s} is not available, histograms will not be filled".format(self._typeElectron))
+            if self._typeMuon:
                 muons = Collection(event, self._typeMuon)
                 self._flagMuon = True
                 if self._doOSDL: self._flagOSDL = True
             else:
-                print("Collection {0:s} is not available, histograms will not be filled".format(self._typeMuon))
-            if hasattr(event, self._typeAK4):
+                print("For typeMuon, collection {0:s} is not available, histograms will not be filled".format(self._typeMuon))
+            if self._typeAK4:
                 jets = Collection(event, self._typeAK4)
                 self._flagAK4 = True
             else:
-                print("Collection {0:s} is not available, histograms will not be filled".format(self._typeAK4))
-            if hasattr(event, self._typeAK8):
+                print("For typeAK4, collection {0:s} is not available, histograms will not be filled".format(self._typeAK4))
+            if self._typeAK8:
                 fatjets = Collection(event, self._typeAK8)
                 self._flagAK8 = True
             else:
-                print("Collection {0:s} is not available, histograms will not be filled".format(self._typeAK8))
-            if self._doSODL and not self._flagOSDL:
+                print("For typeAK8, collection {0:s} is not available, histograms will not be filled".format(self._typeAK8))
+            if self._doOSDL and not self._flagOSDL:
                 self._flagOSDL = False
-                print("Request for Opposite-Sign Dilepton Histograms made, but collections {0:s} and {1:s} not present. Will not be filled"
+                print("Request for Opposite-Sign Dilepton Histograms made, but collections typeMuon({0:s}) and typeElectron({1:s}) not present. Will not be filled"
                       .format(self._typeMuon, self._typeElectron))
         else:
             if self._flagElectron:
@@ -152,6 +159,7 @@ if they exist; the latter triggers calculation and plotting of the event variabl
         #This doesn't protect against missing variables... should really do hasattr(muon, branch) to make sure, first...
         if electrons:
             for e, electron in enumerate(electrons):
+#                if hasattr(self., "_flagOSDL") and self._flagOSDL:
                 if self._flagOSDL:
                     for ee, electron2 in enumerate(electrons):
                         #Avoid double counting same-flavor leptons...
@@ -301,3 +309,5 @@ if they exist; the latter triggers calculation and plotting of the event variabl
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 TestDQM = lambda : PlotDQM(title="Test", typeAK4="Jet", typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=False)
+TestInput = lambda : PlotDQM(title="Input", typeAK4="Jet", typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=False)
+TestOutput = lambda : PlotDQM(title="Output", typeAK4="Jet", typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=False)
