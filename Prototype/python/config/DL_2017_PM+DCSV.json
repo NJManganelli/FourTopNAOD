@@ -1,0 +1,86 @@
+{
+"Electron" : {
+	     "Common" : {
+	     	      "Eta" : 2.4,
+		      "IdType" : "cutBased"
+		      },
+  	     "Select" : {
+	     	      "Pt" : 25.0,
+		      "IdLevel" : 2
+		      },
+	     "Veto" : {
+	     	    "Pt" : 25.0,
+		    "IdLevel" : 1
+		    }
+	     },
+"Muon" : {
+       "Common" : {
+      		"Eta" : 2.4
+		},
+       "Select" : {
+       		"Pt" : 20,
+		"RelIso" : 0.15,
+		"IdLevel" : "looseId"
+		}
+	 },
+"Jet" : {
+      "Common" : {
+      	       "Eta" : 2.4,
+	       "JetId" : 2
+	       },
+      "NonBJet" : {
+      		"Pt" : 30.0
+		},
+      "BJet" : {
+      	     "Pt" : 25.0
+	     },
+      "Algo" : "btagDeepB",
+      "WP" : "Medium",
+      "btagCSVV2" : { 
+	     	  "Loose" : "FIXME", 
+		  "Medium" : 0.8838, 
+		  "Tight" : "FIXME"
+		  },
+      "btagDeepB" : { 
+      		  "Loose" : "FIXME", 
+		  "Medium" : 0.4941, 
+		  "Tight" : "FIXME"
+		  },
+      "DeepFlav" : { 
+      		 "Loose" : "FIXME", 
+		 "Medium" : "FIXME", 
+		 "Tight" : "FIXME"
+		 },
+      "CleanType" : "PartonMatching",
+      "MaxDeltaR" : 0.4
+      },
+"HLT" : {
+    "cutOnTrigs" : "False",
+    "chMuMu" : ["Placeholder", "List", "of", "trigger", "names"],
+    "chElMu" : ["Placeholder", "List", "of", "trigger", "names"],
+    "chElEl" : ["Placeholder", "List", "of", "trigger", "names"]
+    },
+"PV" : { 
+    "FIXME" : "Placeholder for Primary Vertex requirements" 
+    },
+"MET" : { 
+    "cutOnFilts" : "False",
+    "MinMET" : 50
+    },
+"Event" : {
+    "HTMin" : 500,
+    "nBJetMin" : 2,
+    "nTotJetMin" : 4,
+    "nSelLep" : 2,
+    "nVetoLep" : 0,
+    "LowMassReson" : {
+        "Center" : 10.0, 
+        "HalfWidth" : 10.0
+        },
+    "ZMassReson" : {
+        "Center" : 91.0, 
+        "HalfWidth" : 15.0
+        }
+    },
+"InvertIsolation" : "False"	
+}
