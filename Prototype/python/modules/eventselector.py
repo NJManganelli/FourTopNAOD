@@ -418,21 +418,22 @@ class SuperEventSelector(Module):
         ########################
         #self.input = input
         #Input branches for leptons and Jets. Position one must correspond to incoming electrons, two to incoming muons, and three to AK4 jets
-        self.input = ["Electron", "Muon", "Jet"]
-        #self.output = output
+        #self.input = ["Electron", "Muon", "Jet"]
+        self.input = { "typeElectron" : "Electron",
+                       "typeMuon" : "Muon",
+                       "typeAK4" : "Jet"
+                       }
         #Output branches. One = electrons, Two = Muons, Three = b Jets, Four = Non-b Jets
         self.output = ["SelectedElectron", "SelectedMuon", "SelectedBJet", "SelectedNBJet"]
         self.nInputs = len(self.input)
         #self.sortkey = lambda (obj,j,i) : sortkey(obj)
         #self.reverse = reverse
         #self.selector = [(selector[coll] if coll in selector else (lambda x: True)) for coll in self.input] if selector else None # pass dict([(collection_name,lambda obj : selection(obj)])
-        #self.maxObjects = maxObjects # save only the first maxObjects objects passing the selection in the merged collection
         placeholder = []
         for elem in self.output:
             placeholder.append({})
         #Create dictionary of empty dictionaries which will map each output collection's branches to a branchtype
         self.branchType = dict(zip(self.input, placeholder))
-        print(self.branchType)
         ########################
 
         #self.jetSel = jetSelection
@@ -538,12 +539,12 @@ class SuperEventSelector(Module):
         #Create output branches for the selected electrons, muons, and distinct b Jet/Non-b Jet collections
         #FIXME: branchtypes needs self.input instead of self.output[][]....
         for ebr in self.brlist_sep[0]:
-            self.out.branch("%s_%s"%(self.output[0], ebr), _rootLeafType2rootBranchType[self.branchType[self.input[0]][ebr]], lenVar="n%s"%self.output[0])
+            self.out.branch("%s_%s"%(self.output[0], ebr), _rootLeafType2rootBranchType[self.branchType[self.input["typeElectron"]][ebr]], lenVar="n%s"%self.output[0])
         for mbr in self.brlist_sep[1]:
-            self.out.branch("%s_%s"%(self.output[1], mbr), _rootLeafType2rootBranchType[self.branchType[self.input[1]][mbr]], lenVar="n%s"%self.output[1])
+            self.out.branch("%s_%s"%(self.output[1], mbr), _rootLeafType2rootBranchType[self.branchType[self.input["typeMuon"]][mbr]], lenVar="n%s"%self.output[1])
         for jbr in self.brlist_sep[2]:
-            self.out.branch("%s_%s"%(self.output[2], jbr), _rootLeafType2rootBranchType[self.branchType[self.input[2]][jbr]], lenVar="n%s"%self.output[2])
-            self.out.branch("%s_%s"%(self.output[3], jbr), _rootLeafType2rootBranchType[self.branchType[self.input[2]][jbr]], lenVar="n%s"%self.output[3])
+            self.out.branch("%s_%s"%(self.output[2], jbr), _rootLeafType2rootBranchType[self.branchType[self.input["typeAK4"]][jbr]], lenVar="n%s"%self.output[2])
+            self.out.branch("%s_%s"%(self.output[3], jbr), _rootLeafType2rootBranchType[self.branchType[self.input["typeAK4"]][jbr]], lenVar="n%s"%self.output[3])
 
         #called by the eventloop at start of new inputFile
         #Module just passes
@@ -831,29 +832,29 @@ class SuperEventSelector(Module):
         ### Write out Selected lepton and jet collections ###
         #####################################################
         ### 0 input/0 output corresponds to the electrons
-        for br in self.brlist_sep[1]:
+        for br in self.brlist_sep[0]:
             out = []
             for elem in eIndex:
                 out.append(getattr(electrons[elem], br))
-            self.out.fillBranch("%s_%s"%(self.output[1], out))
+            self.out.fillBranch("%s_%s"%(self.output[0],br), out)
         ### 1 input/1 output corresponds to the muons
-        for br in self.brlist_sep[0]:
+        for br in self.brlist_sep[1]:
             out = []
             for elem in mIndex:
                 out.append(getattr(muons[elem], br))
-            self.out.fillBranch("%s_%s"%(self.output[0], out))
+            self.out.fillBranch("%s_%s"%(self.output[1],br), out)
         ### 2 input/2 output corresponds to the b jets
         for br in self.brlist_sep[2]:
             out = []
             for elem in jBIndex:
                 out.append(getattr(jets[elem], br))
-            self.out.fillBranch("%s_%s"%(self.output[2], out))
+            self.out.fillBranch("%s_%s"%(self.output[2],br), out)
         ### 2 input/3 output corresponds to the non-b jets
         for br in self.brlist_sep[2]:
             out = []
             for elem in jNBIndex:
                 out.append(getattr(jets[elem], br))
-            self.out.fillBranch("%s_%s"%(self.output[3], out))
+            self.out.fillBranch("%s_%s"%(self.output[3],br), out)
 
         return True
 
