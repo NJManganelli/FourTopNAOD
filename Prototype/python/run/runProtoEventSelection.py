@@ -8,7 +8,6 @@ from importlib import import_module
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor
 from FourTopNAOD.Prototype.modules.eventselector import *
 from FourTopNAOD.Prototype.tools.fileloader import FileLoader as IFL
-#from FourTopNAOD.Prototype.modules.eventselector import *
 
 preselection="nJet > 4 && (nMuon + nElectron) > 1"
 
@@ -19,16 +18,16 @@ p=PostProcessor(".",
                 cut=preselection,
                 branchsel=None,
                 outputbranchsel=None,
-                postfix="_" + Y.getSet() + "_PostEvtSel",
+                postfix="_" + Y.getSet() + "_PostProtoEvtSel",
                 jsonInput=Y.getJSONPath(),
-                modules=[EventSelector(makeHistos=True, cutOnTrigs=True, cutOnMET=True, 
+                modules=[ProtoEventSelector(makeHistos=True, cutOnTrigs=True, cutOnMET=True, 
                                        cutOnHT=True, verbose=False, selectionConfig=Y.getConfig())],
                 justcount=False,
                 provenance=True,
 #                fwkJobReport=True,
 #                haddFileName="hadded.root",
                 noOut=False,
-                histFileName="hist" + Y.getSet() + ".root",
+                histFileName="hist" + Y.getSet() + "_proto.root",
                 histDirName="plots",
                 compression="LZMA:9"
                 )

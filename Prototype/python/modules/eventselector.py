@@ -7,8 +7,10 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
+from PhysicsTools.NanoAODTools.postprocessing.tools import * #deltaR, deltaPhi, etc.
 
-class EventSelector(Module):
+#ProtoEventSelector is broken, lacking a deltaR implementation, and failing to correctly clean non-b jets. Do not use. Left for reference (currently)
+class ProtoEventSelector(Module):
     def __init__(self, selectionConfig=None, verbose=False, makeHistos=False, cutOnMET=True, cutOnTrigs=True, cutOnHT=True):
         #self.jetSel = jetSelection
         self.writeHistFile=True
@@ -371,17 +373,16 @@ class EventSelector(Module):
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 
 #exampleModuleConstr = lambda : exampleProducer(jetSelection= lambda j : j.pt > 30) 
-defaultEventSelector = lambda : EventSelector()
-loudEventSelector = lambda : EventSelector(verbose=True)
-showyEventSelector = lambda : EventSelector(makeHistos=True)
+defaultEventSelector = lambda : ProtoEventSelector()
+loudEventSelector = lambda : ProtoEventSelector(verbose=True)
+showyEventSelector = lambda : ProtoEventSelector(makeHistos=True)
 
 #Add new collections for selected items following https://github.com/cms-nanoAOD/nanoAOD-tools/blob/master/python/postprocessing/modules/common/collectionMerger.py
 _rootLeafType2rootBranchType = { 'UChar_t':'b', 'Char_t':'B', 'UInt_t':'i', 'Int_t':'I', 'Float_t':'F', 'Double_t':'D', 'ULong64_t':'l', 'Long64_t':'L', 'Bool_t':'O' }
-class SuperEventSelector(Module):
+class EventSelector(Module):
     def __init__(self, selectionConfig=None, verbose=False, makeHistos=False, cutOnMET=True, cutOnTrigs=True, cutOnHT=True):
         #Adapt collectionMerger.py for adding new branches for selected leptons, jets...
         ########################
-        #self.input = input
         #Input branches for leptons and Jets. Position one must correspond to incoming electrons, two to incoming muons, and three to AK4 jets
         self.input = { "typeElectron" : "Electron",
                        "typeMuon" : "Muon",
@@ -399,7 +400,6 @@ class SuperEventSelector(Module):
         for elem in self.output:
             placeholder.append({})
         self.branchType = dict(zip(self.input.values(), placeholder))
-        print(self.branchType)
         ########################
 
         #self.jetSel = jetSelection
@@ -449,6 +449,7 @@ class SuperEventSelector(Module):
         self.cfg_jBWP = self.CFG["Jet"]["WP"] #working point, like "Medium" or "Tight"
         self.cfg_jBThresh = self.CFG["Jet"][self.cfg_jBAlgo][self.cfg_jBWP]
         self.cfg_jClnTyp = self.CFG["Jet"]["CleanType"]
+        self.cfg_jMaxdR = self.CFG["Jet"]["MaxDeltaR"]
 
         #Event CFG loading from config file
         self.cfg_lowMRes_cent = self.CFG["Event"]["LowMassReson"]["Center"] #Low mass resonance veto center
@@ -494,7 +495,7 @@ class SuperEventSelector(Module):
         for elem in self.input:
             placeholder.append([])
         self.brlist_sep = dict(zip(self.input.keys(), placeholder))
-        #print(self.brlist_sep)
+
         for key in self.input.keys():
             self.brlist_sep[key] = self.filterBranchNames(branches,self.input[key])
         #self.brlist_all = set(itertools.chain(*(self.brlist_sep)))
@@ -710,9 +711,9 @@ class SuperEventSelector(Module):
 
 #        for j in filter(self.jetSel,jets):
         nBJets = 0
-        nClnBJets = 0
+        #nClnBJets = 0
         nOthJets = 0
-        nClnOthJets = 0
+        #nClnOthJets = 0
         HT = 0.0
         H = 0.0
         HT2M = 0.0
@@ -729,42 +730,52 @@ class SuperEventSelector(Module):
             #Eta acceptance
             if abs(jet.eta) > self.cfg_jMaxEta:
                 continue
+            if self.cfg_jClnTyp == "PartonMatching":
+                if jInd in crosslinkJetIdx:
+                    continue
+            elif self.cfg_jClnTyp == "DeltaR":
+                #raise NotImplementedError("In eventselector class, in jet loop, selected cleaning type of DeltaR matching has not been implemented")
+                failCleaning = False
+                for mIdx in mIndex:
+                    if deltaR(muons[mIdx], jet) < self.cfg_jMaxdR:
+                        failCleaning = True
+                for eIdx in eIndex:
+                    if deltaR(electrons[eIdx], jet) < self.cfg_jMaxdR:
+                        failCleaning = True
+                if failCleaning:
+                    continue
+            else:
+                raise RuntimeError("The requested Lepton-Jet cross-cleaning algorithm [{0:s}] is not available."
+                                   "Please use \"PartonMatching\" or \"DeltaR\"".format(self.cfg_jClnTyp))
             #https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation94X
             ##if jet.ChosenBTag > ChosenBtagWorkingPoint's Threshold and jet.pt > BTaggedJet's minimum cut
             if getattr(jet, self.cfg_jBAlgo) > self.cfg_jBThresh and jet.pt > self.cfg_jBSelPt:
                 nBJets += 1
-                if self.cfg_jClnTyp == "PartonMatching":
-                    if jInd not in crosslinkJetIdx:
-                        nClnBJets += 1
-                        if self.makeHistos: self.h_jBSel_map.Fill(jet.eta, jet.phi)
-                        if self.makeHistos: self.h_jBSel_pt.Fill(jet.pt)
-                        jBIndex.append(jInd)
-                        HT += jet.pt
-                        H += (jet.p4()).P()
-                        if nClnBJets > 2:
-                            HT2M += jet.pt
-                            H2M += (jet.p4()).P()
-                        #Add BJets to collection here
-                        #Add momentum to HT2M, HT, H here
-                elif self.cfg_jClnTyp == "DeltaR":
-                    raise NotImplementedError("In eventselector class, in jet loop, selected cleaning type of DeltaR matching has not been implemented")
-                    #if DeltaR(jet, lepton) < 0.4
-                        #Need to import from the tools.py the DeltaR function to test between jets and leptons
-                        #Add BJets to collection here
-                        #Add momentum to HT2M, HT, H here
-                else:
-                    raise RuntimeError("The requested Lepton-Jet cross-cleaning algorithm [{0:s}] is not available."
-                                       "Please use \"PartonMatching\" or \"DeltaR\"".format(self.cfg_jClnTyp))
+                #nClnBJets += 1
+                if self.makeHistos: self.h_jBSel_map.Fill(jet.eta, jet.phi)
+                if self.makeHistos: self.h_jBSel_pt.Fill(jet.pt)
+                #Add jet index to list for collection filling
+                jBIndex.append(jInd) 
+                HT += jet.pt
+                H += (jet.p4()).P()
+                #Improper calculation below, fix later
+                #if nClnBJets > 2:
+                #Event variables
+                if nBJets > 2:
+                    HT2M += jet.pt
+                    H2M += (jet.p4()).P()
+                    #Add momentum to HT2M, HT, H here
             elif jet.pt > self.cfg_jNSelPt:
                 nOthJets +=1
                 if self.makeHistos: self.h_jSel_map.Fill(jet.eta, jet.phi)
                 if self.makeHistos: self.h_jSel_pt.Fill(jet.pt)
+                #Add jet index to list for collection filling
                 jNBIndex.append(jInd)
+                #Event variables
                 HT += jet.pt
                 H += (jet.p4()).P()
                 HT2M += jet.pt
                 H2M += (jet.p4()).P() 
-                #Add non-B jets to collection here
 
         #Cut events that don't have minimum number of b-tagged jets
         if nBJets < self.cfg_nBJetMin:
@@ -814,4 +825,4 @@ class SuperEventSelector(Module):
         return True
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
-theSuperEventSelector = lambda : SuperEventSelector()
+theEventSelector = lambda : EventSelector()

@@ -51,7 +51,7 @@
 		 "Medium" : "FIXME", 
 		 "Tight" : "FIXME"
 		 },
-      "CleanType" : "DeltaR",
+      "CleanType" : "PartonMatching",
       "MaxDeltaR" : 0.4
       },
 "HLT" : {
