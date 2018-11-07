@@ -850,8 +850,9 @@ class SuperEventSelector(Module):
             out = []
             for elem in jNBIndex:
                 out.append(getattr(jets[elem], br))
-            self.out.fillBranch("%s_%s"%(self.output[3], out)
+            self.out.fillBranch("%s_%s"%(self.output[3], out))
 
         return True
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
+theSuperEventSelector = lambda : SuperEventSelector()
