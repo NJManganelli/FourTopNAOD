@@ -57,5 +57,5 @@ p=PostProcessor(".",
                 )
 for i in xrange(len(p.modules)):
     if p.modules[i].maxEventsToProcess:
-        p.modules[i].maxEventsToProcess=1000
+        p.modules[i].maxEventsToProcess=100
 p.run()
