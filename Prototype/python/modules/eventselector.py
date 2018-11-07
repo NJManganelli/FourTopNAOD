@@ -40,14 +40,6 @@ class EventSelector(Module):
         self.ElElTrig = 0
         self.MuTrig = 0
 
-        #cfg Electron criteria (later: load from configuration dictionary
-        #self.cfg_eSelPt = 25.0 #min Pt for selection
-        #self.cfg_eVetoPt = 20 #"FIXME" not clear what pt requirements are CURRENTLY for all these leptons
-        # self.cfg_eMaxEta = 2.4 #Max Eta acceptance
-        # self.cfg_eIdType = "cutBased"
-        # self.cfg_eIdSelCut = 2 #loose
-        # self.cfg_eIdExtraCut = 1 #veto
-
         #Electron CFG loading from config file
         self.cfg_eMaxEta = self.CFG["Electron"]["Common"]["Eta"] #Max Eta acceptance
         self.cfg_eIdType = self.CFG["Electron"]["Common"]["IdType"]
@@ -56,28 +48,12 @@ class EventSelector(Module):
         self.cfg_eVetoPt = self.CFG["Electron"]["Veto"]["Pt"] #min Pt for veto counting
         self.cfg_eIdExtraCut = self.CFG["Electron"]["Veto"]["IdLevel"] #veto level
 
-        #cfg Muon criteria
-        #self.cfg_mSelPt = 20 #min Pt for selection
-        #self.cfg_mMaxEta = 2.4 #Max Eta acceptance
-        #self.cfg_mSelId = "mediumId" #would be appropriate for SL, using "tightId"
-        #All muons in NanoAOD are loose Muons or better, so loose-only are just those failing the "mediumId"
-
         #Muon CFG loading from config file
         self.cfg_mMaxEta = self.CFG["Muon"]["Common"]["Eta"] #Max Eta acceptance
         self.cfg_mSelPt = self.CFG["Muon"]["Select"]["Pt"] #min Pt for selection
         self.cfg_mSelRelIso = self.CFG["Muon"]["Select"]["RelIso"] #Relative Isolation
         self.cfg_mSelId = self.CFG["Muon"]["Select"]["IdLevel"]
         #All muons in NanoAOD are loose Muons or better, so loose-only are just those failing the "mediumId"
-
-
-        #cfg Individual Jet criteria
-        # self.cfg_jId = 2 #Tight and Tight Lep Veto are the only supported IDs in 2017, corresponding to bits 2 and 3, respectively
-        # self.cfg_jMaxEta = 2.4 #Max Eta acceptance
-        # self.cfg_jNSelPt = 30.0 #Non-B Jet minimum Pt
-        # self.cfg_jBSelPt = 25.0 #B Jet minimum Pt
-        # self.cfg_jBAlgo = "btagCSVV2" #method of bTagging
-        # self.cfg_jBThresh = 0.8838 #Medium CSVv2 working point cut
-        # self.cfg_jClnTyp = "PartonMatching" #As opposed to "DetlaR"
 
         #Jet CFG loading from config file
         self.cfg_jMaxEta = self.CFG["Jet"]["Common"]["Eta"] #Max Eta acceptance
@@ -88,16 +64,6 @@ class EventSelector(Module):
         self.cfg_jBWP = self.CFG["Jet"]["WP"] #working point, like "Medium" or "Tight"
         self.cfg_jBThresh = self.CFG["Jet"][self.cfg_jBAlgo][self.cfg_jBWP]
         self.cfg_jClnTyp = self.CFG["Jet"]["CleanType"]
-
-        #Baseline Event-level criteria
-        # self.cfg_lowMRes_cent = 10.0 #Low mass resonance veto center
-        # self.cfg_lowMRes_hwidth = 10.0 #low mass resonance veto half-width
-        # self.cfg_ZMRes_cent = 91.0 #Z mass resonance veto center
-        # self.cfg_ZMRes_hwidth = 15 #Z mass resonance veto half-width
-        # self.cfg_HTMin = 500
-        # self.cfg_nBJetMin = 2
-        # self.cfg_nTotJetMin = 4
-        # self.cfg_minMET = 50
 
         #Event CFG loading from config file
         self.cfg_lowMRes_cent = self.CFG["Event"]["LowMassReson"]["Center"] #Low mass resonance veto center
@@ -401,7 +367,6 @@ class EventSelector(Module):
 
         #The event made it! Pass to next module/write out of PostProcessor
         return True
-        #self.out.fillBranch("EventMass",eventSum.M())
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 
@@ -418,26 +383,21 @@ class SuperEventSelector(Module):
         ########################
         #self.input = input
         #Input branches for leptons and Jets. Position one must correspond to incoming electrons, two to incoming muons, and three to AK4 jets
-        #self.input = ["Electron", "Muon", "Jet"]
         self.input = { "typeElectron" : "Electron",
                        "typeMuon" : "Muon",
                        "typeAK4" : "Jet"
                        }
         #Output branches. One = electrons, Two = Muons, Three = b Jets, Four = Non-b Jets
-        #self.output = ["SelectedElectron", "SelectedMuon", "SelectedBJet", "SelectedNBJet"]
         self.output = { "typeElectron" : "SelectedElectron",
                         "typeMuon" : "SelectedMuon",
                         "typeAK4Heavy" : "SelectedHeavyJet",
                         "typeAK4Light" : "SelectedLightJet"
                         }
+        #Create dictionary of empty dictionaries which will map each output collection's branches to a branchtype
         self.nInputs = len(self.input)
-        #self.sortkey = lambda (obj,j,i) : sortkey(obj)
-        #self.reverse = reverse
-        #self.selector = [(selector[coll] if coll in selector else (lambda x: True)) for coll in self.input] if selector else None # pass dict([(collection_name,lambda obj : selection(obj)])
         placeholder = []
         for elem in self.output:
             placeholder.append({})
-        #Create dictionary of empty dictionaries which will map each output collection's branches to a branchtype
         self.branchType = dict(zip(self.input.values(), placeholder))
         print(self.branchType)
         ########################
@@ -536,28 +496,15 @@ class SuperEventSelector(Module):
         self.brlist_sep = dict(zip(self.input.keys(), placeholder))
         #print(self.brlist_sep)
         for key in self.input.keys():
-#            print(key)
-#            print(self.input[key])
-#            print([str(x) for x in self.input[key]])
-#            self.brlist_sep[key] = [self.filterBranchNames(branches,x) for x in self.input[key]]
             self.brlist_sep[key] = self.filterBranchNames(branches,self.input[key])
         #self.brlist_all = set(itertools.chain(*(self.brlist_sep)))
-        for key in self.brlist_sep.keys():
-            print(key + " * " + str(self.brlist_sep[key]))
-        # print(self.brlist_sep["typeElectron"])
-        # print(self.brlist_sep["typeMuon"])
-        # print(self.brlist_sep["typeAK4"])
-        # self.is_there = np.zeros(shape=(len(self.brlist_all),self.nInputs),dtype=bool)
         # for bridx,br in enumerate(self.brlist_all):
         #     for j in xrange(self.nInputs):
         #         if br in self.brlist_sep[j]: self.is_there[bridx][j]=True
 
         self.out = wrappedOutputTree
-        #for br in self.brlist_all:
-        #    self.out.branch("%s_%s"%(self.output,br), _rootLeafType2rootBranchType[self.branchType[br]], lenVar="n%s"%self.output)
         #want multipe sets of output branche collections for the different categories.... not one single branch collection
         #Create output branches for the selected electrons, muons, and distinct b Jet/Non-b Jet collections
-        #FIXME: branchtypes needs self.input instead of self.output[][]....
         for ebr in self.brlist_sep["typeElectron"]:
             self.out.branch("%s_%s"%(self.output["typeElectron"], ebr), 
                             _rootLeafType2rootBranchType[self.branchType[self.input["typeElectron"]][ebr]], lenVar="n%s"%self.output["typeElectron"])
@@ -569,12 +516,6 @@ class SuperEventSelector(Module):
                             _rootLeafType2rootBranchType[self.branchType[self.input["typeAK4"]][jbr]], lenVar="n%s"%self.output["typeAK4Heavy"])
             self.out.branch("%s_%s"%(self.output["typeAK4Light"], jbr), 
                             _rootLeafType2rootBranchType[self.branchType[self.input["typeAK4"]][jbr]], lenVar="n%s"%self.output["typeAK4Light"])
-
-        #called by the eventloop at start of new inputFile
-        #Module just passes
-        #wrappedOutputTree only exists if noOut=False and events are written!
-        # self.out = wrappedOutputTree
-        # self.out.branch("EventMass",  "F");
 
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         #called by the eventloop at end of inputFile
@@ -737,17 +678,14 @@ class SuperEventSelector(Module):
 
         #Dilepton event selection cuts
         if nExtraLeptons > 0:
-            if self.verbose: print("1")
             if self.makeHistos: self.h_cutHisto.Fill(1.5)
             return False
         if nSelLeptons != 2:
-            if self.verbose: print("[{0:d}]".format(nSelLeptons))
             if self.makeHistos: self.h_cutHisto.Fill(2.5)
             return False
 
         #Opposite-sign charges
         if (lepCharge[0]*lepCharge[1] > 0):
-            if self.verbose: print("3")
             if self.makeHistos: self.h_cutHisto.Fill(3.5)
             return False
 
@@ -755,21 +693,17 @@ class SuperEventSelector(Module):
         if nSelMuons == 2:
             diLepMass = (muons[lepIndex[0]].p4() + muons[lepIndex[1]].p4()).M()
             if abs(diLepMass - self.cfg_lowMRes_cent) < self.cfg_lowMRes_hwidth:
-                if self.verbose: print("4")
                 if self.makeHistos: self.h_cutHisto.Fill(4.5)
                 return False
             if abs(diLepMass - self.cfg_ZMRes_cent) < self.cfg_ZMRes_hwidth:
-                if self.verbose: print("5")
                 if self.makeHistos: self.h_cutHisto.Fill(5.5)
                 return False
         if nSelElectrons == 2:
             diLepMass = (electrons[lepIndex[0]].p4() + electrons[lepIndex[1]].p4()).M()
             if abs(diLepMass - self.cfg_lowMRes_cent) < self.cfg_lowMRes_hwidth:
-                if self.verbose: print("4")
                 if self.makeHistos: self.h_cutHisto.Fill(4.5)
                 return False
             if abs(diLepMass - self.cfg_ZMRes_cent) < self.cfg_ZMRes_hwidth:
-                if self.verbose: print("5")
                 if self.makeHistos: self.h_cutHisto.Fill(5.5)
                 return False
 
@@ -834,17 +768,14 @@ class SuperEventSelector(Module):
 
         #Cut events that don't have minimum number of b-tagged jets
         if nBJets < self.cfg_nBJetMin:
-            if self.verbose: print("6")
             if self.makeHistos: self.h_cutHisto.Fill(6.5)
             return False
         #Cut events that don't have minimum number of selected, cross-cleaned jets
         if nBJets + nOthJets < self.cfg_nTotJetMin:
-            if self.verbose: print("7")
             if self.makeHistos: self.h_cutHisto.Fill(7.5)
             return False
         #Cut events that don't have minimum value of HT
         if HT < self.cfg_HTMin:
-            if self.verbose: print("8")
             if self.makeHistos: self.h_cutHisto.Fill(8.5)
             if self.cutOnHT: return False
 
