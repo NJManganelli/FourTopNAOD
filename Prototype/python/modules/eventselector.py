@@ -700,12 +700,16 @@ class EventSelector(Module):
         if nExtraLeptons > 0:
             if self.makeHistos: self.h_cutHisto.Fill(1.5)
             return False
+        #print("n: " + str(nSelLeptons) + " ")
         if nSelLeptons != 2:
             if self.makeHistos: self.h_cutHisto.Fill(2.5)
             return False
 
+        #print(lepCharge)
         #Opposite-sign charges
+        #Get almost exactly 1/3 events failing opposite-sign , if they pass dilepton veto, which is appropriate for 4-top production.
         if (lepCharge[0]*lepCharge[1] > 0):
+            #print("<-Failed")
             if self.makeHistos: self.h_cutHisto.Fill(3.5)
             return False
 
