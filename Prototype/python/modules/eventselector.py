@@ -826,3 +826,64 @@ class EventSelector(Module):
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 theEventSelector = lambda : EventSelector()
+
+class TestMiddle(Module):
+    def __init__(self):
+        #self.writeHistFile=True
+        #event counters
+        self.counter = 0
+        self.maxEventsToProcess = -1
+
+
+    def beginJob(self, histFile=None,histDirName=None):
+        #if self.writeHistFile=False, called by the postprocessor as beginJob()
+        #If self.writeHistFile=True, then called as beginJob(histFile=self.histFile,histDirName=self.histDirName)
+        Module.beginJob(self,histFile,histDirName)
+        if self.makeHistos:
+            self.h_cutHisto = ROOT.TH1F('h_cutHisto', ';Pruning Point in Event Selection; Events', 10, 0, 10)
+            self.addObject(self.h_cutHisto)
+            self.h_jSel_map = ROOT.TH2F('h_jSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
+            self.addObject(self.h_jSel_map)
+            self.h_jSel_pt = ROOT.TH1F('h_jSel_pt', ';Jet Pt; Events', 20, 20, 420)
+            self.addObject(self.h_jSel_pt)
+            self.h_jBSel_map = ROOT.TH2F('h_jBSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
+            self.addObject(self.h_jBSel_map)
+            self.h_jBSel_pt = ROOT.TH1F('h_jBSel_pt', ';Jet Pt; Events', 20, 20, 420)
+            self.addObject(self.h_jBSel_pt)
+            # self.h_medCSVV2 = ROOT.TH1D('h_medCSVV2', ';Medium CSVV2 btags; Events', 5, 0, 5)
+            # self.addObject(self.h_medCSVV2)
+        pass
+
+    def endJob(self):
+        Module.endJob()
+        #called once output has been written
+        #Cannot override and use pass here if objects need to be written to a histFile
+        #pass
+
+    def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
+        Module.beginFile(inputFile, outputFile, inputTree, wrappedOutputTree)
+        pass
+
+    def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
+        #called by the eventloop at end of inputFile
+        #Module just passes
+        pass
+
+    def analyze(self, event): #called by the eventloop per-event
+        """process event, return True (go to next module) or False (fail, go to next event)"""
+        #Increment counter and skip events past the maxEventsToProcess, if larger than -1
+        self.counter +=1
+        if -1 < self.maxEventsToProcess < self.counter:
+            return False
+        if (self.counter % 100) == 0:
+            print("Processed {0:2d} Events".format(self.counter))
+
+        HT = 0
+
+        electrons = Collection(event, "Electron")
+        muons = Collection(event, "Muon")
+        jets = Collection(event, "Jet")
+        met = Object(event, "MET")
+        HLT = Object(event, "HLT")
+
+        #Do a W peak or something, 
