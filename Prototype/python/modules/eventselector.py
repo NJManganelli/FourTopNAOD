@@ -26,7 +26,7 @@ class ProtoEventSelector(Module):
         self.CFG = selectionConfig
 
         #choose whether we want verbose output or to produce cut histograms 
-        self.verbose = verbose
+        self._verbose = verbose
         self.makeHistos = makeHistos
         self.cutOnMET = cutOnMET
         self.cutOnTrigs = cutOnTrigs
@@ -254,17 +254,17 @@ class ProtoEventSelector(Module):
 
         #Dilepton event selection cuts
         if nExtraLeptons > 0:
-            if self.verbose: print("1")
+            if self._verbose: print("1")
             if self.makeHistos: self.h_cutHisto.Fill(1.5)
             return False
         if nSelLeptons != 2:
-            if self.verbose: print("[{0:d}]".format(nSelLeptons))
+            if self._verbose: print("[{0:d}]".format(nSelLeptons))
             if self.makeHistos: self.h_cutHisto.Fill(2.5)
             return False
 
         #Opposite-sign charges
         if (lepCharge[0]*lepCharge[1] > 0):
-            if self.verbose: print("3")
+            if self._verbose: print("3")
             if self.makeHistos: self.h_cutHisto.Fill(3.5)
             return False
 
@@ -272,21 +272,21 @@ class ProtoEventSelector(Module):
         if nSelMuons == 2:
             diLepMass = (muons[lepIndex[0]].p4() + muons[lepIndex[1]].p4()).M()
             if abs(diLepMass - self.cfg_lowMRes_cent) < self.cfg_lowMRes_hwidth:
-                if self.verbose: print("4")
+                if self._verbose: print("4")
                 if self.makeHistos: self.h_cutHisto.Fill(4.5)
                 return False
             if abs(diLepMass - self.cfg_ZMRes_cent) < self.cfg_ZMRes_hwidth:
-                if self.verbose: print("5")
+                if self._verbose: print("5")
                 if self.makeHistos: self.h_cutHisto.Fill(5.5)
                 return False
         if nSelElectrons == 2:
             diLepMass = (electrons[lepIndex[0]].p4() + electrons[lepIndex[1]].p4()).M()
             if abs(diLepMass - self.cfg_lowMRes_cent) < self.cfg_lowMRes_hwidth:
-                if self.verbose: print("4")
+                if self._verbose: print("4")
                 if self.makeHistos: self.h_cutHisto.Fill(4.5)
                 return False
             if abs(diLepMass - self.cfg_ZMRes_cent) < self.cfg_ZMRes_hwidth:
-                if self.verbose: print("5")
+                if self._verbose: print("5")
                 if self.makeHistos: self.h_cutHisto.Fill(5.5)
                 return False
 
@@ -349,17 +349,17 @@ class ProtoEventSelector(Module):
 
         #Cut events that don't have minimum number of b-tagged jets
         if nBJets < self.cfg_nBJetMin:
-            if self.verbose: print("6")
+            if self._verbose: print("6")
             if self.makeHistos: self.h_cutHisto.Fill(6.5)
             return False
         #Cut events that don't have minimum number of selected, cross-cleaned jets
         if nBJets + nOthJets < self.cfg_nTotJetMin:
-            if self.verbose: print("7")
+            if self._verbose: print("7")
             if self.makeHistos: self.h_cutHisto.Fill(7.5)
             return False
         #Cut events that don't have minimum value of HT #BUT was calculating HT only from selected jets right? cross-checking needed
         if HT < self.cfg_HTMin:
-            if self.verbose: print("8")
+            if self._verbose: print("8")
             if self.makeHistos: self.h_cutHisto.Fill(8.5)
             if self.cutOnHT: return False
 
@@ -380,7 +380,7 @@ showyEventSelector = lambda : ProtoEventSelector(makeHistos=True)
 #Add new collections for selected items following https://github.com/cms-nanoAOD/nanoAOD-tools/blob/master/python/postprocessing/modules/common/collectionMerger.py
 _rootLeafType2rootBranchType = { 'UChar_t':'b', 'Char_t':'B', 'UInt_t':'i', 'Int_t':'I', 'Float_t':'F', 'Double_t':'D', 'ULong64_t':'l', 'Long64_t':'L', 'Bool_t':'O' }
 class EventSelector(Module):
-    def __init__(self, selectionConfig=None, verbose=False, makeHistos=False, cutOnMET=True, cutOnTrigs=True, cutOnHT=True):
+    def __init__(self, selectionConfig=None, verbose=False, makeHistos=False, cutOnMET=True, cutOnTrigs=True, cutOnHT=True, isLastModule=False):
         #Adapt collectionMerger.py for adding new branches for selected leptons, jets...
         ########################
         #Input branches for leptons and Jets. Position one must correspond to incoming electrons, two to incoming muons, and three to AK4 jets
@@ -409,11 +409,12 @@ class EventSelector(Module):
         self.CFG = selectionConfig
 
         #choose whether we want verbose output or to produce cut histograms 
-        self.verbose = verbose
+        self._verbose = verbose
         self.makeHistos = makeHistos
         self.cutOnMET = cutOnMET
         self.cutOnTrigs = cutOnTrigs
         self.cutOnHT = cutOnHT
+        self._isLastModule = isLastModule
 
         #event counters
         self.counter = 0
@@ -485,6 +486,24 @@ class EventSelector(Module):
         #called once output has been written
         #Cannot override and use pass here if objects need to be written to a histFile
         #pass
+
+    def endJob(self):
+        if hasattr(self, 'objs') and self.objs != None:
+            prevdir = ROOT.gDirectory
+            if self._verbose:
+                print("EventSelector is switching from directory {0:s} to directory {1:s}".format(prevdir, self.dir))
+            self.dir.cd()
+            if self._verbose:
+                print("EventSelector is writing objects inside the directory.")
+            for obj in self.objs:
+                obj.Write()
+            if self._verbose:
+                print("Returning to previous directory...")
+            prevdir.cd()
+            if self._isLastModule and hasattr(self, 'histFile') and self.histFile != None :
+                if self._verbose:
+                    print("EventSelector was passed the option isLastModule=True. It is closing the file at endJob().")
+                self.histFile.Close()
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         _brlist = inputTree.GetListOfBranches()
@@ -825,7 +844,7 @@ class EventSelector(Module):
         return True
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
-theEventSelector = lambda : EventSelector()
+standaloneEventSelector = lambda : EventSelector(isLastModule=True, verbose=True)
 
 class SimpleActivity(Module):
     def __init__(self):
