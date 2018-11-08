@@ -12,10 +12,10 @@ from FourTopNAOD.Prototype.tools.fileloader import FileLoader as IFL
 
 preselection="nJet > 4 && (nMuon + nElectron) > 1"
 
-# Y = IFL(eventSet="TTTT", era="2017", channel="DL") #Default, deltaR and CSVv2
+Y = IFL(eventSet="TTTT", era="2017", channel="DL") #Default, deltaR and CSVv2
 # Y = IFL(eventSet="TTTT", era="2017", channel="DL", configName="PartonMatching")
 # Y = IFL(eventSet="TTTT", era="2017", channel="DL", configName="DeepCSV")
-Y = IFL(eventSet="TTTT", era="2017", channel="DL", configName="PM+DCSV")
+# Y = IFL(eventSet="TTTT", era="2017", channel="DL", configName="PM+DCSV")
 print(Y.getFiles(indexOfFile=0))
 p=PostProcessor(".",
                 Y.getFiles(indexOfFile=0),
@@ -24,18 +24,18 @@ p=PostProcessor(".",
                 outputbranchsel=None,
                 postfix="_" + Y.getSet() + "_PostEvtSel",
                 jsonInput=Y.getJSONPath(),
-                modules=[EventSelector(makeHistos=True, cutOnTrigs=False, cutOnMET=True, 
+                modules=[EventSelector(makeHistos=True, cutOnTrigs=True, cutOnMET=True, 
                                        cutOnHT=True, verbose=False, selectionConfig=Y.getConfig())],
                 justcount=False,
                 provenance=True,
 #                fwkJobReport=True,
 #                haddFileName="hadded.root",
                 noOut=False,
-                histFileName="hist" + Y.getSet() + ".root",
+                histFileName="hist" + Y.getSet() + "_runEventSelection.root",
                 histDirName="plots",
                 compression="LZMA:9"
                 )
 for i in xrange(len(p.modules)):
-    if p.modules[i].maxEventsToProcess:
+    if hasattr(p.modules[i], "maxEventsToProcess"):
         p.modules[i].maxEventsToProcess=10000
 p.run()

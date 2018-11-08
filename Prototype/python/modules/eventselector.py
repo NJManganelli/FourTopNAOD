@@ -380,7 +380,7 @@ showyEventSelector = lambda : ProtoEventSelector(makeHistos=True)
 #Add new collections for selected items following https://github.com/cms-nanoAOD/nanoAOD-tools/blob/master/python/postprocessing/modules/common/collectionMerger.py
 _rootLeafType2rootBranchType = { 'UChar_t':'b', 'Char_t':'B', 'UInt_t':'i', 'Int_t':'I', 'Float_t':'F', 'Double_t':'D', 'ULong64_t':'l', 'Long64_t':'L', 'Bool_t':'O' }
 class EventSelector(Module):
-    def __init__(self, selectionConfig=None, verbose=False, makeHistos=False, cutOnMET=True, cutOnTrigs=True, cutOnHT=True, isLastModule=False):
+    def __init__(self, selectionConfig=None, verbose=False, makeHistos=False, cutOnMET=True, cutOnTrigs=True, cutOnHT=True, isLastModule=True):
         #Adapt collectionMerger.py for adding new branches for selected leptons, jets...
         ########################
         #Input branches for leptons and Jets. Position one must correspond to incoming electrons, two to incoming muons, and three to AK4 jets
@@ -558,7 +558,7 @@ class EventSelector(Module):
         self.counter +=1
         if -1 < self.maxEventsToProcess < self.counter:
             return False
-        if (self.counter % 10) == 0:
+        if (self.counter % 1000) == 0:
             print("Processed {0:2d} Events".format(self.counter))
 
         PV = Object(event, "PV")
@@ -845,6 +845,7 @@ class EventSelector(Module):
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 standaloneEventSelector = lambda : EventSelector(isLastModule=True, verbose=True)
+#AllEventSelector = lambda : EventSelector(makeHistos=True, cutOnTrigs=TRUE, cutOnMET=True, cutOnHT=True, verbose=True, selectionConfig=Y.getConfig(), isLastModule=False)
 
 class SimpleActivity(Module):
     def __init__(self):

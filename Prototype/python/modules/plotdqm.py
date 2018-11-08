@@ -98,7 +98,7 @@ if they exist; the latter triggers calculation and plotting of the event variabl
                 self.h_osdl_minv = ROOT.TH1F(self._title + '_h_' + 'osdl_minv', ';Invariant Mass; Events', 100, 0., 200.)
                 self.addObject(self.h_osdl_minv)
             if self._doTopologyVariables:
-                self.h_topol_ht = ROOT.TH1F(self._title + '_h_' + 'topol_ht', ';HT; Events', 100, 100., 1000.)
+                self.h_topol_ht = ROOT.TH1F(self._title + '_h_' + 'topol_ht', ';HT; Events', 70, 100., 1500.)
                 self.addObject(self.h_topol_ht)
             if self._verbose:
                 print("Returning to previous directory...")
@@ -370,3 +370,5 @@ if they exist; the latter triggers calculation and plotting of the event variabl
 TestDQM = lambda : PlotDQM(title="Test", typeAK4="Jet", typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=True, verbose=True)
 TestInput = lambda : PlotDQM(title="Input", typeAK4="Jet", typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=True, verbose=True, isLastModule=False)
 TestOutput = lambda : PlotDQM(title="Output", typeAK4="Jet", typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=True, verbose=True, isLastModule=True)
+AllDQMIn = lambda : PlotDQM(title="Input", typeAK4="Jet", typeAK4_e=None, typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=True, verbose=True, isLastModule=False)
+AllDQMOut = lambda : PlotDQM(title="Output", typeAK4="SelectedHeavyJet", typeAK4_e="SelectedLightJet", typeAK8="FatJet", typeElectron="SelectedElectron", typeMuon="SelectedMuon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=True, verbose=True, isLastModule=True)

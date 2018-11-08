@@ -32,7 +32,7 @@ p=PostProcessor(".",
 #                fwkJobReport=True,
 #                haddFileName="hadded.root",
                 noOut=True,
-                histFileName="histOut.root",
+                histFileName="hist" + InputClass.getSet() + "_runDQM.root",
                 histDirName="plots",
                 compression="LZMA:9"
                 )

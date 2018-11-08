@@ -25,24 +25,21 @@ p=PostProcessor(".",
                 outputbranchsel=None,
                 postfix="_" + Y.getSet() + "_PostEvtSel",
                 jsonInput=Y.getJSONPath(),
-                modules = [
-        PlotDQM(title="Input", typeAK4="Jet", typeAK4_e=None, typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", 
-                typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=True, verbose=True, isLastModule=False),
-        EventSelector(makeHistos=True, cutOnTrigs=False, cutOnMET=True, 
-                                       cutOnHT=True, verbose=True, selectionConfig=Y.getConfig(), isLastModule=True),
-        PlotDQM(title="Output", typeAK4="SelectedHeavyJet", typeAK4_e="SelectedLightJet", typeAK8="FatJet", typeElectron="SelectedElectron", 
-                typeMuon="SelectedMuon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=True, verbose=True, isLastModule=True)
-        ],
+                modules = [ AllDQMIn(),
+                            EventSelector(makeHistos=True, cutOnTrigs=True, cutOnMET=True, 
+                                          cutOnHT=True, verbose=True, selectionConfig=Y.getConfig(), isLastModule=False),
+                            AllDQMOut()
+                            ],
                 justcount=False,
                 provenance=True,
 #                fwkJobReport=True,
 #                haddFileName="hadded.root",
                 noOut=False,
-                histFileName="hist" + Y.getSet() + ".root",
+                histFileName="hist" + Y.getSet() + "_runAll.root",
                 histDirName="plots",
                 compression="LZMA:9"
                 )
 for i in xrange(len(p.modules)):
-    if p.modules[i].maxEventsToProcess:
+    if hasattr(p.modules[i], "maxEventsToProcess"):
         p.modules[i].maxEventsToProcess=1000
 p.run()
