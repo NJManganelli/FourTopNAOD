@@ -11,8 +11,8 @@ from FourTopNAOD.Prototype.modules.plotdqm import *
 from FourTopNAOD.Prototype.tools.fileloader import FileLoader
 #from FourTopNAOD.Prototype.modules.eventselector import *
 
-preselection="nJet > 4 && (nMuon + nElectron) > 1"
-
+#preselection="nJet > 4 && (nMuon + nElectron) > 1"
+preselection=None
 InputClass = FileLoader(eventSet="TTTT", era="2017", channel="DL")
 print(InputClass.getFiles(indexOfFile=0))
 p=PostProcessor(".",
@@ -25,7 +25,8 @@ p=PostProcessor(".",
 #                modules=[EventSelector(makeHistos=True, cutOnTrigs=True, cutOnMET=True, 
 #                                       cutOnHT=True, verbose=False, selectionConfig=InputClass.getConfig())],
 #                modules=[PlotDQM(title="Test",typeAK4="Jet", typeAK8=None, typeElectron="Electron", typeMuon="Muon", typeMET=None, typeTrigger=None, doOSDL=False)],
-                modules=[TestDQM()],
+#                modules=[TestDQM()],
+                modules=[TestInput(), TestMiddle(), TestOutput()],
                 justcount=False,
                 provenance=True,
 #                fwkJobReport=True,

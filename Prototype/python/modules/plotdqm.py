@@ -16,29 +16,31 @@ A title must be provided using title="Your Custom Title." This title helps diffe
 The collections should be passed as a string containing the Collection name, to the corresponding Type, which are typeAK4=, typeAK8=, typeElectron=,
 typeMuon=, typeTrigger=, and two boolean values, doOSDL= and doTopologyVariables=. The former triggers invariant mass histograms in same-flavor channels,
 if they exist; the latter triggers calculation and plotting of the event variables, like H, HT, HTRat, etc."""
-    def __init__(self, title=None, typeAK4=None, typeAK8=None, typeElectron=None, typeMuon=None, typeMET=None, typeTrigger=None, doOSDL=False, doTopologyVariables=False):
+    def __init__(self, title=None, typeAK4=None, typeAK4_e=None, typeAK8=None, typeElectron=None, typeMuon=None, typeMET=None, typeTrigger=None, doOSDL=False, doTopologyVariables=False, verbose=False, isLastModule=False):
         #To Do: navigate to folder named after the title, also storing old directory first, then navigating back at the end of the file. Will this work? 
         #Otherwise, give this as pre-title to every single histogram.... maybe equally valid
-        #self.jetSel = jetSelection
         self.writeHistFile=True
-
         self._title = title
         self._dirName = "PlotDQM_" + self._title
 
         #Collection handles and options
         self._typeAK4 = typeAK4
+        self._typeAK4_e = typeAK4_e
         self._typeAK8 = typeAK8
         self._typeElectron = typeElectron
         self._typeMuon = typeMuon
         self._doOSDL = doOSDL
         self._doTopologyVariables = doTopologyVariables
+        self._verbose = verbose
+        #Boolean to trigger file closure if module is the last in the chain:
+        self._isLastModule = isLastModule
 
         #collection flags, to safely handle bad collection names
         self._flagAK4 = False
+        self._flagAK4_e = False #second jet collection
         self._flagAK8 = False
         self._flagElectron = False
         self._flagMuon = False
-        self._flagDiLep = False
         self._flagOSDL = False
 
         #event counters
@@ -54,59 +56,91 @@ if they exist; the latter triggers calculation and plotting of the event variabl
     def beginJob(self, histFile=None,histDirName=None):
         #if self.writeHistFile=False, called by the postprocessor as beginJob()
         #If self.writeHistFile=True, then called as beginJob(histFile=self.histFile,histDirName=self.histDirName)
-        self.histFile = histFile
-        self.histDirName = histDirName
-        Module.beginJob(self,histFile,histDirName)
-        if self._typeAK4:
-            self.h_ak4_map = ROOT.TH2F('h_' + self._typeAK4 + '_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
-            self.addObject(self.h_ak4_map)
-            self.h_ak4_pt = ROOT.TH1F('h_' + self._typeAK4 + '_pt', ';Jet Pt; Events', 20, 20, 420)
-            self.addObject(self.h_ak4_pt)
-            self.h_ak4_eta = ROOT.TH1F('h_' + self._typeAK4 + '_eta', ';Jet Eta; Events', 64, -2.8, 2.8)
-            self.addObject(self.h_ak4_eta)
-            self.h_ak4_phi = ROOT.TH1F('h_' + self._typeAK4 + '_phi', ';Jet Phi; Events', 64, -3.14159265, 3.14159265)
-            self.addObject(self.h_ak4_phi)
-            self.h_ak4_jetId = ROOT.TH1D('h_' + self._typeAK4 + '_jetId', ';Jet ID; Events', 8, 0, 7)
-            self.addObject(self.h_ak4_jetId)
-            self.h_ak4_csvv2 = ROOT.TH1F('h_' + self._typeAK4 + '_csvv2', ';btag CSVv2; Events', 100, -0.1, 1.0)
-            self.addObject(self.h_ak4_csvv2)
-            self.h_ak4_deepcsv = ROOT.TH1F('h_' + self._typeAK4 + '_deepcsv', ';btag DeepB; Events', 100, -0.1, 1.0)
-            self.addObject(self.h_ak4_deepcsv)
-            self.h_ak4_deepflav = ROOT.TH1F('h_' + self._typeAK4 + '_deepflav', ';btag DeepFlavB; Events', 100, -0.1, 1.0)
-            self.addObject(self.h_ak4_deepflav)
-        if self._typeMuon:
-            self.h_mu_Id = ROOT.TH1F('h_' + self._typeMuon + '_muonId', ';Muon ID; Events', 3, 1, 4)
-            self.addObject(self.h_mu_Id)
-            self.h_mu_reliso = ROOT.TH1F('h_' + self._typeMuon + '_reliso', ';PF Relative Isolation; Events', 100, 0.0, 1.0)
-            self.addObject(self.h_mu_reliso)
-        if self._doOSDL:
-            self.h_osdl_minv = ROOT.TH1F('h_osdl_minv', ';Invariant Mass; Events', 100, 0., 200.)
-            self.addObject(self.h_osdl_minv)
-#    def endJob(self):
+        if histFile != None and histDirName != None:
+            self.writeHistFile=True
+            prevdir = ROOT.gDirectory
+            if self._verbose:
+                print("Instance {0:s} of PlotDQM is switching from directory {1:s}".format(self._title, prevdir))
+            self.histFile = histFile
+            self.histFile.cd()
+            #self.dir = self.histFile.mkdir( histDirName )
+            #directory for this instance
+            if self._verbose:
+                print("Instance {0:s} of PlotDQM is creating directory {1:s}".format(self._title, self._dirName))
+            #Use default self.dir to take advantage of inherited endJob() method
+            self.dir = self.histFile.mkdir( self._dirName )
+            self.objs = []
+            if self._verbose:
+                print("Instance {0:s} of PlotDQM is booking histograms".format(self._title))
+            if self._typeAK4 or self._typeAK4_e:
+                self.h_ak4_map = ROOT.TH2F('h_' + self._typeAK4 + '_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
+                self.addObject(self.h_ak4_map)
+                self.h_ak4_pt = ROOT.TH1F('h_' + self._typeAK4 + '_pt', ';Jet Pt; Events', 20, 20, 420)
+                self.addObject(self.h_ak4_pt)
+                self.h_ak4_eta = ROOT.TH1F('h_' + self._typeAK4 + '_eta', ';Jet Eta; Events', 64, -2.8, 2.8)
+                self.addObject(self.h_ak4_eta)
+                self.h_ak4_phi = ROOT.TH1F('h_' + self._typeAK4 + '_phi', ';Jet Phi; Events', 64, -3.14159265, 3.14159265)
+                self.addObject(self.h_ak4_phi)
+                self.h_ak4_jetId = ROOT.TH1D('h_' + self._typeAK4 + '_jetId', ';Jet ID; Events', 8, 0, 7)
+                self.addObject(self.h_ak4_jetId)
+                self.h_ak4_csvv2 = ROOT.TH1F('h_' + self._typeAK4 + '_csvv2', ';btag CSVv2; Events', 100, -0.1, 1.0)
+                self.addObject(self.h_ak4_csvv2)
+                self.h_ak4_deepcsv = ROOT.TH1F('h_' + self._typeAK4 + '_deepcsv', ';btag DeepB; Events', 100, -0.1, 1.0)
+                self.addObject(self.h_ak4_deepcsv)
+                self.h_ak4_deepflav = ROOT.TH1F('h_' + self._typeAK4 + '_deepflav', ';btag DeepFlavB; Events', 100, -0.1, 1.0)
+                self.addObject(self.h_ak4_deepflav)
+            if self._typeMuon:
+                self.h_mu_Id = ROOT.TH1F('h_' + self._typeMuon + '_muonId', ';Muon ID; Events', 3, 1, 4)
+                self.addObject(self.h_mu_Id)
+                self.h_mu_reliso = ROOT.TH1F('h_' + self._typeMuon + '_reliso', ';PF Relative Isolation; Events', 100, 0.0, 1.0)
+                self.addObject(self.h_mu_reliso)
+            if self._doOSDL:
+                self.h_osdl_minv = ROOT.TH1F('h_' + 'osdl_minv', ';Invariant Mass; Events', 100, 0., 200.)
+                self.addObject(self.h_osdl_minv)
+            if self._doTopologyVariables:
+                self.h_topol_ht = ROOT.TH1F('h_' + 'topol_ht', ';HT; Events', 100, 100., 1000.)
+                self.addObject(self.h_topol_ht)
+            if self._verbose:
+                print("Returning to previous directory...")
+            prevdir.cd()
+        else:
+            print("PlotDQM Requires a histFile input. Ensure a filename and directory name (overridden for plot module) are specified in the PostProcessor.")
+    def endJob(self):
+        if hasattr(self, 'objs') and self.objs != None:
+            prevdir = ROOT.gDirectory
+            if self._verbose:
+                print("Instance {0:s} of PlotDQM is switching from directory {1:s} to directory {2:s}".format(self._title, prevdir, self.dir))
+            self.dir.cd()
+            if self._verbose:
+                print("Instance {0:s} of PlotDQM is writing objects inside the directory.".format(self._title))
+            for obj in self.objs:
+                obj.Write()
+            if self._verbose:
+                print("Returning to previous directory...")
+            prevdir.cd()
+            if self._isLastModule and hasattr(self, 'histFile') and self.histFile != None : 
+                if self._verbose:
+                    print("Instance {0:s} of PlotDQM is closing the file at endJob().".format(self._title))
+                self.histFile.Close()
 #       Module.endJob()
         #called once output has been written
         #Cannot override and use pass here if objects need to be written to a histFile
         #pass
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
-        prevdir = ROOT.gDirectory
-        if not self.histFile:
-            print("PlotDQM Requires a histFile input. Ensure a filename and directory name are specified in the PostProcessor.")
-        self.histFile.cd()
-        self.dir = self.histFile.mkdir( self._dirName )
-        prevdir.cd()
+        pass
 
-    def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
-        prevdir = ROOT.gDirectory
-        print("Beginning of endFile, directory is ... " + str(prevdir))
-        #outputFile.cd()
-        self.dir.cd()
-        currdir = ROOT.gDirectory
-        print("In endFile, switched to... " + str(currdir))
-        #self.dir.cd() #Would this also work?
-        #self.h_nevents.Write()
-        prevdir.cd()
-        print("Current directory at end of endFile: " + str(ROOT.gDirectory))
+    # def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
+    #     prevdir = ROOT.gDirectory
+    #     print("Beginning of endFile, directory is ... " + str(prevdir))
+    #     #outputFile.cd()
+    #     self.dir.cd()
+    #     currdir = ROOT.gDirectory
+    #     print("In endFile, switched to... " + str(currdir))
+    #     #self.dir.cd() #Would this also work?
+    #     #self.h_nevents.Write()
+    #     prevdir.cd()
+    #     print("Current directory at end of endFile: " + str(ROOT.gDirectory))
 
     def analyze(self, event): #called by the eventloop per-event
         """process event, return True (go to next module) or False (fail, go to next event)"""
@@ -114,10 +148,11 @@ if they exist; the latter triggers calculation and plotting of the event variabl
         self.counter +=1
         if -1 < self.maxEventsToProcess < self.counter:
             return False
-
+        
         electrons = None
         muons = None
         jets = None
+        jets2 = None #hack to handle second jets collection
         fatjets = None
         if self.counter == 1:
             if self._typeElectron:
@@ -137,6 +172,11 @@ if they exist; the latter triggers calculation and plotting of the event variabl
                 self._flagAK4 = True
             else:
                 print("For typeAK4, collection {0:s} is not available, histograms will not be filled".format(self._typeAK4))
+            if self._typeAK4_e:
+                jets2 = Collection(event, self._typeAK4_e)
+                self._flagAK4_e = True
+            else:
+                print("For typeAK4_e, collection {0:s} is not available, histograms will not be filled".format(self._typeAK4_e))
             if self._typeAK8:
                 fatjets = Collection(event, self._typeAK8)
                 self._flagAK8 = True
@@ -153,6 +193,8 @@ if they exist; the latter triggers calculation and plotting of the event variabl
                 muons = Collection(event, self._typeMuon)
             if self._flagAK4:
                 jets = Collection(event, self._typeAK4)
+            if self._flagAK4_e:
+                jets2 = Collection(event, self._typeAK4_e)
             if self._flagAK8:
                 fatjets = Collection(event, self._typeAK8)
 
@@ -182,8 +224,11 @@ if they exist; the latter triggers calculation and plotting of the event variabl
                         minv = (muon.p4() + muon2.p4()).M()
                         #fill Histo
                         self.h_osdl_minv.Fill(minv)
+
+        HT = 0
         if jets:
             for jet in jets:
+                HT += jet.pt
                 self.h_ak4_map.Fill(jet.eta, jet.phi)
                 self.h_ak4_pt.Fill(jet.pt)
                 self.h_ak4_eta.Fill(jet.eta)
@@ -192,6 +237,20 @@ if they exist; the latter triggers calculation and plotting of the event variabl
                 self.h_ak4_csvv2.Fill(jet.btagCSVV2)
                 self.h_ak4_deepcsv.Fill(jet.btagDeepB)
                 self.h_ak4_deepflav.Fill(jet.btagDeepFlavB)
+        if jets2:
+            for jet in jets2:
+                HT += jet.pt
+                self.h_ak4_map.Fill(jet.eta, jet.phi)
+                self.h_ak4_pt.Fill(jet.pt)
+                self.h_ak4_eta.Fill(jet.eta)
+                self.h_ak4_phi.Fill(jet.phi)
+                self.h_ak4_jetId.Fill(jet.jetId)
+                self.h_ak4_csvv2.Fill(jet.btagCSVV2)
+                self.h_ak4_deepcsv.Fill(jet.btagDeepB)
+                self.h_ak4_deepflav.Fill(jet.btagDeepFlavB)
+
+        if jets or jets2:
+            self.h_topol_ht.Fill(HT)
         # met = Object(event, "MET")
         # HLT = Object(event, "HLT")
         # Filters = Object(event, "Flag") #For Data
@@ -308,6 +367,6 @@ if they exist; the latter triggers calculation and plotting of the event variabl
         return True
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
-TestDQM = lambda : PlotDQM(title="Test", typeAK4="Jet", typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=False)
-TestInput = lambda : PlotDQM(title="Input", typeAK4="Jet", typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=False)
-TestOutput = lambda : PlotDQM(title="Output", typeAK4="Jet", typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=False)
+TestDQM = lambda : PlotDQM(title="Test", typeAK4="Jet", typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=True, verbose=True)
+TestInput = lambda : PlotDQM(title="Input", typeAK4="Jet", typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=True, verbose=True, isLastModule=False)
+TestOutput = lambda : PlotDQM(title="Output", typeAK4="Jet", typeAK8="FatJet", typeElectron="Electron", typeMuon="Muon", typeMET="MET", typeTrigger="HLT", doOSDL=True, doTopologyVariables=True, verbose=True, isLastModule=True)

@@ -827,7 +827,7 @@ class EventSelector(Module):
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 theEventSelector = lambda : EventSelector()
 
-class TestMiddle(Module):
+class SimpleActivity(Module):
     def __init__(self):
         #self.writeHistFile=True
         #event counters
@@ -839,30 +839,30 @@ class TestMiddle(Module):
         #if self.writeHistFile=False, called by the postprocessor as beginJob()
         #If self.writeHistFile=True, then called as beginJob(histFile=self.histFile,histDirName=self.histDirName)
         Module.beginJob(self,histFile,histDirName)
-        if self.makeHistos:
-            self.h_cutHisto = ROOT.TH1F('h_cutHisto', ';Pruning Point in Event Selection; Events', 10, 0, 10)
-            self.addObject(self.h_cutHisto)
-            self.h_jSel_map = ROOT.TH2F('h_jSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
-            self.addObject(self.h_jSel_map)
-            self.h_jSel_pt = ROOT.TH1F('h_jSel_pt', ';Jet Pt; Events', 20, 20, 420)
-            self.addObject(self.h_jSel_pt)
-            self.h_jBSel_map = ROOT.TH2F('h_jBSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
-            self.addObject(self.h_jBSel_map)
-            self.h_jBSel_pt = ROOT.TH1F('h_jBSel_pt', ';Jet Pt; Events', 20, 20, 420)
-            self.addObject(self.h_jBSel_pt)
+        # if self.makeHistos:
+        #     self.h_cutHisto = ROOT.TH1F('h_cutHisto', ';Pruning Point in Event Selection; Events', 10, 0, 10)
+        #     self.addObject(self.h_cutHisto)
+        #     self.h_jSel_map = ROOT.TH2F('h_jSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
+        #     self.addObject(self.h_jSel_map)
+        #     self.h_jSel_pt = ROOT.TH1F('h_jSel_pt', ';Jet Pt; Events', 20, 20, 420)
+        #     self.addObject(self.h_jSel_pt)
+        #     self.h_jBSel_map = ROOT.TH2F('h_jBSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
+        #     self.addObject(self.h_jBSel_map)
+        #     self.h_jBSel_pt = ROOT.TH1F('h_jBSel_pt', ';Jet Pt; Events', 20, 20, 420)
+        #     self.addObject(self.h_jBSel_pt)
             # self.h_medCSVV2 = ROOT.TH1D('h_medCSVV2', ';Medium CSVV2 btags; Events', 5, 0, 5)
             # self.addObject(self.h_medCSVV2)
         pass
 
-    def endJob(self):
-        Module.endJob()
+    # def endJob(self):
+    #     Module.endJob()
         #called once output has been written
         #Cannot override and use pass here if objects need to be written to a histFile
         #pass
 
-    def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
-        Module.beginFile(inputFile, outputFile, inputTree, wrappedOutputTree)
-        pass
+    # def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
+    #     Module.beginFile(inputFile, outputFile, inputTree, wrappedOutputTree)
+    #     pass
 
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         #called by the eventloop at end of inputFile
@@ -886,4 +886,19 @@ class TestMiddle(Module):
         met = Object(event, "MET")
         HLT = Object(event, "HLT")
 
-        #Do a W peak or something, 
+        if met.pt < 25:
+            return False
+
+        for jet in jets:
+            if jet.jetId < 2:
+                continue
+            if abs(jet.eta) > 2.5:
+                continue
+            HT += jet.pt
+        
+        if HT < 350:
+            return False
+
+        return True
+            
+TestMiddle = lambda : SimpleActivity()
