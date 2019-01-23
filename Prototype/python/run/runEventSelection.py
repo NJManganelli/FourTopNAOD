@@ -10,12 +10,13 @@ from FourTopNAOD.Prototype.modules.eventselector import *
 from FourTopNAOD.Prototype.tools.fileloader import FileLoader as IFL
 #from FourTopNAOD.Prototype.modules.eventselector import *
 
-preselection="nJet > 4 && (nMuon + nElectron) > 1"
+#preselection="nJet > 4 && (nMuon + nElectron) > 1"
+preselection=None
 
-Y = IFL(eventSet="TTTT", era="2017", channel="DL") #Default, deltaR and CSVv2
+# Y = IFL(eventSet="TTTT", era="2017", channel="DL") #Default, deltaR and CSVv2
 # Y = IFL(eventSet="TTTT", era="2017", channel="DL", configName="PartonMatching")
 # Y = IFL(eventSet="TTTT", era="2017", channel="DL", configName="DeepCSV")
-# Y = IFL(eventSet="TTTT", era="2017", channel="DL", configName="PM+DCSV")
+Y = IFL(eventSet="TTTT", era="2017", channel="DL", configName="PM+DCSV")
 print(Y.getFiles(indexOfFile=0))
 p=PostProcessor(".",
                 Y.getFiles(indexOfFile=0),
@@ -37,5 +38,5 @@ p=PostProcessor(".",
                 )
 for i in xrange(len(p.modules)):
     if hasattr(p.modules[i], "maxEventsToProcess"):
-        p.modules[i].maxEventsToProcess=10000
+        p.modules[i].maxEventsToProcess=30000
 p.run()

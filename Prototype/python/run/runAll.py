@@ -11,7 +11,8 @@ from FourTopNAOD.Prototype.modules.plotdqm import *
 from FourTopNAOD.Prototype.tools.fileloader import FileLoader as IFL
 #from FourTopNAOD.Prototype.modules.eventselector import *
 
-preselection="nJet > 4 && (nMuon + nElectron) > 1"
+#preselection="nJet > 4 && (nMuon + nElectron) > 1"
+preselection=None
 
 # Y = IFL(eventSet="TTTT", era="2017", channel="DL") #Default, deltaR and CSVv2
 # Y = IFL(eventSet="TTTT", era="2017", channel="DL", configName="PartonMatching")
@@ -23,7 +24,7 @@ p=PostProcessor(".",
                 cut=preselection,
                 branchsel=None,
                 outputbranchsel=None,
-                postfix="_" + Y.getSet() + "_PostEvtSel",
+                postfix="_" + Y.getSet() + "BUGTEST_PostEvtSel",
                 jsonInput=Y.getJSONPath(),
                 modules = [ AllDQMIn(),
                             EventSelector(makeHistos=True, cutOnTrigs=True, cutOnMET=True, 
@@ -35,11 +36,11 @@ p=PostProcessor(".",
 #                fwkJobReport=True,
 #                haddFileName="hadded.root",
                 noOut=False,
-                histFileName="hist" + Y.getSet() + "_runAll.root",
+                histFileName="hist" + Y.getSet() + "BUGTEST_runAll.root",
                 histDirName="plots",
                 compression="LZMA:9"
                 )
 for i in xrange(len(p.modules)):
     if hasattr(p.modules[i], "maxEventsToProcess"):
-        p.modules[i].maxEventsToProcess=1000
+        p.modules[i].maxEventsToProcess=30000
 p.run()

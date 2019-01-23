@@ -17,8 +17,8 @@ p=PostProcessor(".", #This tells the postprocessor where to write the ROOT files
                 cut="nMuon > 0 && nJet > 5",
                 modules=[],
                 jsonInput={1 : [[10000, 10010]]}, #This json input limits the postprocessor to only events in run 1, and lumesections 10000 to 10010
-                postfix="_CH01-Skim", #This will be attached to the end of the filename if it's output
-                justcount=True, #When True, just counts events that pass the cut=" " and jsonInput criteria. When False, will let this produce a skim!
+                postfix="_CH01-Skim", #This will be attached to the end of the filename if it is output
+                justcount=False, #When True, just counts events that pass the cut=" " and jsonInput criteria. When False, will let this produce a skim!
                 )
 
 #Up to this point, things have only been imported and defined. 
