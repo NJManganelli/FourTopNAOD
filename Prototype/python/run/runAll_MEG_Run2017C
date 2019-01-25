@@ -7,36 +7,41 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 from importlib import import_module
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor
 from FourTopNAOD.Prototype.modules.eventselector import *
+from FourTopNAOD.Prototype.modules.plotdqm import *
 from FourTopNAOD.Prototype.tools.fileloader import FileLoader as IFL
 #from FourTopNAOD.Prototype.modules.eventselector import *
 
-#preselection="nJet > 4 && (nMuon + nElectron) > 1"
-preselection=None
+preselection="nJet > 4 && (nMuon + nElectron) > 1"
+#preselection=None
 
 # Y = IFL(eventSet="TTTT", era="2017", channel="DL") #Default, deltaR and CSVv2
 # Y = IFL(eventSet="TTTT", era="2017", channel="DL", configName="PartonMatching")
 # Y = IFL(eventSet="TTTT", era="2017", channel="DL", configName="DeepCSV")
-Y = IFL(eventSet="TTTT", era="2017", channel="DL", configName="PM+DCSV")
+# Y = IFL(eventSet="TTTT", era="2017", channel="DL", configName="PM+DCSV")
+Y = IFL(eventSet="MuonEGRunC", era="2017", channel="DL", configName="PM+DCSV")
 print(Y.getFiles(indexOfFile=0))
 p=PostProcessor(".",
-                Y.getFiles(indexOfFile=0),
+                Y.getFiles(),
                 cut=preselection,
                 branchsel=None,
                 outputbranchsel=None,
-                postfix="_" + Y.getSet() + "_PostEvtSel",
+                postfix="_" + Y.getSet() + "_NoTrig+HTCut",
                 jsonInput=Y.getJSONPath(),
-                modules=[EventSelector(makeHistos=True, cutOnTrigs=True, cutOnMET=True, 
-                                       cutOnHT=True, verbose=False, selectionConfig=Y.getConfig())],
+                modules = [ AllDQMIn(),
+                            EventSelector(makeHistos=True, cutOnTrigs=False, cutOnMET=True, 
+                                          cutOnHT=False, verbose=True, selectionConfig=Y.getConfig(), isLastModule=False),
+                            AllDQMOut()
+                            ],
                 justcount=False,
                 provenance=True,
 #                fwkJobReport=True,
 #                haddFileName="hadded.root",
                 noOut=False,
-                histFileName="hist" + Y.getSet() + "_runEventSelection.root",
+                histFileName="hist" + Y.getSet() + "_NoTrig+HTCut.root",
                 histDirName="plots",
                 compression="LZMA:9"
                 )
 for i in xrange(len(p.modules)):
     if hasattr(p.modules[i], "maxEventsToProcess"):
-        p.modules[i].maxEventsToProcess=30000
+        p.modules[i].maxEventsToProcess=500000
 p.run()
