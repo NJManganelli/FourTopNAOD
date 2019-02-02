@@ -630,13 +630,13 @@ class EventSelector(Module):
         #         if br in self.brlist_sep[j]: self.is_there[bridx][j]=True
 
         self.out = wrappedOutputTree
-        self.out.branch("Electron_PES", "O", "nElectron")
-        self.out.branch("Muon_PES", "O", "nMuon")
-        self.out.branch("Jet_PES", "O", "nJet")
-        self.out.branch("Jet_Tagged", "O", "nJet")
-        self.out.branch("Jet_Untagged", "O", "nJet")
-        self.varDict = OrderedDict([("H", "D"), 
-                                     ("HT", "D") 
+        self.out.branch("Electron_PES", "O", lenVar="nElectron", title="Boolean for electrons passing the event selection criteria")
+        self.out.branch("Muon_PES", "O", lenVar="nMuon", title="Boolean for muons passing the event selection criteria")
+        self.out.branch("Jet_PES", "O", lenVar="nJet", title="Boolean for jets passing the event selection criteria")
+        self.out.branch("Jet_Tagged", "O", lenVar="nJet", title="Boolean for jets passing the B-tagging and corresponding Pt requirements")
+        self.out.branch("Jet_Untagged", "O", lenVar="nJet", title="Boolean for jets passing the non-B-tagged and corresponding Pt  criteria")
+        self.varDict = OrderedDict([("H", "D"),
+                                     ("HT", "D"),
                                      ("H2M", "D"),
                                      ("HTH", "D"),
                                      ("HT2M", "D"),
@@ -647,10 +647,22 @@ class EventSelector(Module):
                                      ("Trig_ElMu", "O"),
                                      ("Trig_ElEl", "O"),
                                      ("Trig_Mu", "O"),
-                                     ("Trig_Mu", "O")
+                                    ])
+        self.titleDict = OrderedDict([("H", "Sum of selected jet 3-momentum P"), 
+                                     ("HT", "Sum of selected jet transverse momentum"),
+                                     ("H2M", "Sum of slected jet 3-momentum except the 2 highest-pt B-tagged jets"),
+                                     ("HTH", "Ratio of HT to H in the event"),
+                                     ("HT2M", "Sum of slected jet transverse momentum except the 2 highest-Pt B-tagged jets"),
+                                     ("HTRat", "Ratio of the sum of 2 highest selected jet Pts to HT"),
+                                     ("nBTagJet", "Number of post-selection and cross-cleaned b-tagged jets"),
+                                     ("nTotJet", "Number of total post-selection and cross-cleaned jets"),
+                                     ("Trig_MuMu", "Event passed one of the dimuon HLT triggers"),
+                                     ("Trig_ElMu", "Event passed one of the electron-muon HLT triggers"),
+                                     ("Trig_ElEl", "Event passed one of the dielectron HLT triggers"),
+                                     ("Trig_Mu", "Event passed one of the solo-muon HLT triggers"),
                                     ])
         for name, valType in self.varDict.items():
-            self.out.branch("Event_%s"%(name), valType)
+            self.out.branch("Event_%s"%(name), valType, title=self.titleDict[name])
 
         #want multipe sets of output branche collections for the different categories.... not one single branch collection
         #Create output branches for the selected electrons, muons, and distinct b Jet/Non-b Jet collections
@@ -723,7 +735,7 @@ class EventSelector(Module):
         jets_Tagged = []
         jets_Untagged = []
         for i in xrange(len(electrons)):
-            electons_PES.append(False)
+            electrons_PES.append(False)
         for j in xrange(len(muons)):
             muons_PES.append(False)
         for k in xrange(len(jets)):
@@ -732,8 +744,8 @@ class EventSelector(Module):
             jets_Untagged.append(False)
         
         #Ints
-        nBJet = 0
-        nOthJet = 0
+        nBJets = 0
+        nOthJets = 0
         
         #Doubles
         HT = 0.0
@@ -1005,6 +1017,7 @@ class EventSelector(Module):
         #Calculate HTRat and HTH, since more than 4 jets in the events reaching this point
         HTH = HT/H
         #HTRat = Pt of two highest pt jets / HT
+        HTRat = HTRat_Numerator / HT
 
 
         #############################################
@@ -1023,8 +1036,8 @@ class EventSelector(Module):
         self.out.fillBranch("Event_H2M", H2M)
         self.out.fillBranch("Event_HTRat", HTRat)
         self.out.fillBranch("Event_HTH", HTH)
-        self.out.fillBranch("nBTagJet", nBJets)
-        self.out.fillBranch("nTotJet", (nOthJets + nBJets))
+        self.out.fillBranch("Event_nBTagJet", nBJets)
+        self.out.fillBranch("Event_nTotJet", (nOthJets + nBJets))
         self.out.fillBranch("Event_Trig_MuMu", passMuMu)
         self.out.fillBranch("Event_Trig_ElMu", passElMu)
         self.out.fillBranch("Event_Trig_ElEl", passElEl)
