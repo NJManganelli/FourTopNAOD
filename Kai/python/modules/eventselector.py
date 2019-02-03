@@ -527,12 +527,6 @@ class EventSelector(Module):
         self.counter = 0
         self.maxEventsToProcess = -1
 
-        #Trigger counters
-        self.MuMuTrig = 0
-        self.ElMuTrig = 0
-        self.ElElTrig = 0
-        self.MuTrig = 0
-
         #Electron CFG loading from config file
         self.cfg_eMaxEta = self.CFG["Electron"]["Common"]["Eta"] #Max Eta acceptance
         self.cfg_eIdType = self.CFG["Electron"]["Common"]["IdType"]
@@ -584,15 +578,7 @@ class EventSelector(Module):
             self.addObject(self.h_jBSel_map)
             self.h_jBSel_pt = ROOT.TH1F('h_jBSel_pt', ';Jet Pt; Events', 20, 20, 420)
             self.addObject(self.h_jBSel_pt)
-            # self.h_medCSVV2 = ROOT.TH1D('h_medCSVV2', ';Medium CSVV2 btags; Events', 5, 0, 5)
-            # self.addObject(self.h_medCSVV2)
         pass
-
-#    def endJob(self):
-#       Module.endJob()
-        #called once output has been written
-        #Cannot override and use pass here if objects need to be written to a histFile
-        #pass
 
     def endJob(self):
         if hasattr(self, 'objs') and self.objs != None:
@@ -614,6 +600,8 @@ class EventSelector(Module):
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         _brlist = inputTree.GetListOfBranches()
+        print(inputFile.GetName())
+        print(inputTree.GetName())
         branches = [_brlist.At(i) for i in xrange(_brlist.GetEntries())]
         #Create dictionary of empty dictionaries which will map each output collection's branches to a branchtype
         #self.branchType = dict(zip(self.input, placeholder))
@@ -635,11 +623,12 @@ class EventSelector(Module):
         self.out.branch("Jet_PES", "O", lenVar="nJet", title="Boolean for jets passing the event selection criteria")
         self.out.branch("Jet_Tagged", "O", lenVar="nJet", title="Boolean for jets passing the B-tagging and corresponding Pt requirements")
         self.out.branch("Jet_Untagged", "O", lenVar="nJet", title="Boolean for jets passing the non-B-tagged and corresponding Pt  criteria")
+        #Define the EventVar_ subvariables' type (Double, Int, Bool...)
         self.varDict = OrderedDict([("H", "D"),
-                                     ("HT", "D"),
                                      ("H2M", "D"),
-                                     ("HTH", "D"),
+                                     ("HT", "D"),
                                      ("HT2M", "D"),
+                                     ("HTH", "D"),
                                      ("HTRat", "D"),
                                      ("nBTagJet", "I"),
                                      ("nTotJet", "I"),
@@ -648,11 +637,13 @@ class EventSelector(Module):
                                      ("Trig_ElEl", "O"),
                                      ("Trig_Mu", "O"),
                                     ])
-        self.titleDict = OrderedDict([("H", "Sum of selected jet 3-momentum P"), 
+
+        #Define the EventVar_ subvariables' titles
+        self.titleDict = OrderedDict([("H", "Sum of selected jet's 3-momentum P (magnitude)"), 
+                                     ("H2M", "Sum of slected jet 3-momentum (magnitude) except the 2 highest-pt B-tagged jets"),
                                      ("HT", "Sum of selected jet transverse momentum"),
-                                     ("H2M", "Sum of slected jet 3-momentum except the 2 highest-pt B-tagged jets"),
-                                     ("HTH", "Ratio of HT to H in the event"),
                                      ("HT2M", "Sum of slected jet transverse momentum except the 2 highest-Pt B-tagged jets"),
+                                     ("HTH", "Ratio of HT to H in the event"),
                                      ("HTRat", "Ratio of the sum of 2 highest selected jet Pts to HT"),
                                      ("nBTagJet", "Number of post-selection and cross-cleaned b-tagged jets"),
                                      ("nTotJet", "Number of total post-selection and cross-cleaned jets"),
@@ -662,7 +653,7 @@ class EventSelector(Module):
                                      ("Trig_Mu", "Event passed one of the solo-muon HLT triggers"),
                                     ])
         for name, valType in self.varDict.items():
-            self.out.branch("Event_%s"%(name), valType, title=self.titleDict[name])
+            self.out.branch("EventVar_%s"%(name), valType, title=self.titleDict[name])
 
         #want multipe sets of output branche collections for the different categories.... not one single branch collection
         #Create output branches for the selected electrons, muons, and distinct b Jet/Non-b Jet collections
@@ -708,22 +699,37 @@ class EventSelector(Module):
 
         #Check whether this file is Data from Runs or Monte Carlo simulations
         self.isData = True
-        if hasattr(event, "nGenPart"):
+        if hasattr(event, "nGenPart") or hasattr(event, "nGenJet") or hasattr(event, "nGenJetAK8"):
             self.isData = False
         
         PV = Object(event, "PV")
         otherPV = Collection(event, "OtherPV")
         SV = Collection(event, "SV")
-
+        
         electrons = Collection(event, "Electron")
         muons = Collection(event, "Muon")
         jets = Collection(event, "Jet")
-        #fatjets = Collection(event, "FatJet") #Correct capitalization?
-        met = Object(event, "MET")
+        fatjets = Collection(event, "FatJet") #Correct capitalization?
+        subjets = Collection(event, "SubJet")
+        #met = Object(event, "MET")
+        met = Object(event, "METFixEE2017") #FIXME: Placeholder until passed in via configuration?
 
         HLT = Object(event, "HLT")
         Filters = Object(event, "Flag") #For Data use only
-        
+
+        if not self.isData:
+            gens = Collection(event, "GenPart")
+            genjets = Collection(event, "GenJet")
+            genfatjets = Collection(event, "GenJetAK8")
+            gensubjets = Collection(event, "SubGenJetAK8")
+            genmet = Object(event, "GenMET")
+            generator = Object(event, "Generator")
+            btagweight = Object(event, "btagWeight") #contains .CSVV2 and .DeepCSVB float weights
+            #genweight = 
+            #lhe = Object(event, "???")
+            #weights = ???
+            #PSWeights = ???
+            
         ################################################
         ### Initialize Branch Variables to be Filled ###
         ################################################
@@ -742,6 +748,11 @@ class EventSelector(Module):
             jets_PES.append(False)
             jets_Tagged.append(False)
             jets_Untagged.append(False)
+
+        #########################
+        ### Prepare Variables ###
+        #########################
+
         
         #Ints
         nBJets = 0
@@ -756,20 +767,55 @@ class EventSelector(Module):
         HTH = 0.0
 
         #Bools
+            #Triggers
         passMuMu = False
         passElMu = False
         passElEl = False
         passMu = False
+            #MET Flags/Filters
+        passFilters = True
+
+        #Uncategorized for the moment
+
+        eventSum = ROOT.TLorentzVector()
+        
+        nSelMuons = 0 #used for cuts and invariant mass vetos
+        nSelElectrons = 0 #used for cuts and invariant mass vetos
+        nSelLeptons = 0 #used for cuts
+        nExtraLeptons = 0 #used for cuts
+#        lepIndex = [] #Used for invariant mass veto, can be replaced with mIndex and eIndex now that they have been added for collection creation
+        mIndex = [] #For making clean muon collection
+        eIndex = [] #For making clean electron collection
+        jBIndex = [] #For making clean b jet collection
+        jNBIndex = [] #For making clean non-b jet collection
+        lepCharge = [] 
+        crosslinkJetIdx = [] #for cleaning jets with PartonMatching algorithm
+        
+
 
         #########################
         ### Trigger Selection ###
         #########################
-        Triggers = { "MuMu" : ["Mu17_TrkIsoVVL_Mu8_TrkIsoVVL"],
-                     "ElMu" : ["Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL",
-                               "Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL"],
-                     "ElEl" : ["Ele23_Ele12_CaloIdL_TrackIdL_IsoVL"],
-                     "Mu" : ["IsoMu24"]
+        #2017 recommendations, to be separated out into proper configuration Supervisor#FIXME
+        Triggers = { "MuMu" : ["Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ", #prescaled starting in Run C...
+                               "Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8",
+                               "Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8"
+                               ],
+                     "ElMu" : ["Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL", 
+                               "Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", 
+#                               "Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL", #prescaled in most 2017 eras
+                               "Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
+#                               "Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL", #prescaled in most 2017 eras
+                               "Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
+                               ],
+                     "ElEl" : ["Ele23_Ele12_CaloIdL_TrackIdL_IsoVL",
+                               "Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ"
+                               ],
+                     "Mu" : ["IsoMu27",
+                             "IsoMu24_eta2p1"
+                             ]
                      }
+
         for trig in Triggers["MuMu"]:
             #Loop through triggers until one is true, then assign it to passCHANNEL, which will break out next iteration if there is one
             if passMuMu:
@@ -791,20 +837,6 @@ class EventSelector(Module):
                 break
             else:
                 passMuMu = getattr(HLT, trig)
-        # for trig in Triggers["El"]:
-        #     if passEl:
-        #         break
-        #     else:
-        #         passEl = getattr(HLT, trig)
-
-        if passMuMu:
-            self.MuMuTrig += 1
-        if passElMu:
-            self.ElMuTrig += 1
-        if passElEl:
-            self.ElElTrig += 1
-        if passMu:
-            self.MuTrig += 1
 
         ##########################
         ### Early Cut on Trigs ###
@@ -812,27 +844,31 @@ class EventSelector(Module):
         if not (passMu or passMuMu or passElMu or passElEl):
             if self.makeHistos: self.h_cutHisto.Fill(0.5)
             if self.cutOnTrigs: return False
-
+        
         ###########
         ### MET ###
         ###########
-        if self.cutOnMET and met.pt < self.cfg_minMET: return False
-
-        eventSum = ROOT.TLorentzVector()
-        
-        nSelMuons = 0 #used for cuts and invariant mass vetos
-        nSelElectrons = 0 #used for cuts and invariant mass vetos
-        nSelLeptons = 0 #used for cuts
-        nExtraLeptons = 0 #used for cuts
-        lepType = [] #intended for small-data forwarding of event selection (only store indices/type of selected leptons to next module)
-        lepIndex = [] #Used for invariant mass veto, can be replaced with mIndex and eIndex now that they have been added for collection creation
-        mIndex = [] #For making clean muon collection
-        eIndex = [] #For making clean electron collection
-        jBIndex = [] #For making clean b jet collection
-        jNBIndex = [] #For making clean non-b jet collection
-        lepCharge = [] 
-        crosslinkJetIdx = [] #for cleaning jets with PartonMatching algorithm
-        
+        Flags = { "isData" : ["eeBadScFilter"],
+                  "CommonBool" :  ["goodVertices",
+                                   "globalSuperTightHalo2016Filter",
+                                   "HBHENoiseFilter",
+                                   "HBHENoiseIsoFilter",
+                                   "EcalDeadCellTriggerPrimitiveFilter",
+                                   "BadPFMuonFilter",
+                                   "BadChargedCandidateFilter",
+                                   "ecalBadCalibFilterV2"
+                               ]
+                  }
+        #Ensure MC and Data pass all recommended filters for 2017 and 2018
+        for flag in Flags["CommonBool"]:
+            passFilters = getattr(Filters, flag)
+            if not passFilters: return False
+        #Check additional flag(s) solely for Data
+        if self.isData:
+            passFilters = getattr(Filters, Flags["isData"][0])
+            if not passFilters: return False
+        #If cutOnMET isn't disabled, then skip events below the minimum MET
+        if self.cutOnMET and met.pt < self.cfg_minMET: return False        
 
         #############
         ### MUONS ###
@@ -855,10 +891,9 @@ class EventSelector(Module):
                 #Count muon and lepton
                 nSelMuons += 1
                 nSelLeptons += 1
-                #Add lepton type, location index, and charge to lists
-                lepType.append("Muon")
+                #Add lepton location index and charge to lists
                 mIndex.append(mInd)
-                lepIndex.append(mInd)
+#                lepIndex.append(mInd)
                 lepCharge.append(muon.charge)
                 #Store the cross-link Id of any matching jet in a list for cross-cleaning later
                 crosslinkJetIdx.append(muon.jetIdx)
@@ -870,21 +905,23 @@ class EventSelector(Module):
             #Early pt cut
             if ele.pt < min(self.cfg_eSelPt, self.cfg_eVetoPt):
                 continue
+            #max eta cut
             if abs(ele.eta) > self.cfg_eMaxEta:
                 continue
+            #thresholds for Selected electrons
             if getattr(ele, self.cfg_eIdType) >= self.cfg_eIdSelCut and ele.pt > self.cfg_eSelPt:
                 #Change PassEventSelection bit
                 electrons_PES[eInd] = True
                 #count electron and leptons
                 nSelElectrons += 1
                 nSelLeptons += 1
-                #Add lepton type, location, and charge to lists
-                lepType.append("Electron")
+                #Add lepton location, and charge to lists
                 eIndex.append(eInd)
-                lepIndex.append(eInd)
+#                lepIndex.append(eInd)
                 lepCharge.append(ele.charge)
                 #Store the cross-link Id of any matching jet in a list for cross-cleaning later
                 crosslinkJetIdx.append(ele.jetIdx)
+            #thresholds for Veto electrons, cascaded down from selection type
             elif getattr(ele, self.cfg_eIdType) == self.cfg_eIdExtraCut and ele.pt > self.cfg_eVetoPt:
                 #count veto-level electrons
                 nExtraLeptons += 1
@@ -893,7 +930,6 @@ class EventSelector(Module):
         if nExtraLeptons > 0:
             if self.makeHistos: self.h_cutHisto.Fill(1.5)
             return False
-        #print("n: " + str(nSelLeptons) + " ")
         if nSelLeptons != 2:
             if self.makeHistos: self.h_cutHisto.Fill(2.5)
             return False
@@ -908,7 +944,7 @@ class EventSelector(Module):
 
         #Same-flavor low mass and Z mass resonance veto ###Improvement: now have separate index lists for muons, electrons, just use those for counting and matching
         if nSelMuons == 2:
-            diLepMass = (muons[lepIndex[0]].p4() + muons[lepIndex[1]].p4()).M()
+            diLepMass = (muons[mIndex[0]].p4() + muons[mIndex[1]].p4()).M()
             if abs(diLepMass - self.cfg_lowMRes_cent) < self.cfg_lowMRes_hwidth:
                 if self.makeHistos: self.h_cutHisto.Fill(4.5)
                 return False
@@ -916,7 +952,7 @@ class EventSelector(Module):
                 if self.makeHistos: self.h_cutHisto.Fill(5.5)
                 return False
         if nSelElectrons == 2:
-            diLepMass = (electrons[lepIndex[0]].p4() + electrons[lepIndex[1]].p4()).M()
+            diLepMass = (electrons[eIndex[0]].p4() + electrons[eIndex[1]].p4()).M()
             if abs(diLepMass - self.cfg_lowMRes_cent) < self.cfg_lowMRes_hwidth:
                 if self.makeHistos: self.h_cutHisto.Fill(4.5)
                 return False
@@ -943,12 +979,15 @@ class EventSelector(Module):
             elif self.cfg_jClnTyp == "DeltaR":
                 #raise NotImplementedError("In eventselector class, in jet loop, selected cleaning type of DeltaR matching has not been implemented")
                 failCleaning = False
+                #DeltaR against muons
                 for mIdx in mIndex:
                     if deltaR(muons[mIdx], jet) < self.cfg_jMaxdR:
                         failCleaning = True
+                #DeltaR against electrons
                 for eIdx in eIndex:
                     if deltaR(electrons[eIdx], jet) < self.cfg_jMaxdR:
                         failCleaning = True
+                #Check if jet survived cleaning or now
                 if failCleaning:
                     continue
             #And protect against invalid lepton-jet cleaning methods, or add in alternative ones here
@@ -962,7 +1001,7 @@ class EventSelector(Module):
                 jets_PES[jInd] = True
                 jets_Tagged[jInd] = True
                 nBJets += 1
-                #Add to HTRat_Numerator if counter is less than 2
+                #Add to HTRat_Numerator if counter is less than 2 (i.e., one of the two highest Pt jets to pass event selection)
                 if HTRat_Counter < 2:
                     HTRat_Numerator += jet.pt
                     HTRat_Counter += 1
@@ -977,20 +1016,21 @@ class EventSelector(Module):
                 #Improper calculation below, fix later
                 if nBJets > 2:
                     #Add momentum to HT2M, H2M variables here
-                    #FIXME: If tagging selection changes from medium, this will be incorrect!
+                    #FIXME: If tagging selection changes from medium, this will be incorrect! (by definition)
                     HT2M += jet.pt
                     H2M += (jet.p4()).P()
             elif jet.pt > self.cfg_jNSelPt:
                 #Flip PassEventSelection and Untagged bits
                 jets_PES[jInd] = True
                 jets_Untagged[jInd] = True
-                #Add to HTRat_Numerator if counter is less than 2
+                #Add to HTRat_Numerator if counter is less than 2, relying on cascading through b-tagging/non-b-tagging selection
                 if HTRat_Counter < 2:
                     HTRat_Numerator += jet.pt
                     HTRat_Counter += 1
                 #Increment jet counter
                 nOthJets +=1
-                #Fill jet histos (Ideally replaced with hsnap() in the future)
+                #Fill jet histos (Ideally replaced with hsnap() in the future) 
+                #FIXME: This isn't the distribution for the jets post event selection!
                 if self.makeHistos: self.h_jSel_map.Fill(jet.eta, jet.phi)
                 if self.makeHistos: self.h_jSel_pt.Fill(jet.pt)
                 #Add jet index to list for collection filling
@@ -1030,18 +1070,18 @@ class EventSelector(Module):
         self.out.fillBranch("Jet_PES", jets_PES)
         self.out.fillBranch("Jet_Tagged", jets_Tagged)
         self.out.fillBranch("Jet_Untagged", jets_Untagged)
-        self.out.fillBranch("Event_HT", HT)
-        self.out.fillBranch("Event_H", H)
-        self.out.fillBranch("Event_HT2M", HT2M)
-        self.out.fillBranch("Event_H2M", H2M)
-        self.out.fillBranch("Event_HTRat", HTRat)
-        self.out.fillBranch("Event_HTH", HTH)
-        self.out.fillBranch("Event_nBTagJet", nBJets)
-        self.out.fillBranch("Event_nTotJet", (nOthJets + nBJets))
-        self.out.fillBranch("Event_Trig_MuMu", passMuMu)
-        self.out.fillBranch("Event_Trig_ElMu", passElMu)
-        self.out.fillBranch("Event_Trig_ElEl", passElEl)
-        self.out.fillBranch("Event_Trig_Mu", passMu)
+        self.out.fillBranch("EventVar_H", H)
+        self.out.fillBranch("EventVar_H2M", H2M)
+        self.out.fillBranch("EventVar_HT", HT)
+        self.out.fillBranch("EventVar_HT2M", HT2M)
+        self.out.fillBranch("EventVar_HTH", HTH)
+        self.out.fillBranch("EventVar_HTRat", HTRat)
+        self.out.fillBranch("EventVar_nBTagJet", nBJets)
+        self.out.fillBranch("EventVar_nTotJet", (nOthJets + nBJets))
+        self.out.fillBranch("EventVar_Trig_MuMu", passMuMu)
+        self.out.fillBranch("EventVar_Trig_ElMu", passElMu)
+        self.out.fillBranch("EventVar_Trig_ElEl", passElEl)
+        self.out.fillBranch("EventVar_Trig_Mu", passMu)
 
 
         #####################################################
