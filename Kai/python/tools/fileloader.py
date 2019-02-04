@@ -29,7 +29,7 @@ serverPrefix: the default prefix for files is root://cms-xrd-global.cern.ch/. Pa
         ### Monte Carlo must NOT              ###
         #########################################
         #Ensure JSON files are formatted properly using tool like https://jsonformatter.curiousconcept.com/
-        self._jsonPath = "../json/"
+        self._jsonPath = "../jsons/"
         self._configPath = "../config/"
         self._filePath = "../filelists/"
         self._eventDict = { 
@@ -125,7 +125,8 @@ serverPrefix: the default prefix for files is root://cms-xrd-global.cern.ch/. Pa
 #        if self._eventSet[:3] is "Run":
         if "Run" in self._eventSet:
             if self._jsonName is None:
-                self._jsonToReturn = self._jsonPath + self_jsonDict[era]["ReReco"]
+                self._jsonToReturn = self._jsonPath + self._jsonDict[era]["ReReco"]
+                print(self._jsonToReturn)
             else:
                 self.jsonToReturn = self._jsonPath + self._jsonName
         else:
