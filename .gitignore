@@ -10,6 +10,8 @@ data/*
 Prototype/python/tools/fileloader.py_preTest
 test/scratch.ipynb
 test/tagVarAdd.ipynb
+Kai/crab/crab_*
+AutoDict_vector_*
 .ipynb_checkpoints
 .ipynb_checkpoints
 test/*.root*

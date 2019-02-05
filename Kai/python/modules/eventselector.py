@@ -510,6 +510,7 @@ class EventSelector(Module):
 
         #self.jetSel = jetSelection
         self.writeHistFile=True
+        self.MADEHistos=False
 
         #load the criteria for brevity
         self.CFG = selectionConfig

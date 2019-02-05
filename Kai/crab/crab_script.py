@@ -96,7 +96,8 @@ print(theConfig)
 
 #from  PhysicsTools.NanoAODTools.postprocessing.examples.exampleModule import * #Creates infinite loop with my modifications added in?
 from  FourTopNAOD.Kai.modules.eventselector import *
-p=PostProcessor(".",inputFiles(),None, modules=[EventSelector(selectionConfig=theConfig, makeHistos=True, cutOnMET=True, cutOnTrigs=False, cutOnHT=False)],provenance=True,fwkJobReport=True,jsonInput=runsAndLumis(), histFileName="hist.root", histDirName="plots")
+p=PostProcessor(".",inputFiles(), cut=None, modules=[EventSelector(selectionConfig=theConfig, makeHistos=False, cutOnMET=True, cutOnTrigs=False, cutOnHT=False)],provenance=True,fwkJobReport=True,jsonInput=runsAndLumis())
+# p=PostProcessor(".",inputFiles(), cut=None, modules=[EventSelector(selectionConfig=theConfig, makeHistos=True, cutOnMET=True, cutOnTrigs=False, cutOnHT=False)],provenance=True,fwkJobReport=True,jsonInput=runsAndLumis(), histFileName="hist.root", histDirName="plots")
 p.run()
 
 print "DONE"
