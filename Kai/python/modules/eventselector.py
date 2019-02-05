@@ -114,7 +114,6 @@ class BreakerEventSelector(Module):
             self.addObject(self.h_jBSel_pt)
             # self.h_medCSVV2 = ROOT.TH1D('h_medCSVV2', ';Medium CSVV2 btags; Events', 5, 0, 5)
             # self.addObject(self.h_medCSVV2)
-        pass
 
 #    def endJob(self):
 #       Module.endJob()
@@ -518,6 +517,7 @@ class EventSelector(Module):
         #choose whether we want verbose output or to produce cut histograms 
         self._verbose = verbose
         self.makeHistos = makeHistos
+        print("DEBUG: makeHistos=" + str(self.makeHistos))
         self.cutOnMET = cutOnMET
         self.cutOnTrigs = cutOnTrigs
         self.cutOnHT = cutOnHT
@@ -563,42 +563,77 @@ class EventSelector(Module):
         self.cfg_nTotJetMin = self.CFG["Event"]["nTotJetMin"] #Minimum total jets
         self.cfg_minMET = self.CFG["MET"]["MinMET"] #Minimum MET
 
-    def beginJob(self, histFile=None,histDirName=None):
-        #if self.writeHistFile=False, called by the postprocessor as beginJob()
-        #If self.writeHistFile=True, then called as beginJob(histFile=self.histFile,histDirName=self.histDirName)
-        Module.beginJob(self,histFile,histDirName)
-        if self.makeHistos:
-            self.h_cutHisto = ROOT.TH1F('h_cutHisto', ';Pruning Point in Event Selection; Events', 10, 0, 10)
-            self.addObject(self.h_cutHisto)
-            self.h_jSel_map = ROOT.TH2F('h_jSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
-            self.addObject(self.h_jSel_map)
-            self.h_jSel_pt = ROOT.TH1F('h_jSel_pt', ';Jet Pt; Events', 20, 20, 420)
-            self.addObject(self.h_jSel_pt)
-            self.h_jBSel_map = ROOT.TH2F('h_jBSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
-            self.addObject(self.h_jBSel_map)
-            self.h_jBSel_pt = ROOT.TH1F('h_jBSel_pt', ';Jet Pt; Events', 20, 20, 420)
-            self.addObject(self.h_jBSel_pt)
-        pass
+
+    def beginJob(self,histFile=None,histDirName=None):
+        print("histfile=" + str(histFile) + " directoryname=" + str(histDirName))
+        if histFile != None and histDirName != None:
+            #self.writeHistFile=True
+            prevdir = ROOT.gDirectory
+            self.histFile = histFile
+            self.histFile.cd()
+            self.dir = self.histFile.mkdir( histDirName )
+            prevdir.cd()
+            self.objs = []
+            print("DEBUG: makeHistos=" + str(self.makeHistos))
+            if self.makeHistos:
+                self.h_cutHisto = ROOT.TH1F('h_cutHisto', ';Pruning Point in Event Selection; Events', 10, 0, 10)
+                self.addObject(self.h_cutHisto)
+                self.h_jSel_map = ROOT.TH2F('h_jSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
+                self.addObject(self.h_jSel_map)
+                self.h_jSel_pt = ROOT.TH1F('h_jSel_pt', ';Jet Pt; Events', 20, 20, 420)
+                self.addObject(self.h_jSel_pt)
+                self.h_jBSel_map = ROOT.TH2F('h_jBSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
+                self.addObject(self.h_jBSel_map)
+                self.h_jBSel_pt = ROOT.TH1F('h_jBSel_pt', ';Jet Pt; Events', 20, 20, 420)
+                self.addObject(self.h_jBSel_pt)
+                self.MADEHistos=True
 
     def endJob(self):
         if hasattr(self, 'objs') and self.objs != None:
             prevdir = ROOT.gDirectory
-            if self._verbose:
-                print("EventSelector is switching from directory {0:s} to directory {1:s}".format(prevdir, self.dir))
             self.dir.cd()
-            if self._verbose:
-                print("EventSelector is writing objects inside the directory.")
             for obj in self.objs:
                 obj.Write()
-            if self._verbose:
-                print("Returning to previous directory...")
             prevdir.cd()
-            if self._isLastModule and hasattr(self, 'histFile') and self.histFile != None :
-                if self._verbose:
-                    print("EventSelector was passed the option isLastModule=True. It is closing the file at endJob().")
+            if hasattr(self, 'histFile') and self.histFile != None : 
                 self.histFile.Close()
 
+    # def beginJob(self, histFile=None,histDirName=None):
+    #     #if self.writeHistFile=False, called by the postprocessor as beginJob()
+    #     #If self.writeHistFile=True, then called as beginJob(histFile=self.histFile,histDirName=self.histDirName)
+    #     Module.beginJob(self,histFile,histDirName)
+    #     if self.makeHistos:
+    #         self.h_cutHisto = ROOT.TH1F('h_cutHisto', ';Pruning Point in Event Selection; Events', 10, 0, 10)
+    #         self.addObject(self.h_cutHisto)
+    #         self.h_jSel_map = ROOT.TH2F('h_jSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
+    #         self.addObject(self.h_jSel_map)
+    #         self.h_jSel_pt = ROOT.TH1F('h_jSel_pt', ';Jet Pt; Events', 20, 20, 420)
+    #         self.addObject(self.h_jSel_pt)
+    #         self.h_jBSel_map = ROOT.TH2F('h_jBSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
+    #         self.addObject(self.h_jBSel_map)
+    #         self.h_jBSel_pt = ROOT.TH1F('h_jBSel_pt', ';Jet Pt; Events', 20, 20, 420)
+    #         self.addObject(self.h_jBSel_pt)
+
+    # def endJob(self):
+    #     if hasattr(self, 'objs') and self.objs != None:
+    #         prevdir = ROOT.gDirectory
+    #         if self._verbose:
+    #             print("EventSelector is switching from directory {0:s} to directory {1:s}".format(prevdir, self.dir))
+    #         self.dir.cd()
+    #         if self._verbose:
+    #             print("EventSelector is writing objects inside the directory.")
+    #         for obj in self.objs:
+    #             obj.Write()
+    #         if self._verbose:
+    #             print("Returning to previous directory...")
+    #         prevdir.cd()
+    #         if self._isLastModule and hasattr(self, 'histFile') and self.histFile != None :
+    #             if self._verbose:
+    #                 print("EventSelector was passed the option isLastModule=True. It is closing the file at endJob().")
+    #             self.histFile.Close()
+
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
+        print("DEBUGGING: " + "getting list of branches")
         _brlist = inputTree.GetListOfBranches()
         print(inputFile.GetName())
         print(inputTree.GetName())
@@ -609,7 +644,7 @@ class EventSelector(Module):
         for elem in self.input:
             placeholder.append([])
         self.brlist_sep = dict(zip(self.input.keys(), placeholder))
-
+        print("DEBUGGING: " + "filtering branch names")
         for key in self.input.keys():
             self.brlist_sep[key] = self.filterBranchNames(branches,self.input[key])
         #self.brlist_all = set(itertools.chain(*(self.brlist_sep)))
@@ -618,6 +653,7 @@ class EventSelector(Module):
         #         if br in self.brlist_sep[j]: self.is_there[bridx][j]=True
 
         self.out = wrappedOutputTree
+        print("DEBUGGING: " + "creating branches")
         self.out.branch("Electron_PES", "O", lenVar="nElectron", title="Boolean for electrons passing the event selection criteria")
         self.out.branch("Muon_PES", "O", lenVar="nMuon", title="Boolean for muons passing the event selection criteria")
         self.out.branch("Jet_PES", "O", lenVar="nJet", title="Boolean for jets passing the event selection criteria")
@@ -655,6 +691,7 @@ class EventSelector(Module):
         for name, valType in self.varDict.items():
             self.out.branch("EventVar_%s"%(name), valType, title=self.titleDict[name])
 
+        print("DEBUGGING: " + "adding cleaned collection branches")
         #want multipe sets of output branche collections for the different categories.... not one single branch collection
         #Create output branches for the selected electrons, muons, and distinct b Jet/Non-b Jet collections
         for ebr in self.brlist_sep["typeElectron"]:
@@ -668,11 +705,12 @@ class EventSelector(Module):
                             _rootLeafType2rootBranchType[self.branchType[self.input["typeAK4"]][jbr]], lenVar="n%s"%self.output["typeAK4Heavy"])
             self.out.branch("%s_%s"%(self.output["typeAK4Light"], jbr), 
                             _rootLeafType2rootBranchType[self.branchType[self.input["typeAK4"]][jbr]], lenVar="n%s"%self.output["typeAK4Light"])
+        print("DEBUGGING: " + "Finished beginFile()")
 
-    def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
-        #called by the eventloop at end of inputFile
-        #Module just passes
-        pass
+    # def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
+    #     #called by the eventloop at end of inputFile
+    #     #Module just passes
+    #     pass
 
     #Use method from CollectionMerger.py
     def filterBranchNames(self,branches,collection):
@@ -842,7 +880,7 @@ class EventSelector(Module):
         ### Early Cut on Trigs ###
         ##########################
         if not (passMu or passMuMu or passElMu or passElEl):
-            if self.makeHistos: self.h_cutHisto.Fill(0.5)
+            if self.MADEHistos: self.h_cutHisto.Fill(0.5)
             if self.cutOnTrigs: return False
         
         ###########
@@ -928,10 +966,10 @@ class EventSelector(Module):
 
         #Dilepton event selection cuts
         if nExtraLeptons > 0:
-            if self.makeHistos: self.h_cutHisto.Fill(1.5)
+            if self.MADEHistos: self.h_cutHisto.Fill(1.5)
             return False
         if nSelLeptons != 2:
-            if self.makeHistos: self.h_cutHisto.Fill(2.5)
+            if self.MADEHistos: self.h_cutHisto.Fill(2.5)
             return False
 
         #print(lepCharge)
@@ -939,25 +977,25 @@ class EventSelector(Module):
         #Get almost exactly 1/3 events failing opposite-sign , if they pass dilepton veto, which is appropriate for 4-top production.
         if (lepCharge[0]*lepCharge[1] > 0):
             #print("<-Failed")
-            if self.makeHistos: self.h_cutHisto.Fill(3.5)
+            if self.MADEHistos: self.h_cutHisto.Fill(3.5)
             return False
 
         #Same-flavor low mass and Z mass resonance veto ###Improvement: now have separate index lists for muons, electrons, just use those for counting and matching
         if nSelMuons == 2:
             diLepMass = (muons[mIndex[0]].p4() + muons[mIndex[1]].p4()).M()
             if abs(diLepMass - self.cfg_lowMRes_cent) < self.cfg_lowMRes_hwidth:
-                if self.makeHistos: self.h_cutHisto.Fill(4.5)
+                if self.MADEHistos: self.h_cutHisto.Fill(4.5)
                 return False
             if abs(diLepMass - self.cfg_ZMRes_cent) < self.cfg_ZMRes_hwidth:
-                if self.makeHistos: self.h_cutHisto.Fill(5.5)
+                if self.MADEHistos: self.h_cutHisto.Fill(5.5)
                 return False
         if nSelElectrons == 2:
             diLepMass = (electrons[eIndex[0]].p4() + electrons[eIndex[1]].p4()).M()
             if abs(diLepMass - self.cfg_lowMRes_cent) < self.cfg_lowMRes_hwidth:
-                if self.makeHistos: self.h_cutHisto.Fill(4.5)
+                if self.MADEHistos: self.h_cutHisto.Fill(4.5)
                 return False
             if abs(diLepMass - self.cfg_ZMRes_cent) < self.cfg_ZMRes_hwidth:
-                if self.makeHistos: self.h_cutHisto.Fill(5.5)
+                if self.MADEHistos: self.h_cutHisto.Fill(5.5)
                 return False
 
         #Construct numerator for storing sum Pt of two highest selected jets, counter to increment and check against
@@ -1006,8 +1044,8 @@ class EventSelector(Module):
                     HTRat_Numerator += jet.pt
                     HTRat_Counter += 1
                 #Fill jet histos (Ideally replaced with hsnap() in the future)
-                if self.makeHistos: self.h_jBSel_map.Fill(jet.eta, jet.phi)
-                if self.makeHistos: self.h_jBSel_pt.Fill(jet.pt)
+                if self.MADEHistos: self.h_jBSel_map.Fill(jet.eta, jet.phi)
+                if self.MADEHistos: self.h_jBSel_pt.Fill(jet.pt)
                 #Add jet index to list for collection filling
                 jBIndex.append(jInd) 
                 #Add momentum to HT, H variables here
@@ -1031,8 +1069,8 @@ class EventSelector(Module):
                 nOthJets +=1
                 #Fill jet histos (Ideally replaced with hsnap() in the future) 
                 #FIXME: This isn't the distribution for the jets post event selection!
-                if self.makeHistos: self.h_jSel_map.Fill(jet.eta, jet.phi)
-                if self.makeHistos: self.h_jSel_pt.Fill(jet.pt)
+                if self.MADEHistos: self.h_jSel_map.Fill(jet.eta, jet.phi)
+                if self.MADEHistos: self.h_jSel_pt.Fill(jet.pt)
                 #Add jet index to list for collection filling
                 jNBIndex.append(jInd)
                 #Add momentum to event variables, no restrictions since these are all untagged jets 
@@ -1043,15 +1081,15 @@ class EventSelector(Module):
 
         #Cut events that don't have minimum number of b-tagged jets
         if nBJets < self.cfg_nBJetMin:
-            if self.makeHistos: self.h_cutHisto.Fill(6.5)
+            if self.MADEHistos: self.h_cutHisto.Fill(6.5)
             return False
         #Cut events that don't have minimum number of selected, cross-cleaned jets
         if nBJets + nOthJets < self.cfg_nTotJetMin:
-            if self.makeHistos: self.h_cutHisto.Fill(7.5)
+            if self.MADEHistos: self.h_cutHisto.Fill(7.5)
             return False
         #Cut events that don't have minimum value of HT
         if HT < self.cfg_HTMin:
-            if self.makeHistos: self.h_cutHisto.Fill(8.5)
+            if self.MADEHistos: self.h_cutHisto.Fill(8.5)
             if self.cutOnHT: return False
 
         #Calculate HTRat and HTH, since more than 4 jets in the events reaching this point
@@ -1111,5 +1149,5 @@ class EventSelector(Module):
             for elem in jNBIndex:
                 out.append(getattr(jets[elem], br))
             self.out.fillBranch("%s_%s"%(self.output["typeAK4Light"],br), out)
-
+        print("DEBUGGING: " + "Found event passing all selection criteria")
         return True
