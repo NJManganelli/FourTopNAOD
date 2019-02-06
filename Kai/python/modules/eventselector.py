@@ -518,7 +518,7 @@ class EventSelector(Module):
         #choose whether we want verbose output or to produce cut histograms 
         self._verbose = verbose
         self.makeHistos = makeHistos
-        print("DEBUG: makeHistos=" + str(self.makeHistos))
+        #print("DEBUG: makeHistos=" + str(self.makeHistos))
         self.cutOnMET = cutOnMET
         self.cutOnTrigs = cutOnTrigs
         self.cutOnHT = cutOnHT
@@ -575,7 +575,7 @@ class EventSelector(Module):
             self.dir = self.histFile.mkdir( histDirName )
             prevdir.cd()
             self.objs = []
-            print("DEBUG: makeHistos=" + str(self.makeHistos))
+            #print("DEBUG: makeHistos=" + str(self.makeHistos))
             if self.makeHistos:
                 self.h_cutHisto = ROOT.TH1F('h_cutHisto', ';Pruning Point in Event Selection; Events', 10, 0, 10)
                 self.addObject(self.h_cutHisto)
@@ -634,7 +634,7 @@ class EventSelector(Module):
     #             self.histFile.Close()
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
-        print("DEBUGGING: " + "getting list of branches")
+        #print("DEBUGGING: " + "getting list of branches")
         _brlist = inputTree.GetListOfBranches()
         print(inputFile.GetName())
         print(inputTree.GetName())
@@ -645,7 +645,7 @@ class EventSelector(Module):
         for elem in self.input:
             placeholder.append([])
         self.brlist_sep = dict(zip(self.input.keys(), placeholder))
-        print("DEBUGGING: " + "filtering branch names")
+        #print("DEBUGGING: " + "filtering branch names")
         for key in self.input.keys():
             self.brlist_sep[key] = self.filterBranchNames(branches,self.input[key])
         #self.brlist_all = set(itertools.chain(*(self.brlist_sep)))
@@ -654,7 +654,7 @@ class EventSelector(Module):
         #         if br in self.brlist_sep[j]: self.is_there[bridx][j]=True
 
         self.out = wrappedOutputTree
-        print("DEBUGGING: " + "creating branches")
+        #print("DEBUGGING: " + "creating branches")
         self.out.branch("Electron_PES", "O", lenVar="nElectron", title="Boolean for electrons passing the event selection criteria")
         self.out.branch("Muon_PES", "O", lenVar="nMuon", title="Boolean for muons passing the event selection criteria")
         self.out.branch("Jet_PES", "O", lenVar="nJet", title="Boolean for jets passing the event selection criteria")
@@ -692,7 +692,7 @@ class EventSelector(Module):
         for name, valType in self.varDict.items():
             self.out.branch("EventVar_%s"%(name), valType, title=self.titleDict[name])
 
-        print("DEBUGGING: " + "adding cleaned collection branches")
+        #print("DEBUGGING: " + "adding cleaned collection branches")
         #want multipe sets of output branche collections for the different categories.... not one single branch collection
         #Create output branches for the selected electrons, muons, and distinct b Jet/Non-b Jet collections
         for ebr in self.brlist_sep["typeElectron"]:
@@ -706,7 +706,7 @@ class EventSelector(Module):
                             _rootLeafType2rootBranchType[self.branchType[self.input["typeAK4"]][jbr]], lenVar="n%s"%self.output["typeAK4Heavy"])
             self.out.branch("%s_%s"%(self.output["typeAK4Light"], jbr), 
                             _rootLeafType2rootBranchType[self.branchType[self.input["typeAK4"]][jbr]], lenVar="n%s"%self.output["typeAK4Light"])
-        print("DEBUGGING: " + "Finished beginFile()")
+        #print("DEBUGGING: " + "Finished beginFile()")
 
     # def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
     #     #called by the eventloop at end of inputFile
@@ -729,7 +729,7 @@ class EventSelector(Module):
         self.counter +=1
         if -1 < self.maxEventsToProcess < self.counter:
             return False
-        if (self.counter % 1000) == 0:
+        if (self.counter % 5000) == 0:
             print("Processed {0:2d} Events".format(self.counter))
         
         ###############################################
@@ -860,22 +860,26 @@ class EventSelector(Module):
             if passMuMu:
                 break
             else:
-                passMuMu = getattr(HLT, trig)
+                if hasattr(HLT, trig):
+                    passMuMu = getattr(HLT, trig)
         for trig in Triggers["ElMu"]:
             if passElMu:
                 break
             else:
-                passMuMu = getattr(HLT, trig)
+                if hasattr(HLT, trig):
+                    passMuMu = getattr(HLT, trig)
         for trig in Triggers["ElEl"]:
             if passElEl:
                 break
             else:
-                passMuMu = getattr(HLT, trig)
+                if hasattr(HLT, trig):
+                    passMuMu = getattr(HLT, trig)
         for trig in Triggers["Mu"]:
             if passMu:
                 break
             else:
-                passMuMu = getattr(HLT, trig)
+                if hasattr(HLT, trig):
+                    passMuMu = getattr(HLT, trig)
 
         ##########################
         ### Early Cut on Trigs ###
@@ -1150,5 +1154,5 @@ class EventSelector(Module):
             for elem in jNBIndex:
                 out.append(getattr(jets[elem], br))
             self.out.fillBranch("%s_%s"%(self.output["typeAK4Light"],br), out)
-        print("DEBUGGING: " + "Found event passing all selection criteria")
+        #print("DEBUGGING: " + "Found event passing all selection criteria")
         return True
