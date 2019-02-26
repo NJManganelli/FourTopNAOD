@@ -210,8 +210,10 @@ class BreakerEventSelector(Module):
         #########################
         ### Trigger Selection ###
         #########################
-        Triggers = { "MuMu" : ["Mu17_TrkIsoVVL_Mu8_TrkIsoVVL"],
-                     "ElMu" : ["Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL",
+        Triggers = { "MuMu" : [#"Mu17_TrkIsoVVL_Mu8_TrkIsoVVL",
+                               "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8"],
+                     "ElMu" : ["Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
+                               #"HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL(_DZ)_v",
                                "Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL"],
                      "ElEl" : ["Ele23_Ele12_CaloIdL_TrackIdL_IsoVL"],
                      "Mu" : ["IsoMu24"]

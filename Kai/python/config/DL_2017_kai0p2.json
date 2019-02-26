@@ -37,19 +37,19 @@
       "Algo" : "btagDeepB",
       "WP" : "Medium",
       "btagCSVV2" : { 
-	     	  "Loose" : "FIXME", 
+	     	  "Loose" : "0.5803", 
 		  "Medium" : 0.8838, 
-		  "Tight" : "FIXME"
+		  "Tight" : "0.9693"
 		  },
       "btagDeepB" : { 
-      		  "Loose" : "FIXME", 
+      		  "Loose" : "0.1522", 
 		  "Medium" : 0.4941, 
-		  "Tight" : "FIXME"
+		  "Tight" : "0.8001"
 		  },
       "DeepFlav" : { 
-      		 "Loose" : "FIXME", 
-		 "Medium" : "FIXME", 
-		 "Tight" : "FIXME"
+      		 "Loose" : "0.0521", 
+		 "Medium" : "0.3033", 
+		 "Tight" : "0.7489"
 		 },
       "CleanType" : "PartonMatching",
       "MaxDeltaR" : 0.4
