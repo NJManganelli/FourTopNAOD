@@ -1,5 +1,5 @@
 from __future__ import (division, print_function)
-from PhysicsTools.NanoAODTools.postprocessing.intools import *
+from FourTopNAOD.Kai.tools.intools import *
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection
 from PhysicsTools.NanoAODTools.postprocessing.tools import *
 import copy
@@ -72,6 +72,12 @@ class MCTree:
         self.treeSubJet = {}
         self.treeGenJetAK8 = {}
         self.treeSubGenJetAK8 = {}
+        self.treeJetTuple = {}
+        self.treeGenJetTuple = {}
+        self.treeFatJetTuple = {}
+        self.treeSubJetTuple = {}
+        self.treeGenJetAK8Tuple = {}
+        self.treeSubGenJetAK8Tuple = {}
         
         ##############################
         ### Gen and PF Collections ###
@@ -195,6 +201,13 @@ class MCTree:
             self.treeGenJetAK8[Idx] = []
             #self.treeSubJet[Idx] = []
             #self.treeSubGenJetAK8[Idx] = []
+            self.treeJetTuple[Idx] = []
+            self.treeGenJetTuple[Idx] = []
+            self.treeFatJetTuple[Idx] = []
+            self.treeGenJetAK8Tuple[Idx] = []
+            #self.treeSubJetTuple[Idx] = []
+            #self.treeSubGenJetAK8Tuple[Idx] = []
+
             
     def buildGenTree(self):
         """Build the Gen Tree by storing descendants' indices in lists associated with the parent index, forming key-value pairs.
@@ -226,12 +239,23 @@ class MCTree:
                     node.sort(key=lambda n : n, reverse=False)
                     
     def getMCTree(self, returnCopy=True):
+        """Return the MC Tree dictionary.
+
+        Default option of returnCopy=True returns a copy.copy() of the tree, so that it can be modified without affecting the class's internal tree."""
         if returnCopy:
             return copy.copy(self.tree)
         else:
             return self.tree
         
-    def buildPFTrees(self, dRforAK4=0.4, dRforAK8=0.8, onlyBuildDaughterless=True, onlyUseClosest=False, returnCopy=True):
+    def buildPFTrees(self, dRforAK4=0.4, dRforAK8=0.8, onlyBuildDaughterless=True, onlyUseClosest=False):
+        """Build trees for Particle Flow objects, including leptons and jets.
+
+        Loops through the gen particles and stores the index of leptons and jets.
+        dRforAK4 is the maximum DeltaR for AK4 Jets
+        dRforAK8 is the maximum DeltaR for AK8 Jets
+        onlyBuildDaughterless specifies whether a gen particle that decays to other gen particles should be matched against any jets (does not affect lepton matching)
+        onlyUseClosest specifies whether a gen particle can match to multiple jets within small enough DeltaR (overlap), or should only store the index of the closest for each jet type
+        """
         #Direct link electrons, muons, taus
         if self.electrons:
             for eidx, ele in enumerate(self.electrons):
@@ -249,15 +273,7 @@ class MCTree:
                 if -1 < genIdx < len(self.gens):
                     self.treeTau[genIdx].append(tauidx)
                 
-        dRJet = {}
-        dRGenJet = {}
-        dRFatJet = {}
-        dRGenJetAK8 = {}
         for Idx, gen in enumerate(self.gens):
-            dRJet[Idx] = []
-            dRGenJet[Idx] = []
-            dRFatJet[Idx] = []
-            dRGenJetAK8[Idx] = []
             #Skip neutrinos
             if abs(gen.pdgId) in set([12,14,16]): 
                 continue
@@ -271,8 +287,9 @@ class MCTree:
                         if dRtest < dRmin and dRtest < dRforAK4:
                             dRmin = copy.copy(dRtest)
                             closestJidx = jidx
-                    if closestJidx > -1: self.treeJet[Idx].append(closestJidx)
-                    if dRmin < 999: dRJet[Idx].append(dRmin)
+                    if closestJidx > -1: 
+                        self.treeJet[Idx].append(closestJidx)
+                        self.treeJetTuple[Idx].append( (closestJidx, dRmin) )
                 if self.genjets:
                     dRmin = 999
                     closestJidx = -1
@@ -281,8 +298,9 @@ class MCTree:
                         if dRtest < dRmin and dRtest < dRforAK4:
                             dRmin = copy.copy(dRtest)
                             closestJidx = jidx
-                    if closestJidx > -1: self.treeGenJet[Idx].append(closestJidx)
-                    if dRmin < 999: dRGenJet[Idx].append(dRmin)
+                    if closestJidx > -1: 
+                        self.treeGenJet[Idx].append(closestJidx)
+                        self.treeGenJetTuple[Idx].append( (closestJidx, dRmin) )
                 if self.fatjets:
                     dRmin = 999
                     closestJidx = -1
@@ -291,8 +309,9 @@ class MCTree:
                         if dRtest < dRmin and dRtest < dRforAK8:
                             dRmin = copy.copy(dRtest)
                             closestJidx = jidx
-                    if closestJidx > -1: self.treeFatJet[Idx].append(closestJidx)
-                    if dRmin < 999: dRFatJet[Idx].append(dRmin)
+                    if closestJidx > -1: 
+                        self.treeFatJet[Idx].append(closestJidx)
+                        self.treeFatJetTuple[Idx].append( (closestJidx, dRmin) )
                 if self.genfatjets:
                     dRmin = 999
                     closestJidx = -1
@@ -301,64 +320,58 @@ class MCTree:
                         if dRtest < dRmin and dRtest < dRforAK8:
                             dRmin = copy.copy(dRtest)
                             closestJidx = jidx
-                    if closestJidx > -1: self.treeGenJetAK8[Idx].append(closestJidx)
-                    if dRmin < 999: dRGenJetAK8[Idx].append(dRmin)
+                    if closestJidx > -1: 
+                        self.treeGenJetAK8[Idx].append(closestJidx)
+                        self.treeGenJetAK8Tuple[Idx].append( (closestJidx, dRmin) )
             else:
                 if self.jets:
                     for jidx, jet in enumerate(self.jets):
                         dRtest = deltaR(gen, jet)
                         if dRtest < dRforAK4:
                             self.treeJet[Idx].append(jidx)
-                            dRJet[Idx].append(dRtest)
+                            self.treeJetTuple[Idx].append( (jidx, dRtest) )
                 if self.genjets:
                     for jidx, jet in enumerate(self.genjets):
                         dRtest = deltaR(gen, jet)
                         if dRtest < dRforAK4:
                             self.treeGenJet[Idx].append(jidx)
-                            dRGenJet[Idx].append(dRtest)
+                            self.treeGenJetTuple[Idx].append( (jidx, dRtest) )
                 if self.fatjets:
                     for jidx, jet in enumerate(self.fatjets):
                         dRtest = deltaR(gen, jet)
                         if dRtest < dRforAK8:
                             self.treeFatJet[Idx].append(jidx)
-                            dRFatJet[Idx].append(dRtest)
+                            self.treeFatJetTuple[Idx].append( (jidx, dRtest) )
                 if self.genfatjets:
                     for jidx, jet in enumerate(self.genfatjets):
                         dRtest = deltaR(gen, jet)
                         if dRtest < dRforAK8:
                             self.treeGenJetAK8[Idx].append(jidx)
-                            dRGenJetAK8[Idx].append(dRtest)
+                            self.treeGenJetAK8Tuple[Idx].append( (jidx, dRtest) )
+
+    def getPFTrees(self, returnCopy=True):
+        """Return the PF Tree dictionaries inside a dictionary.
+
+        Default option of returnCopy=True returns a copy.copy() of the trees, so that they can be modified without affecting the class's internal trees."""
 
         if returnCopy:
-            return { 'dRJet': copy.copy(dRJet),
-                     'dRGenJet': copy.copy(dRGenJet),
-                     'dRFatJet': copy.copy(dRFatJet),
-                     'dRGenJetAK8': copy.copy(dRGenJetAK8)}
+            return { 'treeJet': copy.copy(self.treeJet),
+                     'treeGenJet': copy.copy(self.treeGenJet),
+                     'treeFatJet': copy.copy(self.treeFatJet),
+                     'treeGenJetAK8': copy.copy(self.treeGenJetAK8),
+                     'treeJetTuple': copy.copy(self.treeJetTuple),
+                     'treeGenJetTuple': copy.copy(self.treeGenJetTuple),
+                     'treeFatJetTuple': copy.copy(self.treeFatJetTuple),
+                     'treeGenJetAK8Tuple': copy.copy(self.treeGenJetAK8Tuple)}
         else:
-            return { 'dRJet': dRJet,
-                     'dRGenJet': dRGenJet,
-                     'dRFatJet': dRFatJet,
-                     'dRGenJetAK8': dRGenJetAK8}
-#            else:
-#                if onlyUseClosest:
-#                    raise NotImplementedError("onlyUseClosest has not been implemented for buildPFTrees()")
-#                else:
-#                    if self.jets:
-#                        for jidx, jet in enumerate(self.jets):
-#                            if deltaR(gen, jet) < dRforAK4:
-#                                self.treeJet[Idx].append(jidx)
-#                    if self.genjets:
-#                        for jidx, jet in enumerate(self.genjets):
-#                            if deltaR(gen, jet) < dRforAK4:
-#                                self.treeGenJet[Idx].append(jidx)
-#                    if self.fatjets:
-#                        for jidx, jet in enumerate(self.fatjets):
-#                            if deltaR(gen, jet) < dRforAK8:
-#                                self.treeFatJet[Idx].append(jidx)
-#                    if self.genfatjets:
-#                        for jidx, genjet in enumerate(self.genfatjets):
-#                            if deltaR(gen, genjet) < dRforAK8:
-#                                self.treeGenJetAK8[Idx].append(jidx)
+            return { 'treeJet': self.treeJet,
+                     'treeGenJet': self.treeGenJet,
+                     'treeFatJet': self.treeFatJet,
+                     'treeGenJetAK8': self.treeGenJetAK8,
+                     'treeJetTuple': self.treeJetTuple,
+                     'treeGenJetTuple': self.treeGenJetTuple,
+                     'treeFatJetTuple': self.treeFatJetTuple,
+                     'treeGenJetAK8Tuple': self.treeGenJetAK8Tuple}
               
     def unbrokenDescent(self, Idx, chain=None, sortkey=None, sortreverse=True, chooseLongestChain=True):
         if not sortkey:
@@ -447,6 +460,19 @@ class MCTree:
             return []
         
     def buildTopSubtree(self):
+        """Method to recontstruct nodes of the top decays.
+
+        Calls several submethods:
+        linkTops()
+        linkTopDaughters()
+        linkWDaughters()
+        linkTauDaughters()
+        linkBDescendants()
+        linkWDescendants()
+        linkTauDescendants()
+        evaluateLeptonicity()
+        evaluateHadronicityWithVoting()
+        """
         if self.verbose:
             print("MCTree is building the Top Subtree")
             print(self.t_head)
@@ -458,7 +484,7 @@ class MCTree:
         _______ = self.linkWDescendants()
         ________ = self.linkTauDescendants()
         LepTopDict = self.evaluateLeptonicity()
-        TopJetDict = self.evaluateHadronicity()
+        TopJetDict = self.evaluateHadronicityWithVoting()
         
             
     def linkTops(self, returnSuccess=True, returnCopy=True):
@@ -860,6 +886,163 @@ class MCTree:
             WDau2GenJets[tidx] = set()
             WDau2FatJets[tidx] = set()
             WDau2GenJetAK8s[tidx] = set()
+            
+            #print("b Desc: " + str(self.tb_desc[tidx]))
+            for dnode in self.tb_desc[tidx]:
+                if self.jets:
+                    #print(self.treeJet[dnode])
+                    for i in self.treeJet[dnode]:
+                        bJets[tidx].add(i)
+                if self.genjets:
+                    for i in self.treeGenJet[dnode]:
+                        bGenJets[tidx].add(i)
+                if self.fatjets:
+                    for i in self.treeFatJet[dnode]:
+                        bFatJets[tidx].add(i)
+                if self.genfatjets:
+                    for i in self.treeGenJetAK8[dnode]:
+                        bGenJetAK8s[tidx].add(i)
+            #print("W Dau 1 Desc: " + str(self.tW_dau1_desc[tidx]))
+            for dnode in self.tW_dau1_desc[tidx]:
+                if self.jets:
+                    for i in self.treeJet[dnode]:
+                        WDau1Jets[tidx].add(i)
+                if self.genjets:
+                    for i in self.treeGenJet[dnode]:
+                        WDau1GenJets[tidx].add(i)
+                if self.fatjets:
+                    for i in self.treeFatJet[dnode]:
+                        WDau1FatJets[tidx].add(i)
+                if self.genfatjets:
+                    for i in self.treeGenJetAK8[dnode]:
+                        WDau1GenJetAK8s[tidx].add(i)
+            #print("W Dau 2 Desc: " + str(self.tW_dau2_desc[tidx]))
+            for dnode in self.tW_dau2_desc[tidx]:
+                if self.jets:
+                    for i in self.treeJet[dnode]:
+                        WDau2Jets[tidx].add(i)
+                if self.genjets:
+                    for i in self.treeGenJet[dnode]:
+                        WDau2GenJets[tidx].add(i)
+                if self.fatjets:
+                    for i in self.treeFatJet[dnode]:
+                        WDau2FatJets[tidx].add(i)
+                if self.genfatjets:
+                    for i in self.treeGenJetAK8[dnode]:
+                        WDau2GenJetAK8s[tidx].add(i)
+            #print("t Desc: " + str(self.t_first_desc[tidx]))
+            for dnode in self.t_first_desc[tidx]:
+                if self.jets:
+                    for i in self.treeJet[dnode]:
+                        tJets[tidx].add(i)
+                if self.genjets:
+                    for i in self.treeGenJet[dnode]:
+                        tGenJets[tidx].add(i)
+                if self.fatjets:
+                    for i in self.treeFatJet[dnode]:
+                        tFatJets[tidx].add(i)
+                if self.genfatjets:
+                    for i in self.treeGenJetAK8[dnode]:
+                        tGenJetAK8s[tidx].add(i)
+        #Analyze jet lists via unions, intersections, etc.
+        
+        #convert to list
+        #for tidx in self.t_head.values():
+            tJets[tidx] = list(tJets[tidx])
+            tGenJets[tidx] = list(tGenJets[tidx])
+            tFatJets[tidx] = list(tFatJets[tidx])
+            tGenJetAK8s[tidx] = list(tGenJetAK8s[tidx])
+            bJets[tidx] = list(bJets[tidx])
+            bGenJets[tidx] = list(bGenJets[tidx])
+            bFatJets[tidx] = list(bFatJets[tidx])
+            bGenJetAK8s[tidx] = list(bGenJetAK8s[tidx])
+            WDau1Jets[tidx] = list(WDau1Jets[tidx])
+            WDau1GenJets[tidx] = list(WDau1GenJets[tidx])
+            WDau1FatJets[tidx] = list(WDau1FatJets[tidx])
+            WDau1GenJetAK8s[tidx] = list(WDau1GenJetAK8s[tidx])
+            WDau2Jets[tidx] = list(WDau2Jets[tidx])
+            WDau2GenJets[tidx] = list(WDau2GenJets[tidx])
+            WDau2FatJets[tidx] = list(WDau2FatJets[tidx])
+            WDau2GenJetAK8s[tidx] = list(WDau2GenJetAK8s[tidx])
+            
+        if returnCopy:
+            return {'tJets': copy.copy(tJets), 'tGenJets': copy.copy(tGenJets), 'tFatJets': copy.copy(tFatJets),
+                    'tGenJetAK8s': copy.copy(tGenJetAK8s), 'bJets': copy.copy(bJets), 'bGenJets': copy.copy(bGenJets),
+                    'bFatJets': copy.copy(bFatJets), 'bGenJetAK8s': copy.copy(bGenJetAK8s), 'WDau1Jets': copy.copy(WDau1Jets),
+                    'WDau1GenJets': copy.copy(WDau1GenJets), 'WDau1FatJets': copy.copy(WDau1FatJets),
+                    'WDau1GenJetAK8s': copy.copy(WDau1GenJetAK8s), 'WDau2Jets': copy.copy(WDau2Jets),
+                    'WDau2GenJets': copy.copy(WDau2GenJets), 'WDau2FatJets': copy.copy(WDau2FatJets),
+                    'WDau2GenJetAK8s': copy.copy(WDau2GenJetAK8s)
+                   }
+        else:
+            return {'tJets': tJets, 'tGenJets': tGenJets, 'tFatJets': tFatJets, 'tGenJetAK8s': tGenJetAK8s,
+                    'bJets': bJets, 'bGenJets': bGenJets, 'bFatJets': bFatJets, 'bGenJetAK8s': bGenJetAK8s,
+                    'WDau1Jets': WDau1Jets, 'WDau1GenJets': WDau1GenJets, 'WDau1FatJets': WDau1FatJets,
+                    'WDau1GenJetAK8s': WDau1GenJetAK8s, 'WDau2Jets': WDau2Jets, 'WDau2GenJets': WDau2GenJets,
+                    'WDau2FatJets': WDau2FatJets, 'WDau2GenJetAK8s': WDau2GenJetAK8s
+                   }
+
+    def evaluateHadronicityWithVoting(self, returnCopy=True, votingMethod=None, votingFilter=None):
+        """Matches jets to b quarks and W daughters
+
+        Take note of interplay with BuildPFTrees (notably the onlyUseClosest option storing one jet per gen), as gens can be DeltaR matched against multiple jets 
+        due to overlap and the jet clustering algorithms. 
+        votingMethod=None will cause the method to throw an exception with the usage information
+        votingMethod=0:
+        Unnweighted voting.
+        Each gen can contribute 1 vote per jet and per jet type it was DeltaR matched to.
+        votingMethod=1:
+        Pt weighted voting.
+        Each gen contributes a vote weighted by the fraction of parent particle Pt it carried, per jet and per jet type
+        votingMethod=2:
+        3-Momentum weighted voting.
+        Each gen contributes a vote weighted by the fraction of parent particle Momentum it carried, per jet and per jet type
+        """
+
+        if votingMethod==None:
+            help(MCTree.evaluateHadronicityWithVoting)
+            raise ValueError("evaluateHadronicityWithVoting() in MCTree class requires a chosen voting method.")
+        elif votingMethod==0:
+            self.vote = lambda g, p : 1
+        elif votingMethod==1:
+            self.vote = lambda g, p : self.gens[g].pt / self.gens[p].pt
+        elif votingMethod==2:
+            self.vote = lambda g, p : self.gens[g].p4().P() / self.gens[p].p4().P()
+
+            
+        tJets = {}
+        tGenJets = {}
+        tFatJets = {}
+        tGenJetAK8s = {}
+        bJets = {}
+        bGenJets = {}
+        bFatJets = {}
+        bGenJetAK8s = {}
+        WDau1Jets = {}
+        WDau1GenJets = {}
+        WDau1FatJets = {}
+        WDau1GenJetAK8s = {}
+        WDau2Jets = {}
+        WDau2GenJets = {}
+        WDau2FatJets = {}
+        WDau2GenJetAK8s = {}
+        for tidx in self.t_head.values():
+            tJets[tidx] = []
+            tGenJets[tidx] = []
+            tFatJets[tidx] = []
+            tGenJetAK8s[tidx] = []
+            bJets[tidx] = []
+            bGenJets[tidx] = []
+            bFatJets[tidx] = []
+            bGenJetAK8s[tidx] = []
+            WDau1Jets[tidx] = []
+            WDau1GenJets[tidx] = []
+            WDau1FatJets[tidx] = []
+            WDau1GenJetAK8s[tidx] = []
+            WDau2Jets[tidx] = []
+            WDau2GenJets[tidx] = []
+            WDau2FatJets[tidx] = []
+            WDau2GenJetAK8s[tidx] = []
             
             #print("b Desc: " + str(self.tb_desc[tidx]))
             for dnode in self.tb_desc[tidx]:

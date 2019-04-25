@@ -34,12 +34,14 @@ p=PostProcessor(".", #The output Directory and files list must appear in the sam
                 files,
                 cut=None,
                 #modules=[MCTruth(maxevt=5000, probEvt=155325)],
-                modules=[puWeightProducer("auto",pufile_data2017,"pu_mc","pileup",verbose=False)],
+                modules=[puWeightProducer("auto",pufile_data2017,"pu_mc","pileup",verbose=True)],
                          #WeightToolTester(maxevt=1000, subname=S2)
-                        ],
+                         #],
                 #modules=[]
-                noOut=True,
+                noOut=False,
                 histFileName=hName,
                 histDirName="plots",
                 #justcount=True,
                 )
+
+p.run()
