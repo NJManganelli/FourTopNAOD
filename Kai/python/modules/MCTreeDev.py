@@ -647,13 +647,13 @@ class MCTruth(Module):
         treeMuon = TIS['treeMuon']
         treeTau = TIS['treeTau']
         treeJet = TIS['treeJet']
-        treeJetDR = PFT['dRJet']
+        #treeJetDR = PFT['dRJet']
         treeGenJet = TIS['treeGenJet']
-        treeGenJetDR = PFT['dRGenJet']
+        #treeGenJetDR = PFT['dRGenJet']
         treeFatJet = TIS['treeFatJet']
-        treeFatJetDR = PFT['dRFatJet']
+        #treeFatJetDR = PFT['dRFatJet']
         treeGenJetAK8 = TIS['treeGenJetAK8']
-        treeGenJetAK8DR = PFT['dRGenJetAK8']  
+        #treeGenJetAK8DR = PFT['dRGenJetAK8']  
          
         nAltCalc = len(topMuons) + len(topElectrons) + len(topTauMuons) + len(topTauElectrons)
         if nAltCalc == 2:
@@ -1292,24 +1292,24 @@ class MCTruth(Module):
                 self.hScratch.Fill(len(treeTau[sidx]), "Tau", 1.0)
             if len(treeJet[sidx]) > 0:
                 self.hScratch.Fill(len(treeJet[sidx]), "Jet", 1.0)
-                treeJetDR[sidx].sort()
-                for drc, dr in enumerate(treeJetDR[sidx]):
-                    self.hTree_DeltaR.Fill(dr, str(drc+1)+" Jet", 1.0)
+                # treeJetDR[sidx].sort()
+                # for drc, dr in enumerate(treeJetDR[sidx]):
+                #     self.hTree_DeltaR.Fill(dr, str(drc+1)+" Jet", 1.0)
             if len(treeGenJet[sidx]) > 0:
                 self.hScratch.Fill(len(treeGenJet[sidx]), "GenJet", 1.0)
-                treeGenJetDR[sidx].sort()
-                for drc, dr in enumerate(treeGenJetDR[sidx]):
-                    self.hTree_DeltaR.Fill(dr, str(drc+1)+" GenJet", 1.0)
+                # treeGenJetDR[sidx].sort()
+                # for drc, dr in enumerate(treeGenJetDR[sidx]):
+                #     self.hTree_DeltaR.Fill(dr, str(drc+1)+" GenJet", 1.0)
             if len(treeFatJet[sidx]) > 0:
                 self.hScratch.Fill(len(treeFatJet[sidx]), "FatJet", 1.0)
-                treeFatJetDR[sidx].sort()
-                for drc, dr in enumerate(treeFatJetDR[sidx]):
-                    self.hTree_DeltaR.Fill(dr, str(drc+1)+" FatJet", 1.0)
+                # treeFatJetDR[sidx].sort()
+                # for drc, dr in enumerate(treeFatJetDR[sidx]):
+                #     self.hTree_DeltaR.Fill(dr, str(drc+1)+" FatJet", 1.0)
             if len(treeGenJetAK8[sidx]) > 0:
                 self.hScratch.Fill(len(treeGenJetAK8[sidx]), "GenJetAK8", 1.0)
-                treeGenJetAK8DR[sidx].sort()
-                for drc, dr in enumerate(treeGenJetAK8DR[sidx]):
-                    self.hTree_DeltaR.Fill(dr, str(drc+1)+" GenJetAK8", 1.0)
+                # treeGenJetAK8DR[sidx].sort()
+                # for drc, dr in enumerate(treeGenJetAK8DR[sidx]):
+                #     self.hTree_DeltaR.Fill(dr, str(drc+1)+" GenJetAK8", 1.0)
         #############
         ### Dumps ###
         #############
