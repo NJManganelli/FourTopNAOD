@@ -57,7 +57,7 @@ class MCTree:
                  electronCollection=None, tauCollection=None,
                  jetCollection=None, genJetCollection=None,
                  fatJetCollection=None, genJetAK8Collection=None, 
-                 verbose=False, runLumEvt=None, debug=False):
+                 verbose=False, runLumEvt=None, debug=False, evt=None):
         
         #################
         ### The Trees ###
@@ -83,6 +83,7 @@ class MCTree:
         ### Gen and PF Collections ###
         ##############################
         
+        self.event = evt
         self.gens = genPartCollection
         self.muons = muonCollection
         self.electrons = electronCollection
@@ -176,8 +177,9 @@ class MCTree:
         self.H_head = {} #0-indexed dictionary that stores the index of the first copy of each Higgs Boson
         
         #dumpGenCollection(self.gens)
-        self.initializeTrees()
-        self.buildGenTree()
+        #self.initializeTrees()
+        #self.buildGenTree()
+
         #_ = self.buildPFTrees()
         #self.printGenNode(nodeKey=-1)
         #self.pprintGenNode(nodeKey=-1)
@@ -237,6 +239,42 @@ class MCTree:
                 else:
                     #Sort the -1 node by key-value, so that the 0 node prints first
                     node.sort(key=lambda n : n, reverse=False)
+
+    def LW_buildGenTree(self):
+        """(LightWeight - more optimized version) Build the Gen Tree by storing descendants' indices in lists associated with the parent index, forming key-value pairs.
+        
+        For example, a particle with Idx=5 with descendants 9, 14, 15, 87 would be stored as { 5:[9, 14, 15, 87] }.
+        This only contains the direct descendants, forming a tree structure.
+        PF Candidates are stored with non-integer format.
+        """
+        if self.verbose:
+            print("MCTree is building the Gen Particle tree")
+        for Idx in xrange(self.event.nGenPart):
+            pdgid = abs(self.event.GenPart_pdgId[Idx])
+            moidx = self.event.GenPart_genPartIdxMother[Idx]
+            if moidx > -1:
+                mpdgid = abs(self.event.GenPart_pdgId[moidx])
+            else:
+                mpdgid = -999
+            self.tree[moidx].append(Idx)
+            if pdgid == 6 and mpdgid != 6:
+                self.t_head[len(self.t_head)] = Idx
+            if pdgid == 23 and mpdgid != 23:
+                self.Z_head[len(self.Z_head)] = Idx
+            if pdgid == 24 and mpdgid not in set([6, 24]):
+                self.W_head[len(self.W_head)] = Idx
+            if pdgid == 25 and mpdgid != 25:
+                self.H_head[len(self.H_head)] = Idx
+        #Sort the tree by abs(PDG ID), except the initial pp interaction
+        for nodekey, node in self.tree.iteritems():
+            if len(node) > 1:
+                if nodekey > -1:
+                    #sort all nodes descended from initial pp interaction by absolute value of pdgId, smallest first
+                    node.sort(key=self.sortByAbsId, reverse=False)
+                else:
+                    #Sort the -1 node by key-value, so that the 0 node prints first
+                    node.sort(key=lambda n : n, reverse=False)
+
                     
     def getMCTree(self, returnCopy=True):
         """Return the MC Tree dictionary.
@@ -1005,9 +1043,9 @@ class MCTree:
         elif votingMethod==0:
             self.vote = lambda g, p : 1
         elif votingMethod==1:
-            self.vote = lambda g, p : self.gens[g].pt / self.gens[p].pt
-        elif votingMethod==2:
             self.vote = lambda g, p : self.gens[g].p4().P() / self.gens[p].p4().P()
+        elif votingMethod==2: #Not a good method, due to changes in angular direction for daughters versus parent particles
+            self.vote = lambda g, p : self.gens[g].pt / self.gens[p].pt
 
             
         tJets = {}
@@ -1026,6 +1064,40 @@ class MCTree:
         WDau2GenJets = {}
         WDau2FatJets = {}
         WDau2GenJetAK8s = {}
+
+        tJetsWeight = {}
+        tGenJetsWeight = {}
+        tFatJetsWeight = {}
+        tGenJetAK8sWeight = {}
+        bJetsWeight = {}
+        bGenJetsWeight = {}
+        bFatJetsWeight = {}
+        bGenJetAK8sWeight = {}
+        WDau1JetsWeight = {}
+        WDau1GenJetsWeight = {}
+        WDau1FatJetsWeight = {}
+        WDau1GenJetAK8sWeight = {}
+        WDau2JetsWeight = {}
+        WDau2GenJetsWeight = {}
+        WDau2FatJetsWeight = {}
+        WDau2GenJetAK8sWeight = {}
+
+        tJetsWithVoting = {}
+        tGenJetsWithVoting = {}
+        tFatJetsWithVoting = {}
+        tGenJetAK8sWithVoting = {}
+        bJetsWithVoting = {}
+        bGenJetsWithVoting = {}
+        bFatJetsWithVoting = {}
+        bGenJetAK8sWithVoting = {}
+        WDau1JetsWithVoting = {}
+        WDau1GenJetsWithVoting = {}
+        WDau1FatJetsWithVoting = {}
+        WDau1GenJetAK8sWithVoting = {}
+        WDau2JetsWithVoting = {}
+        WDau2GenJetsWithVoting = {}
+        WDau2FatJetsWithVoting = {}
+        WDau2GenJetAK8sWithVoting = {}
         for tidx in self.t_head.values():
             tJets[tidx] = []
             tGenJets[tidx] = []
@@ -1043,84 +1115,191 @@ class MCTree:
             WDau2GenJets[tidx] = []
             WDau2FatJets[tidx] = []
             WDau2GenJetAK8s[tidx] = []
-            
+
+            tJetsWeight[tidx] = []
+            tGenJetsWeight[tidx] = []
+            tFatJetsWeight[tidx] = []
+            tGenJetAK8sWeight[tidx] = []
+            bJetsWeight[tidx] = []
+            bGenJetsWeight[tidx] = []
+            bFatJetsWeight[tidx] = []
+            bGenJetAK8sWeight[tidx] = []
+            WDau1JetsWeight[tidx] = []
+            WDau1GenJetsWeight[tidx] = []
+            WDau1FatJetsWeight[tidx] = []
+            WDau1GenJetAK8sWeight[tidx] = []
+            WDau2JetsWeight[tidx] = []
+            WDau2GenJetsWeight[tidx] = []
+            WDau2FatJetsWeight[tidx] = []
+            WDau2GenJetAK8sWeight[tidx] = []
+
+            tJetsWithVoting[tidx] = {}
+            tGenJetsWithVoting[tidx] = {}
+            tFatJetsWithVoting[tidx] = {}
+            tGenJetAK8sWithVoting[tidx] = {}
+            bJetsWithVoting[tidx] = {}
+            bGenJetsWithVoting[tidx] = {}
+            bFatJetsWithVoting[tidx] = {}
+            bGenJetAK8sWithVoting[tidx] = {}
+            WDau1JetsWithVoting[tidx] = {}
+            WDau1GenJetsWithVoting[tidx] = {}
+            WDau1FatJetsWithVoting[tidx] = {}
+            WDau1GenJetAK8sWithVoting[tidx] = {}
+            WDau2JetsWithVoting[tidx] = {}
+            WDau2GenJetsWithVoting[tidx] = {}
+            WDau2FatJetsWithVoting[tidx] = {}
+            WDau2GenJetAK8sWithVoting[tidx] = {}
+
+            #Fill dictionaries with jet indices and value initialized to 0 (will be accumulated votes for the jet)
+            #Append jet list of tuples with the jet index and the weight of the vote
             #print("b Desc: " + str(self.tb_desc[tidx]))
             for dnode in self.tb_desc[tidx]:
+                thevote = self.vote(dnode, self.tb_first[tidx])
                 if self.jets:
                     #print(self.treeJet[dnode])
                     for i in self.treeJet[dnode]:
-                        bJets[tidx].add(i)
+                        bJetsWithVoting[tidx][i] = 0
+                        bJetsWeight[tidx].append((i, thevote))
                 if self.genjets:
                     for i in self.treeGenJet[dnode]:
-                        bGenJets[tidx].add(i)
+                        bGenJetsWithVoting[tidx][i] = 0
+                        bGenJetsWeight[tidx].append((i, thevote))
                 if self.fatjets:
                     for i in self.treeFatJet[dnode]:
-                        bFatJets[tidx].add(i)
+                        bFatJetsWithVoting[tidx][i] = 0
+                        bFatJetsWeight[tidx].append((i, thevote))
                 if self.genfatjets:
                     for i in self.treeGenJetAK8[dnode]:
-                        bGenJetAK8s[tidx].add(i)
+                        bGenJetAK8sWithVoting[tidx][i] = 0
+                        bGenJetAK8sWeight[tidx].append((i, thevote))
             #print("W Dau 1 Desc: " + str(self.tW_dau1_desc[tidx]))
             for dnode in self.tW_dau1_desc[tidx]:
+                thevote = self.vote(dnode, self.tW_dau1_last[tidx])
                 if self.jets:
                     for i in self.treeJet[dnode]:
-                        WDau1Jets[tidx].add(i)
+                        WDau1JetsWithVoting[tidx][i] = 0
+                        WDau1JetsWeight[tidx].append((i, thevote))
                 if self.genjets:
                     for i in self.treeGenJet[dnode]:
-                        WDau1GenJets[tidx].add(i)
+                        WDau1GenJetsWithVoting[tidx][i] = 0
+                        WDau1GenJetsWeight[tidx].append((i, thevote))
                 if self.fatjets:
                     for i in self.treeFatJet[dnode]:
-                        WDau1FatJets[tidx].add(i)
+                        WDau1FatJetsWithVoting[tidx][i] = 0
+                        WDau1FatJetsWeight[tidx].append((i, thevote))
                 if self.genfatjets:
                     for i in self.treeGenJetAK8[dnode]:
-                        WDau1GenJetAK8s[tidx].add(i)
+                        WDau1GenJetAK8sWithVoting[tidx][i] = 0
+                        WDau1GenJetAK8sWeight[tidx].append((i, thevote))
             #print("W Dau 2 Desc: " + str(self.tW_dau2_desc[tidx]))
             for dnode in self.tW_dau2_desc[tidx]:
+                thevote = self.vote(dnode, self.tW_dau2_last[tidx])
                 if self.jets:
                     for i in self.treeJet[dnode]:
-                        WDau2Jets[tidx].add(i)
+                        WDau2JetsWithVoting[tidx][i] = 0
+                        WDau2JetsWeight[tidx].append((i, thevote))
                 if self.genjets:
                     for i in self.treeGenJet[dnode]:
-                        WDau2GenJets[tidx].add(i)
+                        WDau2GenJetsWithVoting[tidx][i] = 0
+                        WDau2GenJetsWeight[tidx].append((i, thevote))
                 if self.fatjets:
                     for i in self.treeFatJet[dnode]:
-                        WDau2FatJets[tidx].add(i)
+                        WDau2FatJetsWithVoting[tidx][i] = 0
+                        WDau2FatJetsWeight[tidx].append((i, thevote))
                 if self.genfatjets:
                     for i in self.treeGenJetAK8[dnode]:
-                        WDau2GenJetAK8s[tidx].add(i)
+                        WDau2GenJetAK8sWithVoting[tidx][i] = 0
+                        WDau2GenJetAK8sWeight[tidx].append((i, thevote))
             #print("t Desc: " + str(self.t_first_desc[tidx]))
+            
+            #t_remainder = set(self.t_first_desc[tidx]) - (set(self.tb_first_desc[tidx]) + set(self.tW_dau1_desc[tidx]) + set(self.tW_dau2_desc[tidx]))
+            #for dnode in t_remainder:
             for dnode in self.t_first_desc[tidx]:
+                thevote = self.vote(dnode, self.t_first[tidx])
                 if self.jets:
                     for i in self.treeJet[dnode]:
-                        tJets[tidx].add(i)
+                        tJetsWithVoting[tidx][i] = 0
+                        tJetsWeight[tidx].append((i, thevote))
                 if self.genjets:
                     for i in self.treeGenJet[dnode]:
-                        tGenJets[tidx].add(i)
+                        tGenJetsWithVoting[tidx][i] = 0
+                        tGenJetsWeight[tidx].append((i, thevote))
                 if self.fatjets:
                     for i in self.treeFatJet[dnode]:
-                        tFatJets[tidx].add(i)
+                        tFatJetsWithVoting[tidx][i] = 0
+                        tFatJetsWeight[tidx].append((i, thevote))
                 if self.genfatjets:
                     for i in self.treeGenJetAK8[dnode]:
-                        tGenJetAK8s[tidx].add(i)
-        #Analyze jet lists via unions, intersections, etc.
-        
-        #convert to list
-        #for tidx in self.t_head.values():
-            tJets[tidx] = list(tJets[tidx])
-            tGenJets[tidx] = list(tGenJets[tidx])
-            tFatJets[tidx] = list(tFatJets[tidx])
-            tGenJetAK8s[tidx] = list(tGenJetAK8s[tidx])
-            bJets[tidx] = list(bJets[tidx])
-            bGenJets[tidx] = list(bGenJets[tidx])
-            bFatJets[tidx] = list(bFatJets[tidx])
-            bGenJetAK8s[tidx] = list(bGenJetAK8s[tidx])
-            WDau1Jets[tidx] = list(WDau1Jets[tidx])
-            WDau1GenJets[tidx] = list(WDau1GenJets[tidx])
-            WDau1FatJets[tidx] = list(WDau1FatJets[tidx])
-            WDau1GenJetAK8s[tidx] = list(WDau1GenJetAK8s[tidx])
-            WDau2Jets[tidx] = list(WDau2Jets[tidx])
-            WDau2GenJets[tidx] = list(WDau2GenJets[tidx])
-            WDau2FatJets[tidx] = list(WDau2FatJets[tidx])
-            WDau2GenJetAK8s[tidx] = list(WDau2GenJetAK8s[tidx])
+                        tGenJetAK8sWithVoting[tidx][i] = 0
+                        tGenJetAK8sWeight[tidx].append((i, thevote))
+
+            #Accumulate votes by using the key in the 1st slot of the tuple, and the vote weight in the second slot
+            for v in tJetsWeight[tidx]:
+                tJetsWithVoting[tidx][v[0]] += v[1]
+            for v in tGenJetsWeight[tidx]:
+                tGenJetsWithVoting[tidx][v[0]] += v[1]
+            for v in tFatJetsWeight[tidx]:
+                tFatJetsWithVoting[tidx][v[0]] += v[1]
+            for v in tGenJetAK8sWeight[tidx]:
+                tGenJetAK8sWithVoting[tidx][v[0]] += v[1]
+            for v in bJetsWeight[tidx]:
+                bJetsWithVoting[tidx][v[0]] += v[1]
+            for v in bGenJetsWeight[tidx]:
+                bGenJetsWithVoting[tidx][v[0]] += v[1]
+            for v in bFatJetsWeight[tidx]:
+                bFatJetsWithVoting[tidx][v[0]] += v[1]
+            for v in bGenJetAK8sWeight[tidx]:
+                bGenJetAK8sWithVoting[tidx][v[0]] += v[1]
+            for v in WDau1JetsWeight[tidx]:
+                WDau1JetsWithVoting[tidx][v[0]] += v[1]
+            for v in WDau1GenJetsWeight[tidx]:
+                WDau1GenJetsWithVoting[tidx][v[0]] += v[1]
+            for v in WDau1FatJetsWeight[tidx]:
+                WDau1FatJetsWithVoting[tidx][v[0]] += v[1]
+            for v in WDau1GenJetAK8sWeight[tidx]:
+                WDau1GenJetAK8sWithVoting[tidx][v[0]] += v[1]
+            for v in WDau2JetsWeight[tidx]:
+                WDau2JetsWithVoting[tidx][v[0]] += v[1]
+            for v in WDau2GenJetsWeight[tidx]:
+                WDau2GenJetsWithVoting[tidx][v[0]] += v[1]
+            for v in WDau2FatJetsWeight[tidx]:
+                WDau2FatJetsWithVoting[tidx][v[0]] += v[1]
+            for v in WDau2GenJetAK8sWeight[tidx]:
+                WDau2GenJetAK8sWithVoting[tidx][v[0]] += v[1]
+
+            #Convert to lists of tuples and sort
+            tJets[tidx] = tJetsWithVoting[tidx].items()
+            tJets[tidx].sort(key=lambda k : k[1], reverse=True)
+            tGenJets[tidx] = tGenJetsWithVoting[tidx].items()
+            tGenJets[tidx].sort(key=lambda k : k[1], reverse=True)
+            tFatJets[tidx] = tFatJetsWithVoting[tidx].items()
+            tFatJets[tidx].sort(key=lambda k : k[1], reverse=True)
+            tGenJetAK8s[tidx] = tGenJetAK8sWithVoting[tidx].items()
+            tGenJetAK8s[tidx].sort(key=lambda k : k[1], reverse=True)
+            bJets[tidx] = bJetsWithVoting[tidx].items()
+            bJets[tidx].sort(key=lambda k : k[1], reverse=True)
+            bGenJets[tidx] = bGenJetsWithVoting[tidx].items()
+            bGenJets[tidx].sort(key=lambda k : k[1], reverse=True)
+            bFatJets[tidx] = bFatJetsWithVoting[tidx].items()
+            bFatJets[tidx].sort(key=lambda k : k[1], reverse=True)
+            bGenJetAK8s[tidx] = bGenJetAK8sWithVoting[tidx].items()
+            bGenJetAK8s[tidx].sort(key=lambda k : k[1], reverse=True)
+            WDau1Jets[tidx] = WDau1JetsWithVoting[tidx].items()
+            WDau1Jets[tidx].sort(key=lambda k : k[1], reverse=True)
+            WDau1GenJets[tidx] = WDau1GenJetsWithVoting[tidx].items()
+            WDau1GenJets[tidx].sort(key=lambda k : k[1], reverse=True)
+            WDau1FatJets[tidx] = WDau1FatJetsWithVoting[tidx].items()
+            WDau1FatJets[tidx].sort(key=lambda k : k[1], reverse=True)
+            WDau1GenJetAK8s[tidx] = WDau1GenJetAK8sWithVoting[tidx].items()
+            WDau1GenJetAK8s[tidx].sort(key=lambda k : k[1], reverse=True)
+            WDau2Jets[tidx] = WDau2JetsWithVoting[tidx].items()
+            WDau2Jets[tidx].sort(key=lambda k : k[1], reverse=True)
+            WDau2GenJets[tidx] = WDau2GenJetsWithVoting[tidx].items()
+            WDau2GenJets[tidx].sort(key=lambda k : k[1], reverse=True)
+            WDau2FatJets[tidx] = WDau2FatJetsWithVoting[tidx].items()
+            WDau2FatJets[tidx].sort(key=lambda k : k[1], reverse=True)
+            WDau2GenJetAK8s[tidx] = WDau2GenJetAK8sWithVoting[tidx].items()
+            WDau2GenJetAK8s[tidx].sort(key=lambda k : k[1], reverse=True)
             
         if returnCopy:
             return {'tJets': copy.copy(tJets), 'tGenJets': copy.copy(tGenJets), 'tFatJets': copy.copy(tFatJets),

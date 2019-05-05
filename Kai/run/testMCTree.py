@@ -4,7 +4,8 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import Pos
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 from PhysicsTools.NanoAODTools.postprocessing.tools import * #DeltaR, match collection methods
-from FourTopNAOD.Kai.modules.MCTreeDev import *
+#from FourTopNAOD.Kai.modules.MCTreeDev import *
+from FourTopNAOD.Kai.modules.MCTreeDev import TenKTree
 import collections, copy, json
 
 #files=["TTJets_amcatnloFXFX.root"]
@@ -31,10 +32,12 @@ p=PostProcessor(".",
                 files,
                 cut=None,
                 #modules=[MCTruth(maxevt=5000, probEvt=155325)],
-                modules=[MCTruth(maxevt=10000)],
+#                modules=[MCTruth(maxevt=10000)],
+#                modules=[MCTrees(maxevt=10000)],
+                modules=[TenKTree()],
                 noOut=True,
-                histFileName=hName,
-                histDirName="plots",
+#                histFileName=hName,
+#                histDirName="plots",
                 #justcount=True,
                 )
 

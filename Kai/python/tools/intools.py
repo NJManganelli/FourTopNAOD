@@ -22,6 +22,11 @@ def dumpJetCollection(jets):
     for nj, jet in enumerate(jets):
         print("Idx: {0:<5d}".format(nj) + " " + strJet(jet).replace("Jet ", "", 1))
 
+def dumpGenJetCollection(jets):
+    print("=====Gen Jets=====\n")
+    for nj, jet in enumerate(jets):
+        print("Idx: {0:<5d}".format(nj) + " " + strGenJet(jet).replace("Gen Jet ", "", 1))
+
 def strMuon(muon):
     if not muon:
         return ""

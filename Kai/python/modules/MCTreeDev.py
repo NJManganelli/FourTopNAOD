@@ -6,7 +6,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 from PhysicsTools.NanoAODTools.postprocessing.tools import * #DeltaR, match collection methods
 from FourTopNAOD.Kai.tools.intools import *
 from FourTopNAOD.Kai.tools.mctree import *
-import collections, copy, json
+import collections, copy, json, inspect
 
 class MCTruth(Module):
     def __init__(self, verbose=False, makeHistos=False, maxevt=-1, probEvt=None):
@@ -327,12 +327,13 @@ class MCTruth(Module):
         genjets = Collection(event, "GenJet")
         genfatjets = Collection(event, "GenJetAK8")
         gensubjets = Collection(event, "SubGenJetAK8")
-        genmet = Object(event, "GenMET")
-        generator = Object(event, "Generator")
-        btagweight = Object(event, "btagWeight") #contains .CSVV2 and .DeepCSVB float weights
-        #genweight = 
+        # genmet = Object(event, "GenMET")
+        # generator = Object(event, "Generator")
+        # btagweight = Object(event, "btagWeight") #contains .CSVV2 and .DeepCSVB float weights
+        #genweight
         #lhe = Object(event, "FIXME")
-        #weights = FIXME
+        #ScaleWeights = FIXME
+        #PDFWeights = FIXME
         #PSWeights = FIXME
 
         ##################################
@@ -1365,3 +1366,211 @@ class MCTruth(Module):
 
         #print("\n===========\nFinished Event #" + str(event.event) + "\n\n")
         return True
+
+class MCTrees(Module):
+    def __init__(self, verbose=False, makeHistos=False, maxevt=-1, probEvt=None):
+        self.writeHistFile=False
+        self.verbose=verbose
+        self._verbose = verbose
+        self.probEvt = probEvt
+        if probEvt:
+            #self.probEvt = probEvt
+            self.verbose = True
+        self.MADEHistos=False
+        self.makeHistos = makeHistos
+        
+        #Bits for status flag checking
+        self.bits = {'isPrompt':0b000000000000001,
+                     'isDecayedLeptonHadron':0b000000000000010,
+                     'isTauDecayProduct':0b000000000000100,
+                     'isPromptTauDecaypprProduct':0b000000000001000,
+                     'isDirectTauDecayProduct':0b000000000010000,
+                     'isDirectPromptTauDecayProduct':0b000000000100000,
+                     'isDirectHadronDecayProduct':0b000000001000000,
+                     'isHardProcess':0b000000010000000,
+                     'fromHardProcess':0b000000100000000,
+                     'isHardProcessTauDecayProduct':0b000001000000000,
+                     'isDirectHardProcessTauDecayProduct':0b000010000000000,
+                     'fromHardProcessBeforeFSR':0b000100000000000,
+                     'isFirstCopy':0b001000000000000,
+                     'isLastCopy':0b010000000000000,
+                     'isLastCopyBeforeFSR':0b100000000000000
+                    }
+
+        #event counters
+        self.counter = 0
+        self.maxEventsToProcess=maxevt
+
+    def beginJob(self,histFile=None,histDirName=None):
+        Module.beginJob(self,histFile,histDirName)
+
+    def endJob(self):
+        if hasattr(self, 'objs') and self.objs != None:
+            prevdir = ROOT.gDirectory
+            self.dir.cd()
+            for obj in self.objs:
+                obj.Write()
+            prevdir.cd()
+            if hasattr(self, 'histFile') and self.histFile != None : 
+                self.histFile.Close()
+
+    def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
+        self.out = wrappedOutputTree
+
+    def analyze(self, event): #called by the eventloop per-event
+        """process event, return True (go to next module) or False (fail, go to next event)"""
+        #Increment counter and skip events past the maxEventsToProcess, if larger than -1
+        self.counter +=1
+        # if -1 < self.maxEventsToProcess < self.counter:
+        #     return False
+        if -1 < self.maxEventsToProcess < self.counter:
+            return False
+        # if (self.counter % 5000) == 0:
+        #     print("Processed {0:2d} Events".format(self.counter))
+        
+        if self.probEvt:
+            if event.event != self.probEvt:
+                print("Skipping...")
+                return False
+
+        ###############################################
+        ### Collections and Objects and isData check###
+        ###############################################
+
+        #Check whether this file is Data from Runs or Monte Carlo simulations
+        self.isData = True
+        if hasattr(event, "nGenPart") or hasattr(event, "nGenJet") or hasattr(event, "nGenJetAK8"):
+            self.isData = False
+        if self.isData:
+            print("WARNING: Attempt to run MCTruth Module on Data (Detected)!")
+            return False
+        
+        PV = Object(event, "PV")
+        otherPV = Collection(event, "OtherPV")
+        SV = Collection(event, "SV")
+        
+        electrons = Collection(event, "Electron")
+        muons = Collection(event, "Muon")
+        taus = Collection(event, "Tau")
+        jets = Collection(event, "Jet")
+        fatjets = Collection(event, "FatJet")
+        subjets = Collection(event, "SubJet")
+        #met = Object(event, "MET")
+        met = Object(event, "METFixEE2017") #FIXME: Placeholder until passed in via configuration?
+
+        HLT = Object(event, "HLT")
+        Filters = Object(event, "Flag") #For Data use only
+
+        gens = Collection(event, "GenPart")
+        genjets = Collection(event, "GenJet")
+        genfatjets = Collection(event, "GenJetAK8")
+        gensubjets = Collection(event, "SubGenJetAK8")
+        genmet = Object(event, "GenMET")
+        generator = Object(event, "Generator")
+        btagweight = Object(event, "btagWeight") #contains .CSVV2 and .DeepCSVB float weights
+        #genweight = 
+        #lhe = Object(event, "FIXME")
+        #weights = FIXME
+        #PSWeights = FIXME
+
+   
+        ############
+        ### Tree ###
+        ############
+        #evtTree = MCTree(gens, verbose=True, debug=True)
+        evtTree = MCTree(gens, muonCollection=muons, electronCollection=electrons, tauCollection=taus, 
+                         jetCollection=jets, genJetCollection=genjets, fatJetCollection=fatjets, 
+                         genJetAK8Collection=genfatjets, evt=event)
+
+        _ = evtTree.initializeTrees()
+#        _ = evtTree.LW_buildGenTree() #Slower than the regular version... abject failure
+        _ = evtTree.buildGenTree()
+#        _ = evtTree.buildPFTrees()
+#        _ = evtTree.buildPFTrees(onlyUseClosest=True)
+        _ = evtTree.buildPFTrees(onlyUseClosest=False)
+        _ = evtTree.linkTops(returnSuccess=True, returnCopy=True)
+        _ = evtTree.linkTopDaughters(returnSuccess=True, returnCopy=True)
+        _ = evtTree.linkWDaughters(returnSuccess=True, returnCopy=True)
+        _ = evtTree.linkTauDaughters(returnSuccess=True, returnCopy=True)
+        _ = evtTree.linkBDescendants(returnSuccess=True, returnCopy=True)
+        _ = evtTree.linkWDescendants(returnSuccess=True, returnCopy=True)
+        _ = evtTree.linkAllTopDescendants(returnSuccess=True, returnCopy=True)
+        _ = evtTree.linkTauDescendants(returnSuccess=True, returnCopy=True)
+        LEP = evtTree.evaluateLeptonicity(returnCopy=True)
+#        HAD = evtTree.evaluateHadronicity(returnCopy=True)
+        HAD = evtTree.evaluateHadronicityWithVoting(returnCopy=True, votingMethod=1)
+        print(LEP)
+        print(HAD)
+        # evtTree.pprintGenNode(nodeKey=-1)
+        # dumpJetCollection(jets)
+        # dumpGenJetCollection(genjets)
+
+ 
+#        PFT = evtTree.buildPFTrees(onlyUseClosest=True)
+#        TTops = evtTree.linkTops(returnSuccess=False, returnCopy=True)
+#        TDaughters = evtTree.linkTopDaughters(returnSuccess=False, returnCopy=True)
+#        TWs= evtTree.linkWDaughters(returnSuccess=False, returnCopy=True)
+#        TTaus= evtTree.linkTauDaughters(returnSuccess=False, returnCopy=True)
+#        TBDesc = evtTree.linkBDescendants(returnSuccess=False, returnCopy=True)
+        #print("Searching for W Descendants")
+#        TWDesc = evtTree.linkWDescendants(returnSuccess=False, returnCopy=True)
+        #print(TWDesc)
+#        TDesc = evtTree.linkAllTopDescendants(returnSuccess=False, returnCopy=True)
+#        TTauDesc = evtTree.linkTauDescendants(returnSuccess=False, returnCopy=True)
+#        TLeptonicity = evtTree.evaluateLeptonicity(returnCopy=True)
+#        TJets = evtTree.evaluateHadronicity(returnCopy=True)
+        #print(TJets)
+        #evtTree.pprintGenNode(nodeKey=-1)
+        #print(evtTree.anyDescent(3, sortkey=evtTree.sortByAbsId, onlyDaughterless=True))
+#        TT = evtTree.getMCTree()
+#        TIS = evtTree.getInternalState()
+        #print(TIS)
+        
+        ################################################
+        ### Initialize Branch Variables to be Filled ###
+        ################################################
+            
+        #Arrays
+        # electrons_PES = []
+        # muons_PES = []
+        # jets_PES = []
+        # jets_Tagged = []
+        # jets_Untagged = []
+        # for i in xrange(len(electrons)):
+        #     electrons_PES.append(False)
+        # for j in xrange(len(muons)):
+        #     muons_PES.append(False)
+        # for k in xrange(len(jets)):
+        #     jets_PES.append(False)
+        #     jets_Tagged.append(False)
+        #     jets_Untagged.append(False)
+        #genTop_VARS
+
+
+        #############################################
+        ### Write out slimmed selection variables ###
+        #############################################
+        
+        #Make dictionary that makes this more automated, as in the branch creation
+        # self.out.fillBranch("Electron_PES", electrons_PES)
+        # self.out.fillBranch("Muon_PES", muons_PES)
+        # self.out.fillBranch("Jet_PES", jets_PES)
+        # self.out.fillBranch("Jet_Tagged", jets_Tagged)
+        # self.out.fillBranch("Jet_Untagged", jets_Untagged)
+        # self.out.fillBranch("EventVar_H", H)
+        # self.out.fillBranch("EventVar_H2M", H2M)
+        # self.out.fillBranch("EventVar_HT", HT)
+        # self.out.fillBranch("EventVar_HT2M", HT2M)
+        # self.out.fillBranch("EventVar_HTH", HTH)
+        # self.out.fillBranch("EventVar_HTRat", HTRat)
+        # self.out.fillBranch("EventVar_nBTagJet", nBJets)
+        # self.out.fillBranch("EventVar_nTotJet", (nOthJets + nBJets))
+        # self.out.fillBranch("EventVar_Trig_MuMu", passMuMu)
+        # self.out.fillBranch("EventVar_Trig_ElMu", passElMu)
+        # self.out.fillBranch("EventVar_Trig_ElEl", passElEl)
+        # self.out.fillBranch("EventVar_Trig_Mu", passMu)
+
+        #print("\n===========\nFinished Event #" + str(event.event) + "\n\n")
+        return True
+
+TenKTree = lambda : MCTrees(maxevt=10)
