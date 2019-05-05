@@ -1497,7 +1497,7 @@ class MCTrees(Module):
         # HAD = evtTree.evaluateHadronicityWithVoting(returnCopy=True, votingMethod=1)
 
         theTops = evtTree.buildTopSubtree(method=1, returnCopy=True)
-        print(theTops)
+#        print(theTops)
         
         # print(LEP)
         # print(HAD)
@@ -1573,4 +1573,4 @@ class MCTrees(Module):
         #print("\n===========\nFinished Event #" + str(event.event) + "\n\n")
         return True
 
-TenKTree = lambda : MCTrees(maxevt=10)
+TenKTree = lambda : MCTrees(maxevt=10000)

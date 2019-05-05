@@ -543,21 +543,6 @@ class MCTree:
             LEP = self.evaluateLeptonicity(returnCopy=True)
             HAD = self.evaluateHadronicityWithVoting(returnCopy=True, votingMethod=1)
 
-
-        #TopObject = namedtuple('TopObject', 
-        #TopObject.__new__.__defaults__ = (None,) * len(TopObject._fields) #set after definition of namedtuple is completed... 
-        # TopObject = recordtype('TopObject', 
-        #                        't tIsLeptonic tHasWDauElectron tHasWDauMuon tHasWDauTau tHasHadronicWDauTau tHasHadronicW'\
-        #                        'b b_HadLep b_Jet_0 b_Jet_1 b_Jet_2 b_Jet_3 b_Jet_4 b_GenJet_0 b_GenJet_1 b_GenJet_2 b_GenJet_3 b_GenJet_4'\
-        #                        'b_FatJet_0 b_FatJet_1 b_GenJetAK8_0 b_GenJetAK8_1'\
-        #                        'W W_HadLep W_dau1 W_dau1_Jet_0 W_dau1_Jet_1 W_dau1_Jet_2 W_dau1_GenJet_0 W_dau1_GenJet_1 W_dau1_GenJet_2'\
-        #                        'W_dau1_FatJet_0 W_dau1_FatJet_1 W_dau1_GenJetAK8_0 W_dau1_GenJetAK8_1'\
-        #                        'W_dau2 W_dau2_Jet_0 W_dau2_Jet_1 W_dau2_Jet_2 W_dau2_GenJet_0 W_dau2_GenJet_1 W_dau2_GenJet_2'\
-        #                        'W_dau2_FatJet_0 W_dau2_FatJet_1 W_dau2_GenJetAK8_0 W_dau2_GenJetAK8_1'\
-        #                        'Electron Muon Tau PF_Muon PF_Electron PF_b_HadMuon PF_b_HadElectron PF_W_HadMuon PF_W_HadElectron',
-        #                        default = -1
-        #                        )
-
         ret = {}
         for tidx in self.t_head.values():
             ret[tidx] = {}
@@ -571,55 +556,231 @@ class MCTree:
             ret[tidx]['b'] = self.tb_last[tidx]
             if len(self.tb_hadleps[tidx]) > 0:
                 ret[tidx]['b_HadLep'] = self.tb_hadleps[tidx][0]
+                lepidx = self.tb_hadleps[tidx][0]
+                if abs(self.gens[lepidx].pdgId) == 11 and len(self.treeElectron[lepidx]) > 0:
+                    ret[tidx]['PF_b_HadElectron'] = self.treeElectron[lepidx][0]
+                    ret[tidx]['PF_b_HadMuon'] = -1
+                elif abs(self.gens[lepidx].pdgId) == 13 and len(self.treeMuon[lepidx]) > 0:
+                    ret[tidx]['PF_b_HadMuon'] = self.treeMuon[lepidx][0]
+                    ret[tidx]['PF_b_HadElectron'] = -1
+                else:
+                    ret[tidx]['PF_b_HadMuon'] = -1
+                    ret[tidx]['PF_b_HadElectron'] = -1
+            else:
+                ret[tidx]['b_HadLep'] = -1
+                ret[tidx]['PF_b_HadMuon'] = -1
+                ret[tidx]['PF_b_HadElectron'] = -1
             if len(HAD['bJets'][tidx]) > 0:
-                ret[tidx]['b_Jet_0'] = HAD['bJets'][tidx][0]
+                ret[tidx]['b_Jet_0'] = HAD['bJets'][tidx][0][0]
+            else:
+                ret[tidx]['b_Jet_0'] = -1
             if len(HAD['bJets'][tidx]) > 1:
-                ret[tidx]['b_Jet_1'] = HAD['bJets'][tidx][1]
+                ret[tidx]['b_Jet_1'] = HAD['bJets'][tidx][1][0]
+            else:
+                ret[tidx]['b_Jet_1'] = -1
             if len(HAD['bJets'][tidx]) > 2:
-                ret[tidx]['b_Jet_2'] = HAD['bJets'][tidx][2]
+                ret[tidx]['b_Jet_2'] = HAD['bJets'][tidx][2][0]
+            else:
+                ret[tidx]['b_Jet_2'] = -1
             if len(HAD['bJets'][tidx]) > 3:
-                ret[tidx]['b_Jet_3'] = HAD['bJets'][tidx][3]
+                ret[tidx]['b_Jet_3'] = HAD['bJets'][tidx][3][0]
+            else:
+                ret[tidx]['b_Jet_3'] = -1
             if len(HAD['bJets'][tidx]) > 4:
-                ret[tidx]['b_Jet_4'] = HAD['bJets'][tidx][4]
+                ret[tidx]['b_Jet_4'] = HAD['bJets'][tidx][4][0]
+            else:
+                ret[tidx]['b_Jet_4'] = -1
             if len(HAD['bGenJets'][tidx]) > 0:
-                ret[tidx]['b_GenJet_0'] = HAD['bGenJets'][tidx][0]
+                ret[tidx]['b_GenJet_0'] = HAD['bGenJets'][tidx][0][0]
+            else:
+                ret[tidx]['b_GenJet_0'] = -1
             if len(HAD['bGenJets'][tidx]) > 1:
-                ret[tidx]['b_GenJet_1'] = HAD['bGenJets'][tidx][1]
+                ret[tidx]['b_GenJet_1'] = HAD['bGenJets'][tidx][1][0]
+            else:
+                ret[tidx]['b_GenJet_1'] = -1
             if len(HAD['bGenJets'][tidx]) > 2:
-                ret[tidx]['b_GenJet_2'] = HAD['bGenJets'][tidx][2]
+                ret[tidx]['b_GenJet_2'] = HAD['bGenJets'][tidx][2][0]
+            else:
+                ret[tidx]['b_GenJet_2'] = -1
             if len(HAD['bGenJets'][tidx]) > 3:
-                ret[tidx]['b_GenJet_3'] = HAD['bGenJets'][tidx][3]
+                ret[tidx]['b_GenJet_3'] = HAD['bGenJets'][tidx][3][0]
+            else:
+                ret[tidx]['b_GenJet_3'] = -1
             if len(HAD['bGenJets'][tidx]) > 4:
-                ret[tidx]['b_GenJet_4'] = HAD['bGenJets'][tidx][4]
+                ret[tidx]['b_GenJet_4'] = HAD['bGenJets'][tidx][4][0]
+            else:
+                ret[tidx]['b_GenJet_4'] = -1
             if len(HAD['bFatJets'][tidx]) > 0:
-                ret[tidx]['b_FatJet_0'] = HAD['bFatJets'][tidx][0]
+                ret[tidx]['b_FatJet_0'] = HAD['bFatJets'][tidx][0][0]
+            else:
+                ret[tidx]['b_FatJet_0'] = -1
             if len(HAD['bFatJets'][tidx]) > 1:
-                ret[tidx]['b_FatJet_1'] = HAD['bFatJets'][tidx][1]
+                ret[tidx]['b_FatJet_1'] = HAD['bFatJets'][tidx][1][0]
+            else:
+                ret[tidx]['b_FatJet_1'] = -1
             if len(HAD['bGenJetAK8s'][tidx]) > 0:
-                ret[tidx]['b_GenJetAK8_0'] = HAD['bGenJetAK8s'][tidx][0]
+                ret[tidx]['b_GenJetAK8_0'] = HAD['bGenJetAK8s'][tidx][0][0]
+            else:
+                ret[tidx]['b_GenJetAK8_0'] = -1
             if len(HAD['bGenJetAK8s'][tidx]) > 1:
-                ret[tidx]['b_GenJetAK8_1'] = HAD['bGenJetAK8s'][tidx][1]
+                ret[tidx]['b_GenJetAK8_1'] = HAD['bGenJetAK8s'][tidx][1][0]
+            else:
+                ret[tidx]['b_GenJetAK8_1'] = -1
 
             ret[tidx]['W'] = self.tW_last[tidx]
             if len(self.tW_hadleps[tidx]) > 0:
                 ret[tidx]['W_HadLep'] = self.tW_hadleps[tidx][0]
+                lepidx = self.tW_hadleps[tidx][0]
+                if abs(self.gens[lepidx].pdgId) == 11 and len(self.treeElectron[lepidx]) > 0:
+                    ret[tidx]['PF_W_HadElectron'] = self.treeElectron[lepidx][0]
+                    ret[tidx]['PF_W_HadMuon'] = -1
+                elif abs(self.gens[lepidx].pdgId) == 13 and len(self.treeMuon[lepidx]) > 0:
+                    ret[tidx]['PF_W_HadMuon'] = self.treeMuon[lepidx][0]
+                    ret[tidx]['PF_W_HadElectron'] = -1
+                else:
+                    ret[tidx]['PF_W_HadMuon'] = -1
+                    ret[tidx]['PF_W_HadElectron'] = -1
+            else:
+                ret[tidx]['PF_W_HadMuon'] = -1
+                ret[tidx]['PF_W_HadElectron'] = -1
+
 
             ret[tidx]['W_dau1'] = self.tW_dau1_last[tidx]
-            # ret[tidx]['W_dau1_Jet_0'] = HAD['WDau1Jets'][tidx][0] if len(HAD['WDau1Jets'][tidx]) > 0
-            # ret[tidx]['W_dau1_Jet_1'] = HAD['WDau1Jets'][tidx][1] if len(HAD['WDau1Jets'][tidx]) > 1
-            # ret[tidx]['W_dau1_Jet_2'] = HAD['WDau1Jets'][tidx][2] if len(HAD['WDau1Jets'][tidx]) > 2
-            # ret[tidx]['W_dau1_GenJet_0'] = HAD['WDau1GenJets'][tidx][0] if len(HAD['WDau1GenJets'][tidx]) > 0
-            # ret[tidx]['W_dau1_GenJet_1'] = HAD['WDau1GenJets'][tidx][1] if len(HAD['WDau1GenJets'][tidx]) > 1
-            # ret[tidx]['W_dau1_GenJet_2'] = HAD['WDau1GenJets'][tidx][2] if len(HAD['WDau1GenJets'][tidx]) > 2
-            # ret[tidx]['W_dau1_FatJet_0'] = HAD['WDau1FatJets'][tidx][0] if len(HAD['WDau1FatJets'][tidx]) > 0
-            # ret[tidx]['W_dau1_FatJet_1'] = HAD['WDau1FatJets'][tidx][1] if len(HAD['WDau1FatJets'][tidx]) > 1
-            # ret[tidx]['W_dau1_GenJetAK8_0'] = HAD['WDau1GenJetAK8s'][tidx][0] if len(HAD['WDau1GenJetAK8s'][tidx]) > 0
-            # ret[tidx]['W_dau1_GenJetAK8_1'] = HAD['WDau1GenJetAK8s'][tidx][1] if len(HAD['WDau1GenJetAK8s'][tidx]) > 1
+            if len(HAD['WDau1Jets'][tidx]) > 0:
+                ret[tidx]['W_dau1_Jet_0'] = HAD['WDau1Jets'][tidx][0][0]
+            else:
+                ret[tidx]['W_dau1_Jet_0'] = -1
+            if len(HAD['WDau1Jets'][tidx]) > 1:
+                ret[tidx]['W_dau1_Jet_1'] = HAD['WDau1Jets'][tidx][1][0]
+            else:
+                ret[tidx]['W_dau1_Jet_1'] = -1
+            if len(HAD['WDau1Jets'][tidx]) > 2:
+                ret[tidx]['W_dau1_Jet_2'] = HAD['WDau1Jets'][tidx][2][0]
+            else:
+                ret[tidx]['W_dau1_Jet_2'] = -1
+            if len(HAD['WDau1GenJets'][tidx]) > 0:
+                ret[tidx]['W_dau1_GenJet_0'] = HAD['WDau1GenJets'][tidx][0][0]
+            else:
+                ret[tidx]['W_dau1_GenJet_0'] = -1
+            if len(HAD['WDau1GenJets'][tidx]) > 1:
+                ret[tidx]['W_dau1_GenJet_1'] = HAD['WDau1GenJets'][tidx][1][0]
+            else:
+                ret[tidx]['W_dau1_GenJet_1'] = -1
+            if len(HAD['WDau1GenJets'][tidx]) > 2:
+                ret[tidx]['W_dau1_GenJet_2'] = HAD['WDau1GenJets'][tidx][2][0]
+            else:
+                ret[tidx]['W_dau1_GenJet_2'] = -1
+            if len(HAD['WDau1FatJets'][tidx]) > 0:
+                ret[tidx]['W_dau1_FatJet_0'] = HAD['WDau1FatJets'][tidx][0][0]
+            else:
+                ret[tidx]['W_dau1_FatJet_0'] = -1
+            if len(HAD['WDau1FatJets'][tidx]) > 1:
+                ret[tidx]['W_dau1_FatJet_1'] = HAD['WDau1FatJets'][tidx][1][0]
+            else:
+                ret[tidx]['W_dau1_FatJet_1'] = -1
+            if len(HAD['WDau1GenJetAK8s'][tidx]) > 0:
+                ret[tidx]['W_dau1_GenJetAK8_0'] = HAD['WDau1GenJetAK8s'][tidx][0][0]
+            else:
+                ret[tidx]['W_dau1_GenJetAK8_0'] = -1
+            if len(HAD['WDau1GenJetAK8s'][tidx]) > 1:
+                ret[tidx]['W_dau1_GenJetAK8_1'] = HAD['WDau1GenJetAK8s'][tidx][1][0]
+            else:
+                ret[tidx]['W_dau1_GenJetAK8_1'] = -1
 
-            # ret[tidx]['Electron'] = self.tW_dau1_last[tidx] if self.tHasWDauElectron
-            # ret[tidx]['Muon'] = self.tW_dau1_last[tidx] if self.tHasWDauMuon
-            # ret[tidx]['Tau'] = self.tW_dau1_last[tidx] if self.tHasWDauTau
-# 'PF_Muon PF_Electron PF_b_HadMuon PF_b_HadElectron PF_W_HadMuon PF_W_HadElectron',
+            ret[tidx]['W_dau2'] = self.tW_dau2_last[tidx]
+            if len(HAD['WDau2Jets'][tidx]) > 0:
+                ret[tidx]['W_dau2_Jet_0'] = HAD['WDau2Jets'][tidx][0][0]
+            else:
+                ret[tidx]['W_dau2_Jet_0'] = -1
+            if len(HAD['WDau2Jets'][tidx]) > 1:
+                ret[tidx]['W_dau2_Jet_1'] = HAD['WDau2Jets'][tidx][1][0]
+            else:
+                ret[tidx]['W_dau2_Jet_1'] = -1
+            if len(HAD['WDau2Jets'][tidx]) > 2:
+                ret[tidx]['W_dau2_Jet_2'] = HAD['WDau2Jets'][tidx][2][0]
+            else:
+                ret[tidx]['W_dau2_Jet_2'] = -1
+            if len(HAD['WDau2GenJets'][tidx]) > 0:
+                ret[tidx]['W_dau2_GenJet_0'] = HAD['WDau2GenJets'][tidx][0][0]
+            else:
+                ret[tidx]['W_dau2_GenJet_0'] = -1
+            if len(HAD['WDau2GenJets'][tidx]) > 1:
+                ret[tidx]['W_dau2_GenJet_1'] = HAD['WDau2GenJets'][tidx][1][0]
+            else:
+                ret[tidx]['W_dau2_GenJet_1'] = -1
+            if len(HAD['WDau2GenJets'][tidx]) > 2:
+                ret[tidx]['W_dau2_GenJet_2'] = HAD['WDau2GenJets'][tidx][2][0]
+            else:
+                ret[tidx]['W_dau2_GenJet_2'] = -1
+            if len(HAD['WDau2FatJets'][tidx]) > 0:
+                ret[tidx]['W_dau2_FatJet_0'] = HAD['WDau2FatJets'][tidx][0][0]
+            else:
+                ret[tidx]['W_dau2_FatJet_0'] = -1
+            if len(HAD['WDau2FatJets'][tidx]) > 1:
+                ret[tidx]['W_dau2_FatJet_1'] = HAD['WDau2FatJets'][tidx][1][0]
+            else:
+                ret[tidx]['W_dau2_FatJet_1'] = -1
+            if len(HAD['WDau2GenJetAK8s'][tidx]) > 0:
+                ret[tidx]['W_dau2_GenJetAK8_0'] = HAD['WDau2GenJetAK8s'][tidx][0][0]
+            else:
+                ret[tidx]['W_dau2_GenJetAK8_0'] = -1
+            if len(HAD['WDau2GenJetAK8s'][tidx]) > 1:
+                ret[tidx]['W_dau2_GenJetAK8_1'] = HAD['WDau2GenJetAK8s'][tidx][1][0]
+            else:
+                ret[tidx]['W_dau2_GenJetAK8_1'] = -1
+
+            #Lepton indices
+            if self.tHasWDauElectron[tidx]:
+                ret[tidx]['Electron'] = self.tW_dau1_last[tidx]
+                if len(self.treeElectron[self.tW_dau1_last[tidx]]) > 0:
+                    ret[tidx]['PF_Electron'] = self.treeElectron[self.tW_dau1_last[tidx]][0]
+                else:
+                    ret[tidx]['PF_Electron'] = -1
+            else:
+                ret[tidx]['Electron'] = -1
+                ret[tidx]['PF_Electron'] = -1
+
+            if self.tHasWDauMuon[tidx]:
+                ret[tidx]['Muon'] = self.tW_dau1_last[tidx]
+                if len(self.treeMuon[self.tW_dau1_last[tidx]]) > 0:
+                    ret[tidx]['PF_Muon'] = self.treeMuon[self.tW_dau1_last[tidx]][0]
+                else:
+                    ret[tidx]['PF_Muon'] = -1
+            else:
+                ret[tidx]['Muon'] = -1
+                ret[tidx]['PF_Muon'] = -1
+
+            if self.tHasWDauTau[tidx]:
+                ret[tidx]['Tau'] = self.tW_dau1_last[tidx]
+                lepidx = self.tWTau_mLep_last[tidx]
+                if self.tHasHadronicWDauTau[tidx] == False:
+                    if abs(self.gens[lepidx].pdgId) == 11 and len(self.treeElectron[lepidx]) > 0:
+                        ret[tidx]['PF_Electron'] = self.treeElectron[lepidx][0]
+                        ret[tidx]['PF_Muon'] = -1
+                    elif abs(self.gens[lepidx].pdgId) == 13 and len(self.treeMuon[lepidx]) > 0:
+                        ret[tidx]['PF_Muon'] = self.treeMuon[lepidx][0]
+                        ret[tidx]['PF_Electron'] = -1
+                    else:
+                        ret[tidx]['PF_Muon'] = -1
+                        ret[tidx]['PF_Electron'] = -1
+                    ret[tidx]['PF_Tau_HadMuon'] = -1
+                    ret[tidx]['PF_Tau_HadElectron'] = -1
+                else:
+                    #If hadronic decay, leptons will only be included via the W_HadLep list...
+                    # if abs(self.gens[lepidx].pdgId) == 11 and len(self.treeElectron[lepidx]) > 0:
+                    #     ret[tidx]['PF_Tau_HadElectron'] = self.treeElectron[self.tW_dau1_last[tidx]][0]
+                    #     ret[tidx]['PF_Tau_HadMuon'] = -1
+                    # elif abs(self.gens[lepidx].pdgId) == 13 and len(self.treeMuon[lepidx]) > 0:
+                    #     ret[tidx]['PF_Tau_HadMuon'] = self.treeMuon[lepidx][0]
+                    #     ret[tidx]['PF_Tau_HadElectron'] = -1
+                    # else:
+                    #     ret[tidx]['PF_Tau_HadMuon'] = -1
+                    #     ret[tidx]['PF_Tau_HadElectron'] = -1
+                    ret[tidx]['PF_Muon'] = -1
+                    ret[tidx]['PF_Electron'] = -1
+            else:
+                ret[tidx]['Tau'] = -1
+# PF_b_HadMuon PF_b_HadElectron PF_W_HadMuon PF_W_HadElectron',
             
         # self.t_head = {} #0-indexed dictionary that stores the index of the first copy of each top quark
         # self.t_first = {}
