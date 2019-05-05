@@ -497,7 +497,7 @@ class MCTree:
         else:
             return []
         
-    def buildTopSubtree(self):
+    def buildTopSubtree(self, method=None, returnCopy=True):
         """Method to recontstruct nodes of the top decays.
 
         Calls several submethods:
@@ -511,18 +511,151 @@ class MCTree:
         evaluateLeptonicity()
         evaluateHadronicityWithVoting()
         """
-        if self.verbose:
-            print("MCTree is building the Top Subtree")
+
+        if method==0:
+            if self.verbose:
+                print("MCTree is building the Top Subtree")
             print(self.t_head)
-        __ = self.linkTops()
-        ___ = self.linkTopDaughters()
-        ____ = self.linkWDaughters()
-        _____ = self.linkTauDaughters()
-        ______ = self.linkBDescendants()
-        _______ = self.linkWDescendants()
-        ________ = self.linkTauDescendants()
-        LepTopDict = self.evaluateLeptonicity()
-        TopJetDict = self.evaluateHadronicityWithVoting()
+            __ = self.linkTops()
+            ___ = self.linkTopDaughters()
+            ____ = self.linkWDaughters()
+            _____ = self.linkTauDaughters()
+            ______ = self.linkBDescendants()
+            _______ = self.linkWDescendants()
+            ________ = self.linkTauDescendants()
+            LEP = self.evaluateLeptonicity()
+            HAD = self.evaluateHadronicityWithVoting(votingMethod=0)
+
+        if method==1:
+            if self.verbose:
+                print("MCTree is building the Top Subtree")
+            _ = self.initializeTrees()
+            _ = self.buildGenTree()
+            _ = self.buildPFTrees(onlyUseClosest=False)
+            _ = self.linkTops(returnSuccess=True, returnCopy=True)
+            _ = self.linkTopDaughters(returnSuccess=True, returnCopy=True)
+            _ = self.linkWDaughters(returnSuccess=True, returnCopy=True)
+            _ = self.linkTauDaughters(returnSuccess=True, returnCopy=True)
+            _ = self.linkBDescendants(returnSuccess=True, returnCopy=True)
+            _ = self.linkWDescendants(returnSuccess=True, returnCopy=True)
+            _ = self.linkAllTopDescendants(returnSuccess=True, returnCopy=True)
+            _ = self.linkTauDescendants(returnSuccess=True, returnCopy=True)
+            LEP = self.evaluateLeptonicity(returnCopy=True)
+            HAD = self.evaluateHadronicityWithVoting(returnCopy=True, votingMethod=1)
+
+
+        #TopObject = namedtuple('TopObject', 
+        #TopObject.__new__.__defaults__ = (None,) * len(TopObject._fields) #set after definition of namedtuple is completed... 
+        # TopObject = recordtype('TopObject', 
+        #                        't tIsLeptonic tHasWDauElectron tHasWDauMuon tHasWDauTau tHasHadronicWDauTau tHasHadronicW'\
+        #                        'b b_HadLep b_Jet_0 b_Jet_1 b_Jet_2 b_Jet_3 b_Jet_4 b_GenJet_0 b_GenJet_1 b_GenJet_2 b_GenJet_3 b_GenJet_4'\
+        #                        'b_FatJet_0 b_FatJet_1 b_GenJetAK8_0 b_GenJetAK8_1'\
+        #                        'W W_HadLep W_dau1 W_dau1_Jet_0 W_dau1_Jet_1 W_dau1_Jet_2 W_dau1_GenJet_0 W_dau1_GenJet_1 W_dau1_GenJet_2'\
+        #                        'W_dau1_FatJet_0 W_dau1_FatJet_1 W_dau1_GenJetAK8_0 W_dau1_GenJetAK8_1'\
+        #                        'W_dau2 W_dau2_Jet_0 W_dau2_Jet_1 W_dau2_Jet_2 W_dau2_GenJet_0 W_dau2_GenJet_1 W_dau2_GenJet_2'\
+        #                        'W_dau2_FatJet_0 W_dau2_FatJet_1 W_dau2_GenJetAK8_0 W_dau2_GenJetAK8_1'\
+        #                        'Electron Muon Tau PF_Muon PF_Electron PF_b_HadMuon PF_b_HadElectron PF_W_HadMuon PF_W_HadElectron',
+        #                        default = -1
+        #                        )
+
+        ret = {}
+        for tidx in self.t_head.values():
+            ret[tidx] = {}
+            ret[tidx]['t'] = self.t_last[tidx]
+            ret[tidx]['tIsLeptonic'] = self.tIsLeptonic[tidx]
+            ret[tidx]['tHasWDauElectron'] = self.tHasWDauElectron[tidx]
+            ret[tidx]['tHasWDauMuon'] = self.tHasWDauMuon[tidx]
+            ret[tidx]['tHasWDauTau'] = self.tHasWDauTau[tidx]
+            ret[tidx]['tHasHadronicWDauTau'] = self.tHasHadronicWDauTau[tidx]
+            ret[tidx]['tHasHadronicW'] = self.tHasHadronicW[tidx]
+            ret[tidx]['b'] = self.tb_last[tidx]
+            if len(self.tb_hadleps[tidx]) > 0:
+                ret[tidx]['b_HadLep'] = self.tb_hadleps[tidx][0]
+            if len(HAD['bJets'][tidx]) > 0:
+                ret[tidx]['b_Jet_0'] = HAD['bJets'][tidx][0]
+            if len(HAD['bJets'][tidx]) > 1:
+                ret[tidx]['b_Jet_1'] = HAD['bJets'][tidx][1]
+            if len(HAD['bJets'][tidx]) > 2:
+                ret[tidx]['b_Jet_2'] = HAD['bJets'][tidx][2]
+            if len(HAD['bJets'][tidx]) > 3:
+                ret[tidx]['b_Jet_3'] = HAD['bJets'][tidx][3]
+            if len(HAD['bJets'][tidx]) > 4:
+                ret[tidx]['b_Jet_4'] = HAD['bJets'][tidx][4]
+            if len(HAD['bGenJets'][tidx]) > 0:
+                ret[tidx]['b_GenJet_0'] = HAD['bGenJets'][tidx][0]
+            if len(HAD['bGenJets'][tidx]) > 1:
+                ret[tidx]['b_GenJet_1'] = HAD['bGenJets'][tidx][1]
+            if len(HAD['bGenJets'][tidx]) > 2:
+                ret[tidx]['b_GenJet_2'] = HAD['bGenJets'][tidx][2]
+            if len(HAD['bGenJets'][tidx]) > 3:
+                ret[tidx]['b_GenJet_3'] = HAD['bGenJets'][tidx][3]
+            if len(HAD['bGenJets'][tidx]) > 4:
+                ret[tidx]['b_GenJet_4'] = HAD['bGenJets'][tidx][4]
+            if len(HAD['bFatJets'][tidx]) > 0:
+                ret[tidx]['b_FatJet_0'] = HAD['bFatJets'][tidx][0]
+            if len(HAD['bFatJets'][tidx]) > 1:
+                ret[tidx]['b_FatJet_1'] = HAD['bFatJets'][tidx][1]
+            if len(HAD['bGenJetAK8s'][tidx]) > 0:
+                ret[tidx]['b_GenJetAK8_0'] = HAD['bGenJetAK8s'][tidx][0]
+            if len(HAD['bGenJetAK8s'][tidx]) > 1:
+                ret[tidx]['b_GenJetAK8_1'] = HAD['bGenJetAK8s'][tidx][1]
+
+            ret[tidx]['W'] = self.tW_last[tidx]
+            if len(self.tW_hadleps[tidx]) > 0:
+                ret[tidx]['W_HadLep'] = self.tW_hadleps[tidx][0]
+
+            ret[tidx]['W_dau1'] = self.tW_dau1_last[tidx]
+            # ret[tidx]['W_dau1_Jet_0'] = HAD['WDau1Jets'][tidx][0] if len(HAD['WDau1Jets'][tidx]) > 0
+            # ret[tidx]['W_dau1_Jet_1'] = HAD['WDau1Jets'][tidx][1] if len(HAD['WDau1Jets'][tidx]) > 1
+            # ret[tidx]['W_dau1_Jet_2'] = HAD['WDau1Jets'][tidx][2] if len(HAD['WDau1Jets'][tidx]) > 2
+            # ret[tidx]['W_dau1_GenJet_0'] = HAD['WDau1GenJets'][tidx][0] if len(HAD['WDau1GenJets'][tidx]) > 0
+            # ret[tidx]['W_dau1_GenJet_1'] = HAD['WDau1GenJets'][tidx][1] if len(HAD['WDau1GenJets'][tidx]) > 1
+            # ret[tidx]['W_dau1_GenJet_2'] = HAD['WDau1GenJets'][tidx][2] if len(HAD['WDau1GenJets'][tidx]) > 2
+            # ret[tidx]['W_dau1_FatJet_0'] = HAD['WDau1FatJets'][tidx][0] if len(HAD['WDau1FatJets'][tidx]) > 0
+            # ret[tidx]['W_dau1_FatJet_1'] = HAD['WDau1FatJets'][tidx][1] if len(HAD['WDau1FatJets'][tidx]) > 1
+            # ret[tidx]['W_dau1_GenJetAK8_0'] = HAD['WDau1GenJetAK8s'][tidx][0] if len(HAD['WDau1GenJetAK8s'][tidx]) > 0
+            # ret[tidx]['W_dau1_GenJetAK8_1'] = HAD['WDau1GenJetAK8s'][tidx][1] if len(HAD['WDau1GenJetAK8s'][tidx]) > 1
+
+            # ret[tidx]['Electron'] = self.tW_dau1_last[tidx] if self.tHasWDauElectron
+            # ret[tidx]['Muon'] = self.tW_dau1_last[tidx] if self.tHasWDauMuon
+            # ret[tidx]['Tau'] = self.tW_dau1_last[tidx] if self.tHasWDauTau
+# 'PF_Muon PF_Electron PF_b_HadMuon PF_b_HadElectron PF_W_HadMuon PF_W_HadElectron',
+            
+        # self.t_head = {} #0-indexed dictionary that stores the index of the first copy of each top quark
+        # self.t_first = {}
+        # self.t_last = {}
+        # self.t_rad = {} #Any extra radiated particles
+        # self.t_first_desc = {} #all descendants, superset of tb_desc, tW_dau1_desc, tW_dau2_desc; includes pre-decay radiation
+        # self.t_last_desc = {} #As t_first_desc, but only those after the top decays
+        # self.tb_first = {} #first b (or down-type quark) daughter of the top
+        # self.tb_last = {}
+        # self.tb_desc = {} #all descendants, including the lepton
+        # self.tb_hadleps = {} #store list of stable massive leptons associated with the b quark (electron or muon)
+        # self.tW_first = {}
+        # self.tW_last = {}
+        # self.tW_dau1_first = {} #Preferentially massive lepton or down-type quark (odd, lower abs pdg id)
+        # self.tW_dau1_last = {}
+        # self.tW_dau1_desc = {}
+        # self.tW_dau2_first = {} #Neutrinos and up-type quarks (even, higher abs pddg id)
+        # self.tW_dau2_last = {}
+        # self.tW_dau2_desc = {}
+        # self.tW_hadleps = {} #For storing stable massive leptons arising during a hadronic W decay (electron, muon)
+        # self.tWTau_dauArr_first = {} #For Tau decays
+        # self.tWTau_dauArr_last = {}
+        # self.tWTau_dauArr_desc = {}
+        # self.tWTau_mLep_first = {}
+        # self.tWTau_mLep_last = {}
+        # self.tWTau_mLep_desc = {}
+        # self.tHasWDauElectron = {}
+        # self.tHasWDauMuon = {}
+        # self.tHasWDauTau = {}
+        # self.tHasAnyHadronicTau = {}
+        # self.tHasHadronicWDauTau = {}
+        # self.tHasHadronicW = {}
+        # self.tIsLeptonic = {}
+
+        if returnCopy:
+            return ret
         
             
     def linkTops(self, returnSuccess=True, returnCopy=True):
