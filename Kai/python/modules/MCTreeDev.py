@@ -1414,8 +1414,22 @@ class MCTrees(Module):
             if hasattr(self, 'histFile') and self.histFile != None : 
                 self.histFile.Close()
 
+    def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
+        #called by the eventloop at end of inputFile
+        #Module just passes
+        pass
+
+
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         self.out = wrappedOutputTree
+        self.varDict = getMCTreeVarDict()
+        if not self.out:
+            print("No Output file selected, cannot append branches")
+        else:
+            self.out.branch('nGenTop', 'i', title='Number of Generator-Level Tops in the event')
+            for name, valType, valTitle in self.varDict:
+                #print("name: " + str(name) + " valType: " + str(valType) + " valTitle: " + str(valTitle))
+                self.out.branch("GenTop_%s"%(name), valType, lenVar="nGenTop", title=valTitle)
 
     def analyze(self, event): #called by the eventloop per-event
         """process event, return True (go to next module) or False (fail, go to next event)"""
@@ -1497,7 +1511,13 @@ class MCTrees(Module):
         # HAD = evtTree.evaluateHadronicityWithVoting(returnCopy=True, votingMethod=1)
 
         theTops = evtTree.buildTopSubtree(method=1, returnCopy=True)
-#        print(theTops)
+        #print(theTops)
+        #print("\n\n")
+        nGenTop = 0
+        for fiend, malice in theTops.items():
+            nGenTop = len(malice)
+            if len(malice) != 4:
+                print("key: " + str(fiend) + " value: " + str(malice))
         
         # print(LEP)
         # print(HAD)
@@ -1525,50 +1545,14 @@ class MCTrees(Module):
 #        TT = evtTree.getMCTree()
 #        TIS = evtTree.getInternalState()
         #print(TIS)
-        
-        ################################################
-        ### Initialize Branch Variables to be Filled ###
-        ################################################
-            
-        #Arrays
-        # electrons_PES = []
-        # muons_PES = []
-        # jets_PES = []
-        # jets_Tagged = []
-        # jets_Untagged = []
-        # for i in xrange(len(electrons)):
-        #     electrons_PES.append(False)
-        # for j in xrange(len(muons)):
-        #     muons_PES.append(False)
-        # for k in xrange(len(jets)):
-        #     jets_PES.append(False)
-        #     jets_Tagged.append(False)
-        #     jets_Untagged.append(False)
-        #genTop_VARS
 
-
-        #############################################
-        ### Write out slimmed selection variables ###
-        #############################################
-        
-        #Make dictionary that makes this more automated, as in the branch creation
-        # self.out.fillBranch("Electron_PES", electrons_PES)
-        # self.out.fillBranch("Muon_PES", muons_PES)
-        # self.out.fillBranch("Jet_PES", jets_PES)
-        # self.out.fillBranch("Jet_Tagged", jets_Tagged)
-        # self.out.fillBranch("Jet_Untagged", jets_Untagged)
-        # self.out.fillBranch("EventVar_H", H)
-        # self.out.fillBranch("EventVar_H2M", H2M)
-        # self.out.fillBranch("EventVar_HT", HT)
-        # self.out.fillBranch("EventVar_HT2M", HT2M)
-        # self.out.fillBranch("EventVar_HTH", HTH)
-        # self.out.fillBranch("EventVar_HTRat", HTRat)
-        # self.out.fillBranch("EventVar_nBTagJet", nBJets)
-        # self.out.fillBranch("EventVar_nTotJet", (nOthJets + nBJets))
-        # self.out.fillBranch("EventVar_Trig_MuMu", passMuMu)
-        # self.out.fillBranch("EventVar_Trig_ElMu", passElMu)
-        # self.out.fillBranch("EventVar_Trig_ElEl", passElEl)
-        # self.out.fillBranch("EventVar_Trig_Mu", passMu)
+        ##################################################
+        ### Write out branches for Gen Tops collection ###
+        ##################################################
+        if self.out:
+            self.out.fillBranch("nGenTop", nGenTop)
+            for name, valType, valTitle in self.varDict:
+                self.out.fillBranch("GenTop_%s"%(name), theTops[name])
 
         #print("\n===========\nFinished Event #" + str(event.event) + "\n\n")
         return True
