@@ -4,7 +4,7 @@ from CRABClient.UserUtilities import config, getUsernameFromSiteDB
 config = Configuration()
 
 config.section_("General")
-config.General.requestName = 'NanoMarchTTTT'
+config.General.requestName = 'NanoGenTop_TTTT'
 config.General.transferLogs=True
 config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
@@ -26,17 +26,17 @@ config.Data.inputDataset = '/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunII
 #config.Data.inputDBS = 'phys03'
 config.Data.inputDBS = 'global'
 #opt1
-config.Data.splitting = 'Automatic'
+#config.Data.splitting = 'Automatic'
 #opt 2
 #config.Data.splitting = 'EventAwareLumiBased'
 #opt 3
-#config.Data.splitting = 'FileBased'
+config.Data.splitting = 'FileBased'
 #config.Data.unitsPerJob = 4
 #config.Data.totalUnits = 150
 
-config.Data.outLFNDirBase = '/store/user/%s/XSTest' % (getUsernameFromSiteDB())
+config.Data.outLFNDirBase = '/store/user/%s/NanoGenTop_TTTT' % (getUsernameFromSiteDB())
 config.Data.publication = False
-config.Data.outputDatasetTag = 'XSTestTTTT'
+config.Data.outputDatasetTag = 'NanoGenTop_TTTT'
 config.section_("Site")
 #config.Site.storageSite = "T2_DE_DESY"
 config.Site.storageSite = "T2_CH_CERN"

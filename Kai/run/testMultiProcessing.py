@@ -7,6 +7,8 @@ from PhysicsTools.NanoAODTools.postprocessing.tools import * #DeltaR, match coll
 #from FourTopNAOD.Kai.modules.MCTreeDev import *
 from FourTopNAOD.Kai.modules.MCTreeDev import TenKTree
 import collections, copy, json
+from multiprocessing import *
+import os, time
 
 #files=["TTJets_amcatnloFXFX.root"]
 #files=["TTTT_HLT_PES_500HT.root"]
@@ -28,17 +30,26 @@ import collections, copy, json
 files=["~/eos/AODStorage/TestingSamples/TTTT_TuneCP5_PSweights_102X.root", "~/eos/AODStorage/TestingSamples/ttHTobb_TuneCP5_102X.root"]
 hName="treeHist-TTTT-v3.root"
 
-p=PostProcessor(".",
-                files,
-                cut=None,
-                #modules=[MCTruth(maxevt=5000, probEvt=155325)],
-#                modules=[MCTruth(maxevt=10000)],
-#                modules=[MCTrees(maxevt=10000)],
-                modules=[TenKTree()],
-                noOut=False,
-#                histFileName=hName,
-#                histDirName="plots",
-                #justcount=True,
-                )
+def multiplier(file):
+    pN = PostProcessor(".",
+                        [file],
+                        cut=None,
+                        modules=[TenKTree()],
+                        
+                        )
+    t0 = time.time()
+    pN.run()
+    t1 = time.time()
+    pid = os.getpid()
+    print("Elapsed time {0:7.1f} s by process id: {1}".format((t1 - t0), pid))
 
-p.run()
+procList = []
+
+for file in files:
+    print("File = " + str(file))
+    proc = Process(target=multiplier, args=(file,))
+    procList.append(proc)
+    proc.start()
+
+for proc in procList:
+    proc.join()

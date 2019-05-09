@@ -1516,8 +1516,8 @@ class MCTrees(Module):
         nGenTop = 0
         for fiend, malice in theTops.items():
             nGenTop = len(malice)
-            if len(malice) != 4:
-                print("key: " + str(fiend) + " value: " + str(malice))
+            # if len(malice) != 4:
+            #     print("key: " + str(fiend) + " value: " + str(malice))
         
         # print(LEP)
         # print(HAD)
