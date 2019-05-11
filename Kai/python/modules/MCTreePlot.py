@@ -83,139 +83,139 @@ class MCTreePlot(Module):
         # self.addObject(self.hScratch)
         # self.hTree_DeltaR=ROOT.TH2F('hTree_DeltaR',   'DeltaR plot for Jet types',   120, 0, 1.2, 6, 0, 6)
         # self.addObject(self.hTree_DeltaR)
-        self.hTree_MuMuSpec=ROOT.TH2F('hTree_MuMuSpec',   'DiMuon Pt Spectra; Leading Muon; Sub-leading Muon',   70, 0, 350, 70, 0, 350)
-        self.addObject(self.hTree_MuMuSpec)
-        self.hTree_ElMuSpec=ROOT.TH2F('hTree_ElMuSpec',   'Electron - Muon Pt Spectra; Muon; Electron',   70, 0, 350, 70, 0, 350)
-        self.addObject(self.hTree_ElMuSpec)
-        self.hTree_ElElSpec=ROOT.TH2F('hTree_ElElSpec',   'DiElectron Pt Spectra; Leading Electron; Sub-leading Electron',   70, 0, 350, 70, 0, 350)
-        self.addObject(self.hTree_ElElSpec)
-        #self.hTree_MuPtId=ROOT.TH2F('hTree_MuPtId',   'Muon Pt-Boolean IDs; Muon; ID',   70, 0, 350, 15, 0, 15)
-        #self.addObject(self.hTree_MuPtId)
-        self.hTree_MuPtId={}
-        self.hTree_TauToMuPtId={}
-        self.hTree_MuIsoId={}
-        self.hTree_TauToMuIsoId={}
-        self.hTree_ElPtId={}
-        self.hTree_TauToElPtId={}
-        self.hTree_ElIsoId={}
-        self.hTree_TauToElIsoId={}
-        for i in xrange(4):
-            self.hTree_MuPtId[i]={}
-            self.hTree_ElPtId[i]={}
-            self.hTree_TauToMuPtId[i]={}
-            self.hTree_TauToElPtId[i]={}
-            self.hTree_MuIsoId[i]={}
-            self.hTree_ElIsoId[i]={}
-            self.hTree_TauToMuIsoId[i]={}
-            self.hTree_TauToElIsoId[i]={}
-            for j in xrange(i+1):
-                self.hTree_MuPtId[i][j]=ROOT.TH2F('hTree_MuPtId_{0:d}LepTop_Muon{1:d}'.format(i+1, j+1),
-                                                  'ID tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton; Muon Pt; ID',
-                                                  100, 0, 500, 10, 0, 10)
-                self.hTree_ElPtId[i][j]=ROOT.TH2F('hTree_ElPtId_{0:d}LepTop_Electron{1:d}'.format(i+1, j+1),
-                                                  'ID tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton; Electron Pt; ID',
-                                                  100, 0, 500, 10, 0, 10)
-                self.hTree_TauToMuPtId[i][j]=ROOT.TH2F('hTree_TauToMuPtId_{0:d}LepTop_Muon{1:d}'.format(i+1, j+1),
-                                                  'ID tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton (via Tau); Muon Pt; ID',
-                                                  100, 0, 500, 10, 0, 10)
-                self.hTree_TauToElPtId[i][j]=ROOT.TH2F('hTree_TauToElPtId_{0:d}LepTop_Electron{1:d}'.format(i+1, j+1),
-                                                  'ID tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton (via Tau); Electron Pt; ID',
-                                                  100, 0, 500, 10, 0, 10)
-                self.hTree_MuIsoId[i][j]=ROOT.TH2F('hTree_MuIsoId_{0:d}LepTop_Muon{1:d}'.format(i+1, j+1),
-                                                  'Isolation tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton; Muon Pt; Iso ID',
-                                                  100, 0, 500, 10, 0, 10)
-                self.hTree_ElIsoId[i][j]=ROOT.TH2F('hTree_ElIsoId_{0:d}LepTop_Electron{1:d}'.format(i+1, j+1),
-                                                  'Isolation tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading electron; Electron Pt; Iso ID',
-                                                  100, 0, 500, 10, 0, 10)
-                self.hTree_TauToMuIsoId[i][j]=ROOT.TH2F('hTree_TauToMuIsoId_{0:d}LepTop_Muon{1:d}'.format(i+1, j+1),
-                                                  'Isolation tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton (via Tau); Muon Pt; Iso ID',
-                                                  100, 0, 500, 10, 0, 10)
-                self.hTree_TauToElIsoId[i][j]=ROOT.TH2F('hTree_TauToElIsoId_{0:d}LepTop_Electron{1:d}'.format(i+1, j+1),
-                                                  'Isolation tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton (via Tau); Electron Pt; Iso ID',
-                                                  100, 0, 500, 10, 0, 10)
-                self.addObject(self.hTree_MuPtId[i][j])
-                self.addObject(self.hTree_ElPtId[i][j])
-                self.addObject(self.hTree_TauToMuPtId[i][j])
-                self.addObject(self.hTree_TauToElPtId[i][j])
-                self.addObject(self.hTree_MuIsoId[i][j])
-                self.addObject(self.hTree_ElIsoId[i][j])
-                self.addObject(self.hTree_TauToMuIsoId[i][j])
-                self.addObject(self.hTree_TauToElIsoId[i][j])
+        # self.hTree_MuMuSpec=ROOT.TH2F('hTree_MuMuSpec',   'DiMuon Pt Spectra; Leading Muon; Sub-leading Muon',   70, 0, 350, 70, 0, 350)
+        # self.addObject(self.hTree_MuMuSpec)
+        # self.hTree_ElMuSpec=ROOT.TH2F('hTree_ElMuSpec',   'Electron - Muon Pt Spectra; Muon; Electron',   70, 0, 350, 70, 0, 350)
+        # self.addObject(self.hTree_ElMuSpec)
+        # self.hTree_ElElSpec=ROOT.TH2F('hTree_ElElSpec',   'DiElectron Pt Spectra; Leading Electron; Sub-leading Electron',   70, 0, 350, 70, 0, 350)
+        # self.addObject(self.hTree_ElElSpec)
+        # #self.hTree_MuPtId=ROOT.TH2F('hTree_MuPtId',   'Muon Pt-Boolean IDs; Muon; ID',   70, 0, 350, 15, 0, 15)
+        # #self.addObject(self.hTree_MuPtId)
+        # self.hTree_MuPtId={}
+        # self.hTree_TauToMuPtId={}
+        # self.hTree_MuIsoId={}
+        # self.hTree_TauToMuIsoId={}
+        # self.hTree_ElPtId={}
+        # self.hTree_TauToElPtId={}
+        # self.hTree_ElIsoId={}
+        # self.hTree_TauToElIsoId={}
+        # for i in xrange(4):
+        #     self.hTree_MuPtId[i]={}
+        #     self.hTree_ElPtId[i]={}
+        #     self.hTree_TauToMuPtId[i]={}
+        #     self.hTree_TauToElPtId[i]={}
+        #     self.hTree_MuIsoId[i]={}
+        #     self.hTree_ElIsoId[i]={}
+        #     self.hTree_TauToMuIsoId[i]={}
+        #     self.hTree_TauToElIsoId[i]={}
+        #     for j in xrange(i+1):
+        #         self.hTree_MuPtId[i][j]=ROOT.TH2F('hTree_MuPtId_{0:d}LepTop_Muon{1:d}'.format(i+1, j+1),
+        #                                           'ID tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton; Muon Pt; ID',
+        #                                           100, 0, 500, 10, 0, 10)
+        #         self.hTree_ElPtId[i][j]=ROOT.TH2F('hTree_ElPtId_{0:d}LepTop_Electron{1:d}'.format(i+1, j+1),
+        #                                           'ID tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton; Electron Pt; ID',
+        #                                           100, 0, 500, 10, 0, 10)
+        #         self.hTree_TauToMuPtId[i][j]=ROOT.TH2F('hTree_TauToMuPtId_{0:d}LepTop_Muon{1:d}'.format(i+1, j+1),
+        #                                           'ID tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton (via Tau); Muon Pt; ID',
+        #                                           100, 0, 500, 10, 0, 10)
+        #         self.hTree_TauToElPtId[i][j]=ROOT.TH2F('hTree_TauToElPtId_{0:d}LepTop_Electron{1:d}'.format(i+1, j+1),
+        #                                           'ID tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton (via Tau); Electron Pt; ID',
+        #                                           100, 0, 500, 10, 0, 10)
+        #         self.hTree_MuIsoId[i][j]=ROOT.TH2F('hTree_MuIsoId_{0:d}LepTop_Muon{1:d}'.format(i+1, j+1),
+        #                                           'Isolation tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton; Muon Pt; Iso ID',
+        #                                           100, 0, 500, 10, 0, 10)
+        #         self.hTree_ElIsoId[i][j]=ROOT.TH2F('hTree_ElIsoId_{0:d}LepTop_Electron{1:d}'.format(i+1, j+1),
+        #                                           'Isolation tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading electron; Electron Pt; Iso ID',
+        #                                           100, 0, 500, 10, 0, 10)
+        #         self.hTree_TauToMuIsoId[i][j]=ROOT.TH2F('hTree_TauToMuIsoId_{0:d}LepTop_Muon{1:d}'.format(i+1, j+1),
+        #                                           'Isolation tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton (via Tau); Muon Pt; Iso ID',
+        #                                           100, 0, 500, 10, 0, 10)
+        #         self.hTree_TauToElIsoId[i][j]=ROOT.TH2F('hTree_TauToElIsoId_{0:d}LepTop_Electron{1:d}'.format(i+1, j+1),
+        #                                           'Isolation tops->' + 'l'*(i+1) + '  ' + 'Sub-'*j + 'Leading lepton (via Tau); Electron Pt; Iso ID',
+        #                                           100, 0, 500, 10, 0, 10)
+        #         self.addObject(self.hTree_MuPtId[i][j])
+        #         self.addObject(self.hTree_ElPtId[i][j])
+        #         self.addObject(self.hTree_TauToMuPtId[i][j])
+        #         self.addObject(self.hTree_TauToElPtId[i][j])
+        #         self.addObject(self.hTree_MuIsoId[i][j])
+        #         self.addObject(self.hTree_ElIsoId[i][j])
+        #         self.addObject(self.hTree_TauToMuIsoId[i][j])
+        #         self.addObject(self.hTree_TauToElIsoId[i][j])
                 
-        ### Direct top lepton decays (Muon/Electron) ###        
-        self.hTree_MuPtDz=ROOT.TH3F('hTree_MuPtDz',   'Muon Pt-Dz; Muon; Dz; nJet',   100, 0, 500, 50, 0, 0.2, 15, 0, 15)
-        self.addObject(self.hTree_MuPtDz)
-        self.hTree_ElPtDz=ROOT.TH3F('hTree_ElPtDz',   'Electron Pt-Dz; Electron; Dz; nJet',   100, 0, 500, 50, 0, 0.2, 15, 0, 15)
-        self.addObject(self.hTree_ElPtDz)
-        self.hTree_MuIdIso=ROOT.TH3F('hTree_MuIdIso',   'Muon ID vs ISO; Muon ID; Muon ISO; nJet',   2, 0, 2, 2, 0, 2, 15, 0, 15)
-        self.addObject(self.hTree_MuIdIso)
-        self.hTree_ElIdIso=ROOT.TH3F('hTree_ElIdIso',   'Electron ID vs ISO; Electron ID; Electron ISO; nJet',   2, 0, 2, 2, 0, 2, 15, 0, 15)
-        self.addObject(self.hTree_ElIdIso)
-        self.hTree_MuPtIp3d=ROOT.TH3F('hTree_MuPtIp3d',   'Muon Pt-Ip3d; Muon; 3D Impact Parameter(cm); nJet',   100, 0, 500, 50, 0, 0.2, 15, 0, 15)
-        self.addObject(self.hTree_MuPtIp3d)
-        self.hTree_ElPtIp3d=ROOT.TH3F('hTree_ElPtIp3d',   'Electron Pt-Ip3d; Electron; 3D Impact Parameter(cm); nJet',   100, 0, 500, 50, 0, 0.2, 15, 0, 15)
-        self.addObject(self.hTree_ElPtIp3d)
+        # ### Direct top lepton decays (Muon/Electron) ###        
+        # self.hTree_MuPtDz=ROOT.TH3F('hTree_MuPtDz',   'Muon Pt-Dz; Muon; Dz; nJet',   100, 0, 500, 50, 0, 0.2, 15, 0, 15)
+        # self.addObject(self.hTree_MuPtDz)
+        # self.hTree_ElPtDz=ROOT.TH3F('hTree_ElPtDz',   'Electron Pt-Dz; Electron; Dz; nJet',   100, 0, 500, 50, 0, 0.2, 15, 0, 15)
+        # self.addObject(self.hTree_ElPtDz)
+        # self.hTree_MuIdIso=ROOT.TH3F('hTree_MuIdIso',   'Muon ID vs ISO; Muon ID; Muon ISO; nJet',   2, 0, 2, 2, 0, 2, 15, 0, 15)
+        # self.addObject(self.hTree_MuIdIso)
+        # self.hTree_ElIdIso=ROOT.TH3F('hTree_ElIdIso',   'Electron ID vs ISO; Electron ID; Electron ISO; nJet',   2, 0, 2, 2, 0, 2, 15, 0, 15)
+        # self.addObject(self.hTree_ElIdIso)
+        # self.hTree_MuPtIp3d=ROOT.TH3F('hTree_MuPtIp3d',   'Muon Pt-Ip3d; Muon; 3D Impact Parameter(cm); nJet',   100, 0, 500, 50, 0, 0.2, 15, 0, 15)
+        # self.addObject(self.hTree_MuPtIp3d)
+        # self.hTree_ElPtIp3d=ROOT.TH3F('hTree_ElPtIp3d',   'Electron Pt-Ip3d; Electron; 3D Impact Parameter(cm); nJet',   100, 0, 500, 50, 0, 0.2, 15, 0, 15)
+        # self.addObject(self.hTree_ElPtIp3d)
         
-        ### W soft leptons (hadronization) ###
-        self.hTree_WLepMuPtIp3d=ROOT.TH2F('hTree_WLepMuPtIp3d',   'Hadronic W Jet Muon Pt-Ip3d; Muon; 3D Impact Parameter(cm)',   100, 0, 500, 50, 0, 0.2)
-        self.addObject(self.hTree_WLepMuPtIp3d)
-        self.hTree_WLepElPtIp3d=ROOT.TH2F('hTree_WLepElPtIp3d',   'Hadronic W Jet Electron Pt-Ip3d; Electron;3D Impact Parameter(cm)',   100, 0, 500, 50, 0, 0.2)
-        self.addObject(self.hTree_WLepElPtIp3d)
-        self.hTree_WLepMuPtDz=ROOT.TH2F('hTree_WLepMuPtDz',   'Hadronic W Jet Muon Pt-Dz; Muon; Dz',   100, 0, 500, 50, 0, 0.2)
-        self.addObject(self.hTree_WLepMuPtDz)
-        self.hTree_WLepElPtDz=ROOT.TH2F('hTree_WLepElPtDz',   'Hadronic W Jet Electron Pt-Dz; Electron; Dz',   100, 0, 500, 50, 0, 0.2)
-        self.addObject(self.hTree_WLepElPtDz)
-        self.hTree_WLepMuIdIso=ROOT.TH2F('hTree_WLepMuIdIso',   'Hadronic W Jet Muon ID vs ISO; Muon ID; Muon ISO',   2, 0, 2, 2, 0, 2)
-        self.addObject(self.hTree_WLepMuIdIso)
-        self.hTree_WLepElIdIso=ROOT.TH2F('hTree_WLepElIdIso',   'Hadronic W Jet Electron ID vs ISO; Electron ID; Electron ISO',   2, 0, 2, 2, 0, 2)
-        self.addObject(self.hTree_WLepElIdIso)
+        # ### W soft leptons (hadronization) ###
+        # self.hTree_WLepMuPtIp3d=ROOT.TH2F('hTree_WLepMuPtIp3d',   'Hadronic W Jet Muon Pt-Ip3d; Muon; 3D Impact Parameter(cm)',   100, 0, 500, 50, 0, 0.2)
+        # self.addObject(self.hTree_WLepMuPtIp3d)
+        # self.hTree_WLepElPtIp3d=ROOT.TH2F('hTree_WLepElPtIp3d',   'Hadronic W Jet Electron Pt-Ip3d; Electron;3D Impact Parameter(cm)',   100, 0, 500, 50, 0, 0.2)
+        # self.addObject(self.hTree_WLepElPtIp3d)
+        # self.hTree_WLepMuPtDz=ROOT.TH2F('hTree_WLepMuPtDz',   'Hadronic W Jet Muon Pt-Dz; Muon; Dz',   100, 0, 500, 50, 0, 0.2)
+        # self.addObject(self.hTree_WLepMuPtDz)
+        # self.hTree_WLepElPtDz=ROOT.TH2F('hTree_WLepElPtDz',   'Hadronic W Jet Electron Pt-Dz; Electron; Dz',   100, 0, 500, 50, 0, 0.2)
+        # self.addObject(self.hTree_WLepElPtDz)
+        # self.hTree_WLepMuIdIso=ROOT.TH2F('hTree_WLepMuIdIso',   'Hadronic W Jet Muon ID vs ISO; Muon ID; Muon ISO',   2, 0, 2, 2, 0, 2)
+        # self.addObject(self.hTree_WLepMuIdIso)
+        # self.hTree_WLepElIdIso=ROOT.TH2F('hTree_WLepElIdIso',   'Hadronic W Jet Electron ID vs ISO; Electron ID; Electron ISO',   2, 0, 2, 2, 0, 2)
+        # self.addObject(self.hTree_WLepElIdIso)
         
         
-        ### b soft leptons (hadronization) ###
-        self.hTree_bLepMuPtDz=ROOT.TH2F('hTree_bLepMuPtDz',   'b Jet Muon Pt-Dz; Muon; Dz',   100, 0, 500, 50, 0, 0.2)
-        self.addObject(self.hTree_bLepMuPtDz)
-        self.hTree_bLepElPtDz=ROOT.TH2F('hTree_bLepElPtDz',   'b Jet Electron Pt-Dz; Electron; Dz',   100, 0, 500, 50, 0, 0.2)
-        self.addObject(self.hTree_bLepElPtDz)
-        self.hTree_bLepMuPtIp3d=ROOT.TH2F('hTree_bLepMuPtIp3d',   'b Jet Muon Pt-Ip3d; Muon; 3D Impact Parameter(cm)',   100, 0, 500, 50, 0, 0.2)
-        self.addObject(self.hTree_bLepMuPtIp3d)
-        self.hTree_bLepElPtIp3d=ROOT.TH2F('hTree_bLepElPtIp3d',   'b Jet Electron Pt-Ip3d; Electron;3D Impact Parameter(cm)',   100, 0, 500, 50, 0, 0.2)
-        self.addObject(self.hTree_bLepElPtIp3d)
-        self.hTree_bLepMuIdIso=ROOT.TH2F('hTree_bLepMuIdIso',   'b Jet Muon ID vs ISO; Muon ID; Muon ISO',   2, 0, 2, 2, 0, 2)
-        self.addObject(self.hTree_bLepMuIdIso)
-        self.hTree_bLepElIdIso=ROOT.TH2F('hTree_bLepElIdIso',   'b Jet Electron ID vs ISO; Electron ID; Electron ISO',   2, 0, 2, 2, 0, 2)
-        self.addObject(self.hTree_bLepElIdIso)
-        self.hTree_bLepJetBtag=ROOT.TH2F('hTree_bLepJetBtag',   'b Jet B-tag with associated lepton; lepton Pt; Lepton Pt X Jet B-tag',   100, 0, 1, 2, 0, 2)
-        self.addObject(self.hTree_bLepJetBtag)
+        # ### b soft leptons (hadronization) ###
+        # self.hTree_bLepMuPtDz=ROOT.TH2F('hTree_bLepMuPtDz',   'b Jet Muon Pt-Dz; Muon; Dz',   100, 0, 500, 50, 0, 0.2)
+        # self.addObject(self.hTree_bLepMuPtDz)
+        # self.hTree_bLepElPtDz=ROOT.TH2F('hTree_bLepElPtDz',   'b Jet Electron Pt-Dz; Electron; Dz',   100, 0, 500, 50, 0, 0.2)
+        # self.addObject(self.hTree_bLepElPtDz)
+        # self.hTree_bLepMuPtIp3d=ROOT.TH2F('hTree_bLepMuPtIp3d',   'b Jet Muon Pt-Ip3d; Muon; 3D Impact Parameter(cm)',   100, 0, 500, 50, 0, 0.2)
+        # self.addObject(self.hTree_bLepMuPtIp3d)
+        # self.hTree_bLepElPtIp3d=ROOT.TH2F('hTree_bLepElPtIp3d',   'b Jet Electron Pt-Ip3d; Electron;3D Impact Parameter(cm)',   100, 0, 500, 50, 0, 0.2)
+        # self.addObject(self.hTree_bLepElPtIp3d)
+        # self.hTree_bLepMuIdIso=ROOT.TH2F('hTree_bLepMuIdIso',   'b Jet Muon ID vs ISO; Muon ID; Muon ISO',   2, 0, 2, 2, 0, 2)
+        # self.addObject(self.hTree_bLepMuIdIso)
+        # self.hTree_bLepElIdIso=ROOT.TH2F('hTree_bLepElIdIso',   'b Jet Electron ID vs ISO; Electron ID; Electron ISO',   2, 0, 2, 2, 0, 2)
+        # self.addObject(self.hTree_bLepElIdIso)
+        # self.hTree_bLepJetBtag=ROOT.TH2F('hTree_bLepJetBtag',   'b Jet B-tag with associated lepton; lepton Pt; Lepton Pt X Jet B-tag',   100, 0, 1, 2, 0, 2)
+        # self.addObject(self.hTree_bLepJetBtag)
         
-        ### Tau Leptons ###
-        self.hTree_TauToMuPtDz=ROOT.TH2F('hTree_TauToMuPtDz',   'Muon (via Tau) Pt-Dz; Muon; Dz',   100, 0, 500, 50, 0, 0.2)
-        self.addObject(self.hTree_TauToMuPtDz)
-        self.hTree_TauToElPtDz=ROOT.TH2F('hTree_TauToElPtDz',   'Electron (via Tau) Pt-Dz; Electron; Dz',   100, 0, 500, 50, 0, 0.2)
-        self.addObject(self.hTree_TauToElPtDz)
-        self.hTree_TauToMuPtIp3d=ROOT.TH2F('hTree_TauToMuPtIp3d',   'Muon (via Tau) Pt-Ip3d; Muon; 3D Impact Parameter(cm)',   100, 0, 500, 50, 0, 0.4)
-        self.addObject(self.hTree_TauToMuPtIp3d)
-        self.hTree_TauToElPtIp3d=ROOT.TH2F('hTree_TauToElPtIp3d',   'Electron (via Tau) Pt-Ip3d; Electron; 3D Impact Parameter(cm)',   100, 0, 500, 50, 0, 0.4)
-        self.addObject(self.hTree_TauToElPtIp3d)
-        self.hTree_TauToMuIdIso=ROOT.TH2F('hTree_TauToMuIdIso',   'Muon (via Tau) ID vs ISO; Muon ID; Muon ISO',   2, 0, 2, 2, 0, 2)
-        self.addObject(self.hTree_TauToMuIdIso)
-        self.hTree_TauToElIdIso=ROOT.TH2F('hTree_TauToElIdIso',   'Electron (via Tau) ID vs ISO; Electron ID; Electron ISO',   2, 0, 2, 2, 0, 2)
-        self.addObject(self.hTree_TauToElIdIso)
+        # ### Tau Leptons ###
+        # self.hTree_TauToMuPtDz=ROOT.TH2F('hTree_TauToMuPtDz',   'Muon (via Tau) Pt-Dz; Muon; Dz',   100, 0, 500, 50, 0, 0.2)
+        # self.addObject(self.hTree_TauToMuPtDz)
+        # self.hTree_TauToElPtDz=ROOT.TH2F('hTree_TauToElPtDz',   'Electron (via Tau) Pt-Dz; Electron; Dz',   100, 0, 500, 50, 0, 0.2)
+        # self.addObject(self.hTree_TauToElPtDz)
+        # self.hTree_TauToMuPtIp3d=ROOT.TH2F('hTree_TauToMuPtIp3d',   'Muon (via Tau) Pt-Ip3d; Muon; 3D Impact Parameter(cm)',   100, 0, 500, 50, 0, 0.4)
+        # self.addObject(self.hTree_TauToMuPtIp3d)
+        # self.hTree_TauToElPtIp3d=ROOT.TH2F('hTree_TauToElPtIp3d',   'Electron (via Tau) Pt-Ip3d; Electron; 3D Impact Parameter(cm)',   100, 0, 500, 50, 0, 0.4)
+        # self.addObject(self.hTree_TauToElPtIp3d)
+        # self.hTree_TauToMuIdIso=ROOT.TH2F('hTree_TauToMuIdIso',   'Muon (via Tau) ID vs ISO; Muon ID; Muon ISO',   2, 0, 2, 2, 0, 2)
+        # self.addObject(self.hTree_TauToMuIdIso)
+        # self.hTree_TauToElIdIso=ROOT.TH2F('hTree_TauToElIdIso',   'Electron (via Tau) ID vs ISO; Electron ID; Electron ISO',   2, 0, 2, 2, 0, 2)
+        # self.addObject(self.hTree_TauToElIdIso)
         
-        ### Jets ###
-        self.hTree_tJets=ROOT.TH2F('hTree_tJets',   'Top Jets; Jet Type; N Jets',   2, 0, 2, 8, 0, 8)
-        self.addObject(self.hTree_tJets)
-        self.hTree_tbJets=ROOT.TH2F('hTree_tbJets',   'b Jets; Jet Type; N Jets',   2, 0, 2, 8, 0, 8)
-        self.addObject(self.hTree_tbJets)
-        self.hTree_tWDau1Jets=ROOT.TH2F('hTree_tWDau1Jets',   'W Daughter 1 Jets; Jet Type; N Jets',   2, 0, 2, 8, 0, 8)
-        self.addObject(self.hTree_tWDau1Jets)
-        self.hTree_tWDau2Jets=ROOT.TH2F('hTree_tWDau2Jets',   'W Daughter 2 Jets; Jet Type; N Jets',   2, 0, 2, 8, 0, 8)
-        self.addObject(self.hTree_tWDau2Jets)
+        # ### Jets ###
+        # self.hTree_tJets=ROOT.TH2F('hTree_tJets',   'Top Jets; Jet Type; N Jets',   2, 0, 2, 8, 0, 8)
+        # self.addObject(self.hTree_tJets)
+        # self.hTree_tbJets=ROOT.TH2F('hTree_tbJets',   'b Jets; Jet Type; N Jets',   2, 0, 2, 8, 0, 8)
+        # self.addObject(self.hTree_tbJets)
+        # self.hTree_tWDau1Jets=ROOT.TH2F('hTree_tWDau1Jets',   'W Daughter 1 Jets; Jet Type; N Jets',   2, 0, 2, 8, 0, 8)
+        # self.addObject(self.hTree_tWDau1Jets)
+        # self.hTree_tWDau2Jets=ROOT.TH2F('hTree_tWDau2Jets',   'W Daughter 2 Jets; Jet Type; N Jets',   2, 0, 2, 8, 0, 8)
+        # self.addObject(self.hTree_tWDau2Jets)
 
         ### Reco info ###
         # self.hTree_recoMu=ROOT.TH1F('hTree_recoMu', '
 
-        self.hTree_nJets_new=ROOT.TH1F('hTree_nJets_new',   'nJets (pt > 20 && |eta| < 2.5 && tightId); nJets; events', 20, 0, 20)
-        self.addObject(self.hTree_nJets_new)
+        self.hTree_nJets_low=ROOT.TH1F('hTree_nJets_low',   'nJets (pt > 20 && |eta| < 2.5 && tightId); nJets; events', 20, 0, 20)
+        self.addObject(self.hTree_nJets_low)
         self.hTree_nJets_old=ROOT.TH1F('hTree_nJets_old',   'nJets ((pt > 30 || pt > 25 && Medium CSVv2) && |eta| < 2.5 && tightId); nJets; events', 20, 0, 20)
         self.addObject(self.hTree_nJets_old)
         self.hTree_nJets_oldDeepCSV=ROOT.TH1F('hTree_nJets_oldDeepCSV',   'nJets ((pt > 30 || pt > 25 && Medium DeepCSV) && |eta| < 2.5 && tightId); nJets; events', 20, 0, 20)
@@ -228,6 +228,81 @@ class MCTreePlot(Module):
         self.addObject(self.hTree_nJets_MDeepJet)
         self.hTree_nLeps=ROOT.TH1F('hTree_nLeps',   'number Leptonic Top Decays; number Leptonic Top Decays; events', 5, 0, 5)
         self.addObject(self.hTree_nLeps)
+
+        self.hTree_ElDzCat=ROOT.TH3F('hTree_ElDzCat',   't->W->e Dz vs jet and b-tagged jet multiplicities; Dz (cm); nJets; nBJets', 
+                                     100, 0, 0.8, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_ElDzCat)
+        self.hTree_MuDzCat=ROOT.TH3F('hTree_MuDzCat',   't->W->mu Dz vs jet and b-tagged jet multiplicities; Dz (cm); nJets; nBJets', 
+                                     100, 0, 0.8, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_MuDzCat)
+        self.hTree_ElPtCat=ROOT.TH3F('hTree_ElPtCat',   't->W->e Pt vs jet and b-tagged jet multiplicities; Pt (GeV); nJets; nBJets', 
+                                     400, 0, 400, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_ElPtCat)
+        self.hTree_MuPtCat=ROOT.TH3F('hTree_MuPtCat',   't->W->mu Pt vs jet and b-tagged jet multiplicities; Pt (GeV); nJets; nBJets', 
+                                     400, 0, 400, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_MuPtCat)
+
+        #Sorted leptons
+        self.hTree_DirectLepPtCat = {} #pt, nJet, nBJet
+        self.hTree_IndirectLepPtCat = {}
+        self.hTree_TopSystemPt = {} #top, b, W
+        self.hTree_bMatchedJet = {} #jetpt, jet rank, nJet
+        self.hTree_bMatchedJetDR = {} #b 3-momentum, DR best match, DR second best match
+        self.hTree_bMatchedJetVRank = {} #Rank best, 2nd best, 3rd best
+        self.hTree_WMatchedJet1 = {} #W jet 1 pt, match rank, nJet
+        self.hTree_WMatchedJet2 = {} #W jet 2 pt, match rank, nJet
+        for i in xrange(4):
+            self.hTree_DirectLepPtCat[i]=ROOT.TH3F('hTree_DirectLepPtCat_{0:d}'.format(i+1),   
+                                                   'Pt PF Lepton (t->W->Lep) {0:d}; Pt (GeV); nJets; nBJets'.format(i+1), 
+                                         400, 0, 400, 20, 0, 20, 8, 0, 8)
+            self.addObject(self.hTree_DirectLepPtCat[i])
+            self.hTree_IndirectLepPtCat[i]=ROOT.TH3F('hTree_IndirectLepPtCat_{0:d}'.format(i+1),   
+                                                     'Pt PF Lepton (t->W->Tau->Lep) {0:d}; Pt (GeV); nJets; nBJets'.format(i+1), 
+                                         400, 0, 400, 20, 0, 20, 8, 0, 8)
+            self.addObject(self.hTree_IndirectLepPtCat[i])
+            self.hTree_TopSystemPt[i]=ROOT.TH3F('hTree_TopSystemPt_{0:d}'.format(i+1),   
+                                                'Pt Top System {0:d}; Top_Pt (GeV); Bottom_Pt (GeV); W_Pt (GeV)'.format(i+1), 
+                                                500, 0, 500, 500, 0, 500, 500, 0, 500)
+            self.addObject(self.hTree_TopSystemPt[i])
+            self.hTree_bMatchedJet[i]=ROOT.TH3F('hTree_bMatchedJet_{0:d}'.format(i+1),   
+                                                'b Matched Jet; b Jet Pt (GeV); b Jet Match Rank (3-mom ratio); nJet Multiplicity (20GeV, ...)'.format(i+1), 
+                                                500, 0, 500, 500, 0, 5, 20, 0, 20)
+            self.addObject(self.hTree_bMatchedJet[i])
+            self.hTree_bMatchedJetDR[i]=ROOT.TH3F('hTree_bMatchedJetDR_{0:d}'.format(i+1),   
+                                                  'b Matched Jet DeltaR; b quark 3 Momentum; DeltaR(b quark, Best Matched Jet); DeltaR(b quark, 2nd Best Matched Jet)'.format(i+1), 
+                                                  500, 0, 500, 100, 0, 5, 100, 0, 5)
+            self.addObject(self.hTree_bMatchedJetDR[i])
+            self.hTree_bMatchedJetVRank[i]=ROOT.TH3F('hTree_bMatchedJetVRank_{0:d}'.format(i+1),   
+                                                  'b Jet Match ranks (b pt {0:d}); Rank of Best Match; Rank of Second Best; Rank of 3rd Best'.format(i+1), 
+                                                     100, 0, 2, 100, 0, 2, 100, 0, 2)
+            self.addObject(self.hTree_bMatchedJetVRank[i])
+            self.hTree_WMatchedJet1[i]=ROOT.TH3F('hTree_WMatchedJet1_{0:d}'.format(i+1),   
+                                                 'W Matched Jet 2; W Jet Pt (GeV); W Jet Match Rank (3-momentum proxy); nJet Multiplicity (20GeV, ...)'.format(i+1), 
+                                                500, 0, 500, 500, 0, 5, 20, 0, 20)
+            self.addObject(self.hTree_WMatchedJet1[i])
+            self.hTree_WMatchedJet2[i]=ROOT.TH3F('hTree_WMatchedJet2_{0:d}'.format(i+1),   
+                                                 'W Matched Jet 2; W Jet Pt (GeV); W Jet Match Rank (3-momentum proxy); nJet Multiplicity (20GeV, ...)'.format(i+1), 
+                                                500, 0, 500, 500, 0, 5, 20, 0, 20)
+            self.addObject(self.hTree_WMatchedJet2[i])
+
+        self.hTree_METCat=ROOT.TH3F('hTree_METCat',   'MET vs jet and b-tagged jet multiplicities; MET (GeV); nJets (20 GeV, ...); nBJets (Med DeepJet)', 
+                                     500, 0, 500, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_METCat)
+        self.hTree_HTCat=ROOT.TH3F('hTree_HTCat',   'HT vs jet and b-tagged jet multiplicities; HT (GeV); nJets (20 GeV, ...); nBJets (Med DeepJet)', 
+                                     500, 0, 1500, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_HTCat)
+
+        self.hTree_RecoVGenJet_low=ROOT.TH2F('hTree_RecoVGenJet_low',   'AK4 Reco vs Gen Jet Multiplicity; nJets(pt > 20 && |eta| < 2.5 && TightLepVeto ID); nGenJets(pt > 20 && |eta| < 2.5)', 20, 0, 20, 20, 0, 20)
+        self.addObject(self.hTree_RecoVGenJet_low)
+        self.hTree_RecoVGenJet_DeepJet=ROOT.TH2F('hTree_RecoVGenJet_DeepJet',   'AK4 Reco vs Gen Jet Multiplicity; nJets(pt > 20 && |eta| < 2.5 && TightLepVeto ID && Medium DeepJet); nGenJets(pt > 20 && |eta| < 2.5 && b Had Flav)', 20, 0, 20, 20, 0, 20)
+        self.addObject(self.hTree_RecoVGenJet_DeepJet)
+        self.hTree_RecoVGenJet_oldDeepCSV=ROOT.TH2F('hTree_RecoVGenJet_oldDeepCSV',   'AK4 Reco vs Gen Jet Multiplicity; nJets((pt > 30 || pt > 25 && Med CSVv2) && |eta| < 2.5 && TightLepVeto ID); nGenJets((pt > 30 || b Had Flav) && |eta| < 2.5)', 20, 0, 20, 20, 0, 20)
+        self.addObject(self.hTree_RecoVGenJet_oldDeepCSV)
+        self.hTree_RecoVGenJet_DeepCSV=ROOT.TH2F('hTree_RecoVGenJet_DeepCSV',   'AK4 Reco vs Gen Jet Multiplicity; nJets(pt > 20 && |eta| < 2.5 && TightLepVeto ID && Medium DeepJet); nGenJets(pt > 20 && |eta| < 2.5 && b Had Flav)', 20, 0, 20, 20, 0, 20)
+        self.addObject(self.hTree_RecoVGenJet_DeepCSV)
+
+        self.hTree_RankVotesVBottomPt=ROOT.TH2F('hTree_RankVotesVBottomPt', '; bottom pt; net weighted votes', 400, 0, 400, 100, 0, 10)
+        self.addObject(self.hTree_RankVotesVBottomPt)
         
         #print("histfile=" + str(histFile) + " directoryname=" + str(histDirName))
         #if histFile != None and histDirName != None:
@@ -298,13 +373,16 @@ class MCTreePlot(Module):
             genmet = Object(event, "GenMET")
             generator = Object(event, "Generator")
             btagweight = Object(event, "btagWeight") #contains .CSVV2 and .DeepCSVB float weights
-            #genweight = 
-            #lhe = Object(event, "FIXME")
-            #weights = FIXME
-            #PSWeights = FIXME
+            LHE = Object(event, "LHE")
+            PSWeights = Collection(event, "PSWeight")
+            LHEWeight = getattr(event, "LHEWeight_originalXWGTUP")
+            LHEScaleWeight = Collection(event, "LHEScaleWeight")
+            # LHEReweightingWeight = Collection(event, "LHEReweightingWeight")
+            LHEPdfWeight = Collection(event, "LHEPdfWeight")
 
-        if hasattr(event, "nGenTop"):
-            tops = Collection(event, "GenTop")
+
+        tops = Collection(event, "GenTop")
+        topsL = [top for top in tops]
 
         nLeps = [top for top in tops if top.tIsLeptonic]
         if self.filterNLeps and len(nLeps) != self.filterNLeps:
@@ -314,37 +392,167 @@ class MCTreePlot(Module):
         anyEles = set([top.PF_Electron for top in tops if top.PF_Electron > -1])
         topMus = [top.PF_Muon for top in tops if top.PF_Muon > -1 and top.tHasWDauMuon]
         topEles = [top.PF_Electron for top in tops if top.PF_Electron > -1 and top.tHasWDauElectron]
+        tauMus = list(anyMus - set(topMus))
+        tauEles = list(anyEles - set(topEles))
+
         nJets = [jet for jet in jets if abs(jet.eta) < 2.5 and jet.jetId >= 6 and jet.muonIdx1 not in anyMus and jet.muonIdx2 not in anyMus and jet.electronIdx1 not in anyEles and jet.electronIdx2 not in anyEles]
-        nJets_new = [jet for jet in nJets if jet.pt > 20]
+        nJets_low = [jet for jet in nJets if jet.pt > 20]
         nJets_old = [jet for jet in nJets if jet.pt > 25]
         nJets_oldCSVv2 = [jet for jet in nJets_old if jet.pt > 30 or jet.btagCSVV2 > 0.8838]
         nJets_oldDeepCSV = [jet for jet in nJets_old if jet.pt > 30 or jet.btagDeepB > 0.4941]
 
-        nJetsMCSVv2 = [jet for jet in nJets_new if jet.btagCSVV2 > 0.8838]
-        nJetsMDeepCSV = [jet for jet in nJets_new if jet.btagDeepB > 0.4941]
-        nJetsMDeepJet = [jet for jet in nJets_new if jet.btagDeepFlavB > 0.3033]
-        
-        # print("nMus = " + str(len(topMus)) + " nEles = " + str(len(topEles)) + " nJets = " + str(len(nJets)) + " nJets_old = " + str(len(nJets_old)))
+        #B-tagged jets
+        nJetsMCSVv2 = [jet for jet in nJets_low if jet.btagCSVV2 > 0.8838]
+        nJetsMDeepCSV = [jet for jet in nJets_low if jet.btagDeepB > 0.4941]
+        nJetsMDeepJet = [jet for jet in nJets_low if jet.btagDeepFlavB > 0.3033]
+
+        #Gen Jets
+        nGenJets_low = [genjet for genjet in genjets if genjet.pt >= 20 and abs(genjet.eta) < 2.5]
+        nGenJets_old = [genjet for genjet in nGenJets_low if genjet.pt > 30 or (genjet.hadronFlavour == 5 and genjet.pt > 25)]
+        nGenJets_BTagged = [genjet for genjet in nGenJets_low if genjet.hadronFlavour == 5]
+
+        #HT and other calculations
+        HT = 0
+        H = 0
+        for jet in nJets_low:
+            HT += jet.pt
+            H += jet.p4().P()
+
+        self.hTree_METCat.Fill(met.pt ,len(nJets), len(nJetsMDeepJet))
+        self.hTree_HTCat.Fill(HT ,len(nJets), len(nJetsMDeepJet))
+
 
         self.hTree_nLeps.Fill(len(nLeps))
 
-        self.hTree_nJets_new.Fill(len(nJets_new))
+        self.hTree_nJets_low.Fill(len(nJets_low))
         self.hTree_nJets_old.Fill(len(nJets_oldCSVv2))
         self.hTree_nJets_oldDeepCSV.Fill(len(nJets_oldDeepCSV))
 
         self.hTree_nJets_MCSVv2.Fill(len(nJetsMCSVv2))
         self.hTree_nJets_MDeepCSV.Fill(len(nJetsMDeepCSV))
         self.hTree_nJets_MDeepJet.Fill(len(nJetsMDeepJet))
-        
+
+        self.hTree_RecoVGenJet_low.Fill(len(nJets_low), len(nGenJets_low))
+        self.hTree_RecoVGenJet_DeepJet.Fill(len(nJetsMDeepJet), len(nGenJets_BTagged))
+        self.hTree_RecoVGenJet_oldDeepCSV.Fill(len(nJets_oldDeepCSV), len(nGenJets_old))
+        self.hTree_RecoVGenJet_DeepCSV.Fill(len(nJetsMDeepCSV), len(nGenJets_BTagged))
+
+        dleps = []
+        ileps = []
         for mid in topMus:
             muon = muons[mid]
-            self.hTree_MuPtDz.Fill(muon.pt, muon.dz, len(nJets))
+            dleps.append(muon)
+            # self.hTree_MuPtDz.Fill(muon.pt, muon.dz, len(nJets))
+            self.hTree_MuDzCat.Fill(muon.dz, len(nJets), len(nJetsMDeepJet))
+            self.hTree_MuPtCat.Fill(muon.pt, len(nJets), len(nJetsMDeepJet))
             # self.hTree_MuIdIso
-            self.hTree_MuPtIp3d.Fill(muon.pt, muon.ip3d, len(nJets))
+            # self.hTree_MuPtIp3d.Fill(muon.pt, muon.ip3d, len(nJets))
         for eid in topEles:
             electron = electrons[eid]
-            self.hTree_ElPtDz.Fill(electron.pt, electron.dz, len(nJets))
+            dleps.append(electron)
+            # self.hTree_ElPtDz.Fill(electron.pt, electron.dz, len(nJets))
+            self.hTree_ElDzCat.Fill(electron.dz, len(nJets), len(nJetsMDeepJet))
+            self.hTree_ElPtCat.Fill(electron.pt, len(nJets), len(nJetsMDeepJet))
             # self.hTree_ElIdIso
-            self.hTree_ElPtIp3d.Fill(electron.pt, electron.ip3d, len(nJets))
+            # self.hTree_ElPtIp3d.Fill(electron.pt, electron.ip3d, len(nJets))
+        dleps.sort(key=lambda lep : lep.pt, reverse=True)
+        for i, lep in enumerate(dleps):
+            self.hTree_DirectLepPtCat[i].Fill(lep.pt, len(nJets), len(nJetsMDeepJet))
+
+        for mid in tauMus:
+            muon = muons[mid]
+            ileps.append(muon)
+            # self.hTree_MuDzCat.Fill(muon.dz, len(nJets), len(nJetsMDeepJet))
+            # self.hTree_MuPtCat.Fill(muon.pt, len(nJets), len(nJetsMDeepJet))
+        for eid in tauEles:
+            electron = electrons[eid]
+            ileps.append(electron)
+            # self.hTree_ElDzCat.Fill(electron.dz, len(nJets), len(nJetsMDeepJet))
+            # self.hTree_ElPtCat.Fill(electron.pt, len(nJets), len(nJetsMDeepJet))
+        ileps.sort(key=lambda lep : lep.pt, reverse=True)
+        for i, lep in enumerate(ileps):
+            self.hTree_IndirectLepPtCat[i].Fill(lep.pt, len(nJets), len(nJetsMDeepJet))
+
+        topsL.sort(key=lambda top : gens[top.t].pt, reverse=True)
+        for i, top in enumerate(topsL):
+            t = gens[top.t]
+            b = gens[top.b]
+            W = gens[top.W]
+            self.hTree_TopSystemPt[i].Fill(t.pt, b.pt, W.pt)
+
+        topsL.sort(key=lambda top : gens[top.b].pt, reverse=True)
+        for i, top in enumerate(topsL):
+            b = gens[top.b]
+            bJet = []
+            bJetRank = []
+            if top.b_Jet_0 > -1:
+                bJet.append(jets[top.b_Jet_0])
+                bJetRank.append(top.b_Jet_0W)
+            if top.b_Jet_1 > -1:
+                bJet.append(jets[top.b_Jet_1])
+                bJetRank.append(top.b_Jet_1W)
+            if top.b_Jet_2 > -1:
+                bJet.append(jets[top.b_Jet_2])
+                bJetRank.append(top.b_Jet_2W)
+            if top.b_Jet_3 > -1:
+                bJet.append(jets[top.b_Jet_3])
+                bJetRank.append(top.b_Jet_3W)
+            if top.b_Jet_4 > -1:
+                bJet.append(jets[top.b_Jet_4])
+                bJetRank.append(top.b_Jet_4W)
+
+            rnor = top.b_Jet_0W + top.b_Jet_1W + top.b_Jet_2W + top.b_Jet_3W + top.b_Jet_4W
+            if rnor == 0:
+                #protect against 0 division
+                rnor = 1
+            self.hTree_RankVotesVBottomPt.Fill(b.pt, rnor)
+            for j in xrange(len(bJet)):
+                if j > 3: continue #didn't make more than 4 plots for these...
+                self.hTree_bMatchedJet[j].Fill(bJet[j].pt, bJetRank[j]/rnor, len(nJets)) #jetpt, jet rank, nJet
+            if len(bJet) > 0:
+                dR1 = deltaR(b, bJet[0])
+            else:
+                dR1 = 0.00001
+            if len(bJet) > 1:
+                dR2 = deltaR(b, bJet[1])
+            else:
+                dR2 = 0.00001
+            self.hTree_bMatchedJetDR[i].Fill(b.pt, dR1, dR2) #b 3-momentum, DR best match, DR second best match
+            
+            R1 = top.b_Jet_0W/rnor
+            R2 = top.b_Jet_1W/rnor
+            R3 = top.b_Jet_2W/rnor
+            self.hTree_bMatchedJetVRank[i].Fill(R1, R2, R3) #Rank best, 2nd best, 3rd best
+
+
+        topsL.sort(key=lambda top : gens[top.W].pt, reverse=True)
+        for i, top in enumerate(topsL):
+            W = gens[top.W]
+            WJet1 = []
+            WJet1Rank = []
+            WJet2 = []
+            WJet2Rank = []
+            if top.W_dau1_Jet_0 > -1:
+                WJet1.append(jets[top.W_dau1_Jet_0])
+                WJet1Rank.append(top.W_dau1_Jet_0W)                
+            if top.W_dau1_Jet_1 > -1:
+                WJet1.append(jets[top.W_dau1_Jet_1])
+                WJet1Rank.append(top.W_dau1_Jet_1W)
+            if top.W_dau1_Jet_2 > -1:
+                WJet1.append(jets[top.W_dau1_Jet_2])
+                WJet1Rank.append(top.W_dau1_Jet_2W)
+            if top.W_dau2_Jet_0 > -1:
+                WJet2.append(jets[top.W_dau2_Jet_0])
+                WJet2Rank.append(top.W_dau2_Jet_0W)
+            if top.W_dau2_Jet_1 > -1:
+                WJet2.append(jets[top.W_dau2_Jet_1])
+                WJet2Rank.append(top.W_dau2_Jet_1W)
+            if top.W_dau2_Jet_2 > -1:
+                WJet2.append(jets[top.W_dau2_Jet_2])
+                WJet2Rank.append(top.W_dau2_Jet_2W)
+
+        # self.hTree_WMatchedJet1 = {} #W jet 1 pt, match rank, nJet
+        # self.hTree_WMatchedJet2 = {} #W jet 2 pt, match rank, nJet
+
 
         return True

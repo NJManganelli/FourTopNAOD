@@ -16,13 +16,19 @@ preTT1L="/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/crab_
 preTT1LGF="/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/crab_NanoGenTop_TTToSemiLeptonic_GenFilt/results/"
 
 
+filt=None
 
-# hName="MCTreePlot-TTTT.root"
-# files=[preTTTT+file for file in files]
 
-hName="MCTreePlot-TTTT-DiLepton.root"
+hName="MCTreePlot-TTTT-v0p4.root"
 files=[preTTTT+file for file in files]
-filt=2
+
+# hName="MCTreePlot-TTTT-DiLepton.root"
+# files=[preTTTT+file for file in files]
+# filt=2
+
+# hName="MCTreePlot-TTTT-TriLepton.root"
+# files=[preTTTT+file for file in files]
+# filt=3
 
 # hName="MCTreePlot-TTTo2L2Nu.root"
 # files=[preTT2L+file for file in files]
@@ -36,18 +42,14 @@ filt=2
 # hName="MCTreePlot-TTToSemiLeptonicGF.root"
 # files=[preTT1LGF+file for file in files]
 
-if not filt:
-    filt = None
-
 
 
 p=PostProcessor(".",
                 files,
                 cut=None,
-                modules=[MCTreePlot(maxevt=500000, filterNLeps=filt)],
+                modules=[MCTreePlot(maxevt=10000, filterNLeps=filt)],
                 noOut=True,
                 histFileName=hName,
                 histDirName="plots",
                 )
-
 p.run()
