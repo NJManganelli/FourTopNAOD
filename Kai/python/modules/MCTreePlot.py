@@ -243,10 +243,10 @@ class MCTreePlot(Module):
         self.addObject(self.hTree_MuPtCat)
         self.hTree_bMatchedJetCutFlow=ROOT.TH2F('hTree_bMatchedJetCutFlow',
                                                    'CutFlow of best matched b jets;Category;Number of Jets',
-                                                5, 0, 5, 5, 0, 5)
+                                                1, 0, 1, 1, 0, 1)
         self.addObject(self.hTree_bMatchedJetCutFlow)
         self.hTree_bMultiJet=ROOT.TH2F('hTree_bMultiJet',
-                                       'Multiplicity of events with b -> 2+ AK4 Jets;number of multi-jet b quarks;nJets((pt > 30 || pt > 25 && Medium DeepCSV) && |eta| < 2.5 && TightLepVeto',
+                                       'b -> 2+ AK4 Jets Mult; nJets(2016-like);number of multi-jet b quarks',
                                                 20, 0, 20, 5, 0, 5)
         self.addObject(self.hTree_bMultiJet)
 
@@ -308,10 +308,10 @@ class MCTreePlot(Module):
                                                        200, -1, 1, 200, -1, 1)
             self.addObject(self.hTree_bMatchedJetDeepJet[i])
 
-        self.hTree_METCat=ROOT.TH3F('hTree_METCat',   'MET vs jet and b-tagged jet multiplicities; MET (GeV); nJets (20 GeV, ...); nBJets (Med DeepJet)', 
+        self.hTree_METCat=ROOT.TH3F('hTree_METCat',   'MET vs jet and b-tagged jet multiplicities; MET (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
                                      500, 0, 500, 20, 0, 20, 8, 0, 8)
         self.addObject(self.hTree_METCat)
-        self.hTree_HTCat=ROOT.TH3F('hTree_HTCat',   'HT vs jet and b-tagged jet multiplicities; HT (GeV); nJets (20 GeV, ...); nBJets (Med DeepJet)', 
+        self.hTree_HTCat=ROOT.TH3F('hTree_HTCat',   'HT vs jet and b-tagged jet multiplicities; HT (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
                                      500, 0, 1500, 20, 0, 20, 8, 0, 8)
         self.addObject(self.hTree_HTCat)
 
@@ -566,6 +566,8 @@ class MCTreePlot(Module):
                 dR1 = -0.1
             if len(bJet) > 1:
                 dR2 = deltaR(b, bJet[1])
+                # dRSep = deltaR(bJet[0], bJet[1])
+                # self.hTree_bMatchedJetSep[i].Fill(b.pt, dRSep)
             else:
                 dR2 = -0.1
             self.hTree_bMatchedJetDR[i].Fill(b.pt, dR1, dR2) #b 3-momentum, DR best match, DR second best match
