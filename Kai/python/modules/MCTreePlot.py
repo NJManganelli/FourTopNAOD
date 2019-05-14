@@ -230,10 +230,10 @@ class MCTreePlot(Module):
         self.addObject(self.hTree_nLeps)
 
         self.hTree_ElDzCat=ROOT.TH3F('hTree_ElDzCat',   't->W->e Dz vs jet and b-tagged jet multiplicities; Dz (cm); nJets; nBJets', 
-                                     100, 0, 0.8, 20, 0, 20, 8, 0, 8)
+                                     100, 0, 0.15, 20, 0, 20, 8, 0, 8)
         self.addObject(self.hTree_ElDzCat)
         self.hTree_MuDzCat=ROOT.TH3F('hTree_MuDzCat',   't->W->mu Dz vs jet and b-tagged jet multiplicities; Dz (cm); nJets; nBJets', 
-                                     100, 0, 0.8, 20, 0, 20, 8, 0, 8)
+                                     100, 0, 0.15, 20, 0, 20, 8, 0, 8)
         self.addObject(self.hTree_MuDzCat)
         self.hTree_ElPtCat=ROOT.TH3F('hTree_ElPtCat',   't->W->e Pt vs jet and b-tagged jet multiplicities; Pt (GeV); nJets; nBJets', 
                                      400, 0, 400, 20, 0, 20, 8, 0, 8)
@@ -280,8 +280,8 @@ class MCTreePlot(Module):
                                                 500, 0, 500, 500, 0, 5, 20, 0, 20)
             self.addObject(self.hTree_bMatchedJet[i])
             self.hTree_bMatchedJetDR[i]=ROOT.TH3F('hTree_bMatchedJetDR_{0:d}'.format(i+1),   
-                                                  'b Matched Jet DeltaR; b quark 3 Momentum; DeltaR(b quark, Best Matched Jet); DeltaR(b quark, 2nd Best Matched Jet)'.format(i+1), 
-                                                  500, 0, 500, 100, 0, 5, 100, 0, 5)
+                                                  'b Matched Jet DeltaR; b quark 3 Momentum; DeltaR(b quark, Best Matched Jet); DeltaR(b quark, 2nd Best Matched Jet)', 
+                                                  500, 0, 500, 100, -0.2, 5, 100, -0.2, 5)
             self.addObject(self.hTree_bMatchedJetDR[i])
             self.hTree_bMatchedJetVRank[i]=ROOT.TH3F('hTree_bMatchedJetVRank_{0:d}'.format(i+1),   
                                                   'b Jet Match ranks (b pt {0:d}); Rank of Best Match; Rank of Second Best; Rank of 3rd Best'.format(i+1), 
@@ -423,6 +423,7 @@ class MCTreePlot(Module):
         nJets_old = [jet for jet in nJets if jet.pt > 25]
         nJets_oldCSVv2 = [jet for jet in nJets_old if jet.pt > 30 or jet.btagCSVV2 > 0.8838]
         nJets_oldDeepCSV = [jet for jet in nJets_old if jet.pt > 30 or jet.btagDeepB > 0.4941]
+        nJets_oldDeepJet = [jet for jet in nJets_old if jet.pt > 30 or jet.btagDeepFlavB > 0.3033]
 
         #B-tagged jets
         nJetsMCSVv2 = [jet for jet in nJets_low if jet.btagCSVV2 > 0.8838]
@@ -437,12 +438,33 @@ class MCTreePlot(Module):
         #HT and other calculations
         HT = 0
         H = 0
-        for jet in nJets_low:
+        HT2M = 0
+        H2M = 0
+        HTb = 0
+        nJetsBSorted = [jet for jet in nJets_oldDeepJet]
+        nJetsBSorted.sort(key=lambda jet : jet.btagDeepFlavB, reverse=True)
+        for j, jet in enumerate(nJetsBSorted):
             HT += jet.pt
             H += jet.p4().P()
+            if j > 1 and len(nJetsMDeepJet) > 1:
+                HT2M += jet.pt
+                H2M += jet.p4().P()
+            if jet.btagDeepFlavB > .3033:
+                HTb += jet.pt
+        self.hTree_METCat.Fill(met.pt ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
+        self.hTree_HTCat.Fill(HT ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
+        # self.hTree_HCat.Fill(H ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
+        # self.hTree_HT2MCat.Fill(HT2M ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
+        # self.hTree_H2MCat.Fill(H2M ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
+        # self.hTree_HTbCat.Fill(HTb ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
 
-        self.hTree_METCat.Fill(met.pt ,len(nJets), len(nJetsMDeepJet))
-        self.hTree_HTCat.Fill(HT ,len(nJets), len(nJetsMDeepJet))
+        if len(nJetsBSorted) > 3:
+            # dRbb = deltaR(nJetsBSorted[0], nJetsBSorted[1])
+            # HTRat = (nJetsBSorted[0].pt + nJetsBSorted[1].pt)/HT
+            HTH = HT/H
+            # self.hTree_dRbbCat.Fill(dRbb, len(nJets_oldDeepJet), len(nJetsMDeepJet))
+            # self.hTree_HTRatCat.Fill(HTRat, len(nJets_oldDeepJet), len(nJetsMDeepJet))
+            # self.hTree_HTHCat.Fill(HTH,len(nJets_oldDeepJet), len(nJetsMDeepJet))
 
 
         self.hTree_nLeps.Fill(len(nLeps))
@@ -466,21 +488,21 @@ class MCTreePlot(Module):
             muon = muons[mid]
             dleps.append(muon)
             # self.hTree_MuPtDz.Fill(muon.pt, muon.dz, len(nJets))
-            self.hTree_MuDzCat.Fill(muon.dz, len(nJets), len(nJetsMDeepJet))
-            self.hTree_MuPtCat.Fill(muon.pt, len(nJets), len(nJetsMDeepJet))
+            self.hTree_MuDzCat.Fill(muon.dz, len(nJets_oldDeepJet), len(nJetsMDeepJet))
+            self.hTree_MuPtCat.Fill(muon.pt, len(nJets_oldDeepJet), len(nJetsMDeepJet))
             # self.hTree_MuIdIso
             # self.hTree_MuPtIp3d.Fill(muon.pt, muon.ip3d, len(nJets))
         for eid in topEles:
             electron = electrons[eid]
             dleps.append(electron)
             # self.hTree_ElPtDz.Fill(electron.pt, electron.dz, len(nJets))
-            self.hTree_ElDzCat.Fill(electron.dz, len(nJets), len(nJetsMDeepJet))
-            self.hTree_ElPtCat.Fill(electron.pt, len(nJets), len(nJetsMDeepJet))
+            self.hTree_ElDzCat.Fill(electron.dz, len(nJets_oldDeepJet), len(nJetsMDeepJet))
+            self.hTree_ElPtCat.Fill(electron.pt, len(nJets_oldDeepJet), len(nJetsMDeepJet))
             # self.hTree_ElIdIso
             # self.hTree_ElPtIp3d.Fill(electron.pt, electron.ip3d, len(nJets))
         dleps.sort(key=lambda lep : lep.pt, reverse=True)
         for i, lep in enumerate(dleps):
-            self.hTree_DirectLepPtCat[i].Fill(lep.pt, len(nJets), len(nJetsMDeepJet))
+            self.hTree_DirectLepPtCat[i].Fill(lep.pt, len(nJets_oldDeepJet), len(nJetsMDeepJet))
 
         for mid in tauMus:
             muon = muons[mid]
@@ -537,15 +559,15 @@ class MCTreePlot(Module):
             self.hTree_RankVotesVBottomPt.Fill(b.pt, rnor)
             for j in xrange(len(bJet)):
                 if j > 3: continue #didn't make more than 4 plots for these...
-                self.hTree_bMatchedJet[j].Fill(bJet[j].pt, bJetRank[j]/rnor, len(nJets)) #jetpt, jet rank, nJet
+                self.hTree_bMatchedJet[j].Fill(bJet[j].pt, bJetRank[j]/rnor, len(nJets_oldDeepJet)) #jetpt, jet rank, nJet
             if len(bJet) > 0:
                 dR1 = deltaR(b, bJet[0])
             else:
-                dR1 = -1
+                dR1 = -0.1
             if len(bJet) > 1:
                 dR2 = deltaR(b, bJet[1])
             else:
-                dR2 = 0.00001
+                dR2 = -0.1
             self.hTree_bMatchedJetDR[i].Fill(b.pt, dR1, dR2) #b 3-momentum, DR best match, DR second best match
             
             R1 = top.b_Jet_0W/rnor
@@ -558,7 +580,7 @@ class MCTreePlot(Module):
                 flav = -1
             self.hTree_bMatchedJetHad[i].Fill(R1, flav)
 
-        self.hTree_bMultiJet.Fill(len(nJets_old), multijet)
+        self.hTree_bMultiJet.Fill(len(nJets_oldDeepJet), multijet)
 
         for i, jetset in enumerate(allbJet):
             if len(jetset) > 1:
