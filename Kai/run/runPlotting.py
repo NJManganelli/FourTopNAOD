@@ -22,7 +22,7 @@ filt=None
 hName="MCTreePlot-TTTT-v0p4.root"
 files=[preTTTT+file for file in files]
 
-# hName="MCTreePlot-TTTT-DiLepton.root"
+# hName="MCTreePlot-TTTT-DiLepton-v0p4.root"
 # files=[preTTTT+file for file in files]
 # filt=2
 
@@ -47,7 +47,7 @@ files=[preTTTT+file for file in files]
 p=PostProcessor(".",
                 files,
                 cut=None,
-                modules=[MCTreePlot(maxevt=10000, filterNLeps=filt)],
+                modules=[MCTreePlot(maxevt=1000000, filterNLeps=filt)],
                 noOut=True,
                 histFileName=hName,
                 histDirName="plots",

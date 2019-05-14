@@ -241,6 +241,14 @@ class MCTreePlot(Module):
         self.hTree_MuPtCat=ROOT.TH3F('hTree_MuPtCat',   't->W->mu Pt vs jet and b-tagged jet multiplicities; Pt (GeV); nJets; nBJets', 
                                      400, 0, 400, 20, 0, 20, 8, 0, 8)
         self.addObject(self.hTree_MuPtCat)
+        self.hTree_bMatchedJetCutFlow=ROOT.TH2F('hTree_bMatchedJetCutFlow',
+                                                   'CutFlow of best matched b jets;Category;Number of Jets',
+                                                5, 0, 5, 5, 0, 5)
+        self.addObject(self.hTree_bMatchedJetCutFlow)
+        self.hTree_bMultiJet=ROOT.TH2F('hTree_bMultiJet',
+                                       'Multiplicity of events with b -> 2+ AK4 Jets;number of multi-jet b quarks;nJets((pt > 30 || pt > 25 && Medium DeepCSV) && |eta| < 2.5 && TightLepVeto',
+                                                20, 0, 20, 5, 0, 5)
+        self.addObject(self.hTree_bMultiJet)
 
         #Sorted leptons
         self.hTree_DirectLepPtCat = {} #pt, nJet, nBJet
@@ -249,8 +257,11 @@ class MCTreePlot(Module):
         self.hTree_bMatchedJet = {} #jetpt, jet rank, nJet
         self.hTree_bMatchedJetDR = {} #b 3-momentum, DR best match, DR second best match
         self.hTree_bMatchedJetVRank = {} #Rank best, 2nd best, 3rd best
+        self.hTree_bMatchedJetHad = {} #Rank best, Hadron Flavour (Ghost clustering from GenHFMatcher)
         self.hTree_WMatchedJet1 = {} #W jet 1 pt, match rank, nJet
         self.hTree_WMatchedJet2 = {} #W jet 2 pt, match rank, nJet
+        self.hTree_bMatchedJetDeepCSV = {} #1st and 2nd best matched jets' DeepCSV score
+        self.hTree_bMatchedJetDeepJet = {} #1st and 2nd best matched jets' DeepJet score
         for i in xrange(4):
             self.hTree_DirectLepPtCat[i]=ROOT.TH3F('hTree_DirectLepPtCat_{0:d}'.format(i+1),   
                                                    'Pt PF Lepton (t->W->Lep) {0:d}; Pt (GeV); nJets; nBJets'.format(i+1), 
@@ -284,6 +295,18 @@ class MCTreePlot(Module):
                                                  'W Matched Jet 2; W Jet Pt (GeV); W Jet Match Rank (3-momentum proxy); nJet Multiplicity (20GeV, ...)'.format(i+1), 
                                                 500, 0, 500, 500, 0, 5, 20, 0, 20)
             self.addObject(self.hTree_WMatchedJet2[i])
+            self.hTree_bMatchedJetHad[i]=ROOT.TH2F('hTree_bMatchedJetHad_{0:d}'.format(i+1),   
+                                                  'b Jet Match Ranks v Hadron Flavour (b pt {0:d}); Rank of Best Match; Had Flavour (GenHFMatcher)'.format(i+1), 
+                                                     100, 0, 2, 7, -1, 6)
+            self.addObject(self.hTree_bMatchedJetHad[i])
+            self.hTree_bMatchedJetDeepCSV[i]=ROOT.TH2F('hTree_bMatchedJetDeepCSV_{0:d}'.format(i+1),   
+                                                  'b Jet Matches DeepCSV Value; DeepCSV of best match; DeepCSV of 2nd best match', 
+                                                       200, -1, 1, 200, -1, 1)
+            self.addObject(self.hTree_bMatchedJetDeepCSV[i])
+            self.hTree_bMatchedJetDeepJet[i]=ROOT.TH2F('hTree_bMatchedJetDeepJet_{0:d}'.format(i+1),   
+                                                  'b Jet Matches DeepJet Value; DeepJet of best match; DeepJet of 2nd best match', 
+                                                       200, -1, 1, 200, -1, 1)
+            self.addObject(self.hTree_bMatchedJetDeepJet[i])
 
         self.hTree_METCat=ROOT.TH3F('hTree_METCat',   'MET vs jet and b-tagged jet multiplicities; MET (GeV); nJets (20 GeV, ...); nBJets (Med DeepJet)', 
                                      500, 0, 500, 20, 0, 20, 8, 0, 8)
@@ -481,16 +504,21 @@ class MCTreePlot(Module):
             self.hTree_TopSystemPt[i].Fill(t.pt, b.pt, W.pt)
 
         topsL.sort(key=lambda top : gens[top.b].pt, reverse=True)
+        allbJet = []
+        bestJets = []
+        multijet = 0
         for i, top in enumerate(topsL):
             b = gens[top.b]
             bJet = []
             bJetRank = []
+            bestJets.append(top.b_Jet_0)
             if top.b_Jet_0 > -1:
                 bJet.append(jets[top.b_Jet_0])
                 bJetRank.append(top.b_Jet_0W)
             if top.b_Jet_1 > -1:
                 bJet.append(jets[top.b_Jet_1])
                 bJetRank.append(top.b_Jet_1W)
+                multijet += 1
             if top.b_Jet_2 > -1:
                 bJet.append(jets[top.b_Jet_2])
                 bJetRank.append(top.b_Jet_2W)
@@ -500,6 +528,7 @@ class MCTreePlot(Module):
             if top.b_Jet_4 > -1:
                 bJet.append(jets[top.b_Jet_4])
                 bJetRank.append(top.b_Jet_4W)
+            allbJet.append(bJet)
 
             rnor = top.b_Jet_0W + top.b_Jet_1W + top.b_Jet_2W + top.b_Jet_3W + top.b_Jet_4W
             if rnor == 0:
@@ -512,7 +541,7 @@ class MCTreePlot(Module):
             if len(bJet) > 0:
                 dR1 = deltaR(b, bJet[0])
             else:
-                dR1 = 0.00001
+                dR1 = -1
             if len(bJet) > 1:
                 dR2 = deltaR(b, bJet[1])
             else:
@@ -523,7 +552,72 @@ class MCTreePlot(Module):
             R2 = top.b_Jet_1W/rnor
             R3 = top.b_Jet_2W/rnor
             self.hTree_bMatchedJetVRank[i].Fill(R1, R2, R3) #Rank best, 2nd best, 3rd best
+            if len(bJet) > 0:
+                flav = bJet[0].hadronFlavour
+            else:
+                flav = -1
+            self.hTree_bMatchedJetHad[i].Fill(R1, flav)
 
+        self.hTree_bMultiJet.Fill(len(nJets_old), multijet)
+
+        for i, jetset in enumerate(allbJet):
+            if len(jetset) > 1:
+                DeepCSV1 = jetset[0].btagDeepB
+                DeepJet1 = jetset[0].btagDeepFlavB
+                DeepCSV2 = jetset[1].btagDeepB
+                DeepJet2 = jetset[1].btagDeepFlavB
+            elif len(jetset) > 0:
+                DeepCSV1 = jetset[0].btagDeepB
+                DeepJet1 = jetset[0].btagDeepFlavB
+                DeepCSV2 = -1
+                DeepJet2 = -1
+            else:
+                DeepCSV1 = -1
+                DeepJet1 = -1
+                DeepCSV2 = -1
+                DeepJet2 = -1
+            self.hTree_bMatchedJetDeepCSV[i].Fill(DeepCSV1, DeepCSV2)
+            self.hTree_bMatchedJetDeepJet[i].Fill(DeepJet1, DeepJet2)
+
+
+        self.hTree_bMatchedJetCutFlow.Fill('Events', 'Events', 1.0)
+        bestJets = [jets[j] for j in bestJets if j > -1]
+        bestJets.sort(key=lambda jet : jet.btagDeepFlavB, reverse=True)
+        for i in xrange(len(bestJets)):
+            self.hTree_bMatchedJetCutFlow.Fill('PF Jet', '>= {0:d} Jets'.format(i+1), 1.0)
+        bestJets = [jet for jet in bestJets if abs(jet.eta) < 2.5]
+        for i in xrange(len(bestJets)):
+            self.hTree_bMatchedJetCutFlow.Fill('|eta| < 2.5', '>= {0:d} Jets'.format(i+1), 1.0)
+        bestJets25 = [jet for jet in bestJets if jet.pt > 25]
+        for i in xrange(len(bestJets25)):
+            self.hTree_bMatchedJetCutFlow.Fill('pt > 25', '>= {0:d} Jets'.format(i+1), 1.0)
+        bestJets25 = [jet for jet in bestJets25 if jet.jetId >= 2 ]
+        for i in xrange(len(bestJets25)):
+            self.hTree_bMatchedJetCutFlow.Fill('Tight + pt > 25', '>= {0:d} Jets'.format(i+1), 1.0)
+        bestJets25 = [jet for jet in bestJets25 if jet.jetId >= 6 ]
+        for i in xrange(len(bestJets25)):
+            self.hTree_bMatchedJetCutFlow.Fill('TightLepVeto + pt > 25', '>= {0:d} Jets'.format(i+1), 1.0)
+        bestJets25 = [jet for jet in bestJets25 if jet.btagDeepFlavB > 0.3033 ]
+        for i in xrange(len(bestJets25)):
+            self.hTree_bMatchedJetCutFlow.Fill('TightLepVeto + pt > 25 + Medium DeepJet', '>= {0:d} Jets'.format(i+1), 1.0)
+        bestJets25 = [jet for jet in bestJets25 if jet.btagDeepB > 0.4941 ]
+        for i in xrange(len(bestJets25)):
+            self.hTree_bMatchedJetCutFlow.Fill('TightLepVeto + pt > 25 + Medium DeepCSV', '>= {0:d} Jets'.format(i+1), 1.0)
+        bestJets20 = [jet for jet in bestJets if jet.pt > 20]
+        for i in xrange(len(bestJets20)):
+            self.hTree_bMatchedJetCutFlow.Fill('pt > 20', '>= {0:d} Jets'.format(i+1), 1.0)
+        bestJets20 = [jet for jet in bestJets20 if jet.jetId >= 2 ]
+        for i in xrange(len(bestJets20)):
+            self.hTree_bMatchedJetCutFlow.Fill('Tight + pt > 20', '>= {0:d} Jets'.format(i+1), 1.0)
+        bestJets20 = [jet for jet in bestJets20 if jet.jetId >= 6 ]
+        for i in xrange(len(bestJets20)):
+            self.hTree_bMatchedJetCutFlow.Fill('TightLepVeto + pt > 20', '>= {0:d} Jets'.format(i+1), 1.0)
+        bestJets20 = [jet for jet in bestJets20 if jet.btagDeepFlavB > 0.3033 ]
+        for i in xrange(len(bestJets20)):
+            self.hTree_bMatchedJetCutFlow.Fill('TightLepVeto + pt > 20 + Medium DeepJet', '>= {0:d} Jets'.format(i+1), 1.0)
+        bestJets20 = [jet for jet in bestJets20 if jet.btagDeepB > 0.4941 ]
+        for i in xrange(len(bestJets20)):
+            self.hTree_bMatchedJetCutFlow.Fill('TightLepVeto + pt > 20 + Medium DeepCSV', '>= {0:d} Jets'.format(i+1), 1.0)
 
         topsL.sort(key=lambda top : gens[top.W].pt, reverse=True)
         for i, top in enumerate(topsL):
