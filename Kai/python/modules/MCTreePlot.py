@@ -273,8 +273,8 @@ class MCTreePlot(Module):
                                          400, 0, 400, 20, 0, 20, 8, 0, 8)
             self.addObject(self.hTree_IndirectLepPtCat[i])
             self.hTree_TopSystemPt[i]=ROOT.TH3F('hTree_TopSystemPt_{0:d}'.format(i+1),   
-                                                'Pt Top System {0:d}; Top_Pt (GeV); Bottom_Pt (GeV); W_Pt (GeV)'.format(i+1), 
-                                                500, 0, 500, 500, 0, 500, 500, 0, 500)
+                                                'Top Sys Pt (R{0:d} t pt); Top_Pt (GeV); Bottom_Pt (GeV); W_Pt (GeV)'.format(i+1), 
+                                                400, 0, 1000, 400, 0, 1000, 400, 0, 1000)
             self.addObject(self.hTree_TopSystemPt[i])
             self.hTree_bMatchedJet[i]=ROOT.TH3F('hTree_bMatchedJet_{0:d}'.format(i+1),   
                                                 'b Matched Jet; b Jet Pt (GeV); b Jet Match Rank (3-mom ratio); nJet Multiplicity (20GeV, ...)', 
@@ -284,10 +284,10 @@ class MCTreePlot(Module):
                                                   'b Matched Jet DeltaR; b quark 3 Momentum; DeltaR(b quark, Best Matched Jet); DeltaR(b quark, 2nd Best Matched Jet)', 
                                                   500, 0, 500, 100, -0.2, 5, 100, -0.2, 5)
             self.addObject(self.hTree_bMatchedJetDR[i])
-            # self.hTree_bMatchedJetSep[i]=ROOT.TH2F('hTree_bMatchedJetSep_{0:d}'.format(i+1),   
-            #                                        'b Matched Jet Separation; b quark Pt (GeV);DeltaR(best jet, 2nd best jet)'.format(i+1), 
-            #                                        500, 0, 500, 500, 0, 10)
-            # self.addObject(self.hTree_bMatchedJetSep[i])
+            self.hTree_bMatchedJetSep[i]=ROOT.TH2F('hTree_bMatchedJetSep_{0:d}'.format(i+1),   
+                                                   'b Matched Jet Separation; b quark Pt (GeV);DeltaR(best jet, 2nd best jet)', 
+                                                   500, 0, 500, 500, 0, 10)
+            self.addObject(self.hTree_bMatchedJetSep[i])
             self.hTree_bMatchedJetVRank[i]=ROOT.TH3F('hTree_bMatchedJetVRank_{0:d}'.format(i+1),   
                                                      'b Jet Match ranks (R{0:d} b pt); Rank of Best Match; Rank of Second Best; Rank of 3rd Best'.format(i+1), 
                                                      100, 0, 2, 100, 0, 2, 100, 0, 2)
@@ -592,8 +592,8 @@ class MCTreePlot(Module):
                 dR1 = -0.1
             if len(bJet) > 1:
                 dR2 = deltaR(b, bJet[1])
-                # dRSep = deltaR(bJet[0], bJet[1])
-                # self.hTree_bMatchedJetSep[i].Fill(b.pt, dRSep)
+                dRSep = deltaR(bJet[0], bJet[1])
+                self.hTree_bMatchedJetSep[i].Fill(b.pt, dRSep)
             else:
                 dR2 = -0.1
             self.hTree_bMatchedJetDR[i].Fill(b.pt, dR1, dR2) #b 3-momentum, DR best match, DR second best match
