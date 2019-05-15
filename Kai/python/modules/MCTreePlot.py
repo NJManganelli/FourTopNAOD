@@ -262,13 +262,14 @@ class MCTreePlot(Module):
         self.hTree_WMatchedJet2 = {} #W jet 2 pt, match rank, nJet
         self.hTree_bMatchedJetDeepCSV = {} #1st and 2nd best matched jets' DeepCSV score
         self.hTree_bMatchedJetDeepJet = {} #1st and 2nd best matched jets' DeepJet score
+        self.hTree_bMatchedJetSep = {} #DeltaR separation between 1st and 2nd best ranked jets
         for i in xrange(4):
             self.hTree_DirectLepPtCat[i]=ROOT.TH3F('hTree_DirectLepPtCat_{0:d}'.format(i+1),   
-                                                   'Pt PF Lepton (t->W->Lep) {0:d}; Pt (GeV); nJets; nBJets'.format(i+1), 
+                                                   'Pt PF Lepton (t->W->Lep) (R{0:d} t pt); Pt (GeV); nJets; nBJets'.format(i+1), 
                                          400, 0, 400, 20, 0, 20, 8, 0, 8)
             self.addObject(self.hTree_DirectLepPtCat[i])
             self.hTree_IndirectLepPtCat[i]=ROOT.TH3F('hTree_IndirectLepPtCat_{0:d}'.format(i+1),   
-                                                     'Pt PF Lepton (t->W->Tau->Lep) {0:d}; Pt (GeV); nJets; nBJets'.format(i+1), 
+                                                     'Pt PF Lepton (t->W->Tau->Lep) (R{0:d} t pt); Pt (GeV); nJets; nBJets'.format(i+1), 
                                          400, 0, 400, 20, 0, 20, 8, 0, 8)
             self.addObject(self.hTree_IndirectLepPtCat[i])
             self.hTree_TopSystemPt[i]=ROOT.TH3F('hTree_TopSystemPt_{0:d}'.format(i+1),   
@@ -276,15 +277,19 @@ class MCTreePlot(Module):
                                                 500, 0, 500, 500, 0, 500, 500, 0, 500)
             self.addObject(self.hTree_TopSystemPt[i])
             self.hTree_bMatchedJet[i]=ROOT.TH3F('hTree_bMatchedJet_{0:d}'.format(i+1),   
-                                                'b Matched Jet; b Jet Pt (GeV); b Jet Match Rank (3-mom ratio); nJet Multiplicity (20GeV, ...)'.format(i+1), 
+                                                'b Matched Jet; b Jet Pt (GeV); b Jet Match Rank (3-mom ratio); nJet Multiplicity (20GeV, ...)', 
                                                 500, 0, 500, 500, 0, 5, 20, 0, 20)
             self.addObject(self.hTree_bMatchedJet[i])
             self.hTree_bMatchedJetDR[i]=ROOT.TH3F('hTree_bMatchedJetDR_{0:d}'.format(i+1),   
                                                   'b Matched Jet DeltaR; b quark 3 Momentum; DeltaR(b quark, Best Matched Jet); DeltaR(b quark, 2nd Best Matched Jet)', 
                                                   500, 0, 500, 100, -0.2, 5, 100, -0.2, 5)
             self.addObject(self.hTree_bMatchedJetDR[i])
+            # self.hTree_bMatchedJetSep[i]=ROOT.TH2F('hTree_bMatchedJetSep_{0:d}'.format(i+1),   
+            #                                        'b Matched Jet Separation; b quark Pt (GeV);DeltaR(best jet, 2nd best jet)'.format(i+1), 
+            #                                        500, 0, 500, 500, 0, 10)
+            # self.addObject(self.hTree_bMatchedJetSep[i])
             self.hTree_bMatchedJetVRank[i]=ROOT.TH3F('hTree_bMatchedJetVRank_{0:d}'.format(i+1),   
-                                                  'b Jet Match ranks (b pt {0:d}); Rank of Best Match; Rank of Second Best; Rank of 3rd Best'.format(i+1), 
+                                                     'b Jet Match ranks (R{0:d} b pt); Rank of Best Match; Rank of Second Best; Rank of 3rd Best'.format(i+1), 
                                                      100, 0, 2, 100, 0, 2, 100, 0, 2)
             self.addObject(self.hTree_bMatchedJetVRank[i])
             self.hTree_WMatchedJet1[i]=ROOT.TH3F('hTree_WMatchedJet1_{0:d}'.format(i+1),   
@@ -296,7 +301,7 @@ class MCTreePlot(Module):
                                                 500, 0, 500, 500, 0, 5, 20, 0, 20)
             self.addObject(self.hTree_WMatchedJet2[i])
             self.hTree_bMatchedJetHad[i]=ROOT.TH2F('hTree_bMatchedJetHad_{0:d}'.format(i+1),   
-                                                  'b Jet Match Ranks v Hadron Flavour (b pt {0:d}); Rank of Best Match; Had Flavour (GenHFMatcher)'.format(i+1), 
+                                                   'b Jet Rank v Hadron Flavour (R{0:d} b pt); Rank of Best Match; Had Flavour (GenHFMatcher)'.format(i+1), 
                                                      100, 0, 2, 7, -1, 6)
             self.addObject(self.hTree_bMatchedJetHad[i])
             self.hTree_bMatchedJetDeepCSV[i]=ROOT.TH2F('hTree_bMatchedJetDeepCSV_{0:d}'.format(i+1),   
