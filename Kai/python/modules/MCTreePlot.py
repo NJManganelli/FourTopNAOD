@@ -314,7 +314,28 @@ class MCTreePlot(Module):
         self.hTree_HTCat=ROOT.TH3F('hTree_HTCat',   'HT vs jet and b-tagged jet multiplicities; HT (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
                                      500, 0, 1500, 20, 0, 20, 8, 0, 8)
         self.addObject(self.hTree_HTCat)
-
+        self.hTree_HCat=ROOT.TH3F('hTree_HCat',   'H vs jet and b-tagged jet multiplicities; H (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
+                                     500, 0, 1500, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_HCat)
+        self.hTree_HT2MCat=ROOT.TH3F('hTree_HT2MCat',   'HT2M vs jet and b-tagged jet multiplicities; HT2M (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
+                                     500, 0, 1500, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_HT2MCat)
+        self.hTree_H2MCat=ROOT.TH3F('hTree_H2MCat',   'H2M vs jet and b-tagged jet multiplicities; H2M (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
+                                     500, 0, 1500, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_H2MCat)
+        self.hTree_HTbCat=ROOT.TH3F('hTree_HTbCat',   'HTb vs jet and b-tagged jet multiplicities; HTb (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
+                                     500, 0, 1500, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_HTbCat)
+        self.hTree_HTHCat=ROOT.TH3F('hTree_HTHCat',   'HTH vs jet and b-tagged jet multiplicities; HTH (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
+                                     500, 0, 1, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_HTHCat)
+        self.hTree_HTRatCat=ROOT.TH3F('hTree_HTRatCat',   'HTRat vs jet and b-tagged jet multiplicities; HTRat (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
+                                     500, 0, 1, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_HTRatCat)
+        self.hTree_dRbbCat=ROOT.TH3F('hTree_dRbbCat',   'dRbb vs jet and b-tagged jet multiplicities; dRbb; nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
+                                     500, 0, 5, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_dRbbCat)
+        
         self.hTree_RecoVGenJet_low=ROOT.TH2F('hTree_RecoVGenJet_low',   'AK4 Reco vs Gen Jet Multiplicity; nJets(pt > 20 && |eta| < 2.5 && TightLepVeto ID); nGenJets(pt > 20 && |eta| < 2.5)', 20, 0, 20, 20, 0, 20)
         self.addObject(self.hTree_RecoVGenJet_low)
         self.hTree_RecoVGenJet_DeepJet=ROOT.TH2F('hTree_RecoVGenJet_DeepJet',   'AK4 Reco vs Gen Jet Multiplicity; nJets(pt > 20 && |eta| < 2.5 && TightLepVeto ID && Medium DeepJet); nGenJets(pt > 20 && |eta| < 2.5 && b Had Flav)', 20, 0, 20, 20, 0, 20)
@@ -453,10 +474,10 @@ class MCTreePlot(Module):
                 HTb += jet.pt
         self.hTree_METCat.Fill(met.pt ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
         self.hTree_HTCat.Fill(HT ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
-        # self.hTree_HCat.Fill(H ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
-        # self.hTree_HT2MCat.Fill(HT2M ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
-        # self.hTree_H2MCat.Fill(H2M ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
-        # self.hTree_HTbCat.Fill(HTb ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
+        self.hTree_HCat.Fill(H ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
+        self.hTree_HT2MCat.Fill(HT2M ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
+        self.hTree_H2MCat.Fill(H2M ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
+        self.hTree_HTbCat.Fill(HTb ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
 
         if len(nJetsBSorted) > 3:
             # dRbb = deltaR(nJetsBSorted[0], nJetsBSorted[1])
@@ -464,7 +485,7 @@ class MCTreePlot(Module):
             HTH = HT/H
             # self.hTree_dRbbCat.Fill(dRbb, len(nJets_oldDeepJet), len(nJetsMDeepJet))
             # self.hTree_HTRatCat.Fill(HTRat, len(nJets_oldDeepJet), len(nJetsMDeepJet))
-            # self.hTree_HTHCat.Fill(HTH,len(nJets_oldDeepJet), len(nJetsMDeepJet))
+            self.hTree_HTHCat.Fill(HTH,len(nJets_oldDeepJet), len(nJetsMDeepJet))
 
 
         self.hTree_nLeps.Fill(len(nLeps))
