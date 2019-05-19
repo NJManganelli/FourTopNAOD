@@ -8,7 +8,8 @@ from FourTopNAOD.Kai.modules.MCTreeDev import TenKTree
 from FourTopNAOD.Kai.modules.MCTreePlot import MCTreePlot
 import collections, copy, json
 
-files=["tree_1.root", "tree_2.root", "tree_3.root", "tree_4.root", "tree_5.root", "tree_6.root"] 
+#files=["tree_1.root", "tree_2.root", "tree_3.root", "tree_4.root", "tree_5.root", "tree_6.root"] 
+files=["tree_1.root"]
 preTTTT="/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/crab_NanoGenTop_TTTTv2/results/"
 preTT2L="/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/crab_NanoGenTop_TTTo2L2Nu/results/"
 preTT2LGF="/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/crab_NanoGenTop_TTTo2L2Nu_GenFilt/results/"
@@ -47,7 +48,7 @@ files=[preTTTT+file for file in files]
 p=PostProcessor(".",
                 files,
                 cut=None,
-                modules=[MCTreePlot(maxevt=1000000, filterNLeps=filt)],
+                modules=[MCTreePlot(maxevt=100000, filterNLeps=filt)],
                 noOut=True,
                 histFileName=hName,
                 histDirName="plots",

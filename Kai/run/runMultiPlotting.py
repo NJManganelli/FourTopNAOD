@@ -26,15 +26,20 @@ files=[preTTTT+file for file in basefiles]
 filt=None
 Tuples.append((files, hName, filt))
 
+hName="MCTreePlot-TTTT-SingleLepton-v0p4.root"
+files=[preTTTT+file for file in basefiles]
+filt=1
+Tuples.append((files, hName, filt))
+
 hName="MCTreePlot-TTTT-DiLepton-v0p4.root"
 files=[preTTTT+file for file in basefiles]
 filt=2
 Tuples.append((files, hName, filt))
 
-# hName="MCTreePlot-TTTT-TriLepton-v0p4.root"
-# files=[preTTTT+file for file in basefiles]
-# filt=3
-# Tuples.append((files, hName, filt))
+hName="MCTreePlot-TTTT-TriLepton-v0p4.root"
+files=[preTTTT+file for file in basefiles]
+filt=3
+Tuples.append((files, hName, filt))
 
 hName="MCTreePlot-TTTo2L2Nu-v0p4.root"
 files=[preTT2L+file for file in basefiles]
@@ -73,7 +78,7 @@ def multiplier(fileList, hName=None, NLeps=None, maxevt=10000):
 
 pList = []
 for tup in Tuples:
-    p = multiprocessing.Process(target=multiplier, args=(tup[0], tup[1], tup[2], 500000))
+    p = multiprocessing.Process(target=multiplier, args=(tup[0], tup[1], tup[2], 1000000))
     pList.append(p)
     p.start()
 

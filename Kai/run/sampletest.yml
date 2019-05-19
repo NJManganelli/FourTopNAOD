@@ -1,0 +1,79 @@
+ #YAML 1.2
+ #Test sample card
+  - dataset: #Four Top sample
+        name: "tttt"
+        isData: False
+        nEvents: -1
+        era: "2017"
+        isSignal: True
+        crossection: 0.012
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        inputDataset: "/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        splitting: "Automatic"
+        #splitting: "FileBased"
+        #unitsPerJob: 1
+        #totalUnits: 150
+
+  - dataset: #ttbar dilepton sample
+        name: "tt(DL)"
+        isData: False
+        nEvents: -1
+        era: "2017"
+        isSignal: False
+        crossection: 830.0
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        inputDataset: "/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        splitting: "Automatic"
+        #splitting: "FileBased"
+        #unitsPerJob: 1
+        #totalUnits: 150
+
+  - dataset: #ttbar dilepton sample
+        name: "tt(DL-GF)"
+        isData: False
+        nEvents: -1
+        era: "2017"
+        isSignal: False
+        crossection: 830.0
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        inputDataset: "/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        splitting: "Automatic"
+        #splitting: "FileBased"
+        #unitsPerJob: 1
+        #totalUnits: 150
+
+  - dataset: #Double Muon
+        name: "MuMu(E)"
+        isData: True
+        nEvents: -1
+        era: "2017"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        inputDataset: "/DoubleMuon/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        splitting: "Automatic"
+        #splitting: "FileBased"
+        #unitsPerJob: 1
+        #totalUnits: 150
+
+  - dataset: #Double Muon
+        name: "MuMu(F)"
+        isData: True
+        nEvents: -1
+        era: "2017"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        inputDataset: "/DoubleMuon/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        splitting: "Automatic"
+        #splitting: "FileBased"
+        #unitsPerJob: 1
+        #totalUnits: 150
+
+

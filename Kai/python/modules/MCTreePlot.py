@@ -229,18 +229,36 @@ class MCTreePlot(Module):
         self.hTree_nLeps=ROOT.TH1F('hTree_nLeps',   'number Leptonic Top Decays; number Leptonic Top Decays; events', 5, 0, 5)
         self.addObject(self.hTree_nLeps)
 
-        self.hTree_ElDzCat=ROOT.TH3F('hTree_ElDzCat',   't->W->e Dz vs jet and b-tagged jet multiplicities; Dz (cm); nJets; nBJets', 
-                                     100, 0, 0.15, 20, 0, 20, 8, 0, 8)
+        self.hTree_ElDzCat=ROOT.TH3F('hTree_ElDzCat',   't->W->e Dz; Dz (cm); nJets; nBJets', 
+                                     100, 0, 0.02, 20, 0, 20, 8, 0, 8)
         self.addObject(self.hTree_ElDzCat)
-        self.hTree_MuDzCat=ROOT.TH3F('hTree_MuDzCat',   't->W->mu Dz vs jet and b-tagged jet multiplicities; Dz (cm); nJets; nBJets', 
-                                     100, 0, 0.15, 20, 0, 20, 8, 0, 8)
+        self.hTree_MuDzCat=ROOT.TH3F('hTree_MuDzCat',   't->W->mu Dz; Dz (cm); nJets; nBJets', 
+                                     100, 0, 0.02, 20, 0, 20, 8, 0, 8)
         self.addObject(self.hTree_MuDzCat)
-        self.hTree_ElPtCat=ROOT.TH3F('hTree_ElPtCat',   't->W->e Pt vs jet and b-tagged jet multiplicities; Pt (GeV); nJets; nBJets', 
+        self.hTree_ElPtCat=ROOT.TH3F('hTree_ElPtCat',   't->W->e Pt; Pt (GeV); nJets; nBJets', 
                                      400, 0, 400, 20, 0, 20, 8, 0, 8)
         self.addObject(self.hTree_ElPtCat)
-        self.hTree_MuPtCat=ROOT.TH3F('hTree_MuPtCat',   't->W->mu Pt vs jet and b-tagged jet multiplicities; Pt (GeV); nJets; nBJets', 
+        self.hTree_MuPtCat=ROOT.TH3F('hTree_MuPtCat',   't->W->mu Pt; Pt (GeV); nJets; nBJets', 
                                      400, 0, 400, 20, 0, 20, 8, 0, 8)
         self.addObject(self.hTree_MuPtCat)
+        self.hTree_ElKinCat=ROOT.TH2F('hTree_ElKinCat',   't->W->e Kin; eta; phi', 
+                                      200, -3, 3, 200, -3.1416, 3.1416)
+        self.addObject(self.hTree_ElKinCat)
+        self.hTree_MuKinCat=ROOT.TH2F('hTree_MuKinCat',   't->W->mu Kin; eta; phi', 
+                                      200, -3, 3, 200, -3.1416, 3.1416)
+        self.addObject(self.hTree_MuKinCat)
+        self.hTree_TauElDzCat=ROOT.TH3F('hTree_TauElDzCat',   't->W->Tau->e Dz; Dz (cm); nJets; nBJets', 
+                                     100, 0, 0.02, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_TauElDzCat)
+        self.hTree_TauMuDzCat=ROOT.TH3F('hTree_TauMuDzCat',   't->W->Tau->mu Dz; Dz (cm); nJets; nBJets', 
+                                     100, 0, 0.02, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_TauMuDzCat)
+        self.hTree_TauElPtCat=ROOT.TH3F('hTree_TauElPtCat',   't->W->Tau->e Pt; Pt (GeV); nJets; nBJets', 
+                                     400, 0, 400, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_TauElPtCat)
+        self.hTree_TauMuPtCat=ROOT.TH3F('hTree_TauMuPtCat',   't->W->Tau->mu Pt; Pt (GeV); nJets; nBJets', 
+                                     400, 0, 400, 20, 0, 20, 8, 0, 8)
+        self.addObject(self.hTree_TauMuPtCat)
         self.hTree_bMatchedJetCutFlow=ROOT.TH2F('hTree_bMatchedJetCutFlow',
                                                    'CutFlow of best matched b jets;Category;Number of Jets',
                                                 1, 0, 1, 1, 0, 1)
@@ -249,6 +267,9 @@ class MCTreePlot(Module):
                                        'b -> 2+ AK4 Jets Mult; nJets(2016-like);number of multi-jet b quarks',
                                                 20, 0, 20, 5, 0, 5)
         self.addObject(self.hTree_bMultiJet)
+        self.hTree_tRecoM=ROOT.TH1F('hTree_tRecoM',
+                                       'top reconstructed mass; mass (GeV); tops', 280, 140, 210)
+        self.addObject(self.hTree_tRecoM)
 
         #Sorted leptons
         self.hTree_DirectLepPtCat = {} #pt, nJet, nBJet
@@ -274,7 +295,7 @@ class MCTreePlot(Module):
             self.addObject(self.hTree_IndirectLepPtCat[i])
             self.hTree_TopSystemPt[i]=ROOT.TH3F('hTree_TopSystemPt_{0:d}'.format(i+1),   
                                                 'Top Sys Pt (R{0:d} t pt); Top_Pt (GeV); Bottom_Pt (GeV); W_Pt (GeV)'.format(i+1), 
-                                                400, 0, 1000, 400, 0, 1000, 400, 0, 1000)
+                                                200, 0, 1000, 200, 0, 1000, 200, 0, 1000)
             self.addObject(self.hTree_TopSystemPt[i])
             self.hTree_bMatchedJet[i]=ROOT.TH3F('hTree_bMatchedJet_{0:d}'.format(i+1),   
                                                 'b Matched Jet; b Jet Pt (GeV); b Jet Match Rank (3-mom ratio); nJet Multiplicity (20GeV, ...)', 
@@ -485,11 +506,11 @@ class MCTreePlot(Module):
         self.hTree_HTbCat.Fill(HTb ,len(nJets_oldDeepJet), len(nJetsMDeepJet))
 
         if len(nJetsBSorted) > 3:
-            # dRbb = deltaR(nJetsBSorted[0], nJetsBSorted[1])
-            # HTRat = (nJetsBSorted[0].pt + nJetsBSorted[1].pt)/HT
+            dRbb = deltaR(nJetsBSorted[0], nJetsBSorted[1])
+            HTRat = (nJetsBSorted[0].pt + nJetsBSorted[1].pt)/HT
             HTH = HT/H
-            # self.hTree_dRbbCat.Fill(dRbb, len(nJets_oldDeepJet), len(nJetsMDeepJet))
-            # self.hTree_HTRatCat.Fill(HTRat, len(nJets_oldDeepJet), len(nJetsMDeepJet))
+            self.hTree_dRbbCat.Fill(dRbb, len(nJets_oldDeepJet), len(nJetsMDeepJet))
+            self.hTree_HTRatCat.Fill(HTRat, len(nJets_oldDeepJet), len(nJetsMDeepJet))
             self.hTree_HTHCat.Fill(HTH,len(nJets_oldDeepJet), len(nJetsMDeepJet))
 
 
@@ -516,6 +537,7 @@ class MCTreePlot(Module):
             # self.hTree_MuPtDz.Fill(muon.pt, muon.dz, len(nJets))
             self.hTree_MuDzCat.Fill(muon.dz, len(nJets_oldDeepJet), len(nJetsMDeepJet))
             self.hTree_MuPtCat.Fill(muon.pt, len(nJets_oldDeepJet), len(nJetsMDeepJet))
+            self.hTree_MuKinCat.Fill(muon.eta, muon.phi)
             # self.hTree_MuIdIso
             # self.hTree_MuPtIp3d.Fill(muon.pt, muon.ip3d, len(nJets))
         for eid in topEles:
@@ -524,6 +546,7 @@ class MCTreePlot(Module):
             # self.hTree_ElPtDz.Fill(electron.pt, electron.dz, len(nJets))
             self.hTree_ElDzCat.Fill(electron.dz, len(nJets_oldDeepJet), len(nJetsMDeepJet))
             self.hTree_ElPtCat.Fill(electron.pt, len(nJets_oldDeepJet), len(nJetsMDeepJet))
+            self.hTree_ElKinCat.Fill(electron.eta, electron.phi)
             # self.hTree_ElIdIso
             # self.hTree_ElPtIp3d.Fill(electron.pt, electron.ip3d, len(nJets))
         dleps.sort(key=lambda lep : lep.pt, reverse=True)
@@ -533,13 +556,13 @@ class MCTreePlot(Module):
         for mid in tauMus:
             muon = muons[mid]
             ileps.append(muon)
-            # self.hTree_MuDzCat.Fill(muon.dz, len(nJets), len(nJetsMDeepJet))
-            # self.hTree_MuPtCat.Fill(muon.pt, len(nJets), len(nJetsMDeepJet))
+            self.hTree_TauMuDzCat.Fill(muon.dz, len(nJets_oldDeepJet), len(nJetsMDeepJet))
+            self.hTree_TauMuPtCat.Fill(muon.pt, len(nJets_oldDeepJet), len(nJetsMDeepJet))
         for eid in tauEles:
             electron = electrons[eid]
             ileps.append(electron)
-            # self.hTree_ElDzCat.Fill(electron.dz, len(nJets), len(nJetsMDeepJet))
-            # self.hTree_ElPtCat.Fill(electron.pt, len(nJets), len(nJetsMDeepJet))
+            self.hTree_TauElDzCat.Fill(electron.dz, len(nJets_oldDeepJet), len(nJetsMDeepJet))
+            self.hTree_TauElPtCat.Fill(electron.pt, len(nJets_oldDeepJet), len(nJetsMDeepJet))
         ileps.sort(key=lambda lep : lep.pt, reverse=True)
         for i, lep in enumerate(ileps):
             self.hTree_IndirectLepPtCat[i].Fill(lep.pt, len(nJets), len(nJetsMDeepJet))
@@ -694,6 +717,13 @@ class MCTreePlot(Module):
             if top.W_dau2_Jet_2 > -1:
                 WJet2.append(jets[top.W_dau2_Jet_2])
                 WJet2Rank.append(top.W_dau2_Jet_2W)
+
+            if top.b_Jet_0 > -1 and len(WJet1) > 0 and len(WJet2) > 0:
+                bp4 = jets[top.b_Jet_0].p4()
+                W1p4 = WJet1[0].p4()
+                W2p4 = WJet2[0].p4()
+                tM = (bp4 + W1p4 + W2p4).M()
+                self.hTree_tRecoM.Fill(tM)
 
         # self.hTree_WMatchedJet1 = {} #W jet 1 pt, match rank, nJet
         # self.hTree_WMatchedJet2 = {} #W jet 2 pt, match rank, nJet
