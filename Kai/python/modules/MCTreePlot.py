@@ -570,7 +570,15 @@ class MCTreePlot(Module):
         topsL.sort(key=lambda top : gens[top.t].pt, reverse=True)
         for i, top in enumerate(topsL):
             t = gens[top.t]
-            b = gens[top.b]
+            last_b = gens[top.b]
+            last_b_moth = gens[last_b.genPartIdxMother]
+            last_b_gmoth = gens[last_b_moth.genPartIdxMother]
+            if abs(last_b_moth.pdgId) == 6:
+                b = last_b
+            elif abs(last_b_gmoth.pdgId) == 6:
+                b = last_b_moth
+            else:
+                b = last_b_gmoth
             W = gens[top.W]
             self.hTree_TopSystemPt[i].Fill(t.pt, b.pt, W.pt)
 
@@ -579,7 +587,16 @@ class MCTreePlot(Module):
         bestJets = []
         multijet = 0
         for i, top in enumerate(topsL):
-            b = gens[top.b]
+            last_b = gens[top.b]
+            last_b_moth = gens[last_b.genPartIdxMother]
+            last_b_gmoth = gens[last_b_moth.genPartIdxMother]
+            if abs(last_b_moth.pdgId) == 6:
+                b = last_b
+            elif abs(last_b_gmoth.pdgId) == 6:
+                b = last_b_moth
+            else:
+                b = last_b_gmoth
+            #b = gens[top.b]
             bJet = []
             bJetRank = []
             bestJets.append(top.b_Jet_0)
