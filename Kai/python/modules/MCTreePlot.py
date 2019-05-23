@@ -429,8 +429,10 @@ class MCTreePlot(Module):
         jets = Collection(event, "Jet")
         fatjets = Collection(event, "FatJet")
         subjets = Collection(event, "SubJet")
-        #met = Object(event, "MET")
-        met = Object(event, "METFixEE2017") #FIXME: Placeholder until passed in via configuration?
+        if hasattr(event, "METFixEE2017"):
+            met = Object(event, "METFixEE2017") #FIXME: Placeholder until passed in via configuration?
+        else:
+            met = Object(event, "MET")
 
         HLT = Object(event, "HLT")
         Filters = Object(event, "Flag") #For Data use only
