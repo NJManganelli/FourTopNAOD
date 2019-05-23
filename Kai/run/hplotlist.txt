@@ -1,0 +1,56 @@
+#TH1F
+hTree_nJets_low
+hTree_nJets_old
+hTree_nJets_oldDeepCSV
+hTree_MCSVv2
+hTree_MDeepCSV
+hTree_MDeepJet
+hTree_nLeps
+
+#TH2F
+HPlot2("ElKin", dList, sList,["hTree_ElKinCat"],Width=900, Height=600)
+HPlot2("MuKin", dList, sList,["hTree_MuKinCat"],Width=900, Height=600)
+HPlot2("BJFlow", dList, sList,["hTree_bMatchedJetCutFlow"],Width=900, Height=600)
+HPlot2("BJMult", dList, sList,["hTree_bMultiJet"],Width=900, Height=600)
+HPlot2("RvGlow", dList, sList,["hTree_RecoVGenJet_low"],Width=900, Height=600)
+HPlot2("RvGDJ", dList, sList,["hTree_RecoVGenJet_DeepJet"],Width=900, Height=600)
+HPlot2("RvGoDC", dList, sList,["hTree_RecoVGenJet_oldDeepCSV"],Width=900, Height=600)
+HPlot2("RvGDC", dList, sList,["hTree_RecoVGenJet_DeepCSV"],Width=900, Height=600)
+HPlot2("RnkVotes", dList, sList,["hTree_RankVotesVBottomPt"],Width=900, Height=600)
+
+#TH2F x4
+HPlot2("BJSep", dList, sList,["hTree_bMatchedJetSep_1", "hTree_bMatchedJetSep_2", "hTree_bMatchedJetSep_3", "hTree_bMatchedJetSep_4"],Width=900, Height=600)
+HPlot2("BJHad", dList, sList,["hTree_bMatchedJetHad_1", "hTree_bMatchedJetHad_2", "hTree_bMatchedJetHad_3", "hTree_bMatchedJetHad_4"],Width=900, Height=600)
+HPlot2("BJDC", dList, sList,["hTree_bMatchedJetDeepCSV_1", "hTree_bMatchedJetDeepCSV_2", "hTree_bMatchedJetDeepCSV_3", "hTree_bMatchedJetDeepCSV_4"],Width=900, Height=600)
+HPlot2("BJDJ", dList, sList,["hTree_bMatchedJetDeepJet_1", "hTree_bMatchedJetDeepJet_2", "hTree_bMatchedJetDeepJet_3", "hTree_bMatchedJetDeepJet_4"],Width=900, Height=600)
+
+#TH3F
+#HPlot3(, dList, sList,["  " ],Width=900, Height=600)
+HPlot3("TauElDz", dList, sList,["hTree_TauElDzCat" ],Width=900, Height=600)
+HPlot3("TauMuDz", dList, sList,["hTree_TauMuDzCat" ],Width=900, Height=600)
+HPlot3("TauElPt", dList, sList,["hTree_TauElPtCat" ],Width=900, Height=600)
+HPlot3("TauMuPt", dList, sList,["hTree_TauMuPtCat" ],Width=900, Height=600)
+HPlot3("ElDz", dList, sList,["hTree_ElDzCat" ],Width=900, Height=600)
+HPlot3("MuDz", dList, sList,["hTree_MuDzCat" ],Width=900, Height=600)
+HPlot3("ElPt", dList, sList,["hTree_ElPtCat" ],Width=900, Height=600)
+HPlot3("MuPt", dList, sList,["hTree_MuPtCat" ],Width=900, Height=600)
+HPlot3("MET", dList, sList,["hTree_METCat" ],Width=900, Height=600)
+HPlot3("HT", dList, sList,["hTree_HTCat" ],Width=900, Height=600)
+HPlot3("H", dList, sList,["hTree_HCat" ],Width=900, Height=600)
+HPlot3("HT2M", dList, sList,["hTree_HT2MCat" ],Width=900, Height=600)
+HPlot3("H2M", dList, sList,["hTree_H2MCat" ],Width=900, Height=600)
+HPlot3("HTb", dList, sList,["hTree_HTbCat" ],Width=900, Height=600)
+HPlot3("HTH", dList, sList,["hTree_HTHCat" ],Width=900, Height=600)
+HPlot3("HTRat", dList, sList,["hTree_HTRatCat" ],Width=900, Height=600)
+HPlot3("dRbb", dList, sList,["hTree_dRbbCat" ],Width=900, Height=600)
+
+
+#TH3F x4
+HPlot3("DLepPt", dList, sList,["hTree_DirectLepPtCat_1", "hTree_DirectLepPtCat_2", "hTree_DirectLepPtCat_3", "hTree_DirectLepPtCat_4"],Width=900, Height=600)
+HPlot3("ILepPt", dList, sList,["hTree_IndirectLepPtCat_1", "hTree_IndirectLepPtCat_2", "hTree_IndirectLepPtCat_3", "hTree_IndirectLepPtCat_4"],Width=900, Height=600)
+HPlot3("TopPt", dList, sList,["hTree_TopSystemPt_1", "hTree_TopSystemPt_2", "hTree_TopSystemPt_3", "hTree_TopSystemPt_4"],Width=900, Height=600)
+HPlot3("BJMtch", dList, sList,["hTree_bMatchedJet_1", "hTree_bMatchedJet_2", "hTree_bMatchedJet_3", "hTree_bMatchedJet_4"],Width=900, Height=600)
+HPlot3("BJdR", dList, sList,["hTree_bMatchedJetDR_1", "hTree_bMatchedJetDR_2", "hTree_bMatchedJetDR_3", "hTree_bMatchedJetDR_4"],Width=900, Height=600)
+HPlot3("BJRnk", dList, sList,["hTree_bMatchedJetVRank_1", "hTree_bMatchedJetVRank_2", "hTree_bMatchedJetVRank_3", "hTree_bMatchedJetVRank_4"],Width=900, Height=600)
+HPlot3("WJ1Mtch", dList, sList,["hTree_WMatchedJet1_1", "hTree_WMatchedJet1_2", "hTree_WMatchedJet1_3", "hTree_WMatchedJet1_4"],Width=900, Height=600)
+HPlot3("WJ2Mtch", dList, sList,["hTree_WMatchedJet2_1", "hTree_WMatchedJet2_2", "hTree_WMatchedJet2_3", "hTree_WMatchedJet2_4"],Width=900, Height=600)
