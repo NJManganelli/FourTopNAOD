@@ -7,13 +7,14 @@ from PhysicsTools.NanoAODTools.postprocessing.tools import * #DeltaR, match coll
 from FourTopNAOD.Kai.tools.intools import *
 
 class BaselineSelector(Module):
-    def __init__(self, verbose=False, maxevt=-1, probEvt, isData=True, era="2017", btagging=['DeepCSV','M']):
+    def __init__(self, verbose=False, maxevt=-1, probEvt=None, isData=True, era="2017", btagging=['DeepCSV','M'], lepPt=25, MET=50, HT=500, invertZWindow=False, GenTop_LepSelection=None):
         self.writeHistFile=True
         self.verbose=verbose
         self.probEvt = probEvt
         self.isData = isData
         if probEvt:
             #self.probEvt = probEvt
+            print("Skipping events until event #{0:d} is found".format(probEvt))
             self.verbose = True
         
         #Bits for status flag checking
@@ -33,207 +34,59 @@ class BaselineSelector(Module):
                      'isLastCopy':0b010000000000000,
                      'isLastCopyBeforeFSR':0b100000000000000
                     }
+        #flags for MET filters
+        self.Flags = { "isData" : ["eeBadScFilter"],
+                       "Common" :  ["goodVertices",
+                                    "globalSuperTightHalo2016Filter",
+                                    "HBHENoiseFilter",
+                                    "HBHENoiseIsoFilter",
+                                    "EcalDeadCellTriggerPrimitiveFilter",
+                                    "BadPFMuonFilter",
+                                    "BadChargedCandidateFilter",
+                                    "ecalBadCalibFilterV2"
+                                   ]
+                     }
+        #Btagging dictionary
         self.bTagWorkingPointDict = {
             '2017':{
                 'CSVv2':{
                     'L': 0.5803,
                     'M': 0.8838,
-                    'T': 0.9693
-                    }
+                    'T': 0.9693,
+                    'Var': 'btagCSVV2'
+                    },
                 'DeepCSV':{
                     'L': 0.1522,
                     'M': 0.4941,
-                    'T': 0.8001
-                    }
+                    'T': 0.8001,
+                    'Var': 'btagDeepB'
+                    },
                 'DeepJet':{
                     'L': 0.0521,
                     'M': 0.3033,
-                    'T': 0.7489
+                    'T': 0.7489,
+                    'Var': 'btagDeepFlavB'
                     }
             }
         }
-        self.BTWP = self.bTagWorkingPointDict[era][btagging[0]]
-        self.BTS =  self.bTagWorkingPointDict[era][btagging[0]][btagging[1]]
+        #BTagging method, algorithm name, and chosen selection working point
+        self.BTMeth = self.bTagWorkingPointDict[era][btagging[0]]
+        self.BTWP =  self.bTagWorkingPointDict[era][btagging[0]][btagging[1]]
+        self.BTAlg = self.bTagWorkingPointDict[era][btagging[0]]["Var"]
+        print("BTMeth " + str(self.BTMeth))
         print("BTWP " + str(self.BTWP))
-        print("BTS " + str(self.BTS))
+        print("BTAlg " + str(self.BTAlg))
+        self.lepPt = lepPt
+        self.MET = MET
+        self.HT = HT
+        self.invertZWindow = invertZWindow
 
         #event counters
         self.counter = 0
         self.maxEventsToProcess=maxevt
 
-    def beginJob(self,histFile=None,histDirName=None):
-        Module.beginJob(self,histFile,histDirName)
-
-        self.h_nJets_low=ROOT.TH1F('h_nJets_low',   'nJets (pt > 20 && |eta| < 2.5 && tightId); nJets; events', 20, 0, 20)
-        self.addObject(self.h_nJets_low)
-        self.h_nJets_old=ROOT.TH1F('h_nJets_old',   'nJets ((pt > 30 || pt > 25 && Medium CSVv2) && |eta| < 2.5 && tightId); nJets; events', 20, 0, 20)
-        self.addObject(self.h_nJets_old)
-        self.h_nJets_oldDeepCSV=ROOT.TH1F('h_nJets_oldDeepCSV',   'nJets ((pt > 30 || pt > 25 && Medium DeepCSV) && |eta| < 2.5 && tightId); nJets; events', 20, 0, 20)
-        self.addObject(self.h_nJets_oldDeepCSV)
-        self.h_nJets_MCSVv2=ROOT.TH1F('h_MCSVv2',   'nJets (pt > 20 && |eta| < 2.5 && tightId && Medium CSVv2); nJets; events', 20, 0, 20)
-        self.addObject(self.h_nJets_MCSVv2)
-        self.h_nJets_MDeepCSV=ROOT.TH1F('h_MDeepCSV',   'nJets (pt > 20 && |eta| < 2.5 && tightId && Medium DeepCSV); nJets; events', 20, 0, 20)
-        self.addObject(self.h_nJets_MDeepCSV)
-        self.h_nJets_MDeepJet=ROOT.TH1F('h_MDeepJet',   'nJets (pt > 20 && |eta| < 2.5 && tightId && Medium DeepJet); nJets; events', 20, 0, 20)
-        self.addObject(self.h_nJets_MDeepJet)
-        self.h_nLeps=ROOT.TH1F('h_nLeps',   'number Leptonic Top Decays; number Leptonic Top Decays; events', 5, 0, 5)
-        self.addObject(self.h_nLeps)
-
-        self.h_ElDzCat=ROOT.TH3F('h_ElDzCat',   't->W->e Dz; Dz (cm); nJets; nBJets', 
-                                     100, 0, 0.15, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_ElDzCat)
-        self.h_MuDzCat=ROOT.TH3F('h_MuDzCat',   't->W->mu Dz; Dz (cm); nJets; nBJets', 
-                                     100, 0, 0.15, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_MuDzCat)
-        self.h_ElPtCat=ROOT.TH3F('h_ElPtCat',   't->W->e Pt; Pt (GeV); nJets; nBJets', 
-                                     400, 0, 400, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_ElPtCat)
-        self.h_MuPtCat=ROOT.TH3F('h_MuPtCat',   't->W->mu Pt; Pt (GeV); nJets; nBJets', 
-                                     400, 0, 400, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_MuPtCat)
-        self.h_ElKinCat=ROOT.TH2F('h_ElKinCat',   't->W->e Kin; eta; phi', 
-                                      200, -3, 3, 200, -3.1416, 3.1416)
-        self.addObject(self.h_ElKinCat)
-        self.h_MuKinCat=ROOT.TH2F('h_MuKinCat',   't->W->mu Kin; eta; phi', 
-                                      200, -3, 3, 200, -3.1416, 3.1416)
-        self.addObject(self.h_MuKinCat)
-        self.h_TauElDzCat=ROOT.TH3F('h_TauElDzCat',   't->W->Tau->e Dz; Dz (cm); nJets; nBJets', 
-                                     100, 0, 0.15, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_TauElDzCat)
-        self.h_TauMuDzCat=ROOT.TH3F('h_TauMuDzCat',   't->W->Tau->mu Dz; Dz (cm); nJets; nBJets', 
-                                     100, 0, 0.15, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_TauMuDzCat)
-        self.h_TauElPtCat=ROOT.TH3F('h_TauElPtCat',   't->W->Tau->e Pt; Pt (GeV); nJets; nBJets', 
-                                     400, 0, 400, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_TauElPtCat)
-        self.h_TauMuPtCat=ROOT.TH3F('h_TauMuPtCat',   't->W->Tau->mu Pt; Pt (GeV); nJets; nBJets', 
-                                     400, 0, 400, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_TauMuPtCat)
-        self.h_bMatchedJetCutFlow=ROOT.TH2F('h_bMatchedJetCutFlow',
-                                                   'CutFlow of best matched b jets;Category;Number of Jets',
-                                                1, 0, 1, 1, 0, 1)
-        self.addObject(self.h_bMatchedJetCutFlow)
-        self.h_bMultiJet=ROOT.TH2F('h_bMultiJet',
-                                       'b -> 2+ AK4 Jets Mult; nJets(2016-like);number of multi-jet b quarks',
-                                                20, 0, 20, 5, 0, 5)
-        self.addObject(self.h_bMultiJet)
-
-        #Sorted leptons
-        self.h_DirectLepPtCat = {} #pt, nJet, nBJet
-        self.h_IndirectLepPtCat = {}
-        self.h_TopSystemPt = {} #top, b, W
-        self.h_bMatchedJet = {} #jetpt, jet rank, nJet
-        self.h_bMatchedJetDR = {} #b 3-momentum, DR best match, DR second best match
-        self.h_bMatchedJetVRank = {} #Rank best, 2nd best, 3rd best
-        self.h_bMatchedJetHad = {} #Rank best, Hadron Flavour (Ghost clustering from GenHFMatcher)
-        self.h_WMatchedJet1 = {} #W jet 1 pt, match rank, nJet
-        self.h_WMatchedJet2 = {} #W jet 2 pt, match rank, nJet
-        self.h_bMatchedJetDeepCSV = {} #1st and 2nd best matched jets' DeepCSV score
-        self.h_bMatchedJetDeepJet = {} #1st and 2nd best matched jets' DeepJet score
-        self.h_bMatchedJetSep = {} #DeltaR separation between 1st and 2nd best ranked jets
-        for i in xrange(4):
-            self.h_DirectLepPtCat[i]=ROOT.TH3F('h_DirectLepPtCat_{0:d}'.format(i+1),   
-                                                   'Pt PF Lepton (t->W->Lep) (R{0:d} t pt); Pt (GeV); nJets; nBJets'.format(i+1), 
-                                         400, 0, 400, 20, 0, 20, 8, 0, 8)
-            self.addObject(self.h_DirectLepPtCat[i])
-            self.h_IndirectLepPtCat[i]=ROOT.TH3F('h_IndirectLepPtCat_{0:d}'.format(i+1),   
-                                                     'Pt PF Lepton (t->W->Tau->Lep) (R{0:d} t pt); Pt (GeV); nJets; nBJets'.format(i+1), 
-                                         400, 0, 400, 20, 0, 20, 8, 0, 8)
-            self.addObject(self.h_IndirectLepPtCat[i])
-            self.h_TopSystemPt[i]=ROOT.TH3F('h_TopSystemPt_{0:d}'.format(i+1),   
-                                                'Top Sys Pt (R{0:d} t pt); Top_Pt (GeV); Bottom_Pt (GeV); W_Pt (GeV)'.format(i+1), 
-                                                400, 0, 1000, 400, 0, 1000, 400, 0, 1000)
-            self.addObject(self.h_TopSystemPt[i])
-            self.h_bMatchedJet[i]=ROOT.TH3F('h_bMatchedJet_{0:d}'.format(i+1),   
-                                                'b Matched Jet; b Jet Pt (GeV); b Jet Match Rank (3-mom ratio); nJet Multiplicity (20GeV, ...)', 
-                                                500, 0, 500, 500, 0, 5, 20, 0, 20)
-            self.addObject(self.h_bMatchedJet[i])
-            self.h_bMatchedJetDR[i]=ROOT.TH3F('h_bMatchedJetDR_{0:d}'.format(i+1),   
-                                                  'b Matched Jet DeltaR; b quark 3 Momentum; DeltaR(b quark, Best Matched Jet); DeltaR(b quark, 2nd Best Matched Jet)', 
-                                                  500, 0, 500, 100, -0.2, 5, 100, -0.2, 5)
-            self.addObject(self.h_bMatchedJetDR[i])
-            self.h_bMatchedJetSep[i]=ROOT.TH2F('h_bMatchedJetSep_{0:d}'.format(i+1),   
-                                                   'b Matched Jet Separation; b quark Pt (GeV);DeltaR(best jet, 2nd best jet)', 
-                                                   500, 0, 500, 500, 0, 10)
-            self.addObject(self.h_bMatchedJetSep[i])
-            self.h_bMatchedJetVRank[i]=ROOT.TH3F('h_bMatchedJetVRank_{0:d}'.format(i+1),   
-                                                     'b Jet Match ranks (R{0:d} b pt); Rank of Best Match; Rank of Second Best; Rank of 3rd Best'.format(i+1), 
-                                                     100, 0, 2, 100, 0, 2, 100, 0, 2)
-            self.addObject(self.h_bMatchedJetVRank[i])
-            self.h_WMatchedJet1[i]=ROOT.TH3F('h_WMatchedJet1_{0:d}'.format(i+1),   
-                                                 'W Matched Jet 2; W Jet Pt (GeV); W Jet Match Rank (3-momentum proxy); nJet Multiplicity (20GeV, ...)'.format(i+1), 
-                                                500, 0, 500, 500, 0, 5, 20, 0, 20)
-            self.addObject(self.h_WMatchedJet1[i])
-            self.h_WMatchedJet2[i]=ROOT.TH3F('h_WMatchedJet2_{0:d}'.format(i+1),   
-                                                 'W Matched Jet 2; W Jet Pt (GeV); W Jet Match Rank (3-momentum proxy); nJet Multiplicity (20GeV, ...)'.format(i+1), 
-                                                500, 0, 500, 500, 0, 5, 20, 0, 20)
-            self.addObject(self.h_WMatchedJet2[i])
-            self.h_bMatchedJetHad[i]=ROOT.TH2F('h_bMatchedJetHad_{0:d}'.format(i+1),   
-                                                   'b Jet Rank v Hadron Flavour (R{0:d} b pt); Rank of Best Match; Had Flavour (GenHFMatcher)'.format(i+1), 
-                                                     100, 0, 2, 7, -1, 6)
-            self.addObject(self.h_bMatchedJetHad[i])
-            self.h_bMatchedJetDeepCSV[i]=ROOT.TH2F('h_bMatchedJetDeepCSV_{0:d}'.format(i+1),   
-                                                  'b Jet Matches DeepCSV Value; DeepCSV of best match; DeepCSV of 2nd best match', 
-                                                       200, -1, 1, 200, -1, 1)
-            self.addObject(self.h_bMatchedJetDeepCSV[i])
-            self.h_bMatchedJetDeepJet[i]=ROOT.TH2F('h_bMatchedJetDeepJet_{0:d}'.format(i+1),   
-                                                  'b Jet Matches DeepJet Value; DeepJet of best match; DeepJet of 2nd best match', 
-                                                       200, -1, 1, 200, -1, 1)
-            self.addObject(self.h_bMatchedJetDeepJet[i])
-
-        self.h_METCat=ROOT.TH3F('h_METCat',   'MET vs jet and b-tagged jet multiplicities; MET (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
-                                     500, 0, 500, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_METCat)
-        self.h_HTCat=ROOT.TH3F('h_HTCat',   'HT vs jet and b-tagged jet multiplicities; HT (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
-                                     500, 0, 1500, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_HTCat)
-        self.h_HCat=ROOT.TH3F('h_HCat',   'H vs jet and b-tagged jet multiplicities; H (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
-                                     500, 0, 1500, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_HCat)
-        self.h_HT2MCat=ROOT.TH3F('h_HT2MCat',   'HT2M vs jet and b-tagged jet multiplicities; HT2M (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
-                                     500, 0, 1500, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_HT2MCat)
-        self.h_H2MCat=ROOT.TH3F('h_H2MCat',   'H2M vs jet and b-tagged jet multiplicities; H2M (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
-                                     500, 0, 1500, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_H2MCat)
-        self.h_HTbCat=ROOT.TH3F('h_HTbCat',   'HTb vs jet and b-tagged jet multiplicities; HTb (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
-                                     500, 0, 1500, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_HTbCat)
-        self.h_HTHCat=ROOT.TH3F('h_HTHCat',   'HTH vs jet and b-tagged jet multiplicities; HTH (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
-                                     500, 0, 1, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_HTHCat)
-        self.h_HTRatCat=ROOT.TH3F('h_HTRatCat',   'HTRat vs jet and b-tagged jet multiplicities; HTRat (GeV); nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
-                                     500, 0, 1, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_HTRatCat)
-        self.h_dRbbCat=ROOT.TH3F('h_dRbbCat',   'dRbb vs jet and b-tagged jet multiplicities; dRbb; nJets (25 GeV, M DeepJet...); nBJets (Med DeepJet)', 
-                                     500, 0, 5, 20, 0, 20, 8, 0, 8)
-        self.addObject(self.h_dRbbCat)
-        
-        self.h_RecoVGenJet_low=ROOT.TH2F('h_RecoVGenJet_low',   'AK4 Reco vs Gen Jet Multiplicity; nJets(pt > 20 && |eta| < 2.5 && TightLepVeto ID); nGenJets(pt > 20 && |eta| < 2.5)', 20, 0, 20, 20, 0, 20)
-        self.addObject(self.h_RecoVGenJet_low)
-        self.h_RecoVGenJet_DeepJet=ROOT.TH2F('h_RecoVGenJet_DeepJet',   'AK4 Reco vs Gen Jet Multiplicity; nJets(pt > 20 && |eta| < 2.5 && TightLepVeto ID && Medium DeepJet); nGenJets(pt > 20 && |eta| < 2.5 && b Had Flav)', 20, 0, 20, 20, 0, 20)
-        self.addObject(self.h_RecoVGenJet_DeepJet)
-        self.h_RecoVGenJet_oldDeepCSV=ROOT.TH2F('h_RecoVGenJet_oldDeepCSV',   'AK4 Reco vs Gen Jet Multiplicity; nJets((pt > 30 || pt > 25 && Med CSVv2) && |eta| < 2.5 && TightLepVeto ID); nGenJets((pt > 30 || b Had Flav) && |eta| < 2.5)', 20, 0, 20, 20, 0, 20)
-        self.addObject(self.h_RecoVGenJet_oldDeepCSV)
-        self.h_RecoVGenJet_DeepCSV=ROOT.TH2F('h_RecoVGenJet_DeepCSV',   'AK4 Reco vs Gen Jet Multiplicity; nJets(pt > 20 && |eta| < 2.5 && TightLepVeto ID && Medium DeepJet); nGenJets(pt > 20 && |eta| < 2.5 && b Had Flav)', 20, 0, 20, 20, 0, 20)
-        self.addObject(self.h_RecoVGenJet_DeepCSV)
-
-        self.h_RankVotesVBottomPt=ROOT.TH2F('h_RankVotesVBottomPt', '; bottom pt; net weighted votes', 400, 0, 400, 100, 0, 10)
-        self.addObject(self.h_RankVotesVBottomPt)
-        
-        #print("histfile=" + str(histFile) + " directoryname=" + str(histDirName))
-        #if histFile != None and histDirName != None:
-            #self.writeHistFile=True
-            #prevdir = ROOT.gDirectory
-            #self.histFile = histFile
-            #self.histFile.cd()
-            #self.dir = self.histFile.mkdir( histDirName )
-            #prevdir.cd()
-            #self.objs = []
-            #if self.makeHistos:
-                # self.h_jSel_map = ROOT.TH2F('h_jSel_map', ';Jet Eta;Jet Phi', 40, -2.5, 2.5, 20, -3.14, 3.14)
-                # self.addObject(self.h_jSel_map)
-                # self.MADEHistos=True
+    # def beginJob(self,histFile=None,histDirName=None):
+    #     Module.beginJob(self,histFile,histDirName)
         
     def endJob(self):
         if hasattr(self, 'objs') and self.objs != None:
@@ -245,16 +98,31 @@ class BaselineSelector(Module):
             if hasattr(self, 'histFile') and self.histFile != None: 
                 self.histFile.Close()
 
-    # def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
-    #     self.out = wrappedOutputTree
-    #     self.varDict = getMCTreeVarDict()
-    #     if not self.out:
-    #         print("No Output file selected, cannot append branches")
-    #     else:
-    #         self.out.branch('nGenTop', 'i', title='Number of Generator-Level Tops in the event')
-    #         for name, valType, valTitle in self.varDict:
-    #             #print("name: " + str(name) + " valType: " + str(valType) + " valTitle: " + str(valTitle))
-    #             self.out.branch("GenTop_%s"%(name), valType, lenVar="nGenTop", title=valTitle)
+    def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
+        self.out = wrappedOutputTree
+        self.varDict = [('nJet', 'I', 'Number of jets passing selection requirements'),
+                        ('nJetBTL', 'I', 'Number of jets passing selection requirements and loose b-tagged'),
+                        ('nJetBTM', 'I', 'Number of jets passing selection requirements and medium b-tagged'),
+                        ('nJetBTT', 'I', 'Number of jets passing selection requirements and tight b-tagged'),
+                        # ('tHasHadronicWDauTau', 'O', ' '),
+                        ('HT', 'D', 'Scalar sum of selected jets\' Pt'),
+                        ('H', 'D', 'Scalar sum of selected jets\' P'),
+                        ('HT2M', 'D', 'Scalar sum of selected jets\' Pt except 2 highest b-tagged if they are medium or tight'),
+                        ('H2M', 'D', 'Scalar sum of selected jets\' P except 2 highest b-tagged if they are medium or tight'),
+                        ('HTb', 'D', 'Scalar sum of Pt for medium and tight b-tagged jets'),
+                        ('HTH', 'D', 'Hadronic centrality, HT/H'),
+                        ('HTRat', 'D', 'Ratio of Pt for two highest b-tagged jets to HT'),
+                        ('dRbb', 'D', 'DeltaR between the two highest b-tagged jets'),
+                        ('DiLepMass', 'D', 'Invariant mass of same-flavour leptons (0 default)'),
+                       ]
+        if not self.out:
+            print("No Output file selected, cannot append branches")
+        else:
+            # self.out.branch('nESV', 'i', title='number of event selection ')
+            for name, valType, valTitle in self.varDict:
+                #print("name: " + str(name) + " valType: " + str(valType) + " valTitle: " + str(valTitle))
+                # self.out.branch("Temp_%s"%(name), valType, lenVar="nGenTop", title=valTitle)
+                self.out.branch("ESV_%s"%(name), valType, title=valTitle)
 
 
     def analyze(self, event): #called by the eventloop per-event
@@ -265,7 +133,6 @@ class BaselineSelector(Module):
             return False        
         if self.probEvt:
             if event.event != self.probEvt:
-                print("Skipping...")
                 return False
         
         ###############################################
@@ -286,43 +153,136 @@ class BaselineSelector(Module):
         HLT = Object(event, "HLT")
         Filters = Object(event, "Flag") #For Data use only
 
-        if not self.isData:
-            gens = Collection(event, "GenPart")
-            genjets = Collection(event, "GenJet")
-            genfatjets = Collection(event, "GenJetAK8")
-            gensubjets = Collection(event, "SubGenJetAK8")
-            genmet = Object(event, "GenMET")
-            generator = Object(event, "Generator")
-            btagweight = Object(event, "btagWeight") #contains .CSVV2 and .DeepCSVB float weights
-            LHE = Object(event, "LHE")
-            PSWeights = Collection(event, "PSWeight")
-            LHEWeight = getattr(event, "LHEWeight_originalXWGTUP")
-            LHEScaleWeight = Collection(event, "LHEScaleWeight")
-            # LHEReweightingWeight = Collection(event, "LHEReweightingWeight")
-            LHEPdfWeight = Collection(event, "LHEPdfWeight")
 
 
-        nJets = [jet for jet in jets if abs(jet.eta) < 2.5 and jet.jetId >= 6 and jet.pt > 25 and
-                 jet.muonIdx1 not in selMus and jet.muonIdx2 not in selMus and 
-                 jet.electronIdx1 not in selEles and jet.electronIdx2 not in selEles]
-        nJets = [jet for jet in nJets if jet.pt > 30 or jet.btagDeepB > 0.4941]
-        # nJets_oldDeepJet = [jet for jet in nJets_old if jet.pt > 30 or jet.btagDeepFlavB > 0.3033]
+        ###########
+        ### MET ###
+        ###########
+        #Ensure MC and Data pass all recommended filters for 2017 and 2018
+        for flag in self.Flags["Common"]:
+            passFilters = getattr(Filters, flag)
+            if not passFilters: return False
+        #Check additional flag(s) solely for Data
+        if self.isData:
+            passFilters = getattr(Filters, self.Flags["isData"][0])
+            if not passFilters: return False
+        if met.pt < self.MET:
+            return False
+
+
+
+        # if not self.isData:
+        #     gens = Collection(event, "GenPart")
+        #     genjets = Collection(event, "GenJet")
+        #     genfatjets = Collection(event, "GenJetAK8")
+        #     gensubjets = Collection(event, "SubGenJetAK8")
+        #     genmet = Object(event, "GenMET")
+        #     generator = Object(event, "Generator")
+        #     btagweight = Object(event, "btagWeight") #contains .CSVV2 and .DeepCSVB float weights
+        #     LHE = Object(event, "LHE")
+        #     PSWeights = Collection(event, "PSWeight")
+        #     LHEWeight = getattr(event, "LHEWeight_originalXWGTUP")
+        #     LHEScaleWeight = Collection(event, "LHEScaleWeight")
+        #     # LHEReweightingWeight = Collection(event, "LHEReweightingWeight")
+        #     LHEPdfWeight = Collection(event, "LHEPdfWeight")
+        
+
+        # selEle25 = []
+        # selEle20 = []
+        # selEle15 = []
+        selEleUniform = []
+        for idx, electron in enumerate(electrons):
+            if abs(electron.eta) < 2.4 and electron.cutBased_Fall17_V1 >= 2 and electron.dz < 0.02:
+                if electron.pt > self.lepPt:
+                    selEleUniform.append((idx, electron))
+        #         if electron.pt > 25:
+        #             selMu25.append((idx, electron))
+        #         elif electron.pt > 20:
+        #             selMu20.append((idx, electron))
+        #         elif electron.pt > 15:
+        #             selMu15.append((idx, electron))
+
+        # selMu25 = []
+        # selMu20 = []
+        # selMu15 = []
+        selMuUniform = []
+        for idx, muon in enumerate(muons):
+            if abs(muon.eta) < 2.4 and muon.pfIsoId >= 4 and muon.dz < 0.02:
+                if muon.pt > self.lepPt:
+                    selMuUniform.append((idx, muon))
+        #         if muon.pt > 25:
+        #             selMu25.append((idx, muon))
+        #         elif muon.pt > 20:
+        #             selMu20.append((idx, muon))
+        #         elif muon.pt > 15:
+        #             selMu15.append((idx, muon))
+
+        # nMu = len(selMu25) + len(selMu20) + len(selMu15)
+        # nEle = len(selEle25) + len(selEle20) + len(selEle15)
+        # n25 = len(selMu25) + len(selEle25)
+        # n20 = len(selMu20) + len(selEle20)
+        # n15 = len(selMu15) + len(selEle15)
+        
+        # if nMu + nEle == 2:
+        #     if nMu == 2:
+        #         selHigh = selMu25 + selMu20
+        #         selLow = selMu15
+        #     elif nEle == 2:
+        #         selHigh = selEle25
+        #         selLow = selEle20 + selEle15
+        #     else:
+        #         pass
+        # else:
+        #     return False
+
+        nMu = len(selMuUniform)
+        nEle = len(selEleUniform)
+        nLep = nMu + nEle
+        if nLep != 2:
+            return False
+        lepCharge = [lep[1].charge for lep in (selMuUniform + selEleUniform)]
+        jetsToClean = set([lep[1].jetIdx for lep in (selMuUniform + selEleUniform)])
+        if len(lepCharge) !=2:
+            print("Danger Will Robinson! Danger!")
+        if lepCharge[0]*lepCharge[1] > 0:
+            return False
+        Lep4Mom = [lep[1].p4() for lep in (selMuUniform + selEleUniform)]
+        #calc invariant mass if two same flavor leptons
+        if nMu == 2 or nEle == 2:
+            DiLepMass = (Lep4Mom[0] + Lep4Mom[1]).M()
+            #Low mass resonance rejection
+            if DiLepMass < 20:
+                return False
+            #Z mass resonance rejection or inversion
+            if self.invertZWindow:
+                if abs(DiLepMass - 91.0) > 15.0:
+                    return False
+            elif not self.invertZWindow:
+                if abs(DiLepMass - 91.0) < 15.0:
+                    return False
+        else:
+            #0 default for different flavour leptons
+            DiLepMass = 0
+        
+        selJets = []
+        selBTsortedJets = []
+        for idx, jet in enumerate(jets):
+            if abs(jet.eta) < 2.5 and jet.jetId >= 6 and ((jet.pt > 25 and getattr(jet, self.BTAlg) > self.BTWP) or jet.pt > 30) and idx not in jetsToClean:
+                selJets.append((idx, jet))
+                selBTsortedJets.append((idx, jet))
+        selBTsortedJets.sort(key=lambda j : getattr(j[1], self.BTAlg), reverse=True)
 
         #B-tagged jets
-        nJetsMCSVv2 = [jet for jet in nJets if jet.btagCSVV2 > 0.8838]
-        nJetsMDeepCSV = [jet for jet in nJets_low if jet.btagDeepB > 0.4941]
-        nJetsMDeepJet = [jet for jet in nJets_low if jet.btagDeepFlavB > 0.3033]
+        selBTLooseJets = [jetTup for jetTup in selBTsortedJets if getattr(jetTup[1], self.BTAlg) > self.BTMeth['L']]
+        selBTMediumJets = [jetTup for jetTup in selBTLooseJets if getattr(jetTup[1], self.BTAlg) > self.BTMeth['M']]
+        selBTTightJets = [jetTup for jetTup in selBTMediumJets if getattr(jetTup[1], self.BTAlg) > self.BTMeth['T']]
+        nJets = len(selJets)
+        nBTLoose = len(selBTLooseJets)
+        nBTMedium = len(selBTMediumJets)
+        nBTTight = len(selBTTightJets)
 
-        nJetsMCSVv2 = [jet for jet in nJets if jet.btagCSVV2 > 0.8838]
-        nJetsMDeepCSV = [jet for jet in nJets_low if jet.btagDeepB > 0.4941]
-        nJetsMDeepJet = [jet for jet in nJets_low if jet.btagDeepFlavB > 0.3033]
-
-        nJetsMCSVv2 = [jet for jet in nJets if jet.btagCSVV2 > 0.8838]
-        nJetsMDeepCSV = [jet for jet in nJets_low if jet.btagDeepB > 0.4941]
-        nJetsMDeepJet = [jet for jet in nJets_low if jet.btagDeepFlavB > 0.3033]
-
-        nJetsBTagLoose =  [jet for jet in nJets if jet.btagCSVV2 > 0.8838]
-
+        if nJets < 4 or nBTMedium < 2:
+            return False
 
         #HT and other calculations
         HT = 0
@@ -330,84 +290,49 @@ class BaselineSelector(Module):
         HT2M = 0
         H2M = 0
         HTb = 0
-        nJetsBSorted = [jet for jet in nJets]
-        nJetsBSorted.sort(key=lambda jet : jet.btagDeepB, reverse=True)
-        for j, jet in enumerate(nJetsBSorted):
+        HTH = 0
+        HTRat = 0
+        dRbb = 99
+
+        
+        for j, jet in selBTsortedJets:
             HT += jet.pt
             H += jet.p4().P()
-            if j > 1 and len(nJetsMDeepCSV) > 1:
+            if j > 1 and nBTMedium > 1:
                 HT2M += jet.pt
                 H2M += jet.p4().P()
-            if jet.btagDeepB > .4941:
+            if getattr(jet, self.BTAlg) > self.BTWP:
                 HTb += jet.pt
-        self.h_METCat.Fill(met.pt ,len(nJets), len(nJetsMDeepCSV))
-        self.h_HTCat.Fill(HT ,len(nJets), len(nJetsMDeepCSV))
-        self.h_HCat.Fill(H ,len(nJets), len(nJetsMDeepCSV))
-        self.h_HT2MCat.Fill(HT2M ,len(nJets), len(nJetsMDeepCSV))
-        self.h_H2MCat.Fill(H2M ,len(nJets), len(nJetsMDeepCSV))
-        self.h_HTbCat.Fill(HTb ,len(nJets), len(nJetsMDeepCSV))
 
-        if len(nJetsBSorted) > 3:
-            dRbb = deltaR(nJetsBSorted[0], nJetsBSorted[1])
-            HTRat = (nJetsBSorted[0].pt + nJetsBSorted[1].pt)/HT
+        if nJets > 3:
+            jet1 = selBTsortedJets[0][1]
+            jet2 = selBTsortedJets[1][1]
+            dRbb = deltaR(jet1, jet2)
+            HTRat = (jet1.pt + jet2.pt)/HT
             HTH = HT/H
-            self.h_dRbbCat.Fill(dRbb, len(nJets), len(nJetsMDeepCSV))
-            self.h_HTRatCat.Fill(HTRat, len(nJets), len(nJetsMDeepCSV))
-            self.h_HTHCat.Fill(HTH,len(nJets), len(nJetsMDeepCSV))
 
+        ESV = {}
+        ESV['nJet'] = nJets
+        ESV['nJetBTL'] = nBTLoose
+        ESV['nJetBTM'] = nBTMedium
+        ESV['nJetBTT'] = nBTTight
+        ESV['HT'] = HT
+        ESV['H'] = H
+        ESV['HT2M'] = HT2M
+        ESV['H2M'] = H2M
+        ESV['HTb'] = HTb
+        ESV['HTH'] = HTH
+        ESV['HTRat'] = HTRat
+        ESV['dRbb'] = dRbb
+        ESV['DiLepMass'] = DiLepMass
 
-        self.h_nLeps.Fill(len(nLeps))
-
-        self.h_nJets_MCSVv2.Fill(len(nJetsMCSVv2))
-        self.h_nJets_MDeepCSV.Fill(len(nJetsMDeepCSV))
-        self.h_nJets_MDeepJet.Fill(len(nJetsMDeepJet))
-
-        dleps = []
-        ileps = []
-        for mid in topMus:
-            muon = muons[mid]
-            dleps.append(muon)
-            # self.h_MuPtDz.Fill(muon.pt, muon.dz, len(nJets))
-            self.h_MuDzCat.Fill(muon.dz, len(nJets_oldDeepJet), len(nJetsMDeepJet))
-            self.h_MuPtCat.Fill(muon.pt, len(nJets_oldDeepJet), len(nJetsMDeepJet))
-            self.h_MuKinCat.Fill(muon.eta, muon.phi)
-            # self.h_MuIdIso
-            # self.h_MuPtIp3d.Fill(muon.pt, muon.ip3d, len(nJets))
-        for eid in topEles:
-            electron = electrons[eid]
-            dleps.append(electron)
-            # self.h_ElPtDz.Fill(electron.pt, electron.dz, len(nJets))
-            self.h_ElDzCat.Fill(electron.dz, len(nJets_oldDeepJet), len(nJetsMDeepJet))
-            self.h_ElPtCat.Fill(electron.pt, len(nJets_oldDeepJet), len(nJetsMDeepJet))
-            self.h_ElKinCat.Fill(electron.eta, electron.phi)
-            # self.h_ElIdIso
-            # self.h_ElPtIp3d.Fill(electron.pt, electron.ip3d, len(nJets))
-        dleps.sort(key=lambda lep : lep.pt, reverse=True)
-        for i, lep in enumerate(dleps):
-            self.h_DirectLepPtCat[i].Fill(lep.pt, len(nJets_oldDeepJet), len(nJetsMDeepJet))
-
-        for mid in tauMus:
-            muon = muons[mid]
-            ileps.append(muon)
-            self.h_TauMuDzCat.Fill(muon.dz, len(nJets_oldDeepJet), len(nJetsMDeepJet))
-            self.h_TauMuPtCat.Fill(muon.pt, len(nJets_oldDeepJet), len(nJetsMDeepJet))
-        for eid in tauEles:
-            electron = electrons[eid]
-            ileps.append(electron)
-            self.h_TauElDzCat.Fill(electron.dz, len(nJets_oldDeepJet), len(nJetsMDeepJet))
-            self.h_TauElPtCat.Fill(electron.pt, len(nJets_oldDeepJet), len(nJetsMDeepJet))
-        ileps.sort(key=lambda lep : lep.pt, reverse=True)
-        for i, lep in enumerate(ileps):
-            self.h_IndirectLepPtCat[i].Fill(lep.pt, len(nJets), len(nJetsMDeepJet))
-
-
-        ##########################
+        ########################## 
         ### Write out branches ###
-        ##########################
-        # if self.out:
-        #     self.out.fillBranch("nGenTop", nGenTop)
-        #     for name, valType, valTitle in self.varDict:
-        #         self.out.fillBranch("GenTop_%s"%(name), theTops[name])
+        ##########################         
+        if self.out:
+            # self.out.fillBranch("nGenTop", nGenTop)
+            for name, valType, valTitle in self.varDict:
+                self.out.fillBranch("ESV_%s"%(name), ESV[name])
 
 
         return True
