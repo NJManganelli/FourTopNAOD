@@ -317,7 +317,7 @@ class MCTreePlot(Module):
             self.addObject(self.hTree_RecoTopMass[i])
             self.hTree_RecoTopMassSMatch[i]=ROOT.TH1F('hTree_RecoTopMassSMatch_{0:d}'.format(i+1),   
                                                 'Reco Hadronic Top Mass (3 jets) (R{0:d} t pt); Invariant mass using lone b-matched Jet (GeV)'.format(i+1), 
-                                                1000, 0, 250)
+                                                600, 0, 300)
             self.addObject(self.hTree_RecoTopMassSMatch[i])
             self.hTree_bMatchedJet[i]=ROOT.TH3F('hTree_bMatchedJet_{0:d}'.format(i+1),   
                                                 'b Matched Jet; b Jet Pt (GeV); b Jet Match Rank (3-mom ratio); nJet Multiplicity (20GeV, ...)', 
@@ -601,15 +601,38 @@ class MCTreePlot(Module):
             last_b = gens[top.b]
             last_b_moth = gens[last_b.genPartIdxMother]
             last_b_gmoth = gens[last_b_moth.genPartIdxMother]
+            last_b_ggmoth = gens[last_b_gmoth.genPartIdxMother]
+            last_b_gggmoth = gens[last_b_ggmoth.genPartIdxMother]
+            last_W = gens[top.W]
+            last_W_moth = gens[last_W.genPartIdxMother]
+            last_W_gmoth = gens[last_W_moth.genPartIdxMother]
+            last_W_ggmoth = gens[last_W_gmoth.genPartIdxMother]
+            last_W_gggmoth = gens[last_W_ggmoth.genPartIdxMother]
+            
+            #get the first b and W, going back up to 4 parents above the last copy of the daughter
             if abs(last_b_moth.pdgId) == 6:
                 b = last_b
             elif abs(last_b_gmoth.pdgId) == 6:
                 b = last_b_moth
-            else:
+            elif abs(last_b_ggmoth.pdgId) == 6:
                 b = last_b_gmoth
+            elif abs(last_b_gggmoth.pdgId) == 6:
+                b = last_b_ggmoth
+            else:
+                b = last_b_gggmoth
+            if abs(last_W_moth.pdgId) == 6:
+                Wf = last_W
+            elif abs(last_W_gmoth.pdgId) == 6:
+                Wf = last_W_moth
+            elif abs(last_W_ggmoth.pdgId) == 6:
+                Wf = last_W_gmoth
+            elif abs(last_W_gggmoth.pdgId) == 6:
+                Wf = last_W_ggmoth
+            else:
+                Wf = last_W_gggmoth
             W = gens[top.W]
             self.hTree_TopSystemPt[i].Fill(t.pt, b.pt, W.pt)
-            b4 = t.p4() - W.p4()
+            b4 = t.p4() - Wf.p4()
             self.hTree_bSystemCorr[i].Fill(b.pt, deltaR(b, t), b4.M())
             self.hTree_bSystemError[i].Fill(abs(b4.Pt() - b.pt), abs(b4.P() - b.p4().P()), abs(b4.M() - b.mass))
 
