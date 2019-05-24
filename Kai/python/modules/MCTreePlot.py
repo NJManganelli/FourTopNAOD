@@ -278,12 +278,18 @@ class MCTreePlot(Module):
         self.hTree_bMatchedJet = {} #jetpt, jet rank, nJet
         self.hTree_bMatchedJetDR = {} #b 3-momentum, DR best match, DR second best match
         self.hTree_bMatchedJetVRank = {} #Rank best, 2nd best, 3rd best
-        self.hTree_bMatchedJetHad = {} #Rank best, Hadron Flavour (Ghost clustering from GenHFMatcher)
+        self.hTree_bMatchedJet1Had = {} #Rank best, Hadron Flavour (Ghost clustering from GenHFMatcher)
+        self.hTree_bMatchedJet2Had = {} #Rank 2nd best, Hadron Flavour (Ghost clustering from GenHFMatcher)
         self.hTree_WMatchedJet1 = {} #W jet 1 pt, match rank, nJet
         self.hTree_WMatchedJet2 = {} #W jet 2 pt, match rank, nJet
         self.hTree_bMatchedJetDeepCSV = {} #1st and 2nd best matched jets' DeepCSV score
         self.hTree_bMatchedJetDeepJet = {} #1st and 2nd best matched jets' DeepJet score
         self.hTree_bMatchedJetSep = {} #DeltaR separation between 1st and 2nd best ranked jets
+        self.hTree_bSystemCorr = {} #search for correlations in the b pt spectra and other variables
+        self.hTree_bSystemError = {} #measure error in the Pt, |P| and invariant mass due to zero-ing the mass of b quarks below 10GeV
+        self.hTree_RecoTopMass = {} #reconstructed top mass from hadronic tops whose b quarks are reconstructed as 2 AK4 jets, comparing best to 2nd best matches
+        self.hTree_RecoTopMassSMatch = {} #reconstructed top mass from ideal 3-jet hadronic tops
+
         for i in xrange(4):
             self.hTree_DirectLepPtCat[i]=ROOT.TH3F('hTree_DirectLepPtCat_{0:d}'.format(i+1),   
                                                    'Pt PF Lepton (t->W->Lep) (R{0:d} t pt); Pt (GeV); nJets; nBJets'.format(i+1), 
@@ -297,6 +303,22 @@ class MCTreePlot(Module):
                                                 'Top Sys Pt (R{0:d} t pt); Top_Pt (GeV); Bottom_Pt (GeV); W_Pt (GeV)'.format(i+1), 
                                                 200, 0, 1000, 200, 0, 1000, 200, 0, 1000)
             self.addObject(self.hTree_TopSystemPt[i])
+            self.hTree_bSystemCorr[i]=ROOT.TH3F('hTree_bSystemCorr_{0:d}'.format(i+1),   
+                                                'b quark correlations (R{0:d} t pt); Bottom_Pt (GeV); dR(top, bottom); b Invariant mass (GeV)'.format(i+1), 
+                                                200, 0, 1000, 200, 0, 7, 200, 0, 25)
+            self.addObject(self.hTree_bSystemCorr[i])
+            self.hTree_bSystemError[i]=ROOT.TH3F('hTree_bSystemError_{0:d}'.format(i+1),   
+                                                'b quark kinematic errors (R{0:d} t pt); Pt (GeV); |P| (GeV); Invariant mass (GeV)'.format(i+1), 
+                                                 200, 0, 5, 200, 0, 5, 200, 0, 20)
+            self.addObject(self.hTree_bSystemError[i])
+            self.hTree_RecoTopMass[i]=ROOT.TH2F('hTree_RecoTopMass_{0:d}'.format(i+1),   
+                                                'Reco Hadronic Top Mass (3 jets) (R{0:d} t pt); Using Best-matched b Jet (GeV); Using second-best-matched b Jet (GeV)'.format(i+1), 
+                                                600, 0, 300, 600, 0, 300)
+            self.addObject(self.hTree_RecoTopMass[i])
+            self.hTree_RecoTopMassSMatch[i]=ROOT.TH1F('hTree_RecoTopMassSMatch_{0:d}'.format(i+1),   
+                                                'Reco Hadronic Top Mass (3 jets) (R{0:d} t pt); Invariant mass using lone b-matched Jet (GeV)'.format(i+1), 
+                                                1000, 0, 250)
+            self.addObject(self.hTree_RecoTopMassSMatch[i])
             self.hTree_bMatchedJet[i]=ROOT.TH3F('hTree_bMatchedJet_{0:d}'.format(i+1),   
                                                 'b Matched Jet; b Jet Pt (GeV); b Jet Match Rank (3-mom ratio); nJet Multiplicity (20GeV, ...)', 
                                                 500, 0, 500, 500, 0, 5, 20, 0, 20)
@@ -321,10 +343,14 @@ class MCTreePlot(Module):
                                                  'W Matched Jet 2; W Jet Pt (GeV); W Jet Match Rank (3-momentum proxy); nJet Multiplicity (20GeV, ...)'.format(i+1), 
                                                 500, 0, 500, 500, 0, 5, 20, 0, 20)
             self.addObject(self.hTree_WMatchedJet2[i])
-            self.hTree_bMatchedJetHad[i]=ROOT.TH2F('hTree_bMatchedJetHad_{0:d}'.format(i+1),   
+            self.hTree_bMatchedJet1Had[i]=ROOT.TH2F('hTree_bMatchedJet1Had_{0:d}'.format(i+1),   
                                                    'b Jet Rank v Hadron Flavour (R{0:d} b pt); Rank of Best Match; Had Flavour (GenHFMatcher)'.format(i+1), 
                                                      100, 0, 2, 7, -1, 6)
-            self.addObject(self.hTree_bMatchedJetHad[i])
+            self.addObject(self.hTree_bMatchedJet1Had[i])
+            self.hTree_bMatchedJet2Had[i]=ROOT.TH2F('hTree_bMatchedJet2Had_{0:d}'.format(i+1),   
+                                                   'b Jet Rank v Hadron Flavour (R{0:d} b pt); Rank of 2nd Best Match; Had Flavour (GenHFMatcher)'.format(i+1), 
+                                                     100, 0, 2, 7, -1, 6)
+            self.addObject(self.hTree_bMatchedJet2Had[i])
             self.hTree_bMatchedJetDeepCSV[i]=ROOT.TH2F('hTree_bMatchedJetDeepCSV_{0:d}'.format(i+1),   
                                                   'b Jet Matches DeepCSV Value; DeepCSV of best match; DeepCSV of 2nd best match', 
                                                        200, -1, 1, 200, -1, 1)
@@ -583,6 +609,9 @@ class MCTreePlot(Module):
                 b = last_b_gmoth
             W = gens[top.W]
             self.hTree_TopSystemPt[i].Fill(t.pt, b.pt, W.pt)
+            b4 = t.p4() - W.p4()
+            self.hTree_bSystemCorr[i].Fill(b.pt, deltaR(b, t), b4.M())
+            self.hTree_bSystemError[i].Fill(abs(b4.Pt() - b.pt), abs(b4.P() - b.p4().P()), abs(b4.M() - b.mass))
 
         topsL.sort(key=lambda top : gens[top.b].pt, reverse=True)
         allbJet = []
@@ -605,10 +634,19 @@ class MCTreePlot(Module):
             if top.b_Jet_0 > -1:
                 bJet.append(jets[top.b_Jet_0])
                 bJetRank.append(top.b_Jet_0W)
+                if top.W_dau1_Jet_0 > -1 and top.W_dau2_Jet_0 > -1 and top.b_Jet_1 == -1:
+                    W4S = (jets[top.W_dau1_Jet_0].p4() + jets[top.W_dau2_Jet_0].p4())
+                    InvSingle = (W4S + bJet[0].p4()).M()
+                    self.hTree_RecoTopMassSMatch[i].Fill(InvSingle)
             if top.b_Jet_1 > -1:
                 bJet.append(jets[top.b_Jet_1])
                 bJetRank.append(top.b_Jet_1W)
                 multijet += 1
+                if top.W_dau1_Jet_0 > -1 and top.W_dau2_Jet_0 > -1:
+                    W4 = (jets[top.W_dau1_Jet_0].p4() + jets[top.W_dau2_Jet_0].p4())
+                    InvBest = (W4 + bJet[0].p4()).M()
+                    InvSecBest = (W4 + bJet[1].p4()).M()
+                    self.hTree_RecoTopMass[i].Fill(InvBest, InvSecBest)
             if top.b_Jet_2 > -1:
                 bJet.append(jets[top.b_Jet_2])
                 bJetRank.append(top.b_Jet_2W)
@@ -645,10 +683,15 @@ class MCTreePlot(Module):
             R3 = top.b_Jet_2W/rnor
             self.hTree_bMatchedJetVRank[i].Fill(R1, R2, R3) #Rank best, 2nd best, 3rd best
             if len(bJet) > 0:
-                flav = bJet[0].hadronFlavour
+                flav1 = bJet[0].hadronFlavour
             else:
-                flav = -1
-            self.hTree_bMatchedJetHad[i].Fill(R1, flav)
+                flav1 = -1
+            if len(bJet) > 1:
+                flav2 = bJet[0].hadronFlavour
+            else:
+                flav2 = -1
+            self.hTree_bMatchedJet1Had[i].Fill(R1, flav1)
+            self.hTree_bMatchedJet2Had[i].Fill(R2, flav2)
 
         self.hTree_bMultiJet.Fill(len(nJets_oldDeepJet), multijet)
 
