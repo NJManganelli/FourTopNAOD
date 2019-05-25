@@ -21,20 +21,44 @@ class TopSystemPt(Module):
         #event counters
         self.counter = 0
         self.maxEventsToProcess=maxevt
+        self.bits = {'isPrompt':0b000000000000001,
+                     'isDecayedLeptonHadron':0b000000000000010,
+                     'isTauDecayProduct':0b000000000000100,
+                     'isPromptTauDecaypprProduct':0b000000000001000,
+                     'isDirectTauDecayProduct':0b000000000010000,
+                     'isDirectPromptTauDecayProduct':0b000000000100000,
+                     'isDirectHadronDecayProduct':0b000000001000000,
+                     'isHardProcess':0b000000010000000,
+                     'fromHardProcess':0b000000100000000,
+                     'isHardProcessTauDecayProduct':0b000001000000000,
+                     'isDirectHardProcessTauDecayProduct':0b000010000000000,
+                     'fromHardProcessBeforeFSR':0b000100000000000,
+                     'isFirstCopy':0b001000000000000,
+                     'isLastCopy':0b010000000000000,
+                     'isLastCopyBeforeFSR':0b100000000000000
+                    }
+
 
     def beginJob(self,histFile=None,histDirName=None):
         Module.beginJob(self,histFile,histDirName)
         if histFile and histDirName:
-            self.h_bfcount=ROOT.TH1I('h_bfcount', 'Count of first b quarks in event; number of b quarks directly descended from top quarks; frequency', 10, 0, 10)
+            self.h_bfcount=ROOT.TH1I('h_bfcount', 'Count of first b quarks in event; number of b quarks descended from top quarks; frequency', 10, 0, 10)
             self.addObject(self.h_bfcount)
+            self.h_bfpcount=ROOT.TH1I('h_bfpcount', 'Count of first b quarks in event after pruning; number of b quarks descended from top quarks with sibling W; frequency', 10, 0, 10)
+            self.addObject(self.h_bfpcount)
             self.h_Wfcount=ROOT.TH1I('h_Wfcount', 'Count of first W bosons in event; number of W bosons directly descended from top quarks; frequency', 10, 0, 10)
             self.addObject(self.h_Wfcount)
             self.h_TopSystemPt = {}
+            self.h_bSystemCorr = {}
             for i in xrange(4):
                 self.h_TopSystemPt[i]=ROOT.TH3F('h_TopSystemPt_{0:d}'.format(i+1),   
                                                 'Top Sys Pt (R{0:d} t pt); Top_Pt (GeV); Bottom_Pt (GeV); W_Pt (GeV)'.format(i+1), 
                                                 200, 0, 1000, 200, 0, 1000, 200, 0, 1000)
                 self.addObject(self.h_TopSystemPt[i])       
+                self.h_bSystemCorr[i]=ROOT.TH3F('h_bSystemCorr_{0:d}'.format(i+1),   
+                                                'b Sys Correlations (R{0:d} t pt); b Status code, number; Bottom_Pt (GeV);DeltaEta(t, b)'.format(i+1), 
+                                                2, 0, 2, 1000, 0, 1000, 100, 0, 8)
+                self.addObject(self.h_bSystemCorr[i])       
 
     def endJob(self):
         if hasattr(self, 'objs') and self.objs != None:
@@ -67,23 +91,32 @@ class TopSystemPt(Module):
         gens = Collection(event, "GenPart")
         bs = [gen for gen in gens if abs(gen.pdgId) == 5]
         Ws = [gen for gen in gens if abs(gen.pdgId) == 24]
-        bFirst = [gen for gen in bs if gen.genPartIdxMother > -1 and abs(gens[gen.genPartIdxMother].pdgId) == 6]#.sort(key=lambda g : gens[g.genPartIdxMother].pt, reverse=True)
         WFirst = [gen for gen in Ws if gen.genPartIdxMother > -1 and abs(gens[gen.genPartIdxMother].pdgId) == 6]#.sort(key=lambda g : gens[g.genPartIdxMother].pt, reverse=True)
-        bFirst.sort(key=lambda g : gens[g.genPartIdxMother].pt, reverse=True)
+        bFirst = [gen for gen in bs if gen.genPartIdxMother > -1 and abs(gens[gen.genPartIdxMother].pdgId) == 6]#.sort(key=lambda g : gens[g.genPartIdxMother].pt, reverse=True)
+        tops = set([gen.genPartIdxMother for gen in WFirst])
+        self.h_bfcount.Fill(len(bFirst))
+        self.h_Wfcount.Fill(len(WFirst))
+        bFirst = [gen for gen in bFirst if gen.genPartIdxMother in tops]
+        self.h_bfpcount.Fill(len(bFirst))
         WFirst.sort(key=lambda g : gens[g.genPartIdxMother].pt, reverse=True)
+        bFirst.sort(key=lambda g : gens[g.genPartIdxMother].pt, reverse=True)
         for i in xrange(len(WFirst)):
             b = bFirst[i]
             W = WFirst[i]
             t = gens[bFirst[i].genPartIdxMother]
             self.h_TopSystemPt[i].Fill(t.pt, b.pt, W.pt)
+            stats = ""
+            for flag, bits in self.bits.iteritems():
+                if flag not in ['fromHardProcessBeforeFSR','isFirstCopy','isLastCopy','isLastCopyBeforeFSR']: continue
+                if b.statusFlags & bits:
+                    stats += " " + flag
+            self.h_bSystemCorr[i].Fill(abs(t.eta - b.eta), b.pt, stats, 1.0)
 
-        self.h_bfcount.Fill(len(bFirst))
-        self.h_Wfcount.Fill(len(WFirst))
         return True
 
 files=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/BD738994-6BD2-6D41-9D93-E0AC468497A5.root"]
 # files=["/eos/home-n/nmangane/AODStorage/TestingSamples/TTTT_TuneCP5_PSweights_102X.root"]
-hName="TopSysPt.root"
+hName="TopSysPtv2.root"
 
 
 #Configuration
@@ -93,7 +126,7 @@ if writeNtuple:
     inHistFileName = hName
     inHistDirName = "plots"
 
-modulecache = TopSystemPt(maxevt=-1)
+modulecache = TopSystemPt(maxevt=50000)
 
 p=PostProcessor(".",
                 files,
