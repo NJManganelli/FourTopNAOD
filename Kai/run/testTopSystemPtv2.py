@@ -5,13 +5,13 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import Pos
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 from FourTopNAOD.Kai.tools.intools import *
-import collections, copy, json
+import collections, copy, json, math
 from array import array
 import multiprocessing
 
 
 class TopSystemPt(Module):
-    def __init__(self, verbose=False, maxevt=-1, probEvt=None, isData=False, writeNtup=False):
+    def __init__(self, verbose=False, maxevt=-1, probEvt=None, isData=False, writeNtup=False, wOpt=0):
         self.writeHistFile=True
         self.verbose=verbose
         self._verbose = verbose
@@ -22,6 +22,7 @@ class TopSystemPt(Module):
         #event counters
         self.counter = 0
         self.maxEventsToProcess=maxevt
+        self.wOpt = wOpt
         self.bits = {'isPrompt':0b000000000000001,
                      'isDecayedLeptonHadron':0b000000000000010,
                      'isTauDecayProduct':0b000000000000100,
@@ -58,8 +59,8 @@ class TopSystemPt(Module):
                                                 #200, 0, 1000, 200, 0, 1000, 200, 0, 1000)
                 self.addObject(self.h_TopSystemPt[i])       
                 self.h_bSystemCorr[i]=ROOT.TH3F('h_bSystemCorr_{0:d}'.format(i+1),   
-                                                'b Sys Correlations (R{0:d} t pt);DeltaEta(t, b); Bottom_Pt (GeV); b Status code, number'.format(i+1), 
-                                                100, 0, 8, 1000, 0, 1000, 1, 0, 1)
+                                                'b Sys Correlations (R{0:d} t pt);abs(t.eta); Bottom_Pt (GeV); Theta(t, b)'.format(i+1), 
+                                                100, 0, 4, 1000, 0, 1000, 100, 0, math.pi)
                 self.addObject(self.h_bSystemCorr[i])       
 
     def endJob(self):
@@ -89,6 +90,14 @@ class TopSystemPt(Module):
         ###############################################
         ### Collections and Objects and isData check###
         ###############################################
+        if self.wOpt == 0:
+            weight = 1.0
+        elif self.wOpt == 1:
+            weight = getattr(event, "genWeight")
+        elif self.wOpt == 2:
+            weight = abs(getattr(event, "genWeight"))
+        else:
+            raise Exception("Invalid weight option")
 
         gens = Collection(event, "GenPart")
         bs = [gen for gen in gens if abs(gen.pdgId) == 5]
@@ -96,41 +105,57 @@ class TopSystemPt(Module):
         WFirst = [gen for gen in Ws if gen.genPartIdxMother > -1 and abs(gens[gen.genPartIdxMother].pdgId) == 6]#.sort(key=lambda g : gens[g.genPartIdxMother].pt, reverse=True)
         bFirst = [gen for gen in bs if gen.genPartIdxMother > -1 and abs(gens[gen.genPartIdxMother].pdgId) == 6]#.sort(key=lambda g : gens[g.genPartIdxMother].pt, reverse=True)
         tops = set([gen.genPartIdxMother for gen in WFirst])
-        self.h_bfcount.Fill(len(bFirst))
-        self.h_Wfcount.Fill(len(WFirst))
+        self.h_bfcount.Fill(len(bFirst), weight)
+        self.h_Wfcount.Fill(len(WFirst), weight)
         bFirst = [gen for gen in bFirst if gen.genPartIdxMother in tops]
-        self.h_bfpcount.Fill(len(bFirst))
+        self.h_bfpcount.Fill(len(bFirst), weight)
         WFirst.sort(key=lambda g : gens[g.genPartIdxMother].pt, reverse=True)
         bFirst.sort(key=lambda g : gens[g.genPartIdxMother].pt, reverse=True)
         for i in xrange(len(WFirst)):
             b = bFirst[i]
             W = WFirst[i]
             t = gens[bFirst[i].genPartIdxMother]
-            self.h_TopSystemPt[i].Fill(t.pt, b.pt, W.pt)
-            stats = ""
-            for flag, bits in self.bits.iteritems():
-                if flag not in ['fromHardProcessBeforeFSR','isFirstCopy','isLastCopy','isLastCopyBeforeFSR']: continue
-                if b.statusFlags & bits:
-                    stats += " " + flag
-            self.h_bSystemCorr[i].Fill(abs(t.eta - b.eta), b.pt, stats, 1.0)
+            self.h_TopSystemPt[i].Fill(t.pt, b.pt, W.pt, weight)
+            # stats = ""
+            # for flag, bits in self.bits.iteritems():
+            #     if flag not in ['fromHardProcessBeforeFSR','isFirstCopy','isLastCopy','isLastCopyBeforeFSR']: continue
+            #     if b.statusFlags & bits:
+            #         stats += " " + flag
             b_mass = (t.p4() - W.p4()).M()
-            tVec = ROOT.Math.PtEtaPhiMVector(t.pt, t.eta, t.phi, t.mass)
-            bVec = ROOT.Math.PtEtaPhiMVector(b.pt, b.eta, b.phi, b_mass)
+            t4 = t.p4()
+            b4 = t.p4() - W.p4()
+            b4.Boost(-(t4.BoostVector()))
+            cosTheta = (b4.Px()*t4.Px() + b4.Py()*t4.Py() + b4.Pz()*t4.Pz())/(b4.P() * t4.P())
+            if cosTheta > 1:
+                cosTheta = 1
+            elif cosTheta < -1:
+                cosTheta = -1
+            self.h_bSystemCorr[i].Fill(abs(t.eta - b.eta), b.pt, abs(math.acos(cosTheta)), weight)            
+            # print(cosTheta)
+            #Boost to CoM, measure polar angle between unboosted top and b from CoM -> are there polarization effects?
 
         return True
 Tuples = []
 filesTTTT=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/BD738994-6BD2-6D41-9D93-E0AC468497A5.root"]
 # files=["/eos/home-n/nmangane/AODStorage/TestingSamples/TTTT_TuneCP5_PSweights_102X.root"]
 hNameTTTT="TopSysPtTTTT.root"
-Tuples.append((filesTTTT, hNameTTTT))
+hNameTTTTw="TopSysPtTTTTw.root"
+hNameTTTTabsw="TopSysPtTTTTabsw.root"
+
+Tuples.append((filesTTTT, hNameTTTT, 0))
+Tuples.append((filesTTTT, hNameTTTTw, 1))
+Tuples.append((filesTTTT, hNameTTTTabsw, 2))
 filesTTGF=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/E565691C-17D4-6046-865E-8393F1FE0414.root"]
 hNameTTGF="TopSysPtTTGF.root"
-Tuples.append((filesTTGF, hNameTTGF))
+hNameTTGFw="TopSysPtTTGFw.root"
+hNameTTGFabsw="TopSysPtTTGFabsw.root"
+Tuples.append((filesTTGF, hNameTTGF, 0))
+Tuples.append((filesTTGF, hNameTTGFw, 1))
+Tuples.append((filesTTGF, hNameTTGFabsw, 2))
 
-modulecache = TopSystemPt(maxevt=30)
 
 
-def multiplier(fileList, hName=None):
+def multiplier(fileList, hName=None, wOption=0):
     if hName == None:
         hDirName = None
     else:
@@ -139,7 +164,7 @@ def multiplier(fileList, hName=None):
         p=PostProcessor(".",
                         fileList,
                         cut=None,
-                        modules=[modulecache],
+                        modules=[TopSystemPt(maxevt=300000, wOpt=wOption)],
                         noOut=True,
                         histFileName=hName,
                         histDirName=hDirName,
@@ -148,7 +173,7 @@ def multiplier(fileList, hName=None):
 
 pList = []
 for tup in Tuples:
-    p = multiprocessing.Process(target=multiplier, args=(tup[0], tup[1]))
+    p = multiprocessing.Process(target=multiplier, args=(tup[0], tup[1], tup[2]))
     pList.append(p)
     p.start()
 
