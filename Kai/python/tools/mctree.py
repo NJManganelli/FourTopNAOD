@@ -1522,6 +1522,12 @@ class MCTree:
         WDau2GenJetsWithVoting = {}
         WDau2FatJetsWithVoting = {}
         WDau2GenJetAK8sWithVoting = {}
+
+        #vote renormalization factors
+        self.tb_renorm = {}
+        self.tW_dau1_renorm = {}
+        self.tW_dau2_renorm = {}
+        self.t_first_renorm = {}
         for tidx in self.t_head.values():
             tJets[tidx] = []
             tGenJets[tidx] = []
@@ -1577,8 +1583,15 @@ class MCTree:
             #Fill dictionaries with jet indices and value initialized to 0 (will be accumulated votes for the jet)
             #Append jet list of tuples with the jet index and the weight of the vote
             #print("b Desc: " + str(self.tb_desc[tidx]))
+            #Renomalization: Fix the non-closure of voting method by accumulating the net weighted votes here, then dividing the accumulation by it
+            self.tb_renorm[tidx] = 0
+            self.tW_dau1_renorm[tidx] = 0
+            self.tW_dau2_renorm[tidx] = 0
+            self.t_first_renorm[tidx] = 0
+
             for dnode in self.tb_desc[tidx]:
                 thevote = self.vote(dnode, self.tb_first[tidx])
+                self.tb_renorm[tidx] += thevote
                 if self.jets:
                     #print(self.treeJet[dnode])
                     for i in self.treeJet[dnode]:
@@ -1599,6 +1612,7 @@ class MCTree:
             #print("W Dau 1 Desc: " + str(self.tW_dau1_desc[tidx]))
             for dnode in self.tW_dau1_desc[tidx]:
                 thevote = self.vote(dnode, self.tW_dau1_last[tidx])
+                self.tW_dau1_renorm[tidx] += thevote
                 if self.jets:
                     for i in self.treeJet[dnode]:
                         WDau1JetsWithVoting[tidx][i] = 0
@@ -1618,6 +1632,7 @@ class MCTree:
             #print("W Dau 2 Desc: " + str(self.tW_dau2_desc[tidx]))
             for dnode in self.tW_dau2_desc[tidx]:
                 thevote = self.vote(dnode, self.tW_dau2_last[tidx])
+                self.tW_dau2_renorm[tidx] += thevote
                 if self.jets:
                     for i in self.treeJet[dnode]:
                         WDau2JetsWithVoting[tidx][i] = 0
@@ -1640,6 +1655,7 @@ class MCTree:
             #for dnode in t_remainder:
             for dnode in self.t_first_desc[tidx]:
                 thevote = self.vote(dnode, self.t_first[tidx])
+                self.t_first_renorm[tidx] += thevote
                 if self.jets:
                     for i in self.treeJet[dnode]:
                         tJetsWithVoting[tidx][i] = 0
@@ -1657,39 +1673,39 @@ class MCTree:
                         tGenJetAK8sWithVoting[tidx][i] = 0
                         tGenJetAK8sWeight[tidx].append((i, thevote))
 
-            #Accumulate votes by using the key in the 1st slot of the tuple, and the vote weight in the second slot
+            #Accumulate votes by using the key in the 1st slot of the tuple, and the vote weight in the second slot, with renormalization factor
             for v in tJetsWeight[tidx]:
-                tJetsWithVoting[tidx][v[0]] += v[1]
+                tJetsWithVoting[tidx][v[0]] += v[1]/self.t_first_renorm[tidx]
             for v in tGenJetsWeight[tidx]:
-                tGenJetsWithVoting[tidx][v[0]] += v[1]
+                tGenJetsWithVoting[tidx][v[0]] += v[1]/self.t_first_renorm[tidx]
             for v in tFatJetsWeight[tidx]:
-                tFatJetsWithVoting[tidx][v[0]] += v[1]
+                tFatJetsWithVoting[tidx][v[0]] += v[1]/self.t_first_renorm[tidx]
             for v in tGenJetAK8sWeight[tidx]:
-                tGenJetAK8sWithVoting[tidx][v[0]] += v[1]
+                tGenJetAK8sWithVoting[tidx][v[0]] += v[1]/self.t_first_renorm[tidx]
             for v in bJetsWeight[tidx]:
-                bJetsWithVoting[tidx][v[0]] += v[1]
+                bJetsWithVoting[tidx][v[0]] += v[1]/self.tb_first_renorm[tidx]
             for v in bGenJetsWeight[tidx]:
-                bGenJetsWithVoting[tidx][v[0]] += v[1]
+                bGenJetsWithVoting[tidx][v[0]] += v[1]/self.tb_first_renorm[tidx]
             for v in bFatJetsWeight[tidx]:
-                bFatJetsWithVoting[tidx][v[0]] += v[1]
+                bFatJetsWithVoting[tidx][v[0]] += v[1]/self.tb_first_renorm[tidx]
             for v in bGenJetAK8sWeight[tidx]:
-                bGenJetAK8sWithVoting[tidx][v[0]] += v[1]
+                bGenJetAK8sWithVoting[tidx][v[0]] += v[1]/self.tb_first_renorm[tidx]
             for v in WDau1JetsWeight[tidx]:
-                WDau1JetsWithVoting[tidx][v[0]] += v[1]
+                WDau1JetsWithVoting[tidx][v[0]] += v[1]/self.tW_dau1_renorm[tidx]
             for v in WDau1GenJetsWeight[tidx]:
-                WDau1GenJetsWithVoting[tidx][v[0]] += v[1]
+                WDau1GenJetsWithVoting[tidx][v[0]] += v[1]/self.tW_dau1_renorm[tidx]
             for v in WDau1FatJetsWeight[tidx]:
-                WDau1FatJetsWithVoting[tidx][v[0]] += v[1]
+                WDau1FatJetsWithVoting[tidx][v[0]] += v[1]/self.tW_dau1_renorm[tidx]
             for v in WDau1GenJetAK8sWeight[tidx]:
-                WDau1GenJetAK8sWithVoting[tidx][v[0]] += v[1]
+                WDau1GenJetAK8sWithVoting[tidx][v[0]] += v[1]/self.tW_dau1_renorm[tidx]
             for v in WDau2JetsWeight[tidx]:
-                WDau2JetsWithVoting[tidx][v[0]] += v[1]
+                WDau2JetsWithVoting[tidx][v[0]] += v[1]/self.tW_dau2_renorm[tidx]
             for v in WDau2GenJetsWeight[tidx]:
-                WDau2GenJetsWithVoting[tidx][v[0]] += v[1]
+                WDau2GenJetsWithVoting[tidx][v[0]] += v[1]/self.tW_dau2_renorm[tidx]
             for v in WDau2FatJetsWeight[tidx]:
-                WDau2FatJetsWithVoting[tidx][v[0]] += v[1]
+                WDau2FatJetsWithVoting[tidx][v[0]] += v[1]/self.tW_dau2_renorm[tidx]
             for v in WDau2GenJetAK8sWeight[tidx]:
-                WDau2GenJetAK8sWithVoting[tidx][v[0]] += v[1]
+                WDau2GenJetAK8sWithVoting[tidx][v[0]] += v[1]/self.tW_dau2_renorm[tidx]
 
             #Convert to lists of tuples and sort
             tJets[tidx] = tJetsWithVoting[tidx].items()
