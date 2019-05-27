@@ -270,6 +270,10 @@ class MCTreePlot(Module):
         self.hTree_tRecoM=ROOT.TH1F('hTree_tRecoM',
                                        'top reconstructed mass; mass (GeV); tops', 280, 140, 210)
         self.addObject(self.hTree_tRecoM)
+        self.hTree_AllMatchedJetDiag=ROOT.TH2F('hTree_AllMatchedJetDiag',
+                                                   'Matching of all top daughter jets in hadronic W decays;Category;Number of Jets',
+                                                1, 0, 1, 1, 0, 1)
+        self.addObject(self.hTree_AllMatchedJetDiag)
 
         #Sorted leptons
         self.hTree_DirectLepPtCat = {} #pt, nJet, nBJet
@@ -595,6 +599,17 @@ class MCTreePlot(Module):
         for i, lep in enumerate(ileps):
             self.hTree_IndirectLepPtCat[i].Fill(lep.pt, len(nJets), len(nJetsMDeepJet))
 
+
+        #counters for how many of which type of jets are closest
+        bestBClosest = 0 #highest ranked jet was also the closest jet
+        nextBestBClosest = 0 #second highest jet was also the closest jet
+        neitherBClosest = 0 #deltaR matching will fail for this many jets...
+        bestW1Closest = 0 #check the best for W daughter 1 jets
+        nextBestW1Closest = 0
+        neitherW1Closest = 0
+        bestW2Closest = 0 #check the best for W daughter 2 jets
+        nextBestW2Closest = 0
+        neitherW2Closest = 0
         topsL.sort(key=lambda top : gens[top.t].pt, reverse=True)
         for i, top in enumerate(topsL):
             t = gens[top.t]
@@ -636,7 +651,92 @@ class MCTreePlot(Module):
             self.hTree_bSystemCorr[i].Fill(b.pt, deltaR(b, t), b4.M())
             self.hTree_bSystemError[i].Fill(abs(b4.Pt() - b.pt), abs(b4.P() - b.p4().P()), abs(b4.M() - b.mass))
 
-        topsL.sort(key=lambda top : gens[top.b].pt, reverse=True)
+            #Do an overall jet cutflow for all events, accounting for eta, jet selection kinematics, and matching
+            #Need to find the closest jet for the b, WDau1, and WDau2 (latter only if hadronic W decay, to avoid convolution with hadronic tau decay kinematics...)
+            #fuck it, just do brute force search for the three simultaneously through the jet collection, not gonna waste time trying to make it efficient
+            #Get the gens for the two W daughters, then only check deltaR if it was a hadronic W decay
+            W1 = gens[top.W_dau1]
+            W2 = gens[top.W_dau2]
+            bJetClosest = -1
+            bJetDeltaR = 999
+            W1JetClosest = -1
+            W1JetDeltaR = 999
+            W2JetClosest = -1
+            W2JetDeltaR = 999
+            for i, jet in enumerate(jets):
+                if top.tHasHadronicW:
+                    comp1 = deltaR(W1, jet)
+                    if comp1 < W1JetDeltaR:
+                        W1JetClosest = i
+                        W1JetDeltaR = comp1
+                    comp2 = deltaR(W2, jet)
+                    if comp2 < W2JetDeltaR:
+                        W2JetClosest = i
+                        W2JetDeltaR = comp2
+                comp3 = deltaR(b, jet)
+                if comp3 < bJetDeltaR:
+                    bJetClosest = i
+                    bJetDeltaR = comp3
+            
+            #Have closest jet indices, test whether they are the best, 2nd best, etc.
+            if top.b_Jet_0 > -1:
+                if top.b_Jet_0 == bJetClosest:
+                    bestBClosest += 1
+                elif top.b_Jet_1 > -1:
+                    if top.b_Jet_1 == bJetClosest:
+                        nextBestBClosest += 1
+                    else:
+                        neitherBClosest += 1
+                else:
+                    neitherBClosest += 1
+            if top.tHasHadronicW:
+                if top.W_dau1_Jet_0 > -1:
+                    if top.W_dau1_Jet_0 == W1JetClosest:
+                        bestW1Closest += 1
+                    elif top.W_dau1_Jet_1 > -1:
+                        if top.W_dau1_Jet_1 == W1JetClosest:
+                            nextBestW1Closest += 1
+                        else:
+                            neitherW1Closest += 1
+                    else:
+                        neitherW1Closest += 1
+                if top.W_dau2_Jet_0 > -1:
+                    if top.W_dau2_Jet_0 == W2JetClosest:
+                        bestW2Closest += 1
+                    elif top.W_dau2_Jet_1 > -1:
+                        if top.W_dau2_Jet_1 == W2JetClosest:
+                            nextBestW2Closest += 1
+                        else:
+                            neitherW2Closest += 1
+                    else:
+                        neitherW2Closest += 1
+
+        #Catergorize and fill
+        allBestClosest = bestBClosest + bestW1Closest + bestW2Closest
+        allTwoBestClosest = bestBClosest + bestW1Closest + bestW2Closest + nextBestBClosest + nextBestW1Closest + nextBestW2Closest
+        twoBestBClosest = bestBClosest + nextBestBClosest
+        twoBestW1Closest = bestW1Closest + nextBestW1Closest
+        twoBestW2Closest = bestW2Closest + nextBestW2Closest
+        self.hTree_AllMatchedJetDiag.Fill('Events', 0, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('bestBClosest', bestBClosest, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('nextBestBClosest', nextBestBClosest, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('twoBestBClosest', twoBestBClosest, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('neitherBClosest', neitherBClosest, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('bestW1Closest', bestW1Closest, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('nextBestW1Closest', nextBestW1Closest, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('twoBestW1Closest', twoBestW1Closest, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('neitherW1Closest', neitherW1Closest, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('bestW2Closest', bestW2Closest, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('nextBestW2Closest', nextBestW2Closest, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('twoBestW2Closest', twoBestW2Closest, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('neitherW2Closest', neitherW2Closest, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('allBestClosest', allBestClosest, 1.0)
+        self.hTree_AllMatchedJetDiag.Fill('allTwoBestClosest', allTwoBestClosest, 1.0)
+    
+                
+
+
+        topsL.sort(key=lambda top : gens[top.b].pt, reverse=True)        
         allbJet = []
         bestJets = []
         multijet = 0
