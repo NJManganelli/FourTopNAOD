@@ -1454,11 +1454,12 @@ class MCTree:
         Unnweighted voting.
         Each gen can contribute 1 vote per jet and per jet type it was DeltaR matched to.
         votingMethod=1:
-        Pt weighted voting.
-        Each gen contributes a vote weighted by the fraction of parent particle Pt it carried, per jet and per jet type
-        votingMethod=2:
         3-Momentum weighted voting.
         Each gen contributes a vote weighted by the fraction of parent particle Momentum it carried, per jet and per jet type
+        votingMethod=2:
+        Pt weighted voting.
+        Each gen contributes a vote weighted by the fraction of parent particle Pt it carried, per jet and per jet type
+
         """
 
         if votingMethod==None:
@@ -1467,9 +1468,9 @@ class MCTree:
         elif votingMethod==0:
             self.vote = lambda g, p : 1
         elif votingMethod==1:
-            self.vote = lambda g, p : self.gens[g].p4().P() / self.gens[p].p4().P()
+            self.vote = lambda g, p : self.gens[g].p4().P() #/ self.gens[p].p4().P()
         elif votingMethod==2: #Not a good method, due to changes in angular direction for daughters versus parent particles
-            self.vote = lambda g, p : self.gens[g].pt / self.gens[p].pt
+            self.vote = lambda g, p : self.gens[g].pt #/ self.gens[p].pt
 
             
         tJets = {}
@@ -1590,7 +1591,8 @@ class MCTree:
             self.t_first_renorm[tidx] = 0
 
             for dnode in self.tb_desc[tidx]:
-                thevote = self.vote(dnode, self.tb_first[tidx])
+                # thevote = self.vote(dnode, self.tb_first[tidx])
+                thevote = self.vote(dnode)
                 self.tb_renorm[tidx] += thevote
                 if self.jets:
                     #print(self.treeJet[dnode])
@@ -1611,7 +1613,8 @@ class MCTree:
                         bGenJetAK8sWeight[tidx].append((i, thevote))
             #print("W Dau 1 Desc: " + str(self.tW_dau1_desc[tidx]))
             for dnode in self.tW_dau1_desc[tidx]:
-                thevote = self.vote(dnode, self.tW_dau1_last[tidx])
+                # thevote = self.vote(dnode, self.tW_dau1_last[tidx])
+                thevote = self.vote(dnode)
                 self.tW_dau1_renorm[tidx] += thevote
                 if self.jets:
                     for i in self.treeJet[dnode]:
@@ -1631,7 +1634,8 @@ class MCTree:
                         WDau1GenJetAK8sWeight[tidx].append((i, thevote))
             #print("W Dau 2 Desc: " + str(self.tW_dau2_desc[tidx]))
             for dnode in self.tW_dau2_desc[tidx]:
-                thevote = self.vote(dnode, self.tW_dau2_last[tidx])
+                # thevote = self.vote(dnode, self.tW_dau2_last[tidx])
+                thevote = self.vote(dnode)
                 self.tW_dau2_renorm[tidx] += thevote
                 if self.jets:
                     for i in self.treeJet[dnode]:
@@ -1654,7 +1658,8 @@ class MCTree:
             #t_remainder = set(self.t_first_desc[tidx]) - (set(self.tb_first_desc[tidx]) + set(self.tW_dau1_desc[tidx]) + set(self.tW_dau2_desc[tidx]))
             #for dnode in t_remainder:
             for dnode in self.t_first_desc[tidx]:
-                thevote = self.vote(dnode, self.t_first[tidx])
+                # thevote = self.vote(dnode, self.t_first[tidx])
+                thevote = self.vote(dnode)
                 self.t_first_renorm[tidx] += thevote
                 if self.jets:
                     for i in self.treeJet[dnode]:

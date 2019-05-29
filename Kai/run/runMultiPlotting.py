@@ -23,58 +23,58 @@ preTT1LGF="/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/cra
 
 
 
-hName="MCTreePlot-TTTT16-DiLepton-v0p8.root"
+hName="MCTreePlot-TTTT16-DiLepton-v0p9.root"
 files=[preTTTT16+file for file in basefiles]
 filt=2
 Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTTT18-DiLepton-v0p8.root"
-files=[preTTTT18+file for file in basefiles]
-filt=2
-Tuples.append((files, hName, filt))
+# hName="MCTreePlot-TTTT18-DiLepton-v0p9.root"
+# files=[preTTTT18+file for file in basefiles]
+# filt=2
+# Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTTT-v0p8.root"
+hName="MCTreePlot-TTTT-v0p9.root"
 files=[preTTTT+file for file in basefiles]
 filt=None
 Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTTT-SingleLepton-v0p8.root"
+hName="MCTreePlot-TTTT-SingleLepton-v0p9.root"
 files=[preTTTT+file for file in basefiles]
 filt=1
 Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTTT-DiLepton-v0p8.root"
+hName="MCTreePlot-TTTT-DiLepton-v0p9.root"
 files=[preTTTT+file for file in basefiles]
 filt=2
 Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTTT-TriLepton-v0p8.root"
-files=[preTTTT+file for file in basefiles]
-filt=3
-Tuples.append((files, hName, filt))
+# hName="MCTreePlot-TTTT-TriLepton-v0p9.root"
+# files=[preTTTT+file for file in basefiles]
+# filt=3
+# Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTTo2L2Nu-v0p8.root"
+hName="MCTreePlot-TTTo2L2Nu-v0p9.root"
 files=[preTT2L+file for file in basefiles]
 filt=None
 Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTTo2L2NuGF-v0p8.root"
+hName="MCTreePlot-TTTo2L2NuGF-v0p9.root"
 files=[preTT2LGF+file for file in basefiles]
 filt=None
 Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTToSemiLeptonic-v0p8.root"
+hName="MCTreePlot-TTToSemiLeptonic-v0p9.root"
 files=[preTT1L+file for file in basefiles]
 filt=None
 Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTToSemiLeptonicGF-v0p8.root"
+hName="MCTreePlot-TTToSemiLeptonicGF-v0p9.root"
 files=[preTT1LGF+file for file in basefiles]
 filt=None
 Tuples.append((files, hName, filt))
 
 
-def multiplier(fileList, hName=None, NLeps=None, maxevt=10000):
+def multiplier(fileList, hName=None, NLeps=None, maxevt=1000):
     if hName == None:
         hDirName = None
     else:

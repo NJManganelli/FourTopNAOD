@@ -272,7 +272,7 @@ class MCTreePlot(Module):
         self.addObject(self.hTree_tRecoM)
         self.hTree_AllMatchedJetDiag=ROOT.TH2F('hTree_AllMatchedJetDiag',
                                                    'Matching of all top daughter jets in hadronic W decays;Category;Number of Jets',
-                                                1, 0, 1, 1, 0, 1)
+                                                1, 0, 1, 15, 0, 15)
         self.addObject(self.hTree_AllMatchedJetDiag)
 
         #Sorted leptons
@@ -687,8 +687,8 @@ class MCTreePlot(Module):
                         nextBestBClosest += 1
                     else:
                         neitherBClosest += 1
-                else:
-                    neitherBClosest += 1
+                # else:
+                #     neitherBClosest += 1
             if top.tHasHadronicW:
                 if top.W_dau1_Jet_0 > -1:
                     if top.W_dau1_Jet_0 == W1JetClosest:
@@ -698,8 +698,8 @@ class MCTreePlot(Module):
                             nextBestW1Closest += 1
                         else:
                             neitherW1Closest += 1
-                    else:
-                        neitherW1Closest += 1
+                    # else:
+                    #     neitherW1Closest += 1
                 if top.W_dau2_Jet_0 > -1:
                     if top.W_dau2_Jet_0 == W2JetClosest:
                         bestW2Closest += 1
@@ -708,8 +708,8 @@ class MCTreePlot(Module):
                             nextBestW2Closest += 1
                         else:
                             neitherW2Closest += 1
-                    else:
-                        neitherW2Closest += 1
+                    # else:
+                    #     neitherW2Closest += 1 #Since no counting here, then only do this when there is at least one matched jet, and neither it nor the second matched jet are the closest jet. Avoids overcounting quarks without a PF-jet reconstructed
 
         #Catergorize and fill
         allBestClosest = bestBClosest + bestW1Closest + bestW2Closest
