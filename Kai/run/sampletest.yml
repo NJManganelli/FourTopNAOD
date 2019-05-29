@@ -14,11 +14,11 @@
     stagesource:
         '0': "/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
-        filter: ""
+        filter: "nJet > 2"
     crab_cfg:
-        splitting: "Automatic"
-        #splitting: "FileBased"
-        #unitsPerJob: 1
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 1
         #totalUnits: 150
 
   - dataset: #ttbar dilepton sample
@@ -33,9 +33,9 @@
     postprocessor: 
         filter: ""
     crab_cfg:
-        splitting: "Automatic"
-        #splitting: "FileBased"
-        #unitsPerJob: 1
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
         #totalUnits: 150
 
   - dataset: #ttbar dilepton sample
@@ -50,9 +50,54 @@
     postprocessor: 
         filter: ""
     crab_cfg:
-        splitting: "Automatic"
-        #splitting: "FileBased"
-        #unitsPerJob: 1
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 2
+        #totalUnits: 150
+
+  - dataset: #Double Muon
+        name: "MuMu_B"
+        era: "2017"
+        isData: True
+        nEvents: -1
+    stagesource:
+        '0': "/DoubleMuon/Run2017B-Nano14Dec2018-v1/NANOAOD"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 4
+        #totalUnits: 150
+
+  - dataset: #Double Muon
+        name: "MuMu_C"
+        era: "2017"
+        isData: True
+        nEvents: -1
+    stagesource:
+        '0': "/DoubleMuon/Run2017C-Nano14Dec2018-v1/NANOAOD"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 4
+        #totalUnits: 150
+
+  - dataset: #Double Muon
+        name: "MuMu_D"
+        era: "2017"
+        isData: True
+        nEvents: -1
+    stagesource:
+        '0': "/DoubleMuon/Run2017D-Nano14Dec2018-v1/NANOAOD"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 4
         #totalUnits: 150
 
   - dataset: #Double Muon
@@ -65,9 +110,9 @@
     postprocessor: 
         filter: ""
     crab_cfg:
-        splitting: "Automatic"
-        #splitting: "FileBased"
-        #unitsPerJob: 1
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 4
         #totalUnits: 150
 
   - dataset: #Double Muon
@@ -80,9 +125,9 @@
     postprocessor: 
         filter: ""
     crab_cfg:
-        splitting: "Automatic"
-        #splitting: "FileBased"
-        #unitsPerJob: 1
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 4
         #totalUnits: 150
 
 
