@@ -13,6 +13,7 @@ import os, time
 Tuples=[]
 
 basefiles=["tree_1.root", "tree_2.root", "tree_3.root", "tree_4.root", "tree_5.root", "tree_6.root"] 
+extfiles=["tree_7.root", "tree_8.root", "tree_9.root", "tree_10.root", "tree_11.root", "tree_12.root"] 
 preTTTT="/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/crab_NanoGenTop_TTTTv2/results/"
 preTTTT16="/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/crab_NanoGenTop_TTTT_2016/results/"
 preTTTT18="/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/crab_NanoGenTop_TTTT_2018/results/"
@@ -54,22 +55,22 @@ Tuples.append((files, hName, filt))
 # Tuples.append((files, hName, filt))
 
 hName="BES-TTTo2L2Nu-v1.root"
-files=[preTT2L+file for file in basefiles]
+files=[preTT2L+file for file in basefiles + extfiles]
 filt=None
 Tuples.append((files, hName, filt))
 
 hName="BES-TTTo2L2NuGF-v1.root"
-files=[preTT2LGF+file for file in basefiles]
+files=[preTT2LGF+file for file in basefiles + extfiles]
 filt=None
 Tuples.append((files, hName, filt))
 
 hName="BES-TTToSemiLeptonic-v1.root"
-files=[preTT1L+file for file in basefiles]
+files=[preTT1L+file for file in basefiles + extfiles]
 filt=None
 Tuples.append((files, hName, filt))
 
 hName="BES-TTToSemiLeptonicGF-v1.root"
-files=[preTT1LGF+file for file in basefiles]
+files=[preTT1LGF+file for file in basefiles + extfiles]
 filt=None
 Tuples.append((files, hName, filt))
 
@@ -102,7 +103,7 @@ def multiplier(fileList, hName=None, NLeps=None, maxevt=1000):
 
 pList = []
 for tup in Tuples:
-    p = multiprocessing.Process(target=multiplier, args=(tup[0], tup[1], tup[2], 300000))
+    p = multiprocessing.Process(target=multiplier, args=(tup[0], tup[1], tup[2], 3000000))
     pList.append(p)
     p.start()
 

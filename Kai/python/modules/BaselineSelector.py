@@ -1,5 +1,6 @@
 from __future__ import division, print_function
 import ROOT
+import math
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor 
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
@@ -7,7 +8,7 @@ from PhysicsTools.NanoAODTools.postprocessing.tools import * #DeltaR, match coll
 from FourTopNAOD.Kai.tools.intools import *
 
 class BaselineSelector(Module):
-    def __init__(self, verbose=False, maxevt=-1, probEvt=None, isData=True, era="2017", btagging=['DeepCSV','M'], lepPt=25, MET=50, HT=500, invertZWindow=False, GenTop_LepSelection=None):
+    def __init__(self, verbose=False, maxevt=-1, probEvt=None, isData=True, era="2017", btagging=['DeepCSV','M'], lepPt=25, MET=50, HT=500, invertZWindow=False, invertZWindowEarlyReturn=True, GenTop_LepSelection=None):
         self.writeHistFile=True
         self.verbose=verbose
         self.probEvt = probEvt
@@ -128,13 +129,21 @@ class BaselineSelector(Module):
         self.BTMeth = self.bTagWorkingPointDict[era][btagging[0]]
         self.BTWP =  self.bTagWorkingPointDict[era][btagging[0]][btagging[1]]
         self.BTAlg = self.bTagWorkingPointDict[era][btagging[0]]["Var"]
-        print("BTMeth " + str(self.BTMeth))
-        print("BTWP " + str(self.BTWP))
-        print("BTAlg " + str(self.BTAlg))
         self.lepPt = lepPt
         self.MET = MET
         self.HT = HT
         self.invertZWindow = invertZWindow
+        self.invertZWindowEarlyReturn = invertZWindowEarlyReturn
+        if self.verbose:
+            print("BTMeth " + str(self.BTMeth))
+            print("BTWP " + str(self.BTWP))
+            print("BTAlg " + str(self.BTAlg))
+            print("Minimum lepton Pt: " + str(self.lepPt))
+            print("Minimum MET: " + str(self.MET))
+            print("Minimum HT: " + str(self.HT))
+            print("Inverted Z window: " + str(self.invertZWindow))
+            print("Inverted Z window early return: " + str(self.invertZWindowEarlyReturn))
+            
 
         #event counters
         self.counter = 0
@@ -147,6 +156,65 @@ class BaselineSelector(Module):
             Module.beginJob(self,histFile,histDirName)
             self.cutflow = ROOT.TH1F("h_base_cutflow", "Cutflow in the baseline event selector;; Events", 1, 0, 1)
             self.addObject(self.cutflow)
+            self.ctrl_met_phi = ROOT.TH1F("ctrl_met_phi", "MET;MET #phi; Events", 100, -math.pi, math.pi)
+            self.addObject(self.ctrl_met_phi)
+            self.ctrl_met_pt = ROOT.TH1F("ctrl_met_pt", "MET;MET Pt (GeV); Events", 400, 0, 2000)
+            self.addObject(self.ctrl_met_pt)
+            self.ctrl_HT = ROOT.TH1F("ctrl_HT", "HT; HT (GeV); Events", 600, 0, 3000)
+            self.addObject(self.ctrl_HT)
+            self.ctrl_H = ROOT.TH1F("ctrl_H", "H; H (GeV); Events", 600, 0, 3000)
+            self.addObject(self.ctrl_H)
+            self.ctrl_HTb = ROOT.TH1F("ctrl_HTb", "HTb; HTb (GeV); Events", 400, 0, 2000)
+            self.addObject(self.ctrl_HTb)
+            self.ctrl_HT2M = ROOT.TH1F("ctrl_HT2M", "HT2M; HT2M (GeV); Events", 400, 0, 2000)
+            self.addObject(self.ctrl_HT2M)
+            self.ctrl_H2M = ROOT.TH1F("ctrl_H2M", "H2M; H2M (GeV); Events", 600, 0, 3000)
+            self.addObject(self.ctrl_H2M)
+            self.ctrl_HTH = ROOT.TH1F("ctrl_HTH", "HTH; HTH; Events", 400, 0, 1)
+            self.addObject(self.ctrl_HTH)
+            self.ctrl_HTRat = ROOT.TH1F("ctrl_HTRat", "HTRat; HTRat; Events", 400, 0, 1)
+            self.addObject(self.ctrl_HTRat)
+            self.ctrl_dRbb = ROOT.TH1F("ctrl_dRbb", "dR bb; dRbb; Events", 400, 0, 8)
+            self.addObject(self.ctrl_dRbb)
+            self.ctrl_DLM = ROOT.TH1F("ctrl_DLM", "Same-flavor Dilepton Invariant Mass; Mass (GeV); Events", 400, 0, 400)
+            self.addObject(self.ctrl_DLM)
+            self.ctrl_nJets = ROOT.TH1F("ctrl_nJets", "Jets; nJets; Events", 20, 0, 20)
+            self.addObject(self.ctrl_nJets)
+            self.ctrl_nJets_BTL = ROOT.TH1F("ctrl_nJets_BTL", "Loose b-Tagged Jets; nJets; Events", 12, 0, 12)
+            self.addObject(self.ctrl_nJets_BTL)
+            self.ctrl_nJets_BTM = ROOT.TH1F("ctrl_nJets_BTM", "Medium b-Tagged Jets; nJets; Events", 12, 0, 12)
+            self.addObject(self.ctrl_nJets_BTM)
+            self.ctrl_nJets_BTT = ROOT.TH1F("ctrl_nJets_BTT", "Tight b-Tagged Jets; nJets; Events", 12, 0, 12)
+            self.addObject(self.ctrl_nJets_BTT)
+
+            self.ctrl_BJets = {}
+            self.ctrl_AJets = {}
+            for i in xrange(8):
+                self.ctrl_BJets[i] = {}
+                self.ctrl_AJets[i] = {}
+                for var in ["pt", "eta", "phi", "mass", "btagCSVV2", "btagDeepB", "btagDeepFlavB"]:
+                    if var == "pt":
+                        xmin = 0
+                        xmax = 500
+                    elif var == "eta":
+                        xmin = -3
+                        xmax = 3
+                    elif var == "phi":
+                        xmin = -math.pi
+                        xmax = math.pi
+                    elif var == "mass":
+                        xmin = 0
+                        xmax = 500
+                    elif var == "btagCSVV2" or var == "btagDeepB" or var == "btagDeepFlavB":
+                        xmin = 0
+                        xmax = 1
+                    self.ctrl_BJets[i][var] = ROOT.TH1F("ctrl_BJets[{0:d}][{1:s}]".format(i, var), 
+                                                        "B-tagged Jet [{0:d}]; {1:s}; Events".format(i, var), 100, xmin, xmax)
+                    self.addObject(self.ctrl_BJets[i][var])
+                    self.ctrl_AJets[i][var] = ROOT.TH1F("ctrl_AJets[{0:d}][{1:s}]".format(i, var), 
+                                                        "Pt Sorted Jet [{0:d}]; {1:s}; Events".format(i, var), 100, xmin, xmax)
+                    self.addObject(self.ctrl_AJets[i][var])
+            
 
     def endJob(self):
         if hasattr(self, 'objs') and self.objs != None:
@@ -211,8 +279,9 @@ class BaselineSelector(Module):
         met = Object(event, "METFixEE2017") #FIXME: Placeholder until passed in via configuration?
 
         HLT = Object(event, "HLT")
-        Filters = Object(event, "Flag") #For Data use only
+        Filters = Object(event, "Flag")
 
+        theWeight = 1.0 #Placeholder value
 
         self.cutflow.Fill("> preselection", 1.0)
         ###########
@@ -323,6 +392,8 @@ class BaselineSelector(Module):
                 if abs(DiLepMass - 91.0) > 15.0:
                     return False
                 self.cutflow.Fill("> Z Window (IN)", 1.0)
+                if self.invertZWindowEarlyReturn:
+                    return True
             elif not self.invertZWindow:
                 if abs(DiLepMass - 91.0) < 15.0:
                     return False
@@ -386,6 +457,40 @@ class BaselineSelector(Module):
             HTRat = (jet1.pt + jet2.pt)/HT
             HTH = HT/H
 
+        #####################
+        ### Control Plots ###
+        #####################
+        self.ctrl_met_phi.Fill(met.phi ,theWeight)
+        self.ctrl_met_pt.Fill(met.pt ,theWeight)
+        self.ctrl_HT.Fill(HT ,theWeight)
+        self.ctrl_H.Fill(H ,theWeight)
+        self.ctrl_HTb.Fill(HTb ,theWeight)
+        self.ctrl_HT2M.Fill(HT2M ,theWeight)
+        self.ctrl_H2M.Fill(H2M ,theWeight)
+        self.ctrl_HTH.Fill(HTH ,theWeight)
+        self.ctrl_HTRat.Fill(HTRat ,theWeight)
+        self.ctrl_dRbb.Fill(dRbb ,theWeight)
+        self.ctrl_DLM.Fill(DiLepMass ,theWeight)
+        self.ctrl_nJets.Fill(nJets ,theWeight)
+        self.ctrl_nJets_BTL.Fill(nBTLoose ,theWeight)
+        self.ctrl_nJets_BTM.Fill(nBTMedium ,theWeight)
+        self.ctrl_nJets_BTT.Fill(nBTTight ,theWeight)
+        for var in ["pt", "eta", "phi", "mass", "btagCSVV2", "btagDeepB", "btagDeepFlavB"]:
+            for i, jettup in enumerate(selJets):
+                try:
+                    self.ctrl_AJets[i][var].Fill(getattr(jettup[1], var), theWeight)
+                except:
+                    pass
+            for i, jettup in enumerate(selBTsortedJets):
+                try:
+                    self.ctrl_BJets[i][var].Fill(getattr(jettup[1], var), theWeight)
+                except:
+                    pass
+
+
+        ####################################
+        ### Variables for branch filling ###
+        ####################################
         ESV = {}
         ESV['nJet'] = nJets
         ESV['nJetBTL'] = nBTLoose
