@@ -14,11 +14,45 @@
     stagesource:
         '0': "/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
-        filter: "nJet > 2"
+        filter: ""
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
         unitsPerJob: 1
+        #totalUnits: 150
+
+  - dataset: #Four Top sample
+        name: "tttt"
+        era: "2016"
+        isData: False
+        nEvents: 2456040
+        isSignal: True
+        crossection: 0.012
+    stagesource:
+        '0': "/TTTT_TuneCUETP8M2T4_13TeV-amcatnlo-pythia8/RunIISummer16NanoAODv4-PUMoriond17_Nano14Dec2018_102X_mcRun2_asymptotic_v6-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 1
+        #totalUnits: 150
+
+  - dataset: #ttbar inclusive
+        name: "tt"
+        era: "2016"
+        isData: False
+        nEvents: 76915549
+        isSignal: False
+        crossection: 830.0
+    stagesource:
+        '0': "/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer16NanoAODv4-PUMoriond17_Nano14Dec2018_102X_mcRun2_asymptotic_v6-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
         #totalUnits: 150
 
   - dataset: #ttbar dilepton sample

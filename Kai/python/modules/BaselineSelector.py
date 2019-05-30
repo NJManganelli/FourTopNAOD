@@ -35,19 +35,59 @@ class BaselineSelector(Module):
                      'isLastCopyBeforeFSR':0b100000000000000
                     }
         #flags for MET filters
-        self.Flags = { "isData" : ["eeBadScFilter"],
-                       "Common" :  ["goodVertices",
-                                    "globalSuperTightHalo2016Filter",
-                                    "HBHENoiseFilter",
-                                    "HBHENoiseIsoFilter",
-                                    "EcalDeadCellTriggerPrimitiveFilter",
-                                    "BadPFMuonFilter",
-                                    "BadChargedCandidateFilter",
-                                    "ecalBadCalibFilterV2"
-                                   ]
-                     }
+        self.FlagsDict = {"2016" :  { "isData" : ["globalSuperTightHalo2016Filter"],
+                                      "Common" :  ["goodVertices",
+                                                   "HBHENoiseFilter",
+                                                   "HBHENoiseIsoFilter",
+                                                   "EcalDeadCellTriggerPrimitiveFilter",
+                                                   "BadPFMuonFilter"
+                                                  ],
+                                      "NotRecommended" : ["BadChargedCandidateFilter",
+                                                          "eeBadScFilter"
+                                                         ]
+                                     },
+                          "2017" :  { "isData" : ["globalSuperTightHalo2016Filter"],
+                                      "Common" :  ["goodVertices",
+                                                   "HBHENoiseFilter",
+                                                   "HBHENoiseIsoFilter",
+                                                   "EcalDeadCellTriggerPrimitiveFilter",
+                                                   "BadPFMuonFilter",
+                                                   "ecalBadCalibFilterV2"
+                                                  ],
+                                      "NotRecommended" : ["BadChargedCandidateFilter",
+                                                          "eeBadScFilter"
+                                                         ]
+                                     },
+                          "2018" :  { "isData" : ["globalSuperTightHalo2016Filter"],
+                                      "Common" :  ["goodVertices",
+                                                   "HBHENoiseFilter",
+                                                   "HBHENoiseIsoFilter",
+                                                   "EcalDeadCellTriggerPrimitiveFilter",
+                                                   "BadPFMuonFilter",
+                                                   "ecalBadCalibFilterV2"
+                                                  ],
+                                      "NotRecommended" : ["BadChargedCandidateFilter",
+                                                          "eeBadScFilter"
+                                                         ]
+                                     }
+                         } 
+        self.Flags = self.FlagsDict[era]
         #Btagging dictionary
+        #FIXMEFIXMEFIXME
         self.bTagWorkingPointDict = {
+            '2016':{
+                'DeepCSV':{
+                    'L': 0.2217,
+                    'M': 0.6321,
+                    'T': 0.8953,
+                    'Var': 'btagDeepB'
+                    },
+                'DeepJet':{
+                    'L': 0.0614,
+                    'M': 0.3093,
+                    'T': 0.7221,
+                    'Var': 'btagDeepFlavB'
+                    },
             '2017':{
                 'CSVv2':{
                     'L': 0.5803,
@@ -65,6 +105,19 @@ class BaselineSelector(Module):
                     'L': 0.0521,
                     'M': 0.3033,
                     'T': 0.7489,
+                    'Var': 'btagDeepFlavB'
+                    },
+            '2018':{
+                'DeepCSV':{
+                    'L': 0.1241,
+                    'M': 0.4184,
+                    'T': 0.7527,
+                    'Var': 'btagDeepB'
+                    },
+                'DeepJet':{
+                    'L': 0.0494,
+                    'M': 0.2770,
+                    'T': 0.7264,
                     'Var': 'btagDeepFlavB'
                     }
             }
@@ -85,9 +138,14 @@ class BaselineSelector(Module):
         self.counter = 0
         self.maxEventsToProcess=maxevt
 
-    # def beginJob(self,histFile=None,histDirName=None):
-    #     Module.beginJob(self,histFile,histDirName)
-        
+    def beginJob(self,histFile=None,histDirName=None):
+        if histFile == None or histDirName == None:
+            Module.beginJob(self, None, None)
+        else:
+            Module.beginJob(self,histFile,histDirName)
+            self.cutflow = ROOT.TH1F("h_base_cutflow", "Cutflow in the baseline event selector;; Events", 1, 0, 1)
+            self.addObject(self.cutflow)
+
     def endJob(self):
         if hasattr(self, 'objs') and self.objs != None:
             prevdir = ROOT.gDirectory
@@ -154,7 +212,7 @@ class BaselineSelector(Module):
         Filters = Object(event, "Flag") #For Data use only
 
 
-
+        self.cutflow.Fill("> preselection", 1.0)
         ###########
         ### MET ###
         ###########
@@ -166,8 +224,10 @@ class BaselineSelector(Module):
         if self.isData:
             passFilters = getattr(Filters, self.Flags["isData"][0])
             if not passFilters: return False
+        self.cutflow.Fill("> MET filters", 1.0)
         if met.pt < self.MET:
             return False
+        self.cutflow.Fill("> MET > {0:d}".format(self.MET), 1.0)
 
 
 
@@ -240,12 +300,14 @@ class BaselineSelector(Module):
         nLep = nMu + nEle
         if nLep != 2:
             return False
+        self.cutflow.Fill("> Dilepton", 1.0)
         lepCharge = [lep[1].charge for lep in (selMuUniform + selEleUniform)]
         jetsToClean = set([lep[1].jetIdx for lep in (selMuUniform + selEleUniform)])
         if len(lepCharge) !=2:
             print("Danger Will Robinson! Danger!")
         if lepCharge[0]*lepCharge[1] > 0:
             return False
+        self.cutflow.Fill("> OS Leps", 1.0)
         Lep4Mom = [lep[1].p4() for lep in (selMuUniform + selEleUniform)]
         #calc invariant mass if two same flavor leptons
         if nMu == 2 or nEle == 2:
@@ -253,16 +315,19 @@ class BaselineSelector(Module):
             #Low mass resonance rejection
             if DiLepMass < 20:
                 return False
+            self.cutflow.Fill("> Low M Res", 1.0)
             #Z mass resonance rejection or inversion
             if self.invertZWindow:
                 if abs(DiLepMass - 91.0) > 15.0:
                     return False
+                self.cutflow.Fill("> Z Window (IN)", 1.0)
             elif not self.invertZWindow:
                 if abs(DiLepMass - 91.0) < 15.0:
                     return False
+                self.cutflow.Fill("> Z Window (OUT)", 1.0)
         else:
             #0 default for different flavour leptons
-            DiLepMass = 0
+            DiLepMass = -1
         
         selJets = []
         selBTsortedJets = []
@@ -281,8 +346,12 @@ class BaselineSelector(Module):
         nBTMedium = len(selBTMediumJets)
         nBTTight = len(selBTTightJets)
 
-        if nJets < 4 or nBTMedium < 2:
+        if nJets < 4:
             return False
+        self.cutflow.Fill("> 4+ Jets", 1.0)
+        if nBTMedium < 2:
+            return False
+        self.cutflow.Fill("> 2+ Btag Jets", 1.0)
 
         #HT and other calculations
         HT = 0
@@ -292,7 +361,7 @@ class BaselineSelector(Module):
         HTb = 0
         HTH = 0
         HTRat = 0
-        dRbb = 99
+        dRbb = -1
 
         
         for j, jet in selBTsortedJets:
@@ -304,7 +373,11 @@ class BaselineSelector(Module):
             if getattr(jet, self.BTAlg) > self.BTWP:
                 HTb += jet.pt
 
-        if nJets > 3:
+        if HT < self.HT:
+            return False
+        self.cutflow.Fill("> HT > {0:d}".format(self.HT), 1.0)
+
+        if nJets > 3: #redundant, but only so long as 4 jet cut is in place
             jet1 = selBTsortedJets[0][1]
             jet2 = selBTsortedJets[1][1]
             dRbb = deltaR(jet1, jet2)
