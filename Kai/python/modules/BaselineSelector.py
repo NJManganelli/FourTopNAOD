@@ -87,7 +87,8 @@ class BaselineSelector(Module):
                     'M': 0.3093,
                     'T': 0.7221,
                     'Var': 'btagDeepFlavB'
-                    },
+                    }
+            },
             '2017':{
                 'CSVv2':{
                     'L': 0.5803,
@@ -106,7 +107,8 @@ class BaselineSelector(Module):
                     'M': 0.3033,
                     'T': 0.7489,
                     'Var': 'btagDeepFlavB'
-                    },
+                    }
+            },
             '2018':{
                 'DeepCSV':{
                     'L': 0.1241,

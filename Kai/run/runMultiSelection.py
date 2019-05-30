@@ -23,52 +23,52 @@ preTT1LGF="/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/cra
 
 
 
-# hName="MCTreePlot-TTTT16-DiLepton-v0p9.root"
+# hName="BES-TTTT16-DiLepton-v1.root"
 # files=[preTTTT16+file for file in basefiles]
 # filt=2
 # Tuples.append((files, hName, filt))
 
-# hName="MCTreePlot-TTTT18-DiLepton-v0p9.root"
+# hName="BES-TTTT18-DiLepton-v1.root"
 # files=[preTTTT18+file for file in basefiles]
 # filt=2
 # Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTTT-v0p9.root"
+hName="BES-TTTT-v1.root"
 files=[preTTTT+file for file in basefiles]
 filt=None
 Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTTT-SingleLepton-v0p9.root"
-files=[preTTTT+file for file in basefiles]
-filt=1
-Tuples.append((files, hName, filt))
+# hName="BES-TTTT-SingleLepton-v1.root"
+# files=[preTTTT+file for file in basefiles]
+# filt=1
+# Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTTT-DiLepton-v0p9.root"
-files=[preTTTT+file for file in basefiles]
-filt=2
-Tuples.append((files, hName, filt))
+# hName="BES-TTTT-DiLepton-v1.root"
+# files=[preTTTT+file for file in basefiles]
+# filt=2
+# Tuples.append((files, hName, filt))
 
-# hName="MCTreePlot-TTTT-TriLepton-v0p9.root"
+# hName="BES-TTTT-TriLepton-v1.root"
 # files=[preTTTT+file for file in basefiles]
 # filt=3
 # Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTTo2L2Nu-v0p9.root"
+hName="BES-TTTo2L2Nu-v1.root"
 files=[preTT2L+file for file in basefiles]
 filt=None
 Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTTo2L2NuGF-v0p9.root"
+hName="BES-TTTo2L2NuGF-v1.root"
 files=[preTT2LGF+file for file in basefiles]
 filt=None
 Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTToSemiLeptonic-v0p9.root"
+hName="BES-TTToSemiLeptonic-v1.root"
 files=[preTT1L+file for file in basefiles]
 filt=None
 Tuples.append((files, hName, filt))
 
-hName="MCTreePlot-TTToSemiLeptonicGF-v0p9.root"
+hName="BES-TTToSemiLeptonicGF-v1.root"
 files=[preTT1LGF+file for file in basefiles]
 filt=None
 Tuples.append((files, hName, filt))
@@ -78,23 +78,23 @@ def multiplier(fileList, hName=None, NLeps=None, maxevt=1000):
     if hName == None:
         hDirName = None
     else:
-        hName = "BES_" + hName
+        hName = hName
         hDirName = "plots"
     p=PostProcessor(".",
                     fileList,
-                    modules=[BaselineSelector(BaselineSelector(maxevt=-1, 
-                                                               probEvt=None, 
-                                                               isData=True, 
-                                                               era="2017", 
-                                                               btagging=['DeepCSV','M'], 
-                                                               lepPt=25, 
-                                                               MET=50, 
-                                                               HT=500, 
-                                                               invertZWindow=False, 
-                                                               GenTop_LepSelection=None
-                                                               ),
-                                          ],
-                    noOut=False,
+                    modules=[BaselineSelector(maxevt=maxevt, 
+                                              probEvt=None, 
+                                              isData=False, 
+                                              era="2017", 
+                                              btagging=['CSVv2','M'], 
+                                              lepPt=25, 
+                                              MET=50, 
+                                              HT=500, 
+                                              invertZWindow=False, 
+                                              GenTop_LepSelection=None
+                                             ),
+                         ],
+                    noOut=True,
                     histFileName=hName,
                     histDirName=hDirName,
                    )
