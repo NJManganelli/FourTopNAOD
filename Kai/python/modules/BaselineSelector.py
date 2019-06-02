@@ -195,16 +195,16 @@ class BaselineSelector(Module):
                 for var in ["pt", "eta", "phi", "mass", "btagCSVV2", "btagDeepB", "btagDeepFlavB"]:
                     if var == "pt":
                         xmin = 0
-                        xmax = 500
+                        xmax = 1000
                     elif var == "eta":
-                        xmin = -3
-                        xmax = 3
+                        xmin = -2.6
+                        xmax = 2.6
                     elif var == "phi":
                         xmin = -math.pi
                         xmax = math.pi
                     elif var == "mass":
                         xmin = 0
-                        xmax = 500
+                        xmax = 300
                     elif var == "btagCSVV2" or var == "btagDeepB" or var == "btagDeepFlavB":
                         xmin = 0
                         xmax = 1
@@ -214,7 +214,78 @@ class BaselineSelector(Module):
                     self.ctrl_AJets[i][var] = ROOT.TH1F("ctrl_AJets[{0:d}][{1:s}]".format(i, var), 
                                                         "Pt Sorted Jet [{0:d}]; {1:s}; Events".format(i, var), 100, xmin, xmax)
                     self.addObject(self.ctrl_AJets[i][var])
-            
+                
+            self.ctrl_FatJets = {}
+            for i in xrange(4):
+                self.ctrl_FatJets[i] = {}
+                for var in ["pt", "eta", "phi", "mass", "btagCSVV2", "btagDeepB", "deepTag_TvsQCD", "deepTag_WvsQCD", "deepTag_MD_bbvsLight"]:
+                    if var == "pt":
+                        xmin = 0
+                        xmax = 1500
+                    elif var == "eta":
+                        xmin = -2.6
+                        xmax = 2.6
+                    elif var == "phi":
+                        xmin = -math.pi
+                        xmax = math.pi
+                    elif var == "mass":
+                        xmin = 0
+                        xmax = 300
+                    elif var in ["btagCSVV2", "btagDeepB", "deepTag_TvsQCD", "deepTag_WvsQCD", "deepTag_MD_bbvsLight"]:
+                        xmin = 0
+                        xmax = 1
+                    self.ctrl_FatJets[i][var] = ROOT.TH1F("ctrl_FatJets[{0:d}][{1:s}]".format(i, var), 
+                                                        "AK8 Jet [{0:d}]; {1:s}; Events".format(i, var), 100, xmin, xmax)
+                    self.addObject(self.ctrl_FatJets[i][var])
+
+            self.ctrl_Muons = {}
+            self.ctrl_Electrons = {}
+            self.ctrl_Leptons = {}
+            for i in xrange(2):
+                self.ctrl_Muons[i] = {}
+                self.ctrl_Electrons[i] = {}
+                self.ctrl_Leptons[i] = {}
+                for var in ["pt", "eta", "phi", "mass", "dz", "dxy", "jetRelIso", "ip3d"]:
+                    if var == "pt":
+                        xmin = 0
+                        xmax = 500
+                    elif var == "eta":
+                        xmin = -2.6
+                        xmax = 2.6
+                    elif var == "phi":
+                        xmin = -math.pi
+                        xmax = math.pi
+                    elif var == "mass":
+                        xmin = 0
+                        xmax = 5
+                    elif var == "dz":
+                        xmin = 0
+                        xmax = 0.02
+                    elif var == "dxy" or var == "ip3d":
+                        xmin = 0
+                        xmax = 0.2
+                    elif var in ["jetRelIso"]:
+                        xmin = 0
+                        xmax = 1
+                    # self.ctrl_Muons[i][var] = ROOT.TH1F("ctrl_Muons[{0:d}][{1:s}]".format(i, var), 
+                    #                                     "Selected Muon [{0:d}]; {1:s}; Events".format(i, var), 100, xmin, xmax)
+                    # self.addObject(self.ctrl_Muons[i][var])
+                    # self.ctrl_Electrons[i][var] = ROOT.TH1F("ctrl_Electrons[{0:d}][{1:s}]".format(i, var), 
+                    #                                     "Selected Electron [{0:d}]; {1:s}; Events".format(i, var), 100, xmin, xmax)
+                    # self.addObject(self.ctrl_Electrons[i][var])
+                    self.ctrl_Leptons[i][var] = ROOT.TH1F("ctrl_Leptons[{0:d}][{1:s}]".format(i, var), 
+                                                        "Selected Lepton [{0:d}]; {1:s}; Events".format(i, var), 100, xmin, xmax)
+                    self.addObject(self.ctrl_Leptons[i][var])
+
+            self.stitch_nGenJet = ROOT.TH1I("stitch_nGenJets", "nGenJet (pt > 30); nGenJets; Events", 16, 4, 20)
+            self.addObject(self.stitch_nGenJets)
+            self.stitch_GenHT = ROOT.TH1F("stitch_GenHT", "GenHT (pt > 30, |#eta| < 2.4); Gen HT (GeV); Events", 800, 200, 600)
+            self.addObject(self.stitch_GenHT)
+            self.stitch_nGenLeps = ROOT.TH1I("stitch_nGenLeps", "nGenLeps (e(1), mu (1), #tau (2) from t); nGenLeps; Events", 6, 0, 6)
+            self.addObject(self.stitch_nGenLeps)
+
+
+                    
 
     def endJob(self):
         if hasattr(self, 'objs') and self.objs != None:
@@ -323,7 +394,7 @@ class BaselineSelector(Module):
         # selEle15 = []
         selEleUniform = []
         for idx, electron in enumerate(electrons):
-            if abs(electron.eta) < 2.4 and electron.cutBased_Fall17_V1 >= 2 and electron.dz < 0.02:
+            if (abs(electron.eta) < 1.4442 or (abs(electron.eta) > 1.4660 and abs(electron.eta) < 2.4)) and electron.cutBased_Fall17_V1 >= 2 and electron.dz < 0.02:
                 if electron.pt > self.lepPt:
                     selEleUniform.append((idx, electron))
         #         if electron.pt > 25:
@@ -405,7 +476,7 @@ class BaselineSelector(Module):
         selJets = []
         selBTsortedJets = []
         for idx, jet in enumerate(jets):
-            if abs(jet.eta) < 2.5 and jet.jetId >= 6 and ((jet.pt > 25 and getattr(jet, self.BTAlg) > self.BTWP) or jet.pt > 30) and idx not in jetsToClean:
+            if abs(jet.eta) < 2.4 and jet.jetId >= 6 and ((jet.pt > 25 and getattr(jet, self.BTAlg) > self.BTWP) or jet.pt > 30) and idx not in jetsToClean:
                 selJets.append((idx, jet))
                 selBTsortedJets.append((idx, jet))
         selBTsortedJets.sort(key=lambda j : getattr(j[1], self.BTAlg), reverse=True)
@@ -484,6 +555,18 @@ class BaselineSelector(Module):
             for i, jettup in enumerate(selBTsortedJets):
                 try:
                     self.ctrl_BJets[i][var].Fill(getattr(jettup[1], var), theWeight)
+                except:
+                    pass
+        for var in ["pt", "eta", "phi", "mass", "btagCSVV2", "btagDeepB", "deepTag_TvsQCD", "deepTag_WvsQCD", "deepTag_MD_bbvsLight"]:
+            for i, jet in enumerate(fatjets):
+                try:
+                    self.ctrl_AJets[i][var].Fill(getattr(jet, var), theWeight)
+                except:
+                    pass
+        for var in ["pt", "eta", "phi", "mass", "dz", "dxy", "jetRelIso", "ip3d"]:
+            for i, leptup in enumerate(selMuUniform + selEleUniform)):
+                try:
+                    self.ctrl_AJets[i][var].Fill(getattr(leptup[1], var), theWeight)
                 except:
                     pass
 
