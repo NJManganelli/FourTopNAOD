@@ -139,19 +139,22 @@ Tuples = []
 filesTTTT=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/BD738994-6BD2-6D41-9D93-E0AC468497A5.root"]
 # files=["/eos/home-n/nmangane/AODStorage/TestingSamples/TTTT_TuneCP5_PSweights_102X.root"]
 hNameTTTT="TopSysPtTTTT.root"
-hNameTTTTw="TopSysPtTTTTw.root"
-hNameTTTTabsw="TopSysPtTTTTabsw.root"
-
+# hNameTTTTw="TopSysPtTTTTw.root"
+# hNameTTTTabsw="TopSysPtTTTTabsw.root"
 Tuples.append((filesTTTT, hNameTTTT, 0))
-Tuples.append((filesTTTT, hNameTTTTw, 1))
-Tuples.append((filesTTTT, hNameTTTTabsw, 2))
-filesTTGF=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/E565691C-17D4-6046-865E-8393F1FE0414.root"]
-hNameTTGF="TopSysPtTTGF.root"
-hNameTTGFw="TopSysPtTTGFw.root"
-hNameTTGFabsw="TopSysPtTTGFabsw.root"
-Tuples.append((filesTTGF, hNameTTGF, 0))
-Tuples.append((filesTTGF, hNameTTGFw, 1))
-Tuples.append((filesTTGF, hNameTTGFabsw, 2))
+# Tuples.append((filesTTTT, hNameTTTTw, 1))
+# Tuples.append((filesTTTT, hNameTTTTabsw, 2))
+
+filesTT=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/80000/FB2C8D48-139E-7647-90C2-1CF1767DB0A1.root"]
+hNameTT="TopSysPtTT.root"
+Tuples.append((filesTT, hNameTT, 0))
+# filesTTGF=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/E565691C-17D4-6046-865E-8393F1FE0414.root"]
+# hNameTTGF="TopSysPtTTGF.root"
+# hNameTTGFw="TopSysPtTTGFw.root"
+# hNameTTGFabsw="TopSysPtTTGFabsw.root"
+# Tuples.append((filesTTGF, hNameTTGF, 0))
+# Tuples.append((filesTTGF, hNameTTGFw, 1))
+# Tuples.append((filesTTGF, hNameTTGFabsw, 2))
 
 
 
@@ -164,7 +167,7 @@ def multiplier(fileList, hName=None, wOption=0):
         p=PostProcessor(".",
                         fileList,
                         cut=None,
-                        modules=[TopSystemPt(maxevt=300000, wOpt=wOption)],
+                        modules=[TopSystemPt(maxevt=800000, wOpt=wOption)],
                         noOut=True,
                         histFileName=hName,
                         histDirName=hDirName,
