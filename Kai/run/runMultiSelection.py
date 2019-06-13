@@ -50,15 +50,15 @@ preTT1LGF="/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/cra
 # filt=2
 # Tuples.append((files, hName, filt))
 
-hName="BES-TTTT-v1p4.root"
+hName="BES-TTTT-v1p5.root"
 files=[preTTTT+file for file in basefiles]
 filt=None
 # Tuples.append((files, "B1_"+hName, filt, "2017", ["CSVv2", "M"], [False, 41.53, 0.012, 2273928]))
 # Tuples.append((files, "B2_"+hName, filt, "2017", ["DeepCSV", "M"], [False, 41.53, 0.012, 2273928]))
 # Tuples.append((files, "B3_"+hName, filt, "2017", ["DeepJet", "M"], [False, 41.53, 0.012, 2273928]))
 Tuples.append((files, "B1_"+hName, filt, "2017", ["CSVv2", "M"], [False, 41.53, 0.012, 85136]))
-Tuples.append((files, "B2_"+hName, filt, "2017", ["DeepCSV", "M"], [False, 41.53, 0.012, 85136]))
-Tuples.append((files, "B3_"+hName, filt, "2017", ["DeepJet", "M"], [False, 41.53, 0.012, 85136]))
+# Tuples.append((files, "B2_"+hName, filt, "2017", ["DeepCSV", "M"], [False, 41.53, 0.012, 85136]))
+# Tuples.append((files, "B3_"+hName, filt, "2017", ["DeepJet", "M"], [False, 41.53, 0.012, 85136]))
 
 # hName="BES-TTTT-SingleLepton-v1.root"
 # files=[preTTTT+file for file in basefiles]
@@ -75,13 +75,13 @@ Tuples.append((files, "B3_"+hName, filt, "2017", ["DeepJet", "M"], [False, 41.53
 # filt=3
 # Tuples.append((files, hName, filt))
 
-hName="BES-TTTo2L2Nu-v1p4.root"
+hName="BES-TTTo2L2Nu-v1p5.root"
 files=[preTT2L+file for file in basefiles + extfiles]
 filt=None
 #Tuples.append((files, hName, filt))
 Tuples.append((files, "B1_"+hName, filt, "2017", ["CSVv2", "M"], [False, 41.53, 88.341, 1098554]))
-Tuples.append((files, "B2_"+hName, filt, "2017", ["DeepCSV", "M"], [False, 41.53, 88.341, 1098554]))
-Tuples.append((files, "B3_"+hName, filt, "2017", ["DeepJet", "M"], [False, 41.53, 88.341, 1098554]))
+# Tuples.append((files, "B2_"+hName, filt, "2017", ["DeepCSV", "M"], [False, 41.53, 88.341, 1098554]))
+# Tuples.append((files, "B3_"+hName, filt, "2017", ["DeepJet", "M"], [False, 41.53, 88.341, 1098554]))
 
 
 # hName="BES-TTTo2L2NuGF-v1.root"
@@ -129,6 +129,11 @@ def multiplier(fileList, hName=None, NLeps=None, theEra="2017", theBTagger=['CSV
                                           ),
                              btagSFProducer(theEra, algo=theBTagger[0]),
                              Trigger(triggers),
+                             jetmetUncertaintiesProducer("2017", 
+                                                         "Fall17_17Nov2017_V32_MC", 
+                                                         [ "All" ], 
+                                                         redoJEC=True
+                                                     ),
                              BaselineSelector(maxevt=maxevt, 
                                               probEvt=None,
                                               isData=evtConfig[0],

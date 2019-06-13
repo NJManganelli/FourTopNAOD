@@ -111,6 +111,27 @@
         unitsPerJob: 2
         #totalUnits: 150
 
+  - dataset: #single top - top-W
+        name: "ST_tW"
+        era: "2017"
+        isData: False
+        nEvents: 
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 35.8
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 34.91
+    stagesource:
+        '0': "/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
   - dataset: #single top - antitop-W
         name: "ST_tbarW"
         era: "2017"
@@ -118,7 +139,7 @@
         nEvents: 
         isSignal: False
         procCrossSection: -1
-        crossSection: 34.91
+        crossSection: 35.8
         branchingRatio: 1
         filterEfficiency: 1
         MCMCrossSection: 34.91
@@ -132,11 +153,138 @@
         unitsPerJob: 3
         #totalUnits: 150
 
-  - dataset: #DY dilepton + jets sample
-        name: "DY_DL-HT400to600"
+  - dataset: #ttH to bb dilepton ttbar
+        name: "ttH_DL"
         era: "2017"
         isData: False
-        nEvents: 
+        nEvents: 9794620
+        isSignal: False
+        procCrossSection: 0.2934
+        crossSection: 0.03116
+        branchingRatio: 0.10621
+        filterEfficiency: 1
+        MCMCrossSection: 1
+    stagesource:
+        '0': "/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
+  - dataset: #ttH to bb single lepton ttbar
+        name: "ttH_SL"
+        era: "2017"
+        isData: False
+        nEvents: 9332943
+        isSignal: False
+        procCrossSection: 0.2934
+        crossSection: 0.13332
+        branchingRatio: 0.45441
+        filterEfficiency: 1
+        MCMCrossSection: 1
+    stagesource:
+        '0': "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
+  - dataset: #ttH to bb inclusive
+        name: "ttH"
+        era: "2017"
+        isData: False
+        nEvents: 8000000
+        isSignal: False
+        procCrossSection: 0.2934
+        crossSection: 0.2934
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 1
+    stagesource:
+        '0': "/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
+  - dataset: #ttWJets
+        name: "ttWJets"
+        era: "2017"
+        isData: False
+        nEvents: 9425384
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 0.611
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0.4793
+    stagesource:
+        '0': "/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
+  - dataset: #ttZJets
+        name: "ttZJets"
+        era: "2017"
+        isData: False
+        nEvents: 8536618
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 0.783
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0.618
+    stagesource:
+        '0': "/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
+  - dataset: #DY dilepton + jets sample
+        name: "DYJets_DL"
+        era: "2017"
+        isData: False
+        nEvents: -1
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 5075.6 
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 14420
+    stagesource:
+        '0': "/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017RECOSIMstep_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
+
+  - dataset: #DY dilepton + jets sample
+        name: "DYJets_DL-HT400to600"
+        era: "2017"
+        isData: False
+        nEvents: -1
         isSignal: False
         procCrossSection: -1
         crossSection: 6.805
@@ -154,10 +302,10 @@
         #totalUnits: 150
 
   - dataset: #DY dilepton + jets sample
-        name: "DY_DL-HT600to800"
+        name: "DYJets_DL-HT600to800"
         era: "2017"
         isData: False
-        nEvents: 
+        nEvents: -1
         isSignal: False
         procCrossSection: -1
         crossSection: 1.778
@@ -175,10 +323,10 @@
         #totalUnits: 150
 
   - dataset: #DY dilepton + jets sample
-        name: "DY_DL-HT800to1200"
+        name: "DYJets_DL-HT800to1200"
         era: "2017"
         isData: False
-        nEvents: 
+        nEvents: -1
         isSignal: False
         procCrossSection: -1
         crossSection: 0.8526
@@ -196,10 +344,10 @@
         #totalUnits: 150
 
   - dataset: #DY dilepton + jets sample
-        name: "DY_DL-HT1200to2500"
+        name: "DYJets_DL-HT1200to2500"
         era: "2017"
         isData: False
-        nEvents: 0
+        nEvents: -1
         isSignal: False
         procCrossSection: -1
         crossSection: 0.01852
@@ -290,6 +438,4 @@
         #splitting: "Automatic"
         splitting: "FileBased"
         unitsPerJob: 4
-        #totalUnits: 150
-
-
+      
