@@ -4,15 +4,21 @@
  # stage 0: Unprocessed data and montecarlo, centrally maintained
  # stage 0e: Unfiltered data and montecarlo, with extended variables added (a-la gen-top to PF linking)
  # the combination of name_era must be UNIQUE per sample for the Supervisor to parse and make requests properly. name should be filename-friendly...
+ # example MCM lookup (under select view, choose fragrment, filter efficiency, generator parameters) https://cms-pdmv.cern.ch/mcm/requests?dataset_name=TT_TuneCUETP8M2T4_13TeV-powheg-pythia8&page=0&shown=2199023976531
+ # procCrossSection is the basic process cross-section (i.e. ttbar), and crossSection is the number passed for event weighting, i.e. procCrossSection*branchingRatio*filterEfficiency, where the detailed breakdown is stored where possible.
   - dataset: #Four Top sample
         name: "tttt"
-        era: "2017"
+        era: "2016"
         isData: False
-        nEvents: 2273928
+        nEvents: 2456040
         isSignal: True
-        crossection: 0.012
+        procCrossSection: 0.012
+        crossSection: 0.012
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0.009103
     stagesource:
-        '0': "/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        '0': "/TTTT_TuneCUETP8M2T4_13TeV-amcatnlo-pythia8/RunIISummer16NanoAODv4-PUMoriond17_Nano14Dec2018_102X_mcRun2_asymptotic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -23,13 +29,17 @@
 
   - dataset: #Four Top sample
         name: "tttt"
-        era: "2016"
+        era: "2017"
         isData: False
-        nEvents: 2456040
+        nEvents: 2273928
         isSignal: True
-        crossection: 0.012
+        procCrossSection: 0.012
+        crossSection: 0.012
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0.008213
     stagesource:
-        '0': "/TTTT_TuneCUETP8M2T4_13TeV-amcatnlo-pythia8/RunIISummer16NanoAODv4-PUMoriond17_Nano14Dec2018_102X_mcRun2_asymptotic_v6-v1/NANOAODSIM"
+        '0': "/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -44,7 +54,11 @@
         isData: False
         nEvents: 76915549
         isSignal: False
-        crossection: 831.76
+        procCrossSection: 831.76
+        crossSection: 831.76
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 730
     stagesource:
         '0': "/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer16NanoAODv4-PUMoriond17_Nano14Dec2018_102X_mcRun2_asymptotic_v6-v1/NANOAODSIM"
     postprocessor: 
@@ -61,7 +75,11 @@
         isData: False
         nEvents: 69155808
         isSignal: False
-        crossection: 93.34
+        procCrossSection: 831.76
+        crossSection: 88.341
+        branchingRatio: 0.10621
+        filterEfficiency: 1
+        MCMCrossSection: 730
     stagesource:
         '0': "/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
@@ -78,7 +96,11 @@
         isData: False
         nEvents: 8458223
         isSignal: False
-        crossection: 830.0
+        procCrossSection: 831.76
+        crossSection: 1.32512
+        branchingRatio: 0.10621
+        filterEfficiency: 0.015
+        MCMCrossSection: 730
     stagesource:
         '0': "/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
@@ -88,6 +110,112 @@
         splitting: "FileBased"
         unitsPerJob: 2
         #totalUnits: 150
+
+  - dataset: #single top - antitop-W
+        name: "ST_tbarW"
+        era: "2017"
+        isData: False
+        nEvents: 
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 34.91
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 34.91
+    stagesource:
+        '0': "/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
+  - dataset: #DY dilepton + jets sample
+        name: "DY_DL-HT400to600"
+        era: "2017"
+        isData: False
+        nEvents: 
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 6.805
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 6.805
+    stagesource:
+        '0': "/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
+  - dataset: #DY dilepton + jets sample
+        name: "DY_DL-HT600to800"
+        era: "2017"
+        isData: False
+        nEvents: 
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 1.778
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 1.778
+    stagesource:
+        '0': "/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
+  - dataset: #DY dilepton + jets sample
+        name: "DY_DL-HT800to1200"
+        era: "2017"
+        isData: False
+        nEvents: 
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 0.8526
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0.8526
+    stagesource:
+        '0': "/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
+  - dataset: #DY dilepton + jets sample
+        name: "DY_DL-HT1200to2500"
+        era: "2017"
+        isData: False
+        nEvents: 0
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 0.01852
+        branchingRatio: 1
+        filterEfficiency: 1 
+        MCMCrossSection: 0.01852
+    stagesource:
+        '0': "/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
 
   - dataset: #Double Muon
         name: "MuMu_B"
