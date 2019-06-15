@@ -6,7 +6,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collect
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
 class XSWeight(Module):
-        def __init__(self, verbose=False, maxevt=-1, probEvt=None, isData=False):
+    def __init__(self, verbose=False, maxevt=-1, probEvt=None, isData=False):
         self.writeHistFile=True
         self.verbose=verbose
         self._verbose = verbose
