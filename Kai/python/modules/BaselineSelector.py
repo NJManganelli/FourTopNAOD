@@ -9,7 +9,7 @@ from FourTopNAOD.Kai.tools.intools import *
 
 class BaselineSelector(Module):
     def __init__(self, verbose=False, maxevt=-1, probEvt=None, isData=True, 
-                 genEquivalentLuminosity=1, genXS=1, genNEvents=1, era="2017", btagging=['DeepCSV','M'], lepPt=25, MET=50, HT=500, invertZWindow=False, invertZWindowEarlyReturn=True, GenTop_LepSelection=None):
+                 genEquivalentLuminosity=1, genXS=1, genNEvents=1, era="2017", btagging=['DeepCSV','M'], lepPt=25, MET=50, HT=500, invertZWindow=False, invertZWindowEarlyReturn=True, GenTop_LepSelection=None, jetPtVar = "pt_nom", jetMVar = "mass_nom"):
         self.writeHistFile=True
         self.verbose=verbose
         self.probEvt = probEvt
@@ -158,6 +158,8 @@ class BaselineSelector(Module):
         self.HT = HT
         self.invertZWindow = invertZWindow
         self.invertZWindowEarlyReturn = invertZWindowEarlyReturn
+        self.jetPtVar = jetPtVar
+        self.jetMVar = jetMVar
         if self.verbose:
             print("BTMeth " + str(self.BTMeth))
             print("BTWP " + str(self.BTWP))
@@ -237,10 +239,11 @@ class BaselineSelector(Module):
     
                 self.ctrl_BJets[weight] = {}
                 self.ctrl_AJets[weight] = {}
+                self.jetPlotVars = [self.jetPtVar, "eta", "phi", self.jetMVar, "btagCSVV2", "btagDeepB", "btagDeepFlavB"]
                 for i in xrange(8):
                     self.ctrl_BJets[weight][i] = {}
                     self.ctrl_AJets[weight][i] = {}
-                    for var in ["pt", "eta", "phi", "mass", "btagCSVV2", "btagDeepB", "btagDeepFlavB"]:
+                    for var in self.jetPlotVars:
                         if var == "pt":
                             xmin = 0
                             xmax = 1000
@@ -264,9 +267,10 @@ class BaselineSelector(Module):
                         self.addObject(self.ctrl_AJets[weight][i][var])
                     
                 self.ctrl_FatJets[weight] = {}
+                self.jetAK8PlotVars = ["pt", "eta", "phi", "mass", "btagCSVV2", "btagDeepB", "deepTag_TvsQCD", "deepTag_WvsQCD", "deepTag_MD_bbvsLight"]
                 for i in xrange(4):
                     self.ctrl_FatJets[weight][i] = {}
-                    for var in ["pt", "eta", "phi", "mass", "btagCSVV2", "btagDeepB", "deepTag_TvsQCD", "deepTag_WvsQCD", "deepTag_MD_bbvsLight"]:
+                    for var in self.jetAK8PlotVars:
                         if var == "pt":
                             xmin = 0
                             xmax = 1500
@@ -289,11 +293,12 @@ class BaselineSelector(Module):
                 self.ctrl_Muons[weight] = {}
                 self.ctrl_Electrons[weight] = {}
                 self.ctrl_Leptons[weight] = {}
+                self.leptonPlotVars = ["pt", "eta", "phi", "mass", "dz", "dxy", "jetRelIso", "ip3d"]
                 for i in xrange(2):
                     self.ctrl_Muons[weight][i] = {}
                     self.ctrl_Electrons[weight][i] = {}
                     self.ctrl_Leptons[weight][i] = {}
-                    for var in ["pt", "eta", "phi", "mass", "dz", "dxy", "jetRelIso", "ip3d"]:
+                    for var in self.leptonPlotVars:
                         if var == "pt":
                             xmin = 0
                             xmax = 500
@@ -346,6 +351,19 @@ class BaselineSelector(Module):
                 self.histFile.Close()
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
+        self.branchList = inputTree.GetListOfBranches()
+        if "Jet_{0:s}".format(self.jetPtVar) not in self.branchList:
+            print("Warning: expected branch Jet_{0:s} to be present, but it is not. Switching to Jet_pt".format(self.jetPtVar))
+            for var in self.jetPlotVars:
+                if var == self.jetPtVar:
+                    var = "pt"
+            self.jetPtVar = "pt"
+        if "Jet_{0:s}".format(self.jetMVar) not in self.branchList:
+            print("Warning: expected branch Jet_{0:s} to be present, but it is not. Switching to Jet_mass".format(self.jetMVar))
+            for var in self.jetPlotVars:
+                if var == self.jetMVar:
+                    var = "mass"
+            self.jetMVar = "mass"
         self.out = wrappedOutputTree
         self.varDict = [('nJet', 'I', 'Number of jets passing selection requirements'),
                         ('nJetBTL', 'I', 'Number of jets passing selection requirements and loose b-tagged'),
@@ -599,7 +617,7 @@ class BaselineSelector(Module):
         selJets = []
         selBTsortedJets = []
         for idx, jet in enumerate(jets):
-            if abs(jet.eta) < 2.4 and jet.jetId >= 6 and ((jet.pt > 25 and getattr(jet, self.BTAlg) > self.BTWP) or jet.pt > 30) and idx not in jetsToClean:
+            if abs(jet.eta) < 2.4 and jet.jetId >= 6 and ((getattr(jet, self.jetPtVar) > 25 and getattr(jet, self.BTAlg) > self.BTWP) or getattr(jet, self.jetPtVar) > 30) and idx not in jetsToClean:
                 selJets.append((idx, jet))
                 selBTsortedJets.append((idx, jet))
         selBTsortedJets.sort(key=lambda j : getattr(j[1], self.BTAlg), reverse=True)
@@ -634,13 +652,19 @@ class BaselineSelector(Module):
 
         
         for j, jet in selBTsortedJets:
-            HT += jet.pt
-            H += jet.p4().P()
+            HT += getattr(jet, self.jetPtVar)
+            jetP4 = ROOT.TLorentzVector()
+            jetP4.SetPtEtaPhiM(getattr(jet, self.jetPtVar),
+                               getattr(jet, "eta"),
+                               getattr(jet, "phi"),
+                               getattr(jet, self.jetMVar)
+            )
+            H += jetP4.P()
             if j > 1 and nBTMedium > 1:
-                HT2M += jet.pt
-                H2M += jet.p4().P()
+                HT2M += getattr(jet, self.jetPtVar)
+                H2M += jetP4.P()
             if getattr(jet, self.BTAlg) > self.BTWP:
-                HTb += jet.pt
+                HTb += getattr(jet, self.jetPtVar)
 
         if HT < self.HT:
             return False
@@ -673,7 +697,7 @@ class BaselineSelector(Module):
             self.ctrl_nJets_BTL[weight].Fill(nBTLoose ,theWeight[weight])
             self.ctrl_nJets_BTM[weight].Fill(nBTMedium ,theWeight[weight])
             self.ctrl_nJets_BTT[weight].Fill(nBTTight ,theWeight[weight])
-            for var in ["pt", "eta", "phi", "mass", "btagCSVV2", "btagDeepB", "btagDeepFlavB"]:
+            for var in self.jetPlotVars:
                 for i, jettup in enumerate(selJets):
                     try:
                         self.ctrl_AJets[weight][i][var].Fill(getattr(jettup[1], var), theWeight[weight])
@@ -684,13 +708,13 @@ class BaselineSelector(Module):
                         self.ctrl_BJets[weight][i][var].Fill(getattr(jettup[1], var), theWeight[weight])
                     except:
                         pass
-            for var in ["pt", "eta", "phi", "mass", "btagCSVV2", "btagDeepB", "deepTag_TvsQCD", "deepTag_WvsQCD", "deepTag_MD_bbvsLight"]:
+            for var in self.jetAK8PlotVars:
                 for i, jet in enumerate(fatjets):
                     try:
                         self.ctrl_FatJets[weight][i][var].Fill(getattr(jet, var), theWeight[weight])
                     except:
                         pass
-            for var in ["pt", "eta", "phi", "mass", "dz", "dxy", "jetRelIso", "ip3d"]:
+            for var in self.leptonPlotVars:
                 for i, leptup in enumerate(selMuUniform + selEleUniform):
                     try:
                         self.ctrl_Leptons[weight][i][var].Fill(getattr(leptup[1], var), theWeight[weight])
