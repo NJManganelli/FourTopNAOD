@@ -9,7 +9,7 @@ from FourTopNAOD.Kai.tools.intools import *
 
 class BaselineSelector(Module):
     def __init__(self, verbose=False, maxevt=-1, probEvt=None, isData=True, 
-                 genEquivalentLuminosity=1, genXS=1, genNEvents=1, era="2017", btagging=['DeepCSV','M'], lepPt=25, MET=50, HT=500, invertZWindow=False, invertZWindowEarlyReturn=True, GenTop_LepSelection=None, jetPtVar = "pt_nom", jetMVar = "mass_nom"):
+                 genEquivalentLuminosity=1, genXS=1, genNEvents=1, genSumWeights=1, era="2017", btagging=['DeepCSV','M'], lepPt=25, MET=50, HT=500, invertZWindow=False, invertZWindowEarlyReturn=True, GenTop_LepSelection=None, jetPtVar = "pt_nom", jetMVar = "mass_nom"):
         self.writeHistFile=True
         self.verbose=verbose
         self.probEvt = probEvt
@@ -19,8 +19,10 @@ class BaselineSelector(Module):
         else:
             if genEquivalentLuminosity == 1 and genXS == 1 and genNEvents == 1:
                 self.evtWeightBase = None
+                self.evtWeightAlt = None
             else:
                 self.evtWeightBase = genEquivalentLuminosity*genXS/genNEvents
+                self.evtWeightAlt = genEquivalentLuminosity*genXS/genSumWeights
         self.btagging = btagging
         self.era = era
         if probEvt:
@@ -139,7 +141,7 @@ class BaselineSelector(Module):
         if self.isData:
             self.weightList = ["NONE"]
         else:
-            self.weightList = ["NONE", "EWo", "GWo", "PUo", "BTo", "EP", "EPB"]
+            self.weightList = ["NONE", "EWo", "EWS", "GWo", "PUo", "BTo", "EP", "EPB"]
             # EventWeight only (calculated from XS, Lumi, NumberGeneratedEvents)
             # GenWeight only (as stored in NanoAOD itself)
             # PileupWeight only
@@ -244,7 +246,7 @@ class BaselineSelector(Module):
                     self.ctrl_BJets[weight][i] = {}
                     self.ctrl_AJets[weight][i] = {}
                     for var in self.jetPlotVars:
-                        if var == "pt":
+                        if var == self.jetPtVar:
                             xmin = 0
                             xmax = 1000
                         elif var == "eta":
@@ -253,7 +255,7 @@ class BaselineSelector(Module):
                         elif var == "phi":
                             xmin = -math.pi
                             xmax = math.pi
-                        elif var == "mass":
+                        elif var == self.jetMVar:
                             xmin = 0
                             xmax = 300
                         elif var == "btagCSVV2" or var == "btagDeepB" or var == "btagDeepFlavB":
@@ -353,17 +355,17 @@ class BaselineSelector(Module):
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         self.branchList = inputTree.GetListOfBranches()
         if "Jet_{0:s}".format(self.jetPtVar) not in self.branchList:
-            print("Warning: expected branch Jet_{0:s} to be present, but it is not. Switching to Jet_pt".format(self.jetPtVar))
-            for var in self.jetPlotVars:
-                if var == self.jetPtVar:
-                    var = "pt"
-            self.jetPtVar = "pt"
+            print("Warning: expected branch Jet_{0:s} to be present, but it is not. If not added in a module preceding this one, there will be a crash.".format(self.jetPtVar))
+            # for var in self.jetPlotVars:
+            #     if var == self.jetPtVar:
+            #         var = "pt"
+            # self.jetPtVar = "pt"
         if "Jet_{0:s}".format(self.jetMVar) not in self.branchList:
-            print("Warning: expected branch Jet_{0:s} to be present, but it is not. Switching to Jet_mass".format(self.jetMVar))
-            for var in self.jetPlotVars:
-                if var == self.jetMVar:
-                    var = "mass"
-            self.jetMVar = "mass"
+            print("Warning: expected branch Jet_{0:s} to be present, but it is not. If not added in a module preceding this one, there will be a crash.".format(self.jetMVar))
+            # for var in self.jetPlotVars:
+            #     if var == self.jetMVar:
+            #         var = "mass"
+            # self.jetMVar = "mass"
         self.out = wrappedOutputTree
         self.varDict = [('nJet', 'I', 'Number of jets passing selection requirements'),
                         ('nJetBTL', 'I', 'Number of jets passing selection requirements and loose b-tagged'),
@@ -437,6 +439,8 @@ class BaselineSelector(Module):
                 theWeight[weight] = 1
             elif weight == "EWo":
                 theWeight[weight] = math.copysign(self.evtWeightBase, generator.weight)
+            elif weight == "EWS":
+                theWeight[weight] = math.copysign(self.evtWeightAlt, generator.weight)
             elif weight == "GWo":
                 theWeight[weight] = generator.weight
             elif weight == "PUo":

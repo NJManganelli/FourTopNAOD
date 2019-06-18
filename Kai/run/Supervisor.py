@@ -24,10 +24,12 @@ parser.add_argument('--stage', dest='stage', action='store', type=str,
                     help='analysis stage to be produced')
 parser.add_argument('--stagesource', dest='stagesource', action='store', type=str, default='0',
                     help='Stage of data storage from which to begin supervisor actions, such as stagesource: 0 which is the unprocessed and centrally maintained data/MC')
-parser.add_argument('--sample_card', dest='sample_cards', action='append', type=str,
+parser.add_argument('--sample_cards', dest='sample_cards', action='store', nargs='+', type=str,
                     help='path and name of the sample card(s) to be used')
 parser.add_argument('--redir', dest='redir', action='append', type=str, default='root://cms-xrd-global.cern.ch/',
                     help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
+parser.add_argument('--btagger', dest='btagger', action='store', nargs='+', type=str, default=['DeepCSV', 'M'],
+                    help='tagger algorithm and working point to be used')
 
 def main():
     args = parser.parse_args()
@@ -40,6 +42,7 @@ def main():
     print("Supervisor will check integrity of sample card's event counts: " + str(args.check_events))
     print("Supervisor will run samples locally: " + str(args.local_run))
     print("Supervisor will generate configurations for samples on CRAB: " + str(args.crab_run))
+    print("Supervisor will use the following algorithm and working point for any btagging related SF calculations and event selection: " + str(args.btagger))
     if args.crab_run:
         print("Supervisor will create crab configurations for stage {0:s} using stagesource {1:s}".format(args.stage, args.stagesource))
     print("The path and name of the sample cards(s) are: ")
@@ -111,16 +114,22 @@ def main():
         if args.check_events:
             if isData == False:
                 events_in_files = 0
+                events_sum_weights = 0
+                events_sum_weights2 = 0
                 for fileName in fileList:
                     f = ROOT.TFile.Open(fileName, 'r')
                     tree = f.Get('Runs')
                     for en in xrange(tree.GetEntries()):
                         tree.GetEntry(en)
                         events_in_files += tree.genEventCount
+                        events_sum_weights += tree.genEventSumw
+                        events_sum_weights2 += tree.genEventSumw2
                 if events_in_files != nEvents:
                     print("Mismatch in dataset {0}: nEvents = {1:d}, events_in_files = {2:d}".format(sampleName, nEvents, events_in_files))
                 else:
                     print("Integrity check successful for dataset {0}: {1:d}/{2:d} events".format(sampleName, events_in_files, nEvents))
+                print("nEvents = {0:d}, events_in_files = {1:d}, events_sum_weights = {2:f}, "\
+                      "events_sum_weights2 = {3:f}".format(nEvents, events_in_files, events_sum_weights, events_sum_weights2))
             else:
                 print("Skipping dataset {0} for check_events integrity, as it is marked isData".format(sampleName))
         
@@ -133,7 +142,7 @@ def main():
                 with open("./{0:s}/crab_script_{1:s}.sh".format(runFolder, coreName), "w") as sample_script_sh:
                     sample_script_sh.write(get_crab_script_sh(runFolder, requestName = coreName, stage=args.stage))
                 with open("./{0:s}/crab_script_{1:s}.py".format(runFolder, coreName), "w") as sample_script_py:
-                    sample_script_py.write(get_crab_script_py(runFolder, requestName = coreName, stage=args.stage, sampleConfig = sample))
+                    sample_script_py.write(get_crab_script_py(runFolder, requestName = coreName, stage=args.stage, sampleConfig = sample, btagger = args.btagger))
             
 def get_crab_cfg(runFolder, requestName, splitting='Automatic', unitsPerJob = 1, inputDataset = '', storageSite = 'T2_CH_CERN', publication=True, stage='1'):
     #Options for splitting:
@@ -156,6 +165,7 @@ config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'PSet.py'
 config.JobType.scriptExe = 'crab_script_{1:s}.sh'
 config.JobType.inputFiles = ['crab_script_{1:s}.py', '../../../PhysicsTools/NanoAODTools/scripts/haddnano.py'] #hadd nano will not be needed once nano tools are in cmssw
+config.JobType.outputFiles = ['hist.root']
 config.JobType.sendPythonFolder  = True
 config.section_("Data")
 config.Data.inputDataset = '{4:s}'
@@ -209,9 +219,23 @@ fi
     ret = crab_script_sh.format(requestName)
     return ret
 
-def get_crab_script_py(runFolder, requestName, stage='1', sampleConfig = None, stageConfig = None):
-    isData = sampleConfig['dataset']['isData']
-    era = sampleConfig['dataset']['era']
+def get_crab_script_py(runFolder, requestName, stage='1', sampleConfig = None, stageConfig = None, btagger = ['None', 'None']):
+    eLumiDict = {'2016': 35,
+                 '2017': 41.53,
+                 '2018': 50
+                 }
+    name = sampleConfig['dataset'].get('name')
+    isData = sampleConfig['dataset'].get('isData')
+    era = sampleConfig['dataset'].get('era')
+    subera = sampleConfig['dataset'].get('subera')
+    crossSection = sampleConfig['dataset'].get('crossSection')
+    equivLumi = eLumiDict.get(era)
+    nEvents = sampleConfig['dataset'].get('nEvents')
+    sumWeights = sampleConfig['dataset'].get('sumWeights')
+    isSignal = sampleConfig['dataset'].get('isSignal')
+    
+    
+    
     preselection = sampleConfig['postprocessor']['filter']
     if preselection != "":
         preselection = "\"" + preselection + "\""
@@ -223,23 +247,99 @@ def get_crab_script_py(runFolder, requestName, stage='1', sampleConfig = None, s
         sys.exit()
     if stage == '1':
         crab_script_py = """#!/usr/bin/env python
-import os
+import os, time, collections, copy, json, multiprocessing
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import * 
 from PhysicsTools.NanoAODTools.postprocessing.framework.crabhelper import inputFiles,runsAndLumis
+from PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer import *
+from PhysicsTools.NanoAODTools.postprocessing.modules.common.PrefireCorr import *
+from PhysicsTools.NanoAODTools.postprocessing.modules.btv.btagSFProducer import *
+from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetRecalib import *
+from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties import *
+from FourTopNAOD.Kai.modules.BaselineSelector import BaselineSelector
+from FourTopNAOD.Kai.modules.trigger import Trigger
 from FourTopNAOD.Kai.modules.MCTreeDev import MCTrees
-isData = {0:s}
-era = "{1:s}"
+SC_isData = {0:s}
+SC_era = "{1:s}"
+SC_subera = "{2:s}"
+SC_thePreselection = {3:s}
+SC_crossSection = {4:s}
+SC_equivLumi = {5:s}
+SC_nEvents = {6:s}
+SC_sumWeights = {7:s}
+Sup_BTagger = {8:s}
+
 theFiles = inputFiles()
 theLumis = runsAndLumis()
-thePreselection = {2:s}
 
-moduleCache = []
-if isData:
-    moduleCache.append(None)
+triggers=["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8",
+          "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ",
+          "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
+          "HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
+          "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ"
+          ]
+
+if SC_isData:
+    moduleCache==[Trigger(triggers),
+                 dataRecalib[SC_era][SC_subera],
+                 BaselineSelector(maxevt=maxevt, 
+                                  probEvt=None,
+                                  isData=SC_isData,
+                                  era=SC_era,
+                                  btagging=Sup_BTagger,
+                                  lepPt=25, 
+                                  MET=50, 
+                                  HT=500, 
+                                  invertZWindow=False, 
+                                  invertZWindowEarlyReturn=False,
+                                  GenTop_LepSelection=None,
+                                  jetPtVar="pt_nom",
+                                  jetMVar="mass_nom"
+                              ),
+             ]
 else:
-    moduleCache.append(MCTrees(maxevt=-1)))
+    modulesCache=[puWeightProducer("auto",
+                                   pufile_data2017,
+                                   "pu_mc",
+                                   "pileup",
+                                   verbose=False
+                                 ),
+                 Trigger(triggers),
+                 jetmetUncertaintiesProducer("2017", 
+                                             "Fall17_17Nov2017_V32_MC", 
+                                             [ "All" ], 
+                                             redoJEC=True
+                                         ),
+                 btagSFProducer(SC_era, algo=Sup_BTagger[0]),
+                 BaselineSelector(maxevt=maxevt, 
+                                  probEvt=None,
+                                  isData=SC_isData,
+                                  genEquivalentLuminosity=SC_equivLumi,
+                                  genXS=SC_crossSection,
+                                  genNEvents=SC_nEvents,
+                                  genSumWeights=SC_sumWeights,
+                                  era=SC_era,
+                                  btagging=Sup_BTagger,
+                                  lepPt=25, 
+                                  MET=50, 
+                                  HT=500, 
+                                  invertZWindow=False, 
+                                  invertZWindowEarlyReturn=False,
+                                  GenTop_LepSelection=None,
+                                  jetPtVar="pt_nom",
+                                  jetMVar="mass_nom"
+                              ),
+                 ]
 
-p=PostProcessor(".", theFiles, modules=moduleCache, cut=thePreselection, provenance=True, fwkJobReport=True, theLumis)
+p=PostProcessor(".", 
+                theFiles,       
+                modules=moduleCache, 
+                cut=thePreselection, 
+                provenance=True, 
+                fwkJobReport=True, 
+                theLumis, 
+                histFileName="hist.root",
+                histDirName="plots"
+                )
 p.run()
 """
     elif stage == '':
@@ -250,7 +350,7 @@ p.run()
 #You
 #Are
 #DOOMED"""
-    ret = crab_script_py.format(str(isData), str(era), str(preselection))
+    ret = crab_script_py.format(str(isData), str(era), str(subera), str(preselection), str(crossSection), str(equivLumi), str(nEvents), str(sumWeights), str(btagger))
     return ret
 
 def get_PSet_py(NanoAODPath):
