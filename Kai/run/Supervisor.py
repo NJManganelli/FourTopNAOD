@@ -164,7 +164,7 @@ config.JobType.allowUndistributedCMSSW = True
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'PSet.py'
 config.JobType.scriptExe = 'crab_script_{1:s}.sh'
-config.JobType.inputFiles = ['crab_script_{1:s}.py', '../../../PhysicsTools/NanoAODTools/scripts/haddnano.py'] #hadd nano will not be needed once nano tools are in cmssw
+config.JobType.inputFiles = ['crab_script_{1:s}.py'] #, '../../../PhysicsTools/NanoAODTools/scripts/haddnano.py'] #hadd nano will not be needed once nano tools are in cmssw
 config.JobType.outputFiles = ['hist.root']
 config.JobType.sendPythonFolder  = True
 config.section_("Data")
@@ -174,11 +174,11 @@ config.Data.splitting = '{2:s}'
 if config.Data.splitting == 'FileBased':
     config.Data.unitsPerJob = {3:d}
 
-config.Data.outLFNDirBase = '/store/user/%s/{0:s}' (getUsernameFromSiteDB())
+config.Data.outLFNDirBase = '/store/user/%s/{0:s}' % (getUsernameFromSiteDB())
 config.Data.publication = {6:s}
 config.Data.outputDatasetTag = '{1:s}'
 config.section_("Site")
-config.Site.storageSite = {5:s}
+config.Site.storageSite = '{5:s}'
 """
         ret = crab_cfg.format(runFolder, requestName, splitting, unitsPerJob, inputDataset, storageSite, str(publication), stage)
     else:
@@ -281,7 +281,7 @@ triggers=["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8",
 if SC_isData:
     moduleCache==[Trigger(triggers),
                  dataRecalib[SC_era][SC_subera],
-                 BaselineSelector(maxevt=maxevt, 
+                 BaselineSelector(maxevt=-1, 
                                   probEvt=None,
                                   isData=SC_isData,
                                   era=SC_era,
@@ -297,7 +297,7 @@ if SC_isData:
                               ),
              ]
 else:
-    modulesCache=[puWeightProducer("auto",
+    moduleCache=[puWeightProducer("auto",
                                    pufile_data2017,
                                    "pu_mc",
                                    "pileup",
@@ -310,7 +310,7 @@ else:
                                              redoJEC=True
                                          ),
                  btagSFProducer(SC_era, algo=Sup_BTagger[0]),
-                 BaselineSelector(maxevt=maxevt, 
+                 BaselineSelector(maxevt=-1, 
                                   probEvt=None,
                                   isData=SC_isData,
                                   genEquivalentLuminosity=SC_equivLumi,
@@ -333,10 +333,10 @@ else:
 p=PostProcessor(".", 
                 theFiles,       
                 modules=moduleCache, 
-                cut=thePreselection, 
+                cut=SC_thePreselection, 
                 provenance=True, 
                 fwkJobReport=True, 
-                theLumis, 
+                jsonInput=theLumis, 
                 histFileName="hist.root",
                 histDirName="plots"
                 )
