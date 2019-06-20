@@ -20,6 +20,16 @@ mkdir -p ${CMSSW_BASE}/src/TopTagger/TopTagger/data
 getTaggerCfg.sh -o -n -t DeepResolved_DeepCSV_GR_noDisc_Release_v1.0.0 -d $CMSSW_BASE/src/TopTagger/TopTagger/data
 ~~~~~~~~~~~~~ 
 
+### Attempt to fix resolvedTagger jet source
+in TopTagger/TopTagger/python/resolvedTagger_cff.py, replace instances of slimmedJets with upatedJets, like so:
+~~~~~~~~~~~~~ 
+inputJetCollection = process.slimmedJetsWithUserData.src
+~~~~~~~~~~~~~ 
+with
+~~~~~~~~~~~~~ 
+inputJetCollection = process.updatedJetsWithUserData.src
+~~~~~~~~~~~~~ 
+
 ### cmsDriver commands for NanoAOD Production
 2017:
 ~~~~~~~~~~~~~{sh}
