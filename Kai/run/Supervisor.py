@@ -137,14 +137,15 @@ def main():
             coreName = sampleName + "_" + era
 
             with open("./{0:s}/crab_cfg_{1:s}.py".format(runFolder, coreName), "w") as sample_cfg:
-                sample_cfg.write(get_crab_cfg(runFolder, requestName = coreName, inputDataset=inputDataset, stage=args.stage))
+                sample_cfg.write(get_crab_cfg(runFolder, requestName = coreName, NanoAODPath = NanoAODPath, 
+                                              splitting = crab_cfg['splitting'], inputDataset=inputDataset, stage=args.stage))
             if args.stage != '0Ext':
                 with open("./{0:s}/crab_script_{1:s}.sh".format(runFolder, coreName), "w") as sample_script_sh:
                     sample_script_sh.write(get_crab_script_sh(runFolder, requestName = coreName, stage=args.stage))
                 with open("./{0:s}/crab_script_{1:s}.py".format(runFolder, coreName), "w") as sample_script_py:
                     sample_script_py.write(get_crab_script_py(runFolder, requestName = coreName, stage=args.stage, sampleConfig = sample, btagger = args.btagger))
             
-def get_crab_cfg(runFolder, requestName, splitting='Automatic', unitsPerJob = 1, inputDataset = '', storageSite = 'T2_CH_CERN', publication=True, stage='1'):
+def get_crab_cfg(runFolder, requestName, NanoAODPath='.', splitting='', unitsPerJob = 1, inputDataset = '', storageSite = 'T2_CH_CERN', publication=True, stage='1'):
     #Options for splitting:
     #'Automatic'
     #'EventAwareLumiBased'
@@ -164,7 +165,7 @@ config.JobType.allowUndistributedCMSSW = True
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'PSet.py'
 config.JobType.scriptExe = 'crab_script_{1:s}.sh'
-config.JobType.inputFiles = ['crab_script_{1:s}.py'] #, '../../../PhysicsTools/NanoAODTools/scripts/haddnano.py'] #hadd nano will not be needed once nano tools are in cmssw
+config.JobType.inputFiles = ['crab_script_{1:s}.py', '{8:s}/scripts/haddnano.py'] #, '../../../PhysicsTools/NanoAODTools/scripts/haddnano.py'] #hadd nano will not be needed once nano tools are in cmssw
 config.JobType.outputFiles = ['hist.root']
 config.JobType.sendPythonFolder  = True
 config.section_("Data")
@@ -180,7 +181,7 @@ config.Data.outputDatasetTag = '{1:s}'
 config.section_("Site")
 config.Site.storageSite = '{5:s}'
 """
-        ret = crab_cfg.format(runFolder, requestName, splitting, unitsPerJob, inputDataset, storageSite, str(publication), stage)
+        ret = crab_cfg.format(runFolder, requestName, splitting, unitsPerJob, inputDataset, storageSite, str(publication), stage, str(NanoAODPath))
     else:
         print("We haven't made a stage {0:s} configuration yet... Exiting".format(stage))
         sys.exit()
@@ -194,7 +195,7 @@ if [ "`tty`" != "not a tty" ]; then
   echo "YOU SHOULD NOT RUN THIS IN INTERACTIVE, IT DELETES YOUR LOCAL FILES"
 else
 
-ls -lR .
+ls -ltr .
 echo "ENV..................................."
 env 
 echo "VOMS"
@@ -214,6 +215,7 @@ mv python $CMSSW_BASE/python
 
 echo Found Proxy in: $X509_USER_PROXY
 python crab_script_{0:s}.py $1
+ls -ltr
 fi
 """
     ret = crab_script_sh.format(requestName)
@@ -269,7 +271,6 @@ SC_sumWeights = {7:s}
 Sup_BTagger = {8:s}
 
 theFiles = inputFiles()
-theLumis = runsAndLumis()
 
 triggers=["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8",
           "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ",
@@ -278,8 +279,19 @@ triggers=["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8",
           "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ"
           ]
 
+#Double braces to escape them inside the literal string template used by Supervisor (with .format method)
+dataRecalib = {{"2017": {{"B": jetRecalib("Fall17_17Nov2017B_V32_DATA","Fall17_17Nov2017_V32_DATA"),
+                          "C": jetRecalib("Fall17_17Nov2017C_V32_DATA","Fall17_17Nov2017_V32_DATA"),
+                          "D": jetRecalib("Fall17_17Nov2017DE_V32_DATA","Fall17_17Nov2017_V32_DATA"),
+                          "E": jetRecalib("Fall17_17Nov2017DE_V32_DATA","Fall17_17Nov2017_V32_DATA"),
+                          "F": jetRecalib("Fall17_17Nov2017F_V32_DATA","Fall17_17Nov2017_V32_DATA"),
+                          "NONE": "NothingToSeeHere"
+                      }}
+            }}
+
 if SC_isData:
-    moduleCache==[Trigger(triggers),
+    theLumis = runsAndLumis()
+    moduleCache=[Trigger(triggers),
                  dataRecalib[SC_era][SC_subera],
                  BaselineSelector(maxevt=-1, 
                                   probEvt=None,
@@ -297,6 +309,7 @@ if SC_isData:
                               ),
              ]
 else:
+    theLumis = None
     moduleCache=[puWeightProducer("auto",
                                    pufile_data2017,
                                    "pu_mc",
@@ -376,3 +389,8 @@ process.out = cms.EndPath(process.output)
 
 if __name__ == '__main__':
     main()
+
+# dataRecalib = {"2017": {
+#                     }
+#            }
+

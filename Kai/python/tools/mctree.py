@@ -1466,11 +1466,14 @@ class MCTree:
             help(MCTree.evaluateHadronicityWithVoting)
             raise ValueError("evaluateHadronicityWithVoting() in MCTree class requires a chosen voting method.")
         elif votingMethod==0:
-            self.vote = lambda g, p : 1
+            # self.vote = lambda g, p : 1
+            self.vote = lambda g : 1
         elif votingMethod==1:
-            self.vote = lambda g, p : self.gens[g].p4().P() #/ self.gens[p].p4().P()
+            # self.vote = lambda g, p : self.gens[g].p4().P() / self.gens[p].p4().P()
+            self.vote = lambda g : self.gens[g].p4().P() #/ self.gens[p].p4().P()
         elif votingMethod==2: #Not a good method, due to changes in angular direction for daughters versus parent particles
-            self.vote = lambda g, p : self.gens[g].pt #/ self.gens[p].pt
+            # self.vote = lambda g, p : self.gens[g].pt / self.gens[p].pt
+            self.vote = lambda g : self.gens[g].pt #/ self.gens[p].pt
 
             
         tJets = {}
@@ -1688,13 +1691,13 @@ class MCTree:
             for v in tGenJetAK8sWeight[tidx]:
                 tGenJetAK8sWithVoting[tidx][v[0]] += v[1]/self.t_first_renorm[tidx]
             for v in bJetsWeight[tidx]:
-                bJetsWithVoting[tidx][v[0]] += v[1]/self.tb_first_renorm[tidx]
+                bJetsWithVoting[tidx][v[0]] += v[1]/self.tb_renorm[tidx]
             for v in bGenJetsWeight[tidx]:
-                bGenJetsWithVoting[tidx][v[0]] += v[1]/self.tb_first_renorm[tidx]
+                bGenJetsWithVoting[tidx][v[0]] += v[1]/self.tb_renorm[tidx]
             for v in bFatJetsWeight[tidx]:
-                bFatJetsWithVoting[tidx][v[0]] += v[1]/self.tb_first_renorm[tidx]
+                bFatJetsWithVoting[tidx][v[0]] += v[1]/self.tb_renorm[tidx]
             for v in bGenJetAK8sWeight[tidx]:
-                bGenJetAK8sWithVoting[tidx][v[0]] += v[1]/self.tb_first_renorm[tidx]
+                bGenJetAK8sWithVoting[tidx][v[0]] += v[1]/self.tb_renorm[tidx]
             for v in WDau1JetsWeight[tidx]:
                 WDau1JetsWithVoting[tidx][v[0]] += v[1]/self.tW_dau1_renorm[tidx]
             for v in WDau1GenJetsWeight[tidx]:

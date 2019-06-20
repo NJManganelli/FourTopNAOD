@@ -10,7 +10,7 @@
   - dataset: #Four Top sample
         name: "tttt"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 2273928
         sumWeights: 18645.487772
@@ -34,7 +34,7 @@
   - dataset: #ttbar dilepton sample
         name: "tt_DL"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 69155808
         sumWeights: 4984888995.198164
@@ -58,7 +58,7 @@
   - dataset: #ttbar dilepton sample
         name: "tt_DL-GF"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 8458223
         sumWeights: 608347760.180597
@@ -82,7 +82,7 @@
   - dataset: #single top - top-W
         name: "ST_tW"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 7945242
         sumWeights: 277241050.840222
@@ -106,7 +106,7 @@
   - dataset: #single top - antitop-W
         name: "ST_tbarW"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 7745276
         sumWeights: 270762750.172525
@@ -130,7 +130,7 @@
   - dataset: #ttH to bb dilepton ttbar
         name: "ttH_DL"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 9794620
         sumWeights: 556866.339401
@@ -154,7 +154,7 @@
   - dataset: #ttH to bb single lepton ttbar
         name: "ttH_SL"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 9332943
         sumWeights: 2215145.853339
@@ -178,7 +178,7 @@
   - dataset: #ttH to bb inclusive
         name: "ttH"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 8000000
         sumWeights: 4216319.315884
@@ -202,7 +202,7 @@
   - dataset: #ttWJets
         name: "ttWJets"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 9425384
         sumWeights: 9384328.000000
@@ -226,7 +226,7 @@
   - dataset: #ttZJets
         name: "ttZJets"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 8536618
         sumWeights: 8519074.000000
@@ -250,7 +250,7 @@
   - dataset: #DY dilepton + jets sample
         name: "DYJets_DL"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 49125561
         sumWeights: 49082157.000000
@@ -275,7 +275,7 @@
   - dataset: #DY dilepton + jets sample
         name: "DYJets_DL-HT400to600"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 1124294
         sumWeights: 1119206.000000
@@ -299,7 +299,7 @@
   - dataset: #DY dilepton + jets sample
         name: "DYJets_DL-HT600to800"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 8743640
         sumWeights: 8691608.000000
@@ -323,7 +323,7 @@
   - dataset: #DY dilepton + jets sample
         name: "DYJets_DL-HT800to1200"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 3114980
         sumWeights: 3089712.000000
@@ -347,7 +347,7 @@
   - dataset: #DY dilepton + jets sample
         name: "DYJets_DL-HT1200to2500"
         era: "2017"
-        subera: "None"
+        subera: "NONE"
         isData: False
         nEvents: 625517
         sumWeights: 616923.000000
@@ -382,7 +382,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Double Muon
@@ -398,7 +398,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Double Muon
@@ -414,7 +414,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Double Muon
@@ -430,7 +430,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Double Muon
@@ -446,7 +446,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Double Electron
@@ -462,7 +462,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Double Electron
@@ -478,7 +478,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Double Electron
@@ -494,7 +494,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Double Electron
@@ -510,7 +510,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Double Electron
@@ -526,7 +526,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Muon Electron
@@ -542,7 +542,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Muon Electron
@@ -558,7 +558,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Muon Electron
@@ -574,7 +574,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Muon Electron
@@ -590,7 +590,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
   - dataset: #Muon Electron
@@ -606,7 +606,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 4
+        unitsPerJob: 10
         #totalUnits: 150
 
 
