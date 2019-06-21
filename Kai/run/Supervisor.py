@@ -1,17 +1,26 @@
 #!/usr/bin/env python
 from __future__ import print_function, division
-import os
-import sys
-import time, datetime
+import os, sys, time, datetime
 import argparse
 import subprocess
 import pprint
 from collections import OrderedDict
 from ruamel.yaml import YAML
+from glob import glob
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 parser = argparse.ArgumentParser(description='Supervisor handles submission and bookkeeping for physics samples.')
+parser.add_argument('--sample_cards', dest='sample_cards', action='store', nargs='*', type=str,
+                    help='path and name of the sample card(s) to be used')
+parser.add_argument('--hadd', dest='hadd', action='store', nargs='?', type=str, const='hist.root', default='NOJOIN',
+                    help='path of grandparent directory in which to join ROOT files on a per-directory bases, using hadd. Default arguments are hist.root, '\
+                    'with the assumption that NanoAOD files are inside subdirectories and will be joined as haddnano parsed_name.root hist_1.root hist_2.root ...'\
+                    ' Default parsed_name will be derived from the grandparent folder, as it is tailored to CRAB output structure.')
+parser.add_argument('--haddnano', dest='haddnano', action='store', nargs='?', type=str, const='tree.root', default='NOJOIN',
+                    help='path of grandparent directory in which to join NanoAOD files on a per-directory bases. Default arguments is tree.root, '\
+                    'with the assumption that NanoAOD files are inside subdirectories and will be joined as haddnano parsed_name.root tree_1.root tree_2.root ...'\
+                    ' Default parsed_name will be derived from the grandparent folder, as it is tailored to CRAB output structure.')
 parser.add_argument('--check_events', dest='check_events', action='store_true',
                     help='check that the number of events in source files match those in the sample card')
 parser.add_argument('--local_run', dest='local_run', action='store_true',
@@ -24,8 +33,6 @@ parser.add_argument('--stage', dest='stage', action='store', type=str,
                     help='analysis stage to be produced')
 parser.add_argument('--stagesource', dest='stagesource', action='store', type=str, default='0',
                     help='Stage of data storage from which to begin supervisor actions, such as stagesource: 0 which is the unprocessed and centrally maintained data/MC')
-parser.add_argument('--sample_cards', dest='sample_cards', action='store', nargs='+', type=str,
-                    help='path and name of the sample card(s) to be used')
 parser.add_argument('--redir', dest='redir', action='append', type=str, default='root://cms-xrd-global.cern.ch/',
                     help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
 parser.add_argument('--btagger', dest='btagger', action='store', nargs='+', type=str, default=['DeepCSV', 'M'],
@@ -34,18 +41,99 @@ parser.add_argument('--btagger', dest='btagger', action='store', nargs='+', type
 def main():
     args = parser.parse_args()
     NanoAODPath = "{0:s}/src/PhysicsTools/NanoAODTools".format(os.environ['CMSSW_BASE'])
-    print(NanoAODPath)
     username = 'nmangane'
     if args.local_run and args.crab_run:
         print("Both local_run and crab_run have been set to True; this is not supported. Exiting")
         sys.exit()
     print("Supervisor will check integrity of sample card's event counts: " + str(args.check_events))
-    print("Supervisor will run samples locally: " + str(args.local_run))
-    print("Supervisor will generate configurations for samples on CRAB: " + str(args.crab_run))
     print("Supervisor will use the following algorithm and working point for any btagging related SF calculations and event selection: " + str(args.btagger))
     if args.crab_run:
         print("Supervisor will create crab configurations for stage {0:s} using stagesource {1:s}".format(args.stage, args.stagesource))
-    print("The path and name of the sample cards(s) are: ")
+    if args.local_run:
+        print("Supervisor will run samples locally... or it would, if this were supported. How unfortunate.")
+    if args.sample_cards:
+        print("The path and name of the sample cards(s) are: ")
+        for card in args.sample_cards:
+            print("\t{0:s}".format(card))
+
+    #FIXME: Spin off into a function that takes as input the command (hadd, haddnano.py), the file (tree.root, hist.root), and does this instead of Copy+Paste code
+    if args.haddnano is not 'NOJOIN':
+        print("Joining NanoAOD ROOT files containing {:s}".format(args.haddnano))
+        haddnano_regexp = args.haddnano.replace(".root", "_*.root")
+        haddnano_dict = {}
+        for directory in os.listdir('.'):
+            haddnano_dict[directory] = glob("./{0:s}/*/".format(directory) + haddnano_regexp)
+            if len(haddnano_dict[directory]) == 0:
+                haddnano_dict[directory] = glob("./{0:s}/".format(directory) + haddnano_regexp)
+            if len(haddnano_dict[directory]) == 0:
+                _ = haddnano_dict.pop(directory)
+        if len(haddnano_dict) > 1:
+            joinFolder = "JoinedFiles"
+            if not os.path.exists(joinFolder):
+                os.makedirs(joinFolder)
+            for directory, joinlist in haddnano_dict.iteritems():
+                joinlist.sort(key=lambda f: int(f.split('_')[-1].replace('.root', '')))
+                strlistlist = []
+                strlistlist.append("")
+                strlistsize = []
+                strlistsize.append(0)
+                for f in joinlist:
+                    if strlistsize[-1] + os.path.getsize(f) < 3758096384: #3.5GB file size soft limit
+                        strlistlist[-1] += "{0:s} ".format(f)
+                        strlistsize[-1] += os.path.getsize(f)
+                    else:
+                        strlistlist.append("")
+                        strlistsize.append(0)
+                        strlistlist[-1] += "{0:s} ".format(f)
+                        strlistsize[-1] += os.path.getsize(f)
+                cmdlist = []
+                for s, strlist in enumerate(strlistlist):
+                    directorystripped = directory.replace('crab_', '', 1).replace('local_', '', 1).replace('condor_', '', 1)
+                    cmdlist.append("haddnano.py {0:s}/{1:s}_{2:d}.root ".format(joinFolder, directorystripped, s+1) + strlist)
+                    print(cmdlist[-1])
+    
+    if args.hadd is not 'NOJOIN':
+        print("Joining ROOT files containing {:s}".format(args.hadd))
+        hadd_regexp = args.hadd.replace(".root", "_*.root")
+        hadd_dict = {}
+        for directory in os.listdir('.'):
+            hadd_dict[directory] = glob("./{0:s}/*/".format(directory) + hadd_regexp)
+            if len(hadd_dict[directory]) == 0:
+                hadd_dict[directory] = glob("./{0:s}/".format(directory) + hadd_regexp)
+            if len(hadd_dict[directory]) == 0:
+                _ = hadd_dict.pop(directory)
+        if len(hadd_dict) > 1:
+            joinFolder = "JoinedFiles"
+            if not os.path.exists(joinFolder):
+                os.makedirs(joinFolder)
+            for directory, joinlist in hadd_dict.iteritems():
+                joinlist.sort(key=lambda f: int(f.split('_')[-1].replace('.root', '')))
+                strlistlist = []
+                strlistlist.append("")
+                strlistsize = []
+                strlistsize.append(0)
+                for f in joinlist:
+                    if strlistsize[-1] + os.path.getsize(f) < 3758096384: #3.5GB file size soft limit
+                        strlistlist[-1] += "{0:s} ".format(f)
+                        strlistsize[-1] += os.path.getsize(f)
+                    else:
+                        strlistlist.append("")
+                        strlistsize.append(0)
+                        strlistlist[-1] += "{0:s} ".format(f)
+                        strlistsize[-1] += os.path.getsize(f)
+                cmdlist = []
+                for s, strlist in enumerate(strlistlist):
+                    directorystripped = directory.replace('crab_', '', 1).replace('local_', '', 1).replace('condor_', '', 1)
+                    cmdlist.append("hadd {0:s}/{1:s}_{2:d}.root ".format(joinFolder, directorystripped, s+1) + strlist)
+                    try:
+                        os.system(cmdlist[-1])
+                    except:
+                        print("Command evaluation failed: \n" + str(cmdlist[-1]))
+
+    if not args.sample_cards: 
+        print("Finishing operations that require no sample card(s)")
+        sys.exit()
+
     SampleList = []
     yaml = YAML() #default roundtrip type
     for scard in args.sample_cards:
@@ -82,7 +170,6 @@ def main():
             print("runfolder '{0:s}' already exists. Rename or delete it and attempt resubmission".format(runFolder))
             sys.exit()
 
-    
     for samplenumber, sample in enumerate(SampleList):
         # if samplenumber > 1: continue
         dataset = sample['dataset']
