@@ -1,11 +1,11 @@
  #YAML 1.2
  #Test sample card
  #Description of stages:
- # stage 0: Unprocessed data and montecarlo, centrally maintained
- # stage 0e: Unfiltered data and montecarlo, with extended variables added (a-la gen-top to PF linking)
+ # stage NANOv4: Unprocessed data and montecarlo, centrally maintained, version 4
+ # stage extNANOv5: Unprocessed data and montecarlo, group maintained and created, version 5 with extended variables such as HOT tagger
  # the combination of name_era must be UNIQUE per sample for the Supervisor to parse and make requests properly. name should be filename-friendly...
  # example MCM lookup (under select view, choose fragrment, filter efficiency, generator parameters) https://cms-pdmv.cern.ch/mcm/requests?dataset_name=TT_TuneCUETP8M2T4_13TeV-powheg-pythia8&page=0&shown=2199023976531
- # procCrossSection is the basic process cross-section (i.e. ttbar), and crossSection is the number passed for event weighting, i.e. procCrossSection*branchingRatio*filterEfficiency, where the detailed breakdown is stored where possible.
+ # procCrossSection is the basic process cross-section (i.e. ttbar), and crossSection is the number passed for event weighting, i.e. procCrossSection*branchingRatio*filterEfficiency, where the detailed breakdown is stored where possible. MCM crossSection is usually calculated from LO only
 
   - dataset: #Four Top sample
         name: "tttt"
@@ -22,14 +22,15 @@
         filterEfficiency: 1
         MCMCrossSection: 0.008213
     stagesource:
-        '0': "/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 1
+        unitsPerJob: 2
         #totalUnits: 150
+        stage1CpuHrPerFile: 0.99
 
   - dataset: #ttbar dilepton sample
         name: "tt_DL"
@@ -46,14 +47,15 @@
         filterEfficiency: 1
         MCMCrossSection: 730
     stagesource:
-        '0': "/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 3
+        unitsPerJob: 2
         #totalUnits: 150
+        stage1CpuHrPerFile: 0.91
 
   - dataset: #ttbar dilepton sample
         name: "tt_DL-GF"
@@ -70,14 +72,15 @@
         filterEfficiency: 0.015
         MCMCrossSection: 730
     stagesource:
-        '0': "/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 2
+        unitsPerJob: 20
         #totalUnits: 150
+        stage1CpuHrPerFile: 0.09
 
   - dataset: #single top - top-W
         name: "ST_tW"
@@ -94,14 +97,15 @@
         filterEfficiency: 1
         MCMCrossSection: 34.91
     stagesource:
-        '0': "/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 3
+        unitsPerJob: 12
         #totalUnits: 150
+        stage1CpuHrPerFile: 0.08
 
   - dataset: #single top - antitop-W
         name: "ST_tbarW"
@@ -118,14 +122,15 @@
         filterEfficiency: 1
         MCMCrossSection: 34.91
     stagesource:
-        '0': "/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 3
+        unitsPerJob: 12
         #totalUnits: 150
+        stage1CpuHrPerFile: 0.10
 
   - dataset: #ttH to bb dilepton ttbar
         name: "ttH_DL"
@@ -142,14 +147,15 @@
         filterEfficiency: 1
         MCMCrossSection: 1
     stagesource:
-        '0': "/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 3
+        unitsPerJob: 2
         #totalUnits: 150
+        stage1CpuHrPerFile: 0.98
 
   - dataset: #ttH to bb single lepton ttbar
         name: "ttH_SL"
@@ -166,7 +172,7 @@
         filterEfficiency: 1
         MCMCrossSection: 1
     stagesource:
-        '0': "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -190,7 +196,7 @@
         filterEfficiency: 1
         MCMCrossSection: 1
     stagesource:
-        '0': "/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -214,14 +220,15 @@
         filterEfficiency: 1
         MCMCrossSection: 0.4793
     stagesource:
-        '0': "/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'NANOv4': "/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 3
+        unitsPerJob: 6
         #totalUnits: 150
+        stage1CpuHrPerFile: 0.27
 
   - dataset: #ttZJets
         name: "ttZJets"
@@ -238,14 +245,15 @@
         filterEfficiency: 1
         MCMCrossSection: 0.618
     stagesource:
-        '0': "/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'NANOv4': "/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 3
+        unitsPerJob: 6
         #totalUnits: 150
+        stage1CpuHrPerFile: 0.27
 
   - dataset: #DY dilepton + jets sample
         name: "DYJets_DL"
@@ -262,14 +270,15 @@
         filterEfficiency: 1
         MCMCrossSection: 14420
     stagesource:
-        '0': "/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017RECOSIMstep_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'NANOv4': "/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017RECOSIMstep_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 3
+        unitsPerJob: 4
         #totalUnits: 150
+        stage1CpuHrPerFile: 0.58
 
 
   - dataset: #DY dilepton + jets sample
@@ -287,7 +296,7 @@
         filterEfficiency: 1
         MCMCrossSection: 6.805
     stagesource:
-        '0': "/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'NANOv4': "/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -311,7 +320,7 @@
         filterEfficiency: 1
         MCMCrossSection: 1.778
     stagesource:
-        '0': "/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -335,7 +344,7 @@
         filterEfficiency: 1
         MCMCrossSection: 0.8526
     stagesource:
-        '0': "/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -359,7 +368,7 @@
         filterEfficiency: 1 
         MCMCrossSection: 0.01852
     stagesource:
-        '0': "/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -376,7 +385,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/DoubleMuon/Run2017B-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/DoubleMuon/Run2017B-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -392,7 +401,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/DoubleMuon/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/DoubleMuon/Run2017C-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -408,7 +417,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/DoubleMuon/Run2017D-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/DoubleMuon/Run2017D-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -424,7 +433,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/DoubleMuon/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/DoubleMuon/Run2017E-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -440,7 +449,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/DoubleMuon/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/DoubleMuon/Run2017F-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -456,7 +465,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/DoubleEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/DoubleEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -472,7 +481,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/DoubleEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/DoubleEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -488,7 +497,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/DoubleEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/DoubleEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -504,7 +513,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/DoubleEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/DoubleEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -520,7 +529,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/DoubleEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/DoubleEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -536,7 +545,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/MuonEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/MuonEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -552,7 +561,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/MuonEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/MuonEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -568,7 +577,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/MuonEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/MuonEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -584,7 +593,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/MuonEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/MuonEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -600,7 +609,7 @@
         isData: True
         nEvents: -1
     stagesource:
-        '0': "/MuonEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "/MuonEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
