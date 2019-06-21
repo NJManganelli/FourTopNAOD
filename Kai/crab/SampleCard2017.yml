@@ -30,7 +30,7 @@
         splitting: "FileBased"
         unitsPerJob: 2
         #totalUnits: 150
-        stage1CpuHrPerFile: 0.99
+        CPUHRperFile_Baseline: 0.99
 
   - dataset: #ttbar dilepton sample
         name: "tt_DL"
@@ -55,7 +55,7 @@
         splitting: "FileBased"
         unitsPerJob: 2
         #totalUnits: 150
-        stage1CpuHrPerFile: 0.91
+        CPUHRperFile_Baseline: 0.91
 
   - dataset: #ttbar dilepton sample
         name: "tt_DL-GF"
@@ -80,7 +80,7 @@
         splitting: "FileBased"
         unitsPerJob: 20
         #totalUnits: 150
-        stage1CpuHrPerFile: 0.09
+        CPUHRperFile_Baseline: 0.09
 
   - dataset: #single top - top-W
         name: "ST_tW"
@@ -105,7 +105,7 @@
         splitting: "FileBased"
         unitsPerJob: 12
         #totalUnits: 150
-        stage1CpuHrPerFile: 0.08
+        CPUHRperFile_Baseline: 0.08
 
   - dataset: #single top - antitop-W
         name: "ST_tbarW"
@@ -130,7 +130,7 @@
         splitting: "FileBased"
         unitsPerJob: 12
         #totalUnits: 150
-        stage1CpuHrPerFile: 0.10
+        CPUHRperFile_Baseline: 0.10
 
   - dataset: #ttH to bb dilepton ttbar
         name: "ttH_DL"
@@ -155,7 +155,7 @@
         splitting: "FileBased"
         unitsPerJob: 2
         #totalUnits: 150
-        stage1CpuHrPerFile: 0.98
+        CPUHRperFile_Baseline: 0.98
 
   - dataset: #ttH to bb single lepton ttbar
         name: "ttH_SL"
@@ -228,7 +228,7 @@
         splitting: "FileBased"
         unitsPerJob: 6
         #totalUnits: 150
-        stage1CpuHrPerFile: 0.27
+        CPUHRperFile_Baseline: 0.27
 
   - dataset: #ttZJets
         name: "ttZJets"
@@ -253,7 +253,7 @@
         splitting: "FileBased"
         unitsPerJob: 6
         #totalUnits: 150
-        stage1CpuHrPerFile: 0.27
+        CPUHRperFile_Baseline: 0.27
 
   - dataset: #DY dilepton + jets sample
         name: "DYJets_DL"
@@ -278,7 +278,7 @@
         splitting: "FileBased"
         unitsPerJob: 4
         #totalUnits: 150
-        stage1CpuHrPerFile: 0.58
+        CPUHRperFile_Baseline: 0.58
 
 
   - dataset: #DY dilepton + jets sample
@@ -391,8 +391,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 40
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.020
 
   - dataset: #Double Muon
         name: "MuMu_C"
@@ -407,8 +408,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 40
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.035
 
   - dataset: #Double Muon
         name: "MuMu_D"
@@ -423,8 +425,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 40
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.021
 
   - dataset: #Double Muon
         name: "MuMu_E"
@@ -439,8 +442,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 80
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.021
 
   - dataset: #Double Muon
         name: "MuMu_F"
@@ -455,8 +459,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 80
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.009
 
   - dataset: #Double Electron
         name: "ElEl_B"
@@ -471,8 +476,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 80
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.011
 
   - dataset: #Double Electron
         name: "ElEl_C"
@@ -487,8 +493,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 80
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.011
 
   - dataset: #Double Electron
         name: "ElEl_D"
@@ -503,8 +510,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 80
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.007
 
   - dataset: #Double Electron
         name: "ElEl_E"
@@ -519,8 +527,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 80
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.014
 
   - dataset: #Double Electron
         name: "ElEl_F"
@@ -535,8 +544,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 80
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.011
 
   - dataset: #Muon Electron
         name: "ElMu_B"
@@ -551,8 +561,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 80
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.012
 
   - dataset: #Muon Electron
         name: "ElMu_C"
@@ -567,8 +578,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 40
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.027
 
   - dataset: #Muon Electron
         name: "ElMu_D"
@@ -583,8 +595,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 80
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.015
 
   - dataset: #Muon Electron
         name: "ElMu_E"
@@ -599,8 +612,9 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 40
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.025
 
   - dataset: #Muon Electron
         name: "ElMu_F"
@@ -615,7 +629,8 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 40
         #totalUnits: 150
+        CPUHRperFile_Baseline: 0.022
 
 
