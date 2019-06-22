@@ -124,7 +124,7 @@ def main():
                 cmdlist = []
                 for s, strlist in enumerate(strlistlist):
                     directorystripped = directory.replace('crab_', '', 1).replace('local_', '', 1).replace('condor_', '', 1)
-                    cmdlist.append("hadd {0:s}/{1:s}_{2:d}.root ".format(joinFolder, directorystripped, s+1) + strlist)
+                    cmdlist.append("hadd {0:s}/{1:s}_hist_{2:d}.root ".format(joinFolder, directorystripped, s+1) + strlist)
                     try:
                         os.system(cmdlist[-1])
                     except:
