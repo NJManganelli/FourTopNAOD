@@ -140,7 +140,7 @@ class EventSelector(Module):
         if self.isData:
             self.weightList = ["NONE"]
         else:
-            self.weightList = ["NONE", "EWo", "EWS", "GWo", "PUo", "BTo", "EP", "EPB"]
+            self.weightList = ["NONE", "EWo", "EWS", "PUo", "EP"]
             # EventWeight only (calculated from XS, Lumi, NumberGeneratedEvents)
             # GenWeight only (as stored in NanoAOD itself)
             # PileupWeight only
@@ -429,7 +429,7 @@ class EventSelector(Module):
         theWeight = {}
 
         #Begin weight calculations. Some won't work properly with cutflow, so they'll be running weights
-        # ["NONE", "EWo", "PUo", "BTo", "EP", "EPB"]
+        # ["NONE", "EWo", "EWS", "PUo", "EP"]
         btagSFs = {}
         for jet in jets:
             pass
@@ -444,20 +444,8 @@ class EventSelector(Module):
                 theWeight[weight] = generator.weight
             elif weight == "PUo":
                 theWeight[weight] = event.puWeight #puWeightUp, puWeightDown
-            elif weight == "BTo":
-                if self.BTAlg == "btagCSVV2":
-                    theWeight[weight] = btagweight.CSVV2
-                elif self.BTAlg == "btagDeepB":
-                    theWeight[weight] = btagweight.DeepCSVB                    
-                else:
-                    theWeight[weight] = 1.0 
             elif weight == "EP":
                 theWeight[weight] = math.copysign(self.evtWeightBase, generator.weight)*event.puWeight
-            elif weight == "EPB":
-                #FIXME
-                #Dangerous implementation... depending on "BTo" to be in the list and evaluated first
-                #Needs to be replaced once a stable and consistent btagweight calculator is in place.
-                theWeight[weight] = math.copysign(self.evtWeightBase, generator.weight)*event.puWeight*theWeight["BTo"]
             else:
                 theWeight[weight] = -1
             self.cutflow[weight].Fill("> preselection", theWeight[weight])
@@ -524,7 +512,8 @@ class EventSelector(Module):
         # selEle15 = []
         selEleUniform = []
         for idx, electron in enumerate(electrons):
-            if (abs(electron.eta) < 1.4442 or (abs(electron.eta) > 1.4660 and abs(electron.eta) < 2.4)) and electron.cutBased_Fall17_V1 >= 2 and electron.dz < 0.02:
+            d0 = math.sqrt(electron.dxy**2 + electron.dz**2)
+            if ((abs(electron.eta) < 1.4442 and d0 < 0.05) or (abs(electron.eta) > 1.4660 and abs(electron.eta) < 2.4) and d0 < 0.10)) and electron.cutBased_Fall17_V1 >= 2 and abs(electron.dz) < 0.02:
                 if electron.pt > self.lepPt:
                     selEleUniform.append((idx, electron))
         #         if electron.pt > 25:
@@ -539,7 +528,8 @@ class EventSelector(Module):
         # selMu15 = []
         selMuUniform = []
         for idx, muon in enumerate(muons):
-            if abs(muon.eta) < 2.4 and muon.pfIsoId >= 4 and muon.dz < 0.02:
+            d0 = math.sqrt(muon.dxy**2 + muon.dz**2)
+            if abs(muon.eta) < 2.4 and muon.pfIsoId >= 4 and abs(muon.dz) < 0.02 and d0 < 0.10:
                 if muon.pt > self.lepPt:
                     selMuUniform.append((idx, muon))
         #         if muon.pt > 25:

@@ -23,6 +23,8 @@ parser.add_argument('--haddnano', dest='haddnano', action='store', nargs='?', ty
                     ' Default parsed_name will be derived from the grandparent folder, as it is tailored to CRAB output structure.')
 parser.add_argument('--check_events', dest='check_events', action='store_true',
                     help='check that the number of events in source files match those in the sample card')
+parser.add_argument('--check_size', dest='check_size', action='store_true',
+                    help='check total dataset sizes')
 parser.add_argument('--local_run', dest='local_run', action='store_true',
                     help='run locally')
 parser.add_argument('--crab_run', dest='crab_run', action='store_true',
@@ -42,6 +44,7 @@ def main():
     args = parser.parse_args()
     NanoAODPath = "{0:s}/src/PhysicsTools/NanoAODTools".format(os.environ['CMSSW_BASE'])
     username = 'nmangane'
+    bareRedir = args.redir.replace("root://", "").replace("/", "")
     if args.local_run and args.crab_run:
         print("Both local_run and crab_run have been set to True; this is not supported. Exiting")
         sys.exit()
@@ -137,7 +140,7 @@ def main():
     SampleList = []
     yaml = YAML() #default roundtrip type
     for scard in args.sample_cards:
-        print("\t" + scard)
+        # print("\t" + scard) #Already printed elsewhere
         with open(scard) as sample:
             SampleList += yaml.load(sample)
 
@@ -170,13 +173,16 @@ def main():
             print("runfolder '{0:s}' already exists. Rename or delete it and attempt resubmission".format(runFolder))
             sys.exit()
 
+    total_data_size = 0
+    total_MC_size = 0
     for samplenumber, sample in enumerate(SampleList):
         # if samplenumber > 1: continue
         dataset = sample['dataset']
         sampleName = dataset['name']
         era = dataset['era']
         isData = dataset['isData']
-        nEvents = dataset['nEvents']
+        # nEvents = dataset['nEvents']
+        nEvents = dataset.get('nEvents', 0) #Default to 0 when key DNE
         inputDataset = sample['stagesource'][args.stagesource]
     
         crab_cfg = sample['crab_cfg']
@@ -184,7 +190,7 @@ def main():
         postprocessor = sample['postprocessor']
     
         #write out the filelist to personal space in /tmp, if check_events or local_run is true, then use these to run
-        if args.check_events or args.local_run:
+        if args.check_events or args.local_run or args.check_size:
             query='--query="file dataset=' + inputDataset + '"'
             tmpFileLoc = '/tmp/{0:s}/sample_{1:d}_fileList.txt'.format(username, samplenumber)
             cmd = 'dasgoclient ' + query + ' > ' + tmpFileLoc
@@ -197,15 +203,28 @@ def main():
                     tempName = args.redir + line
                     tempName = tempName.rstrip()
                     fileList.append(tempName)
+
+        if args.check_size:
+            #This will probably be abandoned in favor of using ROOT::Tfile::GetSize()
+            for fileName in fileList:
+                cmd = "xrdfs {0:s} stat {1:s} | awk '$1 ~ /Size/ {print $2}'".format(bareRedir, fileName.replace(args.redir, ""))
+                print(cmd)
         
         if args.check_events:
             if isData == False:
+                current_events_in_files = 0
                 events_in_files = 0
+                events_in_files_positive = 0
+                events_in_files_negative = 0
                 events_sum_weights = 0
                 events_sum_weights2 = 0
+                dataset_size = 0
                 for fileName in fileList:
                     f = ROOT.TFile.Open(fileName, 'r')
+                    dataset_size += int(f.GetSize())
                     tree = f.Get('Runs')
+                    evtTree = f.Get('Events')
+                    current_events_in_files += evtTree.GetEntries()
                     for en in xrange(tree.GetEntries()):
                         tree.GetEntry(en)
                         events_in_files += tree.genEventCount
@@ -216,29 +235,50 @@ def main():
                 else:
                     print("Integrity check successful for dataset {0}: {1:d}/{2:d} events".format(sampleName, events_in_files, nEvents))
                 print("nEvents = {0:d}, events_in_files = {1:d}, events_sum_weights = {2:f}, "\
-                      "events_sum_weights2 = {3:f}".format(nEvents, events_in_files, events_sum_weights, events_sum_weights2))
+                      "events_sum_weights2 = {3:f}, current_events_in_files = {4:d}, "\
+                      "dataset_size = {5:f}GB".format(nEvents, events_in_files, 
+                                                      events_sum_weights, events_sum_weights2, 
+                                                      current_events_in_files,dataset_size/1024**3)
+                )
+                total_MC_size += dataset_size
             else:
-                print("Skipping dataset {0} for check_events integrity, as it is marked isData".format(sampleName))
-        
+                #Distinguish the current event count, which is based on tree entries, from the event counter stored in MC showing how many events had been processed
+                current_events_in_files = 0
+                dataset_size = 0
+                for fileName in fileList:
+                    f = ROOT.TFile.Open(fileName, 'r')
+                    dataset_size += int(f.GetSize())
+                    evtTree = f.Get('Events')
+                    current_events_in_files += evtTree.GetEntries()
+                if events_in_files != nEvents:
+                    print("Mismatch in dataset {0}: nEvents = {1:d}, current_events_in_files = {2:d}".format(sampleName, nEvents, current_events_in_files))
+                else:
+                    print("Integrity check successful for dataset {0}: {1:d}/{2:d} events".format(sampleName, current_events_in_files, nEvents))
+                print("nEvents = {0:d}, current_events_in_files = {1:d}, dataset_size = {2:f}GB".format(nEvents, current_events_in_files, dataset_size/1024**3))
+                total_data_size += dataset_size
+
         if args.crab_run:
             coreName = sampleName + "_" + era
 
             with open("./{0:s}/crab_cfg_{1:s}.py".format(runFolder, coreName), "w") as sample_cfg:
                 sample_cfg.write(get_crab_cfg(runFolder, requestName = coreName, NanoAODPath = NanoAODPath, 
                                               splitting = crab_cfg['splitting'], inputDataset=inputDataset, stage=args.stage))
-            if args.stage != '0Ext':
+            if 'extNANO' not in args.stage:
                 with open("./{0:s}/crab_script_{1:s}.sh".format(runFolder, coreName), "w") as sample_script_sh:
                     sample_script_sh.write(get_crab_script_sh(runFolder, requestName = coreName, stage=args.stage))
                 with open("./{0:s}/crab_script_{1:s}.py".format(runFolder, coreName), "w") as sample_script_py:
                     sample_script_py.write(get_crab_script_py(runFolder, requestName = coreName, stage=args.stage, sampleConfig = sample, btagger = args.btagger))
+
+    if args.check_events:
+        print("total_data_size = {0:f}GB, total_MC_size = {1:f}GB".format(total_data_size/1024**3, total_MC_size/1024**3))
             
-def get_crab_cfg(runFolder, requestName, NanoAODPath='.', splitting='', unitsPerJob = 1, inputDataset = '', storageSite = 'T2_CH_CERN', publication=True, stage='1'):
+def get_crab_cfg(runFolder, requestName, NanoAODPath='.', splitting='', unitsPerJob = 1, inputDataset = '', storageSite = 'T2_CH_CERN', publication=True, stage='Baseline'):
     #Options for splitting:
     #'Automatic'
     #'EventAwareLumiBased'
     #'FileBased'
     #FIXMEs : scriptExe, inputFiles (including the haddnano script), allow undistributed CMSSW?, publication boolean, 
-    if stage == '1':
+    if stage == 'Baseline':
         crab_cfg = """from WMCore.Configuration import Configuration
 from CRABClient.UserUtilities import config, getUsernameFromSiteDB
 
@@ -274,7 +314,7 @@ config.Site.storageSite = '{5:s}'
         sys.exit()
     return ret
 
-def get_crab_script_sh(runFolder, requestName, stage='1'):
+def get_crab_script_sh(runFolder, requestName, stage='Baseline'):
     crab_script_sh = """#this is not mean to be run locally
 #
 echo Check if TTY
@@ -308,7 +348,7 @@ fi
     ret = crab_script_sh.format(requestName)
     return ret
 
-def get_crab_script_py(runFolder, requestName, stage='1', sampleConfig = None, stageConfig = None, btagger = ['None', 'None']):
+def get_crab_script_py(runFolder, requestName, stage='Baseline', sampleConfig = None, stageConfig = None, btagger = ['None', 'None']):
     eLumiDict = {'2016': 35,
                  '2017': 41.53,
                  '2018': 50
@@ -334,7 +374,7 @@ def get_crab_script_py(runFolder, requestName, stage='1', sampleConfig = None, s
     if sampleConfig == None:
         print("No sample configuration found, cannot generate meaningful crab_script.py for sample request {0:s}".format(requestName))
         sys.exit()
-    if stage == '1':
+    if stage == 'Baseline':
         crab_script_py = """#!/usr/bin/env python
 import os, time, collections, copy, json, multiprocessing
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import * 
@@ -384,13 +424,9 @@ if SC_isData:
                                   probEvt=None,
                                   isData=SC_isData,
                                   era=SC_era,
-                                  btagging=Sup_BTagger,
-                                  lepPt=25, 
-                                  MET=50, 
-                                  HT=500, 
-                                  invertZWindow=False, 
-                                  invertZWindowEarlyReturn=False,
-                                  GenTop_LepSelection=None,
+                                  lepPt=13, 
+                                  MET=40, 
+                                  HT=350, 
                                   jetPtVar="pt_nom",
                                   jetMVar="mass_nom"
                               ),
@@ -409,7 +445,6 @@ else:
                                              [ "All" ], 
                                              redoJEC=True
                                          ),
-                 btagSFProducer(SC_era, algo=Sup_BTagger[0]),
                  BaselineSelector(maxevt=-1, 
                                   probEvt=None,
                                   isData=SC_isData,
@@ -418,13 +453,9 @@ else:
                                   genNEvents=SC_nEvents,
                                   genSumWeights=SC_sumWeights,
                                   era=SC_era,
-                                  btagging=Sup_BTagger,
-                                  lepPt=25, 
-                                  MET=50, 
-                                  HT=500, 
-                                  invertZWindow=False, 
-                                  invertZWindowEarlyReturn=False,
-                                  GenTop_LepSelection=None,
+                                  lepPt=13, 
+                                  MET=40, 
+                                  HT=350, 
                                   jetPtVar="pt_nom",
                                   jetMVar="mass_nom"
                               ),
@@ -480,4 +511,5 @@ if __name__ == '__main__':
 # dataRecalib = {"2017": {
 #                     }
 #            }
+
 
