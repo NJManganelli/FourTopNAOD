@@ -22,7 +22,7 @@
         filterEfficiency: 1
         MCMCrossSection: 0.008213
     source:
-        'NANOv4': "/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -47,7 +47,7 @@
         filterEfficiency: 1
         MCMCrossSection: 730
     source:
-        'NANOv4': "/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -72,7 +72,7 @@
         filterEfficiency: 0.015
         MCMCrossSection: 730
     source:
-        'NANOv4': "/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -97,7 +97,7 @@
         filterEfficiency: 1
         MCMCrossSection: 34.91
     source:
-        'NANOv4': "/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -122,7 +122,7 @@
         filterEfficiency: 1
         MCMCrossSection: 34.91
     source:
-        'NANOv4': "/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -147,7 +147,7 @@
         filterEfficiency: 1
         MCMCrossSection: 1
     source:
-        'NANOv4': "/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "dbs:/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -172,7 +172,7 @@
         filterEfficiency: 1
         MCMCrossSection: 1
     source:
-        'NANOv4': "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "dbs:/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -196,7 +196,7 @@
         filterEfficiency: 1
         MCMCrossSection: 1
     source:
-        'NANOv4': "/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -220,7 +220,7 @@
         filterEfficiency: 1
         MCMCrossSection: 0.4793
     source:
-        'NANOv4': "/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'NANOv4': "dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -245,7 +245,7 @@
         filterEfficiency: 1
         MCMCrossSection: 0.618
     source:
-        'NANOv4': "/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'NANOv4': "dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -270,7 +270,7 @@
         filterEfficiency: 1
         MCMCrossSection: 14420
     source:
-        'NANOv4': "/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017RECOSIMstep_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'NANOv4': "dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017RECOSIMstep_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -296,7 +296,7 @@
         filterEfficiency: 1
         MCMCrossSection: 6.805
     source:
-        'NANOv4': "/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'NANOv4': "dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -320,7 +320,7 @@
         filterEfficiency: 1
         MCMCrossSection: 1.778
     source:
-        'NANOv4': "/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -344,7 +344,7 @@
         filterEfficiency: 1
         MCMCrossSection: 0.8526
     source:
-        'NANOv4': "/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -368,7 +368,7 @@
         filterEfficiency: 1 
         MCMCrossSection: 0.01852
     source:
-        'NANOv4': "/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -385,7 +385,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/DoubleMuon/Run2017B-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/DoubleMuon/Run2017B-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -402,7 +402,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/DoubleMuon/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/DoubleMuon/Run2017C-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -419,7 +419,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/DoubleMuon/Run2017D-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/DoubleMuon/Run2017D-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -436,7 +436,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/DoubleMuon/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/DoubleMuon/Run2017E-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -453,7 +453,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/DoubleMuon/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/DoubleMuon/Run2017F-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -470,7 +470,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/DoubleEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/DoubleEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -487,7 +487,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/DoubleEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/DoubleEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -504,7 +504,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/DoubleEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/DoubleEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -521,7 +521,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/DoubleEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/DoubleEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -538,7 +538,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/DoubleEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/DoubleEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -555,7 +555,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/MuonEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/MuonEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -572,7 +572,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/MuonEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/MuonEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -589,7 +589,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/MuonEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/MuonEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -606,7 +606,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/MuonEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/MuonEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -623,7 +623,7 @@
         isData: True
         nEvents: -1
     source:
-        'NANOv4': "/MuonEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/MuonEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:

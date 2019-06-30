@@ -110,7 +110,7 @@ def main():
         hadd_dict = {}
         for directory in os.listdir('.'):
             # hadd_dict[directory] = glob("./{0:s}/*/".format(directory) + hadd_regexp)
-            hadd_dict[directory] = getFiles(globPath="./{0:s}/*/".format(directory), globFileExp=hadd_regexp)            
+            hadd_dict[directory] = getFiles(globPath="./{0:s}/*/".format(directory), globFileExp=hadd_regexp)
             if len(hadd_dict[directory]) == 0:
                 hadd_dict[directory] = glob("./{0:s}/".format(directory) + hadd_regexp)
             if len(hadd_dict[directory]) == 0:
@@ -209,7 +209,7 @@ def main():
     
         #write out the filelist to personal space in /tmp, if check_events or local_run is true, then use these to run
         if args.check_events != 'NOCHECK' or args.local_run: # or args.check_size:
-            # query='--query="file dataset=' + inputDataset + '"'
+            # query='--query="file dataset=' + inputDataset.replace("dbs:","") + '"'
             # tmpFileLoc = '/tmp/{0:s}/sample_{1:d}_fileList.txt'.format(username, samplenumber)
             # cmd = 'dasgoclient ' + query + ' > ' + tmpFileLoc
             # os.system(cmd)
@@ -221,7 +221,12 @@ def main():
             #         tempName = args.redir + line
             #         tempName = tempName.rstrip()
             #         fileList.append(tempName)
-            fileList = getFiles(dbsDataset=inputDataset, redir="root://cms-xrd-global.cern.ch/")            
+            if "list:" in inputDataset:
+                fileList = getFiles(inFileName=inputDataset.replace("list:",""))
+            elif "glob:" in inputDataset:
+                fileList = getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="")
+            else: # "dbs:" in inputDataset:
+                fileList = getFiles(dbsDataset=inputDataset.replace("dbs:",""), redir="root://cms-xrd-global.cern.ch/")
 
         # if args.check_size:
         #     #This will probably be abandoned in favor of using ROOT::Tfile::GetSize()
@@ -239,6 +244,7 @@ def main():
                 events_sum_weights2 = 0
                 dataset_size = 0
                 for fileName in fileList:
+                    # print("Opening {0}".format(fileName))
                     f = ROOT.TFile.Open(fileName, 'r')
                     dataset_size += int(f.GetSize())
                     tree = f.Get('Runs')
@@ -249,6 +255,7 @@ def main():
                         events_in_files += tree.genEventCount
                         events_sum_weights += tree.genEventSumw
                         events_sum_weights2 += tree.genEventSumw2
+                    # f.Close() #Will this speed things up any?
                 if events_in_files != nEvents:
                     print("Mismatch in dataset {0}: nEvents = {1:d}, events_in_files = {2:d}".format(sampleName, nEvents, events_in_files))
                 else:
@@ -265,6 +272,7 @@ def main():
                 current_events_in_files = 0
                 dataset_size = 0
                 for fileName in fileList:
+                    # print("Opening {0}".format(fileName))
                     f = ROOT.TFile.Open(fileName, 'r')
                     dataset_size += int(f.GetSize())
                     evtTree = f.Get('Events')

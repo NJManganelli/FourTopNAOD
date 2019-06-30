@@ -22,7 +22,8 @@
         filterEfficiency: 1
         MCMCrossSection: 0.008213
     source:
-        'NANOv4': "/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv4': "dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_tttt_2017/results/tree_*.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -39,7 +40,8 @@
         isData: True
         nEvents: 49636525
     source:
-        'NANOv4': "/DoubleMuon/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'NANOv4': "dbs:/DoubleMuon/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_MuMu_C_2017/results/tree_*.root"
     postprocessor: 
         filter: ""
     crab_cfg:
