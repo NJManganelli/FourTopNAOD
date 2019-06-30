@@ -209,18 +209,19 @@ def main():
     
         #write out the filelist to personal space in /tmp, if check_events or local_run is true, then use these to run
         if args.check_events != 'NOCHECK' or args.local_run: # or args.check_size:
-            query='--query="file dataset=' + inputDataset + '"'
-            tmpFileLoc = '/tmp/{0:s}/sample_{1:d}_fileList.txt'.format(username, samplenumber)
-            cmd = 'dasgoclient ' + query + ' > ' + tmpFileLoc
-            os.system(cmd)
+            # query='--query="file dataset=' + inputDataset + '"'
+            # tmpFileLoc = '/tmp/{0:s}/sample_{1:d}_fileList.txt'.format(username, samplenumber)
+            # cmd = 'dasgoclient ' + query + ' > ' + tmpFileLoc
+            # os.system(cmd)
         
-            #Load the filelist names including redirector
-            fileList = []
-            with open(tmpFileLoc, "r") as rawFileList:
-                for line in rawFileList:
-                    tempName = args.redir + line
-                    tempName = tempName.rstrip()
-                    fileList.append(tempName)
+            # # Load the filelist names including redirector
+            # fileList = []
+            # with open(tmpFileLoc, "r") as rawFileList:
+            #     for line in rawFileList:
+            #         tempName = args.redir + line
+            #         tempName = tempName.rstrip()
+            #         fileList.append(tempName)
+            fileList = getFiles(dbsDataset=inputDataset, redir="root://cms-xrd-global.cern.ch/")            
 
         # if args.check_size:
         #     #This will probably be abandoned in favor of using ROOT::Tfile::GetSize()
