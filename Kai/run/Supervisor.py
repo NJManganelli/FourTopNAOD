@@ -66,7 +66,8 @@ def main():
         haddnano_regexp = args.haddnano #.replace(".root", "_*.root")
         haddnano_dict = {}
         for directory in os.listdir('.'):
-            haddnano_dict[directory] = glob("./{0:s}/*/".format(directory) + haddnano_regexp)
+            # haddnano_dict[directory] = glob("./{0:s}/*/".format(directory) + haddnano_regexp)
+            haddnano_dict[directory] = getFiles(globPath="./{0:s}/*/".format(directory), globFileExp=haddnano_regexp)
             if len(haddnano_dict[directory]) == 0:
                 haddnano_dict[directory] = glob("./{0:s}/".format(directory) + haddnano_regexp)
             if len(haddnano_dict[directory]) == 0:
@@ -97,14 +98,19 @@ def main():
                 for s, strlist in enumerate(strlistlist):
                     directorystripped = directory.replace('crab_', '', 1).replace('local_', '', 1).replace('condor_', '', 1)
                     cmdlist.append("haddnano.py {0:s}/{1:s}_{2:d}.root ".format(joinFolder, directorystripped, s+1) + strlist)
-                    print(cmdlist[-1])
+                    try:
+                        os.system(cmdlist[-1])
+                    except:
+                        print("Command evaluation failed: \n" + str(cmdlist[-1]))
+
     
     if args.hadd is not 'NOJOIN':
         print("Joining ROOT files containing {:s}".format(args.hadd))
         hadd_regexp = args.hadd #.replace(".root", "_*.root")
         hadd_dict = {}
         for directory in os.listdir('.'):
-            hadd_dict[directory] = glob("./{0:s}/*/".format(directory) + hadd_regexp)
+            # hadd_dict[directory] = glob("./{0:s}/*/".format(directory) + hadd_regexp)
+            hadd_dict[directory] = getFiles(globPath="./{0:s}/*/".format(directory), globFileExp=hadd_regexp)            
             if len(hadd_dict[directory]) == 0:
                 hadd_dict[directory] = glob("./{0:s}/".format(directory) + hadd_regexp)
             if len(hadd_dict[directory]) == 0:
@@ -515,34 +521,35 @@ process.out = cms.EndPath(process.output)
     return PSet_py.format(str(NanoAODPath))
 
 #import glob, os, tempfile
-def getFiles(dbsDataset=None, fileName=None, dirPath=None, fileExp="*.root", meth="dbs", returntype="list", redir=""):
+def getFiles(globPath=None, globFileExp="*.root", dbsDataset=None, inFileName=None, redir="", outFileName=None):
     """Use one of several different methods to acquire a list or text file specifying the filenames.
 
-meth="dbs" requires a dbsDataset to be specified, using the dasgoclient to get a list
+Method follows after globPath, inFileName, or dbsDataset is specified, with precedence going glob > dbs > file.
+globPath should be globbable in python. For example "./my2017ttbarDir/*/results"
+globPath has additional option globFileExp which defaults to "*.root", but can be changed to "tree_*.root" or "SF.txt" for example
+dbsDataset should just be a string as would be used in DAS/dasgoclient search, such as "/DoubleMuon/*/NANOAOD"
+inFileName should specify the path to a file storing the filenames as plain text.
 
-meth="glob" requires a dirPath to be specified, and it should be globbable. For example "./my2017ttbarDir/*/"
-Optionally, the field fileExp can be changed from the default "*.root", which when combined with the above example, would return a list
-containing any root file in subdirectories of the path specified above, due to the extra "*" in the relative path.
-
-meth="file" requires a fileName to be specified.
-
-returntype="list" is the default, optionally can also return a "file"
+additional options:
+outFileName will write the filelist to the specified file path + name
+redir will prepend the redirector to the beginning of the paths, such as redir="root://cms-xrd-global.cern.ch/"
 """
     #methods to support: "dbs" using dasgoclient query, "glob" using directory path, "file" using text file
     fileList = []
     with tempfile.NamedTemporaryFile() as f:
-        if meth.lower() == "file":
-            if fileName == None:
-                raise RuntimeError("getFiles() attempted using meth='file' without a fileName specified")
+        #check file exists as additional check?
+        if inFileName:
+            if True:
+                raise RuntimeError("getFiles() attempted using meth='file' without a inFileName specified")
             else:
                 pass
-        elif meth.lower() == "glob":
-            if dirPath == None:
-                raise RuntimeError("getFiles() attempted using meth='glob' without a globbable dirPath specified")
+        elif globPath:
+            if False:
+                raise RuntimeError("getFiles() attempted using meth='glob' without a globbable globPath specified")
             else:
-                fileList = glob("{0}".format(dirPath) + fileExp)
-        elif meth.lower() == "dbs":
-            if dbsDataset == None:
+                fileList = glob("{0}".format(globPath) + globFileExp)
+        elif dbsDataset:
+            if False:
                 raise RuntimeError("getFiles() attempted using meth='dbs' without a dbsDataset specified")
             else:
                 cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(dbsDataset,f.name)
@@ -551,12 +558,10 @@ returntype="list" is the default, optionally can also return a "file"
                     tmpName = redir + line
                     tmpName = tmpName.rstrip()
                     fileList.append(tmpName)
-    if returntype.lower() == "list":
-        return fileList
-    elif returntype.lower() == "file":
+    if outFileName:
         raise NotImplementedError("returning file not eimplemented yet")
-    else:
-        raise NotImplementedError("returntype '{0}' not eimplemented yet".format(returntype))
+        
+    return fileList
 
 if __name__ == '__main__':
     main()
