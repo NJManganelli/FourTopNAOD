@@ -21,7 +21,7 @@
         branchingRatio: 1
         filterEfficiency: 1
         MCMCrossSection: 0.008213
-    stagesource:
+    source:
         'NANOv4': "/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -46,7 +46,7 @@
         branchingRatio: 0.10621
         filterEfficiency: 1
         MCMCrossSection: 730
-    stagesource:
+    source:
         'NANOv4': "/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -71,7 +71,7 @@
         branchingRatio: 0.10621
         filterEfficiency: 0.015
         MCMCrossSection: 730
-    stagesource:
+    source:
         'NANOv4': "/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -96,7 +96,7 @@
         branchingRatio: 1
         filterEfficiency: 1
         MCMCrossSection: 34.91
-    stagesource:
+    source:
         'NANOv4': "/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -121,7 +121,7 @@
         branchingRatio: 1
         filterEfficiency: 1
         MCMCrossSection: 34.91
-    stagesource:
+    source:
         'NANOv4': "/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -146,7 +146,7 @@
         branchingRatio: 0.10621
         filterEfficiency: 1
         MCMCrossSection: 1
-    stagesource:
+    source:
         'NANOv4': "/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -171,7 +171,7 @@
         branchingRatio: 0.45441
         filterEfficiency: 1
         MCMCrossSection: 1
-    stagesource:
+    source:
         'NANOv4': "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -195,7 +195,7 @@
         branchingRatio: 1
         filterEfficiency: 1
         MCMCrossSection: 1
-    stagesource:
+    source:
         'NANOv4': "/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -219,7 +219,7 @@
         branchingRatio: 1
         filterEfficiency: 1
         MCMCrossSection: 0.4793
-    stagesource:
+    source:
         'NANOv4': "/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -244,7 +244,7 @@
         branchingRatio: 1
         filterEfficiency: 1
         MCMCrossSection: 0.618
-    stagesource:
+    source:
         'NANOv4': "/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -269,7 +269,7 @@
         branchingRatio: 1
         filterEfficiency: 1
         MCMCrossSection: 14420
-    stagesource:
+    source:
         'NANOv4': "/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017RECOSIMstep_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -295,7 +295,7 @@
         branchingRatio: 1
         filterEfficiency: 1
         MCMCrossSection: 6.805
-    stagesource:
+    source:
         'NANOv4': "/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -319,7 +319,7 @@
         branchingRatio: 1
         filterEfficiency: 1
         MCMCrossSection: 1.778
-    stagesource:
+    source:
         'NANOv4': "/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -343,7 +343,7 @@
         branchingRatio: 1
         filterEfficiency: 1
         MCMCrossSection: 0.8526
-    stagesource:
+    source:
         'NANOv4': "/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -367,7 +367,7 @@
         branchingRatio: 1
         filterEfficiency: 1 
         MCMCrossSection: 0.01852
-    stagesource:
+    source:
         'NANOv4': "/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
@@ -384,7 +384,7 @@
         subera: "B"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/DoubleMuon/Run2017B-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -401,7 +401,7 @@
         subera: "C"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/DoubleMuon/Run2017C-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -418,7 +418,7 @@
         subera: "D"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/DoubleMuon/Run2017D-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -435,7 +435,7 @@
         subera: "E"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/DoubleMuon/Run2017E-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -452,7 +452,7 @@
         subera: "F"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/DoubleMuon/Run2017F-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -469,7 +469,7 @@
         subera: "B"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/DoubleEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -486,7 +486,7 @@
         subera: "C"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/DoubleEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -503,7 +503,7 @@
         subera: "D"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/DoubleEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -520,7 +520,7 @@
         subera: "E"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/DoubleEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -537,7 +537,7 @@
         subera: "F"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/DoubleEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -554,7 +554,7 @@
         subera: "B"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/MuonEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -571,7 +571,7 @@
         subera: "C"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/MuonEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -588,7 +588,7 @@
         subera: "D"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/MuonEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -605,7 +605,7 @@
         subera: "E"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/MuonEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""
@@ -622,7 +622,7 @@
         subera: "F"
         isData: True
         nEvents: -1
-    stagesource:
+    source:
         'NANOv4': "/MuonEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
     postprocessor: 
         filter: ""

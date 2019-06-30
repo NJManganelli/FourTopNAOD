@@ -1,0 +1,50 @@
+ #YAML 1.2
+ #Test sample card
+ #Description of stages:
+ # stage NANOv4: Unprocessed data and montecarlo, centrally maintained, version 4
+ # stage extNANOv5: Unprocessed data and montecarlo, group maintained and created, version 5 with extended variables such as HOT tagger
+ # the combination of name_era must be UNIQUE per sample for the Supervisor to parse and make requests properly. name should be filename-friendly...
+ # example MCM lookup (under select view, choose fragrment, filter efficiency, generator parameters) https://cms-pdmv.cern.ch/mcm/requests?dataset_name=TT_TuneCUETP8M2T4_13TeV-powheg-pythia8&page=0&shown=2199023976531
+ # procCrossSection is the basic process cross-section (i.e. ttbar), and crossSection is the number passed for event weighting, i.e. procCrossSection*branchingRatio*filterEfficiency, where the detailed breakdown is stored where possible. MCM crossSection is usually calculated from LO only
+
+  - dataset: #Four Top sample
+        name: "tttt"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 2273928
+        sumWeights: 18645.487772
+        sumWeights2: 1094.209551
+        isSignal: True
+        procCrossSection: 0.012
+        crossSection: 0.012
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0.008213
+    source:
+        'NANOv4': "/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 2
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.99
+
+  - dataset: #Double Muon
+        name: "MuMu_C"
+        era: "2017"
+        subera: "C"
+        isData: True
+        nEvents: 49636525
+    source:
+        'NANOv4': "/DoubleMuon/Run2017C-Nano14Dec2018-v1/NANOAOD"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 40
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.035

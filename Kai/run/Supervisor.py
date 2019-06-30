@@ -7,24 +7,25 @@ import pprint
 from collections import OrderedDict
 from ruamel.yaml import YAML
 from glob import glob
+import tempfile
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 parser = argparse.ArgumentParser(description='Supervisor handles submission and bookkeeping for physics samples.')
 parser.add_argument('--sample_cards', dest='sample_cards', action='store', nargs='*', type=str,
                     help='path and name of the sample card(s) to be used')
-parser.add_argument('--hadd', dest='hadd', action='store', nargs='?', type=str, const='hist.root', default='NOJOIN',
+parser.add_argument('--hadd', dest='hadd', action='store', nargs='?', type=str, const='hist*.root', default='NOJOIN',
                     help='path of grandparent directory in which to join ROOT files on a per-directory bases, using hadd. Default arguments are hist.root, '\
                     'with the assumption that NanoAOD files are inside subdirectories and will be joined as haddnano parsed_name.root hist_1.root hist_2.root ...'\
                     ' Default parsed_name will be derived from the grandparent folder, as it is tailored to CRAB output structure.')
-parser.add_argument('--haddnano', dest='haddnano', action='store', nargs='?', type=str, const='tree.root', default='NOJOIN',
+parser.add_argument('--haddnano', dest='haddnano', action='store', nargs='?', type=str, const='tree*.root', default='NOJOIN',
                     help='path of grandparent directory in which to join NanoAOD files on a per-directory bases. Default arguments is tree.root, '\
                     'with the assumption that NanoAOD files are inside subdirectories and will be joined as haddnano parsed_name.root tree_1.root tree_2.root ...'\
                     ' Default parsed_name will be derived from the grandparent folder, as it is tailored to CRAB output structure.')
-parser.add_argument('--check_events', dest='check_events', action='store_true',
-                    help='check that the number of events in source files match those in the sample card')
-parser.add_argument('--check_size', dest='check_size', action='store_true',
-                    help='check total dataset sizes')
+parser.add_argument('--check_events', dest='check_events', action='store', nargs='?', type=str, const='dbs', default='NOCHECK',
+                    help='check that the number of events in source files match those in the sample card, optional argument "local" for files in the user space or optional argument "dbs" for lookup using dasgoclient query')
+# parser.add_argument('--check_size', dest='check_size', action='store_true',
+#                     help='check total dataset sizes')
 parser.add_argument('--local_run', dest='local_run', action='store_true',
                     help='run locally')
 parser.add_argument('--crab_run', dest='crab_run', action='store_true',
@@ -33,8 +34,8 @@ parser.add_argument('--percent_run', dest='percent_run', action='append', type=i
                     help='percent (as an integer) of each sample to process for local_run')
 parser.add_argument('--stage', dest='stage', action='store', type=str,
                     help='analysis stage to be produced')
-parser.add_argument('--stagesource', dest='stagesource', action='store', type=str, default='0',
-                    help='Stage of data storage from which to begin supervisor actions, such as stagesource: 0 which is the unprocessed and centrally maintained data/MC')
+parser.add_argument('--source', dest='source', action='store', type=str, default='0',
+                    help='Stage of data storage from which to begin supervisor actions, such as source: 0 which is the unprocessed and centrally maintained data/MC')
 parser.add_argument('--redir', dest='redir', action='append', type=str, default='root://cms-xrd-global.cern.ch/',
                     help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
 parser.add_argument('--btagger', dest='btagger', action='store', nargs='+', type=str, default=['DeepCSV', 'M'],
@@ -51,7 +52,7 @@ def main():
     print("Supervisor will check integrity of sample card's event counts: " + str(args.check_events))
     print("Supervisor will use the following algorithm and working point for any btagging related SF calculations and event selection: " + str(args.btagger))
     if args.crab_run:
-        print("Supervisor will create crab configurations for stage {0:s} using stagesource {1:s}".format(args.stage, args.stagesource))
+        print("Supervisor will create crab configurations for stage {0:s} using source {1:s}".format(args.stage, args.source))
     if args.local_run:
         print("Supervisor will run samples locally... or it would, if this were supported. How unfortunate.")
     if args.sample_cards:
@@ -62,7 +63,7 @@ def main():
     #FIXME: Spin off into a function that takes as input the command (hadd, haddnano.py), the file (tree.root, hist.root), and does this instead of Copy+Paste code
     if args.haddnano is not 'NOJOIN':
         print("Joining NanoAOD ROOT files containing {:s}".format(args.haddnano))
-        haddnano_regexp = args.haddnano.replace(".root", "_*.root")
+        haddnano_regexp = args.haddnano #.replace(".root", "_*.root")
         haddnano_dict = {}
         for directory in os.listdir('.'):
             haddnano_dict[directory] = glob("./{0:s}/*/".format(directory) + haddnano_regexp)
@@ -75,7 +76,10 @@ def main():
             if not os.path.exists(joinFolder):
                 os.makedirs(joinFolder)
             for directory, joinlist in haddnano_dict.iteritems():
-                joinlist.sort(key=lambda f: int(f.split('_')[-1].replace('.root', '')))
+                try:
+                    joinlist.sort(key=lambda f: int(f.split('_')[-1].replace('.root', '')))
+                except:
+                    print("Could not sort files prior to joining with haddnano")
                 strlistlist = []
                 strlistlist.append("")
                 strlistsize = []
@@ -97,20 +101,24 @@ def main():
     
     if args.hadd is not 'NOJOIN':
         print("Joining ROOT files containing {:s}".format(args.hadd))
-        hadd_regexp = args.hadd.replace(".root", "_*.root")
+        hadd_regexp = args.hadd #.replace(".root", "_*.root")
         hadd_dict = {}
         for directory in os.listdir('.'):
             hadd_dict[directory] = glob("./{0:s}/*/".format(directory) + hadd_regexp)
             if len(hadd_dict[directory]) == 0:
                 hadd_dict[directory] = glob("./{0:s}/".format(directory) + hadd_regexp)
             if len(hadd_dict[directory]) == 0:
+                #Remove directory from dictionary, since it contains nothing of interest
                 _ = hadd_dict.pop(directory)
         if len(hadd_dict) > 1:
             joinFolder = "JoinedFiles"
             if not os.path.exists(joinFolder):
                 os.makedirs(joinFolder)
             for directory, joinlist in hadd_dict.iteritems():
-                joinlist.sort(key=lambda f: int(f.split('_')[-1].replace('.root', '')))
+                try:
+                    joinlist.sort(key=lambda f: int(f.split('_')[-1].replace('.root', '')))
+                except:
+                    print("Could not sort files prior to joining with haddnano")
                 strlistlist = []
                 strlistlist.append("")
                 strlistsize = []
@@ -145,7 +153,7 @@ def main():
             SampleList += yaml.load(sample)
 
     #Generate crab and local folder name using the current time, outside the sample loop
-    stageFolder = "Stage_{0:s}_to_{1:s}".format(args.stagesource, args.stage)
+    stageFolder = "Stage_{0:s}_to_{1:s}".format(args.source, args.stage)
     dt = datetime.datetime.now()
     runFolder = "{0:d}{1:02d}{2:02d}_{3:02d}{4:02d}".format(dt.year, dt.month, dt.day, dt.hour, dt.minute)
     if args.crab_run:
@@ -176,21 +184,25 @@ def main():
     total_data_size = 0
     total_MC_size = 0
     for samplenumber, sample in enumerate(SampleList):
-        # if samplenumber > 1: continue
-        dataset = sample['dataset']
-        sampleName = dataset['name']
-        era = dataset['era']
-        isData = dataset['isData']
-        # nEvents = dataset['nEvents']
+        #Parse dataset portion
+        dataset = sample.get('dataset')
+        sampleName = dataset.get('name')
+        era = dataset.get('era')
+        isData = dataset.get('isData')
         nEvents = dataset.get('nEvents', 0) #Default to 0 when key DNE
-        inputDataset = sample['stagesource'][args.stagesource]
-    
+
+        #parse source portion
+        source = sample.get('source')
+        inputDataset = source.get(args.source)
+
+        #parse crab portion
         crab_cfg = sample['crab_cfg']
-    
+
+        #parse crab portion
         postprocessor = sample['postprocessor']
     
         #write out the filelist to personal space in /tmp, if check_events or local_run is true, then use these to run
-        if args.check_events or args.local_run or args.check_size:
+        if args.check_events != 'NOCHECK' or args.local_run: # or args.check_size:
             query='--query="file dataset=' + inputDataset + '"'
             tmpFileLoc = '/tmp/{0:s}/sample_{1:d}_fileList.txt'.format(username, samplenumber)
             cmd = 'dasgoclient ' + query + ' > ' + tmpFileLoc
@@ -204,13 +216,13 @@ def main():
                     tempName = tempName.rstrip()
                     fileList.append(tempName)
 
-        if args.check_size:
-            #This will probably be abandoned in favor of using ROOT::Tfile::GetSize()
-            for fileName in fileList:
-                cmd = "xrdfs {0:s} stat {1:s} | awk '$1 ~ /Size/ {print $2}'".format(bareRedir, fileName.replace(args.redir, ""))
-                print(cmd)
+        # if args.check_size:
+        #     #This will probably be abandoned in favor of using ROOT::Tfile::GetSize()
+        #     for fileName in fileList:
+        #         cmd = "xrdfs {0:s} stat {1:s} | awk '$1 ~ /Size/ {print $2}'".format(bareRedir, fileName.replace(args.redir, ""))
+        #         print(cmd)
         
-        if args.check_events:
+        if args.check_events != 'NOCHECK':
             if isData == False:
                 current_events_in_files = 0
                 events_in_files = 0
@@ -250,7 +262,7 @@ def main():
                     dataset_size += int(f.GetSize())
                     evtTree = f.Get('Events')
                     current_events_in_files += evtTree.GetEntries()
-                if events_in_files != nEvents:
+                if current_events_in_files != nEvents:
                     print("Mismatch in dataset {0}: nEvents = {1:d}, current_events_in_files = {2:d}".format(sampleName, nEvents, current_events_in_files))
                 else:
                     print("Integrity check successful for dataset {0}: {1:d}/{2:d} events".format(sampleName, current_events_in_files, nEvents))
@@ -269,7 +281,7 @@ def main():
                 with open("./{0:s}/crab_script_{1:s}.py".format(runFolder, coreName), "w") as sample_script_py:
                     sample_script_py.write(get_crab_script_py(runFolder, requestName = coreName, stage=args.stage, sampleConfig = sample, btagger = args.btagger))
 
-    if args.check_events:
+    if args.check_events != 'NOCHECK':
         print("total_data_size = {0:f}GB, total_MC_size = {1:f}GB".format(total_data_size/1024**3, total_MC_size/1024**3))
             
 def get_crab_cfg(runFolder, requestName, NanoAODPath='.', splitting='', unitsPerJob = 1, inputDataset = '', storageSite = 'T2_CH_CERN', publication=True, stage='Baseline'):
@@ -502,14 +514,50 @@ process.out = cms.EndPath(process.output)
 """
     return PSet_py.format(str(NanoAODPath))
 
+#import glob, os, tempfile
+def getFiles(dbsDataset=None, fileName=None, dirPath=None, fileExp="*.root", meth="dbs", returntype="list", redir=""):
+    """Use one of several different methods to acquire a list or text file specifying the filenames.
 
+meth="dbs" requires a dbsDataset to be specified, using the dasgoclient to get a list
 
+meth="glob" requires a dirPath to be specified, and it should be globbable. For example "./my2017ttbarDir/*/"
+Optionally, the field fileExp can be changed from the default "*.root", which when combined with the above example, would return a list
+containing any root file in subdirectories of the path specified above, due to the extra "*" in the relative path.
+
+meth="file" requires a fileName to be specified.
+
+returntype="list" is the default, optionally can also return a "file"
+"""
+    #methods to support: "dbs" using dasgoclient query, "glob" using directory path, "file" using text file
+    fileList = []
+    with tempfile.NamedTemporaryFile() as f:
+        if meth.lower() == "file":
+            if fileName == None:
+                raise RuntimeError("getFiles() attempted using meth='file' without a fileName specified")
+            else:
+                pass
+        elif meth.lower() == "glob":
+            if dirPath == None:
+                raise RuntimeError("getFiles() attempted using meth='glob' without a globbable dirPath specified")
+            else:
+                fileList = glob("{0}".format(dirPath) + fileExp)
+        elif meth.lower() == "dbs":
+            if dbsDataset == None:
+                raise RuntimeError("getFiles() attempted using meth='dbs' without a dbsDataset specified")
+            else:
+                cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(dbsDataset,f.name)
+                os.system(cmd)
+                for line in f:
+                    tmpName = redir + line
+                    tmpName = tmpName.rstrip()
+                    fileList.append(tmpName)
+    if returntype.lower() == "list":
+        return fileList
+    elif returntype.lower() == "file":
+        raise NotImplementedError("returning file not eimplemented yet")
+    else:
+        raise NotImplementedError("returntype '{0}' not eimplemented yet".format(returntype))
 
 if __name__ == '__main__':
     main()
-
-# dataRecalib = {"2017": {
-#                     }
-#            }
-
 
