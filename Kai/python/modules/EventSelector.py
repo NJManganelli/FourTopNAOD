@@ -513,7 +513,7 @@ class EventSelector(Module):
         selEleUniform = []
         for idx, electron in enumerate(electrons):
             d0 = math.sqrt(electron.dxy**2 + electron.dz**2)
-            if ((abs(electron.eta) < 1.4442 and d0 < 0.05) or (abs(electron.eta) > 1.4660 and abs(electron.eta) < 2.4) and d0 < 0.10)) and electron.cutBased_Fall17_V1 >= 2 and abs(electron.dz) < 0.02:
+            if ((abs(electron.eta) < 1.4442 and d0 < 0.05) or (abs(electron.eta) > 1.4660 and abs(electron.eta) < 2.4 and d0 < 0.10)) and electron.cutBased_Fall17_V1 >= 2 and abs(electron.dz) < 0.02:
                 if electron.pt > self.lepPt:
                     selEleUniform.append((idx, electron))
         #         if electron.pt > 25:

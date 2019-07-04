@@ -22,7 +22,7 @@ parser.add_argument('--haddnano', dest='haddnano', action='store', nargs='?', ty
                     help='path of grandparent directory in which to join NanoAOD files on a per-directory bases. Default arguments is tree.root, '\
                     'with the assumption that NanoAOD files are inside subdirectories and will be joined as haddnano parsed_name.root tree_1.root tree_2.root ...'\
                     ' Default parsed_name will be derived from the grandparent folder, as it is tailored to CRAB output structure.')
-parser.add_argument('--check_events', dest='check_events', action='store', nargs='?', type=str, const='dbs', default='NOCHECK',
+parser.add_argument('--check_events', dest='check_events', action='store', nargs='?', type=str, const='simple', default='NOCHECK',
                     help='check that the number of events in source files match those in the sample card, optional argument "local" for files in the user space or optional argument "dbs" for lookup using dasgoclient query')
 # parser.add_argument('--check_size', dest='check_size', action='store_true',
 #                     help='check total dataset sizes')
@@ -79,7 +79,7 @@ def main():
             for directory, joinlist in haddnano_dict.iteritems():
                 try:
                     joinlist.sort(key=lambda f: int(f.split('_')[-1].replace('.root', '')))
-                except:
+                except Exception:
                     print("Could not sort files prior to joining with haddnano")
                 strlistlist = []
                 strlistlist.append("")
@@ -100,7 +100,7 @@ def main():
                     cmdlist.append("haddnano.py {0:s}/{1:s}_{2:d}.root ".format(joinFolder, directorystripped, s+1) + strlist)
                     try:
                         os.system(cmdlist[-1])
-                    except:
+                    except Exception:
                         print("Command evaluation failed: \n" + str(cmdlist[-1]))
 
     
@@ -123,7 +123,7 @@ def main():
             for directory, joinlist in hadd_dict.iteritems():
                 try:
                     joinlist.sort(key=lambda f: int(f.split('_')[-1].replace('.root', '')))
-                except:
+                except Exception:
                     print("Could not sort files prior to joining with haddnano")
                 strlistlist = []
                 strlistlist.append("")
@@ -144,7 +144,7 @@ def main():
                     cmdlist.append("hadd {0:s}/{1:s}_hist_{2:d}.root ".format(joinFolder, directorystripped, s+1) + strlist)
                     try:
                         os.system(cmdlist[-1])
-                    except:
+                    except Exception:
                         print("Command evaluation failed: \n" + str(cmdlist[-1]))
 
     if not args.sample_cards: 
@@ -238,8 +238,12 @@ def main():
             if isData == False:
                 current_events_in_files = 0
                 events_in_files = 0
-                events_in_files_positive = 0
-                events_in_files_negative = 0
+                if args.check_events == 'detailed':
+                    events_in_files_positive = 0
+                    events_in_files_negative = 0
+                else:
+                    events_in_files_positive = -999
+                    events_in_files_negative = -999
                 events_sum_weights = 0
                 events_sum_weights2 = 0
                 dataset_size = 0
@@ -248,24 +252,41 @@ def main():
                     f = ROOT.TFile.Open(fileName, 'r')
                     dataset_size += int(f.GetSize())
                     tree = f.Get('Runs')
-                    evtTree = f.Get('Events')
-                    current_events_in_files += evtTree.GetEntries()
                     for en in xrange(tree.GetEntries()):
                         tree.GetEntry(en)
                         events_in_files += tree.genEventCount
                         events_sum_weights += tree.genEventSumw
                         events_sum_weights2 += tree.genEventSumw2
+                    evtTree = f.Get('Events')
+                    eventsTreeEntries = evtTree.GetEntries()
+                    current_events_in_files += eventsTreeEntries
+                    if args.check_events == 'detailed':#Only do this for MC
+                        for i in xrange(eventsTreeEntries):
+                            evtTree.GetEntry(i)
+                            if evtTree.genWeight > 0:
+                                events_in_files_positive += 1
+                            elif evtTree.genWeight < 0:
+                                events_in_files_negative += 1
+                            else:
+                                raise RuntimeError("event with weight 0 in file: {0} run: {1} lumi: {2} event: {3}".format(f.GetName(), evtTree.run, 
+                                                                                                                           evtTree.luminosityBlock, 
+                                                                                                                           evtTree.event))
+                            if i % 10000 == 0:
+                                print("processed {0} events in file: {1}".format(i, f.GetName()))
+                                
+                            
                     # f.Close() #Will this speed things up any?
                 if events_in_files != nEvents:
                     print("Mismatch in dataset {0}: nEvents = {1:d}, events_in_files = {2:d}".format(sampleName, nEvents, events_in_files))
                 else:
                     print("Integrity check successful for dataset {0}: {1:d}/{2:d} events".format(sampleName, events_in_files, nEvents))
                 print("nEvents = {0:d}, events_in_files = {1:d}, events_sum_weights = {2:f}, "\
-                      "events_sum_weights2 = {3:f}, current_events_in_files = {4:d}, "\
-                      "dataset_size = {5:f}GB".format(nEvents, events_in_files, 
+                      "events_sum_weights2 = {3:f}, current_events_in_files = {4:d}, events_in_files_positive = {5:d}"\
+                      ", events_in_files_negative = {6:d}, dataset_size = {7:f}GB".format(nEvents, events_in_files, 
                                                       events_sum_weights, events_sum_weights2, 
-                                                      current_events_in_files,dataset_size/1024**3)
-                )
+                                                      current_events_in_files,events_in_files_positive,
+                                                      events_in_files_negative, dataset_size/1024**3)
+                  )
                 total_MC_size += dataset_size
             else:
                 #Distinguish the current event count, which is based on tree entries, from the event counter stored in MC showing how many events had been processed
@@ -528,6 +549,10 @@ process.output = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.s
 process.out = cms.EndPath(process.output)
 """
     return PSet_py.format(str(NanoAODPath))
+
+
+
+
 
 #import glob, os, tempfile
 def getFiles(globPath=None, globFileExp="*.root", dbsDataset=None, inFileName=None, redir="", outFileName=None):
