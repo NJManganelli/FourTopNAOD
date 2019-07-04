@@ -1,0 +1,2 @@
+#!/bin/zsh
+for y in crab_ElEl_B_2017 crab_ElEl_C_2017 crab_ElEl_D_2017 crab_ElEl_E_2017 crab_ElMu_B_2017 crab_ElMu_C_2017 crab_ElMu_D_2017 crab_ElMu_E_2017 crab_MuMu_B_2017 crab_MuMu_C_2017 crab_MuMu_D_2017 crab_MuMu_E_2017 crab_DYJets_DL_2017 crab_ST_tW_2017 crab_ST_tbarW_2017 crab_ttH_2017 crab_ttH_DL_2017 crab_ttH_SL_2017 crab_ttWJets_2017 crab_ttZJets_2017 crab_tttt_2017 crab_tt_DL-GF_2017 crab_tt_DL_2017; eval crab status -d ${y}
