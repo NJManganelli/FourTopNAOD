@@ -1,0 +1,564 @@
+ #YAML 1.2
+ #Test sample card
+ #Description of stages:
+ # stage NANOv4: Unprocessed data and montecarlo, centrally maintained, version 4
+ # stage extNANOv5: Unprocessed data and montecarlo, group maintained and created, version 5 with extended variables such as HOT tagger
+ # the combination of name_era must be UNIQUE per sample for the Supervisor to parse and make requests properly. name should be filename-friendly...
+ # example MCM lookup (under select view, choose fragrment, filter efficiency, generator parameters) https://cms-pdmv.cern.ch/mcm/requests?dataset_name=TT_TuneCUETP8M2T4_13TeV-powheg-pythia8&page=0&shown=2199023976531
+ # procCrossSection is the basic process cross-section (i.e. ttbar), and crossSection is the number passed for event weighting, i.e. procCrossSection*branchingRatio*filterEfficiency, where the detailed breakdown is stored where possible. MCM crossSection is usually calculated from LO only
+
+  - dataset: #Four Top sample
+        name: "tttt"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 2273928
+        sumWeights: 18645.487772
+        sumWeights2: 1094.209551
+        isSignal: True
+        procCrossSection: 0.012
+        crossSection: 0.012
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0.008213
+    source:
+        'NANOv4': "dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_tttt_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 2
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.99
+
+  - dataset: #ttbar dilepton sample
+        name: "tt_DL"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 69155808
+        sumWeights: 4984888995.198164
+        sumWeights2: 365215384868.441772
+        isSignal: False
+        procCrossSection: 831.76
+        crossSection: 88.341
+        branchingRatio: 0.10621
+        filterEfficiency: 1
+        MCMCrossSection: 730
+    source:
+        'NANOv4': "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_tt_DL_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 2
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.91
+
+  - dataset: #ttbar dilepton sample
+        name: "tt_DL-GF"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 8458223
+        sumWeights: 608347760.180597
+        sumWeights2: 44650125908.587616
+        isSignal: False
+        procCrossSection: 831.76
+        crossSection: 1.32512
+        branchingRatio: 0.10621
+        filterEfficiency: 0.015
+        MCMCrossSection: 730
+    source:
+        'NANOv4': "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_tt_DL-GF_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 20
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.09
+
+  - dataset: #single top - top-W
+        name: "ST_tW"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 7945242
+        sumWeights: 277241050.840222
+        sumWeights2: 9823995766.508368
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 35.8
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 34.91
+    source:
+        'NANOv4': "dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ST_tW_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 12
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.08
+
+  - dataset: #single top - antitop-W
+        name: "ST_tbarW"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 7745276
+        sumWeights: 270762750.172525
+        sumWeights2: 9611964941.797768
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 35.8
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 34.91
+    source:
+        'NANOv4': "dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ST_tbarW_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 12
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.10
+
+  - dataset: #ttH to bb dilepton ttbar
+        name: "ttH_DL"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 9794620
+        sumWeights: 556866.339401
+        sumWeights2: 31723.206881
+        isSignal: False
+        procCrossSection: 0.2934
+        crossSection: 0.03116
+        branchingRatio: 0.10621
+        filterEfficiency: 1
+        MCMCrossSection: 1
+    source:
+        'NANOv4': "dbs:/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ttH_DL_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 2
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.98
+
+  - dataset: #ttH to bb single lepton ttbar
+        name: "ttH_SL"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 9332943
+        sumWeights: 2215145.853339
+        sumWeights2: 526777.723819
+        isSignal: False
+        procCrossSection: 0.2934
+        crossSection: 0.13332
+        branchingRatio: 0.45441
+        filterEfficiency: 1
+        MCMCrossSection: 1
+    source:
+        'NANOv4': "dbs:/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ttH_SL_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
+  - dataset: #ttH to bb inclusive
+        name: "ttH"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 8000000
+        sumWeights: 4216319.315884
+        sumWeights2: 2317497.816608
+        isSignal: False
+        procCrossSection: 0.2934
+        crossSection: 0.2934
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 1
+    source:
+        'NANOv4': "dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ttH_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+
+  - dataset: #ttWJets
+        name: "ttWJets"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 9425384
+        sumWeights: 9384328.000000
+        sumWeights2: 9425384.000000
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 0.611
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0.4793
+    source:
+        'NANOv4': "dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ttWJets_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 6
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.27
+
+  - dataset: #ttZJets
+        name: "ttZJets"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 8536618
+        sumWeights: 8519074.000000
+        sumWeights2: 8536618.000000
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 0.783
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0.618
+    source:
+        'NANOv4': "dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ttZJets_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 6
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.27
+
+  - dataset: #DY dilepton + jets sample
+        name: "DYJets_DL"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 49125561
+        sumWeights: 49082157.000000
+        sumWeights2: 49125561.000000
+        isSignal: False
+        procCrossSection: -1
+        crossSection: 5075.6 
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 14420
+    source:
+        'NANOv4': "dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017RECOSIMstep_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_DYJets_DL_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 4
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.58
+
+  - dataset: #Double Muon
+        name: "MuMu_B"
+        era: "2017"
+        subera: "B"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/DoubleMuon/Run2017B-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_MuMu_B_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 40
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.020
+
+  - dataset: #Double Muon
+        name: "MuMu_C"
+        era: "2017"
+        subera: "C"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/DoubleMuon/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_MuMu_C_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 40
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.035
+
+  - dataset: #Double Muon
+        name: "MuMu_D"
+        era: "2017"
+        subera: "D"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/DoubleMuon/Run2017D-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_MuMu_D_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 40
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.021
+
+  - dataset: #Double Muon
+        name: "MuMu_E"
+        era: "2017"
+        subera: "E"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/DoubleMuon/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_MuMu_E_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 80
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.021
+
+  - dataset: #Double Muon
+        name: "MuMu_F"
+        era: "2017"
+        subera: "F"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/DoubleMuon/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_MuMu_F_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 80
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.009
+
+  - dataset: #Double Electron
+        name: "ElEl_B"
+        era: "2017"
+        subera: "B"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/DoubleEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElEl_B_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 80
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.011
+
+  - dataset: #Double Electron
+        name: "ElEl_C"
+        era: "2017"
+        subera: "C"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/DoubleEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElEl_C_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 80
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.011
+
+  - dataset: #Double Electron
+        name: "ElEl_D"
+        era: "2017"
+        subera: "D"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/DoubleEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElEl_D_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 80
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.007
+
+  - dataset: #Double Electron
+        name: "ElEl_E"
+        era: "2017"
+        subera: "E"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/DoubleEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElEl_E_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 80
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.014
+
+  - dataset: #Double Electron
+        name: "ElEl_F"
+        era: "2017"
+        subera: "F"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/DoubleEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElEl_F_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 80
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.011
+
+  - dataset: #Muon Electron
+        name: "ElMu_B"
+        era: "2017"
+        subera: "B"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/MuonEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElMu_B_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 80
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.012
+
+  - dataset: #Muon Electron
+        name: "ElMu_C"
+        era: "2017"
+        subera: "C"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/MuonEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElMu_C_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 40
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.027
+
+  - dataset: #Muon Electron
+        name: "ElMu_D"
+        era: "2017"
+        subera: "D"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/MuonEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElMu_D_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 80
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.015
+
+  - dataset: #Muon Electron
+        name: "ElMu_E"
+        era: "2017"
+        subera: "E"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/MuonEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElMu_E_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 40
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.025
+
+  - dataset: #Muon Electron
+        name: "ElMu_F"
+        era: "2017"
+        subera: "F"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/MuonEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        'Baseline': "glob:/eos/home-n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElMu_F_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 40
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.022
+
+

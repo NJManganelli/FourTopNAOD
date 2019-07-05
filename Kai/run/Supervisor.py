@@ -225,6 +225,8 @@ def main():
                 fileList = getFiles(inFileName=inputDataset.replace("list:",""))
             elif "glob:" in inputDataset:
                 fileList = getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="")
+                if len(fileList) == 0 and len(fileList = getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="tree_*.root")) > 0:
+                    fileList = fileList = getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="tree_*.root")
             else: # "dbs:" in inputDataset:
                 fileList = getFiles(dbsDataset=inputDataset.replace("dbs:",""), redir="root://cms-xrd-global.cern.ch/")
 
@@ -555,7 +557,7 @@ process.out = cms.EndPath(process.output)
 
 
 #import glob, os, tempfile
-def getFiles(globPath=None, globFileExp="*.root", dbsDataset=None, inFileName=None, redir="", outFileName=None):
+def getFiles(globPath=None, globFileExp="*.root", globSort=lambda f: int(f.split('_')[-1].replace('.root', '')), dbsDataset=None, inFileName=None, redir="", outFileName=None):
     """Use one of several different methods to acquire a list or text file specifying the filenames.
 
 Method follows after globPath, inFileName, or dbsDataset is specified, with precedence going glob > dbs > file.
@@ -582,6 +584,10 @@ redir will prepend the redirector to the beginning of the paths, such as redir="
                 raise RuntimeError("getFiles() attempted using meth='glob' without a globbable globPath specified")
             else:
                 fileList = glob("{0}".format(globPath) + globFileExp)
+                try:
+                    fileList.sort(key=globSort)
+                except Exception:
+                    print("Could not sort files prior to joining with haddnano")
         elif dbsDataset:
             if False:
                 raise RuntimeError("getFiles() attempted using meth='dbs' without a dbsDataset specified")
