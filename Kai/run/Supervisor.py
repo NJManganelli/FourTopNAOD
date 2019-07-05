@@ -199,7 +199,7 @@ def main():
 
         #parse source portion
         source = sample.get('source')
-        inputDataset = source.get(args.source)
+        inputDataset = source.get(args.source, None)
 
         #parse crab portion
         crab_cfg = sample['crab_cfg']
@@ -221,7 +221,9 @@ def main():
             #         tempName = args.redir + line
             #         tempName = tempName.rstrip()
             #         fileList.append(tempName)
-            if "list:" in inputDataset:
+            if inputDataset is None:
+                print("Skipping check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))
+            elif "list:" in inputDataset:
                 fileList = getFiles(inFileName=inputDataset.replace("list:",""))
             elif "glob:" in inputDataset:
                 fileList = getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="")
