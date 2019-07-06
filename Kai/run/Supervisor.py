@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from __future__ import print_function, division
-import os, sys, time, datetime
+import os, pwd, sys, time, datetime
 import argparse
 import subprocess
 import pprint
@@ -40,6 +40,8 @@ parser.add_argument('--redir', dest='redir', action='append', type=str, default=
                     help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
 parser.add_argument('--btagger', dest='btagger', action='store', nargs='+', type=str, default=['DeepCSV', 'M'],
                     help='tagger algorithm and working point to be used')
+parser.add_argument('--verbose', dest='verbose', action='store_true',
+                    help='Enable more verbose output during actions')
 
 def main():
     args = parser.parse_args()
@@ -67,9 +69,11 @@ def main():
         haddnano_dict = {}
         for directory in os.listdir('.'):
             # haddnano_dict[directory] = glob("./{0:s}/*/".format(directory) + haddnano_regexp)
-            haddnano_dict[directory] = getFiles(globPath="./{0:s}/*/".format(directory), globFileExp=haddnano_regexp)
+            search_path = "glob:./{0:s}/*/".format(directory) + haddnan_regexp
+            haddnano_dict[directory] = getFiles(query=search_path)
             if len(haddnano_dict[directory]) == 0:
-                haddnano_dict[directory] = glob("./{0:s}/".format(directory) + haddnano_regexp)
+                search_path = "glob:./{0:s}/".format(directory) + haddnan_regexp
+                haddnano_dict[directory] = getFiles(query=search_path)
             if len(haddnano_dict[directory]) == 0:
                 _ = haddnano_dict.pop(directory)
         if len(haddnano_dict) > 1:
@@ -110,9 +114,11 @@ def main():
         hadd_dict = {}
         for directory in os.listdir('.'):
             # hadd_dict[directory] = glob("./{0:s}/*/".format(directory) + hadd_regexp)
-            hadd_dict[directory] = getFiles(globPath="./{0:s}/*/".format(directory), globFileExp=hadd_regexp)
+            search_path = "glob:./{0:s}/*/".format(directory) + hadd_regexp
+            hadd_dict[directory] = getFiles(query=search_path)
             if len(hadd_dict[directory]) == 0:
-                hadd_dict[directory] = glob("./{0:s}/".format(directory) + hadd_regexp)
+                search_path = "glob:./{0:s}/".format(directory) + hadd_regexp
+                hadd_dict[directory] = getFiles(query=search_path)
             if len(hadd_dict[directory]) == 0:
                 #Remove directory from dictionary, since it contains nothing of interest
                 _ = hadd_dict.pop(directory)
@@ -187,8 +193,11 @@ def main():
             print("runfolder '{0:s}' already exists. Rename or delete it and attempt resubmission".format(runFolder))
             sys.exit()
 
-    total_data_size = 0
+    total_Data_size = 0
+    total_Data_current_events = 0
     total_MC_size = 0
+    total_MC_current_events = 0
+    total_MC_processed_events = 0
     for samplenumber, sample in enumerate(SampleList):
         #Parse dataset portion
         dataset = sample.get('dataset')
@@ -202,7 +211,7 @@ def main():
         inputDataset = source.get(args.source, None)
 
         #parse crab portion
-        crab_cfg = sample['crab_cfg']
+        crab_cfg = sample.get('crab_cfg', {})
 
         #parse crab portion
         postprocessor = sample['postprocessor']
@@ -222,15 +231,22 @@ def main():
             #         tempName = tempName.rstrip()
             #         fileList.append(tempName)
             if inputDataset is None:
-                print("Skipping check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))
-            elif "list:" in inputDataset:
-                fileList = getFiles(inFileName=inputDataset.replace("list:",""))
-            elif "glob:" in inputDataset:
-                fileList = getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="")
-                if len(fileList) == 0 and len(fileList = getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="tree_*.root")) > 0:
-                    fileList = fileList = getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="tree_*.root")
-            else: # "dbs:" in inputDataset:
-                fileList = getFiles(dbsDataset=inputDataset.replace("dbs:",""), redir="root://cms-xrd-global.cern.ch/")
+                pass
+                # print("\tSkipped check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))
+            elif "list:" in inputDataset or "glob:" in inputDataset or "dbs:" in inputDataset:
+                fileList = getFiles(query=inputDataset)
+            else:
+                print("Need to append getFiles() query type to inputDataset, such as 'glob:' or 'list:' or 'dbs:'")
+            # elif "list:" in inputDataset:
+            #     fileList = getFiles(inFileName=inputDataset.replace("list:",""))
+            # elif "glob:" or "eoshome:" in inputDataset:
+            #     fileList = getFiles(query=inputDataset, globPath=inputDataset.replace("glob:","").replace("eoshome:",""), globFileExp="", verbose=args.verbose)
+            #     if len(fileList) == 0 and len(getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="tree_*.root")) > 0:
+            #         fileList = fileList = getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="tree_*.root")
+            #     if len(fileList) == 0 and len(getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="tree_*.root")) > 0:
+            #         fileList = fileList = getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="/tree_*.root")
+            # else: # "dbs:" in inputDataset:
+            #     fileList = getFiles(dbsDataset=inputDataset.replace("dbs:",""), redir="root://cms-xrd-global.cern.ch/")
 
         # if args.check_size:
         #     #This will probably be abandoned in favor of using ROOT::Tfile::GetSize()
@@ -280,18 +296,23 @@ def main():
                                 
                             
                     # f.Close() #Will this speed things up any?
+                print(sampleName + "_" + era + ":")
+                if inputDataset is None:
+                    print("\tSkipped check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))
                 if events_in_files != nEvents:
-                    print("Mismatch in dataset {0}: nEvents = {1:d}, events_in_files = {2:d}".format(sampleName, nEvents, events_in_files))
+                    print("\tMismatch in dataset {0}: nEvents = {1:d}, events_in_files = {2:d}".format(sampleName, nEvents, events_in_files))
                 else:
-                    print("Integrity check successful for dataset {0}: {1:d}/{2:d} events".format(sampleName, events_in_files, nEvents))
-                print("nEvents = {0:d}, events_in_files = {1:d}, events_sum_weights = {2:f}, "\
-                      "events_sum_weights2 = {3:f}, current_events_in_files = {4:d}, events_in_files_positive = {5:d}"\
-                      ", events_in_files_negative = {6:d}, dataset_size = {7:f}GB".format(nEvents, events_in_files, 
+                    print("\tIntegrity check successful for dataset {0}: {1:d}/{2:d} events".format(sampleName, events_in_files, nEvents))
+                print("\tnEvents = {0:d}, processed_events = {1:d}, current_events_in_files = {4:d}, \n\tevents_sum_weights = {2:f}, "\
+                      "events_sum_weights2 = {3:f}, \n\tevents_in_files_positive = {5:d}"\
+                      ", events_in_files_negative = {6:d}, \n\tdataset_size = {7:4f}GB".format(nEvents, events_in_files, 
                                                       events_sum_weights, events_sum_weights2, 
                                                       current_events_in_files,events_in_files_positive,
                                                       events_in_files_negative, dataset_size/1024**3)
                   )
                 total_MC_size += dataset_size
+                total_MC_current_events += current_events_in_files
+                total_MC_processed_events += events_in_files
             else:
                 #Distinguish the current event count, which is based on tree entries, from the event counter stored in MC showing how many events had been processed
                 current_events_in_files = 0
@@ -302,27 +323,36 @@ def main():
                     dataset_size += int(f.GetSize())
                     evtTree = f.Get('Events')
                     current_events_in_files += evtTree.GetEntries()
+                print(sampleName + "_" + era + ":")
+                if inputDataset is None:
+                    print("\tSkipped check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))
                 if current_events_in_files != nEvents:
-                    print("Mismatch in dataset {0}: nEvents = {1:d}, current_events_in_files = {2:d}".format(sampleName, nEvents, current_events_in_files))
+                    print("\tMismatch in dataset {0}: nEvents = {1:d}, current_events_in_files = {2:d}".format(sampleName, nEvents, current_events_in_files))
                 else:
-                    print("Integrity check successful for dataset {0}: {1:d}/{2:d} events".format(sampleName, current_events_in_files, nEvents))
-                print("nEvents = {0:d}, current_events_in_files = {1:d}, dataset_size = {2:f}GB".format(nEvents, current_events_in_files, dataset_size/1024**3))
-                total_data_size += dataset_size
+                    print("\tIntegrity check successful for dataset {0}: {1:d}/{2:d} events".format(sampleName, current_events_in_files, nEvents))
+                print("\tnEvents = {0:d}, current_events_in_files = {1:d}, dataset_size = {2:4f}GB".format(nEvents, current_events_in_files, dataset_size/1024**3))
+                total_Data_size += dataset_size
+                total_Data_current_events += current_events_in_files
 
         if args.crab_run:
             coreName = sampleName + "_" + era
 
             with open("./{0:s}/crab_cfg_{1:s}.py".format(runFolder, coreName), "w") as sample_cfg:
                 sample_cfg.write(get_crab_cfg(runFolder, requestName = coreName, NanoAODPath = NanoAODPath, 
-                                              splitting = crab_cfg['splitting'], inputDataset=inputDataset, stage=args.stage))
+                                              splitting = crab_cfg.get('splitting', 'FileBased'), unitsPerJob = crab_cfg.get('unitsPerJob', 2), 
+                                              inputDataset=inputDataset, stage=args.stage))
             if 'extNANO' not in args.stage:
                 with open("./{0:s}/crab_script_{1:s}.sh".format(runFolder, coreName), "w") as sample_script_sh:
                     sample_script_sh.write(get_crab_script_sh(runFolder, requestName = coreName, stage=args.stage))
                 with open("./{0:s}/crab_script_{1:s}.py".format(runFolder, coreName), "w") as sample_script_py:
-                    sample_script_py.write(get_crab_script_py(runFolder, requestName = coreName, stage=args.stage, sampleConfig = sample, btagger = args.btagger))
+                    sample_script_py.write(get_crab_script_py(runFolder, requestName = coreName, stage=args.stage, 
+                                                              sampleConfig = sample, btagger = args.btagger))
 
     if args.check_events != 'NOCHECK':
-        print("total_data_size = {0:f}GB, total_MC_size = {1:f}GB".format(total_data_size/1024**3, total_MC_size/1024**3))
+        print("All samples:\n\ttotal_Data_size = {0:f}GB, total_Data_current_events = {1:d}\n\t"\
+              "total_total_MC_size = {2:f}GB, total_MC_current_events = {3:d}, "\
+              "total_MC_processed_events = {4:d}".format(total_Data_size/1024**3, total_Data_current_events, total_MC_size/1024**3,
+                                                         total_MC_current_events, total_MC_processed_events))
             
 def get_crab_cfg(runFolder, requestName, NanoAODPath='.', splitting='', unitsPerJob = 1, inputDataset = '', storageSite = 'T2_CH_CERN', publication=True, stage='Baseline'):
     #Options for splitting:
@@ -331,7 +361,7 @@ def get_crab_cfg(runFolder, requestName, NanoAODPath='.', splitting='', unitsPer
     #'FileBased'
     #FIXMEs : scriptExe, inputFiles (including the haddnano script), allow undistributed CMSSW?, publication boolean, 
     if stage == 'Baseline':
-        crab_cfg = """from WMCore.Configuration import Configuration
+        crab_cfg_content = """from WMCore.Configuration import Configuration
 from CRABClient.UserUtilities import config, getUsernameFromSiteDB
 
 config = Configuration()
@@ -360,7 +390,7 @@ config.Data.outputDatasetTag = '{1:s}'
 config.section_("Site")
 config.Site.storageSite = '{5:s}'
 """
-        ret = crab_cfg.format(runFolder, requestName, splitting, unitsPerJob, inputDataset, storageSite, str(publication), stage, str(NanoAODPath))
+        ret = crab_cfg_content.format(runFolder, requestName, splitting, unitsPerJob, inputDataset, storageSite, str(publication), stage, str(NanoAODPath))
     else:
         print("We haven't made a stage {0:s} configuration yet... Exiting".format(stage))
         sys.exit()
@@ -559,7 +589,7 @@ process.out = cms.EndPath(process.output)
 
 
 #import glob, os, tempfile
-def getFiles(globPath=None, globFileExp="*.root", globSort=lambda f: int(f.split('_')[-1].replace('.root', '')), dbsDataset=None, inFileName=None, redir="", outFileName=None):
+def getFiles(query=None, globPath=None, globFileExp="*.root", globSort=lambda f: int(f.split('_')[-1].replace('.root', '')), dbsDataset=None, inFileName=None, redir="", outFileName=None, verbose=False):
     """Use one of several different methods to acquire a list or text file specifying the filenames.
 
 Method follows after globPath, inFileName, or dbsDataset is specified, with precedence going glob > dbs > file.
@@ -576,6 +606,38 @@ redir will prepend the redirector to the beginning of the paths, such as redir="
     fileList = []
     with tempfile.NamedTemporaryFile() as f:
         #check file exists as additional check?
+        if query:
+            if "dbs:" in query:
+                # if redir == "" and "root://" not in query: redir = "root://cms-xrd-global.cern.ch"
+                cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(query.replace("dbs:",""),f.name)
+                if verbose:
+                    print("dbs query reformatted to:\n\t" + query)
+                os.system(cmd)
+                for line in f:
+                    tmpName = redir + line
+                    tmpName = tmpName.rstrip()
+                    fileList.append(tmpName)
+            elif "glob:" in query:
+                query_stripped = query.replace("glob:","")
+                fileList = glob(query_stripped)
+            elif "list:" in query:
+                query_stripped = query.replace("list:","")
+                fileList = []
+                with open(query_stripped) as in_f:
+                    for line in in_f:
+                        fileList.append(redir + line.rstrip())
+            return fileList
+            #Kept as reminder for how to produce list with these files for xrootd transfers
+                # if "root://eoshome-{0:s}.cern.ch/".format(get_username()[0]) not in query_stripped:
+                #     query = "root://eoshome-{0:s}.cern.ch/".format(get_username()[0]) + query_stripped
+                #     if verbose:
+                #         print("eoshome query reformatted to:\n\t" + query)
+            # elif "eoscms:" in query:
+            #     if "root://eoscms.cern.ch/" not in query:
+            #         query_stripped = query.replace("eoscms:","")
+            #         query = "root://eoscms.cern.ch/" + query_stripped
+            #         if args.verbose:
+            #             print("eoscms query reformatted to:\n\t" + query)
         if inFileName:
             if True:
                 raise RuntimeError("getFiles() attempted using meth='file' without a inFileName specified")
@@ -604,6 +666,9 @@ redir will prepend the redirector to the beginning of the paths, such as redir="
         raise NotImplementedError("returning file not eimplemented yet")
         
     return fileList
+
+def get_username():
+    return pwd.getpwuid( os.getuid() )[ 0 ]
 
 if __name__ == '__main__':
     main()
