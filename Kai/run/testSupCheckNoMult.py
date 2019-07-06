@@ -74,48 +74,70 @@ hNameTT_MGabsw="evtCounterTT_MGv5v6absw.root"
 # Tuples.append((filesTT_MG, hNameTT_MGabsw, 2))
 
 
-def multiplier(fileList, connection):
-    old_stdout = sys.stdout
-    try:
-        # with tempfile.NamedTemporaryFile() as fout:
-        # connection.send(['Hello there!', fout.name])
-        # sys.stdout = fout
-        if type(fileList) is str:
-            fileList = [fileList]
-        p=PostProcessor(".",
-                        fileList,
-                        modules=[EventCounter()],
-                        noOut=True,
-                        # branchsel='keepdrop.txt',
-                        maxEntries=None,
-                        firstEntry=0,
-                        prefetch=False,
-                        longTermCache=False,
-        )
-        p.run()
-        connection.send([p.modules[0].nEvents, p.modules[0].nPositiveEvents, p.modules[0].nNegativeEvents, p.modules[0].nZeroEvents])
-        print("nEvents: {0}\t nPositivEvents: {1}\t nNegativeEvents: {2}\t nZeroEvents: {3}".format(
-            p.modules[0].nEvents, p.modules[0].nPositiveEvents, p.modules[0].nNegativeEvents, p.modules[0].nZeroEvents)
-        )
-        # for line in fout:
-        #     pass
-    finally:
-        pass
-        # sys.stdout = old_stdout
+# def multiplier(fileList, connection):
+#     old_stdout = sys.stdout
+#     try:
+#         # with tempfile.NamedTemporaryFile() as fout:
+#         # connection.send(['Hello there!', fout.name])
+#         # sys.stdout = fout
+#         sys.stdout = open("/tmp/nmangane/" + str(os.getpid()) + ".out", "w")
+#         sys.stderr = open("/tmp/nmangane/" + str(os.getpid()) + "_err.out", "w")
+#         connection.send({'stdout': str(os.getpid()) + ".out", 'stderr': str(os.getpid()) + "_err.out"})
+#         if type(fileList) is str:
+#             fileList = [fileList]
+#         p=PostProcessor(".",
+#                         fileList,
+#                         modules=[EventCounter()],
+#                         noOut=True,
+#                         # branchsel='keepdrop.txt',
+#                         maxEntries=None,
+#                         firstEntry=0,
+#                         prefetch=False,
+#                         longTermCache=False,
+#         )
+#         p.run()
+#         connection.send({'nEvents': p.modules[0].nEvents, 'nPositiveEvents': p.modules[0].nPositiveEvents, 
+#                          'nNegativeEvents': p.modules[0].nNegativeEvents, 'nZeroEvents': p.modules[0].nZeroEvents})
+#         # print("nEvents: {0}\t nPositivEvents: {1}\t nNegativeEvents: {2}\t nZeroEvents: {3}".format(
+#         #     p.modules[0].nEvents, p.modules[0].nPositiveEvents, p.modules[0].nNegativeEvents, p.modules[0].nZeroEvents)
+#         # )
+#         # for line in fout:
+#         #     pass
+#     finally:
+#         pass
+#         # sys.stdout = old_stdout
     
-pList = []
-connList = []
-# print("Tuple: " + str(Tuples))
+# pList = []
+# connList = []
+# # print("Tuple: " + str(Tuples))
+
+#     base_conn, outpost_conn = multiprocessing.Pipe()
+#     connList.append(base_conn)
+#     p = multiprocessing.Process(target=multiplier, args=(tup[0], outpost_conn,))
+#     pList.append(p)
+
+# for pi, p in enumerate(pList):
+#     p.start()
+
+# for p in pList:
+#     p.join()
+# for pi, p in enumerate(pList):
+#     print(connList[pi].recv())
+#     print(connList[pi].recv())
+
+
+print("Test this outside a subprocess, now...")
+sys.stdout = open("/tmp/nmangane/" + str(os.getpid()) + ".out", "w")
+sys.stderr = open("/tmp/nmangane/" + str(os.getpid()) + "_err.out", "w")
 for tup in Tuples:
-    base_conn, outpost_conn = multiprocessing.Pipe()
-    connList.append(base_conn)
-    p = multiprocessing.Process(target=multiplier, args=(tup[0], outpost_conn,))
-    pList.append(p)
-
-for pi, p in enumerate(pList):
-    p.start()
-
-for p in pList:
-    p.join()
-for pi, p in enumerate(pList):
-    print(connList[pi].recv())
+    p=PostProcessor(".",
+                    tup[0],
+                    modules=[EventCounter()],
+                    noOut=True,
+                    # branchsel='keepdrop.txt',
+                    maxEntries=None,
+                    firstEntry=0,
+                    prefetch=False,
+                    longTermCache=False,
+    )
+    p.run()
