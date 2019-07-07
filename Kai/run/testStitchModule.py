@@ -15,10 +15,8 @@ class Stitcher(Module):
     def __init__(self, verbose=False, maxevt=-1, probEvt=None, mode="Flag", era="2017", channel="DL", condition="Pass"):
         self.writeHistFile=True
         self.verbose=verbose
-        self._verbose = verbose
         self.probEvt = probEvt
         if probEvt:
-            #self.probEvt = probEvt
             self.verbose = True        
         #event counters
         self.counter = 0
@@ -29,6 +27,7 @@ class Stitcher(Module):
         self.era = era
         self.channel = channel
         self.condition = condition
+        # print("Stitcher is in mode '{0}' for era '{1}', channel '{2}', with condition '{3}'".format(self.mode, self.era, self.channel, self.condition))
         self.bits = {'isPrompt':0b000000000000001,
                      'isDecayedLeptonHadron':0b000000000000010,
                      'isTauDecayProduct':0b000000000000100,
@@ -71,18 +70,35 @@ class Stitcher(Module):
         self.stitchDL = self.stitchDict[self.era]['DL']
 
     def beginJob(self,histFile=None,histDirName=None):
+        self.hName = histFile
         if histFile == None or histDirName == None:
+            self.fillHists = False
             Module.beginJob(self, None, None)
         else:
+            self.fillHists = True
+
             Module.beginJob(self,histFile,histDirName)
-            self.stitch_nGenJets = ROOT.TH1I("stitch_nGenJets", "nGenJet (pt > 30); nGenJets; Events", 18, 2, 20)
-            self.addObject(self.stitch_nGenJets)
-            self.stitch_GenHT = ROOT.TH1D("stitch_GenHT", "GenHT (pt > 30, |#eta| < 2.4); Gen HT (GeV); Events", 800, 200, 600)
-            self.addObject(self.stitch_GenHT)
-            self.stitch_nGenLeps = ROOT.TH1I("stitch_nGenLeps", "nGenLeps (e(1) or mu (1) or #tau (2)); nGenLeps; Events", 10, 0, 10)
-            self.addObject(self.stitch_nGenLeps)
-            self.stitch_AllVar = ROOT.TH3D("stitch_AllVar", "nGenLeps, nGenJets, GenHT; nGenLeps; nGenJets; GenHT ", 5, 0, 5, 6, 5, 12, 12, 300., 600.)
-            self.addObject(self.stitch_AllVar)
+            self.stitch_PCond_nGenJets = ROOT.TH1I("stitch_PCond_nGenJets", "nGenJet (pt > 30) Pass condition; nGenJets; Events", 18, 2, 20)
+            self.addObject(self.stitch_PCond_nGenJets)
+            self.stitch_PCond_GenHT = ROOT.TH1D("stitch_PCond_GenHT", "GenHT (pt > 30, |#eta| < 2.4) Pass condition; Gen HT (GeV); Events", 800, 200, 600)
+            self.addObject(self.stitch_PCond_GenHT)
+            self.stitch_PCond_nGenLeps = ROOT.TH1I("stitch_PCond_nGenLeps", "nGenLeps (LHE level) Pass condition; nGenLeps; Events", 10, 0, 10)
+            self.addObject(self.stitch_PCond_nGenLeps)
+            self.stitch_PCond_AllVar = ROOT.TH3D("stitch_PCond_AllVar", "nGenLeps, nGenJets, GenHT Pass condition; nGenLeps; nGenJets; GenHT ", 
+                                                 6, 0, 6, 6, 5, 12, 12, 300., 600.)
+            self.addObject(self.stitch_PCond_AllVar)
+
+            self.stitch_FCond_nGenJets = ROOT.TH1I("stitch_FCond_nGenJets", "nGenJet (pt > 30) Fail condition; nGenJets; Events", 18, 2, 20)
+            self.addObject(self.stitch_FCond_nGenJets)
+            self.stitch_FCond_GenHT = ROOT.TH1D("stitch_FCond_GenHT", "GenHT (pt > 30, |#eta| < 2.4) Fail condition; Gen HT (GeV); Events", 800, 200, 600)
+            self.addObject(self.stitch_FCond_GenHT)
+            self.stitch_FCond_nGenLeps = ROOT.TH1I("stitch_FCond_nGenLeps", "nGenLeps (LHE level) Fail condition; nGenLeps; Events", 10, 0, 10)
+            self.addObject(self.stitch_FCond_nGenLeps)
+            self.stitch_FCond_AllVar = ROOT.TH3D("stitch_FCond_AllVar", "nGenLeps, nGenJets, GenHT  Fail condition; nGenLeps; nGenJets; GenHT ",
+                                                 6, 0, 6, 6, 5, 12, 12, 300., 600.)
+            self.addObject(self.stitch_FCond_AllVar)
+            # self.stitch_nGenLepsPart = ROOT.TH1I("stitch_nGenLeps", "nGenLeps (e(1) or mu (1) or #tau (2)); nGenLeps; Events", 10, 0, 10)
+            # self.addObject(self.stitch_nGenLepsPart)
 
     def endJob(self):
         if hasattr(self, 'objs') and self.objs != None:
@@ -96,15 +112,16 @@ class Stitcher(Module):
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         self.out = wrappedOutputTree
-        self.varDict = [('passSL', 'O', 'Passes Single Lepton Stitch cuts'),
-                        ('passDL', 'O', 'Passes Single Lepton Stitch cuts'),
+        self.varDict = [('passStitchSL', 'O', 'Passes Single Lepton Stitch cuts'),
+                        ('passStitchDL', 'O', 'Passes Single Lepton Stitch cuts'),
+                        ('passStitchCondition', 'O', 'Passes or fails stitch cuts appropriately for the sample in this channel and era')
                        ]
         if self.mode == "Flag":
             if not self.out:
                 raise RuntimeError("No Output file selected, cannot flag events for Stitching")
             else:
                 for name, valType, valTitle in self.varDict:
-                    self.out.branch("Stitch_%s"%(name), valType, title=valTitle)
+                    self.out.branch("ESV_%s"%(name), valType, title=valTitle)
         elif self.mode == "Pass" or self.mode == "Fail":
             pass
 
@@ -126,6 +143,7 @@ class Stitcher(Module):
         ###############################
         gens = Collection(event, "GenPart")
         genjets = Collection(event, "GenJet")
+        lheparts = Collection(event, "LHEPart")
 
         #Stitch variables
         nGL = 0
@@ -136,65 +154,112 @@ class Stitcher(Module):
                 nGJ += 1
                 if abs(jet.eta) < 2.4: 
                     GenHT += jet.pt
-        for gp, gen in enumerate(gens):
-            if abs(gen.pdgId) in set([11, 13]) and gen.status == 1:
+        for lhep in lheparts:
+            if lhep.pdgId in set([-15, -13, -11, 11, 13, 15]):            
                 nGL += 1
-            elif abs(gen.pdgId) in set([15]) and gen.status == 2:
-                nGL += 1
+
+        # nGLgen = 0
+        # for gp, gen in enumerate(gens):
+        #     if abs(gen.pdgId) in set([11, 13]) and gen.status == 1:
+        #         nGLgen += 1
+        #     elif abs(gen.pdgId) in set([15]) and gen.status == 2:
+        #         nGLgen += 1
         
         
 
         passStitch = {}
-        passStitch['passSL'] = (nGL >= self.stitchSL['nGenLeps'] and nGJ >= self.stitchSL['nGenJets'] and GenHT >= self.stitchSL['GenHT'])
-        passStitch['passDL'] = (nGL >= self.stitchDL['nGenLeps'] and nGJ >= self.stitchDL['nGenJets'] and GenHT >= self.stitchDL['GenHT'])
-        print("pass SL: nGL[{0:s}] nGJ[{1:s}] GHT[{2:s}]".format(str(nGL >= self.stitchSL['nGenLeps']),
-                                                                 str(nGJ >= self.stitchSL['nGenJets']),
-                                                                 str(GenHT >= self.stitchSL['GenHT'])))
-        print("pass DL: nGL[{0:s}] nGJ[{1:s}] GHT[{2:s}]".format(str(nGL >= self.stitchDL['nGenLeps']),
-                                                                 str(nGJ >= self.stitchDL['nGenJets']),
-                                                                 str(GenHT >= self.stitchDL['GenHT'])))
+        if nGL == self.stitchSL['nGenLeps'] and nGJ >= self.stitchSL['nGenJets'] and GenHT >= self.stitchSL['GenHT']:
+            shitTestSL = True
+        else:
+            shitTestSL = False
+        if nGL == self.stitchDL['nGenLeps'] and nGJ >= self.stitchDL['nGenJets'] and GenHT >= self.stitchDL['GenHT']:
+            shitTestDL = True
+        else:
+            shitTestDL = False
+        passStitch['passStitchSL'] = (nGL == self.stitchSL['nGenLeps'] and nGJ >= self.stitchSL['nGenJets'] and GenHT >= self.stitchSL['GenHT'])
+        passStitch['passStitchDL'] = (nGL == self.stitchDL['nGenLeps'] and nGJ >= self.stitchDL['nGenJets'] and GenHT >= self.stitchDL['GenHT'])
+        if passStitch['passStitchSL'] != shitTestSL:
+            print("GODDAMNED FAIL, SL!")
+        if passStitch['passStitchDL'] != shitTestDL:
+            print("GODDAMNED FAIL, DL!")
+        if self.condition == "Pass":
+            passStitch['passStitchCondition'] = passStitch['passStitch'+self.channel]
+        elif self.condition == "Fail":
+            passStitch['passStitchCondition'] = not passStitch['passStitch'+self.channel]
+        if self.fillHists:
+            if passStitch['passStitchCondition']:
+                # self.stitch_nGenLepsPart.Fill(nGLgen)
+                self.stitch_PCond_nGenLeps.Fill(nGL)
+                self.stitch_PCond_nGenJets.Fill(nGJ)
+                self.stitch_PCond_GenHT.Fill(GenHT)
+                self.stitch_PCond_AllVar.Fill(nGL, nGJ, GenHT)
+            else:
+                # self.stitch_nGenLepsPart.Fill(nGLgen)
+                self.stitch_FCond_nGenLeps.Fill(nGL)
+                self.stitch_FCond_nGenJets.Fill(nGJ)
+                self.stitch_FCond_GenHT.Fill(GenHT)
+                self.stitch_FCond_AllVar.Fill(nGL, nGJ, GenHT)
 
-        print("nGL[{0:d}]  nGJ[{1:d}]  GHT[{2:f}] passSL[{3:s}] passDL[{4:s}]".format(nGL, nGJ, GenHT, str(passStitch['passSL']), str(passStitch['passDL'])))
 
-        self.stitch_nGenLeps.Fill(nGL)
-        self.stitch_nGenJets.Fill(nGJ)
-        self.stitch_GenHT.Fill(GenHT)
-        self.stitch_AllVar.Fill(nGL, nGJ, GenHT)
+
+        if self.verbose and self.counter % 100 == 0:
+            print("histFile: {3:s} pass SL: nGL[{0:s}] nGJ[{1:s}] GHT[{2:s}]".format(str(nGL == self.stitchSL['nGenLeps']),
+                                                                                     str(nGJ >= self.stitchSL['nGenJets']),
+                                                                                     str(GenHT >= self.stitchSL['GenHT']),
+                                                                                     str(self.hName)))
+            print("histFile: {3:s} pass DL: nGL[{0:s}] nGJ[{1:s}] GHT[{2:s}]".format(str(nGL == self.stitchDL['nGenLeps']),
+                                                                                     str(nGJ >= self.stitchDL['nGenJets']),
+                                                                                     str(GenHT >= self.stitchDL['GenHT']),
+                                                                                     str(self.hName)))
+
+            print("histFile: {5:s} nGL[{0:d}]  nGJ[{1:d}]  GHT[{2:f}] passSL[{3:s}] passDL[{4:s}]".format(nGL, 
+                                                                                                          nGJ, 
+                                                                                                          GenHT, 
+                                                                                                          str(passStitch['passStitchSL']), 
+                                                                                                          str(passStitch['passStitchDL']),
+                                                                                                          str(self.hName))
+              )
 
         ########################## 
         ### Write out branches ###
         ##########################         
         if self.out and self.mode == "Flag":
             for name, valType, valTitle in self.varDict:
-                self.out.fillBranch("Stitch_%s"%(name), passStitch[name])
+                self.out.fillBranch("ESV_%s"%(name), passStitch[name])
             return True
         elif self.mode == "Pass":
             print("Testing event for passing")
-            return passStitch['pass'+self.channel]
+            return passStitch['passStitch'+self.channel]
         elif self.mode == "Fail":
             print("Testing event for failure")
-            return not passStitch['pass'+self.channel]
+            return not passStitch['passStitch'+self.channel]
         else:
             raise NotImplementedError("No method in place for Stitcher module in mode '{0}'".format(self.mode))
 
 Tuples = []
-filesTT=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/80000/FB2C8D48-139E-7647-90C2-1CF1767DB0A1.root"]
-hNameTT="StitchingTTv5.root"
-Tuples.append((filesTT, hNameTT, 0))
-filesTTGF=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/E565691C-17D4-6046-865E-8393F1FE0414.root"]
-hNameTTGF="StitchingTTGF.root"
-Tuples.append((filesTTGF, hNameTTGF, 0))
+filesTTDL=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/80000/FB2C8D48-139E-7647-90C2-1CF1767DB0A1.root"]
+hNameTTDL="StitchingTTDLv7.root"
+Tuples.append((filesTTDL, hNameTTDL, "2017", "DL", "Fail", "Flag"))
+filesTTDLGF=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/E565691C-17D4-6046-865E-8393F1FE0414.root"]
+hNameTTDLGF="StitchingTTDLGFv7.root"
+Tuples.append((filesTTDLGF, hNameTTDLGF,  "2017", "DL", "Pass", "Flag"))
 
-def multiplier(fileList, hName=None, wOpt=0):
+filesTTSL=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/00000/7BB010D2-1FE4-1D45-B5E0-ABC7A285E8FC.root"]
+hNameTTSL="StitchingTTSLv7.root"
+Tuples.append((filesTTSL, hNameTTSL,  "2017", "SL", "Fail", "Flag"))
+filesTTSLGF=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/CD79F874-9C0A-6446-81A2-344B4C7B3EE9.root"]
+hNameTTSLGF="StitchingTTSLGFv7.root"
+Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Flag"))
+
+def multiplier(fileList, hName=None, theEra="2021", theChannel="NL", theCondition="Nope", theMode="Bloop!"):
     if hName == None:
         hDirName = None
     else:
         hDirName = "plots"
-
         p=PostProcessor(".",
                         fileList,
                         cut=None,
-                        modules=[Stitcher(maxevt=1000, era="2017", channel="DL", mode="Flag")],
+                        modules=[Stitcher(maxevt=100000, era=theEra, channel=theChannel, mode=theMode, condition=theCondition, verbose=False)],
                         # modules=[TopSystemPt(maxevt=100, wOpt=wOption)],
                         noOut=False,
                         histFileName=hName,
@@ -204,9 +269,15 @@ def multiplier(fileList, hName=None, wOpt=0):
 
 pList = []
 for tup in Tuples:
-    p = multiprocessing.Process(target=multiplier, args=(tup[0], tup[1], tup[2]))
+    p = multiprocessing.Process(target=multiplier, args=(tup[0], tup[1], tup[2], tup[3], tup[4], tup[5]))
     pList.append(p)
     p.start()
 
 for p in pList:
     p.join()
+
+# tup=Tuples[0]
+# # pt = multiprocessing.Process(target=multiplier, args=((tup[0], tup[1], tup[2], tup[3], tup[4], tup[5]))
+# pt2 = multiplier(tup[0], tup[1], tup[2], tup[3], tup[4], tup[5])
+# # pt.start()
+# # pt.join()

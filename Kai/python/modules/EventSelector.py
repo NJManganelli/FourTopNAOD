@@ -136,6 +136,28 @@ class EventSelector(Module):
                     }
             }
         }
+        #2016selection required !isFake(), nDegreesOfFreedom> 4 (strictly),|z| < 24 (in cm? fractions of acentimeter?), and rho =sqrt(PV.x**2 + PV.y**2)< 2
+        #Cuts are to use strictly less than and greater than, i.e. PV.ndof > minNDoF, not >=
+        self.PVCutDict = {
+            '2016':{
+                'minNDoF': 4,
+                'maxAbsZ': 24.0,
+                'maxRho': 2
+                },
+            '2017':{
+                'minNDoF': 4,
+                'maxAbsZ': 24.0,
+                'maxRho': 2
+                },
+            '2018':{
+                'minNDoF': 4,
+                'maxAbsZ': 24.0,
+                'maxRho': 2
+                }
+        }
+        self.PVCut = self.PVCutDict[era]
+
+
         #Weight variations
         if self.isData:
             self.weightList = ["NONE"]
@@ -151,6 +173,7 @@ class EventSelector(Module):
             
 
         #BTagging method, algorithm name, and chosen selection working point
+        self.BTName = btagging[0]
         self.BTMeth = self.bTagWorkingPointDict[era][btagging[0]]
         self.BTWP =  self.bTagWorkingPointDict[era][btagging[0]][btagging[1]]
         self.BTAlg = self.bTagWorkingPointDict[era][btagging[0]]["Var"]
@@ -330,15 +353,6 @@ class EventSelector(Module):
                         self.ctrl_Leptons[weight][i][var] = ROOT.TH1F("ctrl_Leptons[{2:s}][{0:d}][{1:s}]".format(i, var, weight), 
                                                                       "Selected Lepton [{0:d}]; {1:s}; Events[{2:s}]".format(i, var, weight), 100, xmin, xmax)
                         self.addObject(self.ctrl_Leptons[weight][i][var])
-    
-            self.stitch_nGenJets = ROOT.TH1I("stitch_nGenJets", "nGenJet (pt > 30); nGenJets; Events", 18, 2, 20)
-            self.addObject(self.stitch_nGenJets)
-            self.stitch_GenHT = ROOT.TH1F("stitch_GenHT", "GenHT (pt > 30, |#eta| < 2.4); Gen HT (GeV); Events", 800, 200, 600)
-            self.addObject(self.stitch_GenHT)
-            self.stitch_nGenLeps = ROOT.TH1I("stitch_nGenLeps", "nGenLeps (e(1) or mu (1) or #tau (2)); nGenLeps; Events", 10, 0, 10)
-            self.addObject(self.stitch_nGenLeps)
-
-
                     
 
     def endJob(self):
@@ -449,6 +463,14 @@ class EventSelector(Module):
             else:
                 theWeight[weight] = -1
             self.cutflow[weight].Fill("> preselection", theWeight[weight])
+
+        ######################
+        ### Primary Vertex ###
+        ######################
+        #Require ndof > minNDoF, |z| < maxAbsZ, and rho < maxRho
+        if PV.ndof <= self.PVCut['minNDoF'] or abs(PV.z) >= self.VPCut['maxAbsZ'] or math.sqrt(PV.x**2 + PV.y**2) >= self.PVCut['maxRho']:
+            return False
+
         ###########
         ### MET ###
         ###########
@@ -487,24 +509,28 @@ class EventSelector(Module):
             # LHEScaleWeight = Collection(event, "LHEScaleWeight")
             # LHEPdfWeight = Collection(event, "LHEPdfWeight")
 
+            #BIG Weights lesson learned: you cannot use Collection, and possibly, you cannot even assign the variable and iterate through it using indices or 
+            #pythonic methods. Thus, to ge the 3rd LHEScaleWeight, should use 3rdLHEScaleWeight = getattr(event, "LHEScaleWeight")[2] instead, indexing after acquis.
+
+            #These are redundant and also incorrectly computed as of now (see StitchModule for proper implementation), so no longer used
             #Stitch variables
-            nGL = 0
-            nGJ = 0
-            GenHT = 0
-            for gj, jet in enumerate(genjets):
-                if jet.pt > 30:
-                    nGJ += 1
-                    if abs(jet.eta) < 2.4: 
-                        GenHT += jet.pt
-            for gp, gen in enumerate(gens):
-                if abs(gen.pdgId) in set([11, 13]) and gen.status == 1:
-                    nGL += 1
-                elif abs(gen.pdgId) in set([15]) and gen.status == 2:
-                    nGL += 1
-            #No weights for stitching variables
-            self.stitch_nGenJets.Fill(nGJ)
-            self.stitch_GenHT.Fill(GenHT)
-            self.stitch_nGenLeps.Fill(nGL)
+            # nGL = 0
+            # nGJ = 0
+            # GenHT = 0
+            # for gj, jet in enumerate(genjets):
+            #     if jet.pt > 30:
+            #         nGJ += 1
+            #         if abs(jet.eta) < 2.4: 
+            #             GenHT += jet.pt
+            # for gp, gen in enumerate(gens):
+            #     if abs(gen.pdgId) in set([11, 13]) and gen.status == 1:
+            #         nGL += 1
+            #     elif abs(gen.pdgId) in set([15]) and gen.status == 2:
+            #         nGL += 1
+            # #No weights for stitching variables
+            # self.stitch_nGenJets.Fill(nGJ)
+            # self.stitch_GenHT.Fill(GenHT)
+            # self.stitch_nGenLeps.Fill(nGL)
         
 
         # selEle25 = []
@@ -619,19 +645,21 @@ class EventSelector(Module):
         selBTLooseJets = [jetTup for jetTup in selBTsortedJets if getattr(jetTup[1], self.BTAlg) > self.BTMeth['L']]
         selBTMediumJets = [jetTup for jetTup in selBTLooseJets if getattr(jetTup[1], self.BTAlg) > self.BTMeth['M']]
         selBTTightJets = [jetTup for jetTup in selBTMediumJets if getattr(jetTup[1], self.BTAlg) > self.BTMeth['T']]
+        selBTJets = [jetTup for jetTup in selBTsortedJets if getattr(jetTup[1], self.BTAlg) > self.BTWP] #GETOVERHERE
         nJets = len(selJets)
         nBTLoose = len(selBTLooseJets)
         nBTMedium = len(selBTMediumJets)
         nBTTight = len(selBTTightJets)
+        nBTSelected = len(selBTJets)
 
         if nJets < 4:
             return False
         for weight in self.weightList:
             self.cutflow[weight].Fill("> 4+ Jets", theWeight[weight])
-        if nBTMedium < 2:
+        if nBTSelected < 2:
             return False
         for weight in self.weightList:
-            self.cutflow[weight].Fill("> 2+ Btag Jets", theWeight[weight])
+            self.cutflow[weight].Fill("> 2+ Btag Jets ({0} {1})".format(self.BTName, self.BTWP), theWeight[weight])
 
         #HT and other calculations
         HT = 0
