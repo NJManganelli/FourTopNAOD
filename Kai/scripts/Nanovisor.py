@@ -11,7 +11,7 @@ import tempfile
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
-parser = argparse.ArgumentParser(description='Supervisor handles submission and bookkeeping for physics samples.')
+parser = argparse.ArgumentParser(description='Nanovisor handles submission and bookkeeping for physics samples.')
 parser.add_argument('--sample_cards', dest='sample_cards', action='store', nargs='*', type=str,
                     help='path and name of the sample card(s) to be used')
 parser.add_argument('--hadd', dest='hadd', action='store', nargs='?', type=str, const='hist*.root', default='NOJOIN',
@@ -51,12 +51,12 @@ def main():
     if args.local_run and args.crab_run:
         print("Both local_run and crab_run have been set to True; this is not supported. Exiting")
         sys.exit()
-    print("Supervisor will check integrity of sample card's event counts: " + str(args.check_events))
-    print("Supervisor will use the following algorithm and working point for any btagging related SF calculations and event selection: " + str(args.btagger))
+    print("Nanovisor will check integrity of sample card's event counts: " + str(args.check_events))
+    print("Nanovisor will use the following algorithm and working point for any btagging related SF calculations and event selection: " + str(args.btagger))
     if args.crab_run:
-        print("Supervisor will create crab configurations for stage {0:s} using source {1:s}".format(args.stage, args.source))
+        print("Nanovisor will create crab configurations for stage {0:s} using source {1:s}".format(args.stage, args.source))
     if args.local_run:
-        print("Supervisor will run samples locally... or it would, if this were supported. How unfortunate.")
+        print("Nanovisor will run samples locally... or it would, if this were supported. How unfortunate.")
     if args.sample_cards:
         print("The path and name of the sample cards(s) are: ")
         for card in args.sample_cards:
@@ -488,7 +488,7 @@ triggers=["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8",
           "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ"
           ]
 
-#Double braces to escape them inside the literal string template used by Supervisor (with .format method)
+#Double braces to escape them inside the literal string template used by Nanovisor (with .format method)
 dataRecalib = {{"2017": {{"B": jetRecalib("Fall17_17Nov2017B_V32_DATA","Fall17_17Nov2017_V32_DATA"),
                           "C": jetRecalib("Fall17_17Nov2017C_V32_DATA","Fall17_17Nov2017_V32_DATA"),
                           "D": jetRecalib("Fall17_17Nov2017DE_V32_DATA","Fall17_17Nov2017_V32_DATA"),
