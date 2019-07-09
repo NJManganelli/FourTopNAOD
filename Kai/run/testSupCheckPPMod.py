@@ -1,7 +1,7 @@
 from __future__ import division, print_function
 import os, sys
 import ROOT
-from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor 
+from FourTopNAOD.Kai.tools.modifiedpostprocessor import PostProcessor #Modified PP with redirectable output, buggy unfortunately
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 from FourTopNAOD.Kai.tools.intools import *
