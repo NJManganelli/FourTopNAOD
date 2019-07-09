@@ -9,6 +9,7 @@ from ruamel.yaml import YAML
 from glob import glob
 import tempfile
 import ROOT
+from FourTopNAOD.Kai.tools.toolbox import getFiles
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 parser = argparse.ArgumentParser(description='Nanovisor handles submission and bookkeeping for physics samples.')

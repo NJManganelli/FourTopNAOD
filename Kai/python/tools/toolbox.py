@@ -1,5 +1,9 @@
 from PhysicsTools.NanoAODTools.postprocessing.tools import *
 import copy
+import glob #For getFiles
+import os #For getFiles
+import tempfile #For getFiles
+
 
 def dumpGenCollection(genPartCollection):
     print("=====Gen Particles=====\n{0:>5s} {1:>10s} {2:>10s} {3:>10s} {4:>10s} {5:10s} {6:>10s} {7:>20s}"
@@ -475,3 +479,82 @@ def linkGenJet(inJet, inJetIdx, jetCollection, genJetCollection, genPartCollecti
 #        return chain
 #    else:
 #        return getGenAncestry(genPartCollection[mothIdx], genPartCollection, chain=chain)      
+
+
+def getFiles(query=None, globPath=None, globFileExp="*.root", globSort=lambda f: int(f.split('_')[-1].replace('.root', '')), dbsDataset=None, inFileName=None, redir="", outFileName=None, verbose=False):
+    """Use one of several different methods to acquire a list or text file specifying the filenames.
+
+Method follows after globPath, inFileName, or dbsDataset is specified, with precedence going glob > dbs > file.
+globPath should be globbable in python. For example "./my2017ttbarDir/*/results"
+globPath has additional option globFileExp which defaults to "*.root", but can be changed to "tree_*.root" or "SF.txt" for example
+dbsDataset should just be a string as would be used in DAS/dasgoclient search, such as "/DoubleMuon/*/NANOAOD"
+inFileName should specify the path to a file storing the filenames as plain text.
+
+additional options:
+outFileName will write the filelist to the specified file path + name
+redir will prepend the redirector to the beginning of the paths, such as redir="root://cms-xrd-global.cern.ch/"
+"""
+    #methods to support: "dbs" using dasgoclient query, "glob" using directory path, "file" using text file
+    fileList = []
+    with tempfile.NamedTemporaryFile() as f:
+        #check file exists as additional check?
+        if query:
+            if "dbs:" in query:
+                # if redir == "" and "root://" not in query: redir = "root://cms-xrd-global.cern.ch"
+                cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(query.replace("dbs:",""),f.name)
+                if verbose:
+                    print("dbs query reformatted to:\n\t" + query)
+                os.system(cmd)
+                for line in f:
+                    tmpName = redir + line
+                    tmpName = tmpName.rstrip()
+                    fileList.append(tmpName)
+            elif "glob:" in query:
+                query_stripped = query.replace("glob:","")
+                fileList = glob(query_stripped)
+            elif "list:" in query:
+                query_stripped = query.replace("list:","")
+                fileList = []
+                with open(query_stripped) as in_f:
+                    for line in in_f:
+                        fileList.append(redir + line.rstrip())
+            return fileList
+            #Kept as reminder for how to produce list with these files for xrootd transfers
+                # if "root://eoshome-{0:s}.cern.ch/".format(get_username()[0]) not in query_stripped:
+                #     query = "root://eoshome-{0:s}.cern.ch/".format(get_username()[0]) + query_stripped
+                #     if verbose:
+                #         print("eoshome query reformatted to:\n\t" + query)
+            # elif "eoscms:" in query:
+            #     if "root://eoscms.cern.ch/" not in query:
+            #         query_stripped = query.replace("eoscms:","")
+            #         query = "root://eoscms.cern.ch/" + query_stripped
+            #         if args.verbose:
+            #             print("eoscms query reformatted to:\n\t" + query)
+        if inFileName:
+            if True:
+                raise RuntimeError("getFiles() attempted using meth='file' without a inFileName specified")
+            else:
+                pass
+        elif globPath:
+            if False:
+                raise RuntimeError("getFiles() attempted using meth='glob' without a globbable globPath specified")
+            else:
+                fileList = glob("{0}".format(globPath) + globFileExp)
+                try:
+                    fileList.sort(key=globSort)
+                except Exception:
+                    print("Could not sort files prior to joining with haddnano")
+        elif dbsDataset:
+            if False:
+                raise RuntimeError("getFiles() attempted using meth='dbs' without a dbsDataset specified")
+            else:
+                cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(dbsDataset,f.name)
+                os.system(cmd)
+                for line in f:
+                    tmpName = redir + line
+                    tmpName = tmpName.rstrip()
+                    fileList.append(tmpName)
+    if outFileName:
+        raise NotImplementedError("returning file not eimplemented yet")
+        
+    return fileList

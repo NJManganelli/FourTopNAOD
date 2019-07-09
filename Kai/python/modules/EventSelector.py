@@ -4,7 +4,7 @@ import math
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 from PhysicsTools.NanoAODTools.postprocessing.tools import * #DeltaR, match collection methods
-from FourTopNAOD.Kai.tools.intools import *
+from FourTopNAOD.Kai.tools.toolbox import *
 
 class EventSelector(Module):
     def __init__(self, verbose=False, maxevt=-1, probEvt=None, isData=True, 

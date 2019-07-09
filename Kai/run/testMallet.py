@@ -5,7 +5,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import Pos
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 from PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer import *
-from FourTopNAOD.Kai.tools.intools import *
+from FourTopNAOD.Kai.tools.toolbox import *
 import collections, copy, json
 from array import array
 

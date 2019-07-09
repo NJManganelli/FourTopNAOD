@@ -4,7 +4,7 @@ import ROOT
 from FourTopNAOD.Kai.tools.modifiedpostprocessor import PostProcessor #Modified PP with redirectable output, buggy unfortunately
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
-from FourTopNAOD.Kai.tools.intools import *
+from FourTopNAOD.Kai.tools.toolbox import *
 import collections, copy, json, math
 from array import array
 import multiprocessing, tempfile

@@ -4,7 +4,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import Pos
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 from PhysicsTools.NanoAODTools.postprocessing.tools import * #DeltaR, match collection methods
-from FourTopNAOD.Kai.tools.intools import *
+from FourTopNAOD.Kai.tools.toolbox import *
 from FourTopNAOD.Kai.tools.mctree import *
 import collections, copy, json, inspect
 
