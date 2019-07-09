@@ -500,7 +500,6 @@ redir will prepend the redirector to the beginning of the paths, such as redir="
         #check file exists as additional check?
         if query:
             if "dbs:" in query:
-                # if redir == "" and "root://" not in query: redir = "root://cms-xrd-global.cern.ch"
                 cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(query.replace("dbs:",""),f.name)
                 if verbose:
                     print("dbs query reformatted to:\n\t" + query)

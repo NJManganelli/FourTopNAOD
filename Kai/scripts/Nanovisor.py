@@ -235,7 +235,10 @@ def main():
                 pass
                 # print("\tSkipped check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))
             elif "list:" in inputDataset or "glob:" in inputDataset or "dbs:" in inputDataset:
-                fileList = getFiles(query=inputDataset)
+                if "dbs:" in inputDataset:
+                    fileList = getFiles(query=inputDataset, redir=args.redir)
+                else:
+                    fileList = getFiles(query=inputDataset)
             else:
                 print("Need to append getFiles() query type to inputDataset, such as 'glob:' or 'list:' or 'dbs:'")
             # elif "list:" in inputDataset:
@@ -259,12 +262,14 @@ def main():
             if isData == False:
                 current_events_in_files = 0
                 events_in_files = 0
-                if args.check_events == 'detailed':
-                    events_in_files_positive = 0
-                    events_in_files_negative = 0
-                else:
-                    events_in_files_positive = -999
-                    events_in_files_negative = -999
+                events_in_files_positive = 0
+                events_in_files_negative = 0
+                # if args.check_events == 'detailed':
+                #     events_in_files_positive = 0
+                #     events_in_files_negative = 0
+                # else:
+                #     events_in_files_positive = -999
+                #     events_in_files_negative = -999
                 events_sum_weights = 0
                 events_sum_weights2 = 0
                 dataset_size = 0
@@ -281,17 +286,26 @@ def main():
                     evtTree = f.Get('Events')
                     eventsTreeEntries = evtTree.GetEntries()
                     current_events_in_files += eventsTreeEntries
+                    # pEntries = evtTree.Draw('>>pEntries', 'genWeight > 0')
+                    # print("Draw method" + str(pEntries))
+                    # nEntries = evtTree.Draw('>>nEntries', 'genWeight < 0')
+                    # print(nEntries)
+                    # events_in_files_positive += int(ROOT.gDirectory.Get('pEntries').GetN())
+                    # events_in_files_negative += int(ROOT.gDirectory.Get('nEntries').GetN())
+                    events_in_files_positive += int(evtTree.GetEntries('genWeight > 0'))
+                    events_in_files_negative += int(evtTree.GetEntries('genWeight < 0'))
                     if args.check_events == 'detailed':#Only do this for MC
                         for i in xrange(eventsTreeEntries):
-                            evtTree.GetEntry(i)
-                            if evtTree.genWeight > 0:
-                                events_in_files_positive += 1
-                            elif evtTree.genWeight < 0:
-                                events_in_files_negative += 1
-                            else:
-                                raise RuntimeError("event with weight 0 in file: {0} run: {1} lumi: {2} event: {3}".format(f.GetName(), evtTree.run, 
-                                                                                                                           evtTree.luminosityBlock, 
-                                                                                                                           evtTree.event))
+                            pass
+                            # evtTree.GetEntry(i)
+                            # if evtTree.genWeight > 0:
+                            #     events_in_files_positive += 1
+                            # elif evtTree.genWeight < 0:
+                            #     events_in_files_negative += 1
+                            # else:
+                            #     raise RuntimeError("event with weight 0 in file: {0} run: {1} lumi: {2} event: {3}".format(f.GetName(), evtTree.run, 
+                            #                                                                                                evtTree.luminosityBlock, 
+                            #                                                                                                evtTree.event))
                             if i % 10000 == 0:
                                 print("processed {0} events in file: {1}".format(i, f.GetName()))
                                 
@@ -589,84 +603,84 @@ process.out = cms.EndPath(process.output)
 
 
 
-#import glob, os, tempfile
-def getFiles(query=None, globPath=None, globFileExp="*.root", globSort=lambda f: int(f.split('_')[-1].replace('.root', '')), dbsDataset=None, inFileName=None, redir="", outFileName=None, verbose=False):
-    """Use one of several different methods to acquire a list or text file specifying the filenames.
+# #import glob, os, tempfile
+# def getFiles(query=None, globPath=None, globFileExp="*.root", globSort=lambda f: int(f.split('_')[-1].replace('.root', '')), dbsDataset=None, inFileName=None, redir="", outFileName=None, verbose=False):
+#     """Use one of several different methods to acquire a list or text file specifying the filenames.
 
-Method follows after globPath, inFileName, or dbsDataset is specified, with precedence going glob > dbs > file.
-globPath should be globbable in python. For example "./my2017ttbarDir/*/results"
-globPath has additional option globFileExp which defaults to "*.root", but can be changed to "tree_*.root" or "SF.txt" for example
-dbsDataset should just be a string as would be used in DAS/dasgoclient search, such as "/DoubleMuon/*/NANOAOD"
-inFileName should specify the path to a file storing the filenames as plain text.
+# Method follows after globPath, inFileName, or dbsDataset is specified, with precedence going glob > dbs > file.
+# globPath should be globbable in python. For example "./my2017ttbarDir/*/results"
+# globPath has additional option globFileExp which defaults to "*.root", but can be changed to "tree_*.root" or "SF.txt" for example
+# dbsDataset should just be a string as would be used in DAS/dasgoclient search, such as "/DoubleMuon/*/NANOAOD"
+# inFileName should specify the path to a file storing the filenames as plain text.
 
-additional options:
-outFileName will write the filelist to the specified file path + name
-redir will prepend the redirector to the beginning of the paths, such as redir="root://cms-xrd-global.cern.ch/"
-"""
-    #methods to support: "dbs" using dasgoclient query, "glob" using directory path, "file" using text file
-    fileList = []
-    with tempfile.NamedTemporaryFile() as f:
-        #check file exists as additional check?
-        if query:
-            if "dbs:" in query:
-                # if redir == "" and "root://" not in query: redir = "root://cms-xrd-global.cern.ch"
-                cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(query.replace("dbs:",""),f.name)
-                if verbose:
-                    print("dbs query reformatted to:\n\t" + query)
-                os.system(cmd)
-                for line in f:
-                    tmpName = redir + line
-                    tmpName = tmpName.rstrip()
-                    fileList.append(tmpName)
-            elif "glob:" in query:
-                query_stripped = query.replace("glob:","")
-                fileList = glob(query_stripped)
-            elif "list:" in query:
-                query_stripped = query.replace("list:","")
-                fileList = []
-                with open(query_stripped) as in_f:
-                    for line in in_f:
-                        fileList.append(redir + line.rstrip())
-            return fileList
-            #Kept as reminder for how to produce list with these files for xrootd transfers
-                # if "root://eoshome-{0:s}.cern.ch/".format(get_username()[0]) not in query_stripped:
-                #     query = "root://eoshome-{0:s}.cern.ch/".format(get_username()[0]) + query_stripped
-                #     if verbose:
-                #         print("eoshome query reformatted to:\n\t" + query)
-            # elif "eoscms:" in query:
-            #     if "root://eoscms.cern.ch/" not in query:
-            #         query_stripped = query.replace("eoscms:","")
-            #         query = "root://eoscms.cern.ch/" + query_stripped
-            #         if args.verbose:
-            #             print("eoscms query reformatted to:\n\t" + query)
-        if inFileName:
-            if True:
-                raise RuntimeError("getFiles() attempted using meth='file' without a inFileName specified")
-            else:
-                pass
-        elif globPath:
-            if False:
-                raise RuntimeError("getFiles() attempted using meth='glob' without a globbable globPath specified")
-            else:
-                fileList = glob("{0}".format(globPath) + globFileExp)
-                try:
-                    fileList.sort(key=globSort)
-                except Exception:
-                    print("Could not sort files prior to joining with haddnano")
-        elif dbsDataset:
-            if False:
-                raise RuntimeError("getFiles() attempted using meth='dbs' without a dbsDataset specified")
-            else:
-                cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(dbsDataset,f.name)
-                os.system(cmd)
-                for line in f:
-                    tmpName = redir + line
-                    tmpName = tmpName.rstrip()
-                    fileList.append(tmpName)
-    if outFileName:
-        raise NotImplementedError("returning file not eimplemented yet")
+# additional options:
+# outFileName will write the filelist to the specified file path + name
+# redir will prepend the redirector to the beginning of the paths, such as redir="root://cms-xrd-global.cern.ch/"
+# """
+#     #methods to support: "dbs" using dasgoclient query, "glob" using directory path, "file" using text file
+#     fileList = []
+#     with tempfile.NamedTemporaryFile() as f:
+#         #check file exists as additional check?
+#         if query:
+#             if "dbs:" in query:
+#                 # if redir == "" and "root://" not in query: redir = "root://cms-xrd-global.cern.ch"
+#                 cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(query.replace("dbs:",""),f.name)
+#                 if verbose:
+#                     print("dbs query reformatted to:\n\t" + query)
+#                 os.system(cmd)
+#                 for line in f:
+#                     tmpName = redir + line
+#                     tmpName = tmpName.rstrip()
+#                     fileList.append(tmpName)
+#             elif "glob:" in query:
+#                 query_stripped = query.replace("glob:","")
+#                 fileList = glob(query_stripped)
+#             elif "list:" in query:
+#                 query_stripped = query.replace("list:","")
+#                 fileList = []
+#                 with open(query_stripped) as in_f:
+#                     for line in in_f:
+#                         fileList.append(redir + line.rstrip())
+#             return fileList
+#             #Kept as reminder for how to produce list with these files for xrootd transfers
+#                 # if "root://eoshome-{0:s}.cern.ch/".format(get_username()[0]) not in query_stripped:
+#                 #     query = "root://eoshome-{0:s}.cern.ch/".format(get_username()[0]) + query_stripped
+#                 #     if verbose:
+#                 #         print("eoshome query reformatted to:\n\t" + query)
+#             # elif "eoscms:" in query:
+#             #     if "root://eoscms.cern.ch/" not in query:
+#             #         query_stripped = query.replace("eoscms:","")
+#             #         query = "root://eoscms.cern.ch/" + query_stripped
+#             #         if args.verbose:
+#             #             print("eoscms query reformatted to:\n\t" + query)
+#         if inFileName:
+#             if True:
+#                 raise RuntimeError("getFiles() attempted using meth='file' without a inFileName specified")
+#             else:
+#                 pass
+#         elif globPath:
+#             if False:
+#                 raise RuntimeError("getFiles() attempted using meth='glob' without a globbable globPath specified")
+#             else:
+#                 fileList = glob("{0}".format(globPath) + globFileExp)
+#                 try:
+#                     fileList.sort(key=globSort)
+#                 except Exception:
+#                     print("Could not sort files prior to joining with haddnano")
+#         elif dbsDataset:
+#             if False:
+#                 raise RuntimeError("getFiles() attempted using meth='dbs' without a dbsDataset specified")
+#             else:
+#                 cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(dbsDataset,f.name)
+#                 os.system(cmd)
+#                 for line in f:
+#                     tmpName = redir + line
+#                     tmpName = tmpName.rstrip()
+#                     fileList.append(tmpName)
+#     if outFileName:
+#         raise NotImplementedError("returning file not eimplemented yet")
         
-    return fileList
+#     return fileList
 
 def get_username():
     return pwd.getpwuid( os.getuid() )[ 0 ]
