@@ -1,6 +1,6 @@
 from PhysicsTools.NanoAODTools.postprocessing.tools import *
 import copy
-import glob #For getFiles
+from glob import glob #For getFiles
 import os #For getFiles
 import tempfile #For getFiles
 
