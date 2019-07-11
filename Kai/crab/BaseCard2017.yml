@@ -13,6 +13,8 @@
         subera: "NONE"
         isData: False
         nEvents: 2273928
+        nEventsPositive: 1561946
+        nEventsNegative: 711982
         sumWeights: 18645.487772
         sumWeights2: 1094.209551
         isSignal: True
@@ -40,6 +42,8 @@
         subera: "NONE"
         isData: False
         nEvents: 69155808
+        nEventsPositive: 68875708
+        nEventsNegative: 280100
         sumWeights: 4984888995.198164
         sumWeights2: 365215384868.441772
         isSignal: False
@@ -67,6 +71,8 @@
         subera: "NONE"
         isData: False
         nEvents: 8458223
+        nEventsPositive: 8415626
+        nEventsNegative: 42597
         sumWeights: 608347760.180597
         sumWeights2: 44650125908.587616
         isSignal: False
@@ -94,6 +100,8 @@
         subera: "NONE"
         isData: False
         nEvents: 7945242
+        nEventsPositive: 7914815
+        nEventsNegative: 30427
         sumWeights: 277241050.840222
         sumWeights2: 9823995766.508368
         isSignal: False
@@ -121,6 +129,8 @@
         subera: "NONE"
         isData: False
         nEvents: 7745276
+        nEventsPositive: 7715654
+        nEventsNegative: 30427
         sumWeights: 270762750.172525
         sumWeights2: 9611964941.797768
         isSignal: False
@@ -148,6 +158,8 @@
         subera: "NONE"
         isData: False
         nEvents: 9794620
+        nEventsPositive: 9789774
+        nEventsNegative: 4846
         sumWeights: 556866.339401
         sumWeights2: 31723.206881
         isSignal: False
@@ -175,6 +187,8 @@
         subera: "NONE"
         isData: False
         nEvents: 9332943
+        nEventsPositive: 9328425
+        nEventsNegative: 4518
         sumWeights: 2215145.853339
         sumWeights2: 526777.723819
         isSignal: False
@@ -200,6 +214,8 @@
         subera: "NONE"
         isData: False
         nEvents: 8000000
+        nEventsPositive: 
+        nEventsNegative: 
         sumWeights: 4216319.315884
         sumWeights2: 2317497.816608
         isSignal: False
@@ -225,6 +241,8 @@
         subera: "NONE"
         isData: False
         nEvents: 9425384
+        nEventsPositive: 
+        nEventsNegative: 
         sumWeights: 9384328.000000
         sumWeights2: 9425384.000000
         isSignal: False

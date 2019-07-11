@@ -9,9 +9,8 @@ import collections, copy, json, math
 from array import array
 import multiprocessing
 
-
 class TopSystemPt(Module):
-    def __init__(self, verbose=False, maxevt=-1, probEvt=None, isData=False, writeNtup=False, wOpt=0):
+    def __init__(self, verbose=False, maxevt=-1, probEvt=None, isData=False, writeNtup=False, wOpt=0, wMag = 1):
         self.writeHistFile=True
         self.verbose=verbose
         self._verbose = verbose
@@ -23,6 +22,7 @@ class TopSystemPt(Module):
         self.counter = 0
         self.maxEventsToProcess=maxevt
         self.wOpt = wOpt
+        self.wMag = wMag
         self.bits = {'isPrompt':0b000000000000001,
                      'isDecayedLeptonHadron':0b000000000000010,
                      'isTauDecayProduct':0b000000000000100,
@@ -104,7 +104,7 @@ class TopSystemPt(Module):
         if self.wOpt == 0:
             weight = 1.0
         elif self.wOpt == 1:
-            weight = getattr(event, "genWeight")
+            weight = math.copysign(self.wMag, getattr(event, "genWeight"))
         elif self.wOpt == 2:
             weight = abs(getattr(event, "genWeight"))
         else:
@@ -168,40 +168,50 @@ class TopSystemPt(Module):
 
         return True
 Tuples = []
-filesTTTT=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/BD738994-6BD2-6D41-9D93-E0AC468497A5.root"]
+# filesTTTT=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/BD738994-6BD2-6D41-9D93-E0AC468497A5.root"]
+filesTTTT = getFiles(query="dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM",
+                     redir="root://cms-xrd-global.cern.ch/")
+weightMagTTTT = 0.012*42/(1561946 - 711982)
 # files=["/eos/home-n/nmangane/AODStorage/TestingSamples/TTTT_TuneCP5_PSweights_102X.root"]
 hNameTTTT="TopSysPtTTTTv6.root"
 hNameTTTTw="TopSysPtTTTTv6w.root"
 hNameTTTTabsw="TopSysPtTTTTv6absw.root"
 # Tuples.append((filesTTTT, hNameTTTT, 0)) #Central test configuration, no weights
-Tuples.append((filesTTTT, hNameTTTTw, 1))
+Tuples.append((filesTTTT, hNameTTTTw, 1, weightMagTTTT))
 # Tuples.append((filesTTTT, hNameTTTTabsw, 2))
 
-filesTT=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/80000/FB2C8D48-139E-7647-90C2-1CF1767DB0A1.root"]
+
+filesTT = getFiles(query="dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM",
+                     redir="root://cms-xrd-global.cern.ch/")
+weightMagTT = 88.341*42/(68875708 - 280100)
 hNameTT="TopSysPtTTv6.root"
 hNameTTw="TopSysPtTTv6w.root"
 hNameTTabsw="TopSysPtTTv6absw.root"
 # Tuples.append((filesTT, hNameTT, 0))
-# Tuples.append((filesTT, hNameTTw, 1))
+Tuples.append((filesTT, hNameTTw, 1, weightMagTT))
 # Tuples.append((filesTT, hNameTTabsw, 2))
-filesTTGF=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/E565691C-17D4-6046-865E-8393F1FE0414.root"]
+
+
+filesTTGF = getFiles(query="dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM",
+                       redir="root://cms-xrd-global.cern.ch/")
+weightMagTTGF = 1.32512*42/(8415626 - 42597)
 hNameTTGF="TopSysPtTTGF.root"
 hNameTTGFw="TopSysPtTTGFw.root"
 hNameTTGFabsw="TopSysPtTTGFabsw.root"
 # Tuples.append((filesTTGF, hNameTTGF, 0))
-# Tuples.append((filesTTGF, hNameTTGFw, 1))
+Tuples.append((filesTTGF, hNameTTGFw, 1, weightMagTTFG))
 # Tuples.append((filesTTGF, hNameTTGFabsw, 2))
 
-filesTT_MG=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/79097697-485B-9542-8E6B-43A747EA7F4B.root"]
-hNameTT_MG="TopSysPtTT_MGv6.root"
-hNameTT_MGw="TopSysPtTT_MGv6w.root"
-hNameTT_MGabsw="TopSysPtTT_MGv5v6absw.root"
-# Tuples.append((filesTT_MG, hNameTT_MGw, 0))
-# Tuples.append((filesTT_MG, hNameTT_MGw, 1))
-# Tuples.append((filesTT_MG, hNameTT_MGabsw, 2))
+# filesTT_MG=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/79097697-485B-9542-8E6B-43A747EA7F4B.root"]
+# hNameTT_MG="TopSysPtTT_MGv6.root"
+# hNameTT_MGw="TopSysPtTT_MGv6w.root"
+# hNameTT_MGabsw="TopSysPtTT_MGv5v6absw.root"
+# # Tuples.append((filesTT_MG, hNameTT_MGw, 0))
+# # Tuples.append((filesTT_MG, hNameTT_MGw, 1))
+# # Tuples.append((filesTT_MG, hNameTT_MGabsw, 2))
 
 
-def multiplier(fileList, hName=None, wOption=0):
+def multiplier(fileList, hName=None, wOption=1, weightMagnitude=1):
     if hName == None:
         hDirName = None
     else:
@@ -210,8 +220,7 @@ def multiplier(fileList, hName=None, wOption=0):
         p=PostProcessor(".",
                         fileList,
                         cut=None,
-                        modules=[TopSystemPt(maxevt=300000, wOpt=wOption)],
-                        # modules=[TopSystemPt(maxevt=100, wOpt=wOption)],
+                        modules=[TopSystemPt(maxevt=20000, wOpt=wOption, wMag = weightMagnitude)],
                         noOut=True,
                         histFileName=hName,
                         histDirName=hDirName,

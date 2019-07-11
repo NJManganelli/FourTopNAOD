@@ -262,14 +262,14 @@ def main():
             if isData == False:
                 current_events_in_files = 0
                 events_in_files = 0
-                events_in_files_positive = 0
-                events_in_files_negative = 0
-                # if args.check_events == 'detailed':
-                #     events_in_files_positive = 0
-                #     events_in_files_negative = 0
-                # else:
-                #     events_in_files_positive = -999
-                #     events_in_files_negative = -999
+                # events_in_files_positive = 0
+                # events_in_files_negative = 0
+                if args.check_events == 'detailed':
+                    events_in_files_positive = 0
+                    events_in_files_negative = 0
+                else:
+                    events_in_files_positive = -999
+                    events_in_files_negative = -999
                 events_sum_weights = 0
                 events_sum_weights2 = 0
                 dataset_size = 0
@@ -283,34 +283,43 @@ def main():
                         events_in_files += tree.genEventCount
                         events_sum_weights += tree.genEventSumw
                         events_sum_weights2 += tree.genEventSumw2
-                    evtTree = f.Get('Events')
-                    eventsTreeEntries = evtTree.GetEntries()
-                    current_events_in_files += eventsTreeEntries
+                    if args.check_events == 'detailed':
+                        evtTree = f.Get('Events')
+                        evtTree.SetBranchStatus("*", 0)
+                        evtTree.SetBranchStatus("genWeight", 1)
+                        eventsTreeEntries = evtTree.GetEntries()
+                        current_events_in_files += eventsTreeEntries
+                        events_in_files_positive += int(evtTree.GetEntries('genWeight > 0'))
+                        events_in_files_negative += int(evtTree.GetEntries('genWeight < 0'))
+                        evtTree.SetBranchStatus("*", 1)
+                    else:
+                        evtTree = f.Get('Events')
+                        eventsTreeEntries = evtTree.GetEntries()
+                        current_events_in_files += eventsTreeEntries
                     # pEntries = evtTree.Draw('>>pEntries', 'genWeight > 0')
                     # print("Draw method" + str(pEntries))
                     # nEntries = evtTree.Draw('>>nEntries', 'genWeight < 0')
                     # print(nEntries)
                     # events_in_files_positive += int(ROOT.gDirectory.Get('pEntries').GetN())
                     # events_in_files_negative += int(ROOT.gDirectory.Get('nEntries').GetN())
-                    events_in_files_positive += int(evtTree.GetEntries('genWeight > 0'))
-                    events_in_files_negative += int(evtTree.GetEntries('genWeight < 0'))
-                    if args.check_events == 'detailed':#Only do this for MC
-                        for i in xrange(eventsTreeEntries):
-                            pass
-                            # evtTree.GetEntry(i)
-                            # if evtTree.genWeight > 0:
-                            #     events_in_files_positive += 1
-                            # elif evtTree.genWeight < 0:
-                            #     events_in_files_negative += 1
-                            # else:
-                            #     raise RuntimeError("event with weight 0 in file: {0} run: {1} lumi: {2} event: {3}".format(f.GetName(), evtTree.run, 
-                            #                                                                                                evtTree.luminosityBlock, 
-                            #                                                                                                evtTree.event))
-                            if i % 10000 == 0:
-                                print("processed {0} events in file: {1}".format(i, f.GetName()))
+
+                    # if args.check_events == 'detailed':#Only do this for MC
+                    #     for i in xrange(eventsTreeEntries):
+                    #         pass
+                    #         # evtTree.GetEntry(i)
+                    #         # if evtTree.genWeight > 0:
+                    #         #     events_in_files_positive += 1
+                    #         # elif evtTree.genWeight < 0:
+                    #         #     events_in_files_negative += 1
+                    #         # else:
+                    #         #     raise RuntimeError("event with weight 0 in file: {0} run: {1} lumi: {2} event: {3}".format(f.GetName(), evtTree.run, 
+                    #         #                                                                                                evtTree.luminosityBlock, 
+                    #         #                                                                                                evtTree.event))
+                    #         if i % 10000 == 0:
+                    #             print("processed {0} events in file: {1}".format(i, f.GetName()))
                                 
                             
-                    # f.Close() #Will this speed things up any?
+                    # # f.Close() #Will this speed things up any?
                 print(sampleName + "_" + era + ":")
                 if inputDataset is None:
                     print("\tSkipped check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))

@@ -9,7 +9,126 @@ import collections, copy, json, math
 from array import array
 import multiprocessing
 import inspect
+ROOT.PyConfig.IgnoreCommandLineOptions = True
 
+parser = argparse.ArgumentParser(description='Test of Stitching module and post-stitching distributions')
+parser.add_argument('--stage', dest='stage', action='store', type=str,
+                    help='Stage to be produced: stitch or plot')
+args = parser.parse_args()
+
+class StitchPlotter(Module):
+def __init__(self, verbose=False, maxevt=-1, probEvt=None, mode="Flag", era="2017", channel="DL"):
+        self.writeHistFile=True
+        self.verbose=verbose
+        self.probEvt = probEvt
+        if probEvt:
+            self.verbose = True        
+        #event counters
+        self.counter = 0
+        self.maxEventsToProcess=maxevt
+        self.mode = mode
+        if self.mode not in ["Flag", "Pass", "Fail"]:
+            raise NotImplementedError("Not a supported mode for the Stitcher module: '{0}'".format(self.mode))
+        self.era = era
+        self.channel = channel
+
+    def beginJob(self,histFile=None,histDirName=None):
+        self.hName = histFile
+        if histFile == None or histDirName == None:
+            self.fillHists = False
+            Module.beginJob(self, None, None)
+        else:
+            self.fillHists = True
+
+            Module.beginJob(self,histFile,histDirName)
+            self.stitchPlot_PCond_nGenJets = ROOT.TH1I("stitchPlot_PCond_nGenJets", "nGenJet (pt > 30) Pass condition; nGenJets; Events", 18, 2, 20)
+            self.addObject(self.stitchPlot_PCond_nGenJets)
+            self.stitchPlot_PCond_GenHT = ROOT.TH1D("stitchPlot_PCond_GenHT", "GenHT (pt > 30, |#eta| < 2.4) Pass condition; Gen HT (GeV); Events", 800, 200, 600)
+            self.addObject(self.stitchPlot_PCond_GenHT)
+            self.stitchPlot_PCond_nGenLeps = ROOT.TH1I("stitchPlot_PCond_nGenLeps", "nGenLeps (LHE level) Pass condition; nGenLeps; Events", 10, 0, 10)
+            self.addObject(self.stitchPlot_PCond_nGenLeps)
+            self.stitchPlot_PCond_AllVar = ROOT.TH3D("stitchPlot_PCond_AllVar", "nGenLeps, nGenJets, GenHT Pass condition; nGenLeps; nGenJets; GenHT ", 
+                                                 6, 0, 6, 6, 5, 12, 12, 300., 600.)
+            self.addObject(self.stitchPlot_PCond_AllVar)
+
+            self.stitchPlot_FCond_nGenJets = ROOT.TH1I("stitchPlot_FCond_nGenJets", "nGenJet (pt > 30) Fail condition; nGenJets; Events", 18, 2, 20)
+            self.addObject(self.stitchPlot_FCond_nGenJets)
+            self.stitchPlot_FCond_GenHT = ROOT.TH1D("stitchPlot_FCond_GenHT", "GenHT (pt > 30, |#eta| < 2.4) Fail condition; Gen HT (GeV); Events", 800, 200, 600)
+            self.addObject(self.stitchPlot_FCond_GenHT)
+            self.stitchPlot_FCond_nGenLeps = ROOT.TH1I("stitchPlot_FCond_nGenLeps", "nGenLeps (LHE level) Fail condition; nGenLeps; Events", 10, 0, 10)
+            self.addObject(self.stitchPlot_FCond_nGenLeps)
+            self.stitchPlot_FCond_AllVar = ROOT.TH3D("stitchPlot_FCond_AllVar", "nGenLeps, nGenJets, GenHT  Fail condition; nGenLeps; nGenJets; GenHT ",
+                                                 6, 0, 6, 6, 5, 12, 12, 300., 600.)
+            self.addObject(self.stitchPlot_FCond_AllVar)
+            # self.stitchPlot_nGenLepsPart = ROOT.TH1I("stitchPlot_nGenLeps", "nGenLeps (e(1) or mu (1) or #tau (2)); nGenLeps; Events", 10, 0, 10)
+            # self.addObject(self.stitchPlot_nGenLepsPart)
+
+    def endJob(self):
+        if hasattr(self, 'objs') and self.objs != None:
+            prevdir = ROOT.gDirectory
+            self.dir.cd()
+            for obj in self.objs:
+                obj.Write()
+            prevdir.cd()
+            if hasattr(self, 'histFile') and self.histFile != None : 
+                self.histFile.Close()
+
+    # def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
+    #     self.varDict = [('passStitchSL', 'O', 'Passes Single Lepton Stitch cuts'),
+    #                     ('passStitchDL', 'O', 'Passes Single Lepton Stitch cuts'),
+    #                     ('passStitchCondition', 'O', 'Passes or fails stitch cuts appropriately for the sample in this channel and era')
+    #                    ]
+    #     if self.mode == "Flag":
+    #         if not self.out:
+    #             raise RuntimeError("No Output file selected, cannot flag events for Stitching")
+    #         else:
+    #             for name, valType, valTitle in self.varDict:
+    #                 self.out.branch("ESV_%s"%(name), valType, title=valTitle)
+
+
+
+    def analyze(self, event): #called by the eventloop per-event
+        """process event, return True (go to next module) or False (fail, go to next event)"""
+        #Increment counter and skip events past the maxEventsToProcess, if larger than -1
+        self.counter +=1
+        if -1 < self.maxEventsToProcess < self.counter:
+            return False        
+        
+        ###############################
+        ### Collections and Objects ###
+        ###############################
+        gens = Collection(event, "GenPart")
+        genjets = Collection(event, "GenJet")
+        lheparts = Collection(event, "LHEPart")
+
+        #Stitch variables
+        nGL = 0
+        nGJ = 0
+        GenHT = 0
+        for gj, jet in enumerate(genjets):
+            if jet.pt > 30:
+                nGJ += 1
+                if abs(jet.eta) < 2.4: 
+                    GenHT += jet.pt
+        for lhep in lheparts:
+            if lhep.pdgId in set([-15, -13, -11, 11, 13, 15]):            
+                nGL += 1
+
+        if self.fillHists:
+            if getattr(event, "ESV_passStitchCondition"):
+                # self.stitchPlot_nGenLepsPart.Fill(nGLgen)
+                self.stitchPlot_PCond_nGenLeps.Fill(nGL)
+                self.stitchPlot_PCond_nGenJets.Fill(nGJ)
+                self.stitchPlot_PCond_GenHT.Fill(GenHT)
+                self.stitchPlot_PCond_AllVar.Fill(nGL, nGJ, GenHT)
+            else:
+                # self.stitchPlot_nGenLepsPart.Fill(nGLgen)
+                self.stitchPlot_FCond_nGenLeps.Fill(nGL)
+                self.stitchPlot_FCond_nGenJets.Fill(nGJ)
+                self.stitchPlot_FCond_GenHT.Fill(GenHT)
+                self.stitchPlot_FCond_AllVar.Fill(nGL, nGJ, GenHT)
+
+        return True
 
 class Stitcher(Module):
     def __init__(self, verbose=False, maxevt=-1, probEvt=None, mode="Flag", era="2017", channel="DL", condition="Pass"):
@@ -251,7 +370,7 @@ filesTTSLGF=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTToS
 hNameTTSLGF="StitchingTTSLGFv7.root"
 Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Flag"))
 
-def multiplier(fileList, hName=None, theEra="2021", theChannel="NL", theCondition="Nope", theMode="Bloop!"):
+def stitcher(fileList, hName=None, theEra="2021", theChannel="NL", theCondition="Nope", theMode="Bloop!"):
     if hName == None:
         hDirName = None
     else:
@@ -267,17 +386,42 @@ def multiplier(fileList, hName=None, theEra="2021", theChannel="NL", theConditio
                        )
         p.run()
 
-pList = []
-for tup in Tuples:
-    p = multiprocessing.Process(target=multiplier, args=(tup[0], tup[1], tup[2], tup[3], tup[4], tup[5]))
-    pList.append(p)
-    p.start()
+def plotter(fileList, hName=None, theEra="2021", theChannel="NL", theCondition="Nope"):
+    if hName == None:
+        hDirName = None
+    else:
+        hDirName = "plots"
+        p=PostProcessor(".",
+                        fileList,
+                        cut=None,
+                        modules=[Stitcher(maxevt=100000, era=theEra, channel=theChannel, condition=theCondition, verbose=False)],
+                        noOut=True,
+                        histFileName=hName,
+                        histDirName=hDirName,
+                       )
+        p.run()
 
-for p in pList:
-    p.join()
+if args.stage == 'stitch':
+    pList = []
+    for tup in Tuples:
+        p = multiprocessing.Process(target=stitcher, args=(tup[0], tup[1], tup[2], tup[3], tup[4], tup[5]))
+        pList.append(p)
+        p.start()
+        
+    for p in pList:
+        p.join()
 
-# tup=Tuples[0]
-# # pt = multiprocessing.Process(target=multiplier, args=((tup[0], tup[1], tup[2], tup[3], tup[4], tup[5]))
-# pt2 = multiplier(tup[0], tup[1], tup[2], tup[3], tup[4], tup[5])
-# # pt.start()
-# # pt.join()
+elif args.stage == 'plot':
+    pList = []
+    for tup in Tuples:
+        p = multiprocessing.Process(target=plotter, args=([tup[1]], tup[1].replace(".root", "_post.root"), tup[2], tup[3], tup[4]))
+        pList.append(p)
+        p.start()
+        
+    for p in pList:
+        p.join()
+
+elif args.stage == 'draw':
+    pass
+else:
+    print("Unsuppored stage selected, please choose 'stitch' (add pass/fail stitch branches), 'plot' (make histograms), or 'draw' (Plot the histograms)")
