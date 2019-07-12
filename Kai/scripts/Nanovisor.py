@@ -25,6 +25,8 @@ parser.add_argument('--haddnano', dest='haddnano', action='store', nargs='?', ty
                     ' Default parsed_name will be derived from the grandparent folder, as it is tailored to CRAB output structure.')
 parser.add_argument('--check_events', dest='check_events', action='store', nargs='?', type=str, const='simple', default='NOCHECK',
                     help='check that the number of events in source files match those in the sample card, optional argument "local" for files in the user space or optional argument "dbs" for lookup using dasgoclient query')
+parser.add_argument('--filter', dest='filter', action='store', type=str, default=None,
+                    help='string to filter samples while checking events or generating configurations')
 # parser.add_argument('--check_size', dest='check_size', action='store_true',
 #                     help='check total dataset sizes')
 parser.add_argument('--local_run', dest='local_run', action='store_true',
@@ -70,10 +72,10 @@ def main():
         haddnano_dict = {}
         for directory in os.listdir('.'):
             # haddnano_dict[directory] = glob("./{0:s}/*/".format(directory) + haddnano_regexp)
-            search_path = "glob:./{0:s}/*/".format(directory) + haddnan_regexp
+            search_path = "glob:./{0:s}/*/".format(directory) + haddnano_regexp
             haddnano_dict[directory] = getFiles(query=search_path)
             if len(haddnano_dict[directory]) == 0:
-                search_path = "glob:./{0:s}/".format(directory) + haddnan_regexp
+                search_path = "glob:./{0:s}/".format(directory) + haddnano_regexp
                 haddnano_dict[directory] = getFiles(query=search_path)
             if len(haddnano_dict[directory]) == 0:
                 _ = haddnano_dict.pop(directory)
@@ -216,6 +218,12 @@ def main():
 
         #parse crab portion
         postprocessor = sample['postprocessor']
+
+        #Filter samples
+        if args.filter:
+            if type(args.filter) is str:
+                if args.filter not in sampleName+"_"+era:
+                    continue
     
         #write out the filelist to personal space in /tmp, if check_events or local_run is true, then use these to run
         if args.check_events != 'NOCHECK' or args.local_run: # or args.check_size:
@@ -288,14 +296,14 @@ def main():
                         evtTree.SetBranchStatus("*", 0)
                         evtTree.SetBranchStatus("genWeight", 1)
                         eventsTreeEntries = evtTree.GetEntries()
-                        current_events_in_files += eventsTreeEntries
+                        current_events_in_files += int(eventsTreeEntries)
                         events_in_files_positive += int(evtTree.GetEntries('genWeight > 0'))
                         events_in_files_negative += int(evtTree.GetEntries('genWeight < 0'))
                         evtTree.SetBranchStatus("*", 1)
                     else:
                         evtTree = f.Get('Events')
                         eventsTreeEntries = evtTree.GetEntries()
-                        current_events_in_files += eventsTreeEntries
+                        current_events_in_files += int(eventsTreeEntries)
                     # pEntries = evtTree.Draw('>>pEntries', 'genWeight > 0')
                     # print("Draw method" + str(pEntries))
                     # nEntries = evtTree.Draw('>>nEntries', 'genWeight < 0')
@@ -346,7 +354,9 @@ def main():
                     f = ROOT.TFile.Open(fileName, 'r')
                     dataset_size += int(f.GetSize())
                     evtTree = f.Get('Events')
-                    current_events_in_files += evtTree.GetEntries()
+                    eventsTreeEntries = evtTree.GetEntries()
+                    current_events_in_files += int(eventsTreeEntries)
+                    print("Filename: {}\tEvents: {}\t EventTotal: {}".format(fileName, evtTree.GetEntries(), current_events_in_files))
                 print(sampleName + "_" + era + ":")
                 if inputDataset is None:
                     print("\tSkipped check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))

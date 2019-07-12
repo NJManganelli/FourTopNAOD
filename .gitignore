@@ -17,5 +17,5 @@ AutoDict_vector_*
 test/*.root*
 StandaloneExamples/*.root*
 *.root*
-crab/Stage_0_to_1/*
-crab_Stage_NANOv4_to_Baseline/*
+crab/Stage_0_to_1/*/*
+crab_Stage_NANOv4_to_Baseline/*/*
