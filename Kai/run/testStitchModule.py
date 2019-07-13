@@ -13,16 +13,13 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 parser = argparse.ArgumentParser(description='Test of Stitching module and post-stitching distributions')
 parser.add_argument('--stage', dest='stage', action='store', type=str,
-                    help='Stage to be produced: stitch or plot')
+                    help='Stage to be processed: stitch or plot or draw')
 args = parser.parse_args()
 
 class StitchPlotter(Module):
-def __init__(self, verbose=False, maxevt=-1, probEvt=None, mode="Flag", era="2017", channel="DL"):
+    def __init__(self, verbose=False, maxevt=-1, probEvt=None, mode="Flag", era="2017", channel="DL", weightMagnitude=1):
         self.writeHistFile=True
         self.verbose=verbose
-        self.probEvt = probEvt
-        if probEvt:
-            self.verbose = True        
         #event counters
         self.counter = 0
         self.maxEventsToProcess=maxevt
@@ -31,6 +28,7 @@ def __init__(self, verbose=False, maxevt=-1, probEvt=None, mode="Flag", era="201
             raise NotImplementedError("Not a supported mode for the Stitcher module: '{0}'".format(self.mode))
         self.era = era
         self.channel = channel
+        self.weightMagnitude=weightMagnitude
 
     def beginJob(self,histFile=None,histDirName=None):
         self.hName = histFile
@@ -97,6 +95,7 @@ def __init__(self, verbose=False, maxevt=-1, probEvt=None, mode="Flag", era="201
         ###############################
         ### Collections and Objects ###
         ###############################
+        weight = copysign(self.weightMagnitude, getattr(event, "genWeight"))
         gens = Collection(event, "GenPart")
         genjets = Collection(event, "GenJet")
         lheparts = Collection(event, "LHEPart")
@@ -116,17 +115,17 @@ def __init__(self, verbose=False, maxevt=-1, probEvt=None, mode="Flag", era="201
 
         if self.fillHists:
             if getattr(event, "ESV_passStitchCondition"):
-                # self.stitchPlot_nGenLepsPart.Fill(nGLgen)
-                self.stitchPlot_PCond_nGenLeps.Fill(nGL)
-                self.stitchPlot_PCond_nGenJets.Fill(nGJ)
-                self.stitchPlot_PCond_GenHT.Fill(GenHT)
-                self.stitchPlot_PCond_AllVar.Fill(nGL, nGJ, GenHT)
+                # self.stitchPlot_nGenLepsPart.Fill(nGLgen, weight)
+                self.stitchPlot_PCond_nGenLeps.Fill(nGL, weight)
+                self.stitchPlot_PCond_nGenJets.Fill(nGJ, weight)
+                self.stitchPlot_PCond_GenHT.Fill(GenHT, weight)
+                self.stitchPlot_PCond_AllVar.Fill(nGL, nGJ, GenHT, weight)
             else:
-                # self.stitchPlot_nGenLepsPart.Fill(nGLgen)
-                self.stitchPlot_FCond_nGenLeps.Fill(nGL)
-                self.stitchPlot_FCond_nGenJets.Fill(nGJ)
-                self.stitchPlot_FCond_GenHT.Fill(GenHT)
-                self.stitchPlot_FCond_AllVar.Fill(nGL, nGJ, GenHT)
+                # self.stitchPlot_nGenLepsPart.Fill(nGLgen, weight)
+                self.stitchPlot_FCond_nGenLeps.Fill(nGL, weight)
+                self.stitchPlot_FCond_nGenJets.Fill(nGJ, weight)
+                self.stitchPlot_FCond_GenHT.Fill(GenHT, weight)
+                self.stitchPlot_FCond_AllVar.Fill(nGL, nGJ, GenHT, weight)
 
         return True
 
@@ -355,20 +354,28 @@ class Stitcher(Module):
         else:
             raise NotImplementedError("No method in place for Stitcher module in mode '{0}'".format(self.mode))
 
+#Dilepton Data
 Tuples = []
-filesTTDL=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/80000/FB2C8D48-139E-7647-90C2-1CF1767DB0A1.root"]
+filesTTDL=getFiles(query="dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM",
+                   redir="root://cms-xrd-global.cern.ch/")
+filesTTDL = filesTTDL[0:2]
 hNameTTDL="StitchingTTDLv7.root"
-Tuples.append((filesTTDL, hNameTTDL, "2017", "DL", "Fail", "Flag"))
-filesTTDLGF=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/E565691C-17D4-6046-865E-8393F1FE0414.root"]
+TTWeight = 88.341 * 1000 * 41.53 / (68875708 - 280100)
+Tuples.append((filesTTDL, hNameTTDL, "2017", "DL", "Fail", "Flag", TTWeight)) #Needs weight. They all need weights
+
+filesTTDLGF = getFiles(query="dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM",
+                       redir="root://cms-xrd-global.cern.ch/")
+filesTTDLGF = filesTTDLGF[0:4]
 hNameTTDLGF="StitchingTTDLGFv7.root"
-Tuples.append((filesTTDLGF, hNameTTDLGF,  "2017", "DL", "Pass", "Flag"))
+TTGFWeight = 1.32512 * 1000 * 41.53 / (8415626 - 42597)
+Tuples.append((filesTTDLGF, hNameTTDLGF,  "2017", "DL", "Pass", "Flag", TTGFWeight))
 
 filesTTSL=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/00000/7BB010D2-1FE4-1D45-B5E0-ABC7A285E8FC.root"]
 hNameTTSL="StitchingTTSLv7.root"
-Tuples.append((filesTTSL, hNameTTSL,  "2017", "SL", "Fail", "Flag"))
+#Tuples.append((filesTTSL, hNameTTSL,  "2017", "SL", "Fail", "Flag", FIXMFIXME))
 filesTTSLGF=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/CD79F874-9C0A-6446-81A2-344B4C7B3EE9.root"]
 hNameTTSLGF="StitchingTTSLGFv7.root"
-Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Flag"))
+#Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Flag", FIXMEFIXME))
 
 def stitcher(fileList, hName=None, theEra="2021", theChannel="NL", theCondition="Nope", theMode="Bloop!"):
     if hName == None:
@@ -386,7 +393,7 @@ def stitcher(fileList, hName=None, theEra="2021", theChannel="NL", theCondition=
                        )
         p.run()
 
-def plotter(fileList, hName=None, theEra="2021", theChannel="NL", theCondition="Nope"):
+def plotter(fileList, hName=None, theEra="2021", theChannel="NL", theCondition="Nope", weightMagnitude=1):
     if hName == None:
         hDirName = None
     else:
@@ -394,7 +401,8 @@ def plotter(fileList, hName=None, theEra="2021", theChannel="NL", theCondition="
         p=PostProcessor(".",
                         fileList,
                         cut=None,
-                        modules=[Stitcher(maxevt=100000, era=theEra, channel=theChannel, condition=theCondition, verbose=False)],
+                        #Need the plotter, yo
+                        # modules=[Stitcher(maxevt=100000, era=theEra, channel=theChannel, condition=theCondition, verbose=False), weightMagnitude=weightMagnitude],
                         noOut=True,
                         histFileName=hName,
                         histDirName=hDirName,
@@ -414,7 +422,7 @@ if args.stage == 'stitch':
 elif args.stage == 'plot':
     pList = []
     for tup in Tuples:
-        p = multiprocessing.Process(target=plotter, args=([tup[1]], tup[1].replace(".root", "_post.root"), tup[2], tup[3], tup[4]))
+        p = multiprocessing.Process(target=plotter, args=([tup[1]], tup[1].replace(".root", "_post.root"), tup[2], tup[3], tup[4], tup[6]))
         pList.append(p)
         p.start()
         
