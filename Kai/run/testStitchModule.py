@@ -9,23 +9,24 @@ import collections, copy, json, math
 from array import array
 import multiprocessing
 import inspect
+import argparse
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 parser = argparse.ArgumentParser(description='Test of Stitching module and post-stitching distributions')
 parser.add_argument('--stage', dest='stage', action='store', type=str,
-                    help='Stage to be processed: stitch or plot or draw')
+                    help='Stage to be processed: stitch or hist or plot')
 args = parser.parse_args()
 
-class StitchPlotter(Module):
+class StitchHist(Module):
     def __init__(self, verbose=False, maxevt=-1, probEvt=None, mode="Flag", era="2017", channel="DL", weightMagnitude=1):
         self.writeHistFile=True
         self.verbose=verbose
         #event counters
         self.counter = 0
         self.maxEventsToProcess=maxevt
-        self.mode = mode
-        if self.mode not in ["Flag", "Pass", "Fail"]:
-            raise NotImplementedError("Not a supported mode for the Stitcher module: '{0}'".format(self.mode))
+        # self.mode = mode
+        # if self.mode not in ["Flag", "Pass", "Fail"]:
+        #     raise NotImplementedError("Not a supported mode for the Stitcher module: '{0}'".format(self.mode))
         self.era = era
         self.channel = channel
         self.weightMagnitude=weightMagnitude
@@ -95,7 +96,7 @@ class StitchPlotter(Module):
         ###############################
         ### Collections and Objects ###
         ###############################
-        weight = copysign(self.weightMagnitude, getattr(event, "genWeight"))
+        weight = math.copysign(self.weightMagnitude, getattr(event, "genWeight"))
         gens = Collection(event, "GenPart")
         genjets = Collection(event, "GenJet")
         lheparts = Collection(event, "LHEPart")
@@ -120,7 +121,7 @@ class StitchPlotter(Module):
                 self.stitchPlot_PCond_nGenJets.Fill(nGJ, weight)
                 self.stitchPlot_PCond_GenHT.Fill(GenHT, weight)
                 self.stitchPlot_PCond_AllVar.Fill(nGL, nGJ, GenHT, weight)
-            else:
+            elif not getattr(event, "ESV_passStitchCondition"):
                 # self.stitchPlot_nGenLepsPart.Fill(nGLgen, weight)
                 self.stitchPlot_FCond_nGenLeps.Fill(nGL, weight)
                 self.stitchPlot_FCond_nGenJets.Fill(nGJ, weight)
@@ -385,15 +386,16 @@ def stitcher(fileList, hName=None, theEra="2021", theChannel="NL", theCondition=
         p=PostProcessor(".",
                         fileList,
                         cut=None,
-                        modules=[Stitcher(maxevt=100000, era=theEra, channel=theChannel, mode=theMode, condition=theCondition, verbose=False)],
+                        modules=[Stitcher(maxevt=30000, era=theEra, channel=theChannel, mode=theMode, condition=theCondition, verbose=False)],
                         # modules=[TopSystemPt(maxevt=100, wOpt=wOption)],
                         noOut=False,
-                        histFileName=hName,
+                        haddFileName=hName,
+                        histFileName="hist_"+hName,
                         histDirName=hDirName,
                        )
         p.run()
 
-def plotter(fileList, hName=None, theEra="2021", theChannel="NL", theCondition="Nope", weightMagnitude=1):
+def histogramer(fileList, hName=None, theEra="2021", theChannel="NL", weightMagnitude=1):
     if hName == None:
         hDirName = None
     else:
@@ -402,12 +404,15 @@ def plotter(fileList, hName=None, theEra="2021", theChannel="NL", theCondition="
                         fileList,
                         cut=None,
                         #Need the plotter, yo
-                        # modules=[Stitcher(maxevt=100000, era=theEra, channel=theChannel, condition=theCondition, verbose=False), weightMagnitude=weightMagnitude],
+                        modules=[StitchHist(maxevt=-1, era=theEra, channel=theChannel, verbose=False, weightMagnitude=weightMagnitude)],
                         noOut=True,
                         histFileName=hName,
                         histDirName=hDirName,
                        )
         p.run()
+
+def plotter(fileList, hName=None, theEra="2021", theChannel="NL", theCondition="Nope", weightMagnitude=1):
+    pass
 
 if args.stage == 'stitch':
     pList = []
@@ -419,17 +424,17 @@ if args.stage == 'stitch':
     for p in pList:
         p.join()
 
-elif args.stage == 'plot':
+elif args.stage == 'hist':
     pList = []
     for tup in Tuples:
-        p = multiprocessing.Process(target=plotter, args=([tup[1]], tup[1].replace(".root", "_post.root"), tup[2], tup[3], tup[4], tup[6]))
+        p = multiprocessing.Process(target=histogramer, args=([tup[1]], tup[1].replace(".root", "_post.root"), tup[2], tup[3], tup[6]))
         pList.append(p)
         p.start()
         
     for p in pList:
         p.join()
 
-elif args.stage == 'draw':
+elif args.stage == 'plot':
     pass
 else:
-    print("Unsuppored stage selected, please choose 'stitch' (add pass/fail stitch branches), 'plot' (make histograms), or 'draw' (Plot the histograms)")
+    print("Unsuppored stage selected, please choose 'stitch' (add pass/fail stitch branches), 'hist' (make histograms), or 'plot' (Plot the histograms)")
