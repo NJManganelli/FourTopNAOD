@@ -278,12 +278,12 @@ class BaselineSelector(Module):
                                                                       "Selected Lepton [{0:d}]; {1:s}; Events[{2:s}]".format(i, var, weight), 100, xmin, xmax)
                         self.addObject(self.ctrl_Leptons[weight][i][var])
     
-            self.stitch_nGenJets = ROOT.TH1I("stitch_nGenJets", "nGenJet (pt > 30); nGenJets; Events", 18, 2, 20)
-            self.addObject(self.stitch_nGenJets)
-            self.stitch_GenHT = ROOT.TH1F("stitch_GenHT", "GenHT (pt > 30, |#eta| < 2.4); Gen HT (GeV); Events", 800, 200, 600)
-            self.addObject(self.stitch_GenHT)
-            self.stitch_nGenLeps = ROOT.TH1I("stitch_nGenLeps", "nGenLeps (e(1) or mu (1) or #tau (2)); nGenLeps; Events", 10, 0, 10)
-            self.addObject(self.stitch_nGenLeps)
+            # self.stitch_nGenJets = ROOT.TH1I("stitch_nGenJets", "nGenJet (pt > 30); nGenJets; Events", 18, 2, 20)
+            # self.addObject(self.stitch_nGenJets)
+            # self.stitch_GenHT = ROOT.TH1F("stitch_GenHT", "GenHT (pt > 30, |#eta| < 2.4); Gen HT (GeV); Events", 800, 200, 600)
+            # self.addObject(self.stitch_GenHT)
+            # self.stitch_nGenLeps = ROOT.TH1I("stitch_nGenLeps", "nGenLeps (e(1) or mu (1) or #tau (2)); nGenLeps; Events", 10, 0, 10)
+            # self.addObject(self.stitch_nGenLeps)
 
 
                     
@@ -399,6 +399,7 @@ class BaselineSelector(Module):
             genfatjets = Collection(event, "GenJetAK8")
             gensubjets = Collection(event, "SubGenJetAK8")
             genmet = Object(event, "GenMET")
+            lheparts = Collection(event, "LHEPart")
             #These two are grabbed earlier
             # generator = Object(event, "Generator") #stored earlier for weights access
             # btagweight = Object(event, "btagWeight") #contains .CSVV2 and .DeepCSVB float weights
@@ -420,10 +421,8 @@ class BaselineSelector(Module):
                     nGJ += 1
                     if abs(jet.eta) < 2.4: 
                         GenHT += jet.pt
-            for gp, gen in enumerate(gens):
-                if abs(gen.pdgId) in set([11, 13]) and gen.status == 1:
-                    nGL += 1
-                elif abs(gen.pdgId) in set([15]) and gen.status == 2:
+            for lhep in lheparts:
+                if lhep.pdgId in set([-15, -13, -11, 11, 13, 15]):            
                     nGL += 1
             #No weights for stitching variables
             self.stitch_nGenJets.Fill(nGJ)

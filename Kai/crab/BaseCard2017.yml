@@ -54,6 +54,7 @@
         MCMCrossSection: 730
     source:
         'NANOv4': "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv5': "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_tt_DL_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_tt_DL_2017/results/tree_*.root"
     postprocessor: 
@@ -64,6 +65,10 @@
         unitsPerJob: 2
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.91
+    stitch:
+        mode: 'Flag'
+        condition: 'Fail'
+        channel: 'DL'
 
   - dataset: #ttbar dilepton sample
         name: "tt_DL-GF"
@@ -83,6 +88,7 @@
         MCMCrossSection: 730
     source:
         'NANOv4': "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv5': "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_tt_DL-GF_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_tt_DL-GF_2017/results/tree_*.root"
     postprocessor: 
@@ -93,6 +99,78 @@
         unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.09
+    stitch:
+        mode: 'Flag'
+        condition: 'Pass'
+        channel: 'DL'
+
+  - dataset: #ttbar semilepton sample
+        name: "tt_SL"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 0
+        nEventsPositive: 0
+        nEventsNegative: 0
+        sumWeights: 0
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: 831.76
+        crossSection: 0
+        branchingRatio: 0
+        filterEfficiency: 1
+        MCMCrossSection: 730
+    source:
+        'NANOv4': "dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv5': "dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'Baseline': ""
+        'ES-DCSVM': ""
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 2
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.91
+    stitch:
+        mode: 'Flag'
+        condition: 'Fail'
+        channel: 'SL'
+
+  - dataset: #ttbar semilepton sample
+        name: "tt_SL-GF"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 0
+        nEventsPositive: 0
+        nEventsNegative: 0
+        sumWeights: 0
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: 831.76
+        crossSection: 1.32512
+        branchingRatio: 0.0000
+        filterEfficiency: 0.0000
+        MCMCrossSection: 730
+    source:
+        'NANOv4': "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv5': "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'Baseline': ""
+        'ES-DCSVM': ""
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 10
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.09
+    stitch:
+        mode: 'Flag'
+        condition: 'Pass'
+        channel: 'SL'
 
   - dataset: #single top - top-W
         name: "ST_tW"

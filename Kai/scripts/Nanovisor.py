@@ -281,7 +281,8 @@ def main():
                 events_sum_weights = 0
                 events_sum_weights2 = 0
                 dataset_size = 0
-                for fileName in fileList:
+                for fn, fileName in enumerate(fileList):
+                    if args.verbose: print("File {} of {}".format(fn, len(fileList)))
                     # print("Opening {0}".format(fileName))
                     f = ROOT.TFile.Open(fileName, 'r')
                     dataset_size += int(f.GetSize())
@@ -389,12 +390,16 @@ def main():
                                                          total_MC_current_events, total_MC_processed_events))
             
 def get_crab_cfg(runFolder, requestName, NanoAODPath='.', splitting='', unitsPerJob = 1, inputDataset = '', storageSite = 'T2_CH_CERN', publication=True, stage='Baseline'):
+    if 'dbs:' in inputDataset:
+        cleanInputDataset = inputDataset.replace("dbs:", "")
+    if 'glob:' in inputDataset or 'list:' in inputDataset:
+        raise NotImplementedError("get_crab_cfg submethod of Nanovisor.py is not yet trained to handle non-DAS inputs")
     #Options for splitting:
     #'Automatic'
     #'EventAwareLumiBased'
     #'FileBased'
     #FIXMEs : scriptExe, inputFiles (including the haddnano script), allow undistributed CMSSW?, publication boolean, 
-    if stage == 'Baseline':
+    if stage == 'Baseline' or stage == 'Stitched':
         crab_cfg_content = """from WMCore.Configuration import Configuration
 from CRABClient.UserUtilities import config, getUsernameFromSiteDB
 
@@ -424,7 +429,7 @@ config.Data.outputDatasetTag = '{1:s}'
 config.section_("Site")
 config.Site.storageSite = '{5:s}'
 """
-        ret = crab_cfg_content.format(runFolder, requestName, splitting, unitsPerJob, inputDataset, storageSite, str(publication), stage, str(NanoAODPath))
+        ret = crab_cfg_content.format(runFolder, requestName, splitting, unitsPerJob, cleanInputDataset, storageSite, str(publication), stage, str(NanoAODPath))
     else:
         print("We haven't made a stage {0:s} configuration yet... Exiting".format(stage))
         sys.exit()
@@ -469,19 +474,22 @@ def get_crab_script_py(runFolder, requestName, stage='Baseline', sampleConfig = 
                  '2017': 41.53,
                  '2018': 50
                  }
-    name = sampleConfig['dataset'].get('name')
-    isData = sampleConfig['dataset'].get('isData')
-    era = sampleConfig['dataset'].get('era')
-    subera = sampleConfig['dataset'].get('subera')
-    crossSection = sampleConfig['dataset'].get('crossSection')
+    name = sampleConfig.get('dataset', {}).get('name')
+    isData = sampleConfig.get('dataset', {}).get('isData')
+    era = sampleConfig.get('dataset', {}).get('era')
+    subera = sampleConfig.get('dataset', {}).get('subera')
+    crossSection = sampleConfig.get('dataset', {}).get('crossSection')
     equivLumi = eLumiDict.get(era)
-    nEvents = sampleConfig['dataset'].get('nEvents')
-    sumWeights = sampleConfig['dataset'].get('sumWeights')
-    isSignal = sampleConfig['dataset'].get('isSignal')
+    nEvents = sampleConfig.get('dataset', {}).get('nEvents')
+    sumWeights = sampleConfig.get('dataset', {}).get('sumWeights')
+    isSignal = sampleConfig.get('dataset', {}).get('isSignal')
+    SC_stitch_mode = sampleConfig.get('stitch', {'mode':'Passthrough'}).get('mode', 'Passthrough')
+    SC_stitch_condition = sampleConfig.get('stitch', {'condition':'Passthrough'}).get('condition', 'Passthrough')
+    SC_stitch_channel = sampleConfig.get('stitch', {'channel':'Passthrough'}).get('channel', 'Passthrough')
     
     
     
-    preselection = sampleConfig['postprocessor']['filter']
+    preselection = sampleConfig.get('postprocessor', {'filter':None}).get('filter', 'None')
     if preselection != "":
         preselection = "\"" + preselection + "\""
     else:
@@ -589,16 +597,73 @@ p=PostProcessor(".",
                 )
 p.run()
 """
+        ret = crab_script_py.format(str(isData), str(era), str(subera), str(preselection), str(crossSection), str(equivLumi), 
+                                    str(nEvents), str(sumWeights), str(btagger))
+        return ret
+    elif stage == 'Stitched':
+        crab_script_py = """#!/usr/bin/env python
+import os, time, collections, copy, json, multiprocessing
+from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import * 
+from PhysicsTools.NanoAODTools.postprocessing.framework.crabhelper import inputFiles,runsAndLumis
+from PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer import *
+from FourTopNAOD.Kai.modules.Stitcher import Stitcher
+SC_isData = {0:s}
+SC_era = "{1:s}"
+SC_subera = "{2:s}"
+SC_thePreselection = {3:s}
+SC_crossSection = {4:s}
+SC_equivLumi = {5:s}
+SC_nEvents = {6:s}
+SC_sumWeights = {7:s}
+Sup_BTagger = {8:s}
+SC_stitch_mode = "{9:s}"
+SC_stitch_condition = "{10:s}"
+SC_stitch_channel = "{11:s}"
+
+theFiles = inputFiles()
+
+if SC_isData:
+    pass
+else:
+    theLumis = None
+    moduleCache=[puWeightProducer("auto",
+                                   pufile_data2017,
+                                   "pu_mc",
+                                   "pileup",
+                                   verbose=False
+                                 ),
+                 Stitcher(era=SC_era, mode=SC_stitch_mode, condition=SC_stitch_condition, channel=SC_stitch_channel)
+                 ]
+
+p=PostProcessor(".", 
+                theFiles,       
+                modules=moduleCache, 
+                cut=SC_thePreselection, 
+                provenance=True, 
+                fwkJobReport=True, 
+                jsonInput=theLumis, 
+                histFileName="hist.root",
+                histDirName="plots"
+                )
+p.run()
+"""
+        ret = crab_script_py.format(str(isData), str(era), str(subera), str(preselection), str(crossSection), str(equivLumi), 
+                                    str(nEvents), str(sumWeights), str(btagger), str(SC_stitch_mode), str(SC_stitch_condition),
+                                    str(SC_stitch_channel))
+        return ret
     elif stage == '':
         crab_script_py = """
 """
+        ret = crab_script_py
+        return ret
     else:
         crab_script_py = """#There's nothing here. There's no python script. There's no hope.
 #You
 #Are
-#DOOMED"""
-    ret = crab_script_py.format(str(isData), str(era), str(subera), str(preselection), str(crossSection), str(equivLumi), str(nEvents), str(sumWeights), str(btagger))
-    return ret
+#DOOMED"""        
+        ret = crab_script_py
+        return ret
+    
 
 def get_PSet_py(NanoAODPath):
     PSet_py = """#this fake PSET is needed for local test and for crab to figure the output filename
