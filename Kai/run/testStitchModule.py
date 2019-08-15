@@ -4,7 +4,7 @@ import ROOT
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor 
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
-from FourTopNAOD.Kai.tools.intools import *
+from FourTopNAOD.Kai.tools.toolbox import *
 import collections, copy, json, math
 from array import array
 import multiprocessing
@@ -40,27 +40,29 @@ class StitchHist(Module):
             self.fillHists = True
 
             Module.beginJob(self,histFile,histDirName)
-            self.stitchPlot_PCond_nGenJets = ROOT.TH1I("stitchPlot_PCond_nGenJets", "nGenJet (pt > 30) Pass condition; nGenJets; Events", 18, 2, 20)
+            self.stitchPlot_PCond_nGenJets = ROOT.TH1D("stitchPlot_PCond_nGenJets", "nGenJet (pt > 30) Pass condition; nGenJets; Events", 18, 2, 20)
             self.addObject(self.stitchPlot_PCond_nGenJets)
             self.stitchPlot_PCond_GenHT = ROOT.TH1D("stitchPlot_PCond_GenHT", "GenHT (pt > 30, |#eta| < 2.4) Pass condition; Gen HT (GeV); Events", 800, 200, 600)
             self.addObject(self.stitchPlot_PCond_GenHT)
-            self.stitchPlot_PCond_nGenLeps = ROOT.TH1I("stitchPlot_PCond_nGenLeps", "nGenLeps (LHE level) Pass condition; nGenLeps; Events", 10, 0, 10)
+            self.stitchPlot_PCond_nGenLeps = ROOT.TH1D("stitchPlot_PCond_nGenLeps", "nGenLeps (LHE level) Pass condition; nGenLeps; Events", 10, 0, 10)
             self.addObject(self.stitchPlot_PCond_nGenLeps)
             self.stitchPlot_PCond_AllVar = ROOT.TH3D("stitchPlot_PCond_AllVar", "nGenLeps, nGenJets, GenHT Pass condition; nGenLeps; nGenJets; GenHT ", 
                                                  6, 0, 6, 6, 5, 12, 12, 300., 600.)
             self.addObject(self.stitchPlot_PCond_AllVar)
 
-            self.stitchPlot_FCond_nGenJets = ROOT.TH1I("stitchPlot_FCond_nGenJets", "nGenJet (pt > 30) Fail condition; nGenJets; Events", 18, 2, 20)
+            self.stitchPlot_FCond_nGenJets = ROOT.TH1D("stitchPlot_FCond_nGenJets", "nGenJet (pt > 30) Fail condition; nGenJets; Events", 18, 2, 20)
             self.addObject(self.stitchPlot_FCond_nGenJets)
             self.stitchPlot_FCond_GenHT = ROOT.TH1D("stitchPlot_FCond_GenHT", "GenHT (pt > 30, |#eta| < 2.4) Fail condition; Gen HT (GeV); Events", 800, 200, 600)
             self.addObject(self.stitchPlot_FCond_GenHT)
-            self.stitchPlot_FCond_nGenLeps = ROOT.TH1I("stitchPlot_FCond_nGenLeps", "nGenLeps (LHE level) Fail condition; nGenLeps; Events", 10, 0, 10)
+            self.stitchPlot_FCond_nGenLeps = ROOT.TH1D("stitchPlot_FCond_nGenLeps", "nGenLeps (LHE level) Fail condition; nGenLeps; Events", 10, 0, 10)
             self.addObject(self.stitchPlot_FCond_nGenLeps)
             self.stitchPlot_FCond_AllVar = ROOT.TH3D("stitchPlot_FCond_AllVar", "nGenLeps, nGenJets, GenHT  Fail condition; nGenLeps; nGenJets; GenHT ",
                                                  6, 0, 6, 6, 5, 12, 12, 300., 600.)
             self.addObject(self.stitchPlot_FCond_AllVar)
-            # self.stitchPlot_nGenLepsPart = ROOT.TH1I("stitchPlot_nGenLeps", "nGenLeps (e(1) or mu (1) or #tau (2)); nGenLeps; Events", 10, 0, 10)
+            # self.stitchPlot_nGenLepsPart = ROOT.TH1D("stitchPlot_nGenLeps", "nGenLeps (e(1) or mu (1) or #tau (2)); nGenLeps; Events", 10, 0, 10)
             # self.addObject(self.stitchPlot_nGenLepsPart)
+
+            
 
     def endJob(self):
         if hasattr(self, 'objs') and self.objs != None:
@@ -197,26 +199,26 @@ class Stitcher(Module):
             self.fillHists = True
 
             Module.beginJob(self,histFile,histDirName)
-            self.stitch_PCond_nGenJets = ROOT.TH1I("stitch_PCond_nGenJets", "nGenJet (pt > 30) Pass condition; nGenJets; Events", 18, 2, 20)
+            self.stitch_PCond_nGenJets = ROOT.TH1D("stitch_PCond_nGenJets", "nGenJet (pt > 30) Pass condition; nGenJets; Events", 18, 2, 20)
             self.addObject(self.stitch_PCond_nGenJets)
             self.stitch_PCond_GenHT = ROOT.TH1D("stitch_PCond_GenHT", "GenHT (pt > 30, |#eta| < 2.4) Pass condition; Gen HT (GeV); Events", 800, 200, 600)
             self.addObject(self.stitch_PCond_GenHT)
-            self.stitch_PCond_nGenLeps = ROOT.TH1I("stitch_PCond_nGenLeps", "nGenLeps (LHE level) Pass condition; nGenLeps; Events", 10, 0, 10)
+            self.stitch_PCond_nGenLeps = ROOT.TH1D("stitch_PCond_nGenLeps", "nGenLeps (LHE level) Pass condition; nGenLeps; Events", 10, 0, 10)
             self.addObject(self.stitch_PCond_nGenLeps)
             self.stitch_PCond_AllVar = ROOT.TH3D("stitch_PCond_AllVar", "nGenLeps, nGenJets, GenHT Pass condition; nGenLeps; nGenJets; GenHT ", 
                                                  6, 0, 6, 6, 5, 12, 12, 300., 600.)
             self.addObject(self.stitch_PCond_AllVar)
 
-            self.stitch_FCond_nGenJets = ROOT.TH1I("stitch_FCond_nGenJets", "nGenJet (pt > 30) Fail condition; nGenJets; Events", 18, 2, 20)
+            self.stitch_FCond_nGenJets = ROOT.TH1D("stitch_FCond_nGenJets", "nGenJet (pt > 30) Fail condition; nGenJets; Events", 18, 2, 20)
             self.addObject(self.stitch_FCond_nGenJets)
             self.stitch_FCond_GenHT = ROOT.TH1D("stitch_FCond_GenHT", "GenHT (pt > 30, |#eta| < 2.4) Fail condition; Gen HT (GeV); Events", 800, 200, 600)
             self.addObject(self.stitch_FCond_GenHT)
-            self.stitch_FCond_nGenLeps = ROOT.TH1I("stitch_FCond_nGenLeps", "nGenLeps (LHE level) Fail condition; nGenLeps; Events", 10, 0, 10)
+            self.stitch_FCond_nGenLeps = ROOT.TH1D("stitch_FCond_nGenLeps", "nGenLeps (LHE level) Fail condition; nGenLeps; Events", 10, 0, 10)
             self.addObject(self.stitch_FCond_nGenLeps)
             self.stitch_FCond_AllVar = ROOT.TH3D("stitch_FCond_AllVar", "nGenLeps, nGenJets, GenHT  Fail condition; nGenLeps; nGenJets; GenHT ",
                                                  6, 0, 6, 6, 5, 12, 12, 300., 600.)
             self.addObject(self.stitch_FCond_AllVar)
-            # self.stitch_nGenLepsPart = ROOT.TH1I("stitch_nGenLeps", "nGenLeps (e(1) or mu (1) or #tau (2)); nGenLeps; Events", 10, 0, 10)
+            # self.stitch_nGenLepsPart = ROOT.TH1D("stitch_nGenLeps", "nGenLeps (e(1) or mu (1) or #tau (2)); nGenLeps; Events", 10, 0, 10)
             # self.addObject(self.stitch_nGenLepsPart)
 
     def endJob(self):
@@ -359,14 +361,14 @@ class Stitcher(Module):
 Tuples = []
 filesTTDL=getFiles(query="dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM",
                    redir="root://cms-xrd-global.cern.ch/")
-filesTTDL = filesTTDL[0:2]
+filesTTDL = filesTTDL[0:6]
 hNameTTDL="StitchingTTDLv7.root"
 TTWeight = 88.341 * 1000 * 41.53 / (68875708 - 280100)
 Tuples.append((filesTTDL, hNameTTDL, "2017", "DL", "Fail", "Flag", TTWeight)) #Needs weight. They all need weights
 
 filesTTDLGF = getFiles(query="dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM",
                        redir="root://cms-xrd-global.cern.ch/")
-filesTTDLGF = filesTTDLGF[0:4]
+filesTTDLGF = filesTTDLGF[0:12]
 hNameTTDLGF="StitchingTTDLGFv7.root"
 TTGFWeight = 1.32512 * 1000 * 41.53 / (8415626 - 42597)
 Tuples.append((filesTTDLGF, hNameTTDLGF,  "2017", "DL", "Pass", "Flag", TTGFWeight))
@@ -386,7 +388,7 @@ def stitcher(fileList, hName=None, theEra="2021", theChannel="NL", theCondition=
         p=PostProcessor(".",
                         fileList,
                         cut=None,
-                        modules=[Stitcher(maxevt=30000, era=theEra, channel=theChannel, mode=theMode, condition=theCondition, verbose=False)],
+                        modules=[Stitcher(maxevt=300000, era=theEra, channel=theChannel, mode=theMode, condition=theCondition, verbose=False)],
                         # modules=[TopSystemPt(maxevt=100, wOpt=wOption)],
                         noOut=False,
                         haddFileName=hName,
