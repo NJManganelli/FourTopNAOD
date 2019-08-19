@@ -1,0 +1,43 @@
+
+|-------------+--------------------------+--------+-------+-------------+-------+------+-------+------|
+| Input       | PostProcessor Actions    | Output | Outpu | Output      | Speed | Size | Rel   | Rel  |
+| Compression |                          | Ntuple | Tree  | Compression |  (Hz) | (MB) | Speed | Size |
+|-------------+--------------------------+--------+-------+-------------+-------+------+-------+------|
+| LZMA : 9    | Simple Looper            |        | Y     | None        |   556 | 1100 | 100   | 100  |
+| LZMA : 9    | Simple Looper            |        | Y     | LZMA : 9    |   169 |  277 | 30    | 25   |
+| LZMA : 9    | Simple Looper (skip 3/4) |        | Y     | LZMA : 9    |   598 |  N/A | 107   | N/A  |
+| LZMA : 9    | Simple Looper            |        | Y     | LZMA : 3    |   484 |  614 | 87    | 56   |
+| LZMA : 9    | Simple Looper            |        | Y     | LZ4  : 9    |   212 |  487 | 38    | 44   |
+| LZMA : 9    | Simple Looper            |        | Y     | LZ4  : 3    |   494 |  613 | 89    | 56   |
+| LZMA : 9    | Simple Looper            |        | Y     | ZLIB : 9    |   310 |  377 | 56    | 34   |
+| LZMA : 9    | Simple Looper            |        | Y     | ZLIB : 3    |   483 |  397 | 87    | 36   |
+| LZMA : 9    | Simple Looper (skip 3/4) |        | Y     | ZLIB : 3    |  1323 |  N/A | 238   | N/A  |
+| LZMA : 9    | Simple Looper            | Y      |       | None        |  1257 |  4.9 | 226   | 0.4  |
+| LZMA : 9    | Simple Looper            |        |       | None        |  1279 | None | 230   | 0    |
+| None        | Simple Looper            |        |       | None        |  5498 | None | 989   | 0    |
+| None        | Simple Looper            |        | Y     | None        |  2529 | 1100 | 455   | 100  |
+|-------------+--------------------------+--------+-------+-------------+-------+------+-------+------|
+
+
+Simple Looper is quite basic: 
+loops through muon collection, searching for a muon with:
+pt > 25, abs(eta) < 2.4, mediumId or better, dz < 0.02, PFIsoTight or better
+Then it stores values for up to 4 jets that have:
+pt > 30, abs(eta) < 2.4, tightLeptonVeto Jet ID (Top PAG baseline), and is cross-cleaned against the first 
+selected muon using the shared PF Candidate method (index reference, no DeltaR)
+
+When ntuple output is enabled, it stores some of the above info from the looper (but the looper always runs, 
+and performs no early rejection, except when it skips 3 out of every 4 events)
+
+nTuple contains just 28 values:
+run, LS, event
+muon: pt, eta, phi, mass
+jet 1: pt, eta, phi, btag
+jet 2: pt, eta, phi, btag
+jet 3: pt, eta, phi, btag
+jet 4: pt, eta, phi, btag
+MET: pt, phi
+PU Weight: central, up, down
+
+Some thoughts from my perspective:
+LZMA at 9 is really slow for writing out, ZLIB at 3 seems like a much better balance of speed and size (
