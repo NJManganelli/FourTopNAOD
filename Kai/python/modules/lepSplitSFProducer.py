@@ -6,7 +6,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collect
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
 class lepSplitSFProducer(Module):
-    def __init__(self, muon_ID=None, muon_ISO=None, electron_ID=None, era=None, doMuonHLT=False, doElectronHLT_ZVtx=False, pre2018Run316361Lumi = -10, post2018Run316361Lumi = 10, debug=False):
+    def __init__(self, muon_ID=None, muon_ISO=None, electron_ID=None, era=None, doMuonHLT=False, doElectronHLT_ZVtx=False, pre2018Run316361Lumi = 8.94, post2018Run316361Lumi = 50.73, debug=False):
         self.era = era
         #See self.muD dictionary for options. ISO are denoted with a '/' in the key
         self.muon_ID = muon_ID
@@ -17,8 +17,8 @@ class lepSplitSFProducer(Module):
         self.doMuonHLT = doMuonHLT
         self.doElectronHLT_ZVtx = doElectronHLT_ZVtx
         #These are used to weight the single-muon HLT scale factors for 2018 according to how many /fb of data is used from each era
-        self.preRun316361Lumi = pre2018Run316361Lumi
-        self.postRun316361 = post2018Run316361Lumi
+        self.pre2018Run316361Lumi = pre2018Run316361Lumi
+        self.post2018Run316361Lumi = post2018Run316361Lumi
         self.debug = debug
         self.elD = {"2016": {"EFF": {"SF": "EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root==EGamma_SF2D"},
                              "EFF_lowEt": {"SF": "EGM2D_BtoH_low_RecoSF_Legacy2016.root==EGamma_SF2D"},
@@ -53,35 +53,35 @@ class lepSplitSFProducer(Module):
                              }
                     }
 
-        self.muD = {"2016": {"TRG_SL": {"SF": "Mu_Trg.root==IsoMu24_OR_IsoTkMu24_PtEtaBins",
-                                        "STAT": "Mu_Trg.root==IsoMu24_OR_IsoTkMu24_PtEtaBins"},
-                             "TRG_SL50": {"SF": "Mu_Trg.root==Mu50_OR_TkMu50_PtEtaBins",
-                                          "STAT": "Mu_Trg.root==Mu50_OR_TkMu50_PtEtaBins"},
-                             "LooseID": {"SF": "Mu_ID.root==MC_NUM_LooseID_DEN_genTracks_PAR_pt_eta",
-                                         "STAT": "Mu_ID.root==MC_NUM_LooseID_DEN_genTracks_PAR_pt_eta"},
-                             "MediumID2016": {"SF": "Mu_ID.root==MC_NUM_MediumID2016_DEN_genTracks_PAR_pt_eta",
-                                              "STAT": "Mu_ID.root==MC_NUM_MediumID2016_DEN_genTracks_PAR_pt_eta"},
-                             "MediumID": {"SF": "Mu_ID.root==MC_NUM_MediumID_DEN_genTracks_PAR_pt_eta",
-                                          "STAT": "Mu_ID.root==MC_NUM_MediumID_DEN_genTracks_PAR_pt_eta"},
-                             "TightID": {"SF": "Mu_ID.root==MC_NUM_TightID_DEN_genTracks_PAR_pt_eta",
-                                         "STAT": "Mu_ID.root==MC_NUM_TightID_DEN_genTracks_PAR_pt_eta"},
-                             "HighPtID": {"SF": "Mu_ID.root==MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta",
-                                          "STAT": "Mu_ID.root==MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta"},
-                             "LooseRelIso/LooseID": {"SF": "Mu_Iso.root==LooseISO_LooseID_pt_eta",
-                                                     "STAT": "Mu_Iso.root==LooseISO_LooseID_pt_eta"},
-                             "LooseRelIso/MediumID": {"SF": "Mu_Iso.root==LooseISO_MediumID_pt_eta",
-                                                      "STAT": "Mu_Iso.root==LooseISO_MediumID_pt_eta"},
-                             "LooseRelIso/TightID": {"SF": "Mu_Iso.root==LooseISO_TightID_pt_eta",
-                                                     "STAT": "Mu_Iso.root==LooseISO_TightID_pt_eta"},
-                             "TightRelIso/MediumID": {"SF": "Mu_Iso.root==TightISO_MediumID_pt_eta",
-                                                      "STAT": "Mu_Iso.root==TightISO_MediumID_pt_eta"},
-                             "TightRelIso/TightID": {"SF": "Mu_Iso.root==TightISO_TightID_pt_eta",
-                                                     "STAT": "Mu_Iso.root==TightISO_TightID_pt_eta"},
-                             "LooseRelTkIso/HighPtID": {"SF": "Mu_Iso.root==tkLooseISO_highptID_newpt_eta",
-                                                        "STAT": "Mu_Iso.root==tkLooseISO_highptID_newpt_eta"}
-                             }
-                    "2017": {"TRG_SL": {"SF": "EfficienciesAndSF_RunBtoF_Nov17Nov2017.root==IsoMu24_PtEtaBins/pt_abseta_ratio",
-                                        "STAT": "EfficienciesAndSF_RunBtoF_Nov17Nov2017.root==IsoMu24_PtEtaBins/pt_abseta_ratio"},
+        self.muD = {"2016": {"TRG_SL": {"SF": "Mu_Trg.root==IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio",
+                                        "STAT": "Mu_Trg.root==IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio"},
+                             "TRG_SL50": {"SF": "Mu_Trg.root==Mu50_OR_TkMu50_PtEtaBins/pt_abseta_ratio",
+                                          "STAT": "Mu_Trg.root==Mu50_OR_TkMu50_PtEtaBins/pt_abseta_ratio"},
+                             "LooseID": {"SF": "Mu_ID.root==MC_NUM_LooseID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio",
+                                         "STAT": "Mu_ID.root==MC_NUM_LooseID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio"},
+                             "MediumID2016": {"SF": "Mu_ID.root==MC_NUM_MediumID2016_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio",
+                                              "STAT": "Mu_ID.root==MC_NUM_MediumID2016_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio"},
+                             "MediumID": {"SF": "Mu_ID.root==MC_NUM_MediumID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio",
+                                          "STAT": "Mu_ID.root==MC_NUM_MediumID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio"},
+                             "TightID": {"SF": "Mu_ID.root==MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio",
+                                         "STAT": "Mu_ID.root==MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio"},
+                             "HighPtID": {"SF": "Mu_ID.root==MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/pair_ne_ratio",
+                                          "STAT": "Mu_ID.root==MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/pair_ne_ratio"},
+                             "LooseRelIso/LooseID": {"SF": "Mu_Iso.root==LooseISO_LooseID_pt_eta/pt_abseta_ratio",
+                                                     "STAT": "Mu_Iso.root==LooseISO_LooseID_pt_eta/pt_abseta_ratio"},
+                             "LooseRelIso/MediumID": {"SF": "Mu_Iso.root==LooseISO_MediumID_pt_eta/pt_abseta_ratio",
+                                                      "STAT": "Mu_Iso.root==LooseISO_MediumID_pt_eta/pt_abseta_ratio"},
+                             "LooseRelIso/TightID": {"SF": "Mu_Iso.root==LooseISO_TightID_pt_eta/pt_abseta_ratio",
+                                                     "STAT": "Mu_Iso.root==LooseISO_TightID_pt_eta/pt_abseta_ratio"},
+                             "TightRelIso/MediumID": {"SF": "Mu_Iso.root==TightISO_MediumID_pt_eta/pt_abseta_ratio",
+                                                      "STAT": "Mu_Iso.root==TightISO_MediumID_pt_eta/pt_abseta_ratio"},
+                             "TightRelIso/TightID": {"SF": "Mu_Iso.root==TightISO_TightID_pt_eta/pt_abseta_ratio",
+                                                     "STAT": "Mu_Iso.root==TightISO_TightID_pt_eta/pt_abseta_ratio"},
+                             "LooseRelTkIso/HighPtID": {"SF": "Mu_Iso.root==tkLooseISO_highptID_newpt_eta/pair_ne_ratio",
+                                                        "STAT": "Mu_Iso.root==tkLooseISO_highptID_newpt_eta/pair_ne_ratio"}
+                             },
+                    "2017": {"TRG_SL": {"SF": "EfficienciesAndSF_RunBtoF_Nov17Nov2017.root==IsoMu27_PtEtaBins/pt_abseta_ratio",
+                                        "STAT": "EfficienciesAndSF_RunBtoF_Nov17Nov2017.root==IsoMu27_PtEtaBins/pt_abseta_ratio"},
                              "LooseID": {"SF": "RunBCDEF_SF_ID_syst.root==NUM_LooseID_DEN_genTracks_pt_abseta",
                                          "STAT": "RunBCDEF_SF_ID_syst.root==NUM_LooseID_DEN_genTracks_pt_abseta_stat",
                                          "SYST": "RunBCDEF_SF_ID_syst.root==NUM_LooseID_DEN_genTracks_pt_abseta_syst"},
@@ -156,7 +156,7 @@ class lepSplitSFProducer(Module):
                              "LooseRelIso/LooseID": {"SF": "RunABCD_SF_ISO.root==NUM_LooseRelIso_DEN_LooseID_pt_abseta",
                                                      "STAT": "RunABCD_SF_ISO.root==NUM_LooseRelIso_DEN_LooseID_pt_abseta_stat",
                                                      "SYST": "RunABCD_SF_ISO.root==NUM_LooseRelIso_DEN_LooseID_pt_abseta_syst"},
-                             "LooseRelIso/MediumId": {"SF": "RunABCD_SF_ISO.root==NUM_LooseRelIso_DEN_MediumID_pt_abseta",
+                             "LooseRelIso/MediumID": {"SF": "RunABCD_SF_ISO.root==NUM_LooseRelIso_DEN_MediumID_pt_abseta",
                                                       "STAT": "RunABCD_SF_ISO.root==NUM_LooseRelIso_DEN_MediumID_pt_abseta_stat",
                                                       "SYST": "RunABCD_SF_ISO.root==NUM_LooseRelIso_DEN_MediumID_pt_abseta_syst"},
                              "LooseRelIso/TightIDandIPCut": {"SF": "RunABCD_SF_ISO.root==NUM_LooseRelIso_DEN_TightIDandIPCut_pt_abseta",
@@ -237,34 +237,41 @@ class lepSplitSFProducer(Module):
         self.mu_id_nom_h[0] = self.muD[self.era][self.muon_ID]["SF"].split("==")[1]
         self.mu_id_stat[0] = mu_pre + self.muD[self.era][self.muon_ID]["STAT"].split("==")[0]
         self.mu_id_stat_h[0] = self.muD[self.era][self.muon_ID]["STAT"].split("==")[1]
-        self.mu_id_syst[0] = mu_pre + self.muD[self.era][self.muon_ID]["SYST"].split("==")[0]
-        self.mu_id_syst_h[0] = self.muD[self.era][self.muon_ID]["SYST"].split("==")[1]
         self.mu_iso_nom[0] = mu_pre + self.muD[self.era][self.muon_ISO]["SF"].split("==")[0]
         self.mu_iso_nom_h[0] = self.muD[self.era][self.muon_ISO]["SF"].split("==")[1]
         self.mu_iso_stat[0] = mu_pre + self.muD[self.era][self.muon_ISO]["STAT"].split("==")[0]
         self.mu_iso_stat_h[0] = self.muD[self.era][self.muon_ISO]["STAT"].split("==")[1]
-        self.mu_iso_syst[0] = mu_pre + self.muD[self.era][self.muon_ISO]["SYST"].split("==")[0]
-        self.mu_iso_syst_h[0] = self.muD[self.era][self.muon_ISO]["SYST"].split("==")[1]
+        if self.era == "2017" or self.era == "2018":
+            self.mu_id_syst[0] = mu_pre + self.muD[self.era][self.muon_ID]["SYST"].split("==")[0]
+            self.mu_id_syst_h[0] = self.muD[self.era][self.muon_ID]["SYST"].split("==")[1]
+            self.mu_iso_syst[0] = mu_pre + self.muD[self.era][self.muon_ISO]["SYST"].split("==")[0]
+            self.mu_iso_syst_h[0] = self.muD[self.era][self.muon_ISO]["SYST"].split("==")[1]
+
 
         if "/LeptonEfficiencyCorrector_cc.so" not in ROOT.gSystem.GetLibraries():
             print "Load C++ Worker"
             ROOT.gROOT.ProcessLine(".L %s/src/PhysicsTools/NanoAODTools/python/postprocessing/helpers/LeptonEfficiencyCorrector.cc+" % os.environ['CMSSW_BASE'])
     def beginJob(self):
+        if self.era == "2016":
+            print("2016 Muon Scale Factors are not fully updated, do not account for weighted SF for era GH versus earlier, and do not include systematics")
         if self.doMuonHLT:
             self._worker_mu_HLT_nom = ROOT.LeptonEfficiencyCorrector(self.mu_hlt_nom, self.mu_hlt_nom_h)
             self._worker_mu_HLT_stat = ROOT.LeptonEfficiencyCorrector(self.mu_hlt_stat, self.mu_hlt_stat_h)
             if self.era == "2018":
+                print("2018 Single Lepton Muon HLT Scale Factors are weighted between one set before Run2018A (run < 316361) and another set for Run2018ABCD (run >= 316361)."\
+                      "If not using all of 2018, use brilcalc and pass the lumi in /fb to pre2018Run316361Lumi and post2018Run316361Lumi")
                 self._worker_mu_HLTpreRun316361_nom = ROOT.LeptonEfficiencyCorrector(self.mu_hltpre316361_nom, self.mu_hltpre316361_nom_h)
                 self._worker_mu_HLTpreRun316361_stat = ROOT.LeptonEfficiencyCorrector(self.mu_hltpre316361_stat, self.mu_hltpre316361_stat_h)
         self._worker_mu_ID_nom = ROOT.LeptonEfficiencyCorrector(self.mu_id_nom, self.mu_id_nom_h)
         self._worker_mu_ID_stat = ROOT.LeptonEfficiencyCorrector(self.mu_id_stat, self.mu_id_stat_h)
-        self._worker_mu_ID_syst = ROOT.LeptonEfficiencyCorrector(self.mu_id_syst, self.mu_id_syst_h)
         self._worker_mu_ISO_nom = ROOT.LeptonEfficiencyCorrector(self.mu_iso_nom, self.mu_iso_nom_h)
         self._worker_mu_ISO_stat = ROOT.LeptonEfficiencyCorrector(self.mu_iso_stat, self.mu_iso_stat_h)
-        self._worker_mu_ISO_syst = ROOT.LeptonEfficiencyCorrector(self.mu_iso_syst, self.mu_iso_syst_h)
+        if self.era == "2017" or self.era == "2018":
+            self._worker_mu_ID_syst = ROOT.LeptonEfficiencyCorrector(self.mu_id_syst, self.mu_id_syst_h)
+            self._worker_mu_ISO_syst = ROOT.LeptonEfficiencyCorrector(self.mu_iso_syst, self.mu_iso_syst_h)
 
         self._worker_el_EFF = ROOT.LeptonEfficiencyCorrector(self.el_eff, self.el_eff_h)
-        if self.era == "2017":
+        if self.era == "2017" or self.era == "2016":
             self._worker_el_EFF_lowEt = ROOT.LeptonEfficiencyCorrector(self.el_eff_lowEt, self.el_eff_lowEt_h)
         self._worker_el_ID = ROOT.LeptonEfficiencyCorrector(self.el_id, self.el_id_h)
     def endJob(self):
@@ -326,10 +333,10 @@ class lepSplitSFProducer(Module):
             #SL HLT SFs
             if self.doMuonHLT:
                 if self.era == "2018":
-                    HLTnomSF = self.preRun316361Lumi * self._worker_mu_HLTpreRun316361_nom.getSF(mu.pdgId, mu.pt, mu.eta) + self.postRun316361Lumi * self._worker_mu_HLT_nom.getSF(mu.pdgId, mu.pt, mu.eta)
-                    HLTnomSF /= (self.preRun316361Lumi + self.postRun316361Lumi)
-                    HLTstatSF = self.preRun316361Lumi * self._worker_mu_HLTpreRun316361_stat.getSFErr(mu.pdgId, mu.pt, mu.eta) + self.postRun316361Lumi * self._worker_mu_HLT_stat.getSFErr(mu.pdgId, mu.pt, mu.eta)
-                    HLTstatSF /= (self.preRun316361Lumi + self.postRun316361Lumi)
+                    HLTnomSF = self.pre2018Run316361Lumi * self._worker_mu_HLTpreRun316361_nom.getSF(mu.pdgId, mu.pt, mu.eta) + self.post2018Run316361Lumi * self._worker_mu_HLT_nom.getSF(mu.pdgId, mu.pt, mu.eta)
+                    HLTnomSF /= (self.pre2018Run316361Lumi + self.post2018Run316361Lumi)
+                    HLTstatSF = self.pre2018Run316361Lumi * self._worker_mu_HLTpreRun316361_stat.getSFErr(mu.pdgId, mu.pt, mu.eta) + self.post2018Run316361Lumi * self._worker_mu_HLT_stat.getSFErr(mu.pdgId, mu.pt, mu.eta)
+                    HLTstatSF /= (self.pre2018Run316361Lumi + self.post2018Run316361Lumi)
                 else:
                     HLTnomSF = self._worker_mu_HLT_nom.getSF(mu.pdgId, mu.pt, mu.eta)
                     HLTstatSF = self._worker_mu_HLT_stat.getSFErr(mu.pdgId, mu.pt, mu.eta)
@@ -349,15 +356,15 @@ class lepSplitSFProducer(Module):
         self.out.fillBranch("Electron_SF_EFF_nom", sf_el_eff_nom)
         self.out.fillBranch("Electron_SF_EFF_unc", sf_el_eff_unc)
         self.out.fillBranch("Electron_SF_ID_nom", sf_el_id_nom)
-        self.out.fillBranch("Electron_SF_ID_unc", sf_el_eff_unc)
+        self.out.fillBranch("Electron_SF_ID_unc", sf_el_id_unc)
 
         if self.doMuonHLT:
             self.out.fillBranch("Muon_SF_HLT_nom", sf_mu_hlt_nom)
             self.out.fillBranch("Muon_SF_HLT_stat", sf_mu_hlt_stat)
         if self.doElectronHLT_ZVtx:
             #https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations#HLT_Zvtx_Scale_Factor
-            self.out.fillBranch("EGamma_HLT_ZVtx_SF_nom", [0.991 if self.era=="2017" else 1.0])
-            self.out.fillBranch("EGamma_HLT_ZVtx_SF_unc", [0.001 if self.era=="2017" else 0.0])
+            self.out.fillBranch("EGamma_HLT_ZVtx_SF_nom", 0.991 if self.era=="2017" else 1.0)
+            self.out.fillBranch("EGamma_HLT_ZVtx_SF_unc", 0.001 if self.era=="2017" else 0.0)
 
         self.out.fillBranch("Muon_SF_ID_nom", sf_mu_id_nom)
         self.out.fillBranch("Muon_SF_ID_stat", sf_mu_id_stat)

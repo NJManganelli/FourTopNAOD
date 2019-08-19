@@ -27,26 +27,52 @@ filesTTDL=getFiles(query="glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/Four
 filesTTDL = filesTTDL[0:1]
 hNameTTDL="SF_TTDL.root"
 TTWeight = 88.341 * 1000 * 41.53 / (68875708 - 280100)
-# Tuples.append((filesTTDL, hNameTTDL, "2017", "DL", "Fail", "Flag", TTWeight))
-# Tuples.append((filesTTDL, hNameTTDL, "2017", "LooseID", "LooseRelIso/LooseID", "VetoID"))
-# Tuples.append((filesTTDL, hNameTTDL, "2017", "MediumID", "LooseRelIso/MediumID", "LooseID"))
+#Tuples.append((filesTTDL, hNameTTDL, "2017", "DL", "Fail", "Flag", TTWeight))
+#2016
+Tuples.append((filesTTDL, hNameTTDL, "2016", "MediumID", "LooseRelIso/MediumID", "LooseID"))
+Tuples.append((filesTTDL, hNameTTDL, "2016", "TightID", "TightRelIso/TightID", "MediumID"))
+Tuples.append((filesTTDL, hNameTTDL, "2016", "HighPtID", "LooseRelTkIso/HighPtID", "TightID"))
+Tuples.append((filesTTDL, hNameTTDL, "2016", "LooseID", "LooseRelIso/LooseID", "MVA80"))
+Tuples.append((filesTTDL, hNameTTDL, "2016", "TightID", "LooseRelIso/TightID", "MVA80noiso"))
+Tuples.append((filesTTDL, hNameTTDL, "2016", "MediumID2016", "TightRelIso/MediumID", "MVA90"))
+Tuples.append((filesTTDL, hNameTTDL, "2016", "TightID", "LooseRelIso/TightID", "MVA90noiso"))
+
+#2017
+Tuples.append((filesTTDL, hNameTTDL, "2017", "LooseID", "LooseRelIso/LooseID", "VetoID"))
+Tuples.append((filesTTDL, hNameTTDL, "2017", "MediumID", "LooseRelIso/MediumID", "LooseID"))
 Tuples.append((filesTTDL, hNameTTDL, "2017", "TightID", "LooseRelIso/TightIDandIPCut", "MediumID"))
-# Tuples.append((filesTTDL, hNameTTDL, "2017", "HighPtID", "TightRelTkIso/HighPtIDandIPCut", "TightID"))
-# Tuples.append((filesTTDL, hNameTTDL, "2017", "TrkHighPtID", "TightRelTkIso/TrkHighPtID", "MVA80"))
-# Tuples.append((filesTTDL, hNameTTDL, "2017", "SoftID", "LooseRelIso/LooseID", "MVA80noiso"))
-# Tuples.append((filesTTDL, hNameTTDL, "2017", "MediumID", "TightRelIso/MediumID", "MVA90"))
-# Tuples.append((filesTTDL, hNameTTDL, "2017", "TightID", "TightRelIso/TightIDandIPCut", "MVA90noiso"))
+Tuples.append((filesTTDL, hNameTTDL, "2017", "HighPtID", "TightRelTkIso/HighPtIDandIPCut", "TightID"))
+Tuples.append((filesTTDL, hNameTTDL, "2017", "TrkHighPtID", "TightRelTkIso/TrkHighPtID", "MVA80"))
+Tuples.append((filesTTDL, hNameTTDL, "2017", "SoftID", "LooseRelIso/LooseID", "MVA80noiso"))
+Tuples.append((filesTTDL, hNameTTDL, "2017", "MediumID", "TightRelIso/MediumID", "MVA90"))
+Tuples.append((filesTTDL, hNameTTDL, "2017", "TightID", "TightRelIso/TightIDandIPCut", "MVA90noiso"))
+
+#2018
+Tuples.append((filesTTDL, hNameTTDL, "2018", "LooseID", "LooseRelIso/LooseID", "VetoID"))
+Tuples.append((filesTTDL, hNameTTDL, "2018", "MediumID", "LooseRelIso/MediumID", "LooseID"))
+Tuples.append((filesTTDL, hNameTTDL, "2018", "TightID", "LooseRelIso/TightIDandIPCut", "MediumID"))
+Tuples.append((filesTTDL, hNameTTDL, "2018", "HighPtID", "TightRelTkIso/HighPtIDandIPCut", "TightID"))
+Tuples.append((filesTTDL, hNameTTDL, "2018", "TrkHighPtID", "TightRelTkIso/TrkHighPtID", "MVA80"))
+Tuples.append((filesTTDL, hNameTTDL, "2018", "HighPtID", "LooseRelTkIso/HighPtIDandIPCut", "TightID"))
+Tuples.append((filesTTDL, hNameTTDL, "2018", "TrkHighPtID", "LooseRelTkIso/TrkHighPtID", "MVA80"))
+Tuples.append((filesTTDL, hNameTTDL, "2018", "SoftID", "LooseRelIso/LooseID", "MVA80noiso"))
+Tuples.append((filesTTDL, hNameTTDL, "2018", "MediumPromptID", "TightRelIso/MediumID", "MVA90"))
+Tuples.append((filesTTDL, hNameTTDL, "2018", "TightID", "TightRelIso/TightIDandIPCut", "MVA90noiso"))
 
 def split_sf(fileList, era="2015", muID="LooseID", muISO="LooseRelIso/LooseID", elID="LooseID"):
     p=PostProcessor(".",
                     fileList,
                     cut=None,
                     #Need the plotter, yo
-                    modules=[lepSplitSFProducer(muon_ID=muID, muon_ISO=muISO, electron_ID=elID, era=era, debug=True)],
+                    # modules=[lepSplitSFProducer(muon_ID=muID, muon_ISO=muISO, electron_ID=elID, era=era, doMuonHLT=True, doElectronHLT_ZVtx=True)],
+                    modules=[lepSplitSFProducer(muon_ID=muID, muon_ISO=muISO, electron_ID=elID, era=era, doMuonHLT=True, doElectronHLT_ZVtx=True, debug=True)],
+                    # modules=[lepSplitSFProducer(muon_ID=muID, muon_ISO=muISO, electron_ID=elID, era=era, doMuonHLT=False, doElectronHLT_ZVtx=True, debug=True)],
+                    # modules=[lepSplitSFProducer(muon_ID=muID, muon_ISO=muISO, electron_ID=elID, era=era, doMuonHLT=True, doElectronHLT_ZVtx=False, debug=True)],
+                    # modules=[lepSplitSFProducer(muon_ID=muID, muon_ISO=muISO, electron_ID=elID, era=era, doMuonHLT=False, doElectronHLT_ZVtx=False, debug=True)],
                     noOut=False,
-                    postfix="_"+muID+"_"+muISO.replace("/","@")+"_"+elID,
+                    postfix="_"+era+"_"+muID+"_"+muISO.replace("/","@")+"_"+elID,
                     # haddFileName="SFTest_"+muID+"_"+muISO.replace("/","@")+"_"+elID+".root",
-                    maxEntries=100,
+                    maxEntries=4,
                     # histFileName=hName,
                     # histDirName=hDirName,
     )
