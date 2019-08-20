@@ -206,6 +206,11 @@ def main():
         dataset = sample.get('dataset')
         sampleName = dataset.get('name')
         era = dataset.get('era')
+        #Filter samples early
+        if args.filter:
+            if type(args.filter) is str:
+                if args.filter not in sampleName+"_"+era:
+                    continue
         isData = dataset.get('isData')
         nEvents = dataset.get('nEvents', 0) #Default to 0 when key DNE
 
@@ -218,12 +223,6 @@ def main():
 
         #parse crab portion
         postprocessor = sample['postprocessor']
-
-        #Filter samples
-        if args.filter:
-            if type(args.filter) is str:
-                if args.filter not in sampleName+"_"+era:
-                    continue
     
         #write out the filelist to personal space in /tmp, if check_events or local_run is true, then use these to run
         if args.check_events != 'NOCHECK' or args.local_run: # or args.check_size:

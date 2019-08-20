@@ -25,6 +25,7 @@
         MCMCrossSection: 0.008213
     source:
         'NANOv4': "dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv5': "dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_tttt_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_tttt_2017/results/tree_*.root"
     postprocessor: 
@@ -109,11 +110,11 @@
         era: "2017"
         subera: "NONE"
         isData: False
-        nEvents: 0
-        nEventsPositive: 0
-        nEventsNegative: 0
-        sumWeights: 0
-        sumWeights2: 0
+        nEvents: 20122010
+        nEventsPositive: 20040607
+        nEventsNegative: 81403
+        sumWeights: 6052480345.748356
+        sumWeights2: 1850350248120.376221
         isSignal: False
         procCrossSection: 831.76
         crossSection: 366.2073
@@ -143,11 +144,11 @@
         era: "2017"
         subera: "NONE"
         isData: False
-        nEvents: 0
-        nEventsPositive: 0
-        nEventsNegative: 0
-        sumWeights: 0
-        sumWeights2: 0
+        nEvents: 8836856
+        nEventsPositive: 8794464
+        nEventsNegative: 42392
+        sumWeights: 2653328498.476976
+        sumWeights2: 812201885978.209229
         isSignal: False
         procCrossSection: 831.76
         crossSection: 1000000000
@@ -190,6 +191,7 @@
         MCMCrossSection: 34.91
     source:
         'NANOv4': "dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv5': "dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ST_tW_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ST_tW_2017/results/tree_*.root"
     postprocessor: 
@@ -219,6 +221,7 @@
         MCMCrossSection: 34.91
     source:
         'NANOv4': "dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv5': "dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ST_tbarW_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ST_tbarW_2017/results/tree_*.root"
     postprocessor: 
@@ -248,6 +251,7 @@
         MCMCrossSection: 1
     source:
         'NANOv4': "dbs:/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv5': "dbs:/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ttH_DL_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ttH_DL_2017/results/tree_*.root"
     postprocessor: 
@@ -277,6 +281,7 @@
         MCMCrossSection: 1
     source:
         'NANOv4': "dbs:/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv5': "dbs:/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ttH_SL_2017/results/tree_*.root"
     postprocessor: 
         filter: ""
@@ -304,6 +309,7 @@
         MCMCrossSection: 1
     source:
         'NANOv4': "dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM"
+        'NANOv5': "dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ttH_2017/results/tree_*.root"
     postprocessor: 
         filter: ""
@@ -331,6 +337,7 @@
         MCMCrossSection: 0.4793
     source:
         'NANOv4': "dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'NANOv5': "dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ttWJets_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ttWJets_2017/results/tree_*.root"
     postprocessor: 
@@ -358,6 +365,7 @@
         MCMCrossSection: 0.618
     source:
         'NANOv4': "dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'NANOv5': "dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ttZJets_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ttZJets_2017/results/tree_*.root"
     postprocessor: 
@@ -385,6 +393,7 @@
         MCMCrossSection: 14420
     source:
         'NANOv4': "dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv4-PU2017RECOSIMstep_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6_ext1-v1/NANOAODSIM"
+        'NANOv5': "dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017RECOSIMstep_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_DYJets_DL_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_DYJets_DL_2017/results/tree_*.root"
     postprocessor: 
@@ -404,6 +413,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/DoubleMuon/Run2017B-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/DoubleMuon/Run2017B-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_MuMu_B_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_MuMu_B_2017/results/tree_*.root"
     postprocessor: 
@@ -423,6 +433,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/DoubleMuon/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/DoubleMuon/Run2017C-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_MuMu_C_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_MuMu_C_2017/results/tree_*.root"
     postprocessor: 
@@ -442,6 +453,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/DoubleMuon/Run2017D-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/DoubleMuon/Run2017D-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_MuMu_D_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_MuMu_D_2017/results/tree_*.root"
     postprocessor: 
@@ -461,6 +473,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/DoubleMuon/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/DoubleMuon/Run2017E-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_MuMu_E_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_MuMu_E_2017/results/tree_*.root"
     postprocessor: 
@@ -480,6 +493,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/DoubleMuon/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/DoubleMuon/Run2017F-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_MuMu_F_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_MuMu_F_2017/results/tree_*.root"
     postprocessor: 
@@ -499,6 +513,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/DoubleEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/DoubleEG/Run2017B-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElEl_B_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ElEl_B_2017/results/tree_*.root"
     postprocessor: 
@@ -518,6 +533,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/DoubleEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/DoubleEG/Run2017C-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElEl_C_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ElEl_C_2017/results/tree_*.root"
     postprocessor: 
@@ -537,6 +553,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/DoubleEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/DoubleEG/Run2017D-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElEl_D_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ElEl_D_2017/results/tree_*.root"
     postprocessor: 
@@ -556,6 +573,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/DoubleEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/DoubleEG/Run2017E-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElEl_E_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ElEl_E_2017/results/tree_*.root"
     postprocessor: 
@@ -575,6 +593,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/DoubleEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/DoubleEG/Run2017F-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElEl_F_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ElEl_F_2017/results/tree_*.root"
     postprocessor: 
@@ -594,6 +613,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/MuonEG/Run2017B-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/MuonEG/Run2017B-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElMu_B_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ElMu_B_2017/results/tree_*.root"
     postprocessor: 
@@ -613,6 +633,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/MuonEG/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/MuonEG/Run2017C-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElMu_C_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ElMu_C_2017/results/tree_*.root"
     postprocessor: 
@@ -632,6 +653,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/MuonEG/Run2017D-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/MuonEG/Run2017D-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElMu_D_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ElMu_D_2017/results/tree_*.root"
     postprocessor: 
@@ -651,6 +673,7 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/MuonEG/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/MuonEG/Run2017E-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElMu_E_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ElMu_E_2017/results/tree_*.root"
     postprocessor: 
@@ -670,8 +693,99 @@
         nEvents: -1
     source:
         'NANOv4': "dbs:/MuonEG/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/MuonEG/Run2017F-Nano1June2019-v1/NANOAOD"
         'Baseline': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Baseline/crab_20190626_1624/crab_ElMu_F_2017/results/tree_*.root"
         'ES-DCSVM': "glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_0_to_1/crab_20190620_1021/crab_ElMu_F_2017/results/tree_*.root"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 20
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.022
+
+  - dataset: #Single Muon
+        name: "Mu_B"
+        era: "2017"
+        subera: "B"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/SingleMuon/Run2017B-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/SingleMuon/Run2017B-Nano1June2019-v1/NANOAOD"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 20
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.022
+
+  - dataset: #Single Muon
+        name: "Mu_C"
+        era: "2017"
+        subera: "C"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/SingleMuon/Run2017C-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/SingleMuon/Run2017C-Nano1June2019-v1/NANOAOD"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 20
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.022
+
+  - dataset: #Single Muon
+        name: "Mu_D"
+        era: "2017"
+        subera: "D"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/SingleMuon/Run2017D-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/SingleMuon/Run2017D-Nano1June2019-v1/NANOAOD"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 20
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.022
+
+  - dataset: #Single Muon
+        name: "Mu_E"
+        era: "2017"
+        subera: "E"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/SingleMuon/Run2017E-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/SingleMuon/Run2017E-Nano1June2019-v1/NANOAOD"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 20
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.022
+
+  - dataset: #Single Muon
+        name: "Mu_F"
+        era: "2017"
+        subera: "F"
+        isData: True
+        nEvents: -1
+    source:
+        'NANOv4': "dbs:/SingleMuon/Run2017F-Nano14Dec2018-v1/NANOAOD"
+        'NANOv5': "dbs:/SingleMuon/Run2017F-Nano1June2019-v1/NANOAOD"
     postprocessor: 
         filter: ""
     crab_cfg:

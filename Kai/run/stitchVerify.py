@@ -362,28 +362,36 @@ class StitchHist(Module):
 Tuples = []
 # filesTTDL=getFiles(query="dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_new_pmx_102X_mc2017_realistic_v6-v1/NANOAODSIM",
 #                    redir="root://cms-xrd-global.cern.ch/")
-filesTTDL=getFiles(query="glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Stitched/crab_20190718_0045/crab_tt_DL_2017/results/tree_*.root")
+filesTTDL=getFiles(query="dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   redir="root://cms-xrd-global.cern.ch/")
+# filesTTDL=getFiles(query="glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Stitched/crab_20190718_0045/crab_tt_DL_2017/results/tree_*.root")
 # filesTTDL = filesTTDL[0:1]
 hNameTTDL="StitchingTTDLv7.root"
 TTWeight = 89.0482 * 1000 * 41.53 / (68875708 - 280100)
 Tuples.append((filesTTDL, hNameTTDL, "2017", "DL", "Fail", "Flag", TTWeight))
 
-# filesTTDLGF = getFiles(query="dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM",
-#                        redir="root://cms-xrd-global.cern.ch/")
-filesTTDLGF=getFiles(query="glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Stitched/crab_20190718_0045/crab_tt_DL-GF_2017_v2/results/tree_*.root")
+# filesTTDLGF =getFiles(query="dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv4-PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/NANOAODSIM",
+#                       redir="root://cms-xrd-global.cern.ch/")
+filesTTDLGF=getFiles(query="dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                     redir="root://cms-xrd-global.cern.ch/")
+# filesTTDLGF=getFiles(query="glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/crab/Stage_NANOv4_to_Stitched/crab_20190718_0045/crab_tt_DL-GF_2017_v2/results/tree_*.root")
 # filesTTDLGF = filesTTDLGF[0:1]
 hNameTTDLGF="StitchingTTDLGFv7.root"
 # TTGFWeight = 0 * 1000 * 41.53 / (8415626 - 42597)
 TTGFWeight = 89.0482 * 1000 * 41.53 / (8415626 - 42597) #Without the filter efficiency, to make the calculation more transparent - that is, same XS
 Tuples.append((filesTTDLGF, hNameTTDLGF,  "2017", "DL", "Pass", "Flag", TTGFWeight))
 
-filesTTSL=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/00000/7BB010D2-1FE4-1D45-B5E0-ABC7A285E8FC.root"]
+# filesTTSL=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/00000/7BB010D2-1FE4-1D45-B5E0-ABC7A285E8FC.root"]
+filesTTSL=getFiles(query="dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   redir="root://cms-xrd-global.cern.ch/")
 hNameTTSL="StitchingTTSLv7.root"
-TTWeightSL = 366.2073 * 1000 * 41.53 / (POS - NEG)
+TTWeightSL = 366.2073 * 1000 * 41.53 / (20040607 - 81403)
 Tuples.append((filesTTSL, hNameTTSL,  "2017", "SL", "Fail", "Flag", TTWeightSL))
-filesTTSLGF=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/CD79F874-9C0A-6446-81A2-344B4C7B3EE9.root"]
+# filesTTSLGF=["root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv4/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano14Dec2018_102X_mc2017_realistic_v6-v1/90000/CD79F874-9C0A-6446-81A2-344B4C7B3EE9.root"]
+filesTTSLGF=getFiles(query="dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                     redir="root://cms-xrd-global.cern.ch/")`
 hNameTTSLGF="StitchingTTSLGFv7.root"
-TTGFWeightSL = 366.2073 * 1000 * 41.53 / (POS - NEG)
+TTGFWeightSL = 366.2073 * 1000 * 41.53 / (8794464 - 42392)
 Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Flag", TTGFWeightSL))
 
 def stitcher(fileList, hName=None, theEra="2021", theChannel="NL", theCondition="Nope", theMode="Bloop!", weightMagnitude=1):
