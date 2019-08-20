@@ -48,8 +48,8 @@
         sumWeights2: 365215384868.441772
         isSignal: False
         procCrossSection: 831.76
-        crossSection: 88.341
-        branchingRatio: 0.10621
+        crossSection: 89.0482
+        branchingRatio: 0.10706
         filterEfficiency: 1
         MCMCrossSection: 730
     source:
@@ -83,7 +83,7 @@
         isSignal: False
         procCrossSection: 831.76
         crossSection: 1.32512
-        branchingRatio: 0.10621
+        branchingRatio: 0.10706
         filterEfficiency: 0.015
         MCMCrossSection: 730
     source:
@@ -116,8 +116,8 @@
         sumWeights2: 0
         isSignal: False
         procCrossSection: 831.76
-        crossSection: 0
-        branchingRatio: 0
+        crossSection: 366.2073
+        branchingRatio: 0.44028
         filterEfficiency: 1
         MCMCrossSection: 730
     source:
@@ -130,7 +130,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 2
+        unitsPerJob: 1
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.91
     stitch:
@@ -150,8 +150,8 @@
         sumWeights2: 0
         isSignal: False
         procCrossSection: 831.76
-        crossSection: 1.32512
-        branchingRatio: 0.0000
+        crossSection: 1000000000
+        branchingRatio: 0.44028
         filterEfficiency: 0.0000
         MCMCrossSection: 730
     source:
