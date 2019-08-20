@@ -27,3 +27,26 @@ class Trigger(Module):
             #else:
                 #print("No trigger fired")
         return False
+
+class TriggerAndSelectionLogic(Module):
+    def __init__(self, TriggerChannel="DL"):
+        self.maxEventsToProcess = -1
+        self.Trigger = Trigger
+        
+    def beginJob(self, histFile=None,histDirName=None):
+        Module.beginJob(self,histFile,histDirName)
+
+    def analyze(self, event):
+        """process event, return True (go to next module) or False (fail, go to next event)"""
+        
+        #run = getattr(event, "run")
+        #evt = getattr(event, "event")
+        #lumi = getattr(event, "luminosityBlock")
+        
+        for trig in self.Trigger:
+            if hasattr(event, trig) and getattr(event, trig):
+                #print(getattr(event, trig))
+                return True
+            #else:
+                #print("No trigger fired")
+        return False
