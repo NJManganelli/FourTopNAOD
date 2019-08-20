@@ -6,7 +6,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collect
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
 class lepSplitSFProducer(Module):
-    def __init__(self, muon_ID=None, muon_ISO=None, electron_ID=None, era=None, doMuonHLT=False, doElectronHLT_ZVtx=False, pre2018Run316361Lumi = 8.94, post2018Run316361Lumi = 50.73, debug=False):
+    def __init__(self, muon_ID=None, muon_ISO=None, electron_ID=None, era=None, doMuonHLT=False, doElectronHLT_ZVtx=False, pre2018Run316361Lumi = 8.942, post2018Run316361Lumi = 50.785, debug=False):
         self.era = era
         #See self.muD dictionary for options. ISO are denoted with a '/' in the key
         self.muon_ID = muon_ID
