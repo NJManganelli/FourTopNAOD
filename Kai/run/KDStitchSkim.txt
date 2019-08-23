@@ -1,0 +1,8 @@
+drop *
+keep run
+keep luminosityBlock
+keep event
+keep genWeight
+keep GenJet_pt
+keep GenJet_eta
+keep LHEPart_pdgId
