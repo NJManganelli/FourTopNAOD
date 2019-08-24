@@ -280,9 +280,11 @@ def main():
                 events_sum_weights = 0
                 events_sum_weights2 = 0
                 dataset_size = 0
+                print("Checking {0:d} files".format(len(fileList)))
                 for fn, fileName in enumerate(fileList):
                     if args.verbose: print("File {} of {}".format(fn, len(fileList)))
                     # print("Opening {0}".format(fileName))
+                    print("#", end="")
                     f = ROOT.TFile.Open(fileName, 'r')
                     dataset_size += int(f.GetSize())
                     tree = f.Get('Runs')
@@ -335,12 +337,23 @@ def main():
                     print("\tMismatch in dataset {0}: nEvents = {1:d}, events_in_files = {2:d}".format(sampleName, nEvents, events_in_files))
                 else:
                     print("\tIntegrity check successful for dataset {0}: {1:d}/{2:d} events".format(sampleName, events_in_files, nEvents))
-                print("\tnEvents = {0:d}, processed_events = {1:d}, current_events_in_files = {4:d}, \n\tevents_sum_weights = {2:f}, "\
-                      "events_sum_weights2 = {3:f}, \n\tevents_in_files_positive = {5:d}"\
-                      ", events_in_files_negative = {6:d}, \n\tdataset_size = {7:4f}GB".format(nEvents, events_in_files, 
-                                                      events_sum_weights, events_sum_weights2, 
-                                                      current_events_in_files,events_in_files_positive,
-                                                      events_in_files_negative, dataset_size/1024**3)
+                # print("\tnEvents = {0:d}, processed_events = {1:d}, current_events_in_files = {4:d}, \n\tevents_sum_weights = {2:f}, "\
+                #       "events_sum_weights2 = {3:f}, \n\tevents_in_files_positive = {5:d}"\
+                #       ", events_in_files_negative = {6:d}, \n\tdataset_size = {7:4f}GB".format(nEvents, events_in_files, 
+                #                                       events_sum_weights, events_sum_weights2, 
+                #                                       current_events_in_files,events_in_files_positive,
+                #                                       events_in_files_negative, dataset_size/1024**3)
+                #   )
+                print("        nEvents: {0:d}\n        nEventsPositive: {1:d}\n        nEventsNegative: {2:d}\n        sumWeights: {3:f}\n        sumWeights2: {4:f}"\
+                      "\n        processed_events: {5:d}\n        current_events_in_files: {6:d}"\
+                      "\n        dataset_size: {7:4f}GB".format(nEvents, 
+                                                                events_in_files_positive,
+                                                                events_in_files_negative, 
+                                                                events_sum_weights, 
+                                                                events_sum_weights2, 
+                                                                events_in_files, 
+                                                                current_events_in_files,
+                                                                dataset_size/1024**3)
                   )
                 total_MC_size += dataset_size
                 total_MC_current_events += current_events_in_files
@@ -364,7 +377,7 @@ def main():
                     print("\tMismatch in dataset {0}: nEvents = {1:d}, current_events_in_files = {2:d}".format(sampleName, nEvents, current_events_in_files))
                 else:
                     print("\tIntegrity check successful for dataset {0}: {1:d}/{2:d} events".format(sampleName, current_events_in_files, nEvents))
-                print("\tnEvents = {0:d}, current_events_in_files = {1:d}, dataset_size = {2:4f}GB".format(nEvents, current_events_in_files, dataset_size/1024**3))
+                print("        nEvents: {0:d}\n        current_events_in_files: {1:d}\n        dataset_size: {2:4f}GB".format(nEvents, current_events_in_files, dataset_size/1024**3))
                 total_Data_size += dataset_size
                 total_Data_current_events += current_events_in_files
 
