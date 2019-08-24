@@ -377,6 +377,214 @@
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.27
 
+  - dataset: #ttWH
+        name: "ttWH"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 0
+        sumWeights: 0
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: -1
+        crossSection: -1
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv4': "dbs:"
+        'NANOv5': "dbs:/TTWH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 6
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.27
+
+  - dataset: #ttWW
+        name: "ttWW"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 0
+        sumWeights: 0
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: -1
+        crossSection: -1
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv4': "dbs:"
+        'NANOv5': "dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 6
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.27
+
+  - dataset: #ttWZ
+        name: "ttWZ"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 0
+        sumWeights: 0
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: -1
+        crossSection: -1
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv4': "dbs:"
+        'NANOv5': "dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 6
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.27
+
+  - dataset: #ttZZ
+        name: "ttZZ"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 0
+        sumWeights: 0
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: -1
+        crossSection: -1
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv4': "dbs:"
+        'NANOv5': "dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 6
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.27
+
+  - dataset: #ttZH
+        name: "ttZH"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 0
+        sumWeights: 0
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: -1
+        crossSection: -1
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv4': "dbs:"
+        'NANOv5': "dbs:/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 6
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.27
+
+  - dataset: #ttHH
+        name: "ttHH"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 0
+        sumWeights: 0
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: -1
+        crossSection: -1
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv4': "dbs:"
+        'NANOv5': "dbs:/TTHH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 6
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.27
+
+  - dataset: #tttW
+        name: "tttW"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 0
+        sumWeights: 0
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: -1
+        crossSection: -1
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv4': "dbs:"
+        'NANOv5': "dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 6
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.27
+
+  - dataset: #tttJ
+        name: "tttJ"
+        era: "2017"
+        subera: "NONE"
+        isData: False
+        nEvents: 0
+        sumWeights: 0
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: -1
+        crossSection: -1
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv4': "dbs:"
+        'NANOv5': "dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 6
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.27
+
   - dataset: #DY dilepton + jets sample
         name: "DYJets_DL"
         era: "2017"
