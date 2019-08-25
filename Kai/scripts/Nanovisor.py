@@ -345,14 +345,14 @@ def main():
                 #                                       events_in_files_negative, dataset_size/1024**3)
                 #   )
                 print("        nEvents: {0:d}\n        nEventsPositive: {1:d}\n        nEventsNegative: {2:d}\n        sumWeights: {3:f}\n        sumWeights2: {4:f}"\
-                      "\n        processed_events: {5:d}\n        current_events_in_files: {6:d}"\
-                      "\n        dataset_size: {7:4f}GB".format(nEvents, 
+                      "\n        processed_events: {5:d}\n        sample card nEvents: {6:d}"\
+                      "\n        dataset_size: {7:4f}GB".format(current_events_in_files, 
                                                                 events_in_files_positive,
                                                                 events_in_files_negative, 
                                                                 events_sum_weights, 
                                                                 events_sum_weights2, 
                                                                 events_in_files, 
-                                                                current_events_in_files,
+                                                                nEvents,
                                                                 dataset_size/1024**3)
                   )
                 total_MC_size += dataset_size
@@ -369,7 +369,8 @@ def main():
                     evtTree = f.Get('Events')
                     eventsTreeEntries = evtTree.GetEntries()
                     current_events_in_files += int(eventsTreeEntries)
-                    print("Filename: {}\tEvents: {}\t EventTotal: {}".format(fileName, evtTree.GetEntries(), current_events_in_files))
+                    if args.verbose:
+                        print("Filename: {}\n\tEvents: {}\t EventTotal: {}".format(fileName, evtTree.GetEntries(), current_events_in_files))
                 print(sampleName + "_" + era + ":")
                 if inputDataset is None:
                     print("\tSkipped check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))
@@ -377,7 +378,7 @@ def main():
                     print("\tMismatch in dataset {0}: nEvents = {1:d}, current_events_in_files = {2:d}".format(sampleName, nEvents, current_events_in_files))
                 else:
                     print("\tIntegrity check successful for dataset {0}: {1:d}/{2:d} events".format(sampleName, current_events_in_files, nEvents))
-                print("        nEvents: {0:d}\n        current_events_in_files: {1:d}\n        dataset_size: {2:4f}GB".format(nEvents, current_events_in_files, dataset_size/1024**3))
+                print("        nEvents: {0:d}\n        sample card nEvents: {1:d}\n        dataset_size: {2:4f}GB".format(current_events_in_files, nEvents, dataset_size/1024**3))
                 total_Data_size += dataset_size
                 total_Data_current_events += current_events_in_files
 
