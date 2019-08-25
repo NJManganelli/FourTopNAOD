@@ -39,7 +39,7 @@
         era: "2017"
         subera: "NONE"
         isData: False
-        nEvents: 69155808
+        nEvents: 69098644
         nEventsPositive: 68818780
         nEventsNegative: 279864
         sumWeights: 4980769113.241218
@@ -70,7 +70,7 @@
         era: "2017"
         subera: "NONE"
         isData: False
-        nEvents: 8458223
+        nEvents: 8510388
         nEventsPositive: 8467543
         nEventsNegative: 42845
         sumWeights: 612101836.284397

@@ -327,10 +327,10 @@ def main():
                     #         #                                                                                                evtTree.event))
                     #         if i % 10000 == 0:
                     #             print("processed {0} events in file: {1}".format(i, f.GetName()))
-                                
+                    f.Close()                                
                             
-                    # # f.Close() #Will this speed things up any?
-                print(sampleName + "_" + era + ":")
+
+                print("\n" + sampleName + "_" + era + ":")
                 if inputDataset is None:
                     print("\tSkipped check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))
                 if events_in_files != nEvents:
@@ -362,8 +362,10 @@ def main():
                 #Distinguish the current event count, which is based on tree entries, from the event counter stored in MC showing how many events had been processed
                 current_events_in_files = 0
                 dataset_size = 0
-                for fileName in fileList:
+                print("Checking {0:d} files".format(len(fileList)))
+                for fn, fileName in enumerate(fileList):
                     # print("Opening {0}".format(fileName))
+                    print("#", end="")
                     f = ROOT.TFile.Open(fileName, 'r')
                     dataset_size += int(f.GetSize())
                     evtTree = f.Get('Events')
@@ -371,7 +373,8 @@ def main():
                     current_events_in_files += int(eventsTreeEntries)
                     if args.verbose:
                         print("Filename: {}\n\tEvents: {}\t EventTotal: {}".format(fileName, evtTree.GetEntries(), current_events_in_files))
-                print(sampleName + "_" + era + ":")
+                    f.Close()
+                print("\n" + sampleName + "_" + era + ":")
                 if inputDataset is None:
                     print("\tSkipped check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))
                 if current_events_in_files != nEvents:
