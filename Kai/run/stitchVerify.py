@@ -15,7 +15,7 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 parser = argparse.ArgumentParser(description='Test of Stitching module and post-stitching distributions')
 parser.add_argument('--stage', dest='stage', action='store', type=str,
-                    help='Stage to be processed: stitch or hist or plot or skim')
+                    help='Stage to be processed: stitch or hist or verify (fork of hist) or plot or skim')
 args = parser.parse_args()
 
 class StitchHist(Module):
@@ -523,7 +523,7 @@ elif args.stage == 'hist':
     # Tuples.append((filesTTDL, hNameTTDL, "2017", "DL", "Fail", "Plot", TTWeight, 50))
     # Tuples.append((filesTTDL, hNameTTDL, "2017", "DL", "Fail", "Plot", TTWeight, 100))
 
-    Tuples.append((filesTTDLGF, hNameTTDLGF,  "2017", "DL", "Pass", "Plot", TTGFWeight, 10))
+    # Tuples.append((filesTTDLGF, hNameTTDLGF,  "2017", "DL", "Pass", "Plot", TTGFWeight, 10))
     # Tuples.append((filesTTDLGF, hNameTTDLGF,  "2017", "DL", "Pass", "Plot", TTGFWeight, 25))
     # Tuples.append((filesTTDLGF, hNameTTDLGF,  "2017", "DL", "Pass", "Plot", TTGFWeight, 50))
     # Tuples.append((filesTTDLGF, hNameTTDLGF,  "2017", "DL", "Pass", "Plot", TTGFWeight, 100))
@@ -533,7 +533,46 @@ elif args.stage == 'hist':
     # Tuples.append((filesTTSL, hNameTTSL,  "2017", "SL", "Fail", "Plot", TTWeightSL, 50))
     # Tuples.append((filesTTSL, hNameTTSL,  "2017", "SL", "Fail", "Plot", TTWeightSL, 100))
 
-    Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Plot", TTGFWeightSL, 10))
+    # Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Plot", TTGFWeightSL, 10))
+    # Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Plot", TTGFWeightSL, 25))
+    # Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Plot", TTGFWeightSL, 50))
+    # Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Plot", TTGFWeightSL, 100))
+    if len(Tuples) < 1:
+        print("No tuples selected in stage '{0}'".format(args.stage))
+    print(Tuples)
+    pList = []
+    for tup in Tuples:
+        p = multiprocessing.Process(target=fillhists, args=(tup[0], tup[1].replace(".root", "_verify.root"), tup[2], tup[3], tup[4], tup[5], tup[6], tup[7]))
+        pList.append(p)
+        p.start()
+        
+    for p in pList:
+        p.join()
+
+elif args.stage == 'verify':
+    filesTTSL=getFiles(query="glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/run/stitchingSkims/StitchingTTSL.root")
+    filesTTSLGF=getFiles(query="glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/run/stitchingSkims/StitchingTTSLGF.root")
+    filesTTDL=getFiles(query="glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/run/stitchingSkims/StitchingTTDL.root")
+    filesTTDLGF=getFiles(query="glob:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/run/stitchingSkims/StitchingTTDLGF.root")
+    #All configurations
+    Tuples.append((filesTTDL, "NOM_"+hNameTTDL, "2017", "DL", "Fail", "Plot", TTWeight, 10))
+    # Tuples.append((filesTTDL, hNameTTDL, "2017", "DL", "Fail", "Plot", TTWeight, 25))
+    # Tuples.append((filesTTDL, hNameTTDL, "2017", "DL", "Fail", "Plot", TTWeight, 50))
+    # Tuples.append((filesTTDL, hNameTTDL, "2017", "DL", "Fail", "Plot", TTWeight, 100))
+
+    Tuples.append((filesTTDLGF, "NOM_"+hNameTTDLGF,  "2017", "DL", "Pass", "Plot", TTGFWeight*0.0165139, 10)) #Nominal filter efficiency
+    Tuples.append((filesTTDLGF, "UP_"+hNameTTDLGF,  "2017", "DL", "Pass", "Plot", TTGFWeight*0.0166437, 10))
+    Tuples.append((filesTTDLGF, "DOWN_"+hNameTTDLGF,  "2017", "DL", "Pass", "Plot", TTGFWeight*0.0163847, 10))
+    # Tuples.append((filesTTDLGF, hNameTTDLGF,  "2017", "DL", "Pass", "Plot", TTGFWeight, 25))
+    # Tuples.append((filesTTDLGF, hNameTTDLGF,  "2017", "DL", "Pass", "Plot", TTGFWeight, 50))
+    # Tuples.append((filesTTDLGF, hNameTTDLGF,  "2017", "DL", "Pass", "Plot", TTGFWeight, 100))
+
+    # Tuples.append((filesTTSL, hNameTTSL,  "2017", "SL", "Fail", "Plot", TTWeightSL, 10))
+    # Tuples.append((filesTTSL, hNameTTSL,  "2017", "SL", "Fail", "Plot", TTWeightSL, 25))
+    # Tuples.append((filesTTSL, hNameTTSL,  "2017", "SL", "Fail", "Plot", TTWeightSL, 50))
+    # Tuples.append((filesTTSL, hNameTTSL,  "2017", "SL", "Fail", "Plot", TTWeightSL, 100))
+
+    # Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Plot", TTGFWeightSL, 10))
     # Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Plot", TTGFWeightSL, 25))
     # Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Plot", TTGFWeightSL, 50))
     # Tuples.append((filesTTSLGF, hNameTTSLGF, "2017", "SL", "Pass", "Plot", TTGFWeightSL, 100))
@@ -550,4 +589,4 @@ elif args.stage == 'hist':
         p.join()
 
 else:
-    print("Unsuppored stage selected, please choose 'stitch' (add pass/fail stitch branches), 'plot' (Show histograms), 'hist' (Fill the histograms), or 'skim' (Create trees with minimal branches to determine stitching constants)")
+    print("Unsuppored stage selected, please choose 'stitch' (add pass/fail stitch branches), 'plot' (Show histograms), 'hist' (Fill the histograms), 'verify' (Check different filter efficiencies - fork of hist option), or 'skim' (Create trees with minimal branches to determine stitching constants)")

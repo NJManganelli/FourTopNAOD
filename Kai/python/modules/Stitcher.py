@@ -86,7 +86,7 @@ class Stitcher(Module):
         self.nGenJetBins = self.nGenJetMax - self.nGenJetMin
         self.nGenLepMin = 0
         self.nGenLepMax = 5
-        self.nGenLepBins = self.nGenJetMax - self.nGenJetMin
+        self.nGenLepBins = self.nGenLepMax - self.nGenLepMin
 
         #HT
         self.HTBinWidth = HTBinWidth
