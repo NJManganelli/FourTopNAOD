@@ -34,36 +34,36 @@
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.99
 
-  - dataset: #ttbar dilepton sample
-        name: "tt_DL"
+  - dataset: #ttbar semilepton sample
+        name: "tt_SL-GF"
         era: "2017"
         subera: "NONE"
         isData: False
-        nEvents: 69098644
-        nEventsPositive: 68818780
-        nEventsNegative: 279864
-        sumWeights: 4980769113.241218
-        sumWeights2: 364913493679.955078
+        nEvents: 8836856
+        nEventsPositive: 8794464
+        nEventsNegative: 42392
+        sumWeights: 2653328498.476976
+        sumWeights2: 812201885978.209229
         isSignal: False
         procCrossSection: 831.76
-        crossSection: 89.0482
-        branchingRatio: 0.10706
-        filterEfficiency: 1
+        crossSection: 1000000000
+        branchingRatio: 0.44028
+        filterEfficiency: 0.0000
         MCMCrossSection: 730
     source:
-        'NANOv5': "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'NANOv5': "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 2
+        unitsPerJob: 10
         #totalUnits: 150
-        CPUHRperFile_Baseline: 0.91
+        CPUHRperFile_Baseline: 0.09
     stitch:
         mode: 'Flag'
-        condition: 'Fail'
-        channel: 'DL'
+        condition: 'Pass'
+        channel: 'SL'
 
   - dataset: #ttbar dilepton sample
         name: "tt_DL-GF"
@@ -127,36 +127,36 @@
         condition: 'Fail'
         channel: 'SL'
 
-  - dataset: #ttbar semilepton sample
-        name: "tt_SL-GF"
+  - dataset: #ttbar dilepton sample
+        name: "tt_DL"
         era: "2017"
         subera: "NONE"
         isData: False
-        nEvents: 8836856
-        nEventsPositive: 8794464
-        nEventsNegative: 42392
-        sumWeights: 2653328498.476976
-        sumWeights2: 812201885978.209229
+        nEvents: 69098644
+        nEventsPositive: 68818780
+        nEventsNegative: 279864
+        sumWeights: 4980769113.241218
+        sumWeights2: 364913493679.955078
         isSignal: False
         procCrossSection: 831.76
-        crossSection: 1000000000
-        branchingRatio: 0.44028
-        filterEfficiency: 0.0000
+        crossSection: 89.0482
+        branchingRatio: 0.10706
+        filterEfficiency: 1
         MCMCrossSection: 730
     source:
-        'NANOv5': "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'NANOv5': "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
     postprocessor: 
         filter: ""
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 10
+        unitsPerJob: 2
         #totalUnits: 150
-        CPUHRperFile_Baseline: 0.09
+        CPUHRperFile_Baseline: 0.91
     stitch:
         mode: 'Flag'
-        condition: 'Pass'
-        channel: 'SL'
+        condition: 'Fail'
+        channel: 'DL'
 
   - dataset: #single top - top-W
         name: "ST_tW"
