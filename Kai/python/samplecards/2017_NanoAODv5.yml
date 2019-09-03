@@ -589,7 +589,7 @@
         era: "2017"
         subera: "B"
         isData: True
-        nEvents: -1
+        nEvents: 14501767
     source:
         'NANOv5': "dbs:/DoubleMuon/Run2017B-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -606,7 +606,7 @@
         era: "2017"
         subera: "C"
         isData: True
-        nEvents: -1
+        nEvents: 49636525
     source:
         'NANOv5': "dbs:/DoubleMuon/Run2017C-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -623,7 +623,7 @@
         era: "2017"
         subera: "D"
         isData: True
-        nEvents: -1
+        nEvents: 23075733
     source:
         'NANOv5': "dbs:/DoubleMuon/Run2017D-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -640,7 +640,7 @@
         era: "2017"
         subera: "E"
         isData: True
-        nEvents: -1
+        nEvents: 51589091
     source:
         'NANOv5': "dbs:/DoubleMuon/Run2017E-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -657,7 +657,7 @@
         era: "2017"
         subera: "F"
         isData: True
-        nEvents: -1
+        nEvents: 79756560
     source:
         'NANOv5': "dbs:/DoubleMuon/Run2017F-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -674,7 +674,7 @@
         era: "2017"
         subera: "B"
         isData: True
-        nEvents: -1
+        nEvents: 58088760
     source:
         'NANOv5': "dbs:/DoubleEG/Run2017B-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -691,7 +691,7 @@
         era: "2017"
         subera: "C"
         isData: True
-        nEvents: -1
+        nEvents: 65181125
     source:
         'NANOv5': "dbs:/DoubleEG/Run2017C-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -708,7 +708,7 @@
         era: "2017"
         subera: "D"
         isData: True
-        nEvents: -1
+        nEvents: 25911432
     source:
         'NANOv5': "dbs:/DoubleEG/Run2017D-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -725,7 +725,7 @@
         era: "2017"
         subera: "E"
         isData: True
-        nEvents: -1
+        nEvents: 56233597
     source:
         'NANOv5': "dbs:/DoubleEG/Run2017E-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -742,7 +742,7 @@
         era: "2017"
         subera: "F"
         isData: True
-        nEvents: -1
+        nEvents: 74307066
     source:
         'NANOv5': "dbs:/DoubleEG/Run2017F-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -759,7 +759,7 @@
         era: "2017"
         subera: "B"
         isData: True
-        nEvents: -1
+        nEvents: 4453465
     source:
         'NANOv5': "dbs:/MuonEG/Run2017B-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -776,7 +776,7 @@
         era: "2017"
         subera: "C"
         isData: True
-        nEvents: -1
+        nEvents: 15595214
     source:
         'NANOv5': "dbs:/MuonEG/Run2017C-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -793,7 +793,7 @@
         era: "2017"
         subera: "D"
         isData: True
-        nEvents: -1
+        nEvents: 9164365
     source:
         'NANOv5': "dbs:/MuonEG/Run2017D-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -810,7 +810,7 @@
         era: "2017"
         subera: "E"
         isData: True
-        nEvents: -1
+        nEvents: 19043421
     source:
         'NANOv5': "dbs:/MuonEG/Run2017E-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -827,7 +827,7 @@
         era: "2017"
         subera: "F"
         isData: True
-        nEvents: -1
+        nEvents: 25776363
     source:
         'NANOv5': "dbs:/MuonEG/Run2017F-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -844,7 +844,7 @@
         era: "2017"
         subera: "B"
         isData: True
-        nEvents: -1
+        nEvents: 136300266
     source:
         'NANOv5': "dbs:/SingleMuon/Run2017B-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -861,7 +861,7 @@
         era: "2017"
         subera: "C"
         isData: True
-        nEvents: -1
+        nEvents: 165652756
     source:
         'NANOv5': "dbs:/SingleMuon/Run2017C-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -878,7 +878,7 @@
         era: "2017"
         subera: "D"
         isData: True
-        nEvents: -1
+        nEvents: 70361660
     source:
         'NANOv5': "dbs:/SingleMuon/Run2017D-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -895,7 +895,7 @@
         era: "2017"
         subera: "E"
         isData: True
-        nEvents: -1
+        nEvents: 154630534
     source:
         'NANOv5': "dbs:/SingleMuon/Run2017E-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -912,7 +912,7 @@
         era: "2017"
         subera: "F"
         isData: True
-        nEvents: -1
+        nEvents: 242135500
     source:
         'NANOv5': "dbs:/SingleMuon/Run2017F-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -929,7 +929,7 @@
         era: "2017"
         subera: "B"
         isData: True
-        nEvents: -1
+        nEvents: 60537490
     source:
         'NANOv5': "dbs:/SingleElectron/Run2017B-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -946,7 +946,7 @@
         era: "2017"
         subera: "C"
         isData: True
-        nEvents: -1
+        nEvents: 136637888
     source:
         'NANOv5': "dbs:/SingleElectron/Run2017C-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -963,7 +963,7 @@
         era: "2017"
         subera: "D"
         isData: True
-        nEvents: -1
+        nEvents: 51526710
     source:
         'NANOv5': "dbs:/SingleElectron/Run2017D-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -980,7 +980,7 @@
         era: "2017"
         subera: "E"
         isData: True
-        nEvents: -1
+        nEvents: 102121689
     source:
         'NANOv5': "dbs:/SingleElectron/Run2017E-Nano1June2019-v1/NANOAOD"
     postprocessor: 
@@ -997,7 +997,7 @@
         era: "2017"
         subera: "F"
         isData: True
-        nEvents: -1
+        nEvents: 128467223
     source:
         'NANOv5': "dbs:/SingleElectron/Run2017F-Nano1June2019-v1/NANOAOD"
     postprocessor: 

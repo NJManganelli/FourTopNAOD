@@ -1,0 +1,323 @@
+nmangane@lxplus748:/eos/user/n/nmangane/CMSSW/CMSSW_10_2_14/src/FourTopNAOD/Kai/python/samplecards ../../scripts/Nanovisor.py --sample_cards 2017_NanoAODv5.yml --check_events detailed --source NANOv5              CentOS7.6 09-03 15:03:18
+Nanovisor will check integrity of sample card's event counts: detailed
+Nanovisor will use the following algorithm and working point for any btagging related SF calculations and event selection: ['DeepCSV', 'M']
+The path and name of the sample cards(s) are:
+    2017_NanoAODv5.yml
+tttt_2017:
+	Integrity check successful for dataset tttt: 2273928/2273928 events
+        nEvents: 2273928
+        nEventsPositive: 1561946
+        nEventsNegative: 711982
+        sumWeights: 18645.487772
+        sumWeights2: 1094.209551
+        processed_events: 2273928
+        sample card nEvents: 2273928
+        dataset_size: 7.013590GB
+tt_SL-GF_2017:
+	Integrity check successful for dataset tt_SL-GF: 8836856/8836856 events
+        nEvents: 8836856
+        nEventsPositive: 8794464
+        nEventsNegative: 42392
+        sumWeights: 2653328498.476975
+        sumWeights2: 812201885978.209595
+        processed_events: 8836856
+        sample card nEvents: 8836856
+        dataset_size: 23.079772GB
+tt_DL-GF_2017:
+	Integrity check successful for dataset tt_DL-GF: 8510388/8510388 events
+        nEvents: 8510388
+        nEventsPositive: 8467543
+        nEventsNegative: 42845
+        sumWeights: 612101836.284397
+        sumWeights2: 44925503249.097206
+        processed_events: 8510388
+        sample card nEvents: 8510388
+        dataset_size: 21.321905GB
+tt_SL_2017:
+	Integrity check successful for dataset tt_SL: 20122010/20122010 events
+        nEvents: 20122010
+        nEventsPositive: 20040607
+        nEventsNegative: 81403
+        sumWeights: 6052480345.748354
+        sumWeights2: 1850350248120.376709
+        processed_events: 20122010
+        sample card nEvents: 20122010
+        dataset_size: 36.078247GB
+tt_DL_2017:
+	Integrity check successful for dataset tt_DL: 69098644/69098644 events
+        nEvents: 69098644
+        nEventsPositive: 68818780
+        nEventsNegative: 279864
+        sumWeights: 4980769113.241218
+        sumWeights2: 364913493679.955078
+        processed_events: 69098644
+        sample card nEvents: 69098644
+        dataset_size: 121.855444GB
+ST_tW_2017:
+	Integrity check successful for dataset ST_tW: 7945242/7945242 events
+        nEvents: 7945242
+        nEventsPositive: 7914815
+        nEventsNegative: 30427
+        sumWeights: 277241050.840222
+        sumWeights2: 9823995766.508368
+        processed_events: 7945242
+        sample card nEvents: 7945242
+        dataset_size: 12.887092GB
+ST_tbarW_2017:
+	Integrity check successful for dataset ST_tbarW: 7745276/7745276 events
+        nEvents: 7745276
+        nEventsPositive: 7715654
+        nEventsNegative: 29622
+        sumWeights: 270762750.172525
+        sumWeights2: 9611964941.797770
+        processed_events: 7745276
+        sample card nEvents: 7745276
+        dataset_size: 12.565759GB
+ttH_2017:
+	Integrity check successful for dataset ttH: 8000000/8000000 events
+        nEvents: 8000000
+        nEventsPositive: 7916867
+        nEventsNegative: 83133
+        sumWeights: 4216319.315884
+        sumWeights2: 2317497.816608
+        processed_events: 8000000
+        sample card nEvents: 8000000
+        dataset_size: 18.360874GB
+ttWJets_2017:
+	Integrity check successful for dataset ttWJets: 9425384/9425384 events
+        nEvents: 9425384
+        nEventsPositive: 9404856
+        nEventsNegative: 20528
+        sumWeights: 9384328.000000
+        sumWeights2: 9425384.000000
+        processed_events: 9425384
+        sample card nEvents: 9425384
+        dataset_size: 19.670313GB
+ttZJets_2017:
+	Integrity check successful for dataset ttZJets: 8536618/8536618 events
+        nEvents: 8536618
+        nEventsPositive: 8527846
+        nEventsNegative: 8772
+        sumWeights: 8519074.000000
+        sumWeights2: 8536618.000000
+        processed_events: 8536618
+        sample card nEvents: 8536618
+        dataset_size: 17.709175GB
+ttWH_2017:
+	Integrity check successful for dataset ttWH: 200000/200000 events
+        nEvents: 200000
+        nEventsPositive: 199491
+        nEventsNegative: 509
+        sumWeights: 198839.680865
+        sumWeights2: 199704.039588
+        processed_events: 200000
+        sample card nEvents: 200000
+        dataset_size: 0.492160GB
+ttWW_2017:
+	Integrity check successful for dataset ttWW: 962000/962000 events
+        nEvents: 962000
+        nEventsPositive: 962000
+        nEventsNegative: 0
+        sumWeights: 962000.000000
+        sumWeights2: 962000.000000
+        processed_events: 962000
+        sample card nEvents: 962000
+        dataset_size: 2.316286GB
+ttWZ_2017:
+	Integrity check successful for dataset ttWZ: 200000/200000 events
+        nEvents: 200000
+        nEventsPositive: 199379
+        nEventsNegative: 621
+        sumWeights: 198625.183551
+        sumWeights2: 199708.972601
+        processed_events: 200000
+        sample card nEvents: 200000
+        dataset_size: 0.467818GB
+ttZZ_2017:
+	Integrity check successful for dataset ttZZ: 200000/200000 events
+        nEvents: 200000
+        nEventsPositive: 199686
+        nEventsNegative: 314
+        sumWeights: 199286.628891
+        sumWeights2: 199816.306332
+        processed_events: 200000
+        sample card nEvents: 200000
+        dataset_size: 0.477868GB
+ttZH_2017:
+	Integrity check successful for dataset ttZH: 200000/200000 events
+        nEvents: 200000
+        nEventsPositive: 199643
+        nEventsNegative: 357
+        sumWeights: 199192.234990
+        sumWeights2: 199794.753976
+        processed_events: 200000
+        sample card nEvents: 200000
+        dataset_size: 0.508384GB
+ttHH_2017:
+	Integrity check successful for dataset ttHH: 194817/194817 events
+        nEvents: 194817
+        nEventsPositive: 194516
+        nEventsNegative: 301
+        sumWeights: 194116.909912
+        sumWeights2: 194611.090542
+        processed_events: 194817
+        sample card nEvents: 194817
+        dataset_size: 0.515687GB
+tttW_2017:
+	Integrity check successful for dataset tttW: 200000/200000 events
+        nEvents: 200000
+        nEventsPositive: 199852
+        nEventsNegative: 148
+        sumWeights: 199552.187377
+        sumWeights2: 199697.648421
+        processed_events: 200000
+        sample card nEvents: 200000
+        dataset_size: 0.542475GB
+tttJ_2017:
+	Integrity check successful for dataset tttJ: 200000/200000 events
+        nEvents: 200000
+        nEventsPositive: 199273
+        nEventsNegative: 727
+        sumWeights: 198394.878491
+        sumWeights2: 199663.384954
+        processed_events: 200000
+        sample card nEvents: 200000
+        dataset_size: 0.501256GB
+DYJets_DL_2017:
+	Integrity check successful for dataset DYJets_DL: 49125561/49125561 events
+        nEvents: 49125561
+        nEventsPositive: 49103859
+        nEventsNegative: 21702
+        sumWeights: 49082157.000000
+        sumWeights2: 49125561.000000
+        processed_events: 49125561
+        sample card nEvents: 49125561
+        dataset_size: 48.332931GB
+MuMu_B_2017:
+	Mismatch in dataset MuMu_B: nEvents = -1, current_events_in_files = 14501767
+        nEvents: 14501767
+        sample card nEvents: -1
+        dataset_size: 10.059508GB
+MuMu_C_2017:
+	Mismatch in dataset MuMu_C: nEvents = -1, current_events_in_files = 49636525
+        nEvents: 49636525
+        sample card nEvents: -1
+        dataset_size: 36.766399GB
+MuMu_D_2017:
+	Mismatch in dataset MuMu_D: nEvents = -1, current_events_in_files = 23075733
+        nEvents: 23075733
+        sample card nEvents: -1
+        dataset_size: 17.363897GB
+MuMu_E_2017:
+	Mismatch in dataset MuMu_E: nEvents = -1, current_events_in_files = 51589091
+        nEvents: 51589091
+        sample card nEvents: -1
+        dataset_size: 41.395477GB
+MuMu_F_2017:
+	Mismatch in dataset MuMu_F: nEvents = -1, current_events_in_files = 79756560
+        nEvents: 79756560
+        sample card nEvents: -1
+        dataset_size: 63.317378GB
+ElEl_B_2017:
+	Mismatch in dataset ElEl_B: nEvents = -1, current_events_in_files = 58088760
+        nEvents: 58088760
+        sample card nEvents: -1
+        dataset_size: 43.373703GB
+ElEl_C_2017:
+	Mismatch in dataset ElEl_C: nEvents = -1, current_events_in_files = 65181125
+        nEvents: 65181125
+        sample card nEvents: -1
+        dataset_size: 50.070723GB
+ElEl_D_2017:
+	Mismatch in dataset ElEl_D: nEvents = -1, current_events_in_files = 25911432
+        nEvents: 25911432
+        sample card nEvents: -1
+        dataset_size: 20.135928GB
+ElEl_E_2017:
+	Mismatch in dataset ElEl_E: nEvents = -1, current_events_in_files = 56233597
+        nEvents: 56233597
+        sample card nEvents: -1
+        dataset_size: 46.359095GB
+ElEl_F_2017:
+	Mismatch in dataset ElEl_F: nEvents = -1, current_events_in_files = 74307066
+        nEvents: 74307066
+        sample card nEvents: -1
+        dataset_size: 62.466916GB
+ElMu_B_2017:
+	Mismatch in dataset ElMu_B: nEvents = -1, current_events_in_files = 4453465
+        nEvents: 4453465
+        sample card nEvents: -1
+        dataset_size: 3.791204GB
+ElMu_C_2017:
+	Mismatch in dataset ElMu_C: nEvents = -1, current_events_in_files = 15595214
+        nEvents: 15595214
+        sample card nEvents: -1
+        dataset_size: 13.998963GB
+ElMu_D_2017:
+	Mismatch in dataset ElMu_D: nEvents = -1, current_events_in_files = 9164365
+        nEvents: 9164365
+        sample card nEvents: -1
+        dataset_size: 8.272724GB
+ElMu_E_2017:
+	Mismatch in dataset ElMu_E: nEvents = -1, current_events_in_files = 19043421
+        nEvents: 19043421
+        sample card nEvents: -1
+        dataset_size: 17.909600GB
+ElMu_F_2017:
+	Mismatch in dataset ElMu_F: nEvents = -1, current_events_in_files = 25776363
+        nEvents: 25776363
+        sample card nEvents: -1
+        dataset_size: 24.497167GB
+Mu_B_2017:
+	Mismatch in dataset Mu_B: nEvents = -1, current_events_in_files = 136300266
+        nEvents: 136300266
+        sample card nEvents: -1
+        dataset_size: 80.315122GB
+Mu_C_2017:
+	Mismatch in dataset Mu_C: nEvents = -1, current_events_in_files = 165652756
+        nEvents: 165652756
+        sample card nEvents: -1
+        dataset_size: 101.955789GB
+Mu_D_2017:
+	Mismatch in dataset Mu_D: nEvents = -1, current_events_in_files = 70361660
+        nEvents: 70361660
+        sample card nEvents: -1
+        dataset_size: 43.948793GB
+Mu_E_2017:
+	Mismatch in dataset Mu_E: nEvents = -1, current_events_in_files = 154630534
+        nEvents: 154630534
+        sample card nEvents: -1
+        dataset_size: 103.372102GB
+Mu_F_2017:
+	Mismatch in dataset Mu_F: nEvents = -1, current_events_in_files = 242135500
+        nEvents: 242135500
+        sample card nEvents: -1
+        dataset_size: 166.099144GB
+El_B_2017:
+	Mismatch in dataset El_B: nEvents = -1, current_events_in_files = 60537490
+        nEvents: 60537490
+        sample card nEvents: -1
+        dataset_size: 39.308924GB
+El_C_2017:
+	Mismatch in dataset El_C: nEvents = -1, current_events_in_files = 136637888
+        nEvents: 136637888
+        sample card nEvents: -1
+        dataset_size: 95.485388GB
+El_D_2017:
+	Mismatch in dataset El_D: nEvents = -1, current_events_in_files = 51526710
+        nEvents: 51526710
+        sample card nEvents: -1
+        dataset_size: 35.847979GB
+El_E_2017:
+	Mismatch in dataset El_E: nEvents = -1, current_events_in_files = 102121689
+        nEvents: 102121689
+        sample card nEvents: -1
+        dataset_size: 75.706827GB
+El_F_2017:
+	Mismatch in dataset El_F: nEvents = -1, current_events_in_files = 128467223
+        nEvents: 128467223
+        sample card nEvents: -1
+        dataset_size: 98.001672GB
+All samples:
+    total_Data_size = 1299.820421GB, total_Data_current_events = 1820686200
+    total_total_MC_size = 344.697035GB, total_MC_current_events = 201976724, total_MC_processed_events = 201976724
