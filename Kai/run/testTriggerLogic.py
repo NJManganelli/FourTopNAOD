@@ -75,11 +75,14 @@ if args.era:
     Tuples = [tup for tup in Tuples if tup[0] == args.era]
 if args.subera:
     Tuples = [tup for tup in Tuples if tup[1] == args.subera]
+
+Tuples.sort(key=lambda j : j[1]) #sort by subera
+Tuples.sort(key=lambda j : j[0]) #then by era, again
 # for tup in Tuples:
 #     print(tup)
 if args.stage == 'test':
     Mods = []
     for tup in Tuples:
         Mods.append(TriggerAndSelectionLogic(era=tup[0], subera=tup[1], isData=tup[2], TriggerChannel=tup[3]))
-    # for mod in Mods:
-    #     print(mod.getCutString())
+    for mod in Mods:
+        print(mod.getCutString())

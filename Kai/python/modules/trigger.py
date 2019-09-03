@@ -235,26 +235,31 @@ class TriggerAndSelectionLogic(Module):
                                            3: ["Mu"],
                                            4: ["El"]}
                                   }
-        self.Triggers = [trigger for trigger in self.TriggerList if self.era == trigger.era and (self.isData == False or (self.subera in trigger.subera and self.TriggerChannel == trigger.channel))]
-        self.tier = [trigger.tier for trigger in self.Triggers]
-        self.tier.sort(key=lambda i: i, reverse=False)
-        print("Sorted trigger tiers selected are: " + str(self.tier))
-        self.tier = self.tier[0]
-        print("Trigger tier selected is: " + str(self.tier))
-        #Create list of veto triggers for data, where explicit tiers are expected.
+        #Era subset of triggers, for use in bin labeling (cycle through axis and fill a bin for each trigger with weight 0.0)
+        self.eraTriggers = [trigger for trigger in self.TriggerList if self.era == trigger.era]
+        self.Triggers = [trigger for trigger in self.eraTriggers if self.isData == False or (self.subera in trigger.subera and self.TriggerChannel == trigger.channel)]
+        #Create list of veto triggers for data, where explicit tiers are expected (calculating the tier first)
         #For 2017, 0 = ElMu dataset, 1 = MuMu, 2 = ElEl, 3 = Mu(Any), 4 = El(Any). Veto any events that fire any higher trigger, to avoid double counting by using this dataset
         #For 2018, 0 = ElMu dataset, Rest to be determined!
-        self.vetoTriggers = [trigger for trigger in self.TriggerList if self.isData and self.era == trigger.era and self.subera in trigger.subera and trigger.tier < self.tier]
-        if self.debug:
+        self.tier = [trigger.tier for trigger in self.Triggers]
+        self.tier.sort(key=lambda i: i, reverse=False)
+        if self.debug: 
+            print("Sorted trigger tiers selected are: " + str(self.tier))
+        self.tier = self.tier[0]
+        self.vetoTriggers = [trigger for trigger in self.eraTriggers if self.isData and self.subera in trigger.subera and trigger.tier < self.tier]
+        if self.debug: 
+            print("Trigger tier selected is: " + str(self.tier))
             print("Selected {} Triggers for usage".format(len(self.Triggers)))
             for t in self.Triggers:
                 print(t)
             print("Selected {} Triggers for veto".format(len(self.vetoTriggers)))
             for t in self.vetoTriggers:
                 print(t)
+
+        #Bins for the fired HLT paths; max set to 0 for nice labeling without empty bin
         self.PathsBins = 1
         self.PathsMin = 0
-        self.PathsMax = 1
+        self.PathsMax = 0
         
     def beginJob(self, histFile=None,histDirName=None):
         if self.fillHists == False:
@@ -265,11 +270,18 @@ class TriggerAndSelectionLogic(Module):
             Module.beginJob(self,histFile,histDirName)
             self.trigLogic_Paths = ROOT.TH1D("trigLogic_Paths", "HLT Paths passed by events (weightMagnitude={0}); Paths; Events".format(self.weightMagnitude), self.PathsBins, self.PathsMin, self.PathsMax)
             self.addObject(self.trigLogic_Paths)
-            self.trigLogic_Freq = ROOT.TH1D("trigLogic_Freq", "HLT Paths Fired and Vetoed (weightMagnitude={0}); Fired or Vetoed or Neither; Events".format(self.weightMagnitude), 1, 0, 1)
+            self.trigLogic_Freq = ROOT.TH1D("trigLogic_Freq", "HLT Paths Fired and Vetoed (weightMagnitude={0}); Fired or Vetoed or Neither; Events".format(self.weightMagnitude), 1, 0, 0)
             self.addObject(self.trigLogic_Freq)
             self.trigLogic_2DCorrel = ROOT.TH2D("trigLogic_2DCorrel", "nGenJets, GenHT  Fail condition (weightMagnitude={0}); nGenJets; GenHT ".format(self.weightMagnitude),
                                                 self.PathsBins, self.PathsMin, self.PathsMax, self.PathsBins, self.PathsMin, self.PathsMax)
             self.addObject(self.trigLogic_2DCorrel)
+
+            #Initialize labels to keep consistent across all files
+            for trig in self.eraTriggers:
+                self.trigLogic_Paths.Fill(trig.trigger + "T{})".format(trig.tier), 0.0)
+                self.trigLogic_2DCorrel.Fill(trig.trigger + "T{})".format(trig.tier), trig.trigger + "T{})".format(trig.tier), 0.0)
+            for cat in ["Vetoed", "Fired", "Neither"]:
+                self.trigLogic_Freq.Fill(cat, 0.0)
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         self.branchList = inputTree.GetListOfBranches()
@@ -285,13 +297,6 @@ class TriggerAndSelectionLogic(Module):
         weight = math.copysign(self.weightMagnitude, getattr(event, "genWeight", 1))
         Fired = [trigger for trigger in self.Triggers if getattr(event, trigger.trigger, False)]
         Vetoed = [trigger for trigger in self.vetoTriggers if getattr(event, trigger.trigger, False)]
-        # for trig in self.Triggers:
-        #     fired = [trigger for 
-        #     if getattr(event, trig, False):
-        #         #print(getattr(event, trig))
-        #         return True
-        #     #else:
-        #         #print("No trigger fired")
         if self.fillHists:
             if len(Vetoed) > 0: 
                 self.trigLogic_Freq.Fill("Vetoed", weight)
