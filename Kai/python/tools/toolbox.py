@@ -1,7 +1,7 @@
 from PhysicsTools.NanoAODTools.postprocessing.tools import *
 import copy
 from glob import glob #For getFiles
-import os #For getFiles
+import os, pwd #For getFiles
 import tempfile #For getFiles
 
 
@@ -481,79 +481,58 @@ def linkGenJet(inJet, inJetIdx, jetCollection, genJetCollection, genPartCollecti
 #        return getGenAncestry(genPartCollection[mothIdx], genPartCollection, chain=chain)      
 
 
-def getFiles(query=None, globPath=None, globFileExp="*.root", globSort=lambda f: int(f.split('_')[-1].replace('.root', '')), dbsDataset=None, inFileName=None, redir="", outFileName=None, verbose=False):
+def getFiles(query, redir="", outFileName=None, globSort=lambda f: int(f.split('_')[-1].replace('.root', '')), doEOSHOME=False, doGLOBAL=False, verbose=False):
     """Use one of several different methods to acquire a list or text file specifying the filenames.
 
-Method follows after globPath, inFileName, or dbsDataset is specified, with precedence going glob > dbs > file.
-globPath should be globbable in python. For example "./my2017ttbarDir/*/results"
-globPath has additional option globFileExp which defaults to "*.root", but can be changed to "tree_*.root" or "SF.txt" for example
-dbsDataset should just be a string as would be used in DAS/dasgoclient search, such as "/DoubleMuon/*/NANOAOD"
-inFileName should specify the path to a file storing the filenames as plain text.
+Method is defined by a string passed to the query argument (required, first), with the type of query prepended to a string path.
+'dbs:' - Used to signify getFiles should do a DAS query using the following string path
+'glob:' - Used to signify getFiles should do a glob of the following string path, which should include a reference to the filetype, i.e. "glob:~/my2017ttbarDir/*/results/myTrees_*.root"
+    optional - globSort is a lambda expression to sort the globbed filenames, with a default of lambda f: int(f.split('_')[-1].replace('.root', ''))
+'list:' - Used to signify getFiles should open the file in the following path and return a List. 
 
-additional options:
-outFileName will write the filelist to the specified file path + name
+outFileName can be specified for any option to also write a file with the list (as prepended with any redir string, specified with redir="root://cms-xrd-global.cern.ch" or "root://eoshome-<FIRST_INITIAL>.cern.ch/"
 redir will prepend the redirector to the beginning of the paths, such as redir="root://cms-xrd-global.cern.ch/"
+doEOSHOME will override the redir string with the one formatted based on your username for the eoshome-<FIRST_INITIAL>, which is your typical workspace on EOS (/eos/user/<FIRST_INITIAL>/<USERNAME>/)
+    For example, this xrdcp will work: "xrdcp root://eoshome-n.cern.ch//eos/user/n/nmangane/PATH/TO/ROOT/FILE.root ."
 """
     #methods to support: "dbs" using dasgoclient query, "glob" using directory path, "file" using text file
     fileList = []
-    with tempfile.NamedTemporaryFile() as f:
-        #check file exists as additional check?
-        if query:
-            if "dbs:" in query:
-                cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(query.replace("dbs:",""),f.name)
-                if verbose:
-                    print("dbs query reformatted to:\n\t" + query)
-                os.system(cmd)
-                for line in f:
-                    tmpName = redir + line
-                    tmpName = tmpName.rstrip()
-                    fileList.append(tmpName)
-            elif "glob:" in query:
-                query_stripped = query.replace("glob:","")
-                fileList = glob(query_stripped)
-            elif "list:" in query:
-                query_stripped = query.replace("list:","")
-                fileList = []
-                with open(query_stripped) as in_f:
-                    for line in in_f:
-                        fileList.append(redir + line.rstrip())
-            return fileList
-            #Kept as reminder for how to produce list with these files for xrootd transfers
-                # if "root://eoshome-{0:s}.cern.ch/".format(get_username()[0]) not in query_stripped:
-                #     query = "root://eoshome-{0:s}.cern.ch/".format(get_username()[0]) + query_stripped
-                #     if verbose:
-                #         print("eoshome query reformatted to:\n\t" + query)
-            # elif "eoscms:" in query:
-            #     if "root://eoscms.cern.ch/" not in query:
-            #         query_stripped = query.replace("eoscms:","")
-            #         query = "root://eoscms.cern.ch/" + query_stripped
-            #         if args.verbose:
-            #             print("eoscms query reformatted to:\n\t" + query)
-        if inFileName:
-            if True:
-                raise RuntimeError("getFiles() attempted using meth='file' without a inFileName specified")
-            else:
-                pass
-        elif globPath:
-            if False:
-                raise RuntimeError("getFiles() attempted using meth='glob' without a globbable globPath specified")
-            else:
-                fileList = glob("{0}".format(globPath) + globFileExp)
-                try:
-                    fileList.sort(key=globSort)
-                except Exception:
-                    print("Could not sort files prior to joining with haddnano")
-        elif dbsDataset:
-            if False:
-                raise RuntimeError("getFiles() attempted using meth='dbs' without a dbsDataset specified")
-            else:
-                cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(dbsDataset,f.name)
-                os.system(cmd)
-                for line in f:
-                    tmpName = redir + line
-                    tmpName = tmpName.rstrip()
-                    fileList.append(tmpName)
+    if doEOSHOME:
+        #Set eoshome-<FIRST_INITIAL> as redirector, by getting the username and then the first initial from the username
+        redir = "root://eoshome-{0:s}.cern.ch/".format((pwd.getpwuid(os.getuid())[0])[0])
+    elif doGLOBAL:
+        #Standard redirector
+        redir = "root://cms-xrd-global.cern.ch/"
+    
+    if "dbs:" in query:
+        with tempfile.NamedTemporaryFile() as f:
+            cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(query.replace("dbs:",""),f.name)
+            if verbose:
+                print("dbs query reformatted to:\n\t" + query)
+            os.system(cmd)
+            for line in f:
+                fileList.append(line.rstrip("\s\n\t"))
+    elif "glob:" in query:
+        query_stripped = query.replace("glob:","")
+        fileList = glob(query_stripped)
+    elif "list:" in query:
+        query_stripped = query.replace("list:","")
+        fileList = []
+        with open(query_stripped) as in_f:
+            for line in in_f:
+                fileList.append(line.rstrip("\s\n\t"))
+    if redir != "":
+        if verbose: print("prepending redir")
+        #Protect against double redirectors, assuming root:// is in the beginning
+        if len(fileList) > 0 and "root://" not in fileList[0]:
+            if verbose: print("Not prepending redirector, as one is already in place")
+            fileList[:] = [redir + file for file in fileList]
+
+    #Write desired output file with the list
     if outFileName:
-        raise NotImplementedError("returning file not eimplemented yet")
-        
+        if verbose: print("Writing output file {0:s}".format(outFileName))
+        with open(outFileName, 'w') as out_f:
+            for line in fileList:
+                out_f.write(line + "\n")
+    #Return the list
     return fileList
