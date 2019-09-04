@@ -588,6 +588,7 @@
         name: "MuMu_B"
         era: "2017"
         subera: "B"
+        channel: "MuMu"
         isData: True
         nEvents: 14501767
     source:
@@ -605,6 +606,7 @@
         name: "MuMu_C"
         era: "2017"
         subera: "C"
+        channel: "MuMu"
         isData: True
         nEvents: 49636525
     source:
@@ -622,6 +624,7 @@
         name: "MuMu_D"
         era: "2017"
         subera: "D"
+        channel: "MuMu"
         isData: True
         nEvents: 23075733
     source:
@@ -639,6 +642,7 @@
         name: "MuMu_E"
         era: "2017"
         subera: "E"
+        channel: "MuMu"
         isData: True
         nEvents: 51589091
     source:
@@ -656,6 +660,7 @@
         name: "MuMu_F"
         era: "2017"
         subera: "F"
+        channel: "MuMu"
         isData: True
         nEvents: 79756560
     source:
@@ -673,6 +678,7 @@
         name: "ElEl_B"
         era: "2017"
         subera: "B"
+        channel: "ElEl"
         isData: True
         nEvents: 58088760
     source:
@@ -690,6 +696,7 @@
         name: "ElEl_C"
         era: "2017"
         subera: "C"
+        channel: "ElEl"
         isData: True
         nEvents: 65181125
     source:
@@ -707,6 +714,7 @@
         name: "ElEl_D"
         era: "2017"
         subera: "D"
+        channel: "ElEl"
         isData: True
         nEvents: 25911432
     source:
@@ -724,6 +732,7 @@
         name: "ElEl_E"
         era: "2017"
         subera: "E"
+        channel: "ElEl"
         isData: True
         nEvents: 56233597
     source:
@@ -741,6 +750,7 @@
         name: "ElEl_F"
         era: "2017"
         subera: "F"
+        channel: "ElEl"
         isData: True
         nEvents: 74307066
     source:
@@ -758,6 +768,7 @@
         name: "ElMu_B"
         era: "2017"
         subera: "B"
+        channel: "ElMu"
         isData: True
         nEvents: 4453465
     source:
@@ -775,6 +786,7 @@
         name: "ElMu_C"
         era: "2017"
         subera: "C"
+        channel: "ElMu"
         isData: True
         nEvents: 15595214
     source:
@@ -792,6 +804,7 @@
         name: "ElMu_D"
         era: "2017"
         subera: "D"
+        channel: "ElMu"
         isData: True
         nEvents: 9164365
     source:
@@ -809,6 +822,7 @@
         name: "ElMu_E"
         era: "2017"
         subera: "E"
+        channel: "ElMu"
         isData: True
         nEvents: 19043421
     source:
@@ -826,6 +840,7 @@
         name: "ElMu_F"
         era: "2017"
         subera: "F"
+        channel: "ElMu"
         isData: True
         nEvents: 25776363
     source:
@@ -843,6 +858,7 @@
         name: "Mu_B"
         era: "2017"
         subera: "B"
+        channel: "Mu"
         isData: True
         nEvents: 136300266
     source:
@@ -860,6 +876,7 @@
         name: "Mu_C"
         era: "2017"
         subera: "C"
+        channel: "Mu"
         isData: True
         nEvents: 165652756
     source:
@@ -877,6 +894,7 @@
         name: "Mu_D"
         era: "2017"
         subera: "D"
+        channel: "Mu"
         isData: True
         nEvents: 70361660
     source:
@@ -894,6 +912,7 @@
         name: "Mu_E"
         era: "2017"
         subera: "E"
+        channel: "Mu"
         isData: True
         nEvents: 154630534
     source:
@@ -911,6 +930,7 @@
         name: "Mu_F"
         era: "2017"
         subera: "F"
+        channel: "Mu"
         isData: True
         nEvents: 242135500
     source:
@@ -928,6 +948,7 @@
         name: "El_B"
         era: "2017"
         subera: "B"
+        channel: "El"
         isData: True
         nEvents: 60537490
     source:
@@ -945,6 +966,7 @@
         name: "El_C"
         era: "2017"
         subera: "C"
+        channel: "El"
         isData: True
         nEvents: 136637888
     source:
@@ -962,6 +984,7 @@
         name: "El_D"
         era: "2017"
         subera: "D"
+        channel: "El"
         isData: True
         nEvents: 51526710
     source:
@@ -979,6 +1002,7 @@
         name: "El_E"
         era: "2017"
         subera: "E"
+        channel: "El"
         isData: True
         nEvents: 102121689
     source:
@@ -996,6 +1020,7 @@
         name: "El_F"
         era: "2017"
         subera: "F"
+        channel: "El"
         isData: True
         nEvents: 128467223
     source:
