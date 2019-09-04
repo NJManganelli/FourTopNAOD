@@ -285,7 +285,7 @@ class TriggerAndSelectionLogic(Module):
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         self.branchList = inputTree.GetListOfBranches()
-        if "genWeight" not in self.branchList:
+        if not self.isData and "genWeight" not in self.branchList:
             print("Warning in TriggerAndLogicSelection: expected branch genWeight to be present, but it is not. The weight magnitude indicated will be used, but the sign of the genWeight must be assumed positive!")
 
     def analyze(self, event):
