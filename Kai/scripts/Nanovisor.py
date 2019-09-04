@@ -25,6 +25,8 @@ parser.add_argument('--haddnano', dest='haddnano', action='store', nargs='?', ty
                     ' Default parsed_name will be derived from the grandparent folder, as it is tailored to CRAB output structure.')
 parser.add_argument('--check_events', dest='check_events', action='store', nargs='?', type=str, const='simple', default='NOCHECK',
                     help='check that the number of events in source files match those in the sample card, optional argument "local" for files in the user space or optional argument "dbs" for lookup using dasgoclient query')
+parser.add_argument('--fileLists', dest='fileLists', action='store', nargs='?', type=str, const='nanovisorFileLists', default=False,
+                    help='Write out fileLists for samples, with optional folder specified afterwards. Default folder will be "nanovisorFileLists"')
 parser.add_argument('--filter', dest='filter', action='store', type=str, default=None,
                     help='string to filter samples while checking events or generating configurations')
 # parser.add_argument('--check_size', dest='check_size', action='store_true',
@@ -55,7 +57,8 @@ def main():
         print("Both local_run and crab_run have been set to True; this is not supported. Exiting")
         sys.exit()
     print("Nanovisor will check integrity of sample card's event counts: " + str(args.check_events))
-    print("Nanovisor will use the following algorithm and working point for any btagging related SF calculations and event selection: " + str(args.btagger))
+    if args.btagger:
+        print("Nanovisor will use the following algorithm and working point for any btagging related SF calculations and event selection: " + str(args.btagger))
     if args.crab_run:
         print("Nanovisor will create crab configurations for stage {0:s} using source {1:s}".format(args.stage, args.source))
     if args.local_run:
@@ -163,7 +166,6 @@ def main():
     SampleList = []
     yaml = YAML() #default roundtrip type
     for scard in args.sample_cards:
-        # print("\t" + scard) #Already printed elsewhere
         with open(scard) as sample:
             SampleList += yaml.load(sample)
 
@@ -182,7 +184,7 @@ def main():
             with open(runFolder+"/PSet.py", "w") as PSet_py:
                 PSet_py.write(get_PSet_py(NanoAODPath))
         else:
-            print("runfolder '{0:s}' already exists. Rename or delete it and attempt resubmission".format(runFolder))
+            print("runfolder '{0:s}' already exists. Rename or delete it and attempt recreation".format(runFolder))
             sys.exit()
 
     if args.local_run:
@@ -193,7 +195,7 @@ def main():
         if not os.path.exists(runFolder):
             os.makedirs(runFolder)
         else:
-            print("runfolder '{0:s}' already exists. Rename or delete it and attempt resubmission".format(runFolder))
+            print("runfolder '{0:s}' already exists. Rename or delete it and attempt recreation".format(runFolder))
             sys.exit()
 
     total_Data_size = 0
@@ -218,6 +220,15 @@ def main():
         source = sample.get('source')
         inputDataset = source.get(args.source, None)
 
+        #Make outFileList.txt name combining sample, era, and source, if fileLists are requested
+        if args.fileLists:
+            #Make directory path which is nanovisorFileLists by default, optionally user-defined
+            if not os.path.exists(args.fileLists):
+                os.makedirs(args.fileLists)
+            sampleOutFile = args.fileLists + "/" + sampleName + "_" + era + "_" + args.source + ".txt"
+        else:
+            sampleOutFile=None
+
         #parse crab portion
         crab_cfg = sample.get('crab_cfg', {})
 
@@ -225,46 +236,18 @@ def main():
         postprocessor = sample['postprocessor']
     
         #write out the filelist to personal space in /tmp, if check_events or local_run is true, then use these to run
-        if args.check_events != 'NOCHECK' or args.local_run: # or args.check_size:
-            # query='--query="file dataset=' + inputDataset.replace("dbs:","") + '"'
-            # tmpFileLoc = '/tmp/{0:s}/sample_{1:d}_fileList.txt'.format(username, samplenumber)
-            # cmd = 'dasgoclient ' + query + ' > ' + tmpFileLoc
-            # os.system(cmd)
-        
-            # # Load the filelist names including redirector
-            # fileList = []
-            # with open(tmpFileLoc, "r") as rawFileList:
-            #     for line in rawFileList:
-            #         tempName = args.redir + line
-            #         tempName = tempName.rstrip()
-            #         fileList.append(tempName)
+        if args.check_events != 'NOCHECK' or args.local_run or args.fileLists: # or args.check_size:
             if inputDataset is None:
                 pass
                 # print("\tSkipped check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))
             elif "list:" in inputDataset or "glob:" in inputDataset or "dbs:" in inputDataset:
                 if "dbs:" in inputDataset:
-                    fileList = getFiles(query=inputDataset, redir=args.redir)
+                    fileList = getFiles(query=inputDataset, redir=args.redir, outFileName=sampleOutFile)
                 else:
-                    fileList = getFiles(query=inputDataset)
+                    fileList = getFiles(query=inputDataset, outFileName=sampleOutFile)
             else:
                 print("Need to append getFiles() query type to inputDataset, such as 'glob:' or 'list:' or 'dbs:'")
-            # elif "list:" in inputDataset:
-            #     fileList = getFiles(inFileName=inputDataset.replace("list:",""))
-            # elif "glob:" or "eoshome:" in inputDataset:
-            #     fileList = getFiles(query=inputDataset, globPath=inputDataset.replace("glob:","").replace("eoshome:",""), globFileExp="", verbose=args.verbose)
-            #     if len(fileList) == 0 and len(getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="tree_*.root")) > 0:
-            #         fileList = fileList = getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="tree_*.root")
-            #     if len(fileList) == 0 and len(getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="tree_*.root")) > 0:
-            #         fileList = fileList = getFiles(globPath=inputDataset.replace("glob:",""), globFileExp="/tree_*.root")
-            # else: # "dbs:" in inputDataset:
-            #     fileList = getFiles(dbsDataset=inputDataset.replace("dbs:",""), redir="root://cms-xrd-global.cern.ch/")
 
-        # if args.check_size:
-        #     #This will probably be abandoned in favor of using ROOT::Tfile::GetSize()
-        #     for fileName in fileList:
-        #         cmd = "xrdfs {0:s} stat {1:s} | awk '$1 ~ /Size/ {print $2}'".format(bareRedir, fileName.replace(args.redir, ""))
-        #         print(cmd)
-        
         if args.check_events != 'NOCHECK':
             if isData == False:
                 current_events_in_files = 0
@@ -282,9 +265,9 @@ def main():
                 dataset_size = 0
                 print("Checking {0:d} files".format(len(fileList)))
                 for fn, fileName in enumerate(fileList):
-                    if args.verbose: print("File {} of {}".format(fn, len(fileList)))
-                    # print("Opening {0}".format(fileName))
-                    print("#", end="")
+                    if args.verbose: 
+                        print("File {} of {}".format(fn, len(fileList)))
+                        print("#", end="")
                     f = ROOT.TFile.Open(fileName, 'r')
                     dataset_size += int(f.GetSize())
                     tree = f.Get('Runs')
@@ -306,27 +289,6 @@ def main():
                         evtTree = f.Get('Events')
                         eventsTreeEntries = evtTree.GetEntries()
                         current_events_in_files += int(eventsTreeEntries)
-                    # pEntries = evtTree.Draw('>>pEntries', 'genWeight > 0')
-                    # print("Draw method" + str(pEntries))
-                    # nEntries = evtTree.Draw('>>nEntries', 'genWeight < 0')
-                    # print(nEntries)
-                    # events_in_files_positive += int(ROOT.gDirectory.Get('pEntries').GetN())
-                    # events_in_files_negative += int(ROOT.gDirectory.Get('nEntries').GetN())
-
-                    # if args.check_events == 'detailed':#Only do this for MC
-                    #     for i in xrange(eventsTreeEntries):
-                    #         pass
-                    #         # evtTree.GetEntry(i)
-                    #         # if evtTree.genWeight > 0:
-                    #         #     events_in_files_positive += 1
-                    #         # elif evtTree.genWeight < 0:
-                    #         #     events_in_files_negative += 1
-                    #         # else:
-                    #         #     raise RuntimeError("event with weight 0 in file: {0} run: {1} lumi: {2} event: {3}".format(f.GetName(), evtTree.run, 
-                    #         #                                                                                                evtTree.luminosityBlock, 
-                    #         #                                                                                                evtTree.event))
-                    #         if i % 10000 == 0:
-                    #             print("processed {0} events in file: {1}".format(i, f.GetName()))
                     f.Close()                                
                             
 
@@ -337,13 +299,6 @@ def main():
                     print("\tMismatch in dataset {0}: nEvents = {1:d}, events_in_files = {2:d}".format(sampleName, nEvents, events_in_files))
                 else:
                     print("\tIntegrity check successful for dataset {0}: {1:d}/{2:d} events".format(sampleName, events_in_files, nEvents))
-                # print("\tnEvents = {0:d}, processed_events = {1:d}, current_events_in_files = {4:d}, \n\tevents_sum_weights = {2:f}, "\
-                #       "events_sum_weights2 = {3:f}, \n\tevents_in_files_positive = {5:d}"\
-                #       ", events_in_files_negative = {6:d}, \n\tdataset_size = {7:4f}GB".format(nEvents, events_in_files, 
-                #                                       events_sum_weights, events_sum_weights2, 
-                #                                       current_events_in_files,events_in_files_positive,
-                #                                       events_in_files_negative, dataset_size/1024**3)
-                #   )
                 print("        nEvents: {0:d}\n        nEventsPositive: {1:d}\n        nEventsNegative: {2:d}\n        sumWeights: {3:f}\n        sumWeights2: {4:f}"\
                       "\n        processed_events: {5:d}\n        sample card nEvents: {6:d}"\
                       "\n        dataset_size: {7:4f}GB".format(current_events_in_files, 
@@ -364,8 +319,8 @@ def main():
                 dataset_size = 0
                 print("Checking {0:d} files".format(len(fileList)))
                 for fn, fileName in enumerate(fileList):
-                    # print("Opening {0}".format(fileName))
-                    print("#", end="")
+                    if args.verbose:
+                        print("#", end="")
                     f = ROOT.TFile.Open(fileName, 'r')
                     dataset_size += int(f.GetSize())
                     evtTree = f.Get('Events')
@@ -459,7 +414,7 @@ if [ "`tty`" != "not a tty" ]; then
   echo "YOU SHOULD NOT RUN THIS IN INTERACTIVE, IT DELETES YOUR LOCAL FILES"
 else
 
-ls -ltr .
+# ls -ltr .
 echo "ENV..................................."
 env 
 echo "VOMS"
@@ -479,7 +434,7 @@ mv python $CMSSW_BASE/python
 
 echo Found Proxy in: $X509_USER_PROXY
 python crab_script_{0:s}.py $1
-ls -ltr
+# ls -ltr
 fi
 """
     ret = crab_script_sh.format(requestName)
@@ -698,89 +653,6 @@ process.output = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.s
 process.out = cms.EndPath(process.output)
 """
     return PSet_py.format(str(NanoAODPath))
-
-
-
-
-
-# #import glob, os, tempfile
-# def getFiles(query=None, globPath=None, globFileExp="*.root", globSort=lambda f: int(f.split('_')[-1].replace('.root', '')), dbsDataset=None, inFileName=None, redir="", outFileName=None, verbose=False):
-#     """Use one of several different methods to acquire a list or text file specifying the filenames.
-
-# Method follows after globPath, inFileName, or dbsDataset is specified, with precedence going glob > dbs > file.
-# globPath should be globbable in python. For example "./my2017ttbarDir/*/results"
-# globPath has additional option globFileExp which defaults to "*.root", but can be changed to "tree_*.root" or "SF.txt" for example
-# dbsDataset should just be a string as would be used in DAS/dasgoclient search, such as "/DoubleMuon/*/NANOAOD"
-# inFileName should specify the path to a file storing the filenames as plain text.
-
-# additional options:
-# outFileName will write the filelist to the specified file path + name
-# redir will prepend the redirector to the beginning of the paths, such as redir="root://cms-xrd-global.cern.ch/"
-# """
-#     #methods to support: "dbs" using dasgoclient query, "glob" using directory path, "file" using text file
-#     fileList = []
-#     with tempfile.NamedTemporaryFile() as f:
-#         #check file exists as additional check?
-#         if query:
-#             if "dbs:" in query:
-#                 # if redir == "" and "root://" not in query: redir = "root://cms-xrd-global.cern.ch"
-#                 cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(query.replace("dbs:",""),f.name)
-#                 if verbose:
-#                     print("dbs query reformatted to:\n\t" + query)
-#                 os.system(cmd)
-#                 for line in f:
-#                     tmpName = redir + line
-#                     tmpName = tmpName.rstrip()
-#                     fileList.append(tmpName)
-#             elif "glob:" in query:
-#                 query_stripped = query.replace("glob:","")
-#                 fileList = glob(query_stripped)
-#             elif "list:" in query:
-#                 query_stripped = query.replace("list:","")
-#                 fileList = []
-#                 with open(query_stripped) as in_f:
-#                     for line in in_f:
-#                         fileList.append(redir + line.rstrip())
-#             return fileList
-#             #Kept as reminder for how to produce list with these files for xrootd transfers
-#                 # if "root://eoshome-{0:s}.cern.ch/".format(get_username()[0]) not in query_stripped:
-#                 #     query = "root://eoshome-{0:s}.cern.ch/".format(get_username()[0]) + query_stripped
-#                 #     if verbose:
-#                 #         print("eoshome query reformatted to:\n\t" + query)
-#             # elif "eoscms:" in query:
-#             #     if "root://eoscms.cern.ch/" not in query:
-#             #         query_stripped = query.replace("eoscms:","")
-#             #         query = "root://eoscms.cern.ch/" + query_stripped
-#             #         if args.verbose:
-#             #             print("eoscms query reformatted to:\n\t" + query)
-#         if inFileName:
-#             if True:
-#                 raise RuntimeError("getFiles() attempted using meth='file' without a inFileName specified")
-#             else:
-#                 pass
-#         elif globPath:
-#             if False:
-#                 raise RuntimeError("getFiles() attempted using meth='glob' without a globbable globPath specified")
-#             else:
-#                 fileList = glob("{0}".format(globPath) + globFileExp)
-#                 try:
-#                     fileList.sort(key=globSort)
-#                 except Exception:
-#                     print("Could not sort files prior to joining with haddnano")
-#         elif dbsDataset:
-#             if False:
-#                 raise RuntimeError("getFiles() attempted using meth='dbs' without a dbsDataset specified")
-#             else:
-#                 cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(dbsDataset,f.name)
-#                 os.system(cmd)
-#                 for line in f:
-#                     tmpName = redir + line
-#                     tmpName = tmpName.rstrip()
-#                     fileList.append(tmpName)
-#     if outFileName:
-#         raise NotImplementedError("returning file not eimplemented yet")
-        
-#     return fileList
 
 def get_username():
     return pwd.getpwuid( os.getuid() )[ 0 ]
