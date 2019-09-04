@@ -4,13 +4,15 @@ import os, pwd, sys, time, datetime
 import argparse
 import subprocess
 import pprint
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 from ruamel.yaml import YAML
 from glob import glob
 import tempfile
 import ROOT
 from FourTopNAOD.Kai.tools.toolbox import getFiles
 ROOT.PyConfig.IgnoreCommandLineOptions = True
+
+SampleTuple = namedtuple("SampleTuple", "fileList era subera isData isSignal nEvents nEventsPositive nEventsNegative crossSection channel")
 
 parser = argparse.ArgumentParser(description='Nanovisor handles submission and bookkeeping for physics samples.')
 parser.add_argument('--sample_cards', dest='sample_cards', action='store', nargs='*', type=str,
@@ -51,7 +53,7 @@ parser.add_argument('--verbose', dest='verbose', action='store_true',
 def main():
     args = parser.parse_args()
     NanoAODPath = "{0:s}/src/PhysicsTools/NanoAODTools".format(os.environ['CMSSW_BASE'])
-    username = 'nmangane'
+    username = pwd.getpwuid( os.getuid() )[ 0 ]
     bareRedir = args.redir.replace("root://", "").replace("/", "")
     if args.local_run and args.crab_run:
         print("Both local_run and crab_run have been set to True; this is not supported. Exiting")
@@ -163,11 +165,13 @@ def main():
         print("Finishing operations that require no sample card(s)")
         sys.exit()
 
-    SampleList = []
-    yaml = YAML() #default roundtrip type
-    for scard in args.sample_cards:
-        with open(scard) as sample:
-            SampleList += yaml.load(sample)
+    # SampleList = []
+    # yaml = YAML() #default roundtrip type
+    # for scard in args.sample_cards:
+    #     with open(scard) as sample:
+    #         SampleList += yaml.load(sample)
+
+    SampleList = load_sample_cards(args.sample_cards)
 
     #Generate crab and local folder name using the current time, outside the sample loop
     stageFolder = "Stage_{0:s}_to_{1:s}".format(args.source, args.stage)
@@ -203,19 +207,30 @@ def main():
     total_MC_size = 0
     total_MC_current_events = 0
     total_MC_processed_events = 0
+
+    variety_pack_filelist = []
+    variety_pack_tuples = []
     for samplenumber, sample in enumerate(SampleList):
         #Parse dataset portion
         dataset = sample.get('dataset')
         sampleName = dataset.get('name')
         era = dataset.get('era')
+        subera = dataset.get('subera', 'NONE')
+        channel = dataset.get('channel', 'NONE')
+
         #Filter samples early
         if args.filter:
             if type(args.filter) is str:
                 if args.filter not in sampleName+"_"+era:
                     continue
+
         isData = dataset.get('isData')
         nEvents = dataset.get('nEvents', 0) #Default to 0 when key DNE
-
+        nEventsPositive = dataset.get('nEventsPositive', 0)
+        nEventsNegative = dataset.get('nEventsNegative', 0)
+        isSignal = dataset.get('isSignal', False)
+        crossSection = dataset.get('crossSection', -1)
+        
         #parse source portion
         source = sample.get('source')
         inputDataset = source.get(args.source, None)
@@ -245,8 +260,14 @@ def main():
                     fileList = getFiles(query=inputDataset, redir=args.redir, outFileName=sampleOutFile)
                 else:
                     fileList = getFiles(query=inputDataset, outFileName=sampleOutFile)
+                if len(fileList) > 0: 
+                    variety_pack_filelist.append(fileList[0])
+                    variety_pack_tuples.append(SampleTuple(fileList=fileList[0:1], era=era, subera=subera, isData=isData, isSignal=isSignal, 
+                                                           nEvents=nEvents, nEventsPositive=nEventsPositive, nEventsNegative=nEventsNegative, 
+                                                           crossSection=crossSection, channel=channel))
             else:
                 print("Need to append getFiles() query type to inputDataset, such as 'glob:' or 'list:' or 'dbs:'")
+            
 
         if args.check_events != 'NOCHECK':
             if isData == False:
@@ -359,6 +380,18 @@ def main():
               "total_total_MC_size = {2:f}GB, total_MC_current_events = {3:d}, "\
               "total_MC_processed_events = {4:d}".format(total_Data_size/1024**3, total_Data_current_events, total_MC_size/1024**3,
                                                          total_MC_current_events, total_MC_processed_events))
+    if args.fileLists:
+        variety_outfile = args.fileLists + "/" + "variety_pack" + "_" + era + "_" + args.source + ".txt"
+        variety_outfile_tuples = args.fileLists + "/" + "variety_pack_tuples" + "_" + era + "_" + args.source + ".txt"
+        
+        with open(variety_outfile, "w") as out_f:
+            for line in variety_pack_filelist: 
+                out_f.write(line + "\n")
+        with open(variety_outfile_tuples, "w") as out_t:
+            for tup in variety_pack_tuples: 
+                out_t.write( tup.fileList[0] + "," + tup.era + "," + tup.subera + "," + str(tup.isData) + "," + str(tup.isSignal) + 
+                             "," + str(tup.nEvents) + "," + str(tup.nEventsPositive) + "," + str(tup.nEventsNegative) + "," + 
+                             str(tup.crossSection) + "," + str(tup.channel) + "\n")
             
 def get_crab_cfg(runFolder, requestName, NanoAODPath='.', splitting='', unitsPerJob = 1, inputDataset = '', storageSite = 'T2_CH_CERN', publication=True, stage='Baseline'):
     if 'dbs:' in inputDataset:
@@ -656,6 +689,14 @@ process.out = cms.EndPath(process.output)
 
 def get_username():
     return pwd.getpwuid( os.getuid() )[ 0 ]
+
+def load_sample_cards(sample_cards):
+    SampleList = []
+    yaml = YAML() #default roundtrip type
+    for scard in sample_cards:
+        with open(scard) as sample:
+            SampleList += yaml.load(sample)
+    return SampleList
 
 if __name__ == '__main__':
     main()
