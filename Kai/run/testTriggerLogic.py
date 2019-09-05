@@ -1,5 +1,5 @@
 from __future__ import division, print_function
-import os, sys
+import os, sys, subprocess
 import ROOT
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor 
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
@@ -14,7 +14,7 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 parser = argparse.ArgumentParser(description='Test of TriggerAndSelectionLogic Module and post-selection variables')
 parser.add_argument('--stage', dest='stage', action='store', type=str,
-                    help='Stage to be processed: test or process')
+                    help='Stage to be processed: test or cutstring or process or cache')
 parser.add_argument('--era', dest='era', action='store', type=str, default=None,
                     help='Era to be processed: 2017 or 2018')
 parser.add_argument('--subera', dest='subera', action='store', type=str, default=None,
@@ -80,6 +80,8 @@ Tuples.sort(key=lambda j : j[1]) #sort by subera
 Tuples.sort(key=lambda j : j[0]) #then by era, again
 # for tup in Tuples:
 #     print(tup)
+
+#Test the module initialization and cutstrings produced
 if args.stage == 'test':
     Mods = []
     for tup in Tuples:
@@ -87,9 +89,41 @@ if args.stage == 'test':
     for mod in Mods:
         print(mod.getCutString())
 
-elif args.stage == 'cutstring':
-    tuple_file = "anotherDirectory/variety_pack_tuples_2017_NANOv5.txt"
+#Cache files locally from a variety_pack_tuple, because remote files are wasting my time
+elif args.stage == 'cache':
+    tuple_file = "dirtestTriggerLogic/variety_pack_tuples_2017_NANOv5.txt"
+    local_tuple_file = "dirtestTriggerLogic/local_variety_pack_tuples_2017_NANOv5.txt"
+    files_to_cache = []
+    file_names = []
+    local_tuple_lines = []
     with open(tuple_file, "r") as in_f:
+        for l, line in enumerate(in_f):
+            #Don't clean line, going to write back with file name replacement
+            tup = line.split(",")
+            files_to_cache.append(tup[0])
+            #Fuck wasting more time on this, numerology it is
+            file_names.append("dirtestTriggerLogic/file_{}.root".format(str(l)))
+            local_tuple_lines.append(line.replace(files_to_cache[-1], file_names[-1]))
+
+    xrd_list = zip(files_to_cache, file_names)
+
+    with open(local_tuple_file, "w") as out_f:
+        for line in local_tuple_lines:
+            out_f.write(line)
+
+    # subprocess.Popen(args="voms-proxy-info", shell=True, executable="/bin/zsh", env=dict(os.environ))
+    # subprocess.Popen(args="print $PWD", shell=True, executable="/bin/zsh", env=dict(os.environ))
+    for file_original, file_local in xrd_list:
+        pass
+        # os.system("echo xrdcp {} {}".format(file_original, file_local))
+        # subprocess.Popen(args="xrdcp {} {}".format(file_original, file_local), shell=True, executable="/bin/zsh", env=dict(os.environ))
+        #Call subprocess such that the script waits for it to finish. Otherwise, the script continues and can finish while subprocesses run in the background, and output will get muxed a bit. Useful, however, for interacting with shell while something runs!
+        subprocess.Popen(args="xrdcp {} {}".format(file_original, file_local), shell=True, executable="/bin/zsh", env=dict(os.environ)).wait()
+
+#Test the counts from using the cutstrings
+elif args.stage == 'cutstring':
+    local_tuple_file = "dirtestTriggerLogic/local_variety_pack_tuples_2017_NANOv5.txt"
+    with open(local_tuple_file, "r") as in_f:
         for l, line in enumerate(in_f):
             # if l > 0: 
             #     continue
@@ -111,6 +145,13 @@ elif args.stage == 'cutstring':
                 nEventsNegative = 0
             crossSection = float(tup[8])
             channel = tup[9]
+
+            #Skip choices if requested, only with explicit parameter choice
+            if args.era and era != args.era:
+                continue
+            if args.subera and subera != args.subera:
+                continue
+
 
             if isData in ["True", "TRUE", "true"]:
                 isData = True
@@ -163,7 +204,96 @@ elif args.stage == 'cutstring':
                               outputbranchsel=None,
                               maxEntries=None,
                               firstEntry=0,
-                              prefetch=False,
+                              # prefetch=False,
+                              prefetch=True,
+                              longTermCache=False
+            )
+            p.run()
+#Just run the module without the cutstring, for comparing counts
+elif args.stage == 'process':
+    local_tuple_file = "dirtestTriggerLogic/local_variety_pack_tuples_2017_NANOv5.txt"
+    with open(local_tuple_file, "r") as in_f:
+        for l, line in enumerate(in_f):
+            # if l > 0: 
+            #     continue
+
+            cline = line.rstrip("\n\s\t")
+            tup = cline.split(",") #0 filename, 1 era, 2 subera, 3 isData, 4 isSignal, 5 nEvents, 6 nEvents+, 7 nEvents-, 8 crossSection, 9 channel
+            # for t in tup: print(t)
+            files = [tup[0]]
+            era = tup[1]
+            subera = tup[2]
+            isData = tup[3]
+            isSignal = tup[4]
+            nEvents = int(tup[5])
+            try:
+                nEventsPositive = int(tup[6])
+                nEventsNegative = int(tup[7])
+            except:
+                nEventsPositive = 0
+                nEventsNegative = 0
+            crossSection = float(tup[8])
+            channel = tup[9]
+
+            #Skip choices if requested, only with explicit parameter choice
+            if args.era and era != args.era:
+                continue
+            if args.subera and subera != args.subera:
+                continue
+
+            if isData in ["True", "TRUE", "true"]:
+                isData = True
+            else:
+                isData = False
+            if isSignal in ["True", "TRUE", "true"]:
+                isSignal = True
+            else:
+                isSignal = False
+            if channel not in ["ElMu", "MuMu", "ElEl", "Mu", "El"]:
+                # print("converting channel {} to None".format(channel))
+                channel = None
+            if era == "2017":
+                lumi = 41.53
+            elif era == "2018":
+                lumi = 60 #rough estimate
+            else:
+                lumi = 1
+
+            if not isData:
+                if nEventsNegative > 0 and nEventsPositive > 0:
+                    weight = lumi * 1000 * crossSection / (nEventsPositive - nEventsNegative)
+                else:
+                    weight = lumi * 1000 * crossSection / nEvents
+                subera = None
+            else:
+                weight = 1
+            # print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
+            modules = [TriggerAndSelectionLogic(era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight)]
+            # print(modules[0].getCutString())
+            p = PostProcessor(".",
+                              files,
+                              # cut=modules[0].getCutString(),
+                              cut=None,
+                              branchsel=None,
+                              modules=modules,
+                              compression="LZMA:9",
+                              friend=False,
+                              postfix=None,
+                              jsonInput=None,
+                              # noOut=True,
+                              noOut=False,
+                              # justcount=True,
+                              justcount=False,
+                              provenance=False,
+                              haddFileName=None,
+                              fwkJobReport=False,
+                              histFileName=None,
+                              histDirName=None, 
+                              outputbranchsel=None,
+                              maxEntries=None,
+                              firstEntry=0,
+                              # prefetch=False,
+                              prefetch=True,
                               longTermCache=False
             )
             p.run()
