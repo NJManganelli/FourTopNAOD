@@ -1,4 +1,4 @@
-import collections
+import collections, math
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera tier channel leadMuThresh subMuThresh leadElThresh subElThresh")
