@@ -14,7 +14,7 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 parser = argparse.ArgumentParser(description='Test of TriggerAndSelectionLogic Module and post-selection variables')
 parser.add_argument('--stage', dest='stage', action='store', type=str,
-                    help='Stage to be processed: test or cutstring or process or cache or correct')
+                    help='Stage to be processed: test or cache or correct or cutstring or process or combined or plot')
 parser.add_argument('--era', dest='era', action='store', type=str, default=None,
                     help='Era to be processed: 2017 or 2018')
 parser.add_argument('--subera', dest='subera', action='store', type=str, default=None,
@@ -363,6 +363,183 @@ elif args.stage == 'process':
                               fwkJobReport=False,
                               histFileName=None,
                               histDirName=None, 
+                              outputbranchsel=None,
+                              maxEntries=None,
+                              firstEntry=0,
+                              # prefetch=False,
+                              prefetch=True,
+                              longTermCache=False
+            )
+            p.run()
+
+#Simultaneously run the module and the cutstring
+elif args.stage == 'combined':
+    local_tuple_file = "dirtestTriggerLogic/local_variety_pack_tuples_2017_NANOv5.txt"
+    with open(local_tuple_file, "r") as in_f:
+        for l, line in enumerate(in_f):
+            # if l > 0: 
+            #     continue
+
+            cline = line.rstrip("\n\s\t")
+            tup = cline.split(",") #0 filename, 1 era, 2 subera, 3 isData, 4 isSignal, 5 nEvents, 6 nEvents+, 7 nEvents-, 8 crossSection, 9 channel
+            # for t in tup: print(t)
+            files = [tup[0]]
+            era = tup[1]
+            subera = tup[2]
+            isData = tup[3]
+            isSignal = tup[4]
+            nEvents = int(tup[5])
+            try:
+                nEventsPositive = int(tup[6])
+                nEventsNegative = int(tup[7])
+            except:
+                nEventsPositive = 0
+                nEventsNegative = 0
+            crossSection = float(tup[8])
+            channel = tup[9]
+
+            #Skip choices if requested, only with explicit parameter choice
+            if args.era and era != args.era:
+                continue
+            if args.subera and subera != args.subera:
+                continue
+
+            if isData in ["True", "TRUE", "true"]:
+                isData = True
+            else:
+                isData = False
+            if isSignal in ["True", "TRUE", "true"]:
+                isSignal = True
+            else:
+                isSignal = False
+            if channel not in ["ElMu", "MuMu", "ElEl", "Mu", "El"]:
+                # print("converting channel {} to None".format(channel))
+                channel = None
+            if era == "2017":
+                lumi = 41.53
+            elif era == "2018":
+                lumi = 60 #rough estimate
+            else:
+                lumi = 1
+
+            if not isData:
+                if nEvents == (nEventsNegative + nEventsPositive):
+                    weight = lumi * 1000 * crossSection / (nEventsPositive - nEventsNegative)
+                else:
+                    weight = lumi * 1000 * crossSection / nEvents
+                subera = None
+            else:
+                weight = 1
+            # print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
+            modules = [TriggerAndSelectionLogic(era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=False)]
+            # print(modules[0].getCutString())
+            p = PostProcessor(".",
+                              files,
+                              cut=modules[0].getCutString(),
+                              # cut=None,
+                              branchsel=None,
+                              modules=modules,
+                              compression="LZMA:9",
+                              friend=False,
+                              postfix=None,
+                              jsonInput=None,
+                              noOut=True,
+                              # noOut=False,
+                              # justcount=True,
+                              justcount=False,
+                              provenance=False,
+                              haddFileName=None,
+                              fwkJobReport=False,
+                              histFileName=None,
+                              histDirName=None, 
+                              outputbranchsel=None,
+                              maxEntries=None,
+                              firstEntry=0,
+                              # prefetch=False,
+                              prefetch=True,
+                              longTermCache=False
+            )
+            p.run()
+
+elif args.stage == 'plot':
+    local_tuple_file = "dirtestTriggerLogic/local_variety_pack_tuples_2017_NANOv5.txt"
+    with open(local_tuple_file, "r") as in_f:
+        for l, line in enumerate(in_f):
+            # if l > 0: 
+            #     continue
+
+            cline = line.rstrip("\n\s\t")
+            tup = cline.split(",") #0 filename, 1 era, 2 subera, 3 isData, 4 isSignal, 5 nEvents, 6 nEvents+, 7 nEvents-, 8 crossSection, 9 channel
+            # for t in tup: print(t)
+            files = [tup[0]]
+            era = tup[1]
+            subera = tup[2]
+            isData = tup[3]
+            isSignal = tup[4]
+            nEvents = int(tup[5])
+            try:
+                nEventsPositive = int(tup[6])
+                nEventsNegative = int(tup[7])
+            except:
+                nEventsPositive = 0
+                nEventsNegative = 0
+            crossSection = float(tup[8])
+            channel = tup[9]
+
+            #Skip choices if requested, only with explicit parameter choice
+            if args.era and era != args.era:
+                continue
+            if args.subera and subera != args.subera:
+                continue
+
+            if isData in ["True", "TRUE", "true"]:
+                isData = True
+            else:
+                isData = False
+            if isSignal in ["True", "TRUE", "true"]:
+                isSignal = True
+            else:
+                isSignal = False
+            if channel not in ["ElMu", "MuMu", "ElEl", "Mu", "El"]:
+                # print("converting channel {} to None".format(channel))
+                channel = None
+            if era == "2017":
+                lumi = 41.53
+            elif era == "2018":
+                lumi = 60 #rough estimate
+            else:
+                lumi = 1
+
+            if not isData:
+                if nEvents == (nEventsNegative + nEventsPositive):
+                    weight = lumi * 1000 * crossSection / (nEventsPositive - nEventsNegative)
+                else:
+                    weight = lumi * 1000 * crossSection / nEvents
+                subera = None
+            else:
+                weight = 1
+            # print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
+            modules = [TriggerAndSelectionLogic(era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=False)]
+            # print(modules[0].getCutString())
+            p = PostProcessor("dirtestTriggerLogic",
+                              files,
+                              cut=modules[0].getCutString(),
+                              # cut=None,
+                              branchsel=None,
+                              modules=modules,
+                              compression="LZMA:9",
+                              friend=False,
+                              postfix=None,
+                              jsonInput=None,
+                              noOut=True,
+                              # noOut=False,
+                              # justcount=True,
+                              justcount=False,
+                              provenance=False,
+                              haddFileName=None,
+                              fwkJobReport=False,
+                              histFileName=era+subera+"_"+files[0].replace("file","hist"),
+                              histDirName="plots", 
                               outputbranchsel=None,
                               maxEntries=None,
                               firstEntry=0,
