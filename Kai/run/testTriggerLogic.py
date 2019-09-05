@@ -91,8 +91,8 @@ elif args.stage == 'cutstring':
     tuple_file = "anotherDirectory/variety_pack_tuples_2017_NANOv5.txt"
     with open(tuple_file, "r") as in_f:
         for l, line in enumerate(in_f):
-            if l > 0: 
-                continue
+            # if l > 0: 
+            #     continue
 
             cline = line.rstrip("\n\s\t")
             tup = cline.split(",") #0 filename, 1 era, 2 subera, 3 isData, 4 isSignal, 5 nEvents, 6 nEvents+, 7 nEvents-, 8 crossSection, 9 channel
