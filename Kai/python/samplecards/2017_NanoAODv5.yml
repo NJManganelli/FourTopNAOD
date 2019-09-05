@@ -77,10 +77,13 @@
         sumWeights2: 44925503249.097206
         isSignal: False
         procCrossSection: 831.76
-        crossSection: 1.32512
+        crossSection: 1.4705
         branchingRatio: 0.10706
-        filterEfficiency: 0.015
+        filterEfficiency: 0.0165139
+        filterEfficiencyUp: 0.0166437
+        filterEfficiencyDown: 0.0163847
         MCMCrossSection: 730
+	MCMfilterEfficiency: 0.015
     source:
         'NANOv5': "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
     postprocessor: 
