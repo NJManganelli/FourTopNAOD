@@ -32,7 +32,7 @@ class Trigger(Module):
         return False
 
 class TriggerAndSelectionLogic(Module):
-    def __init__(self, era="2013", subera=None, isData=False, TriggerChannel=None, weightMagnitude=1, fillHists=False, debug=False):
+    def __init__(self, era="2013", subera=None, isData=False, TriggerChannel=None, weightMagnitude=1, fillHists=False, debug=False, mode="Full"):
         """ Trigger logic that checks for fired triggers and searches for appropriate objects based on criteria set by fired triggers.
 
         Era is a string with the year of data taking or corresponding MC sample ("2017", "2018")
@@ -285,8 +285,13 @@ class TriggerAndSelectionLogic(Module):
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         self.branchList = inputTree.GetListOfBranches()
-        if not self.isData and "genWeight" not in self.branchList:
+        if self.isData:
+            self.XSweight = self.dataWeightFunc
+        elif "genWeight" not in self.branchList:
+            self.XSweight = self.backupWeightFunc
             print("Warning in TriggerAndLogicSelection: expected branch genWeight to be present, but it is not. The weight magnitude indicated will be used, but the sign of the genWeight must be assumed positive!")
+        else:
+            self.XSweight = self.genWeightFunc
 
     def analyze(self, event):
         """process event, return True (go to next module) or False (fail, go to next event)"""
@@ -294,9 +299,14 @@ class TriggerAndSelectionLogic(Module):
         #run = getattr(event, "run")
         #evt = getattr(event, "event")
         #lumi = getattr(event, "luminosityBlock")
-        weight = math.copysign(self.weightMagnitude, getattr(event, "genWeight", 1))
-        Fired = [trigger for trigger in self.Triggers if getattr(event, trigger.trigger, False)]
-        Vetoed = [trigger for trigger in self.vetoTriggers if getattr(event, trigger.trigger, False)]
+        # try:
+        #     weight = math.copysign(self.weightMagnitude, getattr(event, "genWeight", 1))
+        # except RuntimeError, e:
+        #     weight = 1
+        weight = self.XSweight(event)
+        #getattr with default value doesn't work, have to protect anyway...
+        Fired = [trigger for trigger in self.Triggers if hasattr(event, trigger.trigger) and getattr(event, trigger.trigger, False)]
+        Vetoed = [trigger for trigger in self.vetoTriggers if hasattr(event, trigger.trigger) and getattr(event, trigger.trigger, False)]
         if self.fillHists:
             if len(Vetoed) > 0: 
                 self.trigLogic_Freq.Fill("Vetoed", weight)
@@ -332,6 +342,15 @@ class TriggerAndSelectionLogic(Module):
         retString += passSection
 
         return retString
+
+    def genWeightFunc(self, event):
+        #Default value is currently useless, since the tree reader array tool raises an exception anyway
+        return math.copysign(self.weightMagnitude, getattr(event, "genWeight", 1))
+    def backupWeightFunc(self, event):
+        return self.weightMagnitude
+    def dataWeightFunc(self, event):
+        return 1
+
 
 ############## Trigger information
 #### 2018 ####
