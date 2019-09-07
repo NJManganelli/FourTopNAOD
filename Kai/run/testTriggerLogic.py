@@ -14,7 +14,7 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 parser = argparse.ArgumentParser(description='Test of TriggerAndSelectionLogic Module and post-selection variables')
 parser.add_argument('--stage', dest='stage', action='store', type=str,
-                    help='Stage to be processed: test or cache or correct or cutstring or process or combined or plot')
+                    help='Stage to be processed: test or cache or correct or cutstring or process or combined or hist')
 parser.add_argument('--era', dest='era', action='store', type=str, default=None,
                     help='Era to be processed: 2017 or 2018')
 parser.add_argument('--subera', dest='subera', action='store', type=str, default=None,
@@ -461,7 +461,7 @@ elif args.stage == 'combined':
             )
             p.run()
 
-elif args.stage == 'plot':
+elif args.stage == 'hist':
     local_tuple_file = "dirtestTriggerLogic/local_variety_pack_tuples_2017_NANOv5.txt"
     with open(local_tuple_file, "r") as in_f:
         for l, line in enumerate(in_f):
@@ -516,15 +516,17 @@ elif args.stage == 'plot':
                 else:
                     weight = lumi * 1000 * crossSection / nEvents
                 subera = None
+                theHistName = files[0].replace("file","hist_"+era)
             else:
+                theHistName = files[0].replace("file","hist_"+era+subera+"_"+channel)
                 weight = 1
             # print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
-            modules = [TriggerAndSelectionLogic(era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=False)]
+            modules = [TriggerAndSelectionLogic(era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=True)]
             # print(modules[0].getCutString())
             p = PostProcessor("dirtestTriggerLogic",
                               files,
-                              cut=modules[0].getCutString(),
-                              # cut=None,
+                              # cut=modules[0].getCutString(),
+                              cut=None,
                               branchsel=None,
                               modules=modules,
                               compression="LZMA:9",
@@ -538,7 +540,7 @@ elif args.stage == 'plot':
                               provenance=False,
                               haddFileName=None,
                               fwkJobReport=False,
-                              histFileName=era+subera+"_"+files[0].replace("file","hist"),
+                              histFileName=theHistName,
                               histDirName="plots", 
                               outputbranchsel=None,
                               maxEntries=None,
