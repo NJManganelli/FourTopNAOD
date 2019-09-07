@@ -147,42 +147,31 @@ class TriggerAndSelectionLogic(Module):
                                          tier=3,
                                          channel="Mu",
                                          leadMuThresh=25,
-                                         subMuThresh=15,
+                                         subMuThresh=99999,
                                          leadElThresh=99999,
-                                         subElThresh=15,
+                                         subElThresh=99999,
                                          nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_IsoMu27",
                                          era="2017",
-                                         subera="BCD",
+                                         subera="BCDEF",
                                          uniqueEraBit=7,
                                          tier=3,
                                          channel="Mu",
                                          leadMuThresh=28,
-                                         subMuThresh=15,
+                                         subMuThresh=99999,
                                          leadElThresh=99999,
-                                         subElThresh=15,
-                                         nontriggerLepThresh=15),
-                            TriggerTuple(trigger="HLT_IsoMu27",
-                                         era="2017",
-                                         subera="EF",
-                                         uniqueEraBit=6,
-                                         tier=3,
-                                         channel="Mu",
-                                         leadMuThresh=28,
-                                         subMuThresh=15,
-                                         leadElThresh=99999,
-                                         subElThresh=15,
+                                         subElThresh=99999,
                                          nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Ele35_WPTight_Gsf",
                                          era="2017",
                                          subera="BCDEF",
-                                         uniqueEraBit=5,
+                                         uniqueEraBit=6,
                                          tier=4,
                                          channel="El",
                                          leadMuThresh=99999,
-                                         subMuThresh=15,
+                                         subMuThresh=99999,
                                          leadElThresh=36,
-                                         subElThresh=15,
+                                         subElThresh=99999,
                                          nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
                                          era="2018",
@@ -257,9 +246,9 @@ class TriggerAndSelectionLogic(Module):
                                          tier=3,
                                          channel="Mu",
                                          leadMuThresh=25,
-                                         subMuThresh=15,
+                                         subMuThresh=99999,
                                          leadElThresh=99999,
-                                         subElThresh=15,
+                                         subElThresh=99999,
                                          nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Ele32_WPTight_Gsf",
                                          era="2018",
@@ -268,9 +257,9 @@ class TriggerAndSelectionLogic(Module):
                                          tier=4,
                                          channel="El",
                                          leadMuThresh=99999,
-                                         subMuThresh=15,
+                                         subMuThresh=99999,
                                          leadElThresh=33,
-                                         subElThresh=15,
+                                         subElThresh=99999,
                                          nontriggerLepThresh=15)]
         #Tiers and TriggerChannels should have a 1-to-1 or 1-to-multiple correspondence, dependant upon how data streams are arranged. Logic of multiple streams will need to be sorted for 2018, wheres some singleLepton stream is folded into the double lepton stream
         #2018 implication: given the combination of DoubleElectron and SingleElectron streams into EGamma (along with xPhoton?) data stream, this implies using the 4th backup tier and re-running over the same dataset yet again...
@@ -496,19 +485,53 @@ class TriggerAndSelectionLogic(Module):
                         nontriggerEl_selection[trigger.trigger].append((idx, el))
 
         #Do Lepton selection logic here
+        pass_baseline_bitset = 0
+        pass_selection_bitset = 0
         for trigger in Fired:
-            pass_baseline_lep[trigger.trigger] = False #convert to bit counter, 0 fail, 1 2+ leps, 2 less than 3 leps, 4 opp charge, 8 inv mass
-            pass_selection_lep[trigger.trigger] = False
+            pass_baseline_lep[trigger.trigger] = 0 #convert to bit counter, 0 fail, 1 2+ leps, 2 less than 3 leps, 4 opp charge, 8 inv mass, 16 ID requirements
+            pass_selection_lep[trigger.trigger] = 0
             
+            #FIXME: Need the mass, charge, 3-lepton vetos in place. Add a bitset for EVERY trigger, then work on single event-level bitset
+            #IDEA: Increment through all the bits for the [trigger.trigger] dict, like bitset += 2**0 if trigger leptons present,
+            #2**1 if less than 3 leptons, 2**2 if opp charge, 2**3 if past mass cut (null for most triggers), 2**4 if past ID requirements (or 2 bits for the ID levels)
             if trigger.channel == "ElMu":
-                if len(leadEl_baseline[trigger.trigger]) > 0 and len(
+                if len(leadEl_baseline[trigger.trigger]) > 0 and len(subMu_baseline[trigger.trigger]) > 0:
+                    pass_baseline_lep[trigger.trigger] += 2**0
+                if len(nontriggerEl_selection[trigger.trigger]) + len(nontriggerEl_selection[trigger.trigger]) <= 2:
+                    pass_baseline_lep[trigger.trigger] += 2**1
+                if pass_baseline_lep[trigger.trigger] >= 31: #Change to reflect proper number of bits used
+                    pass_baseline_bitset += 2**trigger.uniqueEraBit
+
+                if len(leadEl_selection[trigger.trigger]) > 0 and len(subMu_selection[trigger.trigger]) > 0:
+                    pass_selection_lep[trigger.trigger] += 2**0
+                if len(nontriggerEl_selection[trigger.trigger]) + len(nontriggerEl_selection[trigger.trigger]) <= 2:
+                    pass_selection_lep[trigger.trigger] += 2**1
+                if pass_selection_lep[trigger.trigger] >= 31:
+                    pass_selection_bitset += 2**trigger.uniqueEraBit
             elif trigger.channel == "MuMu":
-                pass
+                #Don't forget mass cut!
+                if len(leadMu_baseline[trigger.trigger]) > 0 and len(subMu_baseline[trigger.trigger]) > 1:
+                    pass_baseline_bitset += 2**trigger.uniqueEraBit
+                if len(leadMu_selection[trigger.trigger]) > 0 and len(subMu_selection[trigger.trigger]) > 1:
+                    pass_selection_bitset += 2**trigger.uniqueEraBit
             elif trigger.channel == "ElEl":
-                pass
+                #Don't forget mass cut? Definitely not the ID (loose + medium) cut!
+                if len(leadEl_baseline[trigger.trigger]) > 0 and len(subEl_baseline[trigger.trigger]) > 1:
+                    pass_baseline_bitset += 2**trigger.uniqueEraBit
+                if len(leadEl_selection[trigger.trigger]) > 0 and len(subEl_selection[trigger.trigger]) > 1:
+                    pass_selection_bitset += 2**trigger.uniqueEraBit
             elif trigger.channel == "Mu":
+                if len(leadMu_baseline[trigger.trigger]) > 0 and len(subMu_baseline[trig:
+                    pass_baseline_bitset += 2**trigger.uniqueEraBit
+                if len(leadMu_selection[trigger.trigger]) > 0 and len(subMu_selection[trigger.trigger]) > 1:
+                    pass_selection_bitset += 2**trigger.uniqueEraBit
+
+                #Don't forget eta maybe tkIso cut! Difference between 2017 and 2018 values
                 pass
             elif trigger.channel == "El":
+                #Don't forget higher ID requirement, maybe L1 Seed additional requirement in 2017?
+                pass
+            elif self.doUnbiasedTrigger:
                 pass
             else:
                 RuntimeError("Unhandled Trigger.channel class")
