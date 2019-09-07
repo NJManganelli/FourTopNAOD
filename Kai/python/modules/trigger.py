@@ -1,7 +1,16 @@
+import ROOT
 import collections, math
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
-TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera tier channel leadMuThresh subMuThresh leadElThresh subElThresh")
+#Notes on the TriggerTuple type. The Trigger is the string value naming the HLT branch, exactly as in NanoAOD (i.e. "HLT_IsoMu27" not "HLT_IsoMu27_v" or with wildcard as in Miniaod. 
+#The era and suberas are strings defining the year and run period(s) that the trigger is valid for. The constructor must be initialized with values that will have equality with the era and pass a python "in" check, such as "A" in "ABC" (True), where the latter subera is the value in the trigger tuple and the former is in the constructor for a run 20XX subera "A" dataset
+#The uniqueEraBit will be an integer defining the place in a bitset, and should be unique within the era. That is, If starting from 14 in 2017, then the 10th trigger would be 5, counting down. The important thing is that it is unique within that era, and for bits, it will calculate the value as the sum of 2^(bit_i) for all passing trigger_i.
+#The tier defines groupings, which are oriented toward selecting events without duplication from multiple data streams. Tier 0 is highest, in this case, and it increments to higher integers that have lower tier value/priority, reverse of the bit values. Triggers within the same tier use an OR logic, and triggers in lower tiers are only checked if NONE of the triggers in higher tiers fired, if it's data. For MC, an OR of all triggers regardless of tier is used (but with the correct era). 
+#The channel has a correspondence with the tiers, and so in this case, Tier 0 = "ElMu", the set of triggers with one muon and one electron. Tier 1 = "MuMu", the double muon triggers. Channels are easier handles for passing to the constructor when the MuonEG dataset, for example, is going to be used. This also allows internal reprioritization without changing constructors. To expound further on the tier logic, to prevent uselessly or incorrectly grabbing duplicate events that are in multiple data streams (An event that has two high-pt, isolated leptons can be in both the double lepton and single lepton sets, for example, if it fires both a double lep and single lep trigger). Thus, the event is only pulled from a dataset if it fires the correct trigger, and doesn't fire a trigger that would mean the event enters and gets selected from a higher tier.
+#run 2000657 event 290456921 fires the double muon and single muon triggers, tiers 1 and 3 respectively. It does not fire a tier 0 trigger. When processing the DoubleMuon dataset, it gets picked up because it did NOT fire a tier 0 trigger, but DID fire a tier 1 trigger (that it fired a tier 3 is ignored in this dataset). Now, when processing the single muon dataset, the event is processed again, however, now it fails the veto triggers by fact it fired the tier 1, and so it's ignored despite firing the tier 3. Overall, this permits picking up events that ONLY fire the lower tier trigger and not the higher, whilst preventing duplicate events from being picked up.
+#The leadXXXThresh and subXXXThresh are very specifically for TRIGGERING leptons. That is, if the Trigger is "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", then the leadMuThresh is going to be 23 (or higher, to be safe and more uniform across triggers - such as 25). the subMuThresh will be 99999! Because we do not want to find a second triggering muon at any pt. the leadElThresh is similarly 99999, because we're expecting the leading lepton to be the muon, not the electron. The subElThresh is then set at 15, 3 higher than strictly necessary for the second triggering lepton. Finally, we have to select non-triggering leptons for X-lepton veto and selecting events with second leptons when only single-lepton triggers are fired. The field for this is nontriggerLepThresh, which applies uniformly to muons and electrons.
+
+TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 
 class Trigger(Module):
     def __init__(self, Trigger):
@@ -42,11 +51,15 @@ class TriggerAndSelectionLogic(Module):
         fillHists is a boolean for filling histograms.
 
         Regarding data, internally there are 'tiers' associated with the trigger tuples. For MC, if the event fires any trigger from any tier, it should be accepted. 
-        For data, given that events can be duplicated across data streams ('SingleMuon' and 'MuonEG'), triggers are divided into tiers. The goal is to only select a data event
-        from the highest available tier of triggers that it fires, and veto that event in appropriate data streams when it corresponds to a lower trigger selection.
-        For example, let an event fire both a single muon trigger (tier 4) and a mu-mu trigger (tier 1), but not an e-mu trigger (tier 0). In the double muon dataset, 
+        For data, given that events can be duplicated across data streams ('SingleMuon' and 'MuonEG'), triggers are divided into tiers. 
+        The goal is to only select a data event from the highest available tier of triggers that it fires, and veto that event in appropriate 
+        data streams when it corresponds to a lower trigger selection.
+
+        For example, let an event fire both a single muon trigger (tier 3) and a mu-mu trigger (tier 1), but not an e-mu trigger (tier 0). In the double muon dataset, 
         the event is selected because it fired the tier 1 trigger in the list (and not the tier 0 triggers). In the single muon dataset, the event is veto'd, 
-        because it fired the tier 1 trigger as well as the tier 4."""
+        because it fired the tier 1 trigger as well as the tier 3. A different event that only fired the tier 3 trigger is appropriately picked up on the single muon 
+        dataset, and while it may exist in the double muon dataset, it will only be becasue of a trigger that we have not checked for, and so we must not have picked it up
+        in that dataset"""
         self.era = era
         self.subera = subera
         self.isData = isData
@@ -56,170 +69,209 @@ class TriggerAndSelectionLogic(Module):
             raise ValueError("In TriggerAndSelectionLogic is instantiated with isData, both subera and TriggerChannel must be slected ('B', 'F', 'El', 'ElMu', etc.")
         self.weightMagnitude = weightMagnitude
         self.fillHists = fillHists
+        if self.fillHists: 
+            self.writeHistFile = True
         self.debug = debug
+        self.mode = mode
         #TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera tier channel leadThresh subMuThresh")
         self.TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
                                          era="2017",
                                          subera="BCDEF",
+                                         uniqueEraBit=14,
                                          tier=0,
                                          channel="ElMu",
                                          leadMuThresh=25,
                                          subMuThresh=99999,
                                          leadElThresh=99999,
-                                         subElThresh=15),
+                                         subElThresh=15,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
                                          era="2017",
                                          subera="BCDEF",
+                                         uniqueEraBit=13,
                                          tier=0,
                                          channel="ElMu",
                                          leadMuThresh=99999,
                                          subMuThresh=15,
                                          leadElThresh=25,
-                                         subElThresh=99999),
+                                         subElThresh=99999,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ",
                                          era="2017",
                                          subera="B",
+                                         uniqueEraBit=12,
                                          tier=1,
                                          channel="MuMu",
                                          leadMuThresh=25,
                                          subMuThresh=15,
                                          leadElThresh=99999,
-                                         subElThresh=99999),
+                                         subElThresh=99999,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8",
                                          era="2017",
                                          subera="CDEF",
+                                         uniqueEraBit=11,
                                          tier=1,
                                          channel="MuMu",
                                          leadMuThresh=25,
                                          subMuThresh=15,
                                          leadElThresh=99999,
-                                         subElThresh=99999),
+                                         subElThresh=99999,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8",
                                          era="2017",
                                          subera="CDEF",
+                                         uniqueEraBit=10,
                                          tier=1,
                                          channel="MuMu",
                                          leadMuThresh=25,
                                          subMuThresh=15,
                                          leadElThresh=99999,
-                                         subElThresh=99999),
+                                         subElThresh=99999,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
                                          era="2017",
                                          subera="BCDEF",
+                                         uniqueEraBit=9,
                                          tier=2,
                                          channel="ElEl",
                                          leadMuThresh=99999,
                                          subMuThresh=99999,
                                          leadElThresh=25,
-                                         subElThresh=15),
+                                         subElThresh=15,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_IsoMu24_eta2p1",
                                          era="2017",
                                          subera="BCD",
+                                         uniqueEraBit=8,
                                          tier=3,
                                          channel="Mu",
                                          leadMuThresh=25,
                                          subMuThresh=15,
                                          leadElThresh=99999,
-                                         subElThresh=15),
+                                         subElThresh=15,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_IsoMu27",
                                          era="2017",
                                          subera="BCD",
+                                         uniqueEraBit=7,
                                          tier=3,
                                          channel="Mu",
                                          leadMuThresh=28,
                                          subMuThresh=15,
                                          leadElThresh=99999,
-                                         subElThresh=15),
+                                         subElThresh=15,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_IsoMu27",
                                          era="2017",
                                          subera="EF",
+                                         uniqueEraBit=6,
                                          tier=3,
                                          channel="Mu",
                                          leadMuThresh=28,
                                          subMuThresh=15,
                                          leadElThresh=99999,
-                                         subElThresh=15),
+                                         subElThresh=15,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Ele35_WPTight_Gsf",
                                          era="2017",
                                          subera="BCDEF",
+                                         uniqueEraBit=5,
                                          tier=4,
                                          channel="El",
                                          leadMuThresh=99999,
                                          subMuThresh=15,
                                          leadElThresh=36,
-                                         subElThresh=15),
+                                         subElThresh=15,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
                                          era="2018",
                                          subera="ABCD",
+                                         uniqueEraBit=14,
                                          tier=0,
                                          channel="ElMu",
                                          leadMuThresh=99999,
                                          subMuThresh=15,
                                          leadElThresh=25,
-                                         subElThresh=99999),
+                                         subElThresh=99999,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
                                          era="2018",
                                          subera="ABCD",
+                                         uniqueEraBit=13,
                                          tier=0,
                                          channel="ElMu",
                                          leadMuThresh=99999,
                                          subMuThresh=15,
                                          leadElThresh=25,
-                                         subElThresh=99999),
+                                         subElThresh=99999,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
                                          era="2018",
                                          subera="ABCD",
+                                         uniqueEraBit=12,
                                          tier=0,
                                          channel="ElMu",
                                          leadMuThresh=25,
                                          subMuThresh=99999,
                                          leadElThresh=99999,
-                                         subElThresh=15),
+                                         subElThresh=15,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8",
                                          era="2018",
                                          subera="ABCD",
+                                         uniqueEraBit=11,
                                          tier=1,
                                          channel="MuMu",
                                          leadMuThresh=25,
                                          subMuThresh=15,
                                          leadElThresh=99999,
-                                         subElThresh=99999),
+                                         subElThresh=99999,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8",
                                          era="2018",
                                          subera="ABCD",
+                                         uniqueEraBit=10,
                                          tier=1,
                                          channel="MuMu",
                                          leadMuThresh=25,
                                          subMuThresh=15,
                                          leadElThresh=99999,
-                                         subElThresh=99999),
+                                         subElThresh=99999,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
                                          era="2018",
                                          subera="ABCD",
+                                         uniqueEraBit=9,
                                          tier=2,
                                          channel="ElEl",
                                          leadMuThresh=99999,
                                          subMuThresh=99999,
                                          leadElThresh=25,
-                                         subElThresh=15),
+                                         subElThresh=15,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_IsoMu24",
                                          era="2018",
                                          subera="ABCD",
+                                         uniqueEraBit=8,
                                          tier=3,
                                          channel="Mu",
                                          leadMuThresh=25,
                                          subMuThresh=15,
                                          leadElThresh=99999,
-                                         subElThresh=15),
+                                         subElThresh=15,
+                                         nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Ele32_WPTight_Gsf",
                                          era="2018",
                                          subera="ABCD",
+                                         uniqueEraBit=7,
                                          tier=4,
                                          channel="El",
                                          leadMuThresh=99999,
                                          subMuThresh=15,
                                          leadElThresh=33,
-                                         subElThresh=15)]
+                                         subElThresh=15,
+                                         nontriggerLepThresh=15)]
         #Tiers and TriggerChannels should have a 1-to-1 or 1-to-multiple correspondence, dependant upon how data streams are arranged. Logic of multiple streams will need to be sorted for 2018, wheres some singleLepton stream is folded into the double lepton stream
         #2018 implication: given the combination of DoubleElectron and SingleElectron streams into EGamma (along with xPhoton?) data stream, this implies using the 4th backup tier and re-running over the same dataset yet again...
         #This is a waste of resources, but straightforward and keeps the same backup tiers. The alternative is to swap Mu and El backups, and combine the double electron and single electron into the same Tier...
@@ -235,6 +287,15 @@ class TriggerAndSelectionLogic(Module):
                                            3: ["Mu"],
                                            4: ["El"]}
                                   }
+        #The levels for filling histograms and event levels
+        self.levelToNameDict = {"T": "HLT Trigger",
+                                "B_Lep": "Baseline level with leptons",
+                                "B_Jet": "Baseline level with leptons and jets", 
+                                "B_HT": "Baseline level with leptons and jets and HT", 
+                                "S_Lep": "Selection level with leptons", 
+                                "S_Jet": "Selection level with leptons and jets", 
+                                "S_HT": "Selection level with leptons and jets and HT"
+                                }
         #Era subset of triggers, for use in bin labeling (cycle through axis and fill a bin for each trigger with weight 0.0)
         self.eraTriggers = [trigger for trigger in self.TriggerList if self.era == trigger.era]
         self.Triggers = [trigger for trigger in self.eraTriggers if self.isData == False or (self.subera in trigger.subera and self.TriggerChannel == trigger.channel)]
@@ -268,20 +329,31 @@ class TriggerAndSelectionLogic(Module):
             if histFile == None or histDirName == None:
                 raise RuntimeError("fillHists set to True, but no histFile or histDirName specified")
             Module.beginJob(self,histFile,histDirName)
-            self.trigLogic_Paths = ROOT.TH1D("trigLogic_Paths", "HLT Paths passed by events (weightMagnitude={0}); Paths; Events".format(self.weightMagnitude), self.PathsBins, self.PathsMin, self.PathsMax)
-            self.addObject(self.trigLogic_Paths)
-            self.trigLogic_Freq = ROOT.TH1D("trigLogic_Freq", "HLT Paths Fired and Vetoed (weightMagnitude={0}); Fired or Vetoed or Neither; Events".format(self.weightMagnitude), 1, 0, 0)
-            self.addObject(self.trigLogic_Freq)
-            self.trigLogic_2DCorrel = ROOT.TH2D("trigLogic_2DCorrel", "nGenJets, GenHT  Fail condition (weightMagnitude={0}); nGenJets; GenHT ".format(self.weightMagnitude),
-                                                self.PathsBins, self.PathsMin, self.PathsMax, self.PathsBins, self.PathsMin, self.PathsMax)
-            self.addObject(self.trigLogic_2DCorrel)
+            self.trigLogic_Paths = {}
+            self.trigLogic_Freq = {}
+            self.trigLogic_2DCorrel = {}
+            for lvl in ["T", "B_Lep", "B_Jet", "B_HT", "S_Lep", "S_Jet", "S_HT"]:
+                self.trigLogic_Paths[lvl] = ROOT.TH1D("trigLogic_Paths_{}".format(lvl), 
+                                                      "HLT Paths passed by events  at {} level (weightMagnitude={0}); Paths; Events".format(lvl, self.weightMagnitude), 
+                                                      self.PathsBins, self.PathsMin, self.PathsMax)
+                self.trigLogic_Freq[lvl] = ROOT.TH1D("trigLogic_Freq_{}".format(lvl), 
+                                                     "HLT Paths Fired and Vetoed at {} level  (weightMagnitude={0}); Type; Events".format(lvl, self.weightMagnitude), 
+                                                     1, 0, 0)
+                self.trigLogic_Correl[lvl] = ROOT.TH2D("trigLogic_Correl_{}".format(lvl), 
+                                                         "Fired HLT Path Correlations at {} level (weightMagnitude={0}); Path; Path ".format(lvl, self.weightMagnitude),
+                                                         self.PathsBins, self.PathsMin, self.PathsMax, self.PathsBins, self.PathsMin, self.PathsMax)
+            for lvl in ["T", "B_Lep", "B_Jet", "B_HT", "S_Lep", "S_Jet", "S_HT"]:
+                self.addObject(self.trigLogic_Paths[lvl])
+                self.addObject(self.trigLogic_Freq[lvl])
+                self.addObject(self.trigLogic_2DCorrel[lvl])
 
             #Initialize labels to keep consistent across all files
-            for trig in self.eraTriggers:
-                self.trigLogic_Paths.Fill(trig.trigger + "T{})".format(trig.tier), 0.0)
-                self.trigLogic_2DCorrel.Fill(trig.trigger + "T{})".format(trig.tier), trig.trigger + "T{})".format(trig.tier), 0.0)
-            for cat in ["Vetoed", "Fired", "Neither"]:
-                self.trigLogic_Freq.Fill(cat, 0.0)
+            for lvl in ["T", "B_Lep", "B_Jet", "B_HT", "S_Lep", "S_Jet", "S_HT"]:
+                for trig in self.eraTriggers:
+                    self.trigLogic_Paths[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), 0.0)
+                    self.trigLogic_Correl[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), trig.trigger + " (T{})".format(trig.tier), 0.0)
+                for cat in ["Vetoed", "Fired", "Neither"]:
+                    self.trigLogic_Freq[lvl].Fill(cat, 0.0)
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         self.branchList = inputTree.GetListOfBranches()
@@ -307,18 +379,154 @@ class TriggerAndSelectionLogic(Module):
         #getattr with default value doesn't work, have to protect anyway...
         Fired = [trigger for trigger in self.Triggers if hasattr(event, trigger.trigger) and getattr(event, trigger.trigger, False)]
         Vetoed = [trigger for trigger in self.vetoTriggers if hasattr(event, trigger.trigger) and getattr(event, trigger.trigger, False)]
+        muons = Collection(event, "Muon")
+        elecrtons = Collection(event, "Electron")
+
+        #Prepare dictionary with trigger names as keys
+        leadMu_baseline = {}
+        leadEl_baseline = {}
+        subMu_baseline = {}
+        subEl_baseline = {}
+        leadMu_selection = {}
+        leadEl_selection = {}
+        subMu_selection = {}
+        subEl_selection = {}
+        pass_baseline = {}
+        pass_selection = {}
+        #Create baseline and selection level lists for each trigger, permitting an event to pass at event and selection levels with different triggers
+        for trigger in Fired:
+            leadMu_baseline[trigger.trigger] = []
+            leadEl_baseline[trigger.trigger] = []
+            subMu_baseline[trigger.trigger] = []
+            subEl_baseline[trigger.trigger] = []
+            nontriggerMu_baseline[trigger.trigger] = []
+            nontriggerEl_baseline[trigger.trigger] = []
+            leadMu_selection[trigger.trigger] = []
+            leadEl_selection[trigger.trigger] = []
+            subMu_selection[trigger.trigger] = []
+            subEl_selection[trigger.trigger] = []
+            nontriggerMu_selection[trigger.trigger] = []
+            nontriggerEl_selection[trigger.trigger] = []
+            
+            #pass variables
+            pass_trigger[trigger.trigger] = True #If it's in fired, it fired
+            if len(Vetoed) < 1:
+                pass_trigger_veto[trigger.trigger] = True #both fired and not vetoed in the event
+            else:
+                pass_trigger_veto[trigger.trigger] = False #fired but vetoed
+            pass_baseline_lep[trigger.trigger] = False
+            pass_baseline_jet[trigger.trigger] = False
+            pass_baseline_ht[trigger.trigger] = False
+            pass_selection_lep[trigger.trigger] = False
+            pass_selection_jet[trigger.trigger] = False
+            pass_selection_ht[trigger.trigger] = False
+
+        #FIXME: Add dz cut, add iso cut or trg object cut, add to triggers as well
+        for idx, mu in enumerate(muons):
+            if len(Vetoed) > 0 or len(Fired) < 1: continue
+            d0 = math.sqrt(mu.dxy**2 + mu.dz**2)
+            pass_eta = (abs(mu.eta) < 2.4) #max regardless
+            #Baseline bools
+            pass_iso_baseline = (mu.pfIsoId >= 3) #trigger iso VVL, so selection = tight (4) far exceeds this...
+            pass_dz_baseline = (abs(mu.dz) < 0.06) #trigger dz = 0.2, selection = 0.02, baseline = 0.06
+            pass_d0_baseline = (d0 < 0.15) #selection = 0.10, baseline = 0.15
+            #Selection bools
+            pass_iso_selection = (mu.pfIsoId >= 4) #trigger iso VVL, so selection = tight (4) far exceeds this...
+            pass_dz_selection = (abs(mu.dz) < 0.02) #trigger dz = 0.2, selection = 0.02, baseline = 0.06
+            pass_d0_selection = (d0 < 0.10) #selection = 0.10, baseline = 0.15
+            pass_common_baseline = pass_eta and pass_iso_baseline and pass_dz_baseline and pass_d0_baseline
+            pass_common_selection = pass_eta and pass_iso_selection and pass_dz_selection and pass_d0_selection
+            for trigger in Fired:
+                if pass_common_baseline:
+                    #Create OVERLAPPING baseline collections
+                    if mu.pt > trigger.leadMuThresh:
+                        leadMu_baseline[trigger.trigger].append((idx, mu))
+                    if mu.pt > trigger.subMuThresh:
+                        subMu_baseline[trigger.trigger].append((idx, mu))
+                    if mu.pt > trigger.nontriggerLepThresh:
+                        nontriggerMu_baseline[trigger.trigger].append((idx, mu))
+                if pass_common_selection:
+                    #Create OVERLAPPING selection collections
+                    if mu.pt > trigger.leadMuThresh:
+                        leadMu_selection[trigger.trigger].append((idx, mu))
+                    if mu.pt > trigger.subMuThresh:
+                        subMu_selection[trigger.trigger].append((idx, mu))
+                    if mu.pt > trigger.nontriggerLepThresh:
+                        nontriggerMu_selection[trigger.trigger].append((idx, mu))
+    
+        for idx, el in enumerate(electrons):
+            if len(Vetoed) > 0 or len(Fired) < 1: continue
+            d0 = math.sqrt(el.dxy**2 + el.dz**2)
+            pass_eta_barrel = (abs(el.eta) < 1.4442) #crack edge
+            pass_eta_endcap = (abs(el.eta) > 1.4660 and abs(el.eta) < 2.5) #crack edge and calorimeters
+            if pass_eta_barrel: 
+                pass_d0_baseline = (d0 < 0.10) #selection < 0.05, baseline < 0.10
+                pass_d0_selection = (d0 < 0.05) #selection < 0.05, baseline < 0.10
+                pass_eta = True
+            elif pass_eta_endcap: 
+                pass_d0_baseline = (d0 < 0.15) #selection < 0.10, baseline < 0.15
+                pass_d0_selection = (d0 < 0.10) #selection < 0.10, baseline < 0.15
+                pass_eta = True
+            else: 
+                pass_d0_baseline = False #doesn't matter without eta pass
+                pass_d0_selection = False #doesn't matter without eta pass
+                pass_eta = False
+            pass_dz_baseline = (el.dz < 0.06) #selection < 0.02, baseline < 0.06, trigger < 0.2 presumably (verification needed)
+            pass_dz_selection = (el.dz < 0.02) #selection < 0.02, baseline < 0.06, trigger < 0.2 presumably (verification needed)
+            pass_id_loose = (el.cutBased_Fall17_V1 >= 2)
+            pass_id_medium = (el.cutBased_Fall17_V1 >= 3)
+            pass_common_baseline = pass_eta and pass_iso_baseline and pass_dz_baseline and pass_d0_baseline and pass_id_loose
+            pass_common_selection = pass_eta and pass_iso_selection and pass_dz_selection and pass_d0_selection and pass_id_loose
+            for trigger in Fired:
+                if pass_common_baseline:
+                    #Create OVERLAPPING baseline collections
+                    if el.pt > trigger.leadElThresh:
+                        leadEl_baseline[trigger.trigger].append((idx, el))
+                    if el.pt > trigger.subElThresh:
+                        subEl_baseline[trigger.trigger].append((idx, el))
+                    if el.pt > trigger.nontriggerLepThresh:
+                        nontriggerEl_baseline[trigger.trigger].append((idx, el))
+                if pass_common_selection:
+                    #Create OVERLAPPING selection collections
+                    if el.pt > trigger.leadElThresh:
+                        leadEl_selection[trigger.trigger].append((idx, el))
+                    if el.pt > trigger.subElThresh:
+                        subEl_selection[trigger.trigger].append((idx, el))
+                    if el.pt > trigger.nontriggerLepThresh:
+                        nontriggerEl_selection[trigger.trigger].append((idx, el))
+
+        #Do Lepton selection logic here
+        for trigger in Fired:
+            pass_baseline_lep[trigger.trigger] = False #convert to bit counter, 0 fail, 1 2+ leps, 2 less than 3 leps, 4 opp charge, 8 inv mass
+            pass_selection_lep[trigger.trigger] = False
+            
+            if trigger.channel == "ElMu":
+                if len(leadEl_baseline[trigger.trigger]) > 0 and len(
+            elif trigger.channel == "MuMu":
+                pass
+            elif trigger.channel == "ElEl":
+                pass
+            elif trigger.channel == "Mu":
+                pass
+            elif trigger.channel == "El":
+                pass
+            else:
+                RuntimeError("Unhandled Trigger.channel class")
+    
+#            for lvl in ["T", "B_Lep", "B_Jet", "B_HT", "S_Lep", "S_Jet", "S_HT"]:
         if self.fillHists:
             if len(Vetoed) > 0: 
-                self.trigLogic_Freq.Fill("Vetoed", weight)
+                self.trigLogic_Freq["T"].Fill("Vetoed", weight)
             elif len(Fired) > 0:
-                self.trigLogic_Freq.Fill("Fired", weight)
+                self.trigLogic_Freq["T"].Fill("Fired", weight)
             else:
-                self.trigLogic_Freq.Fill("Neither", weight)
+                self.trigLogic_Freq["T"].Fill("Neither", weight)
             for tn, trig in enumerate(Fired):
-                self.trigLogic_Paths.Fill(trig.trigger + " (T{})".format(trig.tier), weight)
+                self.trigLogic_Paths["T"].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
                 for tm, trig2 in enumerate(Fired):
-                    if tm > tn:
-                        self.trigLogic_2DCorrel.Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
+                    # if tm >= tn: #Do self correllation to set the scale properly
+                    #Just do full correlation matrix
+                    self.trigLogic_Correl["T"].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
         if len(Vetoed) == 0 and len(Fired) > 0: return True
         return False
 
