@@ -41,9 +41,10 @@ class Trigger(Module):
         return False
 
 class TriggerAndSelectionLogic(Module):
-    def __init__(self, era="2013", subera=None, isData=False, TriggerChannel=None, weightMagnitude=1, fillHists=False, debug=False, mode="Full"):
+    def __init__(self, passLevel, era="2013", subera=None, isData=False, TriggerChannel=None, weightMagnitude=1, fillHists=False, debug=False, mode="Flag"):
         """ Trigger logic that checks for fired triggers and searches for appropriate objects based on criteria set by fired triggers.
 
+        passLevel is the level at which the module should trigger "True" to pass the event along to further modules. Available: 'hlt', 'baseline', 'selection'
         Era is a string with the year of data taking or corresponding MC sample ("2017", "2018")
         Subera is a string with the subera of data-taking, only for use in combination with isData=True and TriggerChannel ("B", "E", etc.)
         isData is a boolean for when it's a data sample, as these are handled differently (trigger exclusivity and tier selection) from Monte Carlo.
@@ -60,6 +61,7 @@ class TriggerAndSelectionLogic(Module):
         because it fired the tier 1 trigger as well as the tier 3. A different event that only fired the tier 3 trigger is appropriately picked up on the single muon 
         dataset, and while it may exist in the double muon dataset, it will only be becasue of a trigger that we have not checked for, and so we must not have picked it up
         in that dataset"""
+        self.passLevel = passLevel
         self.era = era
         self.subera = subera
         self.isData = isData
@@ -69,10 +71,13 @@ class TriggerAndSelectionLogic(Module):
             raise ValueError("In TriggerAndSelectionLogic is instantiated with isData, both subera and TriggerChannel must be slected ('B', 'F', 'El', 'ElMu', etc.")
         self.weightMagnitude = weightMagnitude
         self.fillHists = fillHists
-        if self.fillHists: 
+        if self.fillHists or self.mode == "Plot": 
+            self.fillHists = True
             self.writeHistFile = True
         self.debug = debug
         self.mode = mode
+        if self.mode not in ["Flag", "Pass", "Fail", "Plot"]:
+            raise NotImplementedError("Not a supported mode for the TriggerAndSelectionLogic module: '{0}'".format(self.mode))
         #TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera tier channel leadThresh subMuThresh")
         self.TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
                                          era="2017",
@@ -316,7 +321,10 @@ class TriggerAndSelectionLogic(Module):
         self.PathsBins = 1
         self.PathsMin = 0
         self.PathsMax = 0
-        
+        self.BitsBins = 32
+        self.BitsMin = 0
+        self.BitsMax = 32
+
     def beginJob(self, histFile=None,histDirName=None):
         if self.fillHists == False:
             Module.beginJob(self, None, None)
@@ -327,7 +335,7 @@ class TriggerAndSelectionLogic(Module):
             self.trigLogic_Paths = {}
             self.trigLogic_Freq = {}
             self.trigLogic_2DCorrel = {}
-            for lvl in ["T", "B_Lep", "B_Jet", "B_HT", "S_Lep", "S_Jet", "S_HT"]:
+            for lvl in ["TRIG", "BASE", "SLCT"]:
                 self.trigLogic_Paths[lvl] = ROOT.TH1D("trigLogic_Paths_{}".format(lvl), 
                                                       "HLT Paths passed by events  at {} level (weightMagnitude={0}); Paths; Events".format(lvl, self.weightMagnitude), 
                                                       self.PathsBins, self.PathsMin, self.PathsMax)
@@ -337,28 +345,61 @@ class TriggerAndSelectionLogic(Module):
                 self.trigLogic_Correl[lvl] = ROOT.TH2D("trigLogic_Correl_{}".format(lvl), 
                                                          "Fired HLT Path Correlations at {} level (weightMagnitude={0}); Path; Path ".format(lvl, self.weightMagnitude),
                                                          self.PathsBins, self.PathsMin, self.PathsMax, self.PathsBins, self.PathsMin, self.PathsMax)
-            for lvl in ["T", "B_Lep", "B_Jet", "B_HT", "S_Lep", "S_Jet", "S_HT"]:
+                self.trigLogic_Bits[lvl] = ROOT.TH2D("trigLogic_Bits_{}".format(lvl), 
+                                                         "Fired HLT Path Bits at {} level (weightMagnitude={0}); Path; Bits ".format(lvl, self.weightMagnitude),
+                                                         self.PathsBins, self.PathsMin, self.PathsMax, self.BitsBins, self.BitsMin, self.BitsMax)
+            for lvl in ["TRIG", "BASE", "SLCT"]:
                 self.addObject(self.trigLogic_Paths[lvl])
                 self.addObject(self.trigLogic_Freq[lvl])
-                self.addObject(self.trigLogic_2DCorrel[lvl])
+                self.addObject(self.trigLogic_Correl[lvl])
+                self.addObject(self.trigLogic_Bits[lvl])
 
             #Initialize labels to keep consistent across all files
-            for lvl in ["T", "B_Lep", "B_Jet", "B_HT", "S_Lep", "S_Jet", "S_HT"]:
+            for lvl in ["TRIG", "BASE", "SLCT"]:
                 for trig in self.eraTriggers:
                     self.trigLogic_Paths[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), 0.0)
                     self.trigLogic_Correl[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), trig.trigger + " (T{})".format(trig.tier), 0.0)
+                    self.trigLogic_Bits[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), 0, 0.0)
                 for cat in ["Vetoed", "Fired", "Neither"]:
                     self.trigLogic_Freq[lvl].Fill(cat, 0.0)
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
+        self.out = wrappedOutputTree
         self.branchList = inputTree.GetListOfBranches()
+        self.outBranchList = self.out.GetListOfBranches() #Potential check against branches that are being written by previous modules
         if self.isData:
             self.XSweight = self.dataWeightFunc
         elif "genWeight" not in self.branchList:
             self.XSweight = self.backupWeightFunc
-            print("Warning in TriggerAndLogicSelection: expected branch genWeight to be present, but it is not. The weight magnitude indicated will be used, but the sign of the genWeight must be assumed positive!")
+            print("Warning in TriggerAndSelectionLogic: expected branch genWeight to be present, but it is not."\
+                  "The weight magnitude indicated will be used, but the sign of the genWeight must be assumed positive!")
         else:
             self.XSweight = self.genWeightFunc
+        self.varTuple = [('Muon_OSV_baseline', 'O', 'Passes TriggerAndSelectionLogic at baseline level', 'nMuon'),
+                         ('Muon_OSV_selection', 'O', 'Passes TriggerAndSelectionLogic at selection level', 'nMuon'),
+                         ('Electron_OSV_baseline', 'O', 'Passes TriggerAndSelectionLogic at baseline level', 'nElectron'),
+                         ('Electron_OSV_selection', 'O', 'Passes TriggerAndSelectionLogic at selection level', 'nElectron'),
+                         ('ESV_TriggerAndSelectionLogic_baseline', 's', 'Passes TriggerAndSelectionLogic at event level,'\
+                         ' bits correspond to uniqueEraBit in TriggerAndSelectionLogic', None),
+                         ('ESV_TriggerAndSelectionLogic_selection', 's', 'Passes TriggerAndSelectionLogic at event level,'\
+                         ' bits correspond to uniqueEraBit in TriggerAndSelectionLogic', None)
+                       ]        #OSV = Object Selection Variable
+        for trigger in self.eraTriggers:
+            #unsigned 16 bit integers for the trigger bit storage
+            self.varTuple.append(('ESV_TriggerEraBits_b{}'.format(trigger.uniqueEraBit), 's', 
+                                 'Bits (Baseline) for Trigger={}'\
+                                 'with uniqueEraBit={}'.format(trigger.trigger, trigger.uniqueEraBit), None))
+            self.varTuple.append(('ESV_TriggerEraBits_s{}'.format(trigger.uniqueEraBit), 's', 
+                                 'Bits (Selection) for Trigger={}'\
+                                 'with uniqueEraBit={}'.format(trigger.trigger, trigger.uniqueEraBit), None))
+        if self.mode == "Flag":
+            if not self.out:
+                raise RuntimeError("No Output file selected, cannot flag events for TriggerAndSelectionLogic module")
+            else:
+                for name, valType, valTitle, lVar in self.varTuple:
+                    self.out.branch("{}".format(name), valType, lenVar=lVar, title=valTitle) 
+        elif self.mode == "Pass" or self.mode == "Fail" or self.mode == "Plot":
+            pass
 
     def analyze(self, event):
         """process event, return True (go to next module) or False (fail, go to next event)"""
@@ -496,8 +537,6 @@ class TriggerAndSelectionLogic(Module):
         pass_selection_bitset = 0
         for trigger in Fired:            
             #FIXME: Need the mass, charge, 3-lepton vetos in place. Add a bitset for EVERY trigger, then work on single event-level bitset
-            #IDEA: Increment through all the bits for the [trigger.trigger] dict, like bitset += 2**0 if trigger leptons present,
-            #2**1 if less than 3 leptons, 2**2 if opp charge, 2**3 if past mass cut (null for most triggers), 2**4 if past ID requirements (or 2 bits for the ID levels)
             if trigger.channel == "ElMu":
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
                 if len(leadEl_baseline[trigger.trigger]) > 0 and len(subMu_baseline[trigger.trigger]) > 0:
@@ -677,7 +716,7 @@ class TriggerAndSelectionLogic(Module):
                             pass_baseline_lep[trigger.trigger] += 2**2
                             #ID Requirements, if any, beyond the loose-loose common selection
                             if leadEl_baseline[trigger.trigger][0][1].cutBased >= 4:
-                                #WPTight on these...
+                                #WPTight on these... effectively the medium cut in case of e-e channel
                                 pass_baseline_lep[trigger.trigger] += 2**3
                                 #Null invariant mass cut for single e channel - the trivial bit - but pair it with ID requirements here
                                 pass_baseline_lep[trigger.trigger] += 2**4
@@ -700,7 +739,7 @@ class TriggerAndSelectionLogic(Module):
                             pass_selection_lep[trigger.trigger] += 2**2
                             #ID Requirements, if any, beyond the loose-loose common selection
                             if leadEl_selection[trigger.trigger][0][1].cutBased >= 4:
-                                #WPTight on these...
+                                #WPTight on these... effectively the medium cut in case of e-e channel
                                 pass_selection_lep[trigger.trigger] += 2**3
                                 #Null invariant mass cut for single e channel - the trivial bit - but pair it with ID requirements here
                                 pass_selection_lep[trigger.trigger] += 2**4
@@ -711,22 +750,97 @@ class TriggerAndSelectionLogic(Module):
                 pass
             else:
                 RuntimeError("Unhandled Trigger.channel class")
-    
+
 #            for lvl in ["T", "B_Lep", "B_Jet", "B_HT", "S_Lep", "S_Jet", "S_HT"]:
         if self.fillHists:
+            #FIXME: this obviously needs reworking, now... need a dict?
             if len(Vetoed) > 0: 
-                self.trigLogic_Freq["T"].Fill("Vetoed", weight)
+                self.trigLogic_Freq["TRIG"].Fill("Vetoed", weight)
             elif len(Fired) > 0:
-                self.trigLogic_Freq["T"].Fill("Fired", weight)
+                self.trigLogic_Freq["TRIG"].Fill("Fired", weight)
+                if pass_baseline_bitset > 0:
+                    self.trigLogic_Freq["BASE"].Fill("Fired", weight)
+                if pass_selection_bitset > 0:
+                    self.trigLogic_Freq["SLCT"].Fill("Fired", weight)
             else:
-                self.trigLogic_Freq["T"].Fill("Neither", weight)
+                self.trigLogic_Freq["TRIG"].Fill("Neither", weight)
             for tn, trig in enumerate(Fired):
-                self.trigLogic_Paths["T"].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
+                self.trigLogic_Paths["TRIG"].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
+                if pass_baseline_lep[trig.trigger]:
+                    self.trigLogic_Paths["BASE"].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
+                if pass_selection_lep[trig.trigger]:
+                    self.trigLogic_Paths["SLCT"].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
+                self.trigLogic_Bits["BASE"].Fill(trig.trigger + " (T{})".format(trig.tier), pass_baseline_lep[trig.trigger], weight)
+                self.trigLogic_Bits["SLCT"].Fill(trig.trigger + " (T{})".format(trig.tier), pass_selection_lep[trig.trigger], weight)
                 for tm, trig2 in enumerate(Fired):
                     # if tm >= tn: #Do self correllation to set the scale properly
                     #Just do full correlation matrix
-                    self.trigLogic_Correl["T"].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
-        if len(Vetoed) == 0 and len(Fired) > 0: return True
+                    self.trigLogic_Correl["TRIG"].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
+                    if pass_baseline_lep[trig.trigger] and pass_baseline_lep[trig2.trigger]:
+                        self.trigLogic_Correl["BASE"].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
+                    if pass_selection_lep[trig.trigger] and pass_selection_lep[trig2.trigger]:
+                        self.trigLogic_Correl["SLCT"].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
+
+            
+            # for lvl in ["TRIG", "BASE", "SLCT"]:
+            #     if len(Vetoed) > 0: 
+            #         self.trigLogic_Freq[lvl].Fill("Vetoed", weight)
+            #     elif len(Fired) > 0:
+            #         self.trigLogic_Freq[lvl].Fill("Fired", weight)
+            #     else:
+            #         self.trigLogic_Freq[lvl].Fill("Neither", weight)
+            #     for tn, trig in enumerate(Fired):
+            #         self.trigLogic_Paths[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
+            #         self.trigLogic_Bits[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
+            #         for tm, trig2 in enumerate(Fired):
+            #             # if tm >= tn: #Do self correllation to set the scale properly
+            #             #Just do full correlation matrix
+            #             self.trigLogic_Correl[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
+
+
+        #############################################
+        ### Define variable dictionary for values ###
+        #############################################
+
+        #FIXME: Muon and Electron baseline and selection boolean lists...
+        #make a list with the successful idx's for each trigger path, then:
+        #import itertools
+        #muon_osv_baseline = list(itertools.repeat(False, len(muons)))
+        #muon_osv_baseline[idx_0] = True
+        #muon_osv_baseline[idx_1] = True
+
+        # ('Muon_OSV_baseline', 'O', 'Passes TriggerAndSelectionLogic at baseline level', 'nMuon'),
+        # ('Muon_OSV_selection', 'O', 'Passes TriggerAndSelectionLogic at selection level', 'nMuon'),
+        # ('Electron_OSV_baseline', 'O', 'Passes TriggerAndSelectionLogic at baseline level', 'nElectron'),
+        # ('Electron_OSV_selection', 'O', 'Passes TriggerAndSelectionLogic at selection level', 'nElectron'),
+        branchVals = {}
+        branchVals['ESV_TriggerAndSelectionLogic_hlt'] = (len(Vetoed) == 0 and len(Fired) > 0)
+        branchVals['ESV_TriggerAndSelectionLogic_baseline'] = pass_baseline_bitset
+        branchVals['ESV_TriggerAndSelectionLogic_selection'] = pass_selection_bitset
+        for trig3 in self.eraTriggers:
+            branchVals['ESV_TriggerEraBits_b{}'.format(trig3.uniqueEraBit)] = pass_baseline_lep[trig3.trigger]
+            branchVals['ESV_TriggerEraBits_s{}'.format(trig3.uniqueEraBit)] = pass_selection_lep[trig3.trigger]
+
+        ########################## 
+        ### Write out branches ###
+        ##########################         
+        if self.out and self.mode == "Flag":
+            for name, valType, valTitle, lVar in self.varTuple:
+                self.out.fillBranch(name, branchVals[name])
+        elif self.mode == "PassFail":
+            #Do nothing
+            pass
+        elif self.mode == "Plot":
+            #Do something?
+            pass
+            #Do pass through if plotting, make no assumptions about what should be done with the event
+#FIXME            return True
+        else:
+            raise NotImplementedError("No method in place for TriggerAndSelectionLogic module in mode '{0}'".format(self.mode))
+
+
+        if branchVals['ESV_TriggerAndSelectionLogic_{}'.format(self.passLevel)]:
+            return True
         return False
 
     def getCutString(self):
