@@ -548,14 +548,21 @@ class TriggerAndSelectionLogic(Module):
             #FIXME: Need the mass, charge, 3-lepton vetos in place. Add a bitset for EVERY trigger, then work on single event-level bitset
             if trigger.channel == "ElMu":
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
-                if len(leadEl_baseline[trigger.trigger]) > 0 and len(subMu_baseline[trigger.trigger]) > 0:
+                #Failure: This only selects leading electron trigger variants...
+                #exactly one of the lead collections will have a non-empty set of sub-99.999TeV leptons, thus we combine the orthogonal e and mu lists
+                leadLep_baseline = leadEl_baseline[trigger.trigger] + leadMu_baseline[trigger.trigger]
+                subLep_baseline = subEl_baseline[trigger.trigger] + subMu_baseline[trigger.trigger]
+                if len(leadLep_baseline) > 0 and len(subLep_baseline) > 0:
                     #2+ leptons of the right triggering types
                     pass_baseline_lep[trigger.trigger] += 2**0
                     if len(nontriggerEl_baseline[trigger.trigger]) + len(nontriggerMu_baseline[trigger.trigger]) <= 2:
                         #Superset containing the leading and subleading leptons, plus any additional leptons of any flavor at the nontriggering threshold
                         #Only 2 leptons here
-                        pass_baseline_lep[trigger.trigger] += 2**1                
-                        if leadEl_baseline[trigger.trigger][0][1].charge * subMu_baseline[trigger.trigger][0][1].charge < 0:
+                        pass_baseline_lep[trigger.trigger] += 2**1
+                        # if leadEl_baseline[trigger.trigger][0][1].charge * subMu_baseline[trigger.trigger][0][1].charge < 0:
+                        #Because we choose a lead and subleading lepton from separate collections, they must necessarily be non-overlapping collections.
+                        #We choose the first from each tuple, where the second item is the lepton, and then get its charge
+                        if leadLep_baseline[0][1].charge * subLep_baseline[0][1].charge < 0:
                             #Opposite sign leptons
                             pass_baseline_lep[trigger.trigger] += 2**2
                             #ID Requirements, if any, beyond the loose-loose common selection
@@ -567,14 +574,19 @@ class TriggerAndSelectionLogic(Module):
                     pass_baseline_bitset += 2**trigger.uniqueEraBit
 
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
-                if len(leadEl_selection[trigger.trigger]) > 0 and len(subMu_selection[trigger.trigger]) > 0:
+                leadLep_selection = leadEl_selection[trigger.trigger] + leadMu_selection[trigger.trigger]
+                subLep_selection = subEl_selection[trigger.trigger] + subMu_selection[trigger.trigger]
+                if len(leadLep_selection) > 0 and len(subLep_selection) > 0:
                     #2+ leptons of the right triggering types
                     pass_selection_lep[trigger.trigger] += 2**0
                     if len(nontriggerEl_selection[trigger.trigger]) + len(nontriggerMu_selection[trigger.trigger]) <= 2:
                         #Superset containing the leading and subleading leptons, plus any additional leptons of any flavor at the nontriggering threshold
                         #Only 2 leptons here
                         pass_selection_lep[trigger.trigger] += 2**1                
-                        if leadEl_selection[trigger.trigger][0][1].charge * subMu_selection[trigger.trigger][0][1].charge < 0:
+                        # if leadEl_selection[trigger.trigger][0][1].charge * subMu_selection[trigger.trigger][0][1].charge < 0:
+                        #Because we choose a lead and subleading lepton from separate collections, they must necessarily be non-overlapping collections.
+                        #We choose the first from each tuple, where the second item is the lepton, and then get its charge
+                        if leadLep_selection[0][1].charge * subLep_selection[0][1].charge < 0:
                             #Opposite sign leptons
                             pass_selection_lep[trigger.trigger] += 2**2
                             #ID Requirements, if any, beyond the loose-loose common selection
@@ -586,54 +598,56 @@ class TriggerAndSelectionLogic(Module):
                     pass_selection_bitset += 2**trigger.uniqueEraBit
             elif trigger.channel == "MuMu":
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
-                if len(leadMu_baseline[trigger.trigger]) > 0 and len(subMu_baseline[trigger.trigger]) > 0:
+                if len(leadMu_baseline[trigger.trigger]) > 0 and len(subMu_baseline[trigger.trigger]) > 1:
                     #2+ leptons of the right triggering types
                     pass_baseline_lep[trigger.trigger] += 2**0
                     if len(nontriggerEl_baseline[trigger.trigger]) + len(nontriggerMu_baseline[trigger.trigger]) <= 2:
                         #Superset containing the leading and subleading leptons, plus any additional leptons of any flavor at the nontriggering threshold
                         #Only 2 leptons here
-                        pass_baseline_lep[trigger.trigger] += 2**1                
-                        if leadMu_baseline[trigger.trigger][0][1].charge * subMu_baseline[trigger.trigger][0][1].charge < 0:
+                        pass_baseline_lep[trigger.trigger] += 2**1
+                        #Exploit fact that subMu is superset of leadMu in this case, and we have only 2 leptons passing cuts so far, so take the 1st and 2nd...
+                        if subMu_baseline[trigger.trigger][0][1].charge * subMu_baseline[trigger.trigger][1][1].charge < 0:
                             #Opposite sign leptons
                             pass_baseline_lep[trigger.trigger] += 2**2
                             #ID Requirements, if any, beyond the loose-loose common selection
                             #Trivialsolution right now, but couple with OS charge requirement
                             pass_baseline_lep[trigger.trigger] += 2**3
-                            if (leadMu_baseline[trigger.trigger][0][1].p4() * subMu_baseline[trigger.trigger][0][1].p4()).M() > 8.0:
+                            if (subMu_baseline[trigger.trigger][0][1].p4() + subMu_baseline[trigger.trigger][1][1].p4()).M() > 8.0:
                                 #Require invariant mass over 8GeV to simplify trigger tuples, Code could be simplified/unified, but eh...
                                 pass_baseline_lep[trigger.trigger] += 2**4
                 if pass_baseline_lep[trigger.trigger] >= 31: #Change to reflect proper number of bits used
                     pass_baseline_bitset += 2**trigger.uniqueEraBit
 
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
-                if len(leadMu_selection[trigger.trigger]) > 0 and len(subMu_selection[trigger.trigger]) > 0:
+                if len(leadMu_selection[trigger.trigger]) > 0 and len(subMu_selection[trigger.trigger]) > 1:
                     #2+ leptons of the right triggering types
                     pass_selection_lep[trigger.trigger] += 2**0
                     if len(nontriggerEl_selection[trigger.trigger]) + len(nontriggerMu_selection[trigger.trigger]) <= 2:
                         #Superset containing the leading and subleading leptons, plus any additional leptons of any flavor at the nontriggering threshold
                         #Only 2 leptons here
                         pass_selection_lep[trigger.trigger] += 2**1                
-                        if leadMu_selection[trigger.trigger][0][1].charge * subMu_selection[trigger.trigger][0][1].charge < 0:
+                        if subMu_selection[trigger.trigger][0][1].charge * subMu_selection[trigger.trigger][1][1].charge < 0:
                             #Opposite sign leptons
                             pass_selection_lep[trigger.trigger] += 2**2
                             #ID Requirements, if any, beyond the loose-loose common selection
                             #Trivialsolution right now, but couple with OS charge requirement
                             pass_selection_lep[trigger.trigger] += 2**3
-                            if (leadMu_selection[trigger.trigger][0][1].p4() * subMu_selection[trigger.trigger][0][1].p4()).M() > 8.0:
+                            if (subMu_selection[trigger.trigger][0][1].p4() + subMu_selection[trigger.trigger][1][1].p4()).M() > 8.0:
                                 #Require invariant mass over 8GeV to simplify trigger tuples, Code could be simplified/unified, but eh...
                                 pass_selection_lep[trigger.trigger] += 2**4
                 if pass_selection_lep[trigger.trigger] >= 31: #Change to reflect proper number of bits used
                     pass_selection_bitset += 2**trigger.uniqueEraBit
             elif trigger.channel == "ElEl":
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
-                if len(leadEl_baseline[trigger.trigger]) > 0 and len(subEl_baseline[trigger.trigger]) > 0:
+                #Since the same flavor, the subEl must be a superset of the leadEl, and we thus check the first is len>=2, the second len>=1
+                if len(leadEl_baseline[trigger.trigger]) > 0 and len(subEl_baseline[trigger.trigger]) > 1:
                     #2+ leptons of the right triggering types
                     pass_baseline_lep[trigger.trigger] += 2**0
                     if len(nontriggerEl_baseline[trigger.trigger]) + len(nontriggerMu_baseline[trigger.trigger]) <= 2:
                         #Superset containing the leading and subleading leptons, plus any additional leptons of any flavor at the nontriggering threshold
                         #Only 2 leptons here
-                        pass_baseline_lep[trigger.trigger] += 2**1                
-                        if leadEl_baseline[trigger.trigger][0][1].charge * subEl_baseline[trigger.trigger][0][1].charge < 0:
+                        pass_baseline_lep[trigger.trigger] += 2**1
+                        if subEl_baseline[trigger.trigger][0][1].charge * subEl_baseline[trigger.trigger][1][1].charge < 0:
                             #Opposite sign leptons
                             pass_baseline_lep[trigger.trigger] += 2**2
                             #ID Requirements, if any, beyond the loose-loose common selection
@@ -645,14 +659,14 @@ class TriggerAndSelectionLogic(Module):
                     pass_baseline_bitset += 2**trigger.uniqueEraBit
 
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
-                if len(leadEl_selection[trigger.trigger]) > 0 and len(subEl_selection[trigger.trigger]) > 0:
+                if len(leadEl_selection[trigger.trigger]) > 0 and len(subEl_selection[trigger.trigger]) > 1:
                     #2+ leptons of the right triggering types
                     pass_selection_lep[trigger.trigger] += 2**0
                     if len(nontriggerEl_selection[trigger.trigger]) + len(nontriggerMu_selection[trigger.trigger]) <= 2:
                         #Superset containing the leading and subleading leptons, plus any additional leptons of any flavor at the nontriggering threshold
                         #Only 2 leptons here
                         pass_selection_lep[trigger.trigger] += 2**1                
-                        if leadEl_selection[trigger.trigger][0][1].charge * subEl_selection[trigger.trigger][0][1].charge < 0:
+                        if subEl_selection[trigger.trigger][0][1].charge * subEl_selection[trigger.trigger][1][1].charge < 0:
                             #Opposite sign leptons
                             pass_selection_lep[trigger.trigger] += 2**2
                             #ID Requirements, if any, beyond the loose-loose common selection
