@@ -1,5 +1,6 @@
 import ROOT
 import collections, math
+from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
 #Notes on the TriggerTuple type. The Trigger is the string value naming the HLT branch, exactly as in NanoAOD (i.e. "HLT_IsoMu27" not "HLT_IsoMu27_v" or with wildcard as in Miniaod. 
@@ -44,7 +45,7 @@ class TriggerAndSelectionLogic(Module):
     def __init__(self, passLevel, era="2013", subera=None, isData=False, TriggerChannel=None, weightMagnitude=1, fillHists=False, debug=False, mode="Flag"):
         """ Trigger logic that checks for fired triggers and searches for appropriate objects based on criteria set by fired triggers.
 
-        passLevel is the level at which the module should trigger "True" to pass the event along to further modules. Available: 'hlt', 'baseline', 'selection'
+        passLevel is the level at which the module should trigger "True" to pass the event along to further modules. Available: 'all', 'veto', 'hlt', 'baseline', 'selection'
         Era is a string with the year of data taking or corresponding MC sample ("2017", "2018")
         Subera is a string with the subera of data-taking, only for use in combination with isData=True and TriggerChannel ("B", "E", etc.)
         isData is a boolean for when it's a data sample, as these are handled differently (trigger exclusivity and tier selection) from Monte Carlo.
@@ -71,14 +72,13 @@ class TriggerAndSelectionLogic(Module):
             raise ValueError("In TriggerAndSelectionLogic is instantiated with isData, both subera and TriggerChannel must be slected ('B', 'F', 'El', 'ElMu', etc.")
         self.weightMagnitude = weightMagnitude
         self.fillHists = fillHists
-        if self.fillHists or self.mode == "Plot": 
-            self.fillHists = True
-            self.writeHistFile = True
         self.debug = debug
         self.mode = mode
         if self.mode not in ["Flag", "Pass", "Fail", "Plot"]:
             raise NotImplementedError("Not a supported mode for the TriggerAndSelectionLogic module: '{0}'".format(self.mode))
-        #TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera tier channel leadThresh subMuThresh")
+        if self.fillHists or self.mode == "Plot": 
+            self.fillHists = True
+            self.writeHistFile = True
         self.TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
                                          era="2017",
                                          subera="BCDEF",
@@ -366,7 +366,6 @@ class TriggerAndSelectionLogic(Module):
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         self.out = wrappedOutputTree
         self.branchList = inputTree.GetListOfBranches()
-        self.outBranchList = self.out.GetListOfBranches() #Potential check against branches that are being written by previous modules
         if self.isData:
             self.XSweight = self.dataWeightFunc
         elif "genWeight" not in self.branchList:
@@ -379,17 +378,18 @@ class TriggerAndSelectionLogic(Module):
                          ('Muon_OSV_selection', 'O', 'Passes TriggerAndSelectionLogic at selection level', 'nMuon'),
                          ('Electron_OSV_baseline', 'O', 'Passes TriggerAndSelectionLogic at baseline level', 'nElectron'),
                          ('Electron_OSV_selection', 'O', 'Passes TriggerAndSelectionLogic at selection level', 'nElectron'),
-                         ('ESV_TriggerAndSelectionLogic_baseline', 's', 'Passes TriggerAndSelectionLogic at event level,'\
+                         ('ESV_TriggerAndSelectionLogic_baseline', 'i', 'Passes TriggerAndSelectionLogic at event level,'\
                          ' bits correspond to uniqueEraBit in TriggerAndSelectionLogic', None),
-                         ('ESV_TriggerAndSelectionLogic_selection', 's', 'Passes TriggerAndSelectionLogic at event level,'\
+                         ('ESV_TriggerAndSelectionLogic_selection', 'i', 'Passes TriggerAndSelectionLogic at event level,'\
                          ' bits correspond to uniqueEraBit in TriggerAndSelectionLogic', None)
                        ]        #OSV = Object Selection Variable
         for trigger in self.eraTriggers:
-            #unsigned 16 bit integers for the trigger bit storage
-            self.varTuple.append(('ESV_TriggerEraBits_b{}'.format(trigger.uniqueEraBit), 's', 
+            #unsigned 32 bit integers for the trigger bit storage, because 16 is not in the root branch to python branch 
+            #dictionary of the postprocessor framework's output module
+            self.varTuple.append(('ESV_TriggerEraBits_b{}'.format(trigger.uniqueEraBit), 'i', 
                                  'Bits (Baseline) for Trigger={}'\
                                  'with uniqueEraBit={}'.format(trigger.trigger, trigger.uniqueEraBit), None))
-            self.varTuple.append(('ESV_TriggerEraBits_s{}'.format(trigger.uniqueEraBit), 's', 
+            self.varTuple.append(('ESV_TriggerEraBits_s{}'.format(trigger.uniqueEraBit), 'i', 
                                  'Bits (Selection) for Trigger={}'\
                                  'with uniqueEraBit={}'.format(trigger.trigger, trigger.uniqueEraBit), None))
         if self.mode == "Flag":
@@ -416,19 +416,25 @@ class TriggerAndSelectionLogic(Module):
         Fired = [trigger for trigger in self.Triggers if hasattr(event, trigger.trigger) and getattr(event, trigger.trigger, False)]
         Vetoed = [trigger for trigger in self.vetoTriggers if hasattr(event, trigger.trigger) and getattr(event, trigger.trigger, False)]
         muons = Collection(event, "Muon")
-        elecrtons = Collection(event, "Electron")
+        electrons = Collection(event, "Electron")
 
         #Prepare dictionary with trigger names as keys
         leadMu_baseline = {}
         leadEl_baseline = {}
         subMu_baseline = {}
         subEl_baseline = {}
+        nontriggerEl_baseline = {}
+        nontriggerMu_baseline = {}
         leadMu_selection = {}
         leadEl_selection = {}
         subMu_selection = {}
         subEl_selection = {}
-        pass_baseline = {}
-        pass_selection = {}
+        nontriggerEl_selection = {}
+        nontriggerMu_selection = {}
+        pass_trigger = {}
+        pass_trigger_veto = {}
+        pass_baseline_lep = {}
+        pass_selection_lep = {}
         #Create baseline and selection level lists for each trigger, permitting an event to pass at event and selection levels with different triggers
         for trigger in Fired:
             leadMu_baseline[trigger.trigger] = []
@@ -452,15 +458,16 @@ class TriggerAndSelectionLogic(Module):
                 pass_trigger_veto[trigger.trigger] = False #fired but vetoed
             #Store bitsets here for details of the baseline and selection cuts
             pass_baseline_lep[trigger.trigger] = 0 #convert to bit counter, 0 fail, 1 2+ leps, 2 less than 3 leps, 4 opp charge, 8 ID requirements, 16 inv mass
-            pass_baseline_jet[trigger.trigger] = 0
-            pass_baseline_ht[trigger.trigger] = 0
+            # pass_baseline_jet[trigger.trigger] = 0
+            # pass_baseline_ht[trigger.trigger] = 0
             pass_selection_lep[trigger.trigger] = 0
-            pass_selection_jet[trigger.trigger] = 0
-            pass_selection_ht[trigger.trigger] = 0
+            # pass_selection_jet[trigger.trigger] = 0
+            # pass_selection_ht[trigger.trigger] = 0
 
         #FIXME: Add dz cut, add iso cut or trg object cut, add to triggers as well
         for idx, mu in enumerate(muons):
-            if len(Vetoed) > 0 or len(Fired) < 1: continue
+            if len(Vetoed) > 0 or len(Fired) < 1:
+                continue
             d0 = math.sqrt(mu.dxy**2 + mu.dz**2)
             pass_eta = (abs(mu.eta) < 2.4) #max regardless
             #Baseline bools
@@ -492,7 +499,8 @@ class TriggerAndSelectionLogic(Module):
                         nontriggerMu_selection[trigger.trigger].append((idx, mu))
     
         for idx, el in enumerate(electrons):
-            if len(Vetoed) > 0 or len(Fired) < 1: continue
+            if len(Vetoed) > 0 or len(Fired) < 1: 
+                continue
             d0 = math.sqrt(el.dxy**2 + el.dz**2)
             pass_eta_barrel = (abs(el.eta) < 1.4442) #crack edge
             pass_eta_endcap = (abs(el.eta) > 1.4660 and abs(el.eta) < 2.5) #crack edge and calorimeters
@@ -512,8 +520,8 @@ class TriggerAndSelectionLogic(Module):
             pass_dz_selection = (el.dz < 0.02) #selection < 0.02, baseline < 0.06, trigger < 0.2 presumably (verification needed)
             pass_id_loose = (el.cutBased >= 2)
             pass_id_medium = (el.cutBased >= 3)
-            pass_common_baseline = pass_eta and pass_iso_baseline and pass_dz_baseline and pass_d0_baseline and pass_id_loose
-            pass_common_selection = pass_eta and pass_iso_selection and pass_dz_selection and pass_d0_selection and pass_id_loose
+            pass_common_baseline = pass_eta and pass_dz_baseline and pass_d0_baseline and pass_id_loose
+            pass_common_selection = pass_eta and pass_dz_selection and pass_d0_selection and pass_id_loose
             for trigger in Fired:
                 if pass_common_baseline:
                     #Create OVERLAPPING baseline collections
@@ -539,6 +547,8 @@ class TriggerAndSelectionLogic(Module):
             #FIXME: Need the mass, charge, 3-lepton vetos in place. Add a bitset for EVERY trigger, then work on single event-level bitset
             if trigger.channel == "ElMu":
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
+                print(leadEl_baseline[trigger.trigger])
+                print(subMu_baseline[trigger.trigger])
                 if len(leadEl_baseline[trigger.trigger]) > 0 and len(subMu_baseline[trigger.trigger]) > 0:
                     #2+ leptons of the right triggering types
                     pass_baseline_lep[trigger.trigger] += 2**0
@@ -814,12 +824,19 @@ class TriggerAndSelectionLogic(Module):
         # ('Electron_OSV_baseline', 'O', 'Passes TriggerAndSelectionLogic at baseline level', 'nElectron'),
         # ('Electron_OSV_selection', 'O', 'Passes TriggerAndSelectionLogic at selection level', 'nElectron'),
         branchVals = {}
+        #FIXME: Dummy values, always false!
+        branchVals['Muon_OSV_baseline'] = [False]*len(muons)
+        branchVals['Muon_OSV_selection'] = [False]*len(muons)
+        branchVals['Electron_OSV_baseline'] = [False]*len(electrons)
+        branchVals['Electron_OSV_selection'] = [False]*len(electrons)
+        branchVals['ESV_TriggerAndSelectionLogic_all'] = True
+        branchVals['ESV_TriggerAndSelectionLogic_veto'] = (len(Vetoed) > 0)
         branchVals['ESV_TriggerAndSelectionLogic_hlt'] = (len(Vetoed) == 0 and len(Fired) > 0)
         branchVals['ESV_TriggerAndSelectionLogic_baseline'] = pass_baseline_bitset
         branchVals['ESV_TriggerAndSelectionLogic_selection'] = pass_selection_bitset
         for trig3 in self.eraTriggers:
-            branchVals['ESV_TriggerEraBits_b{}'.format(trig3.uniqueEraBit)] = pass_baseline_lep[trig3.trigger]
-            branchVals['ESV_TriggerEraBits_s{}'.format(trig3.uniqueEraBit)] = pass_selection_lep[trig3.trigger]
+            branchVals['ESV_TriggerEraBits_b{}'.format(trig3.uniqueEraBit)] = pass_baseline_lep.get(trig3.trigger, 0)
+            branchVals['ESV_TriggerEraBits_s{}'.format(trig3.uniqueEraBit)] = pass_selection_lep.get(trig3.trigger, 0)
 
         ########################## 
         ### Write out branches ###
