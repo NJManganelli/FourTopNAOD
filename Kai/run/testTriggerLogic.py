@@ -342,7 +342,7 @@ elif args.stage == 'process':
             else:
                 weight = 1
             # print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
-            modules = [TriggerAndSelectionLogic(era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=False)]
+            modules = [TriggerAndSelectionLogic(passLevel='baseline',era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=False, mode="Flag")]
             # print(modules[0].getCutString())
             p = PostProcessor(".",
                               files,
@@ -354,8 +354,8 @@ elif args.stage == 'process':
                               friend=False,
                               postfix=None,
                               jsonInput=None,
-                              noOut=True,
-                              # noOut=False,
+                              # noOut=True,
+                              noOut=False,
                               # justcount=True,
                               justcount=False,
                               provenance=False,
@@ -364,7 +364,7 @@ elif args.stage == 'process':
                               histFileName=None,
                               histDirName=None, 
                               outputbranchsel=None,
-                              maxEntries=None,
+                              maxEntries=300,
                               firstEntry=0,
                               # prefetch=False,
                               prefetch=True,
