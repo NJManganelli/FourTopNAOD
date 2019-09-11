@@ -334,19 +334,20 @@ class TriggerAndSelectionLogic(Module):
             Module.beginJob(self,histFile,histDirName)
             self.trigLogic_Paths = {}
             self.trigLogic_Freq = {}
-            self.trigLogic_2DCorrel = {}
+            self.trigLogic_Correl = {}
+            self.trigLogic_Bits = {}
             for lvl in ["TRIG", "BASE", "SLCT"]:
                 self.trigLogic_Paths[lvl] = ROOT.TH1D("trigLogic_Paths_{}".format(lvl), 
-                                                      "HLT Paths passed by events  at {} level (weightMagnitude={0}); Paths; Events".format(lvl, self.weightMagnitude), 
+                                                      "HLT Paths passed by events  at {} level (weightMagnitude={}); Paths; Events".format(lvl, self.weightMagnitude), 
                                                       self.PathsBins, self.PathsMin, self.PathsMax)
                 self.trigLogic_Freq[lvl] = ROOT.TH1D("trigLogic_Freq_{}".format(lvl), 
-                                                     "HLT Paths Fired and Vetoed at {} level  (weightMagnitude={0}); Type; Events".format(lvl, self.weightMagnitude), 
+                                                     "HLT Paths Fired and Vetoed at {} level  (weightMagnitude={}); Type; Events".format(lvl, self.weightMagnitude), 
                                                      1, 0, 0)
                 self.trigLogic_Correl[lvl] = ROOT.TH2D("trigLogic_Correl_{}".format(lvl), 
-                                                         "Fired HLT Path Correlations at {} level (weightMagnitude={0}); Path; Path ".format(lvl, self.weightMagnitude),
+                                                         "Fired HLT Path Correlations at {} level (weightMagnitude={}); Path; Path ".format(lvl, self.weightMagnitude),
                                                          self.PathsBins, self.PathsMin, self.PathsMax, self.PathsBins, self.PathsMin, self.PathsMax)
                 self.trigLogic_Bits[lvl] = ROOT.TH2D("trigLogic_Bits_{}".format(lvl), 
-                                                         "Fired HLT Path Bits at {} level (weightMagnitude={0}); Path; Bits ".format(lvl, self.weightMagnitude),
+                                                         "Fired HLT Path Bits at {} level (weightMagnitude={}); Path; Bits ".format(lvl, self.weightMagnitude),
                                                          self.PathsBins, self.PathsMin, self.PathsMax, self.BitsBins, self.BitsMin, self.BitsMax)
             for lvl in ["TRIG", "BASE", "SLCT"]:
                 self.addObject(self.trigLogic_Paths[lvl])
@@ -547,8 +548,6 @@ class TriggerAndSelectionLogic(Module):
             #FIXME: Need the mass, charge, 3-lepton vetos in place. Add a bitset for EVERY trigger, then work on single event-level bitset
             if trigger.channel == "ElMu":
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
-                print(leadEl_baseline[trigger.trigger])
-                print(subMu_baseline[trigger.trigger])
                 if len(leadEl_baseline[trigger.trigger]) > 0 and len(subMu_baseline[trigger.trigger]) > 0:
                     #2+ leptons of the right triggering types
                     pass_baseline_lep[trigger.trigger] += 2**0
