@@ -375,10 +375,10 @@ class TriggerAndSelectionLogic(Module):
                   "The weight magnitude indicated will be used, but the sign of the genWeight must be assumed positive!")
         else:
             self.XSweight = self.genWeightFunc
-        self.varTuple = [('Muon_OSV_baseline', 'O', 'Passes TriggerAndSelectionLogic at baseline level', 'nMuon'),
-                         ('Muon_OSV_selection', 'O', 'Passes TriggerAndSelectionLogic at selection level', 'nMuon'),
-                         ('Electron_OSV_baseline', 'O', 'Passes TriggerAndSelectionLogic at baseline level', 'nElectron'),
-                         ('Electron_OSV_selection', 'O', 'Passes TriggerAndSelectionLogic at selection level', 'nElectron'),
+        self.varTuple = [('Muon_OSV_baseline', 'i', 'Passes TriggerAndSelectionLogic at baseline level', 'nMuon'),
+                         ('Muon_OSV_selection', 'i', 'Passes TriggerAndSelectionLogic at selection level', 'nMuon'),
+                         ('Electron_OSV_baseline', 'i', 'Passes TriggerAndSelectionLogic at baseline level', 'nElectron'),
+                         ('Electron_OSV_selection', 'i', 'Passes TriggerAndSelectionLogic at selection level', 'nElectron'),
                          ('ESV_TriggerAndSelectionLogic_baseline', 'i', 'Passes TriggerAndSelectionLogic at event level,'\
                          ' bits correspond to uniqueEraBit in TriggerAndSelectionLogic', None),
                          ('ESV_TriggerAndSelectionLogic_selection', 'i', 'Passes TriggerAndSelectionLogic at event level,'\
@@ -436,6 +436,13 @@ class TriggerAndSelectionLogic(Module):
         pass_trigger_veto = {}
         pass_baseline_lep = {}
         pass_selection_lep = {}
+
+        #Prepare lepton selection bits
+        muon_osv_baseline = [0]*len(muons)
+        muon_osv_selection = [0]*len(muons)
+        electron_osv_baseline = [0]*len(electrons)
+        electron_osv_selection = [0]*len(electrons)
+
         #Create baseline and selection level lists for each trigger, permitting an event to pass at event and selection levels with different triggers
         for trigger in Fired:
             leadMu_baseline[trigger.trigger] = []
@@ -572,6 +579,21 @@ class TriggerAndSelectionLogic(Module):
                             pass_baseline_lep[trigger.trigger] += 2**4
                 if pass_baseline_lep[trigger.trigger] >= 31: #Change to reflect proper number of bits used
                     pass_baseline_bitset += 2**trigger.uniqueEraBit
+                    #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
+                    #Need to know the pdgId of each one to access the right index and set bit high
+                    #Technically, we know that if one is an electron, the other must be a muon, so we only need one if-else block
+                    if leadLep_baseline[0][1].pdgId in [-11, 11]: #electron-muon
+                        electron_osv_baseline[leadLep_baseline[0][0]] += 2**trigger.uniqueEraBit
+                        muon_osv_baseline[subLep_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    elif leadLep_baseline[0][1].pdgId in [-13, 13]: #muon-electron
+                        muon_osv_baseline[leadLep_baseline[0][0]] += 2**trigger.uniqueEraBit
+                        electron_osv_baseline[subLep_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    else:
+                        raise RuntimeError("Logical Error!")
+                    # if subLep_baseline[0][1].pdgId in [-11, 11]: #electron
+                    #     electron_osv_baseline[subLep_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    # else: #muon
+                    #     muon_osv_baseline[subLep_baseline[0][0]] += 2**trigger.uniqueEraBit
 
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
                 leadLep_selection = leadEl_selection[trigger.trigger] + leadMu_selection[trigger.trigger]
@@ -596,6 +618,18 @@ class TriggerAndSelectionLogic(Module):
                             pass_selection_lep[trigger.trigger] += 2**4
                 if pass_selection_lep[trigger.trigger] >= 31: #Change to reflect proper number of bits used
                     pass_selection_bitset += 2**trigger.uniqueEraBit
+                    #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
+                    #Need to know the pdgId of each one to access the right index and set bit high
+                    #Technically, we know that if one is an electron, the other must be a muon, so we only need one if-else block
+                    if leadLep_selection[0][1].pdgId in [-11, 11]: #electron-muon
+                        electron_osv_selection[leadLep_selection[0][0]] += 2**trigger.uniqueEraBit
+                        muon_osv_selection[subLep_selection[0][0]] += 2**trigger.uniqueEraBit
+                    elif leadLep_selection[0][1].pdgId in [-13, 13]: #muon-electron
+                        muon_osv_selection[leadLep_selection[0][0]] += 2**trigger.uniqueEraBit
+                        electron_osv_selection[subLep_selection[0][0]] += 2**trigger.uniqueEraBit
+                    else:
+                        raise RuntimeError("Logical Error!")
+
             elif trigger.channel == "MuMu":
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
                 if len(leadMu_baseline[trigger.trigger]) > 0 and len(subMu_baseline[trigger.trigger]) > 1:
@@ -617,6 +651,11 @@ class TriggerAndSelectionLogic(Module):
                                 pass_baseline_lep[trigger.trigger] += 2**4
                 if pass_baseline_lep[trigger.trigger] >= 31: #Change to reflect proper number of bits used
                     pass_baseline_bitset += 2**trigger.uniqueEraBit
+                    #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
+                    muon_osv_baseline[subMu_baseline[trigger.trigger][0][0]] += 2**trigger.uniqueEraBit
+                    muon_osv_baseline[subMu_baseline[trigger.trigger][1][0]] += 2**trigger.uniqueEraBit
+
+#FIXME: Simplify access to the collections so that trigger.trigger no longer needs to be referenced for the charge or accessing the indices, like ElMu or El channels
 
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
                 if len(leadMu_selection[trigger.trigger]) > 0 and len(subMu_selection[trigger.trigger]) > 1:
@@ -637,6 +676,10 @@ class TriggerAndSelectionLogic(Module):
                                 pass_selection_lep[trigger.trigger] += 2**4
                 if pass_selection_lep[trigger.trigger] >= 31: #Change to reflect proper number of bits used
                     pass_selection_bitset += 2**trigger.uniqueEraBit
+                    #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
+                    muon_osv_selection[subMu_selection[trigger.trigger][0][0]] += 2**trigger.uniqueEraBit
+                    muon_osv_selection[subMu_selection[trigger.trigger][1][0]] += 2**trigger.uniqueEraBit
+
             elif trigger.channel == "ElEl":
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
                 #Since the same flavor, the subEl must be a superset of the leadEl, and we thus check the first is len>=2, the second len>=1
@@ -657,6 +700,9 @@ class TriggerAndSelectionLogic(Module):
                             pass_baseline_lep[trigger.trigger] += 2**4
                 if pass_baseline_lep[trigger.trigger] >= 31: #Change to reflect proper number of bits used
                     pass_baseline_bitset += 2**trigger.uniqueEraBit
+                    #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
+                    electron_osv_baseline[subEl_baseline[trigger.trigger][0][0]] += 2**trigger.uniqueEraBit
+                    electron_osv_baseline[subEl_baseline[trigger.trigger][1][0]] += 2**trigger.uniqueEraBit
 
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
                 if len(leadEl_selection[trigger.trigger]) > 0 and len(subEl_selection[trigger.trigger]) > 1:
@@ -677,6 +723,10 @@ class TriggerAndSelectionLogic(Module):
                                 pass_selection_lep[trigger.trigger] += 2**4
                 if pass_selection_lep[trigger.trigger] >= 31: #Change to reflect proper number of bits used
                     pass_selection_bitset += 2**trigger.uniqueEraBit
+                    #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
+                    electron_osv_selection[subEl_selection[trigger.trigger][0][0]] += 2**trigger.uniqueEraBit
+                    electron_osv_selection[subEl_selection[trigger.trigger][1][0]] += 2**trigger.uniqueEraBit
+
 
             elif trigger.channel == "Mu":
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
@@ -699,6 +749,21 @@ class TriggerAndSelectionLogic(Module):
                             pass_baseline_lep[trigger.trigger] += 2**4
                 if pass_baseline_lep[trigger.trigger] >= 31: #Change to reflect proper number of bits used
                     pass_baseline_bitset += 2**trigger.uniqueEraBit
+                    #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
+                    #Obviously, now that we no longer know for certain what the 2nd lepton is, we must check
+                    if leptons_baseline[0][1].pdgId in [-11, 11]: #electron
+                        electron_osv_baseline[leptons_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    elif leptons_baseline[0][1].pdgId in [-13, 13]: #muon
+                        muon_osv_baseline[leptons_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    else:
+                        raise RuntimeError("Logical Error!")
+                    if leptons_baseline[1][1].pdgId in [-11, 11]: #electron
+                        electron_osv_baseline[leptons_baseline[1][0]] += 2**trigger.uniqueEraBit
+                    elif leptons_baseline[1][1].pdgId in [-13, 13]: #muon
+                        muon_osv_baseline[leptons_baseline[1][0]] += 2**trigger.uniqueEraBit
+                    else:
+                        raise RuntimeError("Logical Error!")
+
 
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
                 if len(leadMu_selection[trigger.trigger]) > 0 and (len(nontriggerEl_selection[trigger.trigger]) + len(nontriggerMu_selection[trigger.trigger])) > 1:
@@ -720,6 +785,20 @@ class TriggerAndSelectionLogic(Module):
                             pass_selection_lep[trigger.trigger] += 2**4
                 if pass_selection_lep[trigger.trigger] >= 31: #Change to reflect proper number of bits used
                     pass_selection_bitset += 2**trigger.uniqueEraBit
+                    #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
+                    #Obviously, now that we no longer know for certain what the 2nd lepton is, we must check
+                    if leptons_selection[0][1].pdgId in [-11, 11]: #electron
+                        electron_osv_selection[leptons_selection[0][0]] += 2**trigger.uniqueEraBit
+                    elif leptons_selection[0][1].pdgId in [-13, 13]: #muon
+                        muon_osv_selection[leptons_selection[0][0]] += 2**trigger.uniqueEraBit
+                    else:
+                        raise RuntimeError("Logical Error!")
+                    if leptons_selection[1][1].pdgId in [-11, 11]: #electron
+                        electron_osv_selection[leptons_selection[1][0]] += 2**trigger.uniqueEraBit
+                    elif leptons_selection[1][1].pdgId in [-13, 13]: #muon
+                        muon_osv_selection[leptons_selection[1][0]] += 2**trigger.uniqueEraBit
+                    else:
+                        raise RuntimeError("Logical Error!")
 
                 #Maybe FIXME: Don't forget eta or tkIso cuts different from double lepton values! Difference between 2017 and 2018 values
             elif trigger.channel == "El":
@@ -745,6 +824,20 @@ class TriggerAndSelectionLogic(Module):
                                 pass_baseline_lep[trigger.trigger] += 2**4
                 if pass_baseline_lep[trigger.trigger] >= 31: #Change to reflect proper number of bits used
                     pass_baseline_bitset += 2**trigger.uniqueEraBit
+                    #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
+                    #Obviously, now that we no longer know for certain what the 2nd lepton is, we must check
+                    if leptons_baseline[0][1].pdgId in [-11, 11]: #electron
+                        electron_osv_baseline[leptons_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    elif leptons_baseline[0][1].pdgId in [-13, 13]: #muon
+                        muon_osv_baseline[leptons_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    else:
+                        raise RuntimeError("Logical Error!")
+                    if leptons_baseline[1][1].pdgId in [-11, 11]: #electron
+                        electron_osv_baseline[leptons_baseline[1][0]] += 2**trigger.uniqueEraBit
+                    elif leptons_baseline[1][1].pdgId in [-13, 13]: #muon
+                        muon_osv_baseline[leptons_baseline[1][0]] += 2**trigger.uniqueEraBit
+                    else:
+                        raise RuntimeError("Logical Error!")
 
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
                 if len(leadEl_selection[trigger.trigger]) > 0 and (len(nontriggerEl_selection[trigger.trigger]) + len(nontriggerMu_selection[trigger.trigger])) > 1:
@@ -768,6 +861,20 @@ class TriggerAndSelectionLogic(Module):
                                 pass_selection_lep[trigger.trigger] += 2**4
                 if pass_selection_lep[trigger.trigger] >= 31: #Change to reflect proper number of bits used
                     pass_selection_bitset += 2**trigger.uniqueEraBit
+                    #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
+                    #Obviously, now that we no longer know for certain what the 2nd lepton is, we must check
+                    if leptons_selection[0][1].pdgId in [-11, 11]: #electron
+                        electron_osv_selection[leptons_selection[0][0]] += 2**trigger.uniqueEraBit
+                    elif leptons_selection[0][1].pdgId in [-13, 13]: #muon
+                        muon_osv_selection[leptons_selection[0][0]] += 2**trigger.uniqueEraBit
+                    else:
+                        raise RuntimeError("Logical Error!")
+                    if leptons_selection[1][1].pdgId in [-11, 11]: #electron
+                        electron_osv_selection[leptons_selection[1][0]] += 2**trigger.uniqueEraBit
+                    elif leptons_selection[1][1].pdgId in [-13, 13]: #muon
+                        muon_osv_selection[leptons_selection[1][0]] += 2**trigger.uniqueEraBit
+                    else:
+                        raise RuntimeError("Logical Error!")
                 #maybe L1 Seed additional requirement in 2017 needed?
             elif self.doUnbiasedTrigger:
                 pass
@@ -837,11 +944,10 @@ class TriggerAndSelectionLogic(Module):
         # ('Electron_OSV_baseline', 'O', 'Passes TriggerAndSelectionLogic at baseline level', 'nElectron'),
         # ('Electron_OSV_selection', 'O', 'Passes TriggerAndSelectionLogic at selection level', 'nElectron'),
         branchVals = {}
-        #FIXME: Dummy values, always false!
-        branchVals['Muon_OSV_baseline'] = [False]*len(muons)
-        branchVals['Muon_OSV_selection'] = [False]*len(muons)
-        branchVals['Electron_OSV_baseline'] = [False]*len(electrons)
-        branchVals['Electron_OSV_selection'] = [False]*len(electrons)
+        branchVals['Muon_OSV_baseline'] = muon_osv_baseline
+        branchVals['Muon_OSV_selection'] = muon_osv_selection
+        branchVals['Electron_OSV_baseline'] = electron_osv_baseline
+        branchVals['Electron_OSV_selection'] = electron_osv_selection
         branchVals['ESV_TriggerAndSelectionLogic_all'] = True
         branchVals['ESV_TriggerAndSelectionLogic_veto'] = (len(Vetoed) > 0)
         branchVals['ESV_TriggerAndSelectionLogic_hlt'] = (len(Vetoed) == 0 and len(Fired) > 0)
