@@ -19,6 +19,10 @@ parser.add_argument('--era', dest='era', action='store', type=str, default=None,
                     help='Era to be processed: 2017 or 2018')
 parser.add_argument('--subera', dest='subera', action='store', type=str, default=None,
                     help='Subera to be processed: A, B, C, D, E, F (year dependant)')
+parser.add_argument('--rmin', dest='rmin', action='store', type=int, default=-1,
+                    help='non-inclusive range minimum (samples start counting at 0; default is -1)')
+parser.add_argument('--rmax', dest='rmax', action='store', type=int, default=99999,
+                    help='non-inclusive range maximum (samples start counting at 0; default is 99999)')
 args = parser.parse_args()
 
 Tuples = []
@@ -290,6 +294,8 @@ elif args.stage == 'process':
         for l, line in enumerate(in_f):
             # if l > 0: 
             #     continue
+            if l < args.rmin or l > args.rmax:
+                continue
 
             cline = line.rstrip("\n\s\t")
             tup = cline.split(",") #0 filename, 1 era, 2 subera, 3 isData, 4 isSignal, 5 nEvents, 6 nEvents+, 7 nEvents-, 8 crossSection, 9 channel
@@ -342,7 +348,7 @@ elif args.stage == 'process':
             else:
                 weight = 1
             # print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
-            modules = [TriggerAndSelectionLogic(passLevel='baseline',era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=False, mode="Flag")]
+            modules = [TriggerAndSelectionLogic(passLevel='baseline',era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=True, mode="Flag")]
             # print(modules[0].getCutString())
             p = PostProcessor(".",
                               files,
@@ -361,15 +367,16 @@ elif args.stage == 'process':
                               provenance=False,
                               haddFileName=None,
                               fwkJobReport=False,
-                              histFileName=None,
-                              histDirName=None, 
+                              histFileName=files[0].replace("file", "hist"),
+                              histDirName="plots", 
                               outputbranchsel=None,
-                              maxEntries=300,
+                              maxEntries=None,
                               firstEntry=0,
                               # prefetch=False,
                               prefetch=True,
                               longTermCache=False
             )
+            print(files[0].replace("file", "hist"))
             p.run()
 
 #Simultaneously run the module and the cutstring
