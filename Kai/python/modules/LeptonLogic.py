@@ -13,35 +13,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 
-class Trigger(Module):
-    def __init__(self, Trigger):
-        self.counting = 0
-        self.maxEventsToProcess = -1
-        self.Trigger = Trigger
-        
-    def beginJob(self, histFile=None,histDirName=None):
-        Module.beginJob(self,histFile,histDirName)
-
-    def analyze(self, event):
-        """process event, return True (go to next module) or False (fail, go to next event)"""
-        #First N events
-        self.counting += 1 
-        if -1 < self.maxEventsToProcess < self.counting:
-            return False
-        
-        #run = getattr(event, "run")
-        #evt = getattr(event, "event")
-        #lumi = getattr(event, "luminosityBlock")
-        
-        for trig in self.Trigger:
-            if hasattr(event, trig) and getattr(event, trig):
-                #print(getattr(event, trig))
-                return True
-            #else:
-                #print("No trigger fired")
-        return False
-
-class TriggerAndSelectionLogic(Module):
+class TriggerAndLeptonLogic(Module):
     def __init__(self, passLevel, era="2013", subera=None, isData=False, TriggerChannel=None, weightMagnitude=1, fillHists=False, debug=False, mode="Flag"):
         """ Trigger logic that checks for fired triggers and searches for appropriate objects based on criteria set by fired triggers.
 
@@ -69,13 +41,13 @@ class TriggerAndSelectionLogic(Module):
         #Options: "MuMu", "ElMu", "ElEl", "Mu"
         self.TriggerChannel = TriggerChannel
         if self.isData and (self.subera == None or self.TriggerChannel == None): 
-            raise ValueError("In TriggerAndSelectionLogic is instantiated with isData, both subera and TriggerChannel must be slected ('B', 'F', 'El', 'ElMu', etc.")
+            raise ValueError("In TriggerAndLeptonLogic is instantiated with isData, both subera and TriggerChannel must be slected ('B', 'F', 'El', 'ElMu', etc.")
         self.weightMagnitude = weightMagnitude
         self.fillHists = fillHists
         self.debug = debug
         self.mode = mode
         if self.mode not in ["Flag", "Pass", "Fail", "Plot"]:
-            raise NotImplementedError("Not a supported mode for the TriggerAndSelectionLogic module: '{0}'".format(self.mode))
+            raise NotImplementedError("Not a supported mode for the TriggerAndLeptonLogic module: '{0}'".format(self.mode))
         if self.fillHists or self.mode == "Plot": 
             self.fillHists = True
             self.writeHistFile = True
@@ -371,18 +343,18 @@ class TriggerAndSelectionLogic(Module):
             self.XSweight = self.dataWeightFunc
         elif "genWeight" not in self.branchList:
             self.XSweight = self.backupWeightFunc
-            print("Warning in TriggerAndSelectionLogic: expected branch genWeight to be present, but it is not."\
+            print("Warning in TriggerAndLeptonLogic: expected branch genWeight to be present, but it is not."\
                   "The weight magnitude indicated will be used, but the sign of the genWeight must be assumed positive!")
         else:
             self.XSweight = self.genWeightFunc
-        self.varTuple = [('Muon_OSV_baseline', 'i', 'Passes TriggerAndSelectionLogic at baseline level', 'nMuon'),
-                         ('Muon_OSV_selection', 'i', 'Passes TriggerAndSelectionLogic at selection level', 'nMuon'),
-                         ('Electron_OSV_baseline', 'i', 'Passes TriggerAndSelectionLogic at baseline level', 'nElectron'),
-                         ('Electron_OSV_selection', 'i', 'Passes TriggerAndSelectionLogic at selection level', 'nElectron'),
-                         ('ESV_TriggerAndSelectionLogic_baseline', 'i', 'Passes TriggerAndSelectionLogic at event level,'\
-                         ' bits correspond to uniqueEraBit in TriggerAndSelectionLogic', None),
-                         ('ESV_TriggerAndSelectionLogic_selection', 'i', 'Passes TriggerAndSelectionLogic at event level,'\
-                         ' bits correspond to uniqueEraBit in TriggerAndSelectionLogic', None)
+        self.varTuple = [('Muon_OSV_baseline', 'i', 'Passes TriggerAndLeptonLogic at baseline level', 'nMuon'),
+                         ('Muon_OSV_selection', 'i', 'Passes TriggerAndLeptonLogic at selection level', 'nMuon'),
+                         ('Electron_OSV_baseline', 'i', 'Passes TriggerAndLeptonLogic at baseline level', 'nElectron'),
+                         ('Electron_OSV_selection', 'i', 'Passes TriggerAndLeptonLogic at selection level', 'nElectron'),
+                         ('ESV_TriggerAndLeptonLogic_baseline', 'i', 'Passes TriggerAndLeptonLogic at event level,'\
+                         ' bits correspond to uniqueEraBit in TriggerAndLeptonLogic', None),
+                         ('ESV_TriggerAndLeptonLogic_selection', 'i', 'Passes TriggerAndLeptonLogic at event level,'\
+                         ' bits correspond to uniqueEraBit in TriggerAndLeptonLogic', None)
                        ]        #OSV = Object Selection Variable
         for trigger in self.eraTriggers:
             #unsigned 32 bit integers for the trigger bit storage, because 16 is not in the root branch to python branch 
@@ -395,7 +367,7 @@ class TriggerAndSelectionLogic(Module):
                                  'with uniqueEraBit={}'.format(trigger.trigger, trigger.uniqueEraBit), None))
         if self.mode == "Flag":
             if not self.out:
-                raise RuntimeError("No Output file selected, cannot flag events for TriggerAndSelectionLogic module")
+                raise RuntimeError("No Output file selected, cannot flag events for TriggerAndLeptonLogic module")
             else:
                 for name, valType, valTitle, lVar in self.varTuple:
                     self.out.branch("{}".format(name), valType, lenVar=lVar, title=valTitle) 
@@ -911,48 +883,20 @@ class TriggerAndSelectionLogic(Module):
                     if pass_selection_lep[trig.trigger] and pass_selection_lep[trig2.trigger]:
                         self.trigLogic_Correl["SLCT"].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
 
-            
-            # for lvl in ["TRIG", "BASE", "SLCT"]:
-            #     if len(Vetoed) > 0: 
-            #         self.trigLogic_Freq[lvl].Fill("Vetoed", weight)
-            #     elif len(Fired) > 0:
-            #         self.trigLogic_Freq[lvl].Fill("Fired", weight)
-            #     else:
-            #         self.trigLogic_Freq[lvl].Fill("Neither", weight)
-            #     for tn, trig in enumerate(Fired):
-            #         self.trigLogic_Paths[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
-            #         self.trigLogic_Bits[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
-            #         for tm, trig2 in enumerate(Fired):
-            #             # if tm >= tn: #Do self correllation to set the scale properly
-            #             #Just do full correlation matrix
-            #             self.trigLogic_Correl[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
-
-
         #############################################
         ### Define variable dictionary for values ###
         #############################################
 
-        #FIXME: Muon and Electron baseline and selection boolean lists...
-        #make a list with the successful idx's for each trigger path, then:
-        #import itertools
-        #muon_osv_baseline = list(itertools.repeat(False, len(muons)))
-        #muon_osv_baseline[idx_0] = True
-        #muon_osv_baseline[idx_1] = True
-
-        # ('Muon_OSV_baseline', 'O', 'Passes TriggerAndSelectionLogic at baseline level', 'nMuon'),
-        # ('Muon_OSV_selection', 'O', 'Passes TriggerAndSelectionLogic at selection level', 'nMuon'),
-        # ('Electron_OSV_baseline', 'O', 'Passes TriggerAndSelectionLogic at baseline level', 'nElectron'),
-        # ('Electron_OSV_selection', 'O', 'Passes TriggerAndSelectionLogic at selection level', 'nElectron'),
         branchVals = {}
         branchVals['Muon_OSV_baseline'] = muon_osv_baseline
         branchVals['Muon_OSV_selection'] = muon_osv_selection
         branchVals['Electron_OSV_baseline'] = electron_osv_baseline
         branchVals['Electron_OSV_selection'] = electron_osv_selection
-        branchVals['ESV_TriggerAndSelectionLogic_all'] = True
-        branchVals['ESV_TriggerAndSelectionLogic_veto'] = (len(Vetoed) > 0)
-        branchVals['ESV_TriggerAndSelectionLogic_hlt'] = (len(Vetoed) == 0 and len(Fired) > 0)
-        branchVals['ESV_TriggerAndSelectionLogic_baseline'] = pass_baseline_bitset
-        branchVals['ESV_TriggerAndSelectionLogic_selection'] = pass_selection_bitset
+        branchVals['ESV_TriggerAndLeptonLogic_all'] = True
+        branchVals['ESV_TriggerAndLeptonLogic_veto'] = (len(Vetoed) > 0)
+        branchVals['ESV_TriggerAndLeptonLogic_hlt'] = (len(Vetoed) == 0 and len(Fired) > 0)
+        branchVals['ESV_TriggerAndLeptonLogic_baseline'] = pass_baseline_bitset
+        branchVals['ESV_TriggerAndLeptonLogic_selection'] = pass_selection_bitset
         for trig3 in self.eraTriggers:
             branchVals['ESV_TriggerEraBits_b{}'.format(trig3.uniqueEraBit)] = pass_baseline_lep.get(trig3.trigger, 0)
             branchVals['ESV_TriggerEraBits_s{}'.format(trig3.uniqueEraBit)] = pass_selection_lep.get(trig3.trigger, 0)
@@ -972,10 +916,10 @@ class TriggerAndSelectionLogic(Module):
             #Do pass through if plotting, make no assumptions about what should be done with the event
 #FIXME            return True
         else:
-            raise NotImplementedError("No method in place for TriggerAndSelectionLogic module in mode '{0}'".format(self.mode))
+            raise NotImplementedError("No method in place for TriggerAndLeptonLogic module in mode '{0}'".format(self.mode))
 
 
-        if branchVals['ESV_TriggerAndSelectionLogic_{}'.format(self.passLevel)]:
+        if branchVals['ESV_TriggerAndLeptonLogic_{}'.format(self.passLevel)]:
             return True
         return False
 
