@@ -14,7 +14,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 
 class TriggerAndLeptonLogic(Module):
-    def __init__(self, passLevel, era="2013", subera=None, isData=False, TriggerChannel=None, weightMagnitude=1, fillHists=False, debug=False, mode="Flag"):
+    def __init__(self, passLevel, enforceMCCascade=True, era="2013", subera=None, isData=False, TriggerChannel=None, weightMagnitude=1, fillHists=False, debug=False, mode="Flag"):
         """ Trigger logic that checks for fired triggers and searches for appropriate objects based on criteria set by fired triggers.
 
         passLevel is the level at which the module should trigger "True" to pass the event along to further modules. Available: 'all', 'veto', 'hlt', 'baseline', 'selection'
@@ -35,6 +35,7 @@ class TriggerAndLeptonLogic(Module):
         dataset, and while it may exist in the double muon dataset, it will only be becasue of a trigger that we have not checked for, and so we must not have picked it up
         in that dataset"""
         self.passLevel = passLevel
+        self.enforceMCCascade = enforceMCCascade #This might not be necessary outside of plotting
         self.era = era
         self.subera = subera
         self.isData = isData
@@ -371,7 +372,7 @@ class TriggerAndLeptonLogic(Module):
             else:
                 for name, valType, valTitle, lVar in self.varTuple:
                     self.out.branch("{}".format(name), valType, lenVar=lVar, title=valTitle) 
-        elif self.mode == "Pass" or self.mode == "Fail" or self.mode == "Plot":
+        elif self.mode == "PassFail" or self.mode == "Plot":
             pass
 
     def analyze(self, event):
@@ -856,6 +857,13 @@ class TriggerAndLeptonLogic(Module):
 #            for lvl in ["T", "B_Lep", "B_Jet", "B_HT", "S_Lep", "S_Jet", "S_HT"]:
         if self.fillHists:
             #FIXME: this obviously needs reworking, now... need a dict?
+            tierFired = [t.tier for t in Fired]
+            tierFired.sort(key=lambda i: i, reverse=False)
+            if len(tierFired) > 0:
+                highestTierFired = tierFired[0]
+            else:
+                highestTierFired = None
+
             if len(Vetoed) > 0: 
                 self.trigLogic_Freq["TRIG"].Fill("Vetoed", weight)
             elif len(Fired) > 0:
@@ -867,6 +875,9 @@ class TriggerAndLeptonLogic(Module):
             else:
                 self.trigLogic_Freq["TRIG"].Fill("Neither", weight)
             for tn, trig in enumerate(Fired):
+                #Skip (primary) trigger filling if not in the tier that fired first (Han!)
+                if self.enforceMCCascade == True and highestTierFired != trig.tier:
+                    continue
                 self.trigLogic_Paths["TRIG"].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
                 if pass_baseline_lep[trig.trigger]:
                     self.trigLogic_Paths["BASE"].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
