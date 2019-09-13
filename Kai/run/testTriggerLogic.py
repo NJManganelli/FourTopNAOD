@@ -4,7 +4,7 @@ import ROOT
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor 
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
-from FourTopNAOD.Kai.modules.trigger import TriggerAndSelectionLogic
+from FourTopNAOD.Kai.modules.LeptonLogic import TriggerAndLeptonLogic
 import argparse
 # import collections, copy, json, math
 # from array import array
@@ -12,7 +12,7 @@ import argparse
 # import inspect
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
-parser = argparse.ArgumentParser(description='Test of TriggerAndSelectionLogic Module and post-selection variables')
+parser = argparse.ArgumentParser(description='Test of TriggerAndLeptonLogic Module and post-selection variables')
 parser.add_argument('--stage', dest='stage', action='store', type=str,
                     help='Stage to be processed: test or cache or correct or cutstring or process or combined or hist')
 parser.add_argument('--era', dest='era', action='store', type=str, default=None,
@@ -89,7 +89,7 @@ Tuples.sort(key=lambda j : j[0]) #then by era, again
 if args.stage == 'test':
     Mods = []
     for tup in Tuples:
-        Mods.append(TriggerAndSelectionLogic(era=tup[0], subera=tup[1], isData=tup[2], TriggerChannel=tup[3]))
+        Mods.append(TriggerAndLeptonLogic(era=tup[0], subera=tup[1], isData=tup[2], TriggerChannel=tup[3]))
     for mod in Mods:
         print(mod.getCutString())
 
@@ -184,7 +184,7 @@ elif args.stage == 'cutstring':
             else:
                 weight = 1
             # print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
-            modules = [TriggerAndSelectionLogic(era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight)]
+            modules = [TriggerAndLeptonLogic(era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight)]
             # print(modules[0].getCutString())
             p = PostProcessor(".",
                               files,
@@ -348,7 +348,7 @@ elif args.stage == 'process':
             else:
                 weight = 1
             # print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
-            modules = [TriggerAndSelectionLogic(passLevel='baseline',era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=True, mode="Flag")]
+            modules = [TriggerAndLeptonLogic(passLevel='baseline',era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=True, mode="Flag")]
             # print(modules[0].getCutString())
             p = PostProcessor(".",
                               files,
@@ -438,7 +438,7 @@ elif args.stage == 'combined':
             else:
                 weight = 1
             # print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
-            modules = [TriggerAndSelectionLogic(era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=False)]
+            modules = [TriggerAndLeptonLogic(era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=False)]
             # print(modules[0].getCutString())
             p = PostProcessor(".",
                               files,
@@ -528,7 +528,7 @@ elif args.stage == 'hist':
                 theHistName = files[0].replace("file","hist_"+era+subera+"_"+channel)
                 weight = 1
             # print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
-            modules = [TriggerAndSelectionLogic(era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=True)]
+            modules = [TriggerAndLeptonLogic(era=era, subera=subera, isData=isData, TriggerChannel=channel, weightMagnitude=weight, fillHists=True)]
             # print(modules[0].getCutString())
             p = PostProcessor("dirtestTriggerLogic",
                               files,
