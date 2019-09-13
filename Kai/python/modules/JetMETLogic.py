@@ -36,11 +36,7 @@ class JetMETLogic(Module):
             self.writeHistFile=True
         self.verbose=verbose
         self.probEvt = probEvt
-        self.isData = isData
-        if self.isData:
-            self.evtWeightBase = 1
-        else:
-            
+        self.isData = isData            
         self.btagging = btagging
         self.era = era
         if probEvt:
@@ -226,7 +222,6 @@ class JetMETLogic(Module):
         self.BTMeth = self.bTagWorkingPointDict[era][btagging[0]]
         self.BTWP =  self.bTagWorkingPointDict[era][btagging[0]][btagging[1]]
         self.BTAlg = self.bTagWorkingPointDict[era][btagging[0]]["Var"]
-        self.lepPt = lepPt
         self.MET = MET
         self.HT = HT
         self.ZWidth = ZWidth
@@ -354,7 +349,7 @@ class JetMETLogic(Module):
         jets = Collection(event, "Jet")
         # fatjets = Collection(event, "FatJet")
         # subjets = Collection(event, "SubJet")
-        weight = self.XSweight(event)
+        weight = self.XSweight(event) # * PU weight, L1Prefiring weight, etc.
         if not self.isData:
             generator = Object(event, "Generator")
             btagweight = Object(event, "btagWeight") #contains .CSVV2 and .DeepCSVB float weights
