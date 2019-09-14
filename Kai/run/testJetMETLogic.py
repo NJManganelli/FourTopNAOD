@@ -348,8 +348,9 @@ elif args.stage == 'process':
                 subera = None
             else:
                 weight = 1
-            # print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
-            modules = [TriggerAndLeptonLogic(passLevel='baseline',era=era, subera=subera, isData=isData,  weightMagnitude=weight, fillHists=False, mode="Flag"),
+            print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
+            modules = [TriggerAndLeptonLogic(passLevel='baseline',era=era, subera=subera, isData=isData, TriggerChannel=channel, 
+                                             weightMagnitude=weight, fillHists=False, mode="Flag"),
                        JetMETLogic(passLevel='baseline',era=era, subera=subera, isData=isData,  weightMagnitude=weight, fillHists=True, mode="Flag",
                                    jetPtVar = "pt", jetMVar = "mass", debug=True)]
             # print(modules[0].getCutString())
