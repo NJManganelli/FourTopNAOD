@@ -349,9 +349,11 @@ elif args.stage == 'process':
             else:
                 weight = 1
             # print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
-            modules = [JetMETLogic(passLevel='baseline',era=era, subera=subera, isData=isData,  weightMagnitude=weight, fillHists=True, mode="Flag")]
+            modules = [TriggerAndLeptonLogic(passLevel='baseline',era=era, subera=subera, isData=isData,  weightMagnitude=weight, fillHists=False, mode="Flag"),
+                       JetMETLogic(passLevel='baseline',era=era, subera=subera, isData=isData,  weightMagnitude=weight, fillHists=True, mode="Flag",
+                                   jetPtVar = "pt", jetMVar = "mass", debug=True)]
             # print(modules[0].getCutString())
-            p = PostProcessor(".",
+            p = PostProcessor("/tmp/nmangane",
                               files,
                               # cut=modules[0].getCutString(),
                               cut=None,
@@ -359,7 +361,7 @@ elif args.stage == 'process':
                               modules=modules,
                               compression="LZMA:9",
                               friend=False,
-                              postfix="_JetMET",
+                              postfix="_LogicX2",
                               jsonInput=None,
                               # noOut=True,
                               noOut=False,
@@ -371,7 +373,7 @@ elif args.stage == 'process':
                               histFileName=files[0].replace("file", "hist"),
                               histDirName="plots", 
                               outputbranchsel=None,
-                              maxEntries=None,
+                              maxEntries=1000,
                               firstEntry=0,
                               # prefetch=False,
                               prefetch=True,
