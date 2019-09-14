@@ -7,7 +7,7 @@ from PhysicsTools.NanoAODTools.postprocessing.tools import * #DeltaR, match coll
 from FourTopNAOD.Kai.tools.toolbox import *
 
 class JetMETLogic(Module):
-    def __init__(self, passLevel, era="2017", subera=None, isData=True, weightMagnitude=1, fillHists=False, btagging=['DeepJet', 'M'], MET=[45, 50], HT=[450,500], ZWidth=15, jetPtVar = "pt_nom", jetMVar = "mass_nom", verbose=False, probEvt=None, ):
+    def __init__(self, passLevel, era="2017", subera=None, isData=True, weightMagnitude=1, fillHists=False, btagging=['DeepJet', 'M'], MET=[45, 50], HT=[450,500], ZWidth=15, jetPtVar = "pt_nom", jetMVar = "mass_nom", verbose=False, probEvt=None, mode="Flag", debug=False):
                  # genEquivalentLuminosity=1, genXS=1, genNEvents=1, genSumWeights=1, era="2017", btagging=['DeepCSV','M'], lepPt=25,  GenTop_LepSelection=None):
         """ Jet, MET, HT logic that performs lepton cleaning and jet selection. Optionally can do b-tagging, but mode without this requirement can be enabled/disabled
 
@@ -36,7 +36,8 @@ class JetMETLogic(Module):
             self.writeHistFile=True
         self.verbose=verbose
         self.probEvt = probEvt
-        self.isData = isData            
+        self.isData = isData
+        self.weightMagnitude = weightMagnitude
         self.btagging = btagging
         self.era = era
         if probEvt:
@@ -67,7 +68,7 @@ class JetMETLogic(Module):
                          'PV_maxAbsZ':0b00000000000000000010,
                          'PV_maxRho':0b00000000000000000100,
                          'MET_globalSuperTightHalo2016Filter':0b00000000000000001000,
-                         'MEt_goodVertices':0b00000000000000010000,
+                         'MET_goodVertices':0b00000000000000010000,
                          'MET_HBHENoiseFilter':0b00000000000000100000,
                          'MET_HBHENoiseIsoFilter':0b00000000000001000000,
                          'MET_EcalDeadCellTriggerPrimitiveFilter':0b00000000000010000000,
@@ -229,6 +230,8 @@ class JetMETLogic(Module):
         # self.invertZWindowEarlyReturn = invertZWindowEarlyReturn
         self.jetPtVar = jetPtVar
         self.jetMVar = jetMVar
+        self.mode = mode
+        self.debug = debug
         if self.verbose:
             print("BTMeth " + str(self.BTMeth))
             print("BTWP " + str(self.BTWP))
@@ -578,9 +581,9 @@ class JetMETLogic(Module):
         # nBTTight = len(selBTTightJets)
         # nBTSelected = len(selBTJets)
 
-        nJets25_baseline = [bits for bits in jetbits_baseline if (jetbits & self.jetbits['pt25'] > 0)]
-        nBJetsDeepCSV_baseline = [bits for bits in jetbits_baseline if (jetbits & self.jetbits['DCSV'] > 0)]
-        nBJetsDeepJet_baseline = [bits for bits in jetbits_baseline if (jetbits & self.jetbits['DJET'] > 0)]
+        nJets25_baseline = [bits for bits in jetbits_baseline if (bits & self.jetbits['pt25'] > 0)]
+        nBJetsDeepCSV_baseline = [bits for bits in jetbits_baseline if (bits & self.jetbits['DCSV'] > 0)]
+        nBJetsDeepJet_baseline = [bits for bits in jetbits_baseline if (bits & self.jetbits['DJET'] > 0)]
         #Just 3 jets in baseline
         if nJets_baseline > 2:
             ESV_baseline += self.passbits['Jet_nJet20']
@@ -592,9 +595,9 @@ class JetMETLogic(Module):
         if len(nBJetsDeepJet_baseline) > 1:
             ESV_baseline += self.passbits['Jet_nBJet_2DJet']
 
-        nJets25_selection = [bits for bits in jetbits_selection if (jetbits & self.jetbits['pt25'] > 0)]
-        nBJetsDeepCSV_selection = [bits for bits in jetbits_selection if (jetbits & self.jetbits['DCSV'] > 0)]
-        nBJetsDeepJet_selection = [bits for bits in jetbits_selection if (jetbits & self.jetbits['DJET'] > 0)]
+        nJets25_selection = [bits for bits in jetbits_selection if (bits & self.jetbits['pt25'] > 0)]
+        nBJetsDeepCSV_selection = [bits for bits in jetbits_selection if (bits & self.jetbits['DCSV'] > 0)]
+        nBJetsDeepJet_selection = [bits for bits in jetbits_selection if (bits & self.jetbits['DJET'] > 0)]
         #4 jets in selection
         if nJets_selection > 3:
             ESV_selection += self.passbits['Jet_nJet20']
@@ -624,11 +627,11 @@ class JetMETLogic(Module):
                                getattr(jet, "phi"),
                                getattr(jet, self.jetMVar)
             )
-            H_baseline += jetP4.P()
+            H_baseline += jetP4_baseline.P()
             #Only use deepjet
             if j > 1 and len(nBJetsDeepJet_baseline) > 1:
                 HT2M_baseline += getattr(jet, self.jetPtVar)
-                H2M_baseline += jetP4.P()
+                H2M_baseline += jetP4_baseline.P()
             if jetbits_baseline[j] & self.jetbits['DJET']:
                 HTb_baseline += getattr(jet, self.jetPtVar)
 
@@ -637,8 +640,8 @@ class JetMETLogic(Module):
         if len(selBTsortedJets_baseline) > 3: #redundant, but only so long as 4 jet cut is in place
             jet1_baseline = selBTsortedJets_baseline[0][1]
             jet2_baseline = selBTsortedJets_baseline[1][1]
-            dRbb_baseline = deltaR(jet1, jet2)
-            HTRat_baseline = (jet1_baseline.pt + jet2_baseline.pt)/HT
+            dRbb_baseline = deltaR(jet1_baseline, jet2_baseline)
+            HTRat_baseline = (jet1_baseline.pt + jet2_baseline.pt)/HT_baseline
             HTH_baseline = HT_baseline/H_baseline
         else:
             dRbb_baseline = -1
@@ -664,11 +667,11 @@ class JetMETLogic(Module):
                                getattr(jet, "phi"),
                                getattr(jet, self.jetMVar)
             )
-            H_selection += jetP4.P()
+            H_selection += jetP4_selection.P()
             #Only use deepjet
             if j > 1 and len(nBJetsDeepJet_selection) > 1:
                 HT2M_selection += getattr(jet, self.jetPtVar)
-                H2M_selection += jetP4.P()
+                H2M_selection += jetP4_selection.P()
             if jetbits_selection[j] & self.jetbits['DJET']:
                 HTb_selection += getattr(jet, self.jetPtVar)
 
@@ -677,8 +680,8 @@ class JetMETLogic(Module):
         if len(selBTsortedJets_selection) > 3: #redundant, but only so long as 4 jet cut is in place
             jet1_selection = selBTsortedJets_selection[0][1]
             jet2_selection = selBTsortedJets_selection[1][1]
-            dRbb_selection = deltaR(jet1, jet2)
-            HTRat_selection = (jet1_selection.pt + jet2_selection.pt)/HT
+            dRbb_selection = deltaR(jet1_selection, jet2_selection)
+            HTRat_selection = (jet1_selection.pt + jet2_selection.pt)/HT_selection
             HTH_selection = HT_selection/H_selection
         else:
             dRbb_selection = -1
