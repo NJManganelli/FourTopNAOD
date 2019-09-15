@@ -278,8 +278,6 @@ class JetMETLogic(Module):
                          ('Jet_OSV_selection', 'i', 'Passes JetMETLogic at selection level', 'nJet'),
                          ('ESV_JetMETLogic_baseline', 'i', 'Passes JetMETLogic at event level baseline,'\
                           ' bits correspond to levels of baseline in JetMETLogic', None),
-                         ('ESV_JetMETLogic_selection', 'i', 'Passes JetMETLogic at event level selection,'\
-                          ' bits correspond to levels of selection in JetMETLogic', None),
                          ('ESV_JetMETLogic_nJet_baseline', 'i', 'Number of jets passing baseline requirements', None),
                          ('ESV_JetMETLogic_HT_baseline', 'D', 'Scalar sum of selected jets\' Pt', None),
                          ('ESV_JetMETLogic_H_baseline', 'D', 'Scalar sum of selected jets\' P', None),
@@ -290,6 +288,8 @@ class JetMETLogic(Module):
                          ('ESV_JetMETLogic_HTRat_baseline', 'D', 'Ratio of Pt for two highest b-tagged jets to HT', None),
                          ('ESV_JetMETLogic_dRbb_baseline', 'D', 'DeltaR between the two highest b-tagged jets', None),
                          ('ESV_JetMETLogic_DiLepMass_baseline', 'D', 'Invariant mass of same-flavour leptons (0 default)', None),
+                         ('ESV_JetMETLogic_selection', 'i', 'Passes JetMETLogic at event level selection,'\
+                          ' bits correspond to levels of selection in JetMETLogic', None),
                          ('ESV_JetMETLogic_nJet_selection', 'i', 'Number of jets passing selection requirements', None),
                          ('ESV_JetMETLogic_HT_selection', 'D', 'Scalar sum of selected jets\' Pt', None),
                          ('ESV_JetMETLogic_H_selection', 'D', 'Scalar sum of selected jets\' P', None),
@@ -675,7 +675,7 @@ class JetMETLogic(Module):
             if jetbits_selection[j] & self.jetbits['DJET']:
                 HTb_selection += getattr(jet, self.jetPtVar)
 
-        if HT_selection >= self.HT[0]:
+        if HT_selection >= self.HT[1]:
             ESV_selection += self.passbits['HT']
         if len(selBTsortedJets_selection) > 3: #redundant, but only so long as 4 jet cut is in place
             jet1_selection = selBTsortedJets_selection[0][1]
@@ -694,8 +694,8 @@ class JetMETLogic(Module):
         branchVals = {}
         branchVals['Jet_OSV_baseline'] = jetbits_baseline
         branchVals['Jet_OSV_selection'] = jetbits_selection
-        branchVals['ESV_JetMETLogic_baseline'] = ESV_baseline
-        branchVals['ESV_JetMETLogic_selection'] = ESV_selection
+        branchVals['ESV_JetMETLogic_baseline'] = ESV_baseline #Do a bit comparison at the end?
+        branchVals['ESV_JetMETLogic_selection'] = ESV_selection #do bit comparison at the end, but maybe still keep bits around...
         branchVals['ESV_JetMETLogic_nJet_baseline'] = nJets_baseline
         branchVals['ESV_JetMETLogic_nJet_selection'] = nJets_selection
         # branchVals['ESV_JetMETLogic_nJetBTL'] = nBTLoose
@@ -720,11 +720,14 @@ class JetMETLogic(Module):
         branchVals['ESV_JetMETLogic_dRbb_selection'] = dRbb_selection
         branchVals['ESV_JetMETLogic_DiLepMass_selection'] = DiLepMass_selection
 
-        branchVals['ESV_JetMETLogic_all'] = True
+
+        #Set event pass values
+        passVals = {}
+        passVals['ESV_JetMETLogic_pass_all'] = True
         #1-10 common, 11 MET_baseline, 13 is Z_Window (not required), 14 is nJets25 (nr), 15 is nJets20, 16 is HT, 17 and 18 are btagging (nr x2)
-        branchVals['ESV_JetMETLogic_baseline'] = (branchVals['ESV_JetMETLogic_baseline'] & 0b00001100011111111111 >= 0b00001100011111111111)
+        passVals['ESV_JetMETLogic_pass_baseline'] = (branchVals['ESV_JetMETLogic_baseline'] & 0b00001100011111111111 >= 0b00001100011111111111)
         #1-10 common, 12 MET_selection, 13 is Z_Window (not required), 14 is nJets25 (nr), 15 is nJets20, 16 is HT, 17 and 18 are btagging (nr x2)
-        branchVals['ESV_JetMETLogic_selection'] = (branchVals['ESV_JetMETLogic_selection'] & 0b00001100101111111111 > 0b00001100101111111111)
+        passVals['ESV_JetMETLogic_pass_selection'] = (branchVals['ESV_JetMETLogic_selection'] & 0b00001100101111111111 >= 0b00001100101111111111)
 
         ########################## 
         ### Write out branches ###
@@ -743,7 +746,7 @@ class JetMETLogic(Module):
         else:
             raise NotImplementedError("No method in place for JetMETLogic module in mode '{0}'".format(self.mode))
 
-        if branchVals['ESV_JetMETLogic_{}'.format(self.passLevel)]:
+        if passVals['ESV_JetMETLogic_pass_{}'.format(self.passLevel)]:
             return True
         return False
 
