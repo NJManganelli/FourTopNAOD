@@ -20,10 +20,10 @@ parser.add_argument('--era', dest='era', action='store', type=str, default=None,
                     help='Era to be processed: 2017 or 2018')
 parser.add_argument('--subera', dest='subera', action='store', type=str, default=None,
                     help='Subera to be processed: A, B, C, D, E, F (year dependant)')
-parser.add_argument('--rmin', dest='rmin', action='store', type=int, default=-1,
-                    help='non-inclusive range minimum (samples start counting at 0; default is -1)')
+parser.add_argument('--rmin', dest='rmin', action='store', type=int, default=0,
+                    help='inclusive range minimum (samples start counting at 0; default is 0)')
 parser.add_argument('--rmax', dest='rmax', action='store', type=int, default=99999,
-                    help='non-inclusive range maximum (samples start counting at 0; default is 99999)')
+                    help='inclusive range maximum (samples start counting at 0; default is 99999)')
 args = parser.parse_args()
 
 Tuples = []
@@ -348,13 +348,13 @@ elif args.stage == 'process':
                 subera = None
             else:
                 weight = 1
-            print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
+            # print("era= {}\t subera={}\t isData={}\t TriggerChannel={}\t weight={}".format(era, subera, str(isData), channel, weight))
             modules = [TriggerAndLeptonLogic(passLevel='baseline',era=era, subera=subera, isData=isData, TriggerChannel=channel, 
                                              weightMagnitude=weight, fillHists=False, mode="Flag"),
                        JetMETLogic(passLevel='baseline',era=era, subera=subera, isData=isData,  weightMagnitude=weight, fillHists=True, mode="Flag",
                                    jetPtVar = "pt", jetMVar = "mass", debug=True)]
             # print(modules[0].getCutString())
-            p = PostProcessor("/tmp/nmangane",
+            p = PostProcessor("/eos/user/n/nmangane/SWAN_projects/TriggerLogicRDF",
                               files,
                               # cut=modules[0].getCutString(),
                               cut=None,
@@ -374,15 +374,18 @@ elif args.stage == 'process':
                               histFileName=files[0].replace("file", "hist"),
                               histDirName="plots", 
                               outputbranchsel=None,
-                              maxEntries=1000,
+                              maxEntries=None,
                               firstEntry=0,
                               # prefetch=False,
                               prefetch=True,
                               longTermCache=False
             )
-            print(files[0].replace("file", "hist"))
+            # print(files[0].replace("file", "hist"))
             p.run()
 
+elif args.stage == 'subprocess':
+    for x in xrange(43):
+        subprocess.Popen(args="python testJetMETLogic.py --stage process --era {0} --rmin {1} --rmax {1} > /tmp/nmangane/subprocess_{1}.o".format(args.era, x), shell=True, executable="/bin/zsh", env=dict(os.environ))#.wait() #Decide to wait, or let multiple subprocesses start in sequence but run in parallel
 #Simultaneously run the module and the cutstring
 elif args.stage == 'combined':
     local_tuple_file = "dirtestTriggerLogic/local_variety_pack_tuples_2017_NANOv5.txt"
