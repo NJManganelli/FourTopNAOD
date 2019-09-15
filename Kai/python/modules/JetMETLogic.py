@@ -603,7 +603,7 @@ class JetMETLogic(Module):
             ESV_selection += self.passbits['Jet_nJet20']
         if len(nJets25_selection) > 3:
             ESV_selection += self.passbits['Jet_nJet25']
-        #Require 2 loose tagged jets
+        #Require 2 medium tagged jets
         if len(nBJetsDeepCSV_selection) > 1:
             ESV_selection += self.passbits['Jet_nBJet_2DCSV']
         if len(nBJetsDeepJet_selection) > 1:
