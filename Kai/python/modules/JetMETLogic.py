@@ -64,36 +64,38 @@ class JetMETLogic(Module):
                     }
 
         #Bits for Event Selection Variables
-        self.passbits = {'PV_minNDoF':0b00000000000000000001,
-                         'PV_maxAbsZ':0b00000000000000000010,
-                         'PV_maxRho':0b00000000000000000100,
-                         'MET_globalSuperTightHalo2016Filter':0b00000000000000001000,
-                         'MET_goodVertices':0b00000000000000010000,
-                         'MET_HBHENoiseFilter':0b00000000000000100000,
-                         'MET_HBHENoiseIsoFilter':0b00000000000001000000,
+        self.passbits = {'PV_minNDoF':                            0b00000000000000000001,
+                         'PV_maxAbsZ':                            0b00000000000000000010,
+                         'PV_maxRho':                             0b00000000000000000100,
+                         'MET_globalSuperTightHalo2016Filter':    0b00000000000000001000,
+                         'MET_goodVertices':                      0b00000000000000010000,
+                         'MET_HBHENoiseFilter':                   0b00000000000000100000,
+                         'MET_HBHENoiseIsoFilter':                0b00000000000001000000,
                          'MET_EcalDeadCellTriggerPrimitiveFilter':0b00000000000010000000,
-                         'MET_BadPFMuonFilter':0b00000000000100000000,
-                         'MET_ecalBadCalibFilterV2':0b00000000001000000000,
-                         'MET_pt_baseline':0b00000000010000000000,
-                         'MET_pt_selection':0b00000000100000000000,
-                         'Lepton_ZWindow':0b00000001000000000000,
-                         'Jet_nJet25':0b00000010000000000000,
-                         'Jet_nJet20':0b00000100000000000000,
-                         'HT':0b00001000000000000000,
-                         'Jet_nBJet_2DCSV':0b00010000000000000000,
-                         'Jet_nBJet_2DJet':0b00100000000000000000,
+                         'MET_BadPFMuonFilter':                   0b00000000000100000000,
+                         'MET_ecalBadCalibFilterV2':              0b00000000001000000000,
+                         'MET_pt':                                0b00000000010000000000,
+                         'unused1':                               0b00000000100000000000,
+                         'Lepton_ZWindow':                        0b00000001000000000000,
+                         'Jet_nJet25':                            0b00000010000000000000,
+                         'Jet_nJet20':                            0b00000100000000000000,
+                         'HT':                                    0b00001000000000000000,
+                         'Jet_nBJet_2DCSV':                       0b00010000000000000000,
+                         'Jet_nBJet_2DJet':                       0b00100000000000000000,
+                         'unused2':                               0b01000000000000000000,
+                         'unused3':                               0b10000000000000000000,
                     }
 
         #bits for Object Selection Variables - Jets
         self.jetbits = {'lepClean': 0b000000001,
-                        'maxEta': 0b000000010,
-                        'jetID': 0b000000100,
-                        'pt25': 0b000001000,
-                        'pt20': 0b000010000,
-                        'unused': 0b000100000,
-                        'DCSV': 0b001000000,
-                        'DJET': 0b010000000,
-                        'BTag_WP': 0b100000000
+                        'maxEta':   0b000000010,
+                        'jetID':    0b000000100,
+                        'pt25':     0b000001000,
+                        'pt20':     0b000010000,
+                        'unused':   0b000100000,
+                        'DCSV':     0b001000000,
+                        'DJET':     0b010000000,
+                        'BTag_WP':  0b100000000
                         }
 
 
@@ -246,6 +248,9 @@ class JetMETLogic(Module):
 
         #event counters
         self.counter = 0
+        self.BitsBins = 20
+        self.BitsMin = 0
+        self.BitsMax = 20
 
     def beginJob(self, histFile=None,histDirName=None):
         if self.fillHists == False and self.writehistFile == False:
@@ -253,8 +258,46 @@ class JetMETLogic(Module):
         else:
             if histFile == None or histDirName == None:
                 raise RuntimeError("fillHists set to True, but no histFile or histDirName specified")
-            Module.beginJob(self,histFile,histDirName)
-            #No histograms in here, right now
+            ###Inherited from Module
+            prevdir = ROOT.gDirectory
+            self.histFile = histFile
+            self.histFile.cd()
+            self.dir = self.histFile.mkdir( histDirName + "_JetMETLogic")
+            prevdir.cd()
+            self.objs = []
+
+            # self.JetMETLogic_Freq = {}
+            # self.JetMETLogic_Correl = {}
+            self.JetMETLogic_FailBits = {}
+            self.JetMETLogic_FailFirst = {}
+            for lvl in ["baseline", "selection"]:
+                # self.JetMETLogic_Freq[lvl] = ROOT.TH1D("JetMETLogic_Freq_{}".format(lvl), 
+                #                                      "HLT Paths Fired and Vetoed at {} level  (weightMagnitude={}); Type; Events".format(lvl, self.weightMagnitude), 
+                #                                      1, 0, 0)
+                # self.JetMETLogic_Correl[lvl] = ROOT.TH2D("JetMETLogic_Correl_{}".format(lvl), 
+                #                                          "Fired HLT Path Correlations at {} level (weightMagnitude={}); Path; Path ".format(lvl, self.weightMagnitude),
+                #                                          self.PathsBins, self.PathsMin, self.PathsMax, self.PathsBins, self.PathsMin, self.PathsMax)
+                self.JetMETLogic_FailBits[lvl] = ROOT.TH1D("JetMETLogic_FailBits_{}".format(lvl), 
+                                                           "Failed JetMETLogic selection (any bits) at {} level (weightMagnitude={}); Path; Least significant bit power".format(lvl, self.weightMagnitude),
+                                                           self.BitsBins, self.BitsMin, self.BitsMax)
+                self.JetMETLogic_FailFirst[lvl] = ROOT.TH1D("JetMETLogic_FailFirst_{}".format(lvl), 
+                                                           "Failed JetMETLogic selection (power of least significant bit) at {} level (weightMagnitude={}); Path; Least significant bit power".format(lvl, self.weightMagnitude),
+                                                           self.BitsBins, self.BitsMin, self.BitsMax)
+            for lvl in ["baseline", "selection"]:
+                # self.addObject(self.JetMETLogic_Freq[lvl])
+                # self.addObject(self.JetMETLogic_Correl[lvl])
+                self.addObject(self.JetMETLogic_FailBits[lvl])
+                self.addObject(self.JetMETLogic_FailFirst[lvl])
+
+            # #Initialize labels to keep consistent across all files (only for labeled histograms, since introduction of 'extra' events in the histo counters (despite 0 weight)
+            # for lvl in ["baseline", "selection"]:
+            #     for bitPos in xrange(self.BitsMin, self.BitsMax):
+            #         # self.JetMETLogic_Correl[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), trig.trigger + " (T{})".format(trig.tier), 0.0)
+            #         # self.JetMETLogic_FailBits[lvl].Fill(bitPos+1, 0, 0.0)
+            #         # self.JetMETLogic_FailFirst[lvl].Fill(bitPos+1, 0, 0.0)
+            #     # for cat in ["Vetoed", "Fired", "Neither"]:
+            #     #     self.JetMETLogic_Freq[lvl].Fill(cat, 0.0)
+
 
 
     # def endJob(self):
@@ -427,9 +470,9 @@ class JetMETLogic(Module):
                 ESV_baseline += self.passbits['MET_{}'.format(flag)]
                 ESV_selection += self.passbits['MET_{}'.format(flag)]
         if met.pt >= self.MET[0]: #baseline level
-            ESV_baseline += self.passbits['MET_pt_baseline']
+            ESV_baseline += self.passbits['MET_pt']
         if met.pt >= self.MET[1]: #selection level
-            ESV_selection += self.passbits['MET_pt_selection']
+            ESV_selection += self.passbits['MET_pt']
         # for weight in self.weightList:
         #     self.cutflow[weight].Fill("> MET > {0:d}".format(self.MET), theWeight[weight])
 
@@ -720,14 +763,40 @@ class JetMETLogic(Module):
         branchVals['ESV_JetMETLogic_dRbb_selection'] = dRbb_selection
         branchVals['ESV_JetMETLogic_DiLepMass_selection'] = DiLepMass_selection
 
-
-        #Set event pass values
+        #############################
+        ### Set event pass values ###
+        #############################
+        threshold_bits = {}
+        #1-10 common, 11 MET_pt at baseline level, 13 is Z_Window (not required), 14 is nJets25 (nr), 15 is nJets20, 16 is HT, 17 and 18 are btagging (nr x2)
+        threshold_bits['baseline'] =  0b00001100011111111111
+        threshold_bits['selection'] = 0b00001100011111111111
+        #1-10 common, 11 MET_pt at selection level, 13 is Z_Window (not required), 14 is nJets25 (nr), 15 is nJets20, 16 is HT, 17 and 18 are btagging (nr x2)
         passVals = {}
         passVals['ESV_JetMETLogic_pass_all'] = True
-        #1-10 common, 11 MET_baseline, 13 is Z_Window (not required), 14 is nJets25 (nr), 15 is nJets20, 16 is HT, 17 and 18 are btagging (nr x2)
-        passVals['ESV_JetMETLogic_pass_baseline'] = (branchVals['ESV_JetMETLogic_baseline'] & 0b00001100011111111111 >= 0b00001100011111111111)
-        #1-10 common, 12 MET_selection, 13 is Z_Window (not required), 14 is nJets25 (nr), 15 is nJets20, 16 is HT, 17 and 18 are btagging (nr x2)
-        passVals['ESV_JetMETLogic_pass_selection'] = (branchVals['ESV_JetMETLogic_selection'] & 0b00001100101111111111 >= 0b00001100101111111111)
+        passVals['ESV_JetMETLogic_pass_baseline'] = (branchVals['ESV_JetMETLogic_baseline'] & threshold_bits['baseline'] >= threshold_bits['baseline'])
+        passVals['ESV_JetMETLogic_pass_selection'] = (branchVals['ESV_JetMETLogic_selection'] & threshold_bits['selection'] >= threshold_bits['selection'])
+
+        ####################### 
+        ### Fill histograms ###
+        #######################         
+        if self.fillHists:
+            for lvl in ["baseline", "selection"]:            
+                if passVals['ESV_JetMETLogic_pass_{}'.format(lvl)]:
+                    pass
+                else:
+                    # self.addObject(self.JetMETLogic_Freq[lvl])
+                    # self.addObject(self.JetMETLogic_Correl[lvl])
+                    foundFirstFail = False
+                    for bitPos, bitVal in enumerate(self.passbits.values()):
+                        if (bitVal & threshold_bits[lvl] == 0) or (bitVal & branchVals['ESV_JetMETLogic_{}'.format(lvl)] > 0):
+                            #Skip values that aren't set in the threshold, we can't fail on them, and of course skip values that are passed in regard to those thresholds!
+                            continue
+                        #This is triggered when we have a bit that is in the threshold and was not met by the event, so it's a failure
+                        self.JetMETLogic_FailBits[lvl].Fill(bitPos+1, weight)
+                        if not foundFirstFail: self.JetMETLogic_FailFirst[lvl].Fill(bitPos+1, weight)
+                        #And if we made it to this point, we skip filling any further bits in the second histo by flipping the flag below
+                        foundFirstFail = True
+
 
         ########################## 
         ### Write out branches ###
