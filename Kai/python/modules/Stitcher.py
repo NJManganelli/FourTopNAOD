@@ -257,9 +257,9 @@ class Stitcher(Module):
                 self.out.fillBranch("ESV_%s"%(name), passStitch[name])
             return True
         elif self.mode == "Pass":
-            return passStitch['passStitch'+self.channel]
+            return passStitch['passStitchCondition']
         elif self.mode == "Fail":
-            return not passStitch['passStitch'+self.channel]
+            return not passStitch['passStitchCondition']
         elif self.mode == "Plot":
             #Do pass through if plotting, make no assumptions about what should be done with the event
             return True
