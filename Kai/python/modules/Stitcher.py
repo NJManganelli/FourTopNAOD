@@ -125,7 +125,7 @@ class Stitcher(Module):
             prevdir = ROOT.gDirectory
             self.histFile = histFile
             self.histFile.cd()
-            self.dir = self.histFile.mkdir( histDirName + "_Stitcher)
+            self.dir = self.histFile.mkdir( histDirName + "_Stitcher")
             prevdir.cd()
             self.objs = []
 
@@ -169,15 +169,15 @@ class Stitcher(Module):
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         self.out = wrappedOutputTree
-        self.varDict = [('passStitchSL', 'O', 'Passes Single Lepton Stitch cuts'),
-                        ('passStitchDL', 'O', 'Passes Single Lepton Stitch cuts'),
-                        ('passStitchCondition', 'O', 'Passes or fails stitch cuts appropriately for the sample in this channel and era')
+        self.varTuple = [('ESV_passStitchSL', 'O', 'Passes Single Lepton Stitch cuts'),
+                        ('ESV_passStitchDL', 'O', 'Passes Single Lepton Stitch cuts'),
+                        ('ESV_passStitchCondition', 'O', 'Passes or fails stitch cuts appropriately for the sample in this channel and era')
                        ]
         if self.mode == "Flag":
             if not self.out:
                 raise RuntimeError("No Output file selected, cannot flag events for Stitching")
             else:
-                for name, valType, valTitle in self.varDict:
+                for name, valType, valTitle in self.varTuple:
                     self.out.branch("ESV_%s"%(name), valType, title=valTitle)
         elif self.mode == "Pass" or self.mode == "Fail" or self.mode == "Plot":
             pass
@@ -217,14 +217,14 @@ class Stitcher(Module):
         #         nGLgen += 1
         
         passStitch = {}
-        passStitch['passStitchSL'] = (nGL == self.stitchSL['nGenLeps'] and nGJ >= self.stitchSL['nGenJets'] and GenHT >= self.stitchSL['GenHT'])
-        passStitch['passStitchDL'] = (nGL == self.stitchDL['nGenLeps'] and nGJ >= self.stitchDL['nGenJets'] and GenHT >= self.stitchDL['GenHT'])
+        passStitch['ESV_passStitchSL'] = (nGL == self.stitchSL['nGenLeps'] and nGJ >= self.stitchSL['nGenJets'] and GenHT >= self.stitchSL['GenHT'])
+        passStitch['ESV_passStitchDL'] = (nGL == self.stitchDL['nGenLeps'] and nGJ >= self.stitchDL['nGenJets'] and GenHT >= self.stitchDL['GenHT'])
         if self.condition == "Pass":
-            passStitch['passStitchCondition'] = passStitch['passStitch'+self.channel]
+            passStitch['ESV_passStitchCondition'] = passStitch['ESV_passStitch'+self.channel]
         elif self.condition == "Fail":
-            passStitch['passStitchCondition'] = not passStitch['passStitch'+self.channel]
+            passStitch['ESV_passStitchCondition'] = not passStitch['ESV_passStitch'+self.channel]
         if self.fillHists:
-            if passStitch['passStitchCondition']:
+            if passStitch['ESV_passStitchCondition']:
                 # self.stitch_nGenLepsPart.Fill(nGLgen, weight)
                 self.stitch_PCond_nGenLeps.Fill(nGL, weight)
                 self.stitch_PCond_nGenJets.Fill(nGJ, weight)
@@ -252,8 +252,8 @@ class Stitcher(Module):
             print("histFile: {5:s} nGL[{0:d}]  nGJ[{1:d}]  GHT[{2:f}] passSL[{3:s}] passDL[{4:s}]".format(nGL, 
                                                                                                           nGJ, 
                                                                                                           GenHT, 
-                                                                                                          str(passStitch['passStitchSL']), 
-                                                                                                          str(passStitch['passStitchDL']),
+                                                                                                          str(passStitch['ESV_passStitchSL']), 
+                                                                                                          str(passStitch['ESV_passStitchDL']),
                                                                                                           str(self.hName))
               )
 
@@ -261,13 +261,13 @@ class Stitcher(Module):
         ### Write out branches ###
         ##########################         
         if self.out and self.mode == "Flag":
-            for name, valType, valTitle in self.varDict:
-                self.out.fillBranch("ESV_%s"%(name), passStitch[name])
+            for name, valType, valTitle in self.varTuple:
+                self.out.fillBranch("{}".format(name), passStitch[name])
             return True
         elif self.mode == "Pass":
-            return passStitch['passStitchCondition']
+            return passStitch['ESV_passStitchCondition']
         elif self.mode == "Fail":
-            return not passStitch['passStitchCondition']
+            return not passStitch['ESV_passStitchCondition']
         elif self.mode == "Plot":
             #Do pass through if plotting, make no assumptions about what should be done with the event
             return True
