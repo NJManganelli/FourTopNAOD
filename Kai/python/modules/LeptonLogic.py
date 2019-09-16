@@ -304,38 +304,56 @@ class TriggerAndLeptonLogic(Module):
         else:
             if histFile == None or histDirName == None:
                 raise RuntimeError("fillHists set to True, but no histFile or histDirName specified")
-            Module.beginJob(self,histFile,histDirName)
-            self.trigLogic_Paths = {}
-            self.trigLogic_Freq = {}
-            self.trigLogic_Correl = {}
-            self.trigLogic_Bits = {}
-            for lvl in ["TRIG", "BASE", "SLCT"]:
-                self.trigLogic_Paths[lvl] = ROOT.TH1D("trigLogic_Paths_{}".format(lvl), 
+            # Module.beginJob(self,histFile,histDirName)
+            ###Inherited from Module
+            prevdir = ROOT.gDirectory
+            self.histFile = histFile
+            self.histFile.cd()
+            self.dir = self.histFile.mkdir( histDirName + "_LeptonLogic" )
+            prevdir.cd()
+            self.objs = []
+
+            self.LeptonLogic_Paths = {}
+            self.LeptonLogic_Freq = {}
+            self.LeptonLogic_Correl = {}
+            self.LeptonLogic_Bits = {}
+            for lvl in ["trigger", "baseline", "selection"]:
+                self.LeptonLogic_Paths[lvl] = ROOT.TH1D("LeptonLogic_Paths_{}".format(lvl), 
                                                       "HLT Paths passed by events  at {} level (weightMagnitude={}); Paths; Events".format(lvl, self.weightMagnitude), 
                                                       self.PathsBins, self.PathsMin, self.PathsMax)
-                self.trigLogic_Freq[lvl] = ROOT.TH1D("trigLogic_Freq_{}".format(lvl), 
+                self.LeptonLogic_Freq[lvl] = ROOT.TH1D("LeptonLogic_Freq_{}".format(lvl), 
                                                      "HLT Paths Fired and Vetoed at {} level  (weightMagnitude={}); Type; Events".format(lvl, self.weightMagnitude), 
                                                      1, 0, 0)
-                self.trigLogic_Correl[lvl] = ROOT.TH2D("trigLogic_Correl_{}".format(lvl), 
+                self.LeptonLogic_Correl[lvl] = ROOT.TH2D("LeptonLogic_Correl_{}".format(lvl), 
                                                          "Fired HLT Path Correlations at {} level (weightMagnitude={}); Path; Path ".format(lvl, self.weightMagnitude),
                                                          self.PathsBins, self.PathsMin, self.PathsMax, self.PathsBins, self.PathsMin, self.PathsMax)
-                self.trigLogic_Bits[lvl] = ROOT.TH2D("trigLogic_Bits_{}".format(lvl), 
+                self.LeptonLogic_Bits[lvl] = ROOT.TH2D("LeptonLogic_Bits_{}".format(lvl), 
                                                          "Fired HLT Path Bits at {} level (weightMagnitude={}); Path; Bits ".format(lvl, self.weightMagnitude),
                                                          self.PathsBins, self.PathsMin, self.PathsMax, self.BitsBins, self.BitsMin, self.BitsMax)
-            for lvl in ["TRIG", "BASE", "SLCT"]:
-                self.addObject(self.trigLogic_Paths[lvl])
-                self.addObject(self.trigLogic_Freq[lvl])
-                self.addObject(self.trigLogic_Correl[lvl])
-                self.addObject(self.trigLogic_Bits[lvl])
+            for lvl in ["trigger", "baseline", "selection"]:
+                self.addObject(self.LeptonLogic_Paths[lvl])
+                self.addObject(self.LeptonLogic_Freq[lvl])
+                self.addObject(self.LeptonLogic_Correl[lvl])
+                self.addObject(self.LeptonLogic_Bits[lvl])
 
             #Initialize labels to keep consistent across all files
-            for lvl in ["TRIG", "BASE", "SLCT"]:
+            for lvl in ["trigger", "baseline", "selection"]:
                 for trig in self.eraTriggers:
-                    self.trigLogic_Paths[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), 0.0)
-                    self.trigLogic_Correl[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), trig.trigger + " (T{})".format(trig.tier), 0.0)
-                    self.trigLogic_Bits[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), 0, 0.0)
+                    self.LeptonLogic_Paths[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), 0.0)
+                    self.LeptonLogic_Correl[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), trig.trigger + " (T{})".format(trig.tier), 0.0)
+                    self.LeptonLogic_Bits[lvl].Fill(trig.trigger + " (T{})".format(trig.tier), 0, 0.0)
                 for cat in ["Vetoed", "Fired", "Neither"]:
-                    self.trigLogic_Freq[lvl].Fill(cat, 0.0)
+                    self.LeptonLogic_Freq[lvl].Fill(cat, 0.0)
+
+    def endJob(self):
+        if hasattr(self, 'objs') and self.objs != None:
+            prevdir = ROOT.gDirectory
+            self.dir.cd()
+            for obj in self.objs:
+                obj.Write()
+            prevdir.cd()
+            # if hasattr(self, 'histFile') and self.histFile != None :
+            #     self.histFile.Close()
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         self.out = wrappedOutputTree
@@ -865,34 +883,34 @@ class TriggerAndLeptonLogic(Module):
                 highestTierFired = None
 
             if len(Vetoed) > 0: 
-                self.trigLogic_Freq["TRIG"].Fill("Vetoed", weight)
+                self.LeptonLogic_Freq["trigger"].Fill("Vetoed", weight)
             elif len(Fired) > 0:
-                self.trigLogic_Freq["TRIG"].Fill("Fired", weight)
+                self.LeptonLogic_Freq["trigger"].Fill("Fired", weight)
                 if pass_baseline_bitset > 0:
-                    self.trigLogic_Freq["BASE"].Fill("Fired", weight)
+                    self.LeptonLogic_Freq["baseline"].Fill("Fired", weight)
                 if pass_selection_bitset > 0:
-                    self.trigLogic_Freq["SLCT"].Fill("Fired", weight)
+                    self.LeptonLogic_Freq["selection"].Fill("Fired", weight)
             else:
-                self.trigLogic_Freq["TRIG"].Fill("Neither", weight)
+                self.LeptonLogic_Freq["trigger"].Fill("Neither", weight)
             for tn, trig in enumerate(Fired):
                 #Skip (primary) trigger filling if not in the tier that fired first (Han!)
                 if self.enforceMCCascade == True and highestTierFired != trig.tier:
                     continue
-                self.trigLogic_Paths["TRIG"].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
+                self.LeptonLogic_Paths["trigger"].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
                 if pass_baseline_lep[trig.trigger]:
-                    self.trigLogic_Paths["BASE"].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
+                    self.LeptonLogic_Paths["baseline"].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
                 if pass_selection_lep[trig.trigger]:
-                    self.trigLogic_Paths["SLCT"].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
-                self.trigLogic_Bits["BASE"].Fill(trig.trigger + " (T{})".format(trig.tier), pass_baseline_lep[trig.trigger], weight)
-                self.trigLogic_Bits["SLCT"].Fill(trig.trigger + " (T{})".format(trig.tier), pass_selection_lep[trig.trigger], weight)
+                    self.LeptonLogic_Paths["selection"].Fill(trig.trigger + " (T{})".format(trig.tier), weight)
+                self.LeptonLogic_Bits["baseline"].Fill(trig.trigger + " (T{})".format(trig.tier), pass_baseline_lep[trig.trigger], weight)
+                self.LeptonLogic_Bits["selection"].Fill(trig.trigger + " (T{})".format(trig.tier), pass_selection_lep[trig.trigger], weight)
                 for tm, trig2 in enumerate(Fired):
                     # if tm >= tn: #Do self correllation to set the scale properly
                     #Just do full correlation matrix
-                    self.trigLogic_Correl["TRIG"].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
-                    if pass_baseline_lep[trig.trigger] and pass_baseline_lep[trig2.trigger]:
-                        self.trigLogic_Correl["BASE"].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
-                    if pass_selection_lep[trig.trigger] and pass_selection_lep[trig2.trigger]:
-                        self.trigLogic_Correl["SLCT"].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
+                    self.LeptonLogic_Correl["trigger"].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
+                    if pass_baseline_lep[trig.trigger] and pass_baseline_lep[trig2.trigger] and trig.tier <= trig2.tier: #Only same or 'lower' (more positive) tier for the second trigger
+                        self.LeptonLogic_Correl["baseline"].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
+                    if pass_selection_lep[trig.trigger] and pass_selection_lep[trig2.trigger] and trig.tier <= trig2.tier:
+                        self.LeptonLogic_Correl["selection"].Fill(trig.trigger + " (T{})".format(trig.tier), trig2.trigger + " (T{})".format(trig2.tier), weight)
 
         #############################################
         ### Define variable dictionary for values ###
