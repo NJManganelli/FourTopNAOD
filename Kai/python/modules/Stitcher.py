@@ -120,7 +120,15 @@ class Stitcher(Module):
         else:
             if histFile == None or histDirName == None:
                 raise RuntimeError("fillHists set to True, but no histFile or histDirName specified")
-            Module.beginJob(self,histFile,histDirName)
+            # Module.beginJob(self,histFile,histDirName)
+            ###Inherited from Module
+            prevdir = ROOT.gDirectory
+            self.histFile = histFile
+            self.histFile.cd()
+            self.dir = self.histFile.mkdir( histDirName + "_Stitcher)
+            prevdir.cd()
+            self.objs = []
+
             self.stitch_PCond_nGenJets = ROOT.TH1D("stitch_PCond_nGenJets", "nGenJet (pt > 30) Pass condition (weightMagnitude={0}); nGenJets; Events".format(self.weightMagnitude), self.nGenJetBins, self.nGenJetMin, self.nGenJetMax)
             self.addObject(self.stitch_PCond_nGenJets)
             self.stitch_PCond_GenHT = ROOT.TH1D("stitch_PCond_GenHT", "GenHT (pt > 30, |#eta| < 2.4) Pass condition (weightMagnitude={0}); Gen HT (GeV); Events".format(self.weightMagnitude), self.HTBins, self.HTMin, self.HTMax)
@@ -156,8 +164,8 @@ class Stitcher(Module):
             for obj in self.objs:
                 obj.Write()
             prevdir.cd()
-            if hasattr(self, 'histFile') and self.histFile != None : 
-                self.histFile.Close()
+            # if hasattr(self, 'histFile') and self.histFile != None : 
+            #     self.histFile.Close()
 
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         self.out = wrappedOutputTree
