@@ -403,7 +403,7 @@ def get_crab_cfg(runFolder, requestName, NanoAODPath='.', splitting='', unitsPer
     #'EventAwareLumiBased'
     #'FileBased'
     #FIXMEs : scriptExe, inputFiles (including the haddnano script), allow undistributed CMSSW?, publication boolean, 
-    if stage == 'Baseline' or stage == 'Stitched':
+    if stage == 'Baseline' or stage == 'Stitched' or stage == 'LogicChain':
         crab_cfg_content = """from WMCore.Configuration import Configuration
 from CRABClient.UserUtilities import config, getUsernameFromSiteDB
 
@@ -482,16 +482,21 @@ def get_crab_script_py(runFolder, requestName, stage='Baseline', sampleConfig = 
     isData = sampleConfig.get('dataset', {}).get('isData')
     era = sampleConfig.get('dataset', {}).get('era')
     subera = sampleConfig.get('dataset', {}).get('subera')
+    if subera != None:
+        subera = "\"" + subera + "\""
+    TriggerChannel = sampleConfig.get('dataset', {}).get('channel')
+    if TriggerChannel != None:
+        TriggerChannel = "\"" + TriggerChannel + "\""
     crossSection = sampleConfig.get('dataset', {}).get('crossSection')
     equivLumi = eLumiDict.get(era)
     nEvents = sampleConfig.get('dataset', {}).get('nEvents')
+    nEventsPositive = sampleConfig.get('dataset', {}).get('nEventsPositive')
+    nEventsNegative = sampleConfig.get('dataset', {}).get('nEventsNegative')
     sumWeights = sampleConfig.get('dataset', {}).get('sumWeights')
     isSignal = sampleConfig.get('dataset', {}).get('isSignal')
-    SC_stitch_mode = sampleConfig.get('stitch', {'mode':'Passthrough'}).get('mode', 'Passthrough')
-    SC_stitch_condition = sampleConfig.get('stitch', {'condition':'Passthrough'}).get('condition', 'Passthrough')
-    SC_stitch_channel = sampleConfig.get('stitch', {'channel':'Passthrough'}).get('channel', 'Passthrough')
-    
-    
+    StitchMode = sampleConfig.get('stitch', {'mode':'Passthrough'}).get('mode', 'Passthrough')
+    StitchCondition = sampleConfig.get('stitch', {'condition':'Passthrough'}).get('condition', 'Passthrough')
+    StitchChannel = sampleConfig.get('stitch', {'channel':'Passthrough'}).get('channel', 'Passthrough')
     
     preselection = sampleConfig.get('postprocessor', {'filter':None}).get('filter', 'None')
     if preselection != "":
@@ -515,14 +520,14 @@ from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties im
 from FourTopNAOD.Kai.modules.BaselineSelector import BaselineSelector
 from FourTopNAOD.Kai.modules.trigger import Trigger
 from FourTopNAOD.Kai.modules.MCTreeDev import MCTrees
-SC_isData = {0:s}
-SC_era = "{1:s}"
-SC_subera = "{2:s}"
-SC_thePreselection = {3:s}
-SC_crossSection = {4:s}
-SC_equivLumi = {5:s}
-SC_nEvents = {6:s}
-SC_sumWeights = {7:s}
+isData = {0:s}
+era = "{1:s}"
+subera = "{2:s}"
+thePreselection = {3:s}
+crossSection = {4:s}
+equivLumi = {5:s}
+nEvents = {6:s}
+sumWeights = {7:s}
 Sup_BTagger = {8:s}
 
 theFiles = inputFiles()
@@ -544,14 +549,14 @@ dataRecalib = {{"2017": {{"B": jetRecalib("Fall17_17Nov2017B_V32_DATA","Fall17_1
                       }}
             }}
 
-if SC_isData:
+if isData:
     theLumis = runsAndLumis()
     moduleCache=[Trigger(triggers),
-                 dataRecalib[SC_era][SC_subera],
+                 dataRecalib[era][subera],
                  BaselineSelector(maxevt=-1, 
                                   probEvt=None,
-                                  isData=SC_isData,
-                                  era=SC_era,
+                                  isData=isData,
+                                  era=era,
                                   lepPt=13, 
                                   MET=40, 
                                   HT=350, 
@@ -575,12 +580,12 @@ else:
                                          ),
                  BaselineSelector(maxevt=-1, 
                                   probEvt=None,
-                                  isData=SC_isData,
-                                  genEquivalentLuminosity=SC_equivLumi,
-                                  genXS=SC_crossSection,
-                                  genNEvents=SC_nEvents,
-                                  genSumWeights=SC_sumWeights,
-                                  era=SC_era,
+                                  isData=isData,
+                                  genEquivalentLuminosity=equivLumi,
+                                  genXS=crossSection,
+                                  genNEvents=nEvents,
+                                  genSumWeights=sumWeights,
+                                  era=era,
                                   lepPt=13, 
                                   MET=40, 
                                   HT=350, 
@@ -592,7 +597,7 @@ else:
 p=PostProcessor(".", 
                 theFiles,       
                 modules=moduleCache, 
-                cut=SC_thePreselection, 
+                cut=thePreselection, 
                 provenance=True, 
                 fwkJobReport=True, 
                 jsonInput=theLumis, 
@@ -604,6 +609,124 @@ p.run()
         ret = crab_script_py.format(str(isData), str(era), str(subera), str(preselection), str(crossSection), str(equivLumi), 
                                     str(nEvents), str(sumWeights), str(btagger))
         return ret
+    elif stage == 'LogicChain':
+        crab_script_py = """#!/usr/bin/env python
+import os, time, collections, copy, json, multiprocessing
+from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import * 
+from PhysicsTools.NanoAODTools.postprocessing.framework.crabhelper import inputFiles,runsAndLumis
+from PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer import *
+from PhysicsTools.NanoAODTools.postprocessing.modules.common.PrefireCorr import *
+from PhysicsTools.NanoAODTools.postprocessing.modules.btv.btagSFProducer import *
+from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetRecalib import *
+from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties import *
+from FourTopNAOD.Kai.modules.LeptonLogic import TriggerAndLeptonLogic
+from FourTopNAOD.Kai.modules.JetMETLogic import JetMETLogic
+from FourTopNAOD.Kai.modules.Stitcher import Stitcher
+from FourTopNAOD.Kai.modules.HistCloser import HistCloser
+isData = {0:s}
+era = "{1:s}"
+subera = {2:s}
+thePreselection = {3:s}
+crossSection = {4:s}
+equivLumi = {5:s}
+nEventsPositive = {6:s}
+nEventsNegative = {7:s}
+sumWeights = {8:s}
+Sup_BTagger = {9:s}
+TriggerChannel = {10:s}
+StitchMode = "{11:s}"
+StitchChannel = "{12:s}"
+StitchCondition = "{13:s}"
+
+theFiles = inputFiles()
+
+#Double braces to escape them inside the literal string template used by Nanovisor (with .format method)
+dataRecalib = {{"2017": {{"B": jetRecalib("Fall17_17Nov2017B_V32_DATA","Fall17_17Nov2017_V32_DATA"),
+                          "C": jetRecalib("Fall17_17Nov2017C_V32_DATA","Fall17_17Nov2017_V32_DATA"),
+                          "D": jetRecalib("Fall17_17Nov2017DE_V32_DATA","Fall17_17Nov2017_V32_DATA"),
+                          "E": jetRecalib("Fall17_17Nov2017DE_V32_DATA","Fall17_17Nov2017_V32_DATA"),
+                          "F": jetRecalib("Fall17_17Nov2017F_V32_DATA","Fall17_17Nov2017_V32_DATA"),
+                          "NONE": "NothingToSeeHere"
+                      }}
+            }}
+
+if isData:
+    weight = 1
+    if era == "2017":
+        theLumis = "{{}}/src/FourTopNAOD/Kai/python/jsons/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt".format(os.environ['CMSSW_BASE'])
+    elif era == "2018":
+        theLumis = "{{}}/src/FourTopNAOD/Kai/python/jsons/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt".format(os.environ['CMSSW_BASE'])
+    # theLumis = runsAndLumis()
+else:
+    weight = crossSection * equivLumi * 1000 / (nEventsPositive - nEventsNegative)
+    theLumis = None
+moduleCache = []
+if not isData: 
+    if era == "2017": 
+        modules.append(puWeightProducer(pufile_mc2017, 
+                                        pufile_data2017,
+                                        "pu_mc",
+                                        "pileup",
+                                        verbose=False,
+                                        doSysVar=True
+                                        ))
+    elif era == "2018": 
+        modules.append(puWeightProducer(pufile_mc2018,
+                                        pufile_data2018,
+                                        "pu_mc",
+                                        "pileup",
+                                        verbose=False,
+                                        doSysVar=True
+                                        ))
+modules.append(TriggerAndLeptonLogic(passLevel='baseline',
+                                     era=era,
+                                     subera=subera,
+                                     isData=isData,
+                                     TriggerChannel=TriggerChannel,
+                                     weightMagnitude=weight,
+                                     fillHists=True,
+                                     mode="Flag"
+                                     ))
+if not isData and StitchMode != "Passthrough": 
+    modules.append(Stitcher(mode=StitchCondition, #Want the fastest execution, and skip flagging in favor of pass/fail, so override StitchMode with the condition
+                            era=era,
+                            channel=StitchChannel,
+                            condition=StitchCondition,
+                            weightMagnitude=weight,
+                            fillHists=True,
+                            HTBinWidth=50,
+                            desiredHTMin=200,
+                            desiredHTMax=800
+                            ))
+modules.append(JetMETLogic(passLevel='baseline',
+                           era=era,
+                           subera=subera,
+                           isData=isData,
+                           weightMagnitude=weight,
+                           fillHists=True,
+                           mode="Flag",
+                           jetPtVar = "pt",
+                           jetMVar = "mass",
+                           debug=False)) #without _nom, since no newer JECs
+modules.append(HistCloser())
+
+p=PostProcessor(".", 
+                theFiles,       
+                modules=moduleCache, 
+                cut=thePreselection, 
+                provenance=True, 
+                fwkJobReport=True, 
+                jsonInput=theLumis, 
+                histFileName="hist.root",
+                histDirName="plots"
+                )
+p.run()
+"""
+        ret = crab_script_py.format(str(isData), str(era), str(subera), str(preselection), str(crossSection), str(equivLumi), 
+                                    str(nEventsPositive), str(nEventsNegative), str(sumWeights), str(btagger), str(TriggerChannel),
+                                    str(StitchMode), str(StitchChannel), str(StitchCondition))
+        return ret
+   
     elif stage == 'Stitched':
         crab_script_py = """#!/usr/bin/env python
 import os, time, collections, copy, json, multiprocessing
@@ -611,22 +734,22 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import *
 from PhysicsTools.NanoAODTools.postprocessing.framework.crabhelper import inputFiles,runsAndLumis
 from PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer import *
 from FourTopNAOD.Kai.modules.Stitcher import Stitcher
-SC_isData = {0:s}
-SC_era = "{1:s}"
-SC_subera = "{2:s}"
-SC_thePreselection = {3:s}
-SC_crossSection = {4:s}
-SC_equivLumi = {5:s}
-SC_nEvents = {6:s}
-SC_sumWeights = {7:s}
+isData = {0:s}
+era = "{1:s}"
+subera = "{2:s}"
+thePreselection = {3:s}
+crossSection = {4:s}
+equivLumi = {5:s}
+nEvents = {6:s}
+sumWeights = {7:s}
 Sup_BTagger = {8:s}
-SC_stitch_mode = "{9:s}"
-SC_stitch_condition = "{10:s}"
-SC_stitch_channel = "{11:s}"
+stitch_mode = "{9:s}"
+stitch_condition = "{10:s}"
+stitch_channel = "{11:s}"
 
 theFiles = inputFiles()
 
-if SC_isData:
+if isData:
     pass
 else:
     theLumis = None
@@ -636,13 +759,13 @@ else:
                                    "pileup",
                                    verbose=False
                                  ),
-                 Stitcher(era=SC_era, mode=SC_stitch_mode, condition=SC_stitch_condition, channel=SC_stitch_channel)
+                 Stitcher(era=era, mode=StitchMode, condition=StitchCondition, channel=StitchChannel)
                  ]
 
 p=PostProcessor(".", 
                 theFiles,       
                 modules=moduleCache, 
-                cut=SC_thePreselection, 
+                cut=thePreselection, 
                 provenance=True, 
                 fwkJobReport=True, 
                 jsonInput=theLumis, 
