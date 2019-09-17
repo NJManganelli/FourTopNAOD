@@ -187,6 +187,8 @@ def main():
         if not os.path.exists(runFolder+"/PSet.py"):
             with open(runFolder+"/PSet.py", "w") as PSet_py:
                 PSet_py.write(get_PSet_py(NanoAODPath))
+            with open(runFolder+"/crab_submit_all.py", "w") as crab_submit_all_py:
+                crab_submit_all_py.write(get_crab_submit_all_py())
         else:
             print("runfolder '{0:s}' already exists. Rename or delete it and attempt recreation".format(runFolder))
             sys.exit()
@@ -663,52 +665,52 @@ else:
 moduleCache = []
 if not isData: 
     if era == "2017": 
-        modules.append(puWeightProducer(pufile_mc2017, 
-                                        pufile_data2017,
-                                        "pu_mc",
-                                        "pileup",
-                                        verbose=False,
-                                        doSysVar=True
-                                        ))
+        moduleCache.append(puWeightProducer(pufile_mc2017, 
+                                            pufile_data2017,
+                                            "pu_mc",
+                                            "pileup",
+                                            verbose=False,
+                                            doSysVar=True
+                                            ))
     elif era == "2018": 
-        modules.append(puWeightProducer(pufile_mc2018,
-                                        pufile_data2018,
-                                        "pu_mc",
-                                        "pileup",
-                                        verbose=False,
-                                        doSysVar=True
-                                        ))
-modules.append(TriggerAndLeptonLogic(passLevel='baseline',
-                                     era=era,
-                                     subera=subera,
-                                     isData=isData,
-                                     TriggerChannel=TriggerChannel,
-                                     weightMagnitude=weight,
-                                     fillHists=True,
-                                     mode="Flag"
-                                     ))
+        moduleCache.append(puWeightProducer(pufile_mc2018,
+                                            pufile_data2018,
+                                            "pu_mc",
+                                            "pileup",
+                                            verbose=False,
+                                            doSysVar=True
+                                            ))
+moduleCache.append(TriggerAndLeptonLogic(passLevel='baseline',
+                                         era=era,
+                                         subera=subera,
+                                         isData=isData,
+                                         TriggerChannel=TriggerChannel,
+                                         weightMagnitude=weight,
+                                         fillHists=True,
+                                         mode="Flag"
+                                         ))
 if not isData and StitchMode != "Passthrough": 
-    modules.append(Stitcher(mode=StitchCondition, #Want the fastest execution, and skip flagging in favor of pass/fail, so override StitchMode with the condition
-                            era=era,
-                            channel=StitchChannel,
-                            condition=StitchCondition,
-                            weightMagnitude=weight,
-                            fillHists=True,
-                            HTBinWidth=50,
-                            desiredHTMin=200,
-                            desiredHTMax=800
-                            ))
-modules.append(JetMETLogic(passLevel='baseline',
-                           era=era,
-                           subera=subera,
-                           isData=isData,
-                           weightMagnitude=weight,
-                           fillHists=True,
-                           mode="Flag",
-                           jetPtVar = "pt",
-                           jetMVar = "mass",
-                           debug=False)) #without _nom, since no newer JECs
-modules.append(HistCloser())
+    moduleCache.append(Stitcher(mode=StitchCondition, #Want the fastest execution, and skip flagging in favor of pass/fail, so override StitchMode with the condition
+                                era=era,
+                                channel=StitchChannel,
+                                condition=StitchCondition,
+                                weightMagnitude=weight,
+                                fillHists=True,
+                                HTBinWidth=50,
+                                desiredHTMin=200,
+                                desiredHTMax=800
+                                ))
+moduleCache.append(JetMETLogic(passLevel='baseline',
+                               era=era,
+                               subera=subera,
+                               isData=isData,
+                               weightMagnitude=weight,
+                               fillHists=True,
+                               mode="Flag",
+                               jetPtVar = "pt",
+                               jetMVar = "mass",
+                               debug=False)) #without _nom, since no newer JECs
+moduleCache.append(HistCloser())
 
 p=PostProcessor(".", 
                 theFiles,       
@@ -718,7 +720,19 @@ p=PostProcessor(".",
                 fwkJobReport=True, 
                 jsonInput=theLumis, 
                 histFileName="hist.root",
-                histDirName="plots"
+                histDirName="plots",
+                branchsel=None,
+                outputbranchsel=None,
+                compression="LZMA:9",
+                friend=False,
+                postfix=None,
+                noOut=False,
+                justcount=False,
+                # haddFileName=None,
+                maxEntries=None,
+                firstEntry=0,
+                prefetch=False,
+                longTermCache=False
                 )
 p.run()
 """
@@ -809,6 +823,17 @@ process.output = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.s
 process.out = cms.EndPath(process.output)
 """
     return PSet_py.format(str(NanoAODPath))
+
+def get_crab_submit_all_py():
+    ret = """#!/usr/bin/env python
+import os, sys, datetime, subprocess
+from glob import glob
+cfg_files = glob("./crab_cfg_*")
+for f in cfg_files:
+    cmd = "crab submit -c {0:s} > submission_{1:s}.log".format(f.replace("./", ""), f.replace("crab_cfg_", "").replace(".py","").replace("./", ""))
+    # subprocess.Popen(args="print '{}'".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))
+    subprocess.Popen(args="{}".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))"""
+    return ret
 
 def get_username():
     return pwd.getpwuid( os.getuid() )[ 0 ]
