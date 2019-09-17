@@ -10,7 +10,6 @@
   - dataset: #Four Top sample
         name: "tttt"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 2273928
         nEventsPositive: 1561946
@@ -37,7 +36,6 @@
   - dataset: #ttbar semilepton sample
         name: "tt_SL-GF"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 8836856
         nEventsPositive: 8794464
@@ -68,7 +66,6 @@
   - dataset: #ttbar dilepton sample
         name: "tt_DL-GF"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 8510388
         nEventsPositive: 8467543
@@ -83,7 +80,7 @@
         filterEfficiencyUp: 0.0166437
         filterEfficiencyDown: 0.0163847
         MCMCrossSection: 730
-	MCMfilterEfficiency: 0.015
+        MCMfilterEfficiency: 0.015
     source:
         'NANOv5': "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
     postprocessor: 
@@ -102,7 +99,6 @@
   - dataset: #ttbar semilepton sample
         name: "tt_SL"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 20122010
         nEventsPositive: 20040607
@@ -133,7 +129,6 @@
   - dataset: #ttbar dilepton sample
         name: "tt_DL"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 69098644
         nEventsPositive: 68818780
@@ -164,7 +159,6 @@
   - dataset: #single top - top-W
         name: "ST_tW"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 7945242
         nEventsPositive: 7914815
@@ -191,7 +185,6 @@
   - dataset: #single top - antitop-W
         name: "ST_tbarW"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 7745276
         nEventsPositive: 7715654
@@ -218,7 +211,6 @@
   # - dataset: #ttH to bb dilepton ttbar
   #       name: "ttH_DL"
   #       era: "2017"
-  #       subera: "NONE"
   #       isData: False
   #       nEvents: 9794620
   #       nEventsPositive: 9789774
@@ -245,7 +237,6 @@
   # - dataset: #ttH to bb single lepton ttbar
   #       name: "ttH_SL"
   #       era: "2017"
-  #       subera: "NONE"
   #       isData: False
   #       nEvents: 9332943
   #       nEventsPositive: 9328425
@@ -271,7 +262,6 @@
   - dataset: #ttH to bb inclusive
         name: "ttH"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 8000000
         nEventsPositive: 7916867
@@ -297,7 +287,6 @@
   - dataset: #ttWJets
         name: "ttWJets"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 9425384
         nEventsPositive: 
@@ -324,7 +313,6 @@
   - dataset: #ttZJets
         name: "ttZJets"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 8536618
         sumWeights: 8519074.000000
@@ -349,7 +337,6 @@
   - dataset: #ttWH
         name: "ttWH"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 200000
         nEventsPositive: 199491
@@ -376,7 +363,6 @@
   - dataset: #ttWW
         name: "ttWW"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 962000
         nEventsPositive: 962000
@@ -403,7 +389,6 @@
   - dataset: #ttWZ
         name: "ttWZ"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 200000
         nEventsPositive: 199379
@@ -430,7 +415,6 @@
   - dataset: #ttZZ
         name: "ttZZ"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 200000
         nEventsPositive: 199686
@@ -457,7 +441,6 @@
   - dataset: #ttZH
         name: "ttZH"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 200000
         nEventsPositive: 199643
@@ -484,7 +467,6 @@
   - dataset: #ttHH
         name: "ttHH"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 194817
         nEventsPositive: 194516
@@ -511,7 +493,6 @@
   - dataset: #tttW
         name: "tttW"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 200000
         nEventsPositive: 199852
@@ -538,7 +519,6 @@
   - dataset: #tttJ
         name: "tttJ"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 200000
         nEventsPositive: 199273
@@ -565,7 +545,6 @@
   - dataset: #DY dilepton + jets sample
         name: "DYJets_DL"
         era: "2017"
-        subera: "NONE"
         isData: False
         nEvents: 49125561
         sumWeights: 49082157.000000
