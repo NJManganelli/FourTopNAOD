@@ -469,6 +469,8 @@ class TriggerAndLeptonLogic(Module):
                 continue
             d0 = math.sqrt(mu.dxy**2 + mu.dz**2)
             pass_eta = (abs(mu.eta) < 2.4) #max regardless
+            #looseId added in NanoAODv5! No longer baseline looseId for the collection, but all the Id's, such as soft MVA and such
+            pass_id_loose = mu.looseId
             #Baseline bools
             pass_iso_baseline = (mu.pfIsoId >= 3) #trigger iso VVL, so selection = tight (4) far exceeds this...
             pass_dz_baseline = (abs(mu.dz) < 0.06) #trigger dz = 0.2, selection = 0.02, baseline = 0.06
@@ -477,8 +479,8 @@ class TriggerAndLeptonLogic(Module):
             pass_iso_selection = (mu.pfIsoId >= 4) #trigger iso VVL, so selection = tight (4) far exceeds this...
             pass_dz_selection = (abs(mu.dz) < 0.02) #trigger dz = 0.2, selection = 0.02, baseline = 0.06
             pass_d0_selection = (d0 < 0.10) #selection = 0.10, baseline = 0.15
-            pass_common_baseline = pass_eta and pass_iso_baseline and pass_dz_baseline and pass_d0_baseline
-            pass_common_selection = pass_eta and pass_iso_selection and pass_dz_selection and pass_d0_selection
+            pass_common_baseline = pass_id_loose and pass_eta and pass_iso_baseline and pass_dz_baseline and pass_d0_baseline
+            pass_common_selection = pass_id_loose and pass_eta and pass_iso_selection and pass_dz_selection and pass_d0_selection
             for trigger in Fired:
                 if pass_common_baseline:
                     #Create OVERLAPPING baseline collections
