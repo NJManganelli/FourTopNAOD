@@ -419,7 +419,10 @@ config.JobType.allowUndistributedCMSSW = True
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'PSet.py'
 config.JobType.scriptExe = 'crab_script_{1:s}.sh'
-config.JobType.inputFiles = ['crab_script_{1:s}.py', '{8:s}/scripts/haddnano.py'] #, '../../../PhysicsTools/NanoAODTools/scripts/haddnano.py'] #hadd nano will not be needed once nano tools are in cmssw
+config.JobType.inputFiles = ['crab_script_{1:s}.py', 
+                             '{8:s}/scripts/haddnano.py',
+                             '{9:s}/src/FourTopNAOD/Kai/python/jsons/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt',
+                             '{9:s}/src/FourTopNAOD/Kai/python/jsons/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt']
 config.JobType.outputFiles = ['hist.root']
 config.JobType.sendPythonFolder  = True
 config.section_("Data")
@@ -435,7 +438,7 @@ config.Data.outputDatasetTag = '{1:s}'
 config.section_("Site")
 config.Site.storageSite = '{5:s}'
 """
-        ret = crab_cfg_content.format(runFolder, requestName, splitting, unitsPerJob, cleanInputDataset, storageSite, str(publication), stage, str(NanoAODPath))
+        ret = crab_cfg_content.format(runFolder, requestName, splitting, unitsPerJob, cleanInputDataset, storageSite, str(publication), stage, str(NanoAODPath), str(os.environ['CMSSW_BASE']))
     else:
         print("We haven't made a stage {0:s} configuration yet... Exiting".format(stage))
         sys.exit()
@@ -655,9 +658,9 @@ dataRecalib = {{"2017": {{"B": jetRecalib("Fall17_17Nov2017B_V32_DATA","Fall17_1
 if isData:
     weight = 1
     if era == "2017":
-        theLumis = "{{}}/src/FourTopNAOD/Kai/python/jsons/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt".format(os.environ['CMSSW_BASE'])
+        theLumis = "Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt"
     elif era == "2018":
-        theLumis = "{{}}/src/FourTopNAOD/Kai/python/jsons/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt".format(os.environ['CMSSW_BASE'])
+        theLumis = "Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt"
     # theLumis = runsAndLumis()
 else:
     weight = crossSection * equivLumi * 1000 / (nEventsPositive - nEventsNegative)
