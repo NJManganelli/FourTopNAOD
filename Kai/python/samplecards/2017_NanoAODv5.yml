@@ -315,6 +315,8 @@
         era: "2017"
         isData: False
         nEvents: 8536618
+        nEventsPositive: 8527846
+        nEventsNegative: 8772
         sumWeights: 8519074.000000
         sumWeights2: 8536618.000000
         isSignal: False
