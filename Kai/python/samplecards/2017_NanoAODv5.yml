@@ -580,7 +580,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.020
 
@@ -598,7 +598,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.035
 
@@ -616,7 +616,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.021
 
@@ -634,7 +634,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 40
+        unitsPerJob: 15
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.021
 
@@ -652,7 +652,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 40
+        unitsPerJob: 15
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.009
 
@@ -670,7 +670,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 40
+        unitsPerJob: 15
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.011
 
@@ -688,7 +688,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 40
+        unitsPerJob: 15
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.011
 
@@ -706,7 +706,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 40
+        unitsPerJob: 15
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.007
 
@@ -724,7 +724,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 40
+        unitsPerJob: 15
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.014
 
@@ -742,7 +742,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 40
+        unitsPerJob: 15
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.011
 
@@ -760,7 +760,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 40
+        unitsPerJob: 15
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.012
 
@@ -778,7 +778,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.027
 
@@ -796,7 +796,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 40
+        unitsPerJob: 15
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.015
 
@@ -814,7 +814,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.025
 
@@ -832,7 +832,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.022
 
@@ -850,7 +850,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.022
 
@@ -868,7 +868,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.022
 
@@ -886,7 +886,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.022
 
@@ -904,7 +904,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.022
 
@@ -922,7 +922,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.022
 
@@ -940,7 +940,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.022
 
@@ -958,7 +958,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.022
 
@@ -976,7 +976,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.022
 
@@ -994,7 +994,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.022
 
@@ -1012,7 +1012,7 @@
     crab_cfg:
         #splitting: "Automatic"
         splitting: "FileBased"
-        unitsPerJob: 20
+        unitsPerJob: 10
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.022
 
