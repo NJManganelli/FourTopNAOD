@@ -24,6 +24,7 @@
         MCMCrossSection: 0.008213
     source:
         'NANOv5': "dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/tttt_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -50,6 +51,7 @@
         MCMCrossSection: 730
     source:
         'NANOv5': "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/tt_SL-GF_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -83,6 +85,7 @@
         MCMfilterEfficiency: 0.015
     source:
         'NANOv5': "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/tt_DL-GF-*_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -113,6 +116,7 @@
         MCMCrossSection: 730
     source:
         'NANOv5': "dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/tt_SL_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -143,6 +147,7 @@
         MCMCrossSection: 730
     source:
         'NANOv5': "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/tt_DL_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -173,6 +178,7 @@
         MCMCrossSection: 34.91
     source:
         'NANOv5': "dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ST_tW_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -199,6 +205,7 @@
         MCMCrossSection: 34.91
     source:
         'NANOv5': "dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ST_tbarW_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -276,6 +283,7 @@
         MCMCrossSection: 1
     source:
         'NANOv5': "dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ttH_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -301,6 +309,7 @@
         MCMCrossSection: 0.4793
     source:
         'NANOv5': "dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ttWJets_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -327,6 +336,7 @@
         MCMCrossSection: 0.618
     source:
         'NANOv5': "dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ttZJets_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -353,6 +363,7 @@
         MCMCrossSection: 0
     source:
         'NANOv5': "dbs:/TTWH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ttWH_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -379,6 +390,7 @@
         MCMCrossSection: 0
     source:
         'NANOv5': "dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ttWW_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -405,6 +417,7 @@
         MCMCrossSection: 0
     source:
         'NANOv5': "dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ttWZ_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -431,6 +444,7 @@
         MCMCrossSection: 0
     source:
         'NANOv5': "dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ttZZ_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -457,6 +471,7 @@
         MCMCrossSection: 0
     source:
         'NANOv5': "dbs:/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ttZH_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -483,6 +498,7 @@
         MCMCrossSection: 0
     source:
         'NANOv5': "dbs:/TTHH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ttHH_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -509,6 +525,7 @@
         MCMCrossSection: 0
     source:
         'NANOv5': "dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/tttW_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -535,6 +552,7 @@
         MCMCrossSection: 0
     source:
         'NANOv5': "dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/tttJ_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -561,6 +579,7 @@
         MCMCrossSection: 14420
     source:
         'NANOv5': "dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017RECOSIMstep_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/DYJets_DL_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -579,6 +598,7 @@
         nEvents: 14501767
     source:
         'NANOv5': "dbs:/DoubleMuon/Run2017B-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/MuMu_B_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -597,6 +617,7 @@
         nEvents: 49636525
     source:
         'NANOv5': "dbs:/DoubleMuon/Run2017C-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/MuMu_C_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -615,6 +636,7 @@
         nEvents: 23075733
     source:
         'NANOv5': "dbs:/DoubleMuon/Run2017D-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/MuMu_D_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -633,6 +655,7 @@
         nEvents: 51589091
     source:
         'NANOv5': "dbs:/DoubleMuon/Run2017E-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/MuMu_E_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -651,6 +674,7 @@
         nEvents: 79756560
     source:
         'NANOv5': "dbs:/DoubleMuon/Run2017F-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/MuMu_F_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -669,6 +693,7 @@
         nEvents: 58088760
     source:
         'NANOv5': "dbs:/DoubleEG/Run2017B-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ElEl_B_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -687,6 +712,7 @@
         nEvents: 65181125
     source:
         'NANOv5': "dbs:/DoubleEG/Run2017C-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ElEl_C_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -705,6 +731,7 @@
         nEvents: 25911432
     source:
         'NANOv5': "dbs:/DoubleEG/Run2017D-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ElEl_D_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -723,6 +750,7 @@
         nEvents: 56233597
     source:
         'NANOv5': "dbs:/DoubleEG/Run2017E-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ElEl_E_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -741,6 +769,7 @@
         nEvents: 74307066
     source:
         'NANOv5': "dbs:/DoubleEG/Run2017F-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ElEl_F_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -759,6 +788,7 @@
         nEvents: 4453465
     source:
         'NANOv5': "dbs:/MuonEG/Run2017B-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ElMu_B_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -777,6 +807,7 @@
         nEvents: 15595214
     source:
         'NANOv5': "dbs:/MuonEG/Run2017C-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ElMu_C_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -795,6 +826,7 @@
         nEvents: 9164365
     source:
         'NANOv5': "dbs:/MuonEG/Run2017D-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ElMu_D_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -813,6 +845,7 @@
         nEvents: 19043421
     source:
         'NANOv5': "dbs:/MuonEG/Run2017E-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ElMu_E_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -831,6 +864,7 @@
         nEvents: 25776363
     source:
         'NANOv5': "dbs:/MuonEG/Run2017F-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ElMu_F_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -849,6 +883,7 @@
         nEvents: 136300266
     source:
         'NANOv5': "dbs:/SingleMuon/Run2017B-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/Mu_B_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -867,6 +902,7 @@
         nEvents: 165652756
     source:
         'NANOv5': "dbs:/SingleMuon/Run2017C-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/Mu_C_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -885,6 +921,7 @@
         nEvents: 70361660
     source:
         'NANOv5': "dbs:/SingleMuon/Run2017D-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/Mu_D_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -903,6 +940,7 @@
         nEvents: 154630534
     source:
         'NANOv5': "dbs:/SingleMuon/Run2017E-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/Mu_E_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -921,6 +959,7 @@
         nEvents: 242135500
     source:
         'NANOv5': "dbs:/SingleMuon/Run2017F-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/Mu_F_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -939,6 +978,7 @@
         nEvents: 60537490
     source:
         'NANOv5': "dbs:/SingleElectron/Run2017B-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/El_B_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -957,6 +997,7 @@
         nEvents: 136637888
     source:
         'NANOv5': "dbs:/SingleElectron/Run2017C-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/El_C_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -975,6 +1016,7 @@
         nEvents: 51526710
     source:
         'NANOv5': "dbs:/SingleElectron/Run2017D-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/El_D_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -993,6 +1035,7 @@
         nEvents: 102121689
     source:
         'NANOv5': "dbs:/SingleElectron/Run2017E-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/El_E_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
@@ -1011,6 +1054,7 @@
         nEvents: 128467223
     source:
         'NANOv5': "dbs:/SingleElectron/Run2017F-Nano1June2019-v1/NANOAOD"
+        'LL_JML_LSF': "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/El_F_2017.root"
     postprocessor: 
         filter: ""
     crab_cfg:
