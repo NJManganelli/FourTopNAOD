@@ -192,6 +192,7 @@ booker = {
         "sumWeights2": 199794.753976,
         "isSignal": False,
         "crossSection": 0.01253,
+        "color": ROOT.kGreen,
         "source": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/ttZH_2017.root",
         },
     "ttHH":{
