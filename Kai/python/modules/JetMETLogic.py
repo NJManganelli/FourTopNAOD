@@ -98,6 +98,31 @@ class JetMETLogic(Module):
                         'BTag_WP':  0b100000000
                         }
 
+        # Thresholds for Event and Jet levels
+        self.jet_threshold_bits = {}
+        self.jet_threshold_bits['baseline'] = self.jetbits['lepClean'] + self.jetbits['maxEta'] + self.jetbits['jetID'] + \
+                                              self.jetbits['pt20']
+        print("Baseline bits are {0:09b}".format(self.jet_threshold_bits['baseline']))
+        self.jet_threshold_bits['selection'] = self.jetbits['lepClean'] + self.jetbits['maxEta'] + self.jetbits['jetID'] + \
+                                               self.jetbits['pt20']
+        print("Selection bits are {0:09b}".format(self.jet_threshold_bits['selection']))
+        self.evt_threshold_bits = {}
+        # self.evt_threshold_bits['baseline'] =  0b00001100011111111111
+        # self.evt_threshold_bits['selection'] = 0b00001100011111111111
+        self.evt_threshold_bits['baseline'] = self.passbits['PV_minNDoF'] + self.passbits['PV_maxAbsZ'] +\
+                                              self.passbits['PV_maxRho'] + self.passbits['MET_globalSuperTightHalo2016Filter'] +\
+                                              self.passbits['MET_goodVertices'] + self.passbits['MET_HBHENoiseFilter'] + \
+                                              self.passbits['MET_HBHENoiseIsoFilter'] + \
+                                              self.passbits['MET_EcalDeadCellTriggerPrimitiveFilter'] + \
+                                              self.passbits['MET_BadPFMuonFilter'] + self.passbits['MET_ecalBadCalibFilterV2'] + \
+                                              self.passbits['MET_pt'] + self.passbits['Jet_nJet20'] + self.passbits['HT']
+        self.evt_threshold_bits['selection'] = self.passbits['PV_minNDoF'] + self.passbits['PV_maxAbsZ'] +\
+                                              self.passbits['PV_maxRho'] + self.passbits['MET_globalSuperTightHalo2016Filter'] +\
+                                              self.passbits['MET_goodVertices'] + self.passbits['MET_HBHENoiseFilter'] + \
+                                              self.passbits['MET_HBHENoiseIsoFilter'] + \
+                                              self.passbits['MET_EcalDeadCellTriggerPrimitiveFilter'] + \
+                                              self.passbits['MET_BadPFMuonFilter'] + self.passbits['MET_ecalBadCalibFilterV2'] + \
+                                              self.passbits['MET_pt'] + self.passbits['Jet_nJet20'] + self.passbits['HT']
 
         #flags for MET filters
         self.FlagsDict = {"2016" :  { "isData" : ["globalSuperTightHalo2016Filter"],
@@ -561,6 +586,8 @@ class JetMETLogic(Module):
         selBTsortedJets_baseline = []
         jetbits_baseline = [0]*len(jets)
         
+        selJets_bugged = []
+
         for idx, jet in enumerate(jets):
             if idx not in jetsToClean_baseline:
                 jetbits_baseline[idx] += self.jetbits['lepClean']
@@ -578,7 +605,7 @@ class JetMETLogic(Module):
                 jetbits_baseline[idx] += self.jetbits['DJET']
             if getattr(jet, self.BTAlg) > self.BTWP:
                 jetbits_baseline[idx] += self.jetbits['BTag_WP']
-            if jetbits_baseline[idx] >= 0b000010111:
+            if (jetbits_baseline[idx] & self.jet_threshold_bits['baseline']) >= self.jet_threshold_bits['baseline']:
                 selJets_baseline.append((idx, jet))
                 selBTsortedJets_baseline.append((idx, jet))
             # #BTagging input disabled without highest bit! Use DeepJet Loose...
@@ -589,7 +616,7 @@ class JetMETLogic(Module):
                 jetbits_selection[idx] += self.jetbits['lepClean']
             if abs(jet.eta) < 2.5:
                 jetbits_selection[idx] += self.jetbits['maxEta']
-            if jet.jetId >= 6:
+            if jet.jetId >= 2: #dropped to 2==Tight due to bug in 4==TightLepVeto ID regarding muon energy fractions
                 jetbits_selection[idx] += self.jetbits['jetID']
             if getattr(jet, self.jetPtVar) > 25:
                 jetbits_selection[idx] += self.jetbits['pt25']
@@ -601,11 +628,9 @@ class JetMETLogic(Module):
                 jetbits_selection[idx] += self.jetbits['DJET']
             if getattr(jet, self.BTAlg) > self.BTWP:
                 jetbits_selection[idx] += self.jetbits['BTag_WP']
-            if jetbits_selection[idx] >= 0b000010111:
+            if (jetbits_selection[idx] & self.jet_threshold_bits['selection']) >= self.jet_threshold_bits['selection']:
                 selJets_selection.append((idx, jet))
-                selBTsortedJets_selection.append((idx, jet))
-            # #BTagging input disabled without highest bit! Use DeepJet Medium...
-            # if jetbits_selection[idx] >= 0b010010111:
+                selBTsortedJets_selection.append((idx, jet))                
 
         nJets_baseline = len(selJets_baseline)
         nJets_selection = len(selJets_selection)
@@ -763,18 +788,13 @@ class JetMETLogic(Module):
         branchVals['ESV_JetMETLogic_dRbb_selection'] = dRbb_selection
         branchVals['ESV_JetMETLogic_DiLepMass_selection'] = DiLepMass_selection
 
-        #############################
-        ### Set event pass values ###
-        #############################
-        threshold_bits = {}
-        #1-10 common, 11 MET_pt at baseline level, 13 is Z_Window (not required), 14 is nJets25 (nr), 15 is nJets20, 16 is HT, 17 and 18 are btagging (nr x2)
-        threshold_bits['baseline'] =  0b00001100011111111111
-        threshold_bits['selection'] = 0b00001100011111111111
-        #1-10 common, 11 MET_pt at selection level, 13 is Z_Window (not required), 14 is nJets25 (nr), 15 is nJets20, 16 is HT, 17 and 18 are btagging (nr x2)
+        ####################################
+        ### Event pass values calculated ###
+        ####################################
         passVals = {}
         passVals['ESV_JetMETLogic_pass_all'] = True
-        passVals['ESV_JetMETLogic_pass_baseline'] = (branchVals['ESV_JetMETLogic_baseline'] & threshold_bits['baseline'] >= threshold_bits['baseline'])
-        passVals['ESV_JetMETLogic_pass_selection'] = (branchVals['ESV_JetMETLogic_selection'] & threshold_bits['selection'] >= threshold_bits['selection'])
+        passVals['ESV_JetMETLogic_pass_baseline'] = ( (branchVals['ESV_JetMETLogic_baseline'] & self.evt_threshold_bits['baseline']) >= self.evt_threshold_bits['baseline'])
+        passVals['ESV_JetMETLogic_pass_selection'] = ( (branchVals['ESV_JetMETLogic_selection'] & self.evt_threshold_bits['selection']) >= self.evt_threshold_bits['selection'])
 
         ####################### 
         ### Fill histograms ###
@@ -788,8 +808,8 @@ class JetMETLogic(Module):
                     # self.addObject(self.JetMETLogic_Correl[lvl])
                     foundFirstFail = False
                     for bitPos, bitVal in enumerate(self.passbits.values()):
-                        if (bitVal & threshold_bits[lvl] == 0) or (bitVal & branchVals['ESV_JetMETLogic_{}'.format(lvl)] > 0):
-                            #Skip values that aren't set in the threshold, we can't fail on them, and of course skip values that are passed in regard to those thresholds!
+                        if (bitVal & self.evt_threshold_bits[lvl] == 0) or (bitVal & branchVals['ESV_JetMETLogic_{}'.format(lvl)] > 0):
+                            #First skip values that aren't set in the evt_threshold, we can't fail on them, then additionally skip values that are passed in regard to those thresholds, using the comparison with bits in ESV_JetMETLogic_{lvl}
                             continue
                         #This is triggered when we have a bit that is in the threshold and was not met by the event, so it's a failure
                         self.JetMETLogic_FailBits[lvl].Fill(bitPos+1, weight)
