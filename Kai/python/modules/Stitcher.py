@@ -15,8 +15,7 @@ class Stitcher(Module):
         and set to "Fail" if the desirable events are those that 'fail' the simultaneity conditions (that is, the events fail one OR more of those conditions). In this way, events that are from the 'bulk' of the nominal sample are
         flagged with True, events from the high-HT, high-nJet tail of the nominal sample are flagged with False, events from the filtered sample should be flagged with True.
 
-        The mode "Pass" or "Fail" does not create branches, but simply decides whether to pass the event on to the next module or not. This is synonymous with the condition "Pass" and "Fail," so in pass mode, events fulfilling all
-        the simultaneous criteria will go to the next module/be written to the tree, and in fail mode, only those that fail to pass one of the conditions will continue/be written out. Not fully tested, last this docstring was updated.
+        The mode "Pass" or "Negate" does not create branches, but simply decides whether to pass the event on to the next module or not. When set to Pass, then if the event meets the condition for the channel selected, it's passed (if condition='Pass' then you will pass along filtered sample events, if condition='Fail', then un-filtered sample events. Negate inverts this selection, for the purpose of debugging or studies
         """
         self.writeHistFile=True
         self.verbose=verbose
@@ -26,7 +25,7 @@ class Stitcher(Module):
         #event counters
         self.counter = 0
         self.mode = mode
-        if self.mode not in ["Flag", "Pass", "Fail", "Plot"]:
+        if self.mode not in ["Flag", "Pass", "Negate", "Plot"]:
             raise NotImplementedError("Not a supported mode for the Stitcher module: '{0}'".format(self.mode))
         self.era = era
         self.channel = channel
@@ -178,8 +177,9 @@ class Stitcher(Module):
                 raise RuntimeError("No Output file selected, cannot flag events for Stitching")
             else:
                 for name, valType, valTitle in self.varTuple:
-                    self.out.branch("ESV_%s"%(name), valType, title=valTitle)
-        elif self.mode == "Pass" or self.mode == "Fail" or self.mode == "Plot":
+                    # print("Generating branch {}".format(name))
+                    self.out.branch("{}".format(name), valType, title=valTitle)
+        elif self.mode == "Pass" or self.mode == "Negate" or self.mode == "Plot":
             pass
 
 
@@ -215,7 +215,7 @@ class Stitcher(Module):
         #         nGLgen += 1
         #     elif abs(gen.pdgId) in set([15]) and gen.status == 2:
         #         nGLgen += 1
-        
+        # print("nGL == {} nGJ == {} GenHT == {}".format(nGL, nGJ, GenHT))
         passStitch = {}
         passStitch['ESV_passStitchSL'] = (nGL == self.stitchSL['nGenLeps'] and nGJ >= self.stitchSL['nGenJets'] and GenHT >= self.stitchSL['GenHT'])
         passStitch['ESV_passStitchDL'] = (nGL == self.stitchDL['nGenLeps'] and nGJ >= self.stitchDL['nGenJets'] and GenHT >= self.stitchDL['GenHT'])
@@ -223,6 +223,9 @@ class Stitcher(Module):
             passStitch['ESV_passStitchCondition'] = passStitch['ESV_passStitch'+self.channel]
         elif self.condition == "Fail":
             passStitch['ESV_passStitchCondition'] = not passStitch['ESV_passStitch'+self.channel]
+        # print("passStitchSL == {} passStitchDL == {} passStitchCondition == {}".format(passStitch['ESV_passStitchSL'],
+        #                                                                                passStitch['ESV_passStitchDL'], 
+        #                                                                                passStitch['ESV_passStitchCondition']))
         if self.fillHists:
             if passStitch['ESV_passStitchCondition']:
                 # self.stitch_nGenLepsPart.Fill(nGLgen, weight)
@@ -266,8 +269,8 @@ class Stitcher(Module):
             return True
         elif self.mode == "Pass":
             return passStitch['ESV_passStitchCondition']
-        elif self.mode == "Fail":
-            return not passStitch['ESV_passStitchCondition']
+        elif self.mode == "Negate":
+            return not passStitch['ESV_passStitchCondition'] #ESV_passStitchCondition already accounts for whether the event should be passed according to the condition. This option inverts the option for the purpose of debugging
         elif self.mode == "Plot":
             #Do pass through if plotting, make no assumptions about what should be done with the event
             return True
