@@ -824,20 +824,18 @@ class JetMETLogic(Module):
         if self.out and self.mode == "Flag":
             for name, valType, valTitle, lVar in self.varTuple:
                 self.out.fillBranch(name, branchVals[name])
+            return True
         elif self.mode == "PassFail":
-            #Do nothing
-            pass
+            if passVals['ESV_JetMETLogic_pass_{}'.format(self.passLevel)]:
+                return True
+            else:
+                return False
         elif self.mode == "Plot":
             #Do something?
-            pass
             #Do pass through if plotting, make no assumptions about what should be done with the event
-#FIXME            return True
+            return True
         else:
             raise NotImplementedError("No method in place for JetMETLogic module in mode '{0}'".format(self.mode))
-
-        if passVals['ESV_JetMETLogic_pass_{}'.format(self.passLevel)]:
-            return True
-        return False
 
     def genWeightFunc(self, event):
         #Default value is currently useless, since the tree reader array tool raises an exception anyway
