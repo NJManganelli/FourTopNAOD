@@ -420,8 +420,13 @@ config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'PSet.py'
 config.JobType.scriptExe = 'crab_script_{1:s}.sh'
 config.JobType.inputFiles = ['crab_script_{1:s}.py', 
-                             '{8:s}/python/postprocessing/data/pileup/puData2017_withVar.root',
+                             '{8:s}/python/postprocessing/data/pileup/PileupData_GoldenJSON_Full2016.root',
+                             '{8:s}/python/postprocessing/data/pileup/PileupHistogram-goldenJSON-13tev-2017-99bins_withVar.root',
+                             '{8:s}/python/postprocessing/data/pileup/PileupHistogram-goldenJSON-13tev-2018-99bins_withVar.root',
+                             '{8:s}/python/postprocessing/data/pileup/PileupHistogram-goldenJSON-13tev-2018-100bins_withVar.root',
+                             '{8:s}/python/postprocessing/data/pileup/pileup_profile_Summer16.root',
                              '{8:s}/python/postprocessing/data/pileup/mcPileup2017.root',
+                             '{8:s}/python/postprocessing/data/pileup/mcPileup2018.root',
                              '{8:s}/scripts/haddnano.py',
                              '{9:s}/src/FourTopNAOD/Kai/python/jsons/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt',
                              '{9:s}/src/FourTopNAOD/Kai/python/jsons/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt']
@@ -669,17 +674,25 @@ else:
     theLumis = None
 moduleCache = []
 if not isData: 
+    if era == "2016": 
+        moduleCache.append(puWeightProducer("pileup_profile_Summer16.root",
+                                            "PileupData_GoldenJSON_Full2016.root",
+                                            "pu_mc",
+                                            "pileup",
+                                            verbose=False,
+                                            doSysVar=True
+                                            ))
     if era == "2017": 
-        moduleCache.append(puWeightProducer(pufile_mc2018,
-                                            pufile_data2018,
+        moduleCache.append(puWeightProducer("mcPileup2017.root",
+                                            "PileupHistogram-goldenJSON-13tev-2017-99bins_withVar.root",
                                             "pu_mc",
                                             "pileup",
                                             verbose=False,
                                             doSysVar=True
                                             ))
     elif era == "2018": 
-        moduleCache.append(puWeightProducer("mcPileup2018.root", 
-                                            "puData2018_withVar.root",
+        moduleCache.append(puWeightProducer("mcPileup2018.root",
+                                            "PileupHistogram-goldenJSON-13tev-2018-100bins_withVar.root",
                                             "pu_mc",
                                             "pileup",
                                             verbose=False,
