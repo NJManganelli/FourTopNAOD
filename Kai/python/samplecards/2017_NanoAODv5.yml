@@ -45,7 +45,7 @@
         sumWeights2: 812201885978.209229
         isSignal: False
         procCrossSection: 831.76
-        crossSection: 1000000000
+        crossSection: 6
         branchingRatio: 0.44028
         filterEfficiency: 0.0000
         MCMCrossSection: 730
@@ -588,6 +588,195 @@
         unitsPerJob: 3
         #totalUnits: 150
         CPUHRperFile_Baseline: 0.58
+
+  - dataset: #QCD HT
+        name: "QCD_HT200"
+        era: "2017"
+        isData: False
+        nEvents: 10
+        nEventsPositive: 15
+        nEventsNegative: 5
+        sumWeights: 1
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: 1712000.0
+        crossSection: 1712000.0
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv5': "dbs:/QCD_HT200to300_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': ""
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.0
+
+  - dataset: #QCD HT
+        name: "QCD_HT300"
+        era: "2017"
+        isData: False
+        nEvents: 10
+        nEventsPositive: 15
+        nEventsNegative: 5
+        sumWeights: 1
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: 347700.0
+        crossSection: 347700.0
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv5': "dbs:/QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': ""
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.0
+
+  - dataset: #QCD HT
+        name: "QCD_HT500"
+        era: "2017"
+        isData: False
+        nEvents: 10
+        nEventsPositive: 15
+        nEventsNegative: 5
+        sumWeights: 1
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: 32100.0
+        crossSection: 32100.0
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv5': "dbs:/QCD_HT500to700_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': ""
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.0
+
+  - dataset: #QCD HT
+        name: "QCD_HT700"
+        era: "2017"
+        isData: False
+        nEvents: 10
+        nEventsPositive: 15
+        nEventsNegative: 5
+        sumWeights: 1
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: 6831.0
+        crossSection: 6831.0
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv5': "dbs:/QCD_HT700to1000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': ""
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.0
+
+  - dataset: #QCD HT
+        name: "QCD_HT1000"
+        era: "2017"
+        isData: False
+        nEvents: 10
+        nEventsPositive: 15
+        nEventsNegative: 5
+        sumWeights: 1
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: 1207.0
+        crossSection: 1207.0
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv5': "dbs:/QCD_HT1000to1500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': ""
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.0
+
+  - dataset: #QCD HT
+        name: "QCD_HT1500"
+        era: "2017"
+        isData: False
+        nEvents: 10
+        nEventsPositive: 15
+        nEventsNegative: 5
+        sumWeights: 1
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: 119.9
+        crossSection: 119.9
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv5': "dbs:/QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': ""
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.0
+
+  - dataset: #QCD HT
+        name: "QCD_HT2000"
+        era: "2017"
+        isData: False
+        nEvents: 10
+        nEventsPositive: 15
+        nEventsNegative: 5
+        sumWeights: 1
+        sumWeights2: 0
+        isSignal: False
+        procCrossSection: 25.24
+        crossSection: 25.24
+        branchingRatio: 1
+        filterEfficiency: 1
+        MCMCrossSection: 0
+    source:
+        'NANOv5': "dbs:/QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+        'LL_JML_LSF': ""
+    postprocessor: 
+        filter: ""
+    crab_cfg:
+        #splitting: "Automatic"
+        splitting: "FileBased"
+        unitsPerJob: 3
+        #totalUnits: 150
+        CPUHRperFile_Baseline: 0.0
 
   - dataset: #Double Muon
         name: "MuMu_B"
