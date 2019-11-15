@@ -593,11 +593,11 @@
         name: "QCD_HT200"
         era: "2017"
         isData: False
-        nEvents: 10
-        nEventsPositive: 15
-        nEventsNegative: 5
-        sumWeights: 1
-        sumWeights2: 0
+        nEvents: 59200263
+        nEventsPositive: 59166789
+        nEventsNegative: 32544
+        sumWeights: 59133315.000000
+        sumWeights2: 59200263.000000
         isSignal: False
         procCrossSection: 1712000.0
         crossSection: 1712000.0
@@ -620,11 +620,11 @@
         name: "QCD_HT300"
         era: "2017"
         isData: False
-        nEvents: 10
-        nEventsPositive: 15
-        nEventsNegative: 5
-        sumWeights: 1
-        sumWeights2: 0
+        nEvents: 59569132
+        nEventsPositive: 59514373
+        nEventsNegative: 54759
+        sumWeights: 59459614.000000
+        sumWeights2: 59569132.000000
         isSignal: False
         procCrossSection: 347700.0
         crossSection: 347700.0
@@ -647,11 +647,11 @@
         name: "QCD_HT500"
         era: "2017"
         isData: False
-        nEvents: 10
-        nEventsPositive: 15
-        nEventsNegative: 5
-        sumWeights: 1
-        sumWeights2: 0
+        nEvents: 56207744
+        nEventsPositive: 56124381
+        nEventsNegative: 83363
+        sumWeights: 56041018.000000
+        sumWeights2: 56207744.000000
         isSignal: False
         procCrossSection: 32100.0
         crossSection: 32100.0
@@ -674,11 +674,11 @@
         name: "QCD_HT700"
         era: "2017"
         isData: False
-        nEvents: 10
-        nEventsPositive: 15
-        nEventsNegative: 5
-        sumWeights: 1
-        sumWeights2: 0
+        nEvents: 46840955
+        nEventsPositive: 46739970
+        nEventsNegative: 100985
+        sumWeights: 46638985.000000
+        sumWeights2: 46840955.000000
         isSignal: False
         procCrossSection: 6831.0
         crossSection: 6831.0
@@ -701,11 +701,11 @@
         name: "QCD_HT1000"
         era: "2017"
         isData: False
-        nEvents: 10
-        nEventsPositive: 15
-        nEventsNegative: 5
-        sumWeights: 1
-        sumWeights2: 0
+        nEvents: 16882838
+        nEventsPositive: 16826800
+        nEventsNegative: 56038
+        sumWeights: 16770762.000000
+        sumWeights2: 16882838.000000
         isSignal: False
         procCrossSection: 1207.0
         crossSection: 1207.0
@@ -728,11 +728,11 @@
         name: "QCD_HT1500"
         era: "2017"
         isData: False
-        nEvents: 10
-        nEventsPositive: 15
-        nEventsNegative: 5
-        sumWeights: 1
-        sumWeights2: 0
+        nEvents: 11634434
+        nEventsPositive: 11571519
+        nEventsNegative: 62915
+        sumWeights: 11508604.000000
+        sumWeights2: 11634434.000000
         isSignal: False
         procCrossSection: 119.9
         crossSection: 119.9
@@ -755,11 +755,11 @@
         name: "QCD_HT2000"
         era: "2017"
         isData: False
-        nEvents: 10
-        nEventsPositive: 15
-        nEventsNegative: 5
-        sumWeights: 1
-        sumWeights2: 0
+        nEvents: 5941306
+        nEventsPositive: 5883436
+        nEventsNegative: 57870
+        sumWeights: 5825566.000000
+        sumWeights2: 5941306.000000
         isSignal: False
         procCrossSection: 25.24
         crossSection: 25.24
