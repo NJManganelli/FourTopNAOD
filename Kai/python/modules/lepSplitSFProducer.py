@@ -6,14 +6,14 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collect
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
 class lepSplitSFProducer(Module):
-    def __init__(self, muon_ID=None, muon_ISO=None, electron_ID=None, era=None, doMuonHLT=False, doElectronHLT_ZVtx=False, pre2018Run316361Lumi = 8.942, post2018Run316361Lumi = 50.785, debug=False):
-        self.era = era
+    def __init__(self, muon_ID=None, muon_ISO=None, electron_ID=None, year=None, doMuonHLT=False, doElectronHLT_ZVtx=False, pre2018Run316361Lumi = 8.942, post2018Run316361Lumi = 50.785, debug=False):
+        self.year = year
         #See self.muD dictionary for options. ISO are denoted with a '/' in the key
         self.muon_ID = muon_ID
         self.muon_ISO = muon_ISO
         #See self.elD dictionary for options
         self.electron_ID = electron_ID
-        #insert the SL HLT SF for the given era, with option for the EGamma HLT ZVtx SF (which is 1 pm 0 for 2016, 2018, and 2017DEF, but lower for 2017B and 2017C)
+        #insert the SL HLT SF for the given year, with option for the EGamma HLT ZVtx SF (which is 1 pm 0 for 2016, 2018, and 2017DEF, but lower for 2017B and 2017C)
         self.doMuonHLT = doMuonHLT
         self.doElectronHLT_ZVtx = doElectronHLT_ZVtx
         #These are used to weight the single-muon HLT scale factors for 2018 according to how many /fb of data is used from each era
@@ -183,8 +183,12 @@ class lepSplitSFProducer(Module):
                          }
                 }
 
-        el_pre = "{0:s}/src/PhysicsTools/NanoAODTools/python/postprocessing/data/leptonSF/Electron/{1:s}/".format(os.environ['CMSSW_BASE'], self.era)
-        mu_pre = "{0:s}/src/PhysicsTools/NanoAODTools/python/postprocessing/data/leptonSF/Muon/{1:s}/".format(os.environ['CMSSW_BASE'], self.era)
+        #from central tools
+        # el_pre = "{0:s}/src/PhysicsTools/NanoAODTools/python/postprocessing/data/leptonSF/Electron/{1:s}/".format(os.environ['CMSSW_BASE'], self.year)
+        # mu_pre = "{0:s}/src/PhysicsTools/NanoAODTools/python/data/leptonSF/Muon/{1:s}/".format(os.environ['CMSSW_BASE'], self.year)
+        #FourTopNAOD repository
+        el_pre = "{0:s}/src/FourTopNAOD/Kai/python/postprocessing/data/leptonSF/Electron/{1:s}/".format(os.environ['CMSSW_BASE'], self.year)
+        mu_pre = "{0:s}/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/{1:s}/".format(os.environ['CMSSW_BASE'], self.year)
 
         self.el_eff = ROOT.std.vector(str)(1)
         self.el_eff_lowEt = ROOT.std.vector(str)(1)
@@ -192,20 +196,20 @@ class lepSplitSFProducer(Module):
         self.el_eff_h = ROOT.std.vector(str)(1)
         self.el_eff_lowEt_h = ROOT.std.vector(str)(1)
         self.el_id_h = ROOT.std.vector(str)(1)
-        self.el_eff[0] = el_pre + self.elD[self.era]["EFF"]["SF"].split("==")[0]
-        self.el_eff_h[0] = self.elD[self.era]["EFF"]["SF"].split("==")[1]
-        self.el_id[0] = el_pre + self.elD[self.era][self.electron_ID]["SF"].split("==")[0]
-        self.el_id_h[0] = self.elD[self.era][self.electron_ID]["SF"].split("==")[1]
-        if self.era == "2017" or self.era == "2016":
-            self.el_eff_lowEt[0] = el_pre + self.elD[self.era]["EFF_lowEt"]["SF"].split("==")[0]
-            self.el_eff_lowEt_h[0] = self.elD[self.era]["EFF_lowEt"]["SF"].split("==")[1]
+        self.el_eff[0] = el_pre + self.elD[self.year]["EFF"]["SF"].split("==")[0]
+        self.el_eff_h[0] = self.elD[self.year]["EFF"]["SF"].split("==")[1]
+        self.el_id[0] = el_pre + self.elD[self.year][self.electron_ID]["SF"].split("==")[0]
+        self.el_id_h[0] = self.elD[self.year][self.electron_ID]["SF"].split("==")[1]
+        if self.year == "2017" or self.year == "2016":
+            self.el_eff_lowEt[0] = el_pre + self.elD[self.year]["EFF_lowEt"]["SF"].split("==")[0]
+            self.el_eff_lowEt_h[0] = self.elD[self.year]["EFF_lowEt"]["SF"].split("==")[1]
 
         if self.doMuonHLT:
             self.mu_hlt_nom = ROOT.std.vector(str)(1)
             self.mu_hlt_stat = ROOT.std.vector(str)(1)
             self.mu_hlt_nom_h = ROOT.std.vector(str)(1)
             self.mu_hlt_stat_h = ROOT.std.vector(str)(1)
-            if self.era == "2018":
+            if self.year == "2018":
                 self.mu_hltpre316361_nom = ROOT.std.vector(str)(1)
                 self.mu_hltpre316361_stat = ROOT.std.vector(str)(1)
                 self.mu_hltpre316361_nom_h = ROOT.std.vector(str)(1)
@@ -224,40 +228,40 @@ class lepSplitSFProducer(Module):
         self.mu_iso_syst_h = ROOT.std.vector(str)(1)
 
         if self.doMuonHLT:
-            self.mu_hlt_nom[0] = mu_pre + self.muD[self.era]["TRG_SL"]["SF"].split("==")[0]
-            self.mu_hlt_nom_h[0] = self.muD[self.era]["TRG_SL"]["SF"].split("==")[1]
-            self.mu_hlt_stat[0] = mu_pre + self.muD[self.era]["TRG_SL"]["STAT"].split("==")[0]
-            self.mu_hlt_stat_h[0] = self.muD[self.era]["TRG_SL"]["STAT"].split("==")[1]
-            if self.era == "2018":
-                self.mu_hltpre316361_nom[0] = mu_pre + self.muD[self.era]["TRG_SL_preRun316361"]["SF"].split("==")[0]
-                self.mu_hltpre316361_nom_h[0] = self.muD[self.era]["TRG_SL_preRun316361"]["SF"].split("==")[1]
-                self.mu_hltpre316361_stat[0] = mu_pre + self.muD[self.era]["TRG_SL_preRun316361"]["STAT"].split("==")[0]
-                self.mu_hltpre316361_stat_h[0] = self.muD[self.era]["TRG_SL_preRun316361"]["STAT"].split("==")[1]
-        self.mu_id_nom[0] = mu_pre + self.muD[self.era][self.muon_ID]["SF"].split("==")[0]
-        self.mu_id_nom_h[0] = self.muD[self.era][self.muon_ID]["SF"].split("==")[1]
-        self.mu_id_stat[0] = mu_pre + self.muD[self.era][self.muon_ID]["STAT"].split("==")[0]
-        self.mu_id_stat_h[0] = self.muD[self.era][self.muon_ID]["STAT"].split("==")[1]
-        self.mu_iso_nom[0] = mu_pre + self.muD[self.era][self.muon_ISO]["SF"].split("==")[0]
-        self.mu_iso_nom_h[0] = self.muD[self.era][self.muon_ISO]["SF"].split("==")[1]
-        self.mu_iso_stat[0] = mu_pre + self.muD[self.era][self.muon_ISO]["STAT"].split("==")[0]
-        self.mu_iso_stat_h[0] = self.muD[self.era][self.muon_ISO]["STAT"].split("==")[1]
-        if self.era == "2017" or self.era == "2018":
-            self.mu_id_syst[0] = mu_pre + self.muD[self.era][self.muon_ID]["SYST"].split("==")[0]
-            self.mu_id_syst_h[0] = self.muD[self.era][self.muon_ID]["SYST"].split("==")[1]
-            self.mu_iso_syst[0] = mu_pre + self.muD[self.era][self.muon_ISO]["SYST"].split("==")[0]
-            self.mu_iso_syst_h[0] = self.muD[self.era][self.muon_ISO]["SYST"].split("==")[1]
+            self.mu_hlt_nom[0] = mu_pre + self.muD[self.year]["TRG_SL"]["SF"].split("==")[0]
+            self.mu_hlt_nom_h[0] = self.muD[self.year]["TRG_SL"]["SF"].split("==")[1]
+            self.mu_hlt_stat[0] = mu_pre + self.muD[self.year]["TRG_SL"]["STAT"].split("==")[0]
+            self.mu_hlt_stat_h[0] = self.muD[self.year]["TRG_SL"]["STAT"].split("==")[1]
+            if self.year == "2018":
+                self.mu_hltpre316361_nom[0] = mu_pre + self.muD[self.year]["TRG_SL_preRun316361"]["SF"].split("==")[0]
+                self.mu_hltpre316361_nom_h[0] = self.muD[self.year]["TRG_SL_preRun316361"]["SF"].split("==")[1]
+                self.mu_hltpre316361_stat[0] = mu_pre + self.muD[self.year]["TRG_SL_preRun316361"]["STAT"].split("==")[0]
+                self.mu_hltpre316361_stat_h[0] = self.muD[self.year]["TRG_SL_preRun316361"]["STAT"].split("==")[1]
+        self.mu_id_nom[0] = mu_pre + self.muD[self.year][self.muon_ID]["SF"].split("==")[0]
+        self.mu_id_nom_h[0] = self.muD[self.year][self.muon_ID]["SF"].split("==")[1]
+        self.mu_id_stat[0] = mu_pre + self.muD[self.year][self.muon_ID]["STAT"].split("==")[0]
+        self.mu_id_stat_h[0] = self.muD[self.year][self.muon_ID]["STAT"].split("==")[1]
+        self.mu_iso_nom[0] = mu_pre + self.muD[self.year][self.muon_ISO]["SF"].split("==")[0]
+        self.mu_iso_nom_h[0] = self.muD[self.year][self.muon_ISO]["SF"].split("==")[1]
+        self.mu_iso_stat[0] = mu_pre + self.muD[self.year][self.muon_ISO]["STAT"].split("==")[0]
+        self.mu_iso_stat_h[0] = self.muD[self.year][self.muon_ISO]["STAT"].split("==")[1]
+        if self.year == "2017" or self.year == "2018":
+            self.mu_id_syst[0] = mu_pre + self.muD[self.year][self.muon_ID]["SYST"].split("==")[0]
+            self.mu_id_syst_h[0] = self.muD[self.year][self.muon_ID]["SYST"].split("==")[1]
+            self.mu_iso_syst[0] = mu_pre + self.muD[self.year][self.muon_ISO]["SYST"].split("==")[0]
+            self.mu_iso_syst_h[0] = self.muD[self.year][self.muon_ISO]["SYST"].split("==")[1]
 
 
         if "/LeptonEfficiencyCorrector_cc.so" not in ROOT.gSystem.GetLibraries():
             print "Load C++ Worker"
             ROOT.gROOT.ProcessLine(".L %s/src/PhysicsTools/NanoAODTools/python/postprocessing/helpers/LeptonEfficiencyCorrector.cc+" % os.environ['CMSSW_BASE'])
     def beginJob(self):
-        if self.era == "2016":
+        if self.year == "2016":
             print("2016 Muon Scale Factors are not fully updated, do not account for weighted SF for era GH versus earlier, and do not include systematics")
         if self.doMuonHLT:
             self._worker_mu_HLT_nom = ROOT.LeptonEfficiencyCorrector(self.mu_hlt_nom, self.mu_hlt_nom_h)
             self._worker_mu_HLT_stat = ROOT.LeptonEfficiencyCorrector(self.mu_hlt_stat, self.mu_hlt_stat_h)
-            if self.era == "2018":
+            if self.year == "2018":
                 print("2018 Single Lepton Muon HLT Scale Factors are weighted between one set before Run2018A (run < 316361) and another set for Run2018ABCD (run >= 316361)."\
                       "If not using all of 2018, use brilcalc and pass the lumi in /fb to pre2018Run316361Lumi and post2018Run316361Lumi")
                 self._worker_mu_HLTpreRun316361_nom = ROOT.LeptonEfficiencyCorrector(self.mu_hltpre316361_nom, self.mu_hltpre316361_nom_h)
@@ -266,12 +270,12 @@ class lepSplitSFProducer(Module):
         self._worker_mu_ID_stat = ROOT.LeptonEfficiencyCorrector(self.mu_id_stat, self.mu_id_stat_h)
         self._worker_mu_ISO_nom = ROOT.LeptonEfficiencyCorrector(self.mu_iso_nom, self.mu_iso_nom_h)
         self._worker_mu_ISO_stat = ROOT.LeptonEfficiencyCorrector(self.mu_iso_stat, self.mu_iso_stat_h)
-        if self.era == "2017" or self.era == "2018":
+        if self.year == "2017" or self.year == "2018":
             self._worker_mu_ID_syst = ROOT.LeptonEfficiencyCorrector(self.mu_id_syst, self.mu_id_syst_h)
             self._worker_mu_ISO_syst = ROOT.LeptonEfficiencyCorrector(self.mu_iso_syst, self.mu_iso_syst_h)
 
         self._worker_el_EFF = ROOT.LeptonEfficiencyCorrector(self.el_eff, self.el_eff_h)
-        if self.era == "2017" or self.era == "2016":
+        if self.year == "2017" or self.year == "2016":
             self._worker_el_EFF_lowEt = ROOT.LeptonEfficiencyCorrector(self.el_eff_lowEt, self.el_eff_lowEt_h)
         self._worker_el_ID = ROOT.LeptonEfficiencyCorrector(self.el_id, self.el_id_h)
     def endJob(self):
@@ -282,19 +286,19 @@ class lepSplitSFProducer(Module):
             self.out.branch("Muon_SF_HLT_nom", "F",  lenVar="nMuon", title="Muon Single Lepton HLT SF")
             self.out.branch("Muon_SF_HLT_stat", "F", lenVar="nMuon", title="Muon Single Lepton HLT SF stat uncertainty")
         if self.doElectronHLT_ZVtx:
-            self.out.branch("EGamma_HLT_ZVtx_SF_nom", "F", title="EGamma HLT Z_vtx Scale Factor for era={0:s}".format(self.era))
-            self.out.branch("EGamma_HLT_ZVtx_SF_unc", "F", title="EGamma HLT Z_vtx Scale Factor for era={0:s}".format(self.era))
-        self.out.branch("Muon_SF_ID_nom", "F",  lenVar="nMuon", title="Muon ID SF ({0:s}) for era={1:s}".format(self.muon_ID, self.era))
-        self.out.branch("Muon_SF_ID_stat", "F", lenVar="nMuon", title="Muon ID SF stat uncertainty ({0:s}) for era={1:s}".format(self.muon_ID, self.era))
-        self.out.branch("Muon_SF_ID_syst", "F", lenVar="nMuon", title="Muon ID SF syst uncertainty ({0:s}) for era={1:s}".format(self.muon_ID, self.era + " syst is not properly fetched, stored as 0" if self.era == "2016" else self.era))
-        self.out.branch("Muon_SF_ISO_nom", "F", lenVar="nMuon", title="Muon ISO SF ({0:s}) for era={1:s}".format(self.muon_ISO, self.era))
-        self.out.branch("Muon_SF_ISO_stat", "F", lenVar="nMuon", title="Muon ISO SF stat uncertainty ({0:s}) for era={1:s}".format(self.muon_ISO, self.era))
-        self.out.branch("Muon_SF_ISO_syst", "F", lenVar="nMuon", title="Muon ISO SF syst uncertainty ({0:s}) for era={1:s}".format(self.muon_ISO, self.era + " syst is not properly fetched, stored as 0" if self.era == "2016" else self.era))
+            self.out.branch("EGamma_HLT_ZVtx_SF_nom", "F", title="EGamma HLT Z_vtx Scale Factor for year={0:s}".format(self.year))
+            self.out.branch("EGamma_HLT_ZVtx_SF_unc", "F", title="EGamma HLT Z_vtx Scale Factor for year={0:s}".format(self.year))
+        self.out.branch("Muon_SF_ID_nom", "F",  lenVar="nMuon", title="Muon ID SF ({0:s}) for year={1:s}".format(self.muon_ID, self.year))
+        self.out.branch("Muon_SF_ID_stat", "F", lenVar="nMuon", title="Muon ID SF stat uncertainty ({0:s}) for year={1:s}".format(self.muon_ID, self.year))
+        self.out.branch("Muon_SF_ID_syst", "F", lenVar="nMuon", title="Muon ID SF syst uncertainty ({0:s}) for year={1:s}".format(self.muon_ID, self.year + " syst is not properly fetched, stored as 0" if self.year == "2016" else self.year))
+        self.out.branch("Muon_SF_ISO_nom", "F", lenVar="nMuon", title="Muon ISO SF ({0:s}) for year={1:s}".format(self.muon_ISO, self.year))
+        self.out.branch("Muon_SF_ISO_stat", "F", lenVar="nMuon", title="Muon ISO SF stat uncertainty ({0:s}) for year={1:s}".format(self.muon_ISO, self.year))
+        self.out.branch("Muon_SF_ISO_syst", "F", lenVar="nMuon", title="Muon ISO SF syst uncertainty ({0:s}) for year={1:s}".format(self.muon_ISO, self.year + " syst is not properly fetched, stored as 0" if self.year == "2016" else self.year))
 
-        self.out.branch("Electron_SF_EFF_nom", "F", lenVar="nElectron", title="Electron Efficiency SF for era={0:s}".format(self.era))
-        self.out.branch("Electron_SF_EFF_unc", "F", lenVar="nElectron", title="Electron Efficiency SF uncertainty for era={0:s}".format(self.era))
-        self.out.branch("Electron_SF_ID_nom", "F", lenVar="nElectron", title="Electron ID SF ({0:s}) for era={1:s}".format(self.electron_ID, self.era))
-        self.out.branch("Electron_SF_ID_unc", "F", lenVar="nElectron", title="Electron ID SF uncertainty ({0:s}) for era={1:s}".format(self.electron_ID, self.era))
+        self.out.branch("Electron_SF_EFF_nom", "F", lenVar="nElectron", title="Electron Efficiency SF for year={0:s}".format(self.year))
+        self.out.branch("Electron_SF_EFF_unc", "F", lenVar="nElectron", title="Electron Efficiency SF uncertainty for year={0:s}".format(self.year))
+        self.out.branch("Electron_SF_ID_nom", "F", lenVar="nElectron", title="Electron ID SF ({0:s}) for year={1:s}".format(self.electron_ID, self.year))
+        self.out.branch("Electron_SF_ID_unc", "F", lenVar="nElectron", title="Electron ID SF uncertainty ({0:s}) for year={1:s}".format(self.electron_ID, self.year))
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         pass
     def analyze(self, event):
@@ -308,7 +312,7 @@ class lepSplitSFProducer(Module):
         sf_el_id_unc = []        
         for el in electrons:
             #Efficiency SFs, split into low and high Et for 2016 and 2017
-            if self.era != "2018" and el.pt < 20: 
+            if self.year != "2018" and el.pt < 20: 
                 sf_el_eff_nom.append(self._worker_el_EFF_lowEt.getSF(el.pdgId, el.pt, el.eta))
                 sf_el_eff_unc.append(self._worker_el_EFF_lowEt.getSFErr(el.pdgId, el.pt, el.eta))
                 if self.debug: print("EL EFF: pt={0:5.2f} eta={1:5.2f} sf={2:5.6f} unc={3:5.2f}".format(el.pt, el.eta, sf_el_eff_nom[-1], sf_el_eff_unc[-1]))
@@ -332,7 +336,7 @@ class lepSplitSFProducer(Module):
         for mu in muons:
             #SL HLT SFs
             if self.doMuonHLT:
-                if self.era == "2018":
+                if self.year == "2018":
                     HLTnomSF = self.pre2018Run316361Lumi * self._worker_mu_HLTpreRun316361_nom.getSF(mu.pdgId, mu.pt, mu.eta) + self.post2018Run316361Lumi * self._worker_mu_HLT_nom.getSF(mu.pdgId, mu.pt, mu.eta)
                     HLTnomSF /= (self.pre2018Run316361Lumi + self.post2018Run316361Lumi)
                     HLTstatSF = self.pre2018Run316361Lumi * self._worker_mu_HLTpreRun316361_stat.getSFErr(mu.pdgId, mu.pt, mu.eta) + self.post2018Run316361Lumi * self._worker_mu_HLT_stat.getSFErr(mu.pdgId, mu.pt, mu.eta)
@@ -345,12 +349,12 @@ class lepSplitSFProducer(Module):
             #ID SFs
             sf_mu_id_nom.append(self._worker_mu_ID_nom.getSF(mu.pdgId, mu.pt, mu.eta))
             sf_mu_id_stat.append(self._worker_mu_ID_stat.getSFErr(mu.pdgId, mu.pt, mu.eta))
-            sf_mu_id_syst.append(0.0 if self.era == "2016" else self._worker_mu_ID_syst.getSFErr(mu.pdgId, mu.pt, mu.eta))
+            sf_mu_id_syst.append(0.0 if self.year == "2016" else self._worker_mu_ID_syst.getSFErr(mu.pdgId, mu.pt, mu.eta))
             if self.debug: print("MU ID: ALGO={0:s} pt={1:5.2f} |eta|={2:5.2f} sf={3:5.6f} stat={4:5.2f} syst={5:5.2f}".format(self.muon_ID, mu.pt, abs(mu.eta), sf_mu_id_nom[-1], sf_mu_id_stat[-1], sf_mu_id_syst[-1]))
             #ISO SFs
             sf_mu_iso_nom.append(self._worker_mu_ISO_nom.getSF(mu.pdgId, mu.pt, mu.eta))
             sf_mu_iso_stat.append(self._worker_mu_ISO_stat.getSFErr(mu.pdgId, mu.pt, mu.eta))
-            sf_mu_iso_syst.append(0.0 if self.era == "2016" else self._worker_mu_ISO_syst.getSFErr(mu.pdgId, mu.pt, mu.eta))
+            sf_mu_iso_syst.append(0.0 if self.year == "2016" else self._worker_mu_ISO_syst.getSFErr(mu.pdgId, mu.pt, mu.eta))
             if self.debug: print("MU ISO: ALGO={0:s} pt={1:5.2f} |eta|={2:5.2f} sf={3:5.6f} stat={4:5.2f} syst={5:5.2f}".format(self.muon_ISO, mu.pt, abs(mu.eta), sf_mu_iso_nom[-1], sf_mu_iso_stat[-1], sf_mu_iso_syst[-1]))
 
         self.out.fillBranch("Electron_SF_EFF_nom", sf_el_eff_nom)
@@ -363,8 +367,8 @@ class lepSplitSFProducer(Module):
             self.out.fillBranch("Muon_SF_HLT_stat", sf_mu_hlt_stat)
         if self.doElectronHLT_ZVtx:
             #https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations#HLT_Zvtx_Scale_Factor
-            self.out.fillBranch("EGamma_HLT_ZVtx_SF_nom", 0.991 if self.era=="2017" else 1.0)
-            self.out.fillBranch("EGamma_HLT_ZVtx_SF_unc", 0.001 if self.era=="2017" else 0.0)
+            self.out.fillBranch("EGamma_HLT_ZVtx_SF_nom", 0.991 if self.year=="2017" else 1.0)
+            self.out.fillBranch("EGamma_HLT_ZVtx_SF_unc", 0.001 if self.year=="2017" else 0.0)
 
         self.out.fillBranch("Muon_SF_ID_nom", sf_mu_id_nom)
         self.out.fillBranch("Muon_SF_ID_stat", sf_mu_id_stat)
@@ -375,6 +379,6 @@ class lepSplitSFProducer(Module):
         return True
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
-# 2017_elTight_muTightTight = lambda : lepSplitSFProducer(muon_ID="TightID", muon_ISO="TightRelIso/TightIDandIPCut", electron_ID="TightID", era="2017")
-# 2017_elLoose_muLooseLoose = lambda : lepSplitSFProducer(muon_ID="LooseID", muon_ISO="LooseRelIso/LooseID", electron_ID="LooseID", era="2017")
+# 2017_elTight_muTightTight = lambda : lepSplitSFProducer(muon_ID="TightID", muon_ISO="TightRelIso/TightIDandIPCut", electron_ID="TightID", year="2017")
+# 2017_elLoose_muLooseLoose = lambda : lepSplitSFProducer(muon_ID="LooseID", muon_ISO="LooseRelIso/LooseID", electron_ID="LooseID", year="2017")
 

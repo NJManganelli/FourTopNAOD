@@ -14,38 +14,36 @@ import argparse
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 parser = argparse.ArgumentParser(description='LepSFProcessor for adding LepSF to files and hadding them')
-parser.add_argument('--output', dest='output', action='store', type=str,
-                    help='output file name')
-parser.add_argument('--outDirectory', dest='outDirectory', action='store', type=str,
-                    help='output directory path for usage with postfix option')
-parser.add_argument('--postfix', dest='postfix', action='store', type=str,
-                    help='postfix file name, which will also store the files in the same directory as they were input from')
+parser.add_argument('--haddName', dest='haddName', action='store', type=str, default=""
+                    help='output file name if haddnano is desired, default None')
+parser.add_argument('--outDirectory', dest='outDirectory', action='store', type=str, default="."
+                    help='output directory path defaulting to "."')
+parser.add_argument('--postfix', dest='postfix', action='store', type=str, default="_LSF"
+                    help='postfix for output files defaulting to "_LSF"')
 parser.add_argument('--input', dest='input', action='store', type=str,
                     help='globbable input file name')
-parser.add_argument('--era', dest='era', action='store', type=str, default="2017",
-                    help='era (year)')
+parser.add_argument('--year', dest='year', action='store', type=str, default="2017",
+                    help='simulation/run year')
 args = parser.parse_args()
 
 Tuples = []
 files=getFiles(query="glob:{}".format(args.input))
-output = "{}".format(args.output)
-if ".root" not in output:
-    output += ".root"
-if args.postfix == None:
-    writeLocation = "/tmp/nmangane/{}/".format(args.output.replace(".root", ""))
-    haddName = output
-    postfix = None
-else:
-    writeLocation = args.outDirectory
+if args.haddName == "":
     haddName = None
-    postfix = "_LSF"
+else:
+    haddName = args.haddName
+writeLocation = args.outDirectory
+postfix = args.postfix
+if args.postfix == None:
+#    writeLocation = "/tmp/nmangane/{}/".format(args.output.replace(".root", ""))
 print("Will run over these files: {}".format(files))
-print("Will use this output directory: {} \nWill use this haddName: {}\n Will use this postfix: {}".format(writeLocation, haddName, postfix))
+print("Will use this output directory: {} \nWill use this haddName: {}\n Will use this postfix: {}\n Will configure with this year: {}"\
+      .format(writeLocation, haddName, postfix, args.year))
 p=PostProcessor(writeLocation,
                 files,
                 cut=None,
                 modules=[lepSplitSFProducer(muon_ID="LooseID", muon_ISO="LooseRelIso/LooseID", 
-                                            electron_ID="LooseID", era=args.era, doMuonHLT=True, 
+                                            electron_ID="LooseID", year=args.year, doMuonHLT=True, 
                                             doElectronHLT_ZVtx=True, debug=False)],
                 noOut=False,
                 postfix=postfix,
