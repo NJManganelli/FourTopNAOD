@@ -187,7 +187,7 @@ class lepSplitSFProducer(Module):
         # el_pre = "{0:s}/src/PhysicsTools/NanoAODTools/python/postprocessing/data/leptonSF/Electron/{1:s}/".format(os.environ['CMSSW_BASE'], self.year)
         # mu_pre = "{0:s}/src/PhysicsTools/NanoAODTools/python/data/leptonSF/Muon/{1:s}/".format(os.environ['CMSSW_BASE'], self.year)
         #FourTopNAOD repository
-        el_pre = "{0:s}/src/FourTopNAOD/Kai/python/postprocessing/data/leptonSF/Electron/{1:s}/".format(os.environ['CMSSW_BASE'], self.year)
+        el_pre = "{0:s}/src/FourTopNAOD/Kai/python/data/leptonSF/Electron/{1:s}/".format(os.environ['CMSSW_BASE'], self.year)
         mu_pre = "{0:s}/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/{1:s}/".format(os.environ['CMSSW_BASE'], self.year)
 
         self.el_eff = ROOT.std.vector(str)(1)
