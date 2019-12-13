@@ -22,7 +22,7 @@ parser.add_argument('--outDirectory', dest='outDirectory', action='store', type=
                     help='output directory path defaulting to "."')
 parser.add_argument('--postfix', dest='postfix', action='store', type=str, default="_LSF",
                     help='postfix for output files defaulting to "_LSF"')
-parser.add_argument('--year', dest='year', action='store', type=str, default="2017",
+parser.add_argument('--era', dest='era', action='store', type=str, default="2017",
                     help='simulation/run year')
 parser.add_argument('--maxEntries', dest='maxEntries', action='store', type=int, default=-1,
                     help='maxEntries per file for processing')
@@ -45,13 +45,13 @@ if args.maxEntries < 0:
 writeLocation = args.outDirectory
 print("Will run over these files: {}".format(files))
 print("Will use this output directory: {} \nWill use this haddName: {}\nWill use this postfix: {}\nWill configure with this year: {}"\
-      .format(writeLocation, args.haddName, args.postfix, args.year))
+      .format(writeLocation, args.haddName, args.postfix, args.era))
 print("Will use this muon ID: {}\nWill use this Muon ISO: {}\nWill use this Electron ID: {}".format(args.muon_ID, args.muon_ISO, args.electron_ID))
 p=PostProcessor(writeLocation,
                 files,
                 cut=None,
                 modules=[lepSplitSFProducer(muon_ID=args.muon_ID, muon_ISO=args.muon_ISO, 
-                                            electron_ID=args.electron_ID, year=args.year, 
+                                            electron_ID=args.electron_ID, era=args.era, 
                                             doMuonHLT=True, doElectronHLT_ZVtx=True, debug=False)],
                 noOut=False,
                 postfix=args.postfix,
