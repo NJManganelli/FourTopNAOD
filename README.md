@@ -1,6 +1,50 @@
 # FourTopNAOD
 UC Riverside Four Top Analysis in NanoAOD format (2016 validation, 2017 and 2018 data analysis)
 
+## PostProcessor code
+~~~~~~~~~~~~~{sh}
+export SCRAM_ARCH=slc7_amd64_gcc700
+cmsrel CMSSW_10_2_18
+cd CMSSW_10_2_18/src
+cmsenv
+git clone https://github.com/cms-nanoAOD/nanoAOD-tools.git PhysicsTools/NanoAODTools
+git clone https://github.com/NJManganelli/FourTopNAOD.git FourTopNAOD
+scram b -j4
+~~~~~~~~~~~~~
+### Getting files with dasgoclient
+~~~~~~~~~~~~~{sh}
+voms-proxy-init -voms cms
+dasgoclient --query="file dataset=/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+~~~~~~~~~~~~~
+Choose a file from those printed, add an xrootd redirector such as root://cms-xrd-global.cern.ch/
+~~~~~~~~~~~~~{sh}
+xrdcp root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv5/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/120000/0E27F419-ADDE-1E4C-AC0A-130DA36C1FA6.root testfile.root
+~~~~~~~~~~~~~
+
+### Running Lepton Scale Factor insertion code
+~~~~~~~~~~~~~{sh}
+cd FourTopNAOD/Kai
+mkdir test
+cd test
+python ../scripts/LepSFProcessor.py --help
+~~~~~~~~~~~~~
+For example, we can add the Loose ID SF's for muons and electrons, using the LooseRelIso/LooseID Isolation SF's, with the following ommand line code. If path/to/inputfile_*.root is a globbable path to multipe inputs (or a single input), and output directory 'somedirectory' exists
+~~~~~~~~~~~~~{sh}
+python ../scripts/LepSFProcessor.py 'path/to/testfile.root' --outDirectory . --muon_ID LooseID --muon_ISO LooseRelIso/LooseID --electron_ID LooseID --era 2017 --maxEntries 2500
+~~~~~~~~~~~~~
+
+### Running Stitching code for flagging
+~~~~~~~~~~~~~{sh}
+cd FourTopNAOD/Kai
+mkdir test
+cd test
+python ../scripts/StitchingProcessor.py --help
+~~~~~~~~~~~~~
+Run over testfile with dilepton nominal and single lepton filtered setting
+~~~~~~~~~~~~~{sh}
+python ../scripts/StitchFlagProcessor.py testfile.root --outDirectory . --era 2017 --channel DL --mode Flag --maxEntries 3000 --source Nominal --fillHists --weight 0.27
+python ../scripts/StitchFlagProcessor.py testfile.root --outDirectory . --era 2017 --channel SL --mode Flag --maxEntries 3000 --source Filtered --fillHists --weight 0.15
+~~~~~~~~~~~~~
 ## New instructions
 
 ### Setting up NanoAODv5 Production
