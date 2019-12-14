@@ -6,16 +6,16 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 # from FourTopNAOD.Kai.tools.toolbox import *
 
 class Stitcher(Module):
-    def __init__(self, verbose=False, probEvt=None, mode="Flag", era="2017", channel="DL", condition="Pass", weightMagnitude=1, fillHists=False, HTBinWidth=50, desiredHTMin=200, desiredHTMax=800):
+    def __init__(self, verbose=False, probEvt=None, mode="Flag", era="2017", channel="DL", source="Filtered", weightMagnitude=1, fillHists=False, HTBinWidth=50, desiredHTMin=200, desiredHTMax=800):
         """Class for stitching gen(jet)HT-, nGenLep(ton)-, and nGenJet-binned samples. 
 
         The mode "Flag" adds a boolean branch which is set to True if the sample event should be used, and False if it should not. 
-        Whether an event should be marked as True/False depends on the three variables era, condition, and channel. The era and channel should match the sample being put through ("DL" for Dilepton, "SL" for Single lepton,
-        "2016, "2017" or "2018" for the era). The condition should be set to "Pass" if the desirable events are those that 'pass' the simultaneous cuts (that is, filtered sample where nGenJet >= X and GenHT >= Y and nGenLep >= Z),
-        and set to "Fail" if the desirable events are those that 'fail' the simultaneity conditions (that is, the events fail one OR more of those conditions). In this way, events that are from the 'bulk' of the nominal sample are
-        flagged with True, events from the high-HT, high-nJet tail of the nominal sample are flagged with False, events from the filtered sample should be flagged with True.
+        Whether an event should be marked as True/False depends on the three variables era, source, and channel. The era and channel should match the sample being put through ("DL" for Dilepton, "SL" for Single lepton,
+        "2016, "2017" or "2018" for the era). The source should be set to "Filtered" if the desirable events are those that pass the simultaneous cuts (that is, filtered sample where nGenJet >= X and GenHT >= Y and nGenLep == Z),
+        and set to "Nominal" if the desirable events are those that fail the simultaneity conditions (that is, the events fail one OR more of those conditions). In this way, events that are from the 'bulk' of the nominal sample are
+        flagged in the variable "ESV_passStitchCondition" with True, events from the high-HT, high-nJet tail of the nominal sample are flagged with False, events from the filtered sample should be flagged with True (almost) always.
 
-        The mode "Pass" or "Negate" does not create branches, but simply decides whether to pass the event on to the next module or not. When set to Pass, then if the event meets the condition for the channel selected, it's passed (if condition='Pass' then you will pass along filtered sample events, if condition='Fail', then un-filtered sample events. Negate inverts this selection, for the purpose of debugging or studies
+        The mode "Pass" or "Negate" does not create branches, but simply decides whether to pass the event on to the next module or not. When set to Pass, then if the event meets the source for the channel selected, it's passed (if source='Pass' then you will pass along filtered sample events, if source='Fail', then un-filtered sample events. Negate inverts this selection, for the purpose of debugging or studies
         """
         self.writeHistFile=True
         self.verbose=verbose
@@ -29,14 +29,16 @@ class Stitcher(Module):
             raise NotImplementedError("Not a supported mode for the Stitcher module: '{0}'".format(self.mode))
         self.era = era
         self.channel = channel
-        self.condition = condition
+        self.source = source
+        if self.source not in ["Nominal", "Filtered"]:
+            raise NotImplementedError("Not a supported source (previously called 'condition') in the Stitcher module. Use 'Nominal' or 'Filtered'")
         self.weightMagnitude = weightMagnitude
         if self.mode == "Plot":
             self.fillHists = True
         else:
             self.fillHists = fillHists
 
-        # print("Stitcher is in mode '{0}' for era '{1}', channel '{2}', with condition '{3}'".format(self.mode, self.era, self.channel, self.condition))
+        # print("Stitcher is in mode '{0}' for era '{1}', channel '{2}', with source '{3}'".format(self.mode, self.era, self.channel, self.source))
         self.bits = {'isPrompt':0b000000000000001,
                      'isDecayedLeptonHadron':0b000000000000010,
                      'isTauDecayProduct':0b000000000000100,
@@ -128,29 +130,29 @@ class Stitcher(Module):
             prevdir.cd()
             self.objs = []
 
-            self.stitch_PCond_nGenJets = ROOT.TH1D("stitch_PCond_nGenJets", "nGenJet (pt > 30) Pass condition (weightMagnitude={0}); nGenJets; Events".format(self.weightMagnitude), self.nGenJetBins, self.nGenJetMin, self.nGenJetMax)
+            self.stitch_PCond_nGenJets = ROOT.TH1D("stitch_PCond_nGenJets", "nGenJet (pt > 30) Pass condition (weightMagnitude=genWeight*{0}); nGenJets; Events".format(self.weightMagnitude), self.nGenJetBins, self.nGenJetMin, self.nGenJetMax)
             self.addObject(self.stitch_PCond_nGenJets)
-            self.stitch_PCond_GenHT = ROOT.TH1D("stitch_PCond_GenHT", "GenHT (pt > 30, |#eta| < 2.4) Pass condition (weightMagnitude={0}); Gen HT (GeV); Events".format(self.weightMagnitude), self.HTBins, self.HTMin, self.HTMax)
+            self.stitch_PCond_GenHT = ROOT.TH1D("stitch_PCond_GenHT", "GenHT (pt > 30, |#eta| < 2.4) Pass condition (weightMagnitude=genWeight*{0}); Gen HT (GeV); Events".format(self.weightMagnitude), self.HTBins, self.HTMin, self.HTMax)
             self.addObject(self.stitch_PCond_GenHT)
-            self.stitch_PCond_nGenLeps = ROOT.TH1D("stitch_PCond_nGenLeps", "nGenLeps (LHE level) Pass condition (weightMagnitude={0}); nGenLeps; Events".format(self.weightMagnitude), self.nGenLepBins, self.nGenLepMin, self.nGenLepMax)
+            self.stitch_PCond_nGenLeps = ROOT.TH1D("stitch_PCond_nGenLeps", "nGenLeps (LHE level) Pass condition (weightMagnitude=genWeight*{0}); nGenLeps; Events".format(self.weightMagnitude), self.nGenLepBins, self.nGenLepMin, self.nGenLepMax)
             self.addObject(self.stitch_PCond_nGenLeps)
-            self.stitch_PCond_2DJetHT = ROOT.TH2D("stitch_PCond_2DJetHT", "nGenJets, GenHT  Fail condition (weightMagnitude={0}); nGenJets; GenHT ".format(self.weightMagnitude),
+            self.stitch_PCond_2DJetHT = ROOT.TH2D("stitch_PCond_2DJetHT", "nGenJets, GenHT  Fail condition (weightMagnitude=genWeight*{0}); nGenJets; GenHT ".format(self.weightMagnitude),
                                                   self.nGenJetBins, self.nGenJetMin, self.nGenJetMax, self.HTBins, self.HTMin, self.HTMax)
             self.addObject(self.stitch_PCond_2DJetHT)
-            self.stitch_PCond_AllVar = ROOT.TH3D("stitch_PCond_AllVar", "nGenLeps, nGenJets, GenHT Pass condition (weightMagnitude={0}); nGenLeps; nGenJets; GenHT ".format(self.weightMagnitude), 
+            self.stitch_PCond_AllVar = ROOT.TH3D("stitch_PCond_AllVar", "nGenLeps, nGenJets, GenHT Pass condition (weightMagnitude=genWeight*{0}); nGenLeps; nGenJets; GenHT ".format(self.weightMagnitude), 
                                                  self.nGenLepBins, self.nGenLepMin, self.nGenLepMax, self.nGenJetBins, self.nGenJetMin, self.nGenJetMax, self.HTBins, self.HTMin, self.HTMax)
             self.addObject(self.stitch_PCond_AllVar)
 
-            self.stitch_FCond_nGenJets = ROOT.TH1D("stitch_FCond_nGenJets", "nGenJet (pt > 30) Fail condition (weightMagnitude={0}); nGenJets; Events".format(self.weightMagnitude), self.nGenJetBins, self.nGenJetMin, self.nGenJetMax)
+            self.stitch_FCond_nGenJets = ROOT.TH1D("stitch_FCond_nGenJets", "nGenJet (pt > 30) Fail condition (weightMagnitude=genWeight*{0}); nGenJets; Events".format(self.weightMagnitude), self.nGenJetBins, self.nGenJetMin, self.nGenJetMax)
             self.addObject(self.stitch_FCond_nGenJets)
-            self.stitch_FCond_GenHT = ROOT.TH1D("stitch_FCond_GenHT", "GenHT (pt > 30, |#eta| < 2.4) Fail condition (weightMagnitude={0}); Gen HT (GeV); Events".format(self.weightMagnitude), self.HTBins, self.HTMin, self.HTMax)
+            self.stitch_FCond_GenHT = ROOT.TH1D("stitch_FCond_GenHT", "GenHT (pt > 30, |#eta| < 2.4) Fail condition (weightMagnitude=genWeight*{0}); Gen HT (GeV); Events".format(self.weightMagnitude), self.HTBins, self.HTMin, self.HTMax)
             self.addObject(self.stitch_FCond_GenHT)
-            self.stitch_FCond_nGenLeps = ROOT.TH1D("stitch_FCond_nGenLeps", "nGenLeps (LHE level) Fail condition (weightMagnitude={0}); nGenLeps; Events".format(self.weightMagnitude), self.nGenLepBins, self.nGenLepMin, self.nGenLepMax)
+            self.stitch_FCond_nGenLeps = ROOT.TH1D("stitch_FCond_nGenLeps", "nGenLeps (LHE level) Fail condition (weightMagnitude=genWeight*{0}); nGenLeps; Events".format(self.weightMagnitude), self.nGenLepBins, self.nGenLepMin, self.nGenLepMax)
             self.addObject(self.stitch_FCond_nGenLeps)
-            self.stitch_FCond_2DJetHT = ROOT.TH2D("stitch_FCond_2DJetHT", "nGenJets, GenHT  Fail condition (weightMagnitude={0}); nGenJets; GenHT ".format(self.weightMagnitude),
+            self.stitch_FCond_2DJetHT = ROOT.TH2D("stitch_FCond_2DJetHT", "nGenJets, GenHT  Fail condition (weightMagnitude=genWeight*{0}); nGenJets; GenHT ".format(self.weightMagnitude),
                                                   self.nGenJetBins, self.nGenJetMin, self.nGenJetMax, self.HTBins, self.HTMin, self.HTMax)
             self.addObject(self.stitch_FCond_2DJetHT)
-            self.stitch_FCond_AllVar = ROOT.TH3D("stitch_FCond_AllVar", "nGenLeps, nGenJets, GenHT  Fail condition (weightMagnitude={0}); nGenLeps; nGenJets; GenHT ".format(self.weightMagnitude),
+            self.stitch_FCond_AllVar = ROOT.TH3D("stitch_FCond_AllVar", "nGenLeps, nGenJets, GenHT  Fail condition (weightMagnitude=genWeight*{0}); nGenLeps; nGenJets; GenHT ".format(self.weightMagnitude),
                                                  self.nGenLepBins, self.nGenLepMin, self.nGenLepMax, self.nGenJetBins, self.nGenJetMin, self.nGenJetMax, self.HTBins, self.HTMin, self.HTMax)
             self.addObject(self.stitch_FCond_AllVar)
             # self.stitch_nGenLepsPart = ROOT.TH1D("stitch_nGenLeps", "nGenLeps (e(1) or mu (1) or #tau (2)); nGenLeps; Events", 10, 0, 10)
@@ -191,7 +193,7 @@ class Stitcher(Module):
         ###############################
         ### Collections and Objects ###
         ###############################
-        weight = math.copysign(self.weightMagnitude, getattr(event, "genWeight"))
+        weight = self.weightMagnitude*getattr(event, "genWeight")
         # gens = Collection(event, "GenPart")
         genjets = Collection(event, "GenJet")
         lheparts = Collection(event, "LHEPart")
@@ -219,9 +221,9 @@ class Stitcher(Module):
         passStitch = {}
         passStitch['ESV_passStitchSL'] = (nGL == self.stitchSL['nGenLeps'] and nGJ >= self.stitchSL['nGenJets'] and GenHT >= self.stitchSL['GenHT'])
         passStitch['ESV_passStitchDL'] = (nGL == self.stitchDL['nGenLeps'] and nGJ >= self.stitchDL['nGenJets'] and GenHT >= self.stitchDL['GenHT'])
-        if self.condition == "Pass":
+        if self.source == "Filtered":
             passStitch['ESV_passStitchCondition'] = passStitch['ESV_passStitch'+self.channel]
-        elif self.condition == "Fail":
+        elif self.source == "Nominal":
             passStitch['ESV_passStitchCondition'] = not passStitch['ESV_passStitch'+self.channel]
         # print("passStitchSL == {} passStitchDL == {} passStitchCondition == {}".format(passStitch['ESV_passStitchSL'],
         #                                                                                passStitch['ESV_passStitchDL'], 
@@ -277,22 +279,22 @@ class Stitcher(Module):
         else:
             raise NotImplementedError("No method in place for Stitcher module in mode '{0}'".format(self.mode))
 
-Stitcher_2017_DL = lambda : Stitcher(era="2017", channel="DL", condition="Fail", mode="Flag")
-Stitcher_2017_DL_GF = lambda : Stitcher(era="2017", channel="DL", condition="Pass", mode="Flag")
-Stitcher_2017_SL = lambda : Stitcher(era="2017", channel="SL", condition="Fail", mode="Flag")
-Stitcher_2017_SL_GF = lambda : Stitcher(era="2017", channel="SL", condition="Pass", mode="Flag")
+Stitcher_2017_DL = lambda : Stitcher(era="2017", channel="DL", source="Nominal", mode="Flag")
+Stitcher_2017_DL_GF = lambda : Stitcher(era="2017", channel="DL", source="Filtered", mode="Flag")
+Stitcher_2017_SL = lambda : Stitcher(era="2017", channel="SL", source="Nominal", mode="Flag")
+Stitcher_2017_SL_GF = lambda : Stitcher(era="2017", channel="SL", source="Filtered", mode="Flag")
 
-Stitcher_2018_DL = lambda : Stitcher(era="2018", channel="DL", condition="Fail", mode="Flag")
-Stitcher_2018_DL_GF = lambda : Stitcher(era="2018", channel="DL", condition="Pass", mode="Flag")
-Stitcher_2018_SL = lambda : Stitcher(era="2018", channel="SL", condition="Fail", mode="Flag")
-Stitcher_2018_SL_GF = lambda : Stitcher(era="2018", channel="SL", condition="Pass", mode="Flag")
+Stitcher_2018_DL = lambda : Stitcher(era="2018", channel="DL", source="Nominal", mode="Flag")
+Stitcher_2018_DL_GF = lambda : Stitcher(era="2018", channel="DL", source="Filtered", mode="Flag")
+Stitcher_2018_SL = lambda : Stitcher(era="2018", channel="SL", source="Nominal", mode="Flag")
+Stitcher_2018_SL_GF = lambda : Stitcher(era="2018", channel="SL", source="Filtered", mode="Flag")
 
-StitchPlot_2017_DL = lambda : Stitcher(era="2017", channel="DL", condition="Fail", mode="Plot")
-StitchPlot_2017_DL_GF = lambda : Stitcher(era="2017", channel="DL", condition="Pass", mode="Plot")
-StitchPlot_2017_SL = lambda : Stitcher(era="2017", channel="SL", condition="Fail", mode="Plot")
-StitchPlot_2017_SL_GF = lambda : Stitcher(era="2017", channel="SL", condition="Pass", mode="Plot")
+StitchPlot_2017_DL = lambda : Stitcher(era="2017", channel="DL", source="Nominal", mode="Plot")
+StitchPlot_2017_DL_GF = lambda : Stitcher(era="2017", channel="DL", source="Filtered", mode="Plot")
+StitchPlot_2017_SL = lambda : Stitcher(era="2017", channel="SL", source="Nominal", mode="Plot")
+StitchPlot_2017_SL_GF = lambda : Stitcher(era="2017", channel="SL", source="Filtered", mode="Plot")
 
-StitchPlot_2018_DL = lambda : Stitcher(era="2018", channel="DL", condition="Fail", mode="Plot")
-StitchPlot_2018_DL_GF = lambda : Stitcher(era="2018", channel="DL", condition="Pass", mode="Plot")
-StitchPlot_2018_SL = lambda : Stitcher(era="2018", channel="SL", condition="Fail", mode="Plot")
-StitchPlot_2018_SL_GF = lambda : Stitcher(era="2018", channel="SL", condition="Pass", mode="Plot")
+StitchPlot_2018_DL = lambda : Stitcher(era="2018", channel="DL", source="Nominal", mode="Plot")
+StitchPlot_2018_DL_GF = lambda : Stitcher(era="2018", channel="DL", source="Filtered", mode="Plot")
+StitchPlot_2018_SL = lambda : Stitcher(era="2018", channel="SL", source="Nominal", mode="Plot")
+StitchPlot_2018_SL_GF = lambda : Stitcher(era="2018", channel="SL", source="Filtered", mode="Plot")

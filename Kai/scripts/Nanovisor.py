@@ -507,7 +507,7 @@ def get_crab_script_py(runFolder, requestName, stage='Baseline', sampleConfig = 
     sumWeights = sampleConfig.get('dataset', {}).get('sumWeights')
     isSignal = sampleConfig.get('dataset', {}).get('isSignal')
     StitchMode = sampleConfig.get('stitch', {'mode':'Passthrough'}).get('mode', 'Passthrough')
-    StitchCondition = sampleConfig.get('stitch', {'condition':'Passthrough'}).get('condition', 'Passthrough')
+    StitchSource = sampleConfig.get('stitch', {'source':'Passthrough'}).get('source', 'Passthrough')
     StitchChannel = sampleConfig.get('stitch', {'channel':'Passthrough'}).get('channel', 'Passthrough')
     
     preselection = sampleConfig.get('postprocessor', {'filter':None}).get('filter', 'None')
@@ -648,7 +648,7 @@ Sup_BTagger = {9:s}
 TriggerChannel = {10:s}
 StitchMode = "{11:s}"
 StitchChannel = "{12:s}"
-StitchCondition = "{13:s}"
+StitchSource = "{13:s}"
 
 theFiles = inputFiles()
 
@@ -711,7 +711,7 @@ if not isData and StitchMode != "Passthrough":
     moduleCache.append(Stitcher(mode=StitchMode,
                                 era=era,
                                 channel=StitchChannel,
-                                condition=StitchCondition,
+                                source=StitchSource,
                                 weightMagnitude=weight,
                                 fillHists=True,
                                 HTBinWidth=50,
@@ -756,7 +756,7 @@ p.run()
 """
         ret = crab_script_py.format(str(isData), str(era), str(subera), str(preselection), str(crossSection), str(equivLumi), 
                                     str(nEventsPositive), str(nEventsNegative), str(sumWeights), str(btagger), str(TriggerChannel),
-                                    str(StitchMode), str(StitchChannel), str(StitchCondition))
+                                    str(StitchMode), str(StitchChannel), str(StitchSource))
         return ret
    
     elif stage == 'Stitched':
@@ -776,7 +776,7 @@ nEvents = {6:s}
 sumWeights = {7:s}
 Sup_BTagger = {8:s}
 stitch_mode = "{9:s}"
-stitch_condition = "{10:s}"
+stitch_source = "{10:s}"
 stitch_channel = "{11:s}"
 
 theFiles = inputFiles()
@@ -791,7 +791,7 @@ else:
                                    "pileup",
                                    verbose=False
                                  ),
-                 Stitcher(era=era, mode=StitchMode, condition=StitchCondition, channel=StitchChannel)
+                 Stitcher(era=era, mode=stitch_mode, source=stitch_source, channel=stitch_channel)
                  ]
 
 p=PostProcessor(".", 
@@ -807,8 +807,8 @@ p=PostProcessor(".",
 p.run()
 """
         ret = crab_script_py.format(str(isData), str(era), str(subera), str(preselection), str(crossSection), str(equivLumi), 
-                                    str(nEvents), str(sumWeights), str(btagger), str(SC_stitch_mode), str(SC_stitch_condition),
-                                    str(SC_stitch_channel))
+                                    str(nEvents), str(sumWeights), str(btagger), str(StitchMode), str(StitchCondition),
+                                    str(StitchChannel))
         return ret
     elif stage == '':
         crab_script_py = """

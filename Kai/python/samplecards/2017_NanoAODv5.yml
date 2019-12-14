@@ -62,7 +62,7 @@
         CPUHRperFile_Baseline: 0.09
     stitch:
         mode: 'Flag'
-        condition: 'Pass'
+        source: 'Filtered'
         channel: 'SL'
 
   - dataset: #ttbar dilepton sample
@@ -96,7 +96,7 @@
         CPUHRperFile_Baseline: 0.09
     stitch:
         mode: 'Flag'
-        condition: 'Pass'
+        source: 'Filtered'
         channel: 'DL'
 
   - dataset: #ttbar semilepton sample
@@ -127,7 +127,7 @@
         CPUHRperFile_Baseline: 0.91
     stitch:
         mode: 'Flag'
-        condition: 'Fail'
+        source: 'Nominal'
         channel: 'SL'
 
   - dataset: #ttbar dilepton sample
@@ -158,7 +158,7 @@
         CPUHRperFile_Baseline: 0.91
     stitch:
         mode: 'Flag'
-        condition: 'Fail'
+        source: 'Nominal'
         channel: 'DL'
 
   - dataset: #single top - top-W
