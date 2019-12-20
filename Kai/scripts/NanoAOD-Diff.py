@@ -35,10 +35,16 @@ parser.add_argument('--noBatch', dest='noBatch', action='store_true',
                     help='Disable Batch mode, allowing plots to be drawn in windows')
 parser.add_argument('--plotcards', dest='plotcards', action='store', nargs='*', type=str, default=None,
                     help='plotcards to load and parse, syntax (separator = 4 spaces):<branchname>    <nbins>    <xmin>    <xmax>')
+parser.add_argument('--rMin', dest='rMin', action='store', nargs='?', type=float, default=0.9,
+                    help='Minimum for ratio plots')
+parser.add_argument('--rMax', dest='rMax', action='store', nargs='?', type=float, default=1.1,
+                    help='Maximum for ratio plots')
+parser.add_argument('--pdfOut', dest='pdfOut', action='store', nargs='?', type=str, const="NanoAOD-Diff.pdf", default=None,
+                    help='Name of pdf output file, if plotting selected')
+parser.add_argument('--histOut', dest='histOut', action='store', nargs='?', type=str, const="NanoAOD-Diff_hist.root", default=None,
+                    help='Name of hist output file, if plotting selected')
 parser.add_argument('--noPlots', dest='noPlots', action='store_true', 
                     help='Disable plotting')
-parser.add_argument('--config', dest='config', action='store', type=str, default=None,
-                    help='path to configuration file storing on each line: "<branch name>    <nbins>    <xmin>    <xmax>", separator = 4 spaces')
 args = parser.parse_args()
 procstart = collections.OrderedDict()
 procfinish = collections.OrderedDict()
@@ -105,11 +111,20 @@ def main():
             else:
                 inputSets.append(f[0])
         branchDict = getBranchInfo_RDF(inputSets, whiteList = args.WL, blackList = args.BL)
+        branchReport_RDF(branchDict, reportFile = "branchReport.txt")
         if args.noPlots == False:
             plotDict = makePlotDict(args.plotcards)
             histDict, uniqueHistDict = makeHists_RDF(branchDict, plotDict, eventsKey = "Events", weightsKey = "Weights")
+            #Make histogram file if option histOut is called, which optionally contains a non-default filename.
+            if args.histOut != None:
+                print("Writing hist file")
+                for sn, flatDict in histDict.items():
+                    dictToFile(flatDict, args.histOut, update=True, prefix=nToLabel[sn])
             #Make the function for plotting here
-            canvasDict = makePlots_RDF(histDict, "myPDF.pdf")
+            if args.pdfOut != None:
+                canvasDict = makePlots_RDF(histDict, args.pdfOut)
+            
+            
     timeReport(prnt=True)
 
 def getBranchInfo_RDF(inputSets, blackList = None, whiteList = None):
@@ -118,6 +133,7 @@ def getBranchInfo_RDF(inputSets, blackList = None, whiteList = None):
     #["HLT_", "L1_", "nTau", "nSubJet", "nSubGenJetAK8", "nSoftActivityJet", "nSV", "nPhoton", "nOtherPV", "nMuon", ]
     #["Electron", "Muon", "Photon", "Jet", "GenJet", "FatJet", "GenJetAK8", "GenPart", "Tau", "MET", "SubJet", "PV", "SV"]
     #Runs meta info in the TChain
+    Files = {} #Files 
     Runs = {} #Store the Runs tree RDF node
     SumEvents = {} #Store the sum of events that were processed (meta-level)
     SumEventsBranchName = {} #The branch name, in case there are some minor perturbation, such as addition of '_'
@@ -145,6 +161,7 @@ def getBranchInfo_RDF(inputSets, blackList = None, whiteList = None):
 
     for fn, f in enumerate(inputSets):
         indices.append(fn)
+        Files[fn] = f
         Runs[fn] = ROOT.ROOT.RDataFrame("Runs", f)
         SumEventsBranchName[fn] = [cn for cn in Runs[fn].GetColumnNames() if "genEventCount" in cn]
         SumWeightsBranchName[fn] = [cn for cn in Runs[fn].GetColumnNames() if "genEventSumw" in cn and "genEventSumw2" not in cn]
@@ -222,7 +239,8 @@ def getBranchInfo_RDF(inputSets, blackList = None, whiteList = None):
         #Blacks[fn] = set([b for b in Branchs[fn]]) #do loop over elements of blackList creating subsets, then union/disjoint things
 
 
-    retDict = {"Runs": Runs,
+    retDict = {"Files": Files,
+               "Runs": Runs,
                "SumEvents": SumEvents,
                "SumEventsBranchName": SumEventsBranchName,
                "SumWeights": SumWeights,
@@ -259,7 +277,9 @@ def makeHists_RDF(branchDict, plotDict, eventsKey = "Events", weightsKey = "Weig
                 uniqueHistDict[fn][br] = rdf.Histo1D(plot, str(br), "diffWeight")
             # print("({}, {}, {})".format(plot, br, branchDict[weightsKey][fn]))
             else:
-                histDict[fn][br] = rdf.Histo1D(plot, str(br), "diffWeight")
+                #change the plot name in memory by replacing 
+                plot_labeled = (plot[0].replace("$INPUT", nToLabel[fn]), plot[1], plot[2], plot[3], plot[4])
+                histDict[fn][br] = rdf.Histo1D(plot_labeled, str(br), "diffWeight")
     procfinish['makeHists_RDF(Define)'] = datetime.now()
     procstart['makeHists_RDF(Run)'] = datetime.now()
     counts = {}
@@ -278,14 +298,14 @@ def makePlotDict(plotcards):
     procstart['makePlotDict'] = datetime.now()
     """Create a dictionary of tuples for plotting, including a name for ROOT, a title, number of bins, X axis mins and maxes, starting from a list of text files.
     Text files should contain "<branchname>    <nbins>    <xmin>    <xmax>" on each line, where the newline will be stripped and the line will be split by "    " (4 whitespaces) separator.
-    Returns a the dictionary of tuples with branches as the keys"""
+    Returns the dictionary of tuples with branches as the keys"""
     plotDict = collections.OrderedDict()
     for card in plotcards:
         with open(card, "r") as c:
             for line in c:
                 br, nb, mn, mx = line.rstrip().split("    ")
                 if br[0] == "#": continue #skip commented lines
-                plotDict[br] = ("h_{0}".format(br), "{0} {{}} vs {{}}; {0} ; Arbitrary units".format(br), int(nb), float(mn), float(mx))
+                plotDict[br] = ("h_{0}_$INPUT".format(br), "{0}; {0} ; Arbitrary units".format(br), int(nb), float(mn), float(mx))
     # for k, v in plotDict.items():
     procfinish['makePlotDict'] = datetime.now()
     return plotDict
@@ -359,29 +379,29 @@ def branchReport_RDF(branchDict, reportFile = "branchReport.txt"):
     uniquePairs = [(a,b) for a in branchDict["indices"] for b in branchDict["indices"] if a < b]
     with open(reportFile, "w") as o:
         for indexA, indexB in uniquePairs:
-            inCommon = BranchSets[indexA].intersection(BranchSets[indexB])
-            onlyInA = BranchSets[indexA] - BranchSets[indexB]
-            onlyInB = BranchSets[indexB] - BranchSets[indexA]
+            inCommon = branchDict["BranchSets"][indexA].intersection(branchDict["BranchSets"][indexB])
+            onlyInA = branchDict["BranchSets"][indexA] - branchDict["BranchSets"][indexB]
+            onlyInB = branchDict["BranchSets"][indexB] - branchDict["BranchSets"][indexA]
             o.write("==================================\n")
             o.write("Report on inputs {iA} and {iB}:\n    files[{iA}]: {fA}\n    files[{iB}]: {fB}\n"\
                     "\n    SumEvents[{iA}]: {seA}\n    SumEvents[{iB}]: {seB}"\
                     "\n    SumWeights[{iA}]: {swA}\n    SumWeights[{iB}]: {swB}\n"\
-                    .format(iA = indexA, iB = indexB, fA = inputFiles[indexA], fB = inputFiles[indexB],
-                            seA = SumEvents[indexA], seB = SumEvents[indexB],
-                            swA = SumWeights[indexA], swB = SumWeights[indexB]))
+                    .format(iA = indexA, iB = indexB, fA = branchDict["Files"][indexA], fB = branchDict["Files"][indexB],
+                            seA = branchDict["SumEvents"][indexA], seB = branchDict["SumEvents"][indexB],
+                            swA = branchDict["SumWeights"][indexA], swB = branchDict["SumWeights"][indexB]))
         o.write("\n======== Common Branches ========\n")
         for b in sorted(inCommon): 
-            o.write(b + " << " + BranchTypes[indexA][b] + " << "+ BranchTypes[indexB][b] + "\n")
+            o.write(b + " << " + branchDict["BranchTypes"][indexA][b] + " << "+ branchDict["BranchTypes"][indexB][b] + "\n")
         o.write("\n======== Branches only in {iA} ========\n".format(iA = indexA))
         for b in sorted(onlyInA): 
-            o.write(b + " << " + BranchTypes[indexA][b] + "\n")
+            o.write(b + " << " + branchDict["BranchTypes"][indexA][b] + "\n")
         o.write("\n======== Branches only in {iB} ========\n".format(iB = indexB))
         for b in sorted(onlyInB): 
-            o.write(b + " << " + BranchTypes[indexB][b] + "\n")
+            o.write(b + " << " + branchDict["BranchTypes"][indexB][b] + "\n")
         o.write("==================================\n")
     procfinish['branchReport_RDF'] = datetime.now()
 
-def makePlots_RDF(histDict, pdfFile):
+def makePlots_RDF(histDict, pdfFile, colorList = [ROOT.kBlack, ROOT.kRed, ROOT.kGreen, ROOT.kAzure]):
     procstart['makePlots_RDF'] = datetime.now()
     last = len(histDict[0].keys()) - 1
     for bn, branch in enumerate(histDict[0].keys()):
@@ -389,23 +409,48 @@ def makePlots_RDF(histDict, pdfFile):
                                                    nXPads=1, topFraction=0.7, xpixels=800, ypixels=800)
         upperPads[0].cd()
         for sn, sample in enumerate(histDict.keys()):
-            h = histDict[sample][branch].Clone("clntrp_{}_{}".format(branch, sample))
+            print("{}_{}".format(branch, sample))
+            theClone = "".format(histDict[sample][branch].GetName()).replace("h_", "")
+            h = histDict[sample][branch].Clone(theClone)
             if sn == 0:
-                h.SetLineColor(ROOT.kBlack)
+                h.SetFillColorAlpha(colorList[sn], 0.3)
+                #h.SetLineColor(colorList[sn])
+                #ROOT.gStyle.SetOptStat(1001111)
                 h.Draw("S HIST")
+                xaxis = h.GetXaxis()
+                yaxis = h.GetYaxis()
+                xaxis.SetLabelFont(43)
+                xaxis.SetLabelSize(15)
+                #yaxis.SetLabelSize(0.0)
+                #axis = ROOT.TGaxis(xaxis.GetXmin(), yaxis.GetXmin(), xaxis.GetXmax(), yaxis.GetXmax(), 20., 220., 510, "") #last 4 are wmin, wmax, nDivisions, options string
+                #axis.SetLabelFont(43)
+                #axis.SetLabelSize(15)
+                #axis.Draw()
             else:
-                h.SetLineColor(ROOT.kRed)
-                h.Draw("SAME")
+                if sn >= len(colorList): raise RuntimeError("makePlots_* Requires a longer colorList to set the line color for this histogram, see configuration")
+                h.SetLineColor(colorList[sn])
+                #ROOT.gStyle.SetOptStat(1001111)
+                h.Draw("SAME HIST S")
+        #organize the stats boxes
+        #for sn, sample in enumerate(histDict.keys()):
+        #    if sn == 0:
+        #        StatBox = h.GetListOfFunctions().FindObject("stats")
+        #        StatBox.SetY1NDC(0.7)
+        #        StatBox.SetY2NDC(0.5)
+        #    else:
+        #        StatBox = h.GetListOfFunctions().FindObject("stats")
+        #        StatBox.SetY1NDC(0.5)
+        #        StatBox.SetY2NDC(0.3)
         lowerPads[0].cd()
         for sn, sample in enumerate(histDict.keys()):
             if sn == 0: continue #Take first sample as the denominator always
             numerator = nToLabel[sn]
             denominator = nToLabel[0]
-            hrat = createRatio(histDict[sample][branch], histDict[0][branch], ratioTitle="\frac{0}{1}".format(numerator, denominator))
+            hrat = createRatio(histDict[sample][branch], histDict[0][branch], ratioTitle="#frac{0}{1}".format("{"+numerator+"}", "{"+denominator+"}"))
             if sn == 1:
-                hrat.Draw()
+                hrat.Draw("ep")
             else:
-                hrat.Draw("SAME")
+                hrat.Draw("SAME ep")
         c.Draw()
         if bn == 0:
             c.SaveAs("{}(".format(pdfFile))
@@ -416,12 +461,14 @@ def makePlots_RDF(histDict, pdfFile):
     procfinish['makePlots_RDF'] = datetime.now()
 
 def createRatio(h1, h2, ratioTitle="input 0 vs input 1", ratioColor = ROOT.kBlack):
-    h3 = h1.Clone()
+    #h3 = h1.Clone("rat_{}_{}".format(h1.GetName(), ratioTitle.replace(" ", "_")))
+    #h3 = h1.Clone("rat_{}".format(h1.GetName()))
+    h3 = h1#.Clone("rat_{}".format((h1.GetName()).replace("h_","")))
     h3.SetLineColor(ratioColor)
     h3.SetMarkerStyle(21)
     # h3.SetTitle("")
-    h3.SetMinimum(0.8)
-    h3.SetMaximum(1.2)
+    h3.SetMinimum(args.rMin)
+    h3.SetMaximum(args.rMax)
     # Set up plot for markers and errors
     h3.Sumw2()
     h3.SetStats(0)
@@ -490,7 +537,37 @@ def createCanvasPads(canvasTitle, doRatio=True, setXGrid=False, setYGrid=False,
         lowerPads.append(padL)
     return c, upperPads, lowerPads
 
+def dictToFile(histDict, fileName, update=False, prefix=None):
+    for k, v in histDict.items():
+        if type(v) == dict or type(v) == collections.OrderedDict:
+            raise NotImplementedError("In method dictToFile, the key '{}' corresponds to a nested dictionary. dictToFile cannot handle recursively."\
+                                      .format(k))
+    f = None
+    #Store the previous directory so we can return to it once the file is opened and closed, otherwise ROOT suicides itself
+    prevdir = ROOT.gDirectory
+    print("Attempting to open file {}".format(fileName))
+    try:
+        if update == True:
+            f = ROOT.TFile.Open(fileName, "UPDATE")
+        else:
+            f = ROOT.TFile.Open(fileName, "RECREATE")
 
+        f.cd()
+        for k, v in histDict.items():
+            if prefix != None:
+                name = prefix + "_" + k
+            else:
+                name = k
+            print(name)
+            v.Write(name)
+    except:
+        print("There was an exception in the function dictToFile()")
+    finally:
+        if f != None:
+            f.Close()
+        prevdir.cd()
+    
+    
 
 if __name__ == '__main__':
     main()
