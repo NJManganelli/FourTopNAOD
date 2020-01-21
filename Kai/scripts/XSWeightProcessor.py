@@ -23,7 +23,7 @@ parser.add_argument('--maxEntries', dest='maxEntries', action='store', type=int,
 parser.add_argument('--weight', dest='weight', action='store', type=float, default=1,
                     help='magnitude of weight/genWeight (genWeight acquired per event), as in calculation: N_effective = process_cross_section * Luminosity * genWeight/SUM(genWeights)')
 parser.add_argument('--cut', dest='cut', action='store', type=str, default=None,
-                    help='Cut string to pre-process the events tree, greatly reducing processing time')
+                    help='Cut string to pre-process the events tree')
 args = parser.parse_args()
 
 #Example calculation of weight magnitude
