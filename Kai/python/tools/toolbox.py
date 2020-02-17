@@ -1,7 +1,7 @@
 from PhysicsTools.NanoAODTools.postprocessing.tools import *
 import copy
 from glob import glob #For getFiles
-import os, pwd #For getFiles
+import os, pwd, sys #For getFiles
 import tempfile #For getFiles
 
 
@@ -503,7 +503,8 @@ doEOSHOME will override the redir string with the one formatted based on your us
     elif doGLOBAL:
         #Standard redirector
         redir = "root://cms-xrd-global.cern.ch/"
-    
+    else:
+        redir = ""
     if "dbs:" in query:
         with tempfile.NamedTemporaryFile() as f:
             cmd = 'dasgoclient --query="file dataset={0:s}" > {1:s}'.format(query.replace("dbs:",""),f.name)
@@ -521,6 +522,9 @@ doEOSHOME will override the redir string with the one formatted based on your us
         with open(query_stripped) as in_f:
             for line in in_f:
                 fileList.append(line.rstrip("\s\n\t"))
+    else:
+        print("No query passed to getFiles(), exiting")
+        sys.exit(9001)
     if redir != "":
         if verbose: print("prepending redir")
         #Protect against double redirectors, assuming root:// is in the beginning
