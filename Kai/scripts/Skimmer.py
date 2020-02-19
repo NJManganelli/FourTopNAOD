@@ -31,8 +31,8 @@ args = parser.parse_args()
 Tuples = []
 tmp = args.input
 if "glob:" in args.input or "dbs:" in args.input:
-    print("executing command: getFiles(query='{}', verbose=True)".format(args.input))
-    files=getFiles(query="{}".format(tmp), verbose=True)
+    print("executing command: getFiles(query='{}', doGLOBAL=True)".format(args.input))
+    files=getFiles(query="{}".format(tmp), doGLOBAL=True)
     # print("sleeping for 150s to prevent overzealous execution")
     # time.sleep(150)
     print(files)

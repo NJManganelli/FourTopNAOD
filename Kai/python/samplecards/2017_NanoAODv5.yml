@@ -45,9 +45,11 @@
         sumWeights2: 812201885978.209229
         isSignal: False
         procCrossSection: 831.76
-        crossSection: 6
+        crossSection: 12.40714
         branchingRatio: 0.44028
-        filterEfficiency: 0.0000
+        filterEfficiency: 0.03388010
+        filterEfficiencyUp: 0.00018213448251695047
+        filterEfficiencyDown: -0.0001817096770218643
         MCMCrossSection: 730
     source:
         'NANOv5': "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
@@ -76,11 +78,11 @@
         sumWeights2: 44925503249.097206
         isSignal: False
         procCrossSection: 831.76
-        crossSection: 1.4705
+        crossSection: 1.481597
         branchingRatio: 0.10706
-        filterEfficiency: 0.0165139
-        filterEfficiencyUp: 0.0166437
-        filterEfficiencyDown: 0.0163847
+        filterEfficiency: 0.01663814
+        filterEfficiencyUp: 6.066511875056982e-05
+        filterEfficiencyDown: -6.054635688937729e-05
         MCMCrossSection: 730
         MCMfilterEfficiency: 0.015
     source:

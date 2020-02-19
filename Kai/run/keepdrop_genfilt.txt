@@ -1,0 +1,5 @@
+drop *
+keep GenJet_eta
+keep GenJet_pt
+keep LHEPart_pdgId
+keep genWeight
