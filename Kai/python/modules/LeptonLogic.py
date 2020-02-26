@@ -479,8 +479,11 @@ class TriggerAndLeptonLogic(Module):
             pass_iso_selection = (mu.pfIsoId >= 4) #trigger iso VVL, so selection = tight (4) far exceeds this...
             pass_dz_selection = (abs(mu.dz) < 0.02) #trigger dz = 0.2, selection = 0.02, baseline = 0.06
             pass_d0_selection = (d0 < 0.10) #selection = 0.10, baseline = 0.15
-            pass_common_baseline = pass_id_loose and pass_eta and pass_iso_baseline and pass_dz_baseline and pass_d0_baseline
-            pass_common_selection = pass_id_loose and pass_eta and pass_iso_selection and pass_dz_selection and pass_d0_selection
+            # pass_common_baseline = pass_id_loose and pass_eta and pass_iso_baseline and pass_dz_baseline and pass_d0_baseline
+            # pass_common_selection = pass_id_loose and pass_eta and pass_iso_selection and pass_dz_selection and pass_d0_selection
+            #Remove the ISO requirement from muons for QCD contamination estimates!
+            pass_common_baseline = pass_id_loose and pass_eta and pass_dz_baseline and pass_d0_baseline
+            pass_common_selection = pass_id_loose and pass_eta and pass_dz_selection and pass_d0_selection
             for trigger in Fired:
                 if pass_common_baseline:
                     #Create OVERLAPPING baseline collections
@@ -517,8 +520,8 @@ class TriggerAndLeptonLogic(Module):
                 pass_d0_baseline = False #doesn't matter without eta pass
                 pass_d0_selection = False #doesn't matter without eta pass
                 pass_eta = False
-            pass_dz_baseline = (el.dz < 0.06) #selection < 0.02, baseline < 0.06, trigger < 0.2 presumably (verification needed)
-            pass_dz_selection = (el.dz < 0.02) #selection < 0.02, baseline < 0.06, trigger < 0.2 presumably (verification needed)
+            pass_dz_baseline = (abs(el.dz) < 0.06) #selection < 0.02, baseline < 0.06, trigger < 0.2 presumably (verification needed)
+            pass_dz_selection = (abs(el.dz) < 0.02) #selection < 0.02, baseline < 0.06, trigger < 0.2 presumably (verification needed)
             pass_id_loose = (el.cutBased >= 2)
             pass_id_medium = (el.cutBased >= 3)
             pass_common_baseline = pass_eta and pass_dz_baseline and pass_d0_baseline and pass_id_loose
