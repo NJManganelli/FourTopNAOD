@@ -22,6 +22,8 @@ parser.add_argument('--maxEntries', dest='maxEntries', action='store', type=int,
                     help='maxEntries per file for processing')
 parser.add_argument('--runPeriod', dest='runPeriod', action='store', type=str, default=None, choices=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
                     help='Run Period for data, i.e. "B" for 2017B')
+parser.add_argument('--redoJEC', dest='redoJEC', action='store_false', default=True,
+                    help='Data vs MC boolean flag')
 parser.add_argument('--isData', dest='isData', action='store_true', default=False,
                     help='Data vs MC boolean flag')
 parser.add_argument('--btagAlgo', dest='btagAlgo', action='store', type=str, default='deepcsv', choices=['csvv2', 'deepcsv', 'deepjet'],
@@ -33,13 +35,13 @@ jmeModule = createJMECorrector(isMC=(not args.isData),
                                dataYear=int(args.era), 
                                runPeriod=args.runPeriod if args.isData else None, 
                                jesUncert="Total", 
-                               redojec=True, 
+                               redojec=args.redoJEC, 
                                jetType = "AK4PFchs", 
                                noGroom=False, 
-                               metBranchName="METFixEE2017" if args.era is "2017" else "MET", 
+                               metBranchName="METFixEE2017" if args.era == "2017" else "MET", 
                                applySmearing=True, 
                                isFastSim=False)
-moduleCache.append(jmeModule)
+moduleCache.append(jmeModule())
 if not args.isData:
     moduleCache.append(btagSFProducer(args.era, 
                                       algo=args.btagAlgo, 
