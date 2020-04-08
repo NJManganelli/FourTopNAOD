@@ -20,6 +20,7 @@ class TH2Lookup {
 public:
 
   TH2Lookup() {lookupMap_.clear();}
+  TH2Lookup(std::string file, bool debug=false);
   TH2Lookup(std::string file, std::vector<std::string> histos);
   ~TH2Lookup() {}
 
@@ -29,7 +30,7 @@ public:
   float getLookupErr(std::string key, float x_val, float y_val);
   RVec_f getJetEfficiencySimple(ROOT::VecOps::RVec<int>* jets_flav, ROOT::VecOps::RVec<float>* jets_pt, ROOT::VecOps::RVec<float>* jets_eta);
   RVec_f getJetEfficiency(std::string category, std::string tagger_WP, RVec_i* jets_flav, RVec_f* jets_pt, RVec_f* jets_eta);
-  RVec_f getEventYield(std::string sample, std::string category, std::string variation);
+  double getEventYieldRatio(std::string sample, std::string variation, int nJet, double HT, bool debug=false);
   //const std::vector<float> & run();
 
 private:
@@ -40,6 +41,25 @@ private:
   float *Jet_eta_, *Jet_pt_;
   int *Jet_flav_;
 };
+
+TH2Lookup::TH2Lookup(std::string file, bool debug=false) {
+  lookupMap_.clear();
+  validKeys_.clear();
+  TFile *f = TFile::Open(file.c_str(),"read");
+  if(!f) {
+    std::cout << "WARNING! File " << file << " cannot be opened. Skipping this efficiency" << std::endl;
+  }
+  for(const auto&& obj: *(f->GetListOfKeys())){
+    std::string key = obj->GetName();
+    std::string clone_key = "TH2LU_" + key;
+    //for(int i=0; i<(int)histos.size();++i) {
+    lookupMap_[obj->GetName()] = (TH2*)(f->Get(key.c_str())->Clone(clone_key.c_str()));
+    //lookupMap_[obj->GetName()] = (TH2*)(f->Get((obj->GetName()).c_str()))->Clone(("TH2LU_"+obj->GetName()).c_str());
+    lookupMap_[obj->GetName()]->SetDirectory(0);
+    if(debug){std::cout << obj->GetName() << "     ";}
+  }
+  f->Close();
+}
 
 TH2Lookup::TH2Lookup(std::string file, std::vector<std::string> histos) {
   lookupMap_.clear();
@@ -100,21 +120,12 @@ RVec_f TH2Lookup::getJetEfficiency(std::string category, std::string tagger_wp, 
   return eff;
 }
 
-RVec_f TH2Lookup::getEventYield(std::string sample, std::string category, std::string variation){
-  //RVec_str keys;
-  RVec_f yield = {1.0};
+double TH2Lookup::getEventYieldRatio(std::string sample, std::string variation, int nJet, double HT, bool debug=false){
+  double yield = 1.0;
   std::string key = "";
-
-//   for(int i = 0; i < jets_flav->size(); ++i){
-//     if(jets_flav->at(i) == 5){
-//       key = category + "_bjets_" + tagger_wp;
-//     } else if(jets_flav->at(i) == 4){
-//       key = category + "_cjets_" + tagger_wp;
-//     } else {
-//       key = category + "_udsgjets_" + tagger_wp;
-//     }
-//     eff.push_back(getLookup(key, jets_pt->at(i), fabs(jets_eta->at(i))));
-//   }
+  key = sample + "_" + variation;
+  if(debug){std::cout << "getEventYield key: " << key << std::endl;}
+  yield = getLookup(key, HT, nJet);
   return yield;
 }
 

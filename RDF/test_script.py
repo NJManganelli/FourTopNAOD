@@ -1,5 +1,6 @@
 import ROOT
 import numpy
+import ctypes
 ROOT.gROOT.ProcessLine(".L test_class.cpp")
 
 f_mc = "/eos/user/n/nmangane/data/20200403/mc_test_file.root"
@@ -7,6 +8,13 @@ f_data = "/eos/user/n/nmangane/data/20200403/data_test_file.root"
 print("Test files for...\nMC:{}\nData:{}".format(f_mc, f_data))
 
 print("Testing TH2Lookup class")
+aa = ROOT.TH2Lookup("/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/select_20200403/ElMu_selection/BtaggingYields/BTaggingYields.root")
+ROOT.gInterpreter.Declare("TH2Lookup* yielder;")
+ROOT.yielder = aa
+valnJet = ctypes.c_int(6)
+valHT = ctypes.c_double(823)
+valYield = ROOT.yielder.getEventYieldRatio("Aggregate", "_deepcsv", valnJet.value, valHT.value)
+print("Yield value: {}".format(valYield))
 v=ROOT.std.vector(str)(3)
 v[0]="Inclusive_bjets_DeepCSV_M"
 v[1]="Inclusive_cjets_DeepCSV_M"
@@ -28,7 +36,9 @@ rd = rd.Define("MET_xycorr_phi_shift", "abs(MET_xycorr_phi - METFixEE2017_phi)")
 print("Testing FTA::btagEventWeight_shape function")
 rd =rd.Define("jet_mask", "Jet_pt > 20 && abs(Jet_eta) < 2.5")
 rd = rd.Define("btagPreEventWeight", "genWeight * FTA::btagEventWeight_shape(Jet_btagSF_deepcsv_shape, jet_mask)")
-rd = rd.Define("btagPercentShift", "(1 - btagPreEventWeight/genWeight)")
+rd = rd.Define("btagEventWeight", "btagPreEventWeight * yielder->getEventYieldRatio(\"Aggregate\", \"_deepcsv\", Jet_pt[jet_mask].size(), Sum(Jet_pt[jet_mask]));")
+rd = rd.Define("btagPreShift", "(1 - btagPreEventWeight/genWeight)")
+rd = rd.Define("btagFinalShift", "(1 - btagEventWeight/genWeight)")
 s1 = rd.Mean("MET_xycorr_pt_shift")
 s11 = rd.Mean("MET_xycorr_phi_shift")
 
@@ -56,7 +66,8 @@ hists["MC_phi_uncorr"] = rd.Histo1D(("hphi_uncorr", "", 36, -3.14, 3.14), "METFi
 hists["MC_phi_corr"] = rd.Histo1D(("hphi_corr", "", 36, -3.14, 3.14), "MET_xycorr_phi", "genWeight")
 hists["MC_pt_shift"] = rd.Histo1D(("hpt_shift", "", 100, -10, 10), "MET_xycorr_pt_shift", "genWeight")
 hists["MC_phi_shift"] = rd.Histo1D(("hphi_shift", "", 72, -3.14, 3.14), "MET_xycorr_phi_shift", "genWeight")
-hists["MC_btagPercentShift"] = rd.Histo1D(("hbtagPercentShift", "", 100, -1, 1), "btagPercentShift")
+hists["MC_btagPreShift"] = rd.Histo1D(("hbtagPreShift", "", 100, -1, 1), "btagPreShift")
+hists["MC_btagFinalShift"] = rd.Histo1D(("hbtagFinalShift", "", 100, -1, 1), "btagFinalShift")
 
 
 #Data
