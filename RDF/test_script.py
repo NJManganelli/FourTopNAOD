@@ -27,6 +27,12 @@ ROOT.alook = a
 r = ROOT.ROOT.RDataFrame("Events", f_mc)#.Range(1000)
 rd = r.Define("Jet_eff", 'alook->getJetEfficiency("Inclusive", "DeepCSV_M", &Jet_hadronFlavour, &Jet_pt, &Jet_eta)')
 
+print("Testing FTA::generateIndices function")
+jidx = r.Range(10).Define("Jet_idx", "FTA::generateIndices(Jet_pt);").AsNumpy(["Jet_idx", "nJet"])
+print(jidx["Jet_idx"])
+print(jidx["nJet"])
+
+
 print("Testing FTA::METXYCorr function")
 rd = rd.Define("MET_xycorr_doublet", "FTA::METXYCorr(METFixEE2017_pt, METFixEE2017_phi, run, 2017, false, PV_npvs)")
 rd = rd.Define("MET_xycorr_pt", "MET_xycorr_doublet.first")

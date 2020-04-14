@@ -185,25 +185,49 @@ namespace FTA{
     return weight;
   }
   
-  RVec_i generateIndices(RVec_i *v){
-    RVec_i i(v->size());
+  RVec_i generateIndices(RVec_i v){
+    RVec_i i(v.size());
     std::iota(i.begin(), i.end(), 0);
     return i;
   }
   
-  RVec_i generateIndices(RVec_f *v){
-    RVec_i i(v->size());
+  RVec_i generateIndices(RVec_f v){
+    RVec_i i(v.size());
     std::iota(i.begin(), i.end(), 0);
     return i;
   }
   
-  RVec_f transverseMass(RVec_f *pt1, RVec_f *phi1, RVec_f *m1, RVec_f *pt2, RVec_f *phi2, RVec_f *m2){
-    if(pt1->size() != pt2->size()){
+  RVec_f transverseMass(RVec_f pt1, RVec_f phi1, RVec_f m1, RVec_f pt2, RVec_f phi2, RVec_f m2){
+    //This function only accepts vectors of equal size
+    if(pt1.size() != pt2.size()){
       RVec_f v = {-9999.9};
       return v;
     }
     else {
-      auto MT2 = (*m1)*(*m1) + (*m2)*(*m2) + 2*(sqrt((*m1)*(*m1) + (*pt1)*(*pt1)) * sqrt((*m2)*(*m2) + (*pt2)*(*pt2)) - (*pt1)*(*pt2)*cos(ROOT::VecOps::DeltaPhi(*phi1, *phi2)));
+      //RVec multiplication is element-by-element, i.e. {0, 1, 2}*{1, -3, 9.5} = {0, -3, 19}
+      //auto MT2 = (*m1)*(*m1) + (*m2)*(*m2) + 2*(sqrt((*m1)*(*m1) + (*pt1)*(*pt1)) * sqrt((*m2)*(*m2) + (*pt2)*(*pt2)) - (*pt1)*(*pt2)*cos(ROOT::VecOps::DeltaPhi(*phi1, *phi2)));
+      auto MT2 = (m1)*(m1) + (m2)*(m2) + 2*(sqrt((m1)*(m1) + (pt1)*(pt1)) * sqrt((m2)*(m2) + (pt2)*(pt2)) - (pt1)*(pt2)*cos(ROOT::VecOps::DeltaPhi(phi1, phi2)));
+      return sqrt(MT2);
+    }
+  }
+
+  RVec_f transverseMassMET(RVec_f pt1, RVec_f phi1, RVec_f m1, double pt2_uncast, double phi2_uncast){
+    if(pt1.size() == 0){
+      RVec_f v = {-9999.9};
+      return v;
+    }
+    else {
+      RVec_f pt2, phi2, m2;
+      double m2_uncast = 0;
+      //broadcast the double to RVec's
+      for(int z = 0; z < pt1.size(); ++z){
+	pt2.push_back(pt2_uncast);
+	phi2.push_back(phi2_uncast);
+	m2.push_back(m2_uncast);
+      }
+      //RVec multiplication is element-by-element, i.e. {0, 1, 2}*{1, -3, 9.5} = {0, -3, 19}
+      //auto MT2 = (*m1)*(*m1) + (*m2)*(*m2) + 2*(sqrt((*m1)*(*m1) + (*pt1)*(*pt1)) * sqrt((*m2)*(*m2) + (*pt2)*(*pt2)) - (*pt1)*(*pt2)*cos(ROOT::VecOps::DeltaPhi(*phi1, *phi2)));
+      auto MT2 = (m1)*(m1) + (m2)*(m2) + 2*(sqrt((m1)*(m1) + (pt1)*(pt1)) * sqrt((m2)*(m2) + (pt2)*(pt2)) - (pt1)*(pt2)*cos(ROOT::VecOps::DeltaPhi(phi1, phi2)));
       return sqrt(MT2);
     }
   }
