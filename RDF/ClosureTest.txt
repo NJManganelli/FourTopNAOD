@@ -1,0 +1,82 @@
+#Hand-crafted closure test, may be worth adding as standard for the 1DX and 1DY distributions 
+>>> h2 = f.Get('Aggregate_1DX_nom')
+>>> h2.Draw("COLZ TEXTE45")
+Info in <TCanvas::MakeDefCanvas>:  created default TCanvas with name c1
+>>> c = ROOT.TCanvas("c", "", 900, 600)
+>>> c.SetLogx()
+^[[Ah2.Draw("COLZ TEXTE45")
+c.Draw()
+>>> c.Draw()
+>>> h3 = f.Get('Aggregate_1DX_btagSF_deepcsv_shape_down_lf')
+>>> h4 = f.Get('Aggregate_1DX_btagSF_deepcsv_shape_up_lf')
+>>> h4
+<ROOT.TH2D object ("Aggregate_1DX_btagSF_deepcsv_shape_up_lf") at 0x5df5d00>
+>>> h6 = f.Get('Aggregate_1DX_btagSF_deepcsv_shape_up_hf')
+>>> h5 = f.Get('Aggregate_1DX_btagSF_deepcsv_shape_down_hf')
+>>> h3.Draw("COLZ TEXTE")
+>>> h4.Draw("COLZ TEXTE")
+>>> h2.SetMinimum(.82);h3.SetMinimum(.82); h4.SetMinimum(.82); h5.SetMinimum(.82); h6.SetMinimum(.82)
+>>> h2.SetMaximum(.99);h3.SetMaximum(.99); h4.SetMaximum(.99); h5.SetMaximum(.99); h6.SetMaximum(.99);
+>>> h2.Draw("COLZ TEXTE90")
+>>> h3.Draw("COLZ TEXTE90")
+>>> h4.Draw("COLZ TEXTE90")
+>>> h5.Draw("COLZ TEXTE90")
+>>> h6.Draw("COLZ TEXTE90")
+>>> h1
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'h1' is not defined
+>>> h
+<ROOT.TH2D object ("Aggregate__nom") at 0x5856d30>
+>>> h.GetYAxis().GetNBins()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'TH2D' object has no attribute 'GetYAxis'
+>>> h.GetYAxis().GetNbins()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'TH2D' object has no attribute 'GetYAxis'
+>>> h.GetYxxis().GetNbins()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'TH2D' object has no attribute 'GetYxxis'
+>>> h.GetYaxis().GetNbins()
+6
+>>> for z in xrange(1, 6):
+...
+  File "<stdin>", line 2
+
+    ^
+IndentationError: expected an indented block
+>>> p = {}
+>>> for z in xrange(1, 6):
+...   p[z] = h.ProjectionX("_px{}".format(z), z, z)
+...
+>>> p[1]
+<ROOT.TH1D object ("_px1") at 0x5e5e0d0>
+>>> p[0] = h2.ProjectionX("_px0", 1, 1)
+>>> p[1].SetLineColor(ROOT.kRed)
+>>> p[2].SetLineColor(ROOT.kBlue); p[3].SetLineColor(ROOT.kGreen); p[4].SetLineColor(ROOT.kOrange); p[5].SetLineColor(ROOT.kMagenta); p[6].SetLineColor(ROOT.kCyan)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+KeyError: 6
+>>> p[6] = h.ProjectionX("_px6", 6, 6); p[6].SetLineColor(ROOT.kCyan)
+>>> p[2].SetLineColor(ROOT.kBlue); p[3].SetLineColor(ROOT.kGreen); p[4].SetLineColor(ROOT.kOrange); p[5].SetLineColor(ROOT.kMagenta);
+>>> c2 = ROOT.TCanvas("c2", "", 900, 600)
+>>> p[0].GetTitle()
+'Aggregate BtaggingYield r=#frac{#Sigma#omega_{before}}{#Sigma#omega_{after}}(1DX_nom)'
+>>> p[0].SetTitle('Aggregate Yield 1D vs nJet r=#frac{#Sigma#omega_{before}}{#Sigma#omega_{after}}(nominal)'
+... )
+>>> l = ROOT.TLegend()
+>>> p[0].SetMarkerStyle(20)
+>>> l.Add(p[0], "1D", "p"); l.Add(p[1], "nJet4", "l");l.Add(p[2], "nJet5", "l");l.Add(p[3], "nJet6", "l");l.Add(p[4], "nJet7", "l");l.Add(p[5], "nJet8", "l");l.Add(p[6], "nJet9to20", "l");
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'TLegend' object has no attribute 'Add'
+>>> l.AddEntry(p[0], "1D", "p"); l.AddEntry(p[1], "nJet4", "l");l.AddEntry(p[2], "nJet5", "l");l.AddEntry(p[3], "nJet6", "l");l.AddEntry(p[4], "nJet7", "l");l.AddEntry(p[5], "nJet8", "l");l.AddEntry(p[6], "nJet9to20", "l");
+>>> p[0].Draw("PE1"); p[1].Draw("HIST SAME"); p[2].Draw("HIST SAME"); p[3].Draw("HIST SAME"); p[4].Draw("HIST SAME") p[5].Draw("HIST SAME"); p[6].Draw("HIST SAME"); l.Draw(); c2.Draw()
+  File "<stdin>", line 1
+    p[0].Draw("PE1"); p[1].Draw("HIST SAME"); p[2].Draw("HIST SAME"); p[3].Draw("HIST SAME"); p[4].Draw("HIST SAME") p[5].Draw("HIST SAME"); p[6].Draw("HIST SAME"); l.Draw(); c2.Draw()
+                                                                                                                     ^
+SyntaxError: invalid syntax
+>>> p[0].Draw("PE1"); p[1].Draw("HIST SAME"); p[2].Draw("HIST SAME"); p[3].Draw("HIST SAME"); p[4].Draw("HIST SAME");p[5].Draw("HIST SAME"); p[6].Draw("HIST SAME"); l.Draw(); c2.Draw()
