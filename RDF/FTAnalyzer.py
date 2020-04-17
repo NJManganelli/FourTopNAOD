@@ -1284,7 +1284,7 @@ def defineInitWeights(input_df, crossSection=0, sumWeights=-1, lumi=0,
             rdf = rdf.Define(k, v)
     return rdf
 
-def defineJets(input_df, era="2017", doAK8Jets=False, isData=True, debugInfo = True, 
+def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
                nJetsToHisto=10, bTagger="DeepCSV", verbose=False,
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -1449,16 +1449,22 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True, debugInfo = T
     return rdf
 
 
-def defineWeights(input_df, isData=False, verbose=False, final=False):
+def defineWeights(input_df, era, isData=False, verbose=False, final=False):
     """Define all the pre-final or final weights and the variations, to be referened by the sysVariations dictionaries as wgt_final.
-    if final=False, do the pre-final weights for BtaggingYields calculations.
+    if final=False, do the pre-final weights for BTaggingYields calculations.
     
     pwgt = partial weight, component for final weight
     wgt_$SYSTEMATIC is form of final event weights, i.e. wgt_nom or wgt_puWeightDown
-    prewgt_$SYSTEMATIC is form of weight for BtaggingYields calculation, should include everything but pwgt_btag_$SYSTEMATIC"""
+    prewgt_$SYSTEMATIC is form of weight for BTaggingYields calculation, should include everything but pwgt_btag_$SYSTEMATIC"""
     rdf = input_df
     #There's only one lepton branch variation (nominal), but if it ever changes, this will serve as sign it's referenced here and made need to be varied
     leppostfix = "_nom"
+
+
+    lumi = {"2017": 41.53,
+            "2018": 1}
+    #era = "2017"
+
     
     #Two lists of weight definitions, one or the other is chosen at the end via 'final' optional parameter
     zFin = []
@@ -1470,7 +1476,7 @@ def defineWeights(input_df, isData=False, verbose=False, final=False):
     
     #WARNING: on btag weights, it can ALWAYS be 'varied' to match the systematic, so that the event weight from
     #the correct jet collection, btag SFs, and yields is used. Always match! This duplicates some calculations uselessly
-    #in the BtaggingYields function, but it should help avoid mistakes at the level of final calculations
+    #in the BTaggingYields function, but it should help avoid mistakes at the level of final calculations
     
     #Nominal weight
     zFin.append(("wgt_nom", "pwgt_XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF_nom * pwgt_btag_nom"))
@@ -1556,7 +1562,7 @@ def defineWeights(input_df, isData=False, verbose=False, final=False):
 # In[ ]:
 
 
-def BtaggingYields(input_df, sampleName, isData = True, histos_dict=None, verbose=False,
+def BTaggingYields(input_df, sampleName, isData = True, histosDict=None, verbose=False,
                    sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                              "jet_pt_var": "Jet_pt",
@@ -1641,7 +1647,7 @@ def BtaggingYields(input_df, sampleName, isData = True, histos_dict=None, verbos
                 ROOT.gInterpreter.Declare("std::map<std::string, std::vector<TH2Lookup*>> {0};".format(lookupMap))
             iLUM = getattr(ROOT, lookupMap)
         else:
-            raise RuntimeError("lookupMap (used in BtaggingYields function) must either be a string name "                               "for the declared function's (C++ variable) name, used to find or declare one of type "                               "std::map<std::string, std::vector<TH2Lookup*>>")
+            raise RuntimeError("lookupMap (used in BTaggingYields function) must either be a string name "                               "for the declared function's (C++ variable) name, used to find or declare one of type "                               "std::map<std::string, std::vector<TH2Lookup*>>")
         nSlots = input_df.GetNSlots()
         while iLUM[sampleName].size() < nSlots:
             if type(loadYields) == str:
@@ -1662,8 +1668,8 @@ def BtaggingYields(input_df, sampleName, isData = True, histos_dict=None, verbos
         #Create list of the variations to be histogrammed (2D yields)
         yieldList = []
         #Add key to histos dictionary, if calculating the yields
-        if calculateYields and "BtaggingYields" not in histos_dict.keys():
-            histos_dict["BtaggingYields"] = {}
+        if calculateYields and "BTaggingYields" not in histosDict.keys():
+            histosDict["BTaggingYields"] = {}
         for sysVar, sysDict in sysVariations.items():
             z[sysVar] = []
             isWeightVariation = sysDict.get("weightVariation")
@@ -1675,7 +1681,7 @@ def BtaggingYields(input_df, sampleName, isData = True, histos_dict=None, verbos
             #We must get or calculate various weights, defined below
             #This btagSFProduct is the product of the SFs for the selected jets from collection jetPt with mask jetMask
             btagSFProduct = "btagSFProduct{spf}".format(spf=syspostfix)
-            #input weight, should include all corrections for this systematic variation except Btagging SF and yield ratio
+            #input weight, should include all corrections for this systematic variation except BTagging SF and yield ratio
             calculationWeightBefore = "prewgt{spf}".format(spf=syspostfix)
             #For calculating the yeild ratio, we need this weight, which will be the product of calculationWeightBefore and the product of btag SFs (no yield ratio!)
             calculationWeightAfter = "calcBtagYields_after{spf}".format(spf=syspostfix)
@@ -1685,11 +1691,11 @@ def BtaggingYields(input_df, sampleName, isData = True, histos_dict=None, verbos
             
             #Lets be really obvious about missing jet_masks... exception it
             if jetMask not in listOfDefinedColumns:
-                raise RuntimeError("Could not find {} column in method BtaggingYields".format(jetMask))
+                raise RuntimeError("Could not find {} column in method BTaggingYields".format(jetMask))
             
             #Skip SFs for which the requisite per-jet SFs are not present...
             if jetSF not in listOfDefinedColumns:
-                if verbose: print("Skipping {} in BtaggingYields as it is not a valid column name".format(jetSF))
+                if verbose: print("Skipping {} in BTaggingYields as it is not a valid column name".format(jetSF))
                 continue
                 
             #Check we have the input weight for before btagSF and yield ratio multiplication
@@ -1699,8 +1705,8 @@ def BtaggingYields(input_df, sampleName, isData = True, histos_dict=None, verbos
             #Now check if the event preweight SF is in the list of columns, and if not, define it (common to calculating yields and loading them...)
             #We might want to call this function twice to calculate yields for a future iteration and use an older iteration at the same time
             if btagSFProduct not in listOfDefinedColumns:
-                if calculateYields and btagSFProduct not in histos_dict["BtaggingYields"].keys():
-                    histos_dict["BtaggingYields"][btagSFProduct] = {}
+                if calculateYields and btagSFProduct not in histosDict["BTaggingYields"].keys():
+                    histosDict["BTaggingYields"][btagSFProduct] = {}
                 z[sysVar].append(("{}".format(btagSFProduct), "FTA::btagEventWeight_shape({}, {})".format(jetSF, jetMask)))
             if calculationWeightAfter not in listOfDefinedColumns:
                 z[sysVar].append(("{}".format(calculationWeightAfter), "{} * {}".format(calculationWeightBefore, 
@@ -1735,15 +1741,15 @@ def BtaggingYields(input_df, sampleName, isData = True, histos_dict=None, verbos
             #calculate Yields path
             if calculateYields:
                 k = btagSFProduct
-                histos_dict["BtaggingYields"][k] = {}
-                histos_dict["BtaggingYields"][k]["sumW_before"] = rdf.Histo2D(("{}_BtaggingYield_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")), 
+                histosDict["BTaggingYields"][k] = {}
+                histosDict["BTaggingYields"][k]["sumW_before"] = rdf.Histo2D(("{}_BTaggingYield_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")), 
                                                                                "BTaggingYield #Sigma#omega_{before}; HT; nJet",
                                                                                HTBins, HTMin, HTMax,
                                                                                JetBins, nJetMin, nJetMax),
                                                                                HTName,
                                                                                nJetName,
                                                                                calculationWeightBefore)
-                histos_dict["BtaggingYields"][k]["sumW_after"] = rdf.Histo2D(("{}_BtaggingYield_{}_sumW_after".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
+                histosDict["BTaggingYields"][k]["sumW_after"] = rdf.Histo2D(("{}_BTaggingYield_{}_sumW_after".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
                                                                               "BTaggingYield #Sigma#omega_{after}; HT; nJet",
                                                                               HTBins, HTMin, HTMax,
                                                                               JetBins, nJetMin, nJetMax),
@@ -1751,14 +1757,14 @@ def BtaggingYields(input_df, sampleName, isData = True, histos_dict=None, verbos
                                                                               nJetName,
                                                                               calculationWeightAfter)
                 #For Unified JetBinning calculation
-                histos_dict["BtaggingYields"][k]["1DXsumW_before"] = rdf.Histo2D(("{}_BtaggingYield1DX_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")), 
+                histosDict["BTaggingYields"][k]["1DXsumW_before"] = rdf.Histo2D(("{}_BTaggingYield1DX_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")), 
                                                                                "BTaggingYield #Sigma#omega_{before}; HT; nJet",
                                                                                HTBins, HTMin, HTMax,
                                                                                1, nJetMin, nJetMax),
                                                                                HTName,
                                                                                nJetName,
                                                                                calculationWeightBefore)
-                histos_dict["BtaggingYields"][k]["1DXsumW_after"] = rdf.Histo2D(("{}_BtaggingYield1DX_{}_sumW_after".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
+                histosDict["BTaggingYields"][k]["1DXsumW_after"] = rdf.Histo2D(("{}_BTaggingYield1DX_{}_sumW_after".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
                                                                               "BTaggingYield #Sigma#omega_{after}; HT; nJet",
                                                                               HTBins, HTMin, HTMax,
                                                                               1, nJetMin, nJetMax),
@@ -1766,14 +1772,14 @@ def BtaggingYields(input_df, sampleName, isData = True, histos_dict=None, verbos
                                                                               nJetName,
                                                                               calculationWeightAfter)
                 #For Unified HTBinning calculation
-                histos_dict["BtaggingYields"][k]["1DYsumW_before"] = rdf.Histo2D(("{}_BtaggingYield1DY_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")), 
+                histosDict["BTaggingYields"][k]["1DYsumW_before"] = rdf.Histo2D(("{}_BTaggingYield1DY_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")), 
                                                                                "BTaggingYield #Sigma#omega_{before}; HT; nJet",
                                                                                1, HTMin, HTMax,
                                                                                JetBins, nJetMin, nJetMax),
                                                                                HTName,
                                                                                nJetName,
                                                                                calculationWeightBefore)
-                histos_dict["BtaggingYields"][k]["1DYsumW_after"] = rdf.Histo2D(("{}_BtaggingYield1DY_{}_sumW_after".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
+                histosDict["BTaggingYields"][k]["1DYsumW_after"] = rdf.Histo2D(("{}_BTaggingYield1DY_{}_sumW_after".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
                                                                               "BTaggingYield #Sigma#omega_{after}; HT; nJet",
                                                                               1, HTMin, HTMax,
                                                                               JetBins, nJetMin, nJetMax),
@@ -1783,8 +1789,8 @@ def BtaggingYields(input_df, sampleName, isData = True, histos_dict=None, verbos
         return rdf
 
 
-def BtaggingEfficiencies(input_df, sampleName=None, era="2017", wgtVar="wgt_SUMW_PU_L1PF", isData = True, histos_dict=None, 
-               doDeepCSV=True, doDeepJet=True, debugInfo=False):
+def BTaggingEfficiencies(input_df, sampleName=None, era="2017", wgtVar="wgt_SUMW_PU_L1PF", isData = True, histosDict=None, 
+               doDeepCSV=True, doDeepJet=True):
     validAlgos = []
     if doDeepCSV == True: validAlgos.append("DeepCSV")
     if doDeepJet == True: validAlgos.append("DeepJet")
@@ -1836,20 +1842,20 @@ def BtaggingEfficiencies(input_df, sampleName=None, era="2017", wgtVar="wgt_SUMW
         cat_df = collections.OrderedDict()
         for ck, cs in theCats.items():
             cat_df[ck] = input_df_defined.Filter(cs, "btagging " + cs)
-        if histos_dict != None:
-            if "Btagging" not in histos_dict:
-                histos_dict["Btagging"] = {}
+        if histosDict != None:
+            if "BTagging" not in histosDict:
+                histosDict["BTagging"] = {}
             for tc in theCats.keys(): 
-                if tc not in histos_dict["Btagging"]: 
-                    histos_dict["Btagging"][tc] = {}
+                if tc not in histosDict["BTagging"]: 
+                    histosDict["BTagging"][tc] = {}
             for tc, cut in theCats.items():
                 tcn = tc.replace("blind_", "")
                 for jettype in ["bjet", "cjet", "udsgjet"]:
-                    histos_dict["Btagging"][tc]["{}s_untagged".format(jettype)] = cat_df[tc].Histo2D(("{0}s_untagged_[{0}]({1})".format(tcn, wgtVar), ";jet p_{T}; jet |#eta|", 248, 20, 2500, 25, 0, 2.5), 
+                    histosDict["BTagging"][tc]["{}s_untagged".format(jettype)] = cat_df[tc].Histo2D(("{0}s_untagged_[{0}]({1})".format(tcn, wgtVar), ";jet p_{T}; jet |#eta|", 248, 20, 2500, 25, 0, 2.5), 
                                                                                                      "GJet_{}_untagged_pt".format(jettype), "GJet_{}_untagged_abseta".format(jettype), wgtVar)
                     for algo in validAlgos:
                         for wp in ["L", "M", "T"]:
-                            histos_dict["Btagging"][tc]["{0}s_{1}_{2}".format(jettype, algo, wp)] = cat_df[tc].Histo2D(("{0}s_{1}_{2}_[{0}]({3})".format(tcn, algo, wp, wgtVar), ";jet p_{T}; jet |#eta|", 248, 20, 2500, 25, 0, 2.5), 
+                            histosDict["BTagging"][tc]["{0}s_{1}_{2}".format(jettype, algo, wp)] = cat_df[tc].Histo2D(("{0}s_{1}_{2}_[{0}]({3})".format(tcn, algo, wp, wgtVar), ";jet p_{T}; jet |#eta|", 248, 20, 2500, 25, 0, 2.5), 
                                                                                                              "GJet_{0}_{1}_{2}_pt".format(jettype, algo, wp), "GJet_{0}_{1}_{2}_abseta".format(jettype, algo, wp), wgtVar)
                             
 
@@ -1971,10 +1977,10 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 
 
 
-def fillHistos(input_df, sampleName=None, isData = True, histos1D_dict=None, histos2D_dict=None, histosNS_dict=None, 
+def fillHistos(input_df, sampleName=None, isData = True, histosDict=None,
                doMuons=False, doElectrons=False, doLeptons=False, doJets=False, doWeights=False, doEventVars=False, 
-               makeMountains=False, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV", verbose=False,
-               HTCut=500, METCut=None, ZMassMETWindow=None, verbose=False
+               makeMountains=False, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
+               HTCut=500, METCut=None, ZMassMETWindow=None, verbose=False,
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "wgt_final": "wgt_nom",
                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -2075,219 +2081,212 @@ def fillHistos(input_df, sampleName=None, isData = True, histos1D_dict=None, his
 
     
         if doWeights == True:
-            if histosNS_dict != None:
-                if "EventVars" not in histosNS_dict:
-                    histosNS_dict["EventVars"] = {}
-                histosNS[name][lvl]["EventVars"]["wgt_NUMW"] = input_df.Histo1D("wgt_NUMW")
-                histosNS[name][lvl]["EventVars"][wgtVar] = input_df.Histo1D(wgtVar)
-            if histos1D_dict != None:
-                if "EventVars" not in histos1D_dict:
-                    histos1D_dict["EventVars"] = {}
-                histos1D_dict["EventVars"]["wgt_diff"] = input_df.Histo1D(("wgt_diff", "(wgt_NUMW - wgt_SUMW)/wgt_SUMW", 2000, -1, 1), "wgt_diff", "1")
-                histos1D_dict["EventVars"]["wgt_PU"] = input_df.Histo1D(("wgt_PU", "", 2000, 0, 5), "puWeight", "wgt_SUMW")
-                histos1D_dict["EventVars"]["wgt_LSF"] = input_df.Histo1D(("wgt_LSF", "", 2000, 0, 5), "wgt_LSF", "wgt_SUMW")
-                histos1D_dict["EventVars"]["wgt_L1PF"] = input_df.Histo1D(("wgt_L1PF", "", 2000, 0, 5), "L1PreFiringWeight_Nom", "wgt_SUMW")
-                histos1D_dict["EventVars"]["wgt_PU_LSF_L1PF"] = input_df.Histo1D(("wgt_PU_LSF_L1PF", "", 2000, 0, 5), "wgt_PU_LSF_L1PF", "wgt_SUMW")
+            if histosDict != None:
+                if "EventVars" not in histosDict:
+                    histosDict["EventVars"] = {}
+                # histosDict["EventVars"]["wgt_NUMW"] = input_df.Histo1D("wgt_NUMW")
+                # histosDict["EventVars"]["wgt_diff"] = input_df.Histo1D(("wgt_diff", "(wgt_NUMW - wgt_SUMW)/wgt_SUMW", 2000, -1, 1), "wgt_diff", "1")
+                # histosDict["EventVars"]["wgt_PU"] = input_df.Histo1D(("wgt_PU", "", 2000, 0, 5), "puWeight", "wgt_SUMW")
+                # histosDict["EventVars"]["wgt_LSF"] = input_df.Histo1D(("wgt_LSF", "", 2000, 0, 5), "wgt_LSF", "wgt_SUMW")
+                # histosDict["EventVars"]["wgt_L1PF"] = input_df.Histo1D(("wgt_L1PF", "", 2000, 0, 5), "L1PreFiringWeight_Nom", "wgt_SUMW")
+                # histosDict["EventVars"]["wgt_PU_LSF_L1PF"] = input_df.Histo1D(("wgt_PU_LSF_L1PF", "", 2000, 0, 5), "wgt_PU_LSF_L1PF", "wgt_SUMW")
         if doMuons == True:
-            if histos1D_dict != None:
-                if "Muons" not in histos1D_dict: 
-                    histos1D_dict["Muons"] = {}
-                histos1D_dict["Muons"]["idx"] = input_df.Histo1D(("idx{}".format(postfix), "", 5, 0, 5), "Muon_idx", wgtVar)
-                histos1D_dict["Muons"]["Gidx"] = input_df.Histo1D(("Gidx{}".format(postfix), "", 5, 0, 5), "FTAMuon{lpf}_idx", wgtVar)
-                histos1D_dict["Muons"]["nMu"] = input_df.Histo1D(("nMuon{}".format(postfix), "", 5, 0, 5), "nFTAMuon{lpf}", wgtVar)
-                histos1D_dict["Muons"]["nLooseMu"] = input_df.Histo1D(("nLooseMuon{}".format(postfix), "", 5, 0, 5), "nLooseFTAMuon{lpf}", wgtVar)
-                histos1D_dict["Muons"]["nMediumMu"] = input_df.Histo1D(("nMediumMuon{}".format(postfix), "", 5, 0, 5), "nMediumFTAMuon{lpf}", wgtVar)
-                histos1D_dict["Muons"]["pt"] = input_df.Histo1D(("Muon_pt{}".format(postfix), "", 100, 0, 500), "FTAMuon{lpf}_pt", wgtVar)
-                histos1D_dict["Muons"]["eta"] = input_df.Histo1D(("Muon_eta{}".format(postfix), "", 104, -2.6, 2.6), "FTAMuon{lpf}_eta", wgtVar)
-                histos1D_dict["Muons"]["phi"] = input_df.Histo1D(("Muon_phi{}".format(postfix), "", 64, -pi, pi), "FTAMuon{lpf}_phi", wgtVar)
-                #histos1D_dict["Muons"]["mass"] = input_df.Histo1D(("Muon_mass{}".format(postfix), "", 50, 0, 1), "FTAMuon{lpf}_mass", wgtVar)
-                histos1D_dict["Muons"]["iso"] = input_df.Histo1D(("Muon_iso{}".format(postfix), "", 8, 0, 8), "FTAMuon{lpf}_pfIsoId", wgtVar)
-                histos1D_dict["Muons"]["dz"] = input_df.Histo1D(("Muon_dz{}".format(postfix), "", 100, -0.01, 0.01), "FTAMuon{lpf}_dz", wgtVar)
-                histos1D_dict["Muons"]["dxy"] = input_df.Histo1D(("Muon_dxy{}".format(postfix), "", 100, -0.1, 0.1), "FTAMuon{lpf}_dxy", wgtVar)
-                #histos1D_dict["Muons"]["d0"] = input_df.Histo1D(("Muon_d0{}".format(postfix), "", 100, -0.01, 0.01), "FTAMuon{lpf}_d0", wgtVar)
-                histos1D_dict["Muons"]["ip3d"] = input_df.Histo1D(("Muon_ip3d{}".format(postfix), "", 100, 0, 0.01), "FTAMuon{lpf}_ip3d", wgtVar)
-                histos1D_dict["Muons"]["pfRelIso03_all"] = input_df.Histo1D(("Muon_pfRelIso03_all{}".format(postfix), "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_all", wgtVar)
-                histos1D_dict["Muons"]["pfRelIso03_chg"] = input_df.Histo1D(("Muon_pfRelIso03_chg{}".format(postfix), "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_chg", wgtVar)
-                histos1D_dict["Muons"]["pfRelIso04_all"] = input_df.Histo1D(("Muon_pfRelIso04_all{}".format(postfix), "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso04_all", wgtVar)
-            if histos2D_dict != None:
-                if "Muons" not in histos2D_dict:
-                    histos2D_dict["Muons"] = {}
-                histos2D_dict["Muons"]["eta_phi"] = input_df.Histo2D(("Muon_eta_phi{}".format(postfix), "",
+            if histosDict != None:
+                if "Muons" not in histosDict: 
+                    histosDict["Muons"] = {}
+                histosDict["Muons"]["idx"] = input_df.Histo1D(("idx{}".format(postfix), "", 5, 0, 5), "Muon_idx", wgtVar)
+                histosDict["Muons"]["Gidx"] = input_df.Histo1D(("Gidx{}".format(postfix), "", 5, 0, 5), "FTAMuon{lpf}_idx", wgtVar)
+                histosDict["Muons"]["nMu"] = input_df.Histo1D(("nMuon{}".format(postfix), "", 5, 0, 5), "nFTAMuon{lpf}", wgtVar)
+                histosDict["Muons"]["nLooseMu"] = input_df.Histo1D(("nLooseMuon{}".format(postfix), "", 5, 0, 5), "nLooseFTAMuon{lpf}", wgtVar)
+                histosDict["Muons"]["nMediumMu"] = input_df.Histo1D(("nMediumMuon{}".format(postfix), "", 5, 0, 5), "nMediumFTAMuon{lpf}", wgtVar)
+                histosDict["Muons"]["pt"] = input_df.Histo1D(("Muon_pt{}".format(postfix), "", 100, 0, 500), "FTAMuon{lpf}_pt", wgtVar)
+                histosDict["Muons"]["eta"] = input_df.Histo1D(("Muon_eta{}".format(postfix), "", 104, -2.6, 2.6), "FTAMuon{lpf}_eta", wgtVar)
+                histosDict["Muons"]["phi"] = input_df.Histo1D(("Muon_phi{}".format(postfix), "", 64, -pi, pi), "FTAMuon{lpf}_phi", wgtVar)
+                #histosDict["Muons"]["mass"] = input_df.Histo1D(("Muon_mass{}".format(postfix), "", 50, 0, 1), "FTAMuon{lpf}_mass", wgtVar)
+                histosDict["Muons"]["iso"] = input_df.Histo1D(("Muon_iso{}".format(postfix), "", 8, 0, 8), "FTAMuon{lpf}_pfIsoId", wgtVar)
+                histosDict["Muons"]["dz"] = input_df.Histo1D(("Muon_dz{}".format(postfix), "", 100, -0.01, 0.01), "FTAMuon{lpf}_dz", wgtVar)
+                histosDict["Muons"]["dxy"] = input_df.Histo1D(("Muon_dxy{}".format(postfix), "", 100, -0.1, 0.1), "FTAMuon{lpf}_dxy", wgtVar)
+                #histosDict["Muons"]["d0"] = input_df.Histo1D(("Muon_d0{}".format(postfix), "", 100, -0.01, 0.01), "FTAMuon{lpf}_d0", wgtVar)
+                histosDict["Muons"]["ip3d"] = input_df.Histo1D(("Muon_ip3d{}".format(postfix), "", 100, 0, 0.01), "FTAMuon{lpf}_ip3d", wgtVar)
+                histosDict["Muons"]["pfRelIso03_all"] = input_df.Histo1D(("Muon_pfRelIso03_all{}".format(postfix), "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_all", wgtVar)
+                histosDict["Muons"]["pfRelIso03_chg"] = input_df.Histo1D(("Muon_pfRelIso03_chg{}".format(postfix), "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_chg", wgtVar)
+                histosDict["Muons"]["pfRelIso04_all"] = input_df.Histo1D(("Muon_pfRelIso04_all{}".format(postfix), "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso04_all", wgtVar)
+            if histosDict != None:
+                if "Muons" not in histosDict:
+                    histosDict["Muons"] = {}
+                histosDict["Muons"]["eta_phi"] = input_df.Histo2D(("Muon_eta_phi{}".format(postfix), "",
                                                                       104, -2.6, 2.6,
                                                                       64, -pi, pi),
                                                                      "FTAMuon{lpf}_eta", "FTAMuon{lpf}_phi", wgtVar)
-                histos2D_dict["Muons"]["dz_ip3d"] = input_df.Histo2D(("Muon_dz_ip3d{}".format(postfix), "",
+                histosDict["Muons"]["dz_ip3d"] = input_df.Histo2D(("Muon_dz_ip3d{}".format(postfix), "",
                                                                       100, -0.01, 0.01,
                                                                       100, 0, 0.01),
                                                                      "FTAMuon{lpf}_dz", "FTAMuon{lpf}_ip3d", wgtVar)
         if doElectrons == True:
-            if histos1D_dict != None:
-                if "Electrons" not in histos1D_dict: 
-                    histos1D_dict["Electrons"] = {}
-                histos1D_dict["Electrons"]["nEl"] = input_df.Histo1D(("nElectron{}".format(postfix), "", 5, 0, 5), "nFTAElectron{lpf}", wgtVar)
-                histos1D_dict["Electrons"]["nLooseEl"] = input_df.Histo1D(("nLooseElectron{}".format(postfix), "", 5, 0, 5), "nLooseFTAElectron{lpf}", wgtVar)
-                histos1D_dict["Electrons"]["nMediumEl"] = input_df.Histo1D(("nMediumElectron{}".format(postfix), "", 5, 0, 5), "nMediumFTAElectron{lpf}", wgtVar)
-                histos1D_dict["Electrons"]["pt"] = input_df.Histo1D(("Electron_pt{}".format(postfix), "", 100, 0, 500), "FTAElectron{lpf}_pt", wgtVar)
-                histos1D_dict["Electrons"]["eta"] = input_df.Histo1D(("Electron_eta{}".format(postfix), "", 104, -2.6, 2.6), "FTAElectron{lpf}_eta", wgtVar)
-                histos1D_dict["Electrons"]["phi"] = input_df.Histo1D(("Electron_phi{}".format(postfix), "", 64, -pi, pi), "FTAElectron{lpf}_phi", wgtVar)
-                #histos1D_dict["Electrons"]["mass"] = input_df.Histo1D(("Electron_mass{}".format(postfix), "", 50, 0, 1), "FTAElectron{lpf}_mass", wgtVar)
-                histos1D_dict["Electrons"]["dz"] = input_df.Histo1D(("Electron_dz{}".format(postfix), "", 100, -0.01, 0.01), "FTAElectron{lpf}_dz", wgtVar)
-                #histos1D_dict["Electrons"]["d0"] = input_df.Histo1D(("Electron_d0{}".format(postfix), "", 100, 0, 0.01), "FTAElectron{lpf}_d0", wgtVar)
-                histos1D_dict["Electrons"]["ip3d"] = input_df.Histo1D(("Electron_ip3d{}".format(postfix), "", 100, 0, 0.01), "FTAElectron{lpf}_ip3d", wgtVar)
-                histos1D_dict["Electrons"]["pfRelIso03_all"] = input_df.Histo1D(("Electron_pfRelIso03_all{}".format(postfix), "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_all", wgtVar)
-                histos1D_dict["Electrons"]["pfRelIso03_chg"] = input_df.Histo1D(("Electron_pfRelIso03_chg{}".format(postfix), "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_chg", wgtVar)
-                histos1D_dict["Electrons"]["cutBased"] = input_df.Histo1D(("Electron_cutBased{}".format(postfix), "", 5, 0, 5), "FTAElectron{lpf}_cutBased", wgtVar)
-            if histos2D_dict != None:
-                if "Electrons" not in histos2D_dict: 
-                    histos2D_dict["Electrons"] = {}
-                histos2D_dict["Electrons"]["eta_phi"] = input_df.Histo2D(("Electron_eta_phi{}".format(postfix), "",
+            if histosDict != None:
+                if "Electrons" not in histosDict: 
+                    histosDict["Electrons"] = {}
+                histosDict["Electrons"]["nEl"] = input_df.Histo1D(("nElectron{}".format(postfix), "", 5, 0, 5), "nFTAElectron{lpf}", wgtVar)
+                histosDict["Electrons"]["nLooseEl"] = input_df.Histo1D(("nLooseElectron{}".format(postfix), "", 5, 0, 5), "nLooseFTAElectron{lpf}", wgtVar)
+                histosDict["Electrons"]["nMediumEl"] = input_df.Histo1D(("nMediumElectron{}".format(postfix), "", 5, 0, 5), "nMediumFTAElectron{lpf}", wgtVar)
+                histosDict["Electrons"]["pt"] = input_df.Histo1D(("Electron_pt{}".format(postfix), "", 100, 0, 500), "FTAElectron{lpf}_pt", wgtVar)
+                histosDict["Electrons"]["eta"] = input_df.Histo1D(("Electron_eta{}".format(postfix), "", 104, -2.6, 2.6), "FTAElectron{lpf}_eta", wgtVar)
+                histosDict["Electrons"]["phi"] = input_df.Histo1D(("Electron_phi{}".format(postfix), "", 64, -pi, pi), "FTAElectron{lpf}_phi", wgtVar)
+                #histosDict["Electrons"]["mass"] = input_df.Histo1D(("Electron_mass{}".format(postfix), "", 50, 0, 1), "FTAElectron{lpf}_mass", wgtVar)
+                histosDict["Electrons"]["dz"] = input_df.Histo1D(("Electron_dz{}".format(postfix), "", 100, -0.01, 0.01), "FTAElectron{lpf}_dz", wgtVar)
+                #histosDict["Electrons"]["d0"] = input_df.Histo1D(("Electron_d0{}".format(postfix), "", 100, 0, 0.01), "FTAElectron{lpf}_d0", wgtVar)
+                histosDict["Electrons"]["ip3d"] = input_df.Histo1D(("Electron_ip3d{}".format(postfix), "", 100, 0, 0.01), "FTAElectron{lpf}_ip3d", wgtVar)
+                histosDict["Electrons"]["pfRelIso03_all"] = input_df.Histo1D(("Electron_pfRelIso03_all{}".format(postfix), "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_all", wgtVar)
+                histosDict["Electrons"]["pfRelIso03_chg"] = input_df.Histo1D(("Electron_pfRelIso03_chg{}".format(postfix), "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_chg", wgtVar)
+                histosDict["Electrons"]["cutBased"] = input_df.Histo1D(("Electron_cutBased{}".format(postfix), "", 5, 0, 5), "FTAElectron{lpf}_cutBased", wgtVar)
+            if histosDict != None:
+                if "Electrons" not in histosDict: 
+                    histosDict["Electrons"] = {}
+                histosDict["Electrons"]["eta_phi"] = input_df.Histo2D(("Electron_eta_phi{}".format(postfix), "",
                                                                           104, -2.6, 2.6,
                                                                           64, -pi, pi),
                                                                          "FTAElectron{lpf}_eta", "FTAElectron{lpf}_phi", wgtVar)
-                histos2D_dict["Electrons"]["dz_ip3d"] = input_df.Histo2D(("Electron_dz_ip3d{}".format(postfix), "",
+                histosDict["Electrons"]["dz_ip3d"] = input_df.Histo2D(("Electron_dz_ip3d{}".format(postfix), "",
                                                                           100, -0.01, 0.01,
                                                                           100, 0, 0.01),
                                                                          "FTAElectron{lpf}_dz", "FTAElectron{lpf}_ip3d", wgtVar)
         if doLeptons == True:
-            if histos1D_dict != None:
-                if "Leptons" not in histos1D_dict: 
-                    histos1D_dict["Leptons"] = {}
-                histos1D_dict["Leptons"]["pt_LeadLep"] = input_df                        .Histo1D(("FTALepton{lpf}_pt_LeadLep{}".format(postfix), "", 100, 0, 500),"FTALepton{lpf}_pt_LeadLep", wgtVar)
-                histos1D_dict["Leptons"]["pt_SubleadLep"] = input_df                        .Histo1D(("FTALepton{lpf}_pt_SubleadLep{}".format(postfix), "", 100, 0, 500),"FTALepton{lpf}_pt_SubleadLep", wgtVar)
-                histos1D_dict["Leptons"]["eta"] = input_df                        .Histo1D(("FTALepton{lpf}_eta{}".format(postfix), "", 104, -2.6, 2.6),"FTALepton{lpf}_eta", wgtVar)
-                histos1D_dict["Leptons"]["phi"] = input_df                        .Histo1D(("FTALepton{lpf}_phi{}".format(postfix), "", 64, -pi, pi),"FTALepton{lpf}_phi", wgtVar)
-                histos1D_dict["Leptons"]["nLepton"] = input_df                        .Histo1D(("nLepton{}".format(postfix), "", 5, 0, 5), "nFTALepton{lpf}", wgtVar)
-                histos1D_dict["Leptons"]["pdgId"] = input_df                        .Histo1D(("Lepton_pdgId{}".format(postfix), "", 32, -16, 16), "FTALepton{lpf}_pdgId", wgtVar)
-                histos1D_dict["Leptons"]["jetIdx"] = input_df                        .Histo1D(("Lepton_jetIdx{}".format(postfix), "", 20, 0, 20), "FTALepton{lpf}_jetIdx", wgtVar)
-                #histos1D_dict["Leptons"]["LepSF"] = input_df\
+            if histosDict != None:
+                if "Leptons" not in histosDict: 
+                    histosDict["Leptons"] = {}
+                histosDict["Leptons"]["pt_LeadLep"] = input_df                        .Histo1D(("FTALepton{lpf}_pt_LeadLep{}".format(postfix), "", 100, 0, 500),"FTALepton{lpf}_pt_LeadLep", wgtVar)
+                histosDict["Leptons"]["pt_SubleadLep"] = input_df                        .Histo1D(("FTALepton{lpf}_pt_SubleadLep{}".format(postfix), "", 100, 0, 500),"FTALepton{lpf}_pt_SubleadLep", wgtVar)
+                histosDict["Leptons"]["eta"] = input_df                        .Histo1D(("FTALepton{lpf}_eta{}".format(postfix), "", 104, -2.6, 2.6),"FTALepton{lpf}_eta", wgtVar)
+                histosDict["Leptons"]["phi"] = input_df                        .Histo1D(("FTALepton{lpf}_phi{}".format(postfix), "", 64, -pi, pi),"FTALepton{lpf}_phi", wgtVar)
+                histosDict["Leptons"]["nLepton"] = input_df                        .Histo1D(("nLepton{}".format(postfix), "", 5, 0, 5), "nFTALepton{lpf}", wgtVar)
+                histosDict["Leptons"]["pdgId"] = input_df                        .Histo1D(("Lepton_pdgId{}".format(postfix), "", 32, -16, 16), "FTALepton{lpf}_pdgId", wgtVar)
+                histosDict["Leptons"]["jetIdx"] = input_df                        .Histo1D(("Lepton_jetIdx{}".format(postfix), "", 20, 0, 20), "FTALepton{lpf}_jetIdx", wgtVar)
+                #histosDict["Leptons"]["LepSF"] = input_df\
                 #        .Histo1D(("Lepton_SF_({})".format("wgt_SUMW_PU:HARDCODED"), "", 100, 0.93, 1.03), "FTALepton{lpf}_SF_nom", "wgt_SUMW_PU")
-                #histos1D_dict["Leptons"]["LSF"] = input_df\
+                #histosDict["Leptons"]["LSF"] = input_df\
                 #        .Histo1D(("LSF_({})".format("wgt_SUMW_PU:HARDCODED"), "", 200, 0.80, 1.1), "wgt_LSF", "wgt_SUMW_PU")
-                #histos1D_dict["Leptons"]["SPL_SP"] = input_df\
+                #histosDict["Leptons"]["SPL_SP"] = input_df\
                 #        .Histo1D(("SPL_SP_({})".format("wgt_SUMW_PU:HARDCODED"), "", 200, 0.80, 1.1), "SPL_SP", "wgt_SUMW_PU")
-                #histos1D_dict["Leptons"]["LepSF"] = input_df.Histo1D("FTALepton{lpf}_SF_nom")#, "wgt_SUMW_PU")
-                #histos1D_dict["Leptons"]["LSF"] = input_df.Histo1D("wgt_LSF")#, "wgt_SUMW_PU")
-                #histos1D_dict["Leptons"]["SPL_SP"] = input_df.Histo1D("SPL_SP")#, "wgt_SUMW_PU")
-                #histos1D_dict["Leptons"]["SUMW_PU"] = input_df.Histo1D("wgt_SUMW_PU")#, "wgt_SUMW_PU")
-                #histos1D_dict["Leptons"]["SUMW_PU_LSF"] = input_df.Histo1D("wgt_SUMW_PU_LSF")#, "wgt_SUMW_PU")
-                #histos1D_dict["Leptons"]["PU"] = input_df.Histo1D("puWeight")#, "wgt_SUMW_PU")
+                #histosDict["Leptons"]["LepSF"] = input_df.Histo1D("FTALepton{lpf}_SF_nom")#, "wgt_SUMW_PU")
+                #histosDict["Leptons"]["LSF"] = input_df.Histo1D("wgt_LSF")#, "wgt_SUMW_PU")
+                #histosDict["Leptons"]["SPL_SP"] = input_df.Histo1D("SPL_SP")#, "wgt_SUMW_PU")
+                #histosDict["Leptons"]["SUMW_PU"] = input_df.Histo1D("wgt_SUMW_PU")#, "wgt_SUMW_PU")
+                #histosDict["Leptons"]["SUMW_PU_LSF"] = input_df.Histo1D("wgt_SUMW_PU_LSF")#, "wgt_SUMW_PU")
+                #histosDict["Leptons"]["PU"] = input_df.Histo1D("puWeight")#, "wgt_SUMW_PU")
         if doJets == True:
-            if histos1D_dict != None:
-                if "Jets" not in histos1D_dict:
-                    histos1D_dict["Jets"] = {}
-                histos1D_dict["Jets"]["pt"] = input_df.Histo1D(("Jet_pt{}".format(postfix), "", 100, 0, 500), fillJet_pt, wgtVar)
+            if histosDict != None:
+                if "Jets" not in histosDict:
+                    histosDict["Jets"] = {}
+                histosDict["Jets"]["pt"] = input_df.Histo1D(("Jet_pt{}".format(postfix), "", 100, 0, 500), fillJet_pt, wgtVar)
                 for x in xrange(nJetsToHisto):
-                    histos1D_dict["Jets"]["pt_jet{}".format(x+1)] = input_df.Histo1D(("Jet_pt_jet{}({})".format(x+1, wgtVar), "", 100, 0, 500), "Jet{bpf}_pt_jet{}".format(x+1), wgtVar)
-                    histos1D_dict["Jets"]["eta_jet{}".format(x+1)] = input_df.Histo1D(("Jet_eta_jet{}({})".format(x+1, wgtVar), "", 104, -2.6, 2.6), "Jet{bpf}_eta_jet{}".format(x+1), wgtVar)
-                    histos1D_dict["Jets"]["phi_jet{}".format(x+1)] = input_df.Histo1D(("Jet_phi_jet{}({})".format(x+1, wgtVar), "", 64, -pi, pi), "Jet{bpf}_phi_jet{}".format(x+1), wgtVar)
-                histos1D_dict["Jets"]["eta"] = input_df.Histo1D(("Jet_eta{}".format(postfix), "", 104, -2.6, 2.6), fillJet_eta, wgtVar)
-                histos1D_dict["Jets"]["phi"] = input_df.Histo1D(("Jet_phi{}".format(postfix), "", 64, -pi, pi), fillJet_phi, wgtVar)
-                histos1D_dict["Jets"]["mass"] = input_df.Histo1D(("Jet_mass{}".format(postfix), "", 100, 0, 500), fillJet_mass, wgtVar)
-                histos1D_dict["Jets"]["jetId"] = input_df.Histo1D(("Jet_jetId{}".format(postfix), "", 8, 0, 8), "Jet{bpf}_jetId", wgtVar) #FIXME: not based on variation... okay? maybe not with masks...
-                #histos1D_dict["Jets"]["btagDeepB_LeadtagJet"] = input_df.Histo1D(("Jet_btagDeepB_LeadtagJet{}".format(postfix), "", 101, -0.01, 1), "Jet{bpf}_btagDeepB_LeadtagJet", wgtVar)
-                #histos1D_dict["Jets"]["btagDeepB_SubleadtagJet"] = input_df.Histo1D(("Jet_btagDeepB_SubleadtagJet{}".format(postfix), "", 101, -0.01, 1), "Jet{bpf}_btagDeepB_SubleadtagJet", wgtVar)
-                #histos1D_dict["Jets"]["btagDeepJet_LeadtagJet"] = input_df.Histo1D(("Jet_btagDeepJetB_LeadtagJet{}".format(postfix), "", 101, -0.01, 1), "Jet{bpf}_btagDeepFlavB_sorted_LeadtagJet", wgtVar)
-                #histos1D_dict["Jets"]["btagDeepJet_SubleadtagJet"] = input_df.Histo1D(("Jet_btagDeepJetB_SubleadtagJet{}".format(postfix), "", 101, -0.01, 1), "Jet{bpf}_btagDeepFlavB_sorted_SubleadtagJet", wgtVar)
-                #histos1D_dict["Jets"]["nMediumCSVv2"] = input_df.Histo1D(("nJet_MediumCSVv2{}".format(postfix), "", 10, 0, 10), "nJet{bpf}_MediumCSVv2", wgtVar)
-                histos1D_dict["Jets"]["nMediumDeepCSV"] = input_df.Histo1D(("nJet_MediumDeepCSV{}".format(postfix), "", 10, 0, 10), "nJet{bpf}_MediumDeepCSV", wgtVar)
-                histos1D_dict["Jets"]["nMediumDeepJet"] = input_df.Histo1D(("nJet_MediumDeepJet{}".format(postfix), "", 10, 0, 10), "nJet{bpf}_MediumDeepJet", wgtVar)
-                histos1D_dict["Jets"]["nJet"] = input_df.Histo1D(("nJet{}".format(postfix), "", 15, 0, 15), "nJet{bpf}", wgtVar)
-                histos1D_dict["Jets"]["dR_Jet_Mu_leading"] = input_df.Histo1D(("dR_Jet_Mu_leading{}".format(postfix), "dR(Jet, #mu_{leading}); dR; Events)", 40, 0, 0.8), "dR_Jet_Mu_leading", wgtVar)
-                histos1D_dict["Jets"]["dR_Jet_Mu_sublead"] = input_df.Histo1D(("dR_Jet_Mu_sublead{}".format(postfix), "dR(Jet, #mu_{subleading}); dR; Events)", 40, 0, 0.8), "dR_Jet_Mu_sublead", wgtVar)
-                histos1D_dict["Jets"]["dR_Jet_El_leading"] = input_df.Histo1D(("dR_Jet_El_leading{}".format(postfix), "dR(Jet, #e_{leading}); dR; Events)", 40, 0, 0.8), "dR_Jet_El_leading", wgtVar)
-                histos1D_dict["Jets"]["dR_Jet_El_sublead"] = input_df.Histo1D(("dR_Jet_El_sublead{}".format(postfix), "dR(Jet, #e_{subleading}); dR; Events)", 40, 0, 0.8), "dR_Jet_El_sublead", wgtVar)
+                    histosDict["Jets"]["pt_jet{}".format(x+1)] = input_df.Histo1D(("Jet_pt_jet{}({})".format(x+1, wgtVar), "", 100, 0, 500), "Jet{bpf}_pt_jet{}".format(x+1), wgtVar)
+                    histosDict["Jets"]["eta_jet{}".format(x+1)] = input_df.Histo1D(("Jet_eta_jet{}({})".format(x+1, wgtVar), "", 104, -2.6, 2.6), "Jet{bpf}_eta_jet{}".format(x+1), wgtVar)
+                    histosDict["Jets"]["phi_jet{}".format(x+1)] = input_df.Histo1D(("Jet_phi_jet{}({})".format(x+1, wgtVar), "", 64, -pi, pi), "Jet{bpf}_phi_jet{}".format(x+1), wgtVar)
+                histosDict["Jets"]["eta"] = input_df.Histo1D(("Jet_eta{}".format(postfix), "", 104, -2.6, 2.6), fillJet_eta, wgtVar)
+                histosDict["Jets"]["phi"] = input_df.Histo1D(("Jet_phi{}".format(postfix), "", 64, -pi, pi), fillJet_phi, wgtVar)
+                histosDict["Jets"]["mass"] = input_df.Histo1D(("Jet_mass{}".format(postfix), "", 100, 0, 500), fillJet_mass, wgtVar)
+                histosDict["Jets"]["jetId"] = input_df.Histo1D(("Jet_jetId{}".format(postfix), "", 8, 0, 8), "Jet{bpf}_jetId", wgtVar) #FIXME: not based on variation... okay? maybe not with masks...
+                #histosDict["Jets"]["btagDeepB_LeadtagJet"] = input_df.Histo1D(("Jet_btagDeepB_LeadtagJet{}".format(postfix), "", 101, -0.01, 1), "Jet{bpf}_btagDeepB_LeadtagJet", wgtVar)
+                #histosDict["Jets"]["btagDeepB_SubleadtagJet"] = input_df.Histo1D(("Jet_btagDeepB_SubleadtagJet{}".format(postfix), "", 101, -0.01, 1), "Jet{bpf}_btagDeepB_SubleadtagJet", wgtVar)
+                #histosDict["Jets"]["btagDeepJet_LeadtagJet"] = input_df.Histo1D(("Jet_btagDeepJetB_LeadtagJet{}".format(postfix), "", 101, -0.01, 1), "Jet{bpf}_btagDeepFlavB_sorted_LeadtagJet", wgtVar)
+                #histosDict["Jets"]["btagDeepJet_SubleadtagJet"] = input_df.Histo1D(("Jet_btagDeepJetB_SubleadtagJet{}".format(postfix), "", 101, -0.01, 1), "Jet{bpf}_btagDeepFlavB_sorted_SubleadtagJet", wgtVar)
+                #histosDict["Jets"]["nMediumCSVv2"] = input_df.Histo1D(("nJet_MediumCSVv2{}".format(postfix), "", 10, 0, 10), "nJet{bpf}_MediumCSVv2", wgtVar)
+                histosDict["Jets"]["nMediumDeepCSV"] = input_df.Histo1D(("nJet_MediumDeepCSV{}".format(postfix), "", 10, 0, 10), "nJet{bpf}_MediumDeepCSV", wgtVar)
+                histosDict["Jets"]["nMediumDeepJet"] = input_df.Histo1D(("nJet_MediumDeepJet{}".format(postfix), "", 10, 0, 10), "nJet{bpf}_MediumDeepJet", wgtVar)
+                histosDict["Jets"]["nJet"] = input_df.Histo1D(("nJet{}".format(postfix), "", 15, 0, 15), "nJet{bpf}", wgtVar)
+                histosDict["Jets"]["dR_Jet_Mu_leading"] = input_df.Histo1D(("dR_Jet_Mu_leading{}".format(postfix), "dR(Jet, #mu_{leading}); dR; Events)", 40, 0, 0.8), "dR_Jet_Mu_leading", wgtVar)
+                histosDict["Jets"]["dR_Jet_Mu_sublead"] = input_df.Histo1D(("dR_Jet_Mu_sublead{}".format(postfix), "dR(Jet, #mu_{subleading}); dR; Events)", 40, 0, 0.8), "dR_Jet_Mu_sublead", wgtVar)
+                histosDict["Jets"]["dR_Jet_El_leading"] = input_df.Histo1D(("dR_Jet_El_leading{}".format(postfix), "dR(Jet, #e_{leading}); dR; Events)", 40, 0, 0.8), "dR_Jet_El_leading", wgtVar)
+                histosDict["Jets"]["dR_Jet_El_sublead"] = input_df.Histo1D(("dR_Jet_El_sublead{}".format(postfix), "dR(Jet, #e_{subleading}); dR; Events)", 40, 0, 0.8), "dR_Jet_El_sublead", wgtVar)
             
                 if debugInfo == True:
-                    #histos1D_dict["Jets"]["DiffMaskVsALT"] = input_df.Histo1D(("DiffMaskVsALT", "", 10, -10, 10), "DiffMaskVsALT", wgtVar)
-                    #histos1D_dict["Jets"]["DiffnJet"] = input_df.Histo1D(("DiffnJet", "", 10, -10, 10), "DiffnJet", wgtVar)
-                    histos1D_dict["Jets"]["DeepJetSorted"] = input_df.Histo1D("DeepJetSorted", wgtVar)
-                    histos1D_dict["Jets"]["DeepJetLeadtagMinusSubleadtag"] = input_df.Histo1D(("DeepJetLeadtagMinusSubleadtag", "DeepJet(Leadtag - Subleadtag);;Events", 100, -1, 1), "DeepJet0Minus1", wgtVar)
-                    histos1D_dict["Jets"]["MediumDeepJetSorted"] = input_df.Histo1D("MediumDeepJetSorted", wgtVar)
-                    #histos1D_dict["Jets"]["MediumDeepJet0Minus1"] = input_df.Histo1D(("MediumDeepJet0Minus1", "", 100, -1, 1), "MediumDeepJet0Minus1", wgtVar)
-                    #histos1D_dict["Jets"]["btagDeepJet_jet0Med"] = input_df.Histo1D(("Jet_btagDeepJetB_jet0Med{}".format(postfix), "", 102, -0.02, 1), "Jet{bpf}_btagDeepFlavB_jet0Med", wgtVar)
-                    #histos1D_dict["Jets"]["btagDeepJet_jet1Med"] = input_df.Histo1D(("Jet_btagDeepJetB_jet1Med{}".format(postfix), "", 102, -0.02, 1), "Jet{bpf}_btagDeepFlavB_jet1Med", wgtVar)
-                    #histos1D_dict["Jets"]["nJetNUMW"] = input_df.Histo1D(("nJet_NUMW", "", 15, 0, 15), "nJet{bpf}", "wgt_NUMW_V2")
-                    #histos1D_dict["Jets"]["nJetSUMW_PU"] = input_df.Histo1D(("nJet_SUMW_PU", "", 15, 0, 15), "nJet{bpf}", "wgt_SUMW_PU")
-                    #histos1D_dict["Jets"]["nJetSUMW_LSF"] = input_df.Histo1D(("nJet_SUMW_LSF", "", 15, 0, 15), "nJet{bpf}", "wgt_SUMW_LSF")
-                    #histos1D_dict["Jets"]["ptALT"] = input_df.Histo1D(("Jet_ptALT{}".format(postfix), "", 100, 0, 500), "Jet{bpf}_ptALT", wgtVar)
-                    #histos1D_dict["Jets"]["etaALT"] = input_df.Histo1D(("Jet_etaALT{}".format(postfix), "", 104, -2.6, 2.6), "Jet{bpf}_etaALT", wgtVar)
-                    #histos1D_dict["Jets"]["phiALT"] = input_df.Histo1D(("Jet_phiALT{}".format(postfix), "", 64, -pi, pi), "Jet{bpf}_phiALT", wgtVar)
-                    #histos1D_dict["Jets"]["massALT"] = input_df.Histo1D(("Jet_massALT{}".format(postfix), "", 100, 0, 500), "Jet{bpf}_massALT", wgtVar)
-                    #histos1D_dict["Jets"]["jetIdALT"] = input_df.Histo1D(("Jet_jetIdALT{}".format(postfix), "", 8, 0, 8), "Jet{bpf}_jetIdALT", wgtVar)
+                    #histosDict["Jets"]["DiffMaskVsALT"] = input_df.Histo1D(("DiffMaskVsALT", "", 10, -10, 10), "DiffMaskVsALT", wgtVar)
+                    #histosDict["Jets"]["DiffnJet"] = input_df.Histo1D(("DiffnJet", "", 10, -10, 10), "DiffnJet", wgtVar)
+                    histosDict["Jets"]["DeepJetSorted"] = input_df.Histo1D("DeepJetSorted", wgtVar)
+                    histosDict["Jets"]["DeepJetLeadtagMinusSubleadtag"] = input_df.Histo1D(("DeepJetLeadtagMinusSubleadtag", "DeepJet(Leadtag - Subleadtag);;Events", 100, -1, 1), "DeepJet0Minus1", wgtVar)
+                    histosDict["Jets"]["MediumDeepJetSorted"] = input_df.Histo1D("MediumDeepJetSorted", wgtVar)
+                    #histosDict["Jets"]["MediumDeepJet0Minus1"] = input_df.Histo1D(("MediumDeepJet0Minus1", "", 100, -1, 1), "MediumDeepJet0Minus1", wgtVar)
+                    #histosDict["Jets"]["btagDeepJet_jet0Med"] = input_df.Histo1D(("Jet_btagDeepJetB_jet0Med{}".format(postfix), "", 102, -0.02, 1), "Jet{bpf}_btagDeepFlavB_jet0Med", wgtVar)
+                    #histosDict["Jets"]["btagDeepJet_jet1Med"] = input_df.Histo1D(("Jet_btagDeepJetB_jet1Med{}".format(postfix), "", 102, -0.02, 1), "Jet{bpf}_btagDeepFlavB_jet1Med", wgtVar)
+                    #histosDict["Jets"]["nJetNUMW"] = input_df.Histo1D(("nJet_NUMW", "", 15, 0, 15), "nJet{bpf}", "wgt_NUMW_V2")
+                    #histosDict["Jets"]["nJetSUMW_PU"] = input_df.Histo1D(("nJet_SUMW_PU", "", 15, 0, 15), "nJet{bpf}", "wgt_SUMW_PU")
+                    #histosDict["Jets"]["nJetSUMW_LSF"] = input_df.Histo1D(("nJet_SUMW_LSF", "", 15, 0, 15), "nJet{bpf}", "wgt_SUMW_LSF")
+                    #histosDict["Jets"]["ptALT"] = input_df.Histo1D(("Jet_ptALT{}".format(postfix), "", 100, 0, 500), "Jet{bpf}_ptALT", wgtVar)
+                    #histosDict["Jets"]["etaALT"] = input_df.Histo1D(("Jet_etaALT{}".format(postfix), "", 104, -2.6, 2.6), "Jet{bpf}_etaALT", wgtVar)
+                    #histosDict["Jets"]["phiALT"] = input_df.Histo1D(("Jet_phiALT{}".format(postfix), "", 64, -pi, pi), "Jet{bpf}_phiALT", wgtVar)
+                    #histosDict["Jets"]["massALT"] = input_df.Histo1D(("Jet_massALT{}".format(postfix), "", 100, 0, 500), "Jet{bpf}_massALT", wgtVar)
+                    #histosDict["Jets"]["jetIdALT"] = input_df.Histo1D(("Jet_jetIdALT{}".format(postfix), "", 8, 0, 8), "Jet{bpf}_jetIdALT", wgtVar)
         
-            if histos2D_dict != None:
-                if "Jets" not in histos2D_dict:
-                    histos2D_dict["Jets"] = {}
-                histos2D_dict["Jets"]["eta_phi"] = input_df.Histo2D(("Jet_eta_phi{}".format(postfix), "",
+            if histosDict != None:
+                if "Jets" not in histosDict:
+                    histosDict["Jets"] = {}
+                histosDict["Jets"]["eta_phi"] = input_df.Histo2D(("Jet_eta_phi{}".format(postfix), "",
                                                                      104, -2.6, 2.6,
                                                                      64, -pi, pi),
                                                                     fillJet_eta, fillJet_phi, wgtVar)
         if doEventVars == True:
-            if histos1D_dict != None:
-                if "EventVars" not in histos1D_dict:
-                    histos1D_dict["EventVars"] = {}
-                #histos1D_dict["EventVars"]["JML_baseline"] = input_df.Histo1D(("JML_baseline{}".format(postfix), "", 2,0,2), "JML_baseline_pass", wgtVar)
-                #histos1D_dict["EventVars"]["JML_selection"] = input_df.Histo1D(("JML_selection{}".format(postfix), "", 2,0,2), "JML_selection_pass", wgtVar)
-                #histos1D_dict["EventVars"]["HT_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HT_baseline{}".format(postfix), "", 100,400,1400), "ESV_JetMETLogic_HT_baseline", wgtVar)
-                #histos1D_dict["EventVars"]["H_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_H_baseline{}".format(postfix), "", 100,400,1400), "ESV_JetMETLogic_H_baseline", wgtVar)
-                #histos1D_dict["EventVars"]["HT2M_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HT2M_baseline{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_HT2M_baseline", wgtVar)
-                #histos1D_dict["EventVars"]["H2M_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_H2M_baseline{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_H2M_baseline", wgtVar)
-                #histos1D_dict["EventVars"]["HTb_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HTb_baseline{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_HTb_baseline", wgtVar)
-                #histos1D_dict["EventVars"]["HTH_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HTH_baseline{}".format(postfix), "", 100,0,1), "ESV_JetMETLogic_HTH_baseline", wgtVar)
-                #histos1D_dict["EventVars"]["HTRat_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HTRat_baseline{}".format(postfix), "", 100,0,1), "ESV_JetMETLogic_HTRat_baseline", wgtVar)
-                #histos1D_dict["EventVars"]["dRbb_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_dRbb_baseline{}".format(postfix), "", 64,0,2*pi), "ESV_JetMETLogic_dRbb_baseline", wgtVar)
-                #histos1D_dict["EventVars"]["DiLepMass_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_DiLepMass_baseline{}".format(postfix), "", 100,0,500), "ESV_JetMETLogic_DiLepMass_baseline", wgtVar)
-                #histos1D_dict["EventVars"]["HT_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HT_selection{}".format(postfix), "", 100,400,1400), "ESV_JetMETLogic_HT_selection", wgtVar)
-                #histos1D_dict["EventVars"]["H_selection"] = input_df.Histo1D(("ESV_JetMETLogic_H_selection{}".format(postfix), "", 100,400,1400), "ESV_JetMETLogic_H_selection", wgtVar)
-                #histos1D_dict["EventVars"]["HT2M_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HT2M_selection{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_HT2M_selection", wgtVar)
-                #histos1D_dict["EventVars"]["H2M_selection"] = input_df.Histo1D(("ESV_JetMETLogic_H2M_selection{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_H2M_selection", wgtVar)
-                #histos1D_dict["EventVars"]["HTb_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HTb_selection{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_HTb_selection", wgtVar)
-                #histos1D_dict["EventVars"]["HTH_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HTH_selection{}".format(postfix), "", 100,0,1), "ESV_JetMETLogic_HTH_selection", wgtVar)
-                #histos1D_dict["EventVars"]["HTRat_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HTRat_selection{}".format(postfix), "", 100,0,1), "ESV_JetMETLogic_HTRat_selection", wgtVar)
-                #histos1D_dict["EventVars"]["dRbb_selection"] = input_df.Histo1D(("ESV_JetMETLogic_dRbb_selection{}".format(postfix), "", 64,0,2*pi), "ESV_JetMETLogic_dRbb_selection", wgtVar)
-                #histos1D_dict["EventVars"]["DiLepMass_selection"] = input_df.Histo1D(("ESV_JetMETLogic_DiLepMass_selection{}".format(postfix), "", 100,0,500), "ESV_JetMETLogic_DiLepMass_selection", wgtVar)
-                histos1D_dict["EventVars"]["MET_pt"] = input_df.Histo1D(("MET_xycorr_pt{}".format(postfix), "", 100,30,1030), fillMET_pt, wgtVar)
-                histos1D_dict["EventVars"]["MET_phi"] = input_df.Histo1D(("MET_xycorr_phi{}".format(postfix), "", 100,-pi,pi), fillMET_phi, wgtVar)
-                histos1D_dict["EventVars"]["HT"] = input_df.Histo1D(("HT{}".format(postfix), "", 130,400,1700), "FTAJet{bpf}_HT", wgtVar)
-                histos1D_dict["EventVars"]["H"] = input_df.Histo1D(("H{}".format(postfix), "", 160,400,2000), "FTAJet{bpf}_H", wgtVar)
-                histos1D_dict["EventVars"]["HT2M"] = input_df.Histo1D(("HT2M{}".format(postfix), "", 100,0,1000), "FTAJet{bpf}_HT2M", wgtVar)
-                histos1D_dict["EventVars"]["H2M"] = input_df.Histo1D(("H2M{}".format(postfix), "", 150,0,1500), "FTAJet{bpf}_H2M", wgtVar)
-                histos1D_dict["EventVars"]["HTb"] = input_df.Histo1D(("HTb{}".format(postfix), "", 100,0,1000), "FTAJet{bpf}_HTb", wgtVar)
-                histos1D_dict["EventVars"]["HTH"] = input_df.Histo1D(("HTH{}".format(postfix), "", 100,0,1), "FTAJet{bpf}_HTH", wgtVar)
-                histos1D_dict["EventVars"]["HTRat"] = input_df.Histo1D(("HTRat{}".format(postfix), "", 100,0,1), "FTAJet{bpf}_HTRat", wgtVar)
-                histos1D_dict["EventVars"]["dRbb"] = input_df.Histo1D(("dRbb{}".format(postfix), "", 64,0,2*pi), "FTAJet{bpf}_dRbb", wgtVar)
-                histos1D_dict["EventVars"]["dPhibb"] = input_df.Histo1D(("dPhibb{}".format(postfix), "", 64,-pi,pi), "FTAJet{bpf}_dPhibb", wgtVar)
-                histos1D_dict["EventVars"]["dEtabb"] = input_df.Histo1D(("dEtabb{}".format(postfix), "", 50,0,5), "FTAJet{bpf}_dEtabb", wgtVar)
-                histos1D_dict["EventVars"]["dRll"] = input_df.Histo1D(("dRll{}".format(postfix), "", 64,0,2*pi), "FTALepton{lpf}_dRll", wgtVar)
-                histos1D_dict["EventVars"]["dPhill"] = input_df.Histo1D(("dPhill{}".format(postfix), "", 64,-pi,pi), "FTALepton{lpf}_dPhill", wgtVar)
-                histos1D_dict["EventVars"]["dEtall"] = input_df.Histo1D(("dEtall{}".format(postfix), "", 50,0,5), "FTALepton{lpf}_dEtall", wgtVar)
-                histos1D_dict["EventVars"]["MTofMETandEl"] = input_df.Histo1D(("MTofMETandEl{}".format(postfix), "", 100, 0, 200), "MTofMETandEl", wgtVar)
-                histos1D_dict["EventVars"]["MTofMETandMu"] = input_df.Histo1D(("MTofMETandMu{}".format(postfix), "", 100, 0, 200), "MTofMETandMu", wgtVar)
-                histos1D_dict["EventVars"]["MTofElandMu"] = input_df.Histo1D(("MTofElandMu{}".format(postfix), "", 100, 0, 200), "MTofElandMu", wgtVar)
-                #histos1D_dict["EventVars"]["MTMasslessCheck"] = input_df.Histo1D(("MTMasslessCheck{}".format(postfix), "", 100, 0, 200), "MTMasslessCheck", wgtVar)
-                #histos1D_dict["EventVars"]["MTCrossCheck"] = input_df.Histo1D(("MTCrossCheck{}".format(postfix), "", 100, 0, 200), "MTCrossCheck", wgtVar)
-                #histos1D_dict["EventVars"]["MTCrossCheckDifference"] = input_df.Histo1D(("MTCrossCheckDifference{}".format(postfix), "", 100, 0, 10), "MTCrossCheckDifference", wgtVar)
-                #histos1D_dict["EventVars"]["MTCrossCheckMasslessDifference"] = input_df.Histo1D(("MTCrossCheckMasslessDifference{}".format(postfix), "", 100, 0, 0.02), "MTCrossCheckMasslessDifference", wgtVar)
-                histos1D_dict["EventVars"]["PV_npvsGood"] = input_df.Histo1D(("PV_npvsGood{}".format(postfix), "", 100, 0, 100), "PV_npvsGood", wgtVar)
-                histos1D_dict["EventVars"]["PV_npvs"] = input_df.Histo1D(("PV_npvs{}".format(postfix), "", 150, 0, 150), "PV_npvs", wgtVar)
+            if histosDict != None:
+                if "EventVars" not in histosDict:
+                    histosDict["EventVars"] = {}
+                #histosDict["EventVars"]["JML_baseline"] = input_df.Histo1D(("JML_baseline{}".format(postfix), "", 2,0,2), "JML_baseline_pass", wgtVar)
+                #histosDict["EventVars"]["JML_selection"] = input_df.Histo1D(("JML_selection{}".format(postfix), "", 2,0,2), "JML_selection_pass", wgtVar)
+                #histosDict["EventVars"]["HT_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HT_baseline{}".format(postfix), "", 100,400,1400), "ESV_JetMETLogic_HT_baseline", wgtVar)
+                #histosDict["EventVars"]["H_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_H_baseline{}".format(postfix), "", 100,400,1400), "ESV_JetMETLogic_H_baseline", wgtVar)
+                #histosDict["EventVars"]["HT2M_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HT2M_baseline{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_HT2M_baseline", wgtVar)
+                #histosDict["EventVars"]["H2M_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_H2M_baseline{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_H2M_baseline", wgtVar)
+                #histosDict["EventVars"]["HTb_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HTb_baseline{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_HTb_baseline", wgtVar)
+                #histosDict["EventVars"]["HTH_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HTH_baseline{}".format(postfix), "", 100,0,1), "ESV_JetMETLogic_HTH_baseline", wgtVar)
+                #histosDict["EventVars"]["HTRat_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HTRat_baseline{}".format(postfix), "", 100,0,1), "ESV_JetMETLogic_HTRat_baseline", wgtVar)
+                #histosDict["EventVars"]["dRbb_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_dRbb_baseline{}".format(postfix), "", 64,0,2*pi), "ESV_JetMETLogic_dRbb_baseline", wgtVar)
+                #histosDict["EventVars"]["DiLepMass_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_DiLepMass_baseline{}".format(postfix), "", 100,0,500), "ESV_JetMETLogic_DiLepMass_baseline", wgtVar)
+                #histosDict["EventVars"]["HT_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HT_selection{}".format(postfix), "", 100,400,1400), "ESV_JetMETLogic_HT_selection", wgtVar)
+                #histosDict["EventVars"]["H_selection"] = input_df.Histo1D(("ESV_JetMETLogic_H_selection{}".format(postfix), "", 100,400,1400), "ESV_JetMETLogic_H_selection", wgtVar)
+                #histosDict["EventVars"]["HT2M_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HT2M_selection{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_HT2M_selection", wgtVar)
+                #histosDict["EventVars"]["H2M_selection"] = input_df.Histo1D(("ESV_JetMETLogic_H2M_selection{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_H2M_selection", wgtVar)
+                #histosDict["EventVars"]["HTb_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HTb_selection{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_HTb_selection", wgtVar)
+                #histosDict["EventVars"]["HTH_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HTH_selection{}".format(postfix), "", 100,0,1), "ESV_JetMETLogic_HTH_selection", wgtVar)
+                #histosDict["EventVars"]["HTRat_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HTRat_selection{}".format(postfix), "", 100,0,1), "ESV_JetMETLogic_HTRat_selection", wgtVar)
+                #histosDict["EventVars"]["dRbb_selection"] = input_df.Histo1D(("ESV_JetMETLogic_dRbb_selection{}".format(postfix), "", 64,0,2*pi), "ESV_JetMETLogic_dRbb_selection", wgtVar)
+                #histosDict["EventVars"]["DiLepMass_selection"] = input_df.Histo1D(("ESV_JetMETLogic_DiLepMass_selection{}".format(postfix), "", 100,0,500), "ESV_JetMETLogic_DiLepMass_selection", wgtVar)
+                histosDict["EventVars"]["MET_pt"] = input_df.Histo1D(("MET_xycorr_pt{}".format(postfix), "", 100,30,1030), fillMET_pt, wgtVar)
+                histosDict["EventVars"]["MET_phi"] = input_df.Histo1D(("MET_xycorr_phi{}".format(postfix), "", 100,-pi,pi), fillMET_phi, wgtVar)
+                histosDict["EventVars"]["HT"] = input_df.Histo1D(("HT{}".format(postfix), "", 130,400,1700), "FTAJet{bpf}_HT", wgtVar)
+                histosDict["EventVars"]["H"] = input_df.Histo1D(("H{}".format(postfix), "", 160,400,2000), "FTAJet{bpf}_H", wgtVar)
+                histosDict["EventVars"]["HT2M"] = input_df.Histo1D(("HT2M{}".format(postfix), "", 100,0,1000), "FTAJet{bpf}_HT2M", wgtVar)
+                histosDict["EventVars"]["H2M"] = input_df.Histo1D(("H2M{}".format(postfix), "", 150,0,1500), "FTAJet{bpf}_H2M", wgtVar)
+                histosDict["EventVars"]["HTb"] = input_df.Histo1D(("HTb{}".format(postfix), "", 100,0,1000), "FTAJet{bpf}_HTb", wgtVar)
+                histosDict["EventVars"]["HTH"] = input_df.Histo1D(("HTH{}".format(postfix), "", 100,0,1), "FTAJet{bpf}_HTH", wgtVar)
+                histosDict["EventVars"]["HTRat"] = input_df.Histo1D(("HTRat{}".format(postfix), "", 100,0,1), "FTAJet{bpf}_HTRat", wgtVar)
+                histosDict["EventVars"]["dRbb"] = input_df.Histo1D(("dRbb{}".format(postfix), "", 64,0,2*pi), "FTAJet{bpf}_dRbb", wgtVar)
+                histosDict["EventVars"]["dPhibb"] = input_df.Histo1D(("dPhibb{}".format(postfix), "", 64,-pi,pi), "FTAJet{bpf}_dPhibb", wgtVar)
+                histosDict["EventVars"]["dEtabb"] = input_df.Histo1D(("dEtabb{}".format(postfix), "", 50,0,5), "FTAJet{bpf}_dEtabb", wgtVar)
+                histosDict["EventVars"]["dRll"] = input_df.Histo1D(("dRll{}".format(postfix), "", 64,0,2*pi), "FTALepton{lpf}_dRll", wgtVar)
+                histosDict["EventVars"]["dPhill"] = input_df.Histo1D(("dPhill{}".format(postfix), "", 64,-pi,pi), "FTALepton{lpf}_dPhill", wgtVar)
+                histosDict["EventVars"]["dEtall"] = input_df.Histo1D(("dEtall{}".format(postfix), "", 50,0,5), "FTALepton{lpf}_dEtall", wgtVar)
+                histosDict["EventVars"]["MTofMETandEl"] = input_df.Histo1D(("MTofMETandEl{}".format(postfix), "", 100, 0, 200), "MTofMETandEl", wgtVar)
+                histosDict["EventVars"]["MTofMETandMu"] = input_df.Histo1D(("MTofMETandMu{}".format(postfix), "", 100, 0, 200), "MTofMETandMu", wgtVar)
+                histosDict["EventVars"]["MTofElandMu"] = input_df.Histo1D(("MTofElandMu{}".format(postfix), "", 100, 0, 200), "MTofElandMu", wgtVar)
+                #histosDict["EventVars"]["MTMasslessCheck"] = input_df.Histo1D(("MTMasslessCheck{}".format(postfix), "", 100, 0, 200), "MTMasslessCheck", wgtVar)
+                #histosDict["EventVars"]["MTCrossCheck"] = input_df.Histo1D(("MTCrossCheck{}".format(postfix), "", 100, 0, 200), "MTCrossCheck", wgtVar)
+                #histosDict["EventVars"]["MTCrossCheckDifference"] = input_df.Histo1D(("MTCrossCheckDifference{}".format(postfix), "", 100, 0, 10), "MTCrossCheckDifference", wgtVar)
+                #histosDict["EventVars"]["MTCrossCheckMasslessDifference"] = input_df.Histo1D(("MTCrossCheckMasslessDifference{}".format(postfix), "", 100, 0, 0.02), "MTCrossCheckMasslessDifference", wgtVar)
+                histosDict["EventVars"]["PV_npvsGood"] = input_df.Histo1D(("PV_npvsGood{}".format(postfix), "", 100, 0, 100), "PV_npvsGood", wgtVar)
+                histosDict["EventVars"]["PV_npvs"] = input_df.Histo1D(("PV_npvs{}".format(postfix), "", 150, 0, 150), "PV_npvs", wgtVar)
                 if isData == False:
-                    histos1D_dict["EventVars"]["Pileup_nTrueInt"] = input_df.Histo1D(("Pileup_TrueInt{}".format(postfix), ";Pileup_TrueInt;Events", 150, 0, 150), "Pileup_nTrueInt", wgtVar)
-                    histos1D_dict["EventVars"]["Pileup_nTrueInt_XS"] = input_df.Histo1D(("Pileup_TrueInt_({})".format("wgt_SUMW"), ";Pileup_TrueInt;Events", 150, 0, 150), "Pileup_nTrueInt", "wgt_SUMW")
-                    histos1D_dict["EventVars"]["Pileup_nPU_XS"] = input_df.Histo1D(("Pileup_nPU_({})".format("wgt_SUMW"), ";Pileup_nPU;Events", 150, 0, 150), "Pileup_nPU", "wgt_SUMW")
-                    histos1D_dict["EventVars"]["Pileup_nPU"] = input_df.Histo1D(("Pileup_nPU{}".format(postfix), ";Pileup_nPU;Events", 150, 0, 150), "Pileup_nPU", wgtVar)
+                    histosDict["EventVars"]["Pileup_nTrueInt"] = input_df.Histo1D(("Pileup_TrueInt{}".format(postfix), ";Pileup_TrueInt;Events", 150, 0, 150), "Pileup_nTrueInt", wgtVar)
+                    histosDict["EventVars"]["Pileup_nTrueInt_XS"] = input_df.Histo1D(("Pileup_TrueInt_({})".format("wgt_SUMW"), ";Pileup_TrueInt;Events", 150, 0, 150), "Pileup_nTrueInt", "wgt_SUMW")
+                    histosDict["EventVars"]["Pileup_nPU_XS"] = input_df.Histo1D(("Pileup_nPU_({})".format("wgt_SUMW"), ";Pileup_nPU;Events", 150, 0, 150), "Pileup_nPU", "wgt_SUMW")
+                    histosDict["EventVars"]["Pileup_nPU"] = input_df.Histo1D(("Pileup_nPU{}".format(postfix), ";Pileup_nPU;Events", 150, 0, 150), "Pileup_nPU", wgtVar)
             
-            if histos2D_dict != None:
-                if "EventVars" not in histos2D_dict:
-                    histos2D_dict["EventVars"] = {}
+            if histosDict != None:
+                if "EventVars" not in histosDict:
+                    histosDict["EventVars"] = {}
                 if isData == False:
-                    histos2D_dict["EventVars"]["npvsGood_vs_nTrueInt"] = input_df.Histo2D(("npvsGood_vs_nTrueInt{}".format(postfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvsGood", wgtVar)
-                    histos2D_dict["EventVars"]["npvsGood_vs_nPU"] = input_df.Histo2D(("npvsGood_vs_nPU{}".format(postfix), ";nPU;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvsGood", wgtVar)
-                    histos2D_dict["EventVars"]["npvs_vs_nTrueInt"] = input_df.Histo2D(("npvs_vs_nTrueInt{}".format(postfix), ";nTrueInt;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvs", wgtVar)
-                    histos2D_dict["EventVars"]["npvs_vs_nPU"] = input_df.Histo2D(("npvs_vs_nPU{}".format(postfix), ";nPU;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvs", wgtVar)
+                    histosDict["EventVars"]["npvsGood_vs_nTrueInt"] = input_df.Histo2D(("npvsGood_vs_nTrueInt{}".format(postfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvsGood", wgtVar)
+                    histosDict["EventVars"]["npvsGood_vs_nPU"] = input_df.Histo2D(("npvsGood_vs_nPU{}".format(postfix), ";nPU;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvsGood", wgtVar)
+                    histosDict["EventVars"]["npvs_vs_nTrueInt"] = input_df.Histo2D(("npvs_vs_nTrueInt{}".format(postfix), ";nTrueInt;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvs", wgtVar)
+                    histosDict["EventVars"]["npvs_vs_nPU"] = input_df.Histo2D(("npvs_vs_nPU{}".format(postfix), ";nPU;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvs", wgtVar)
                 
-                if debugInfo == True:
-                    #histos1D_dict["EventVars"]["Jet{bpf}_HT_Match"] = input_df.Histo1D(("Jet{bpf}_HT_Match{}".format(postfix), "", 2,0,2), "Jet{bpf}_HT_matches", wgtVar)
-                    pass
             
         if makeMountains == True:
             theCatsL0 = collections.OrderedDict()#Baseline nJet selection (inclusive!) for each systematic scale variation
@@ -2352,131 +2351,118 @@ def fillHistos(input_df, sampleName=None, isData = True, histos1D_dict=None, his
                             cat_df[cknest] = cat_df[ck1].Filter(cs2, "{} && {}".format(cs1.replace("FTA", ""), cs2.replace("FTA", "")))
                                                                 
         
-            if histos1D_dict != None:
-                if "sysVar{spf}".format(spf=syspostfix) not in histos1D_dict:
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)] = {}
+            if histosDict != None:
+                if "sysVar{spf}".format(spf=syspostfix) not in histosDict:
+                    histosDict["sysVar{spf}".format(spf=syspostfix)] = {}
                 for tc in cat_df.keys(): 
-                    if tc not in histos1D_dict["sysVar{spf}".format(spf=syspostfix)]: 
-                        histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc] = {}
+                    if tc not in histosDict["sysVar{spf}".format(spf=syspostfix)]: 
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc] = {}
                 for tc, node in cat_df.items():
                     if verbose:
                         print("Histogramming the {} node".format(tc))
                     tcn = tc#.replace("blind_", "") #FIXME do I want blind stripped with new convention for naming?
                     for x in xrange(nJetsToHisto):
                         #FIXME: None of these are based upon jet scale variations, yet!
-                        histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_pt_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_pt_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0, 500), "{fj}_pt_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_eta_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_eta_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 104, -2.6, 2.6), "{fj}_eta_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_phi_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_phi_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 64, -pi, pi), "{fj}_phi_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepCSVB_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_DeepCSVB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepCSVB_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepJetB_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_DeepJetB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepJetB_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepCSVB_sortedjet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_DeepCSVB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepCSVB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepJetB_sortedjet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_DeepJetB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepJetB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_pt"] = cat_df[tc].Histo1D(("{name}__{cat}__MET_pt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), fillMET_pt, wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_phi"] = cat_df[tc].Histo1D(("{name}__{cat}__MET_phi_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,-pi,pi), fillMET_phi, wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso03_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso03_chg_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso04_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso04_all".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all"] = cat_df[tc].Histo1D(("{name}__{cat}__Electron_pfRelIso03_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg"] = cat_df[tc].Histo1D(("{name}__{cat}__Electron_pfRelIso03_chg_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["HT"] = cat_df[tc].Histo1D(("{name}__{cat}__HT_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30,400,2000), "HT{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["H"] = cat_df[tc].Histo1D(("{name}__{cat}__H_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30,400,2000), "H{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["HT2M"] = cat_df[tc].Histo1D(("{name}__{cat}__HT2M_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), "HT2M{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["H2M"] = cat_df[tc].Histo1D(("{name}__{cat}__H2M_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1500), "H2M{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["HTb"] = cat_df[tc].Histo1D(("{name}__{cat}__HTb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), "HTb{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["HTH"] = cat_df[tc].Histo1D(("{name}__{cat}__HTH_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1), "HTH{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["HTRat"] = cat_df[tc].Histo1D(("{name}__{cat}__HTRat_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1), "HTRat{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["dRbb"] = cat_df[tc].Histo1D(("{name}__{cat}__dRbb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,0,2*pi), "dRbb{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["dPhibb"] = cat_df[tc].Histo1D(("{name}__{cat}__dPhibb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,-pi,pi), "dPhibb{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["dEtabb"] = cat_df[tc].Histo1D(("{name}__{cat}__dEtabb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 10,0,5), "dEtabb{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_pt_LeadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_pt_LeadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 100,0,500), "FTALepton{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_pt_SubleadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_pt_SubleadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 100,0,500), "FTALepton{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar)
-                    #histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon{lpf}_pt".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Muon{lpf}_pt_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 100,0,500), "FTAMuon{lpf}_pt".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_eta_LeadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_eta_LeadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 52,-2.6,2.6), "FTALepton{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_eta_SubleadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_eta_SubleadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 52,-2.6,2.6), "FTALepton{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar)
-                    #histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_eta_SubleadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_eta_SubleadLep_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 52,-2.6,2.6), "FTALepton{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["dRll"] = cat_df[tc].Histo1D(("{name}__{cat}__dRll_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,0,2*pi), "FTALepton{lpf}_dRll".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["dPhill"] = cat_df[tc].Histo1D(("{name}__{cat}__dPhill_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,-pi,pi), "FTALepton{lpf}_dPhill".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["dEtall"] = cat_df[tc].Histo1D(("{name}__{cat}__dEtall_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 10,0,5), "FTALepton{lpf}_dEtall".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandEl"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofMETandEl_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandEl{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandMu"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofMETandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandMu{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofElandMu"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofElandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofElandMu{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nJet"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 14, 0, 14), "n{fj}".format(fj=fillJet), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_pt_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_pt_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0, 500), "{fj}_pt_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_eta_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_eta_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 104, -2.6, 2.6), "{fj}_eta_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_phi_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_phi_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 64, -pi, pi), "{fj}_phi_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepCSVB_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_DeepCSVB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepCSVB_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepJetB_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_DeepJetB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepJetB_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepCSVB_sortedjet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_DeepCSVB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepCSVB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepJetB_sortedjet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_DeepJetB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepJetB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_pt"] = cat_df[tc].Histo1D(("{name}__{cat}__MET_pt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), fillMET_pt, wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_phi"] = cat_df[tc].Histo1D(("{name}__{cat}__MET_phi_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,-pi,pi), fillMET_phi, wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso03_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso03_chg_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso04_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso04_all".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all"] = cat_df[tc].Histo1D(("{name}__{cat}__Electron_pfRelIso03_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg"] = cat_df[tc].Histo1D(("{name}__{cat}__Electron_pfRelIso03_chg_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HT"] = cat_df[tc].Histo1D(("{name}__{cat}__HT_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30,400,2000), "HT{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["H"] = cat_df[tc].Histo1D(("{name}__{cat}__H_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30,400,2000), "H{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HT2M"] = cat_df[tc].Histo1D(("{name}__{cat}__HT2M_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), "HT2M{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["H2M"] = cat_df[tc].Histo1D(("{name}__{cat}__H2M_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1500), "H2M{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HTb"] = cat_df[tc].Histo1D(("{name}__{cat}__HTb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), "HTb{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HTH"] = cat_df[tc].Histo1D(("{name}__{cat}__HTH_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1), "HTH{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HTRat"] = cat_df[tc].Histo1D(("{name}__{cat}__HTRat_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1), "HTRat{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dRbb"] = cat_df[tc].Histo1D(("{name}__{cat}__dRbb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,0,2*pi), "dRbb{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dPhibb"] = cat_df[tc].Histo1D(("{name}__{cat}__dPhibb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,-pi,pi), "dPhibb{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dEtabb"] = cat_df[tc].Histo1D(("{name}__{cat}__dEtabb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 10,0,5), "dEtabb{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_pt_LeadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_pt_LeadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 100,0,500), "FTALepton{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_pt_SubleadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_pt_SubleadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 100,0,500), "FTALepton{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon{lpf}_pt".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Muon{lpf}_pt_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 100,0,500), "FTAMuon{lpf}_pt".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_eta_LeadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_eta_LeadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 52,-2.6,2.6), "FTALepton{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_eta_SubleadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_eta_SubleadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 52,-2.6,2.6), "FTALepton{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_eta_SubleadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_eta_SubleadLep_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 52,-2.6,2.6), "FTALepton{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dRll"] = cat_df[tc].Histo1D(("{name}__{cat}__dRll_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,0,2*pi), "FTALepton{lpf}_dRll".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dPhill"] = cat_df[tc].Histo1D(("{name}__{cat}__dPhill_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,-pi,pi), "FTALepton{lpf}_dPhill".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dEtall"] = cat_df[tc].Histo1D(("{name}__{cat}__dEtall_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 10,0,5), "FTALepton{lpf}_dEtall".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandEl"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofMETandEl_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandEl{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandMu"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofMETandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandMu{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofElandMu"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofElandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofElandMu{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nJet"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 14, 0, 14), "n{fj}".format(fj=fillJet), wgtVar)
                     if isData is False:
-                        histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nJet_genMatched"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_genMatched_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 14, 0, 14), "n{fj}_genMatched".format(fj=fillJet), wgtVar)
-                        histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nJet_genMatched_puIdLoose"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_genMatched_puIdLoose_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 14, 0, 14), "n{fj}_genMatched_puIdLoose".format(fj=fillJet), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseDeepCSV"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_LooseDeepCSV_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumDeepCSV"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_MediumDeepCSV_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightDeepCSV"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_TightDeepCSV_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nTightDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseDeepJet"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_LooseDeepJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nLooseDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumDeepJet"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_MediumDeepJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nMediumDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightDeepJet"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_TightDeepJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nTightDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseMuon"] = cat_df[tc].Histo1D(("{name}__{cat}__nLooseFTAMuon{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nLooseFTAMuon{lpf}".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumMuon"] = cat_df[tc].Histo1D(("{name}__{cat}__nMediumFTAMuon{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nMediumFTAMuon{lpf}".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightMuon"] = cat_df[tc].Histo1D(("{name}__{cat}__nTightFTAMuon{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nTightFTAMuon{lpf}".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseElectron"] = cat_df[tc].Histo1D(("{name}__{cat}__nLooseFTAElectron{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nLooseFTAElectron{lpf}".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumElectron"] = cat_df[tc].Histo1D(("{name}__{cat}__nMediumFTAElectron{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nMediumFTAElectron{lpf}".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightElectron"] = cat_df[tc].Histo1D(("{name}__{cat}__nTightFTAElectron{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nTightFTAElectron{lpf}".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseLepton"] = cat_df[tc].Histo1D(("{name}__{cat}__nLooseFTALepton{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nLooseFTALepton{lpf}".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumLepton"] = cat_df[tc].Histo1D(("{name}__{cat}__nMediumFTALepton{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nMediumFTALepton{lpf}".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightLepton"] = cat_df[tc].Histo1D(("{name}__{cat}__nTightFTALepton{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nTightFTALepton{lpf}".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandEl"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofMETandEl_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandEl{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandMu"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofMETandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandMu{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofElandMu"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofElandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofElandMu{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_InvMass"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_InvMass_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 60, 0, 150), "FTAMuon{lpf}_InvariantMass".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_InvMass"] = cat_df[tc].Histo1D(("{name}__{cat}__Electron_InvMass_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 60, 0, 150), "FTAElectron{lpf}_InvariantMass".format(lpf=leppostfix), wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_InvMass_v_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_InvMass_v_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30, 0, 150, 20, 0, 400), "FTAMuon{lpf}_InvariantMass".format(lpf=leppostfix), fillMET_pt, wgtVar)
-                    histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_InvMass_v_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_InvMass_v_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30, 0, 150, 20, 0, 400), "FTAElectron{lpf}_InvariantMass".format(lpf=leppostfix), fillMET_pt, wgtVar)
-                    #histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0., 0.2, 20,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
-                    #histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
-                    #histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso04_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso04_all;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "RVec_MET_pt", wgtVar)
-                    #histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
-                    #histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nJet_genMatched"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_genMatched_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 14, 0, 14), "n{fj}_genMatched".format(fj=fillJet), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nJet_genMatched_puIdLoose"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_genMatched_puIdLoose_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 14, 0, 14), "n{fj}_genMatched_puIdLoose".format(fj=fillJet), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseDeepCSV"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_LooseDeepCSV_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumDeepCSV"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_MediumDeepCSV_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightDeepCSV"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_TightDeepCSV_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nTightDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseDeepJet"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_LooseDeepJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nLooseDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumDeepJet"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_MediumDeepJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nMediumDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightDeepJet"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_TightDeepJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nTightDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseMuon"] = cat_df[tc].Histo1D(("{name}__{cat}__nLooseFTAMuon{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nLooseFTAMuon{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumMuon"] = cat_df[tc].Histo1D(("{name}__{cat}__nMediumFTAMuon{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nMediumFTAMuon{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightMuon"] = cat_df[tc].Histo1D(("{name}__{cat}__nTightFTAMuon{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nTightFTAMuon{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseElectron"] = cat_df[tc].Histo1D(("{name}__{cat}__nLooseFTAElectron{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nLooseFTAElectron{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumElectron"] = cat_df[tc].Histo1D(("{name}__{cat}__nMediumFTAElectron{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nMediumFTAElectron{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightElectron"] = cat_df[tc].Histo1D(("{name}__{cat}__nTightFTAElectron{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nTightFTAElectron{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseLepton"] = cat_df[tc].Histo1D(("{name}__{cat}__nLooseFTALepton{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nLooseFTALepton{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumLepton"] = cat_df[tc].Histo1D(("{name}__{cat}__nMediumFTALepton{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nMediumFTALepton{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightLepton"] = cat_df[tc].Histo1D(("{name}__{cat}__nTightFTALepton{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nTightFTALepton{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandEl"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofMETandEl_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandEl{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandMu"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofMETandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandMu{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofElandMu"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofElandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofElandMu{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_InvMass"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_InvMass_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 60, 0, 150), "FTAMuon{lpf}_InvariantMass".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_InvMass"] = cat_df[tc].Histo1D(("{name}__{cat}__Electron_InvMass_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 60, 0, 150), "FTAElectron{lpf}_InvariantMass".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_InvMass_v_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_InvMass_v_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30, 0, 150, 20, 0, 400), "FTAMuon{lpf}_InvariantMass".format(lpf=leppostfix), fillMET_pt, wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_InvMass_v_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_InvMass_v_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30, 0, 150, 20, 0, 400), "FTAElectron{lpf}_InvariantMass".format(lpf=leppostfix), fillMET_pt, wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0., 0.2, 20,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso04_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso04_all;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
                 
                     if isData == False:
                         pass                
             
-            if histos2D_dict != None:
-                if "sysVar_{spf}".format(spf=syspostfix) not in histos2D_dict:
-                    histos2D_dict["sysVar{spf}".format(spf=syspostfix)] = {}
+            if histosDict != None:
+                if "sysVar_{spf}".format(spf=syspostfix) not in histosDict:
+                    histosDict["sysVar{spf}".format(spf=syspostfix)] = {}
                 for tc in cat_df.keys(): 
-                    if tc not in histos2D_dict["sysVar{spf}".format(spf=syspostfix)]: 
-                        histos2D_dict["sysVar{spf}".format(spf=syspostfix)][tc] = {}
+                    if tc not in histosDict["sysVar{spf}".format(spf=syspostfix)]: 
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc] = {}
                 for tc, node in cat_df.items():
                     tcn = tc#.replace("blind_", "")
-                    #histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0., 0.2, 20,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
-                    #histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
-                    #histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso04_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso04_all;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "RVec_MET_pt", wgtVar)
-                    #histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
-                    #histos1D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0., 0.2, 20,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso04_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso04_all;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
                     #### Older versions
-                    #histos2D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 100, 0., 0.2, 100,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
-                    #histos2D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
-                    #histos2D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso04_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso04_all;MET", 100, 0, 0.2, 100,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "RVec_MET_pt", wgtVar)
-                    #histos2D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
-                    #histos2D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 100, 0., 0.2, 100,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso04_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso04_all;MET", 100, 0, 0.2, 100,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
                     if isData == False:
-                        #histos2D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["test1"] = cat_df[tc].Histo2D(("{name}__{cat}__test1_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "PV_npvsGood", wgtVar)
-                        #histos2D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["test2"] = cat_df[tc].Histo2D(("{name}__{cat}__test2_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "METFixEE2017_pt", wgtVar)
-                        #histos2D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["npvsGood_vs_nTrueInttest"] = cat_df[tc].Histo2D(("{name}__{cat}__npvsGood_vs_nTrueInttest_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAElectron{lpf}_pfRelIso03_all", "MET_pt_flat", wgtVar)
-                        histos2D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["npvsGood_vs_nTrueInt"] = cat_df[tc].Histo2D(("{name}__{cat}__npvsGood_vs_nTrueInt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvsGood", wgtVar)
-                        histos2D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["npvsGood_vs_nPU"] = cat_df[tc].Histo2D(("{name}__{cat}__npvsGood_vs_nPU_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nPU;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvsGood", wgtVar)
-                        histos2D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["npvs_vs_nTrueInt"] = cat_df[tc].Histo2D(("{name}__{cat}__npvs_vs_nTrueInt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvs", wgtVar)
-                        histos2D_dict["sysVar{spf}".format(spf=syspostfix)][tc]["npvs_vs_nPU"] = cat_df[tc].Histo2D(("{name}__{cat}__npvs_vs_nPU_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nPU;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvs", wgtVar)
+                        #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["test1"] = cat_df[tc].Histo2D(("{name}__{cat}__test1_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "PV_npvsGood", wgtVar)
+                        #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["test2"] = cat_df[tc].Histo2D(("{name}__{cat}__test2_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "METFixEE2017_pt", wgtVar)
+                        #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvsGood_vs_nTrueInttest"] = cat_df[tc].Histo2D(("{name}__{cat}__npvsGood_vs_nTrueInttest_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAElectron{lpf}_pfRelIso03_all", "MET_pt_flat", wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvsGood_vs_nTrueInt"] = cat_df[tc].Histo2D(("{name}__{cat}__npvsGood_vs_nTrueInt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvsGood", wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvsGood_vs_nPU"] = cat_df[tc].Histo2D(("{name}__{cat}__npvsGood_vs_nPU_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nPU;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvsGood", wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvs_vs_nTrueInt"] = cat_df[tc].Histo2D(("{name}__{cat}__npvs_vs_nTrueInt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvs", wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvs_vs_nPU"] = cat_df[tc].Histo2D(("{name}__{cat}__npvs_vs_nPU_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nPU;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvs", wgtVar)
       
     return cat_df
-
-#ROOT.gInterpreter.Declare("std::map<std::string, std::vector<TH2Lookup*>> LUM;")
-#ROOT.LUM["no"].push_back(ROOT.TH2Lookup("/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BTaggingYields.root"))
-#ROOT.LUM["no"].getEventYieldRatio("Aggregate", "_deepcsv", 5, 695.0)
-#ROOT.LUM["bleh"].size()
-#ROOT.LUM["no"].push_back(ROOT.TH2Lookup("/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BTaggingYields.root"))
-#ROOT.LUM["no"].size()
-#ROOT.LUM["no"][0].getEventYieldRatio("Aggregate", "_deepcsv", 5, 695.0)
-#ROOT.LUM["yes"].size()
-#str(type(ROOT.LUM))
-#getattr(ROOT, "LUM")["no"].size()
-#if str(type(getattr(ROOT, "LUM"))) == "<class 'ROOT.map<string,vector<TH2Lookup*> >'>":
-#    print("Okay!")
 
 def jetMatchingEfficiency(input_df, max_eta = 2.5, min_pt = 30.0, wgtVar="wgt_SUMW_PU_L1PF", stats_dict=None,
                          isData=True):
@@ -2505,7 +2491,7 @@ def jetMatchingEfficiency(input_df, max_eta = 2.5, min_pt = 30.0, wgtVar="wgt_SU
             stats_dict[ck]["nJet_puIdLoose"] = cat_df[ck].Stats("nGJet_puIdLoose", wgtVar)
             stats_dict[ck]["nJet_genMatched_puIdLoose"] = cat_df[ck].Stats("nGJet_genMatched_puIdLoose", wgtVar)
 
-def fillHLTMeans(input_df, wgtVar="wgt_SUMW_PU_L1PF", stats_dict=None, debugInfo=False):
+def fillHLTMeans(input_df, wgtVar="wgt_SUMW_PU_L1PF", stats_dict=None):
     theCats = collections.OrderedDict()
     theCats["Inclusive"] = "nGJet >= 4"
     theCats["nJet4to5"] = "nGJet == 4 || nGJet == 5"
@@ -2679,11 +2665,11 @@ def writeHistos(histDict, directory, levelsOfInterest="All", samplesOfInterest="
         f.Close()
 
 
-def BtaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", stripKey=".root",
+def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", stripKey=".root",
                            internalKeys = {"Numerators":["_sumW_before"],
                                            "Denominator": "_sumW_after",
                                           },
-                           internalKeysReplacements = {"BtaggingYield": "",
+                           internalKeysReplacements = {"BTaggingYield": "",
                                                        "_sumW_before": "",
                                                        "_sumW_after": "",
                                                       },
@@ -2691,7 +2677,7 @@ def BtaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
                                                      "X": [500.0, 600, 700.0, 900.0, 1100.0, 3200.0],
                                                     },
                                          },
-                           overrides={"Title": "$NAME BtaggingYield r=#frac{#Sigma#omega_{before}}{#Sigma#omega_{after}}($INTERNALS)",
+                           overrides={"Title": "$NAME BTaggingYield r=#frac{#Sigma#omega_{before}}{#Sigma#omega_{after}}($INTERNALS)",
                                       "Xaxis": "H_{T} (GeV)",
                                       "Yaxis": "nJet",
                                      },
@@ -2704,10 +2690,10 @@ def BtaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
     
     #FIXME (below this line)
     Keys can be parsed with 
-    <name_format> (default 'BtaggingYield*btagPreSF_$VARIATION*$SUM') where $CAT, $JETTYPE, and $TAG are cycled through from 
+    <name_format> (default 'BTaggingYield*btagPreSF_$VARIATION*$SUM') where $CAT, $JETTYPE, and $TAG are cycled through from 
     their respective input lists, format_dict{<categories>, <jettypes>, <tags>}. The format_dict{<untag>} option 
     specifies the denominator histogram (where $TAG is replaced by <untag>). A file 'ttWH.root' with 
-    'Btagging*nJet4*bjets_DeepJet_T' will generate a file 'ttWH_BTagEff.root' containing the histogram 
+    'BTagging*nJet4*bjets_DeepJet_T' will generate a file 'ttWH_BTagEff.root' containing the histogram 
     'nJet4_bjets_DeepJet_T'"""
     
     if doNumpyValidation == True:
@@ -2718,7 +2704,7 @@ def BtaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
             try:
                 import numpy as np
             except Exception as e:
-                raise RuntimeError("Could not import the numpy (as np) module in method BtaggingYieldsAnalyzer")
+                raise RuntimeError("Could not import the numpy (as np) module in method BTaggingYieldsAnalyzer")
     
     if "{}" in outDirectory:
         outDirectory = outDirectory.format(directory)
@@ -2730,12 +2716,12 @@ def BtaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
         try:
             import glob
         except Exception as e:
-            raise RuntimeError("Could not import the glob module in method BtaggingYieldsAnalyzer")
+            raise RuntimeError("Could not import the glob module in method BTaggingYieldsAnalyzer")
     if 'copy' not in dir():
         try:
             import copy
         except Exception as e:
-            raise RuntimeError("Could not import the copy module in method BtaggingYieldsAnalyzer")
+            raise RuntimeError("Could not import the copy module in method BTaggingYieldsAnalyzer")
     files = glob.glob("{}/{}".format(directory, globKey))
     #deduce names from the filenames, with optional stripKey parameter that defaults to .root
     names = [fname.split("/")[-1].replace(stripKey, "") for fname in files]
@@ -2972,8 +2958,8 @@ def BtaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
     oFile.Close() 
  
     
-def BtaggingEfficienciesAnalyzer(directory, outDirectory="{}/BtaggingEfficiencies", globKey="*.root", stripKey=".root", 
-                       name_format="Btagging*$CAT*$JETTYPE_$TAG",
+def BTaggingEfficienciesAnalyzer(directory, outDirectory="{}/BTaggingEfficiencies", globKey="*.root", stripKey=".root", 
+                       name_format="BTagging*$CAT*$JETTYPE_$TAG",
                        format_dict={"categories": ["Inclusive", "nJet4", "nJet5", "nJet6", "nJet7", "nJet8+"],
                                     "jettypes": ["bjets", "cjets", "udsgjets"],
                                     "tags": ["DeepCSV_L", "DeepCSV_M", "DeepCSV_T", "DeepJet_L", "DeepJet_M", "DeepJet_T"],
@@ -3000,10 +2986,10 @@ def BtaggingEfficienciesAnalyzer(directory, outDirectory="{}/BtaggingEfficiencie
     
     take list of files in <directory>, with optional <globKey>, and create individual root files containing
     each sample's btagging efficiency histograms, based on derived categories. Keys can be parsed with 
-    <name_format> (default 'Btagging*$CAT*$JETTYPE_$TAG') where $CAT, $JETTYPE, and $TAG are cycled through from 
+    <name_format> (default 'BTagging*$CAT*$JETTYPE_$TAG') where $CAT, $JETTYPE, and $TAG are cycled through from 
     their respective input lists, format_dict{<categories>, <jettypes>, <tags>}. The format_dict{<untag>} option 
     specifies the denominator histogram (where $TAG is replaced by <untag>). A file 'ttWH.root' with 
-    'Btagging*nJet4*bjets_DeepJet_T' will generate a file 'ttWH_BTagEff.root' containing the histogram 
+    'BTagging*nJet4*bjets_DeepJet_T' will generate a file 'ttWH_BTagEff.root' containing the histogram 
     'nJet4_bjets_DeepJet_T'"""
     
     #old binning in X:
@@ -3021,7 +3007,7 @@ def BtaggingEfficienciesAnalyzer(directory, outDirectory="{}/BtaggingEfficiencie
         try:
             import glob
         except Exception as e:
-            raise RuntimeError("Could not import the glob module in method BtaggingEfficienciesAnalyzer")
+            raise RuntimeError("Could not import the glob module in method BTaggingEfficienciesAnalyzer")
     files = glob.glob("{}/{}".format(directory, globKey))
     #deduce names from the filenames, with optional stripKey parameter that defaults to .root
     names = [fname.split("/")[-1].replace(stripKey, "") for fname in files]
@@ -3054,10 +3040,10 @@ def BtaggingEfficienciesAnalyzer(directory, outDirectory="{}/BtaggingEfficiencie
         #inFiles
         fileDict[name] = ROOT.TFile.Open(fname, "READ")
         #hist names
-        keysDict[name] = [hist.GetName() for hist in fileDict[name].GetListOfKeys() if "Btagging*" in hist.GetName()]
-        #Skip files without Btagging 
+        keysDict[name] = [hist.GetName() for hist in fileDict[name].GetListOfKeys() if "BTagging*" in hist.GetName()]
+        #Skip files without BTagging 
         if len(keysDict[name]) is 0: 
-            print("Skipping sample {} whose file contains no histograms containing 'Btagging*'".format(name))
+            print("Skipping sample {} whose file contains no histograms containing 'BTagging*'".format(name))
             fileDict[name].Close()
             continue
         #outFiles
@@ -3325,7 +3311,10 @@ def rebin2D(hist, name, xbins, ybins, return_numpy_arrays=False):
             #If it's the last bin for this slice, do the X rebinning
             if bn is len(ybinset)-1:
                 #make sure to get the return value, don't try to rebin in place
-                slice_dict[str(sn)]["hist"] = slice_dict[str(sn)]["hist"].Rebin(len(xbins)-1, "", xbins_vec)
+                if len(xbins)-1 > 1:
+                    slice_dict[str(sn)]["hist"] = slice_dict[str(sn)]["hist"].Rebin(len(xbins)-1, "", xbins_vec)
+                else:
+                    pass
         #Carry over slice content and errors to the new histogram, remembering sn starts at 0, and non-underflow
         #in histograms begins at 1 (overflow at NBins + 1, requiring us to add 2 when creating an xrange object)
         #print(slice_dict[str(sn)])
@@ -3646,13 +3635,7 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         line = path + "," + ",".join(path_values.values()) + "\n"
                         f.write(line)
             
-def main():
-
-
-lumi = {"2017": 41.53,
-        "2018": 1}
-era = "2017"
-
+def main(BTaggingYieldsFile="/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BTaggingYields.root"):
     ##################################################
     ##################################################
     ### CHOOSE SAMPLE DICT AND CHANNEL TO ANALYZE ####
@@ -3701,12 +3684,16 @@ era = "2017"
     #Decide on things to do
     doHLTMeans = False
     doHistos = False
-    doBtaggingEfficiencies = False
-    doBtaggingYields = True
+    doBTaggingEfficiencies = False
+    doBTaggingYields = True
     doJetEfficiency = False
     
-    if doBtaggingYields:
-        print("Loading all samples for calculating BtaggingYields")
+    if doBTaggingYields:
+        print("Loading all samples for calculating BTaggingYields")
+        #Set these options for the BTaggingYields module, to differentiate between calculating and loading yields
+        loadTheYields = None
+        calculateTheYields = True
+
         #valid_samples = all_samples
         removeThese = []
         #removeThese += ['ttZJets', 'ttH', 'tttW', 'ttZZ', 'tt_SL', 'tttJ'] #done
@@ -3717,7 +3704,11 @@ era = "2017"
             if sample not in removeThese:
                 valid_samples.append(sample)
         
-    
+    else:
+        #If we're not calculating the yields, we need to have the string value of the Yields to be loaded...
+        loadTheYields = BTaggingYieldsFile
+        #loadTheYields = "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BTaggingYields.root"
+        calculateTheYields = False
     #Use skimmed channels flag
     useSkimmed = True
     chooseChannel = "ElMu"
@@ -3886,10 +3877,7 @@ era = "2017"
     
     samples = {}
     counts = {}
-    histos1D = {}
-    histos1D_PU = {}
-    histos2D = {}
-    histosNS = {} #unstacked histograms
+    histos = {}
     the_df = {}
     stats = {} #Stats for HLT branches
     effic = {} #Stats for jet matching efficiencies
@@ -3906,10 +3894,7 @@ era = "2017"
         #if name not in ["tttt", "ElMu_F"]: continue
         print("Booking - {}".format(name))
         counts[name] = {}
-        histos1D[name] = {}
-        histos1D_PU[name] = {}
-        histos2D[name] = {}
-        histosNS[name] = {}
+        histos[name] = {}
         the_df[name] = {}
         stats[name] = {}
         effic[name] = {}
@@ -3921,8 +3906,8 @@ era = "2017"
         #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
         for lvl in levelsOfInterest:
             the_df[name][lvl] = METXYCorr(filtered[name][lvl],
-                                          run_branch = "run",
-                                          era="2017", 
+                                          run_branch="run",
+                                          era=vals["era"],
                                           isData=vals["isData"],
                                           verbose=beVerbose,
                                           )
@@ -3938,7 +3923,7 @@ era = "2017"
                 the_df[name][lvl] = defineInitWeights(the_df[name][lvl],
                                                       crossSection=vals["crossSection"], 
                                                       sumWeights=vals["sumWeights"], 
-                                                      lumi=lumi[era],
+                                                      lumi=lumi[vals["era"]],
                                                       nEvents=vals["nEvents"], 
                                                       nEventsPositive=vals["nEventsPositive"], 
                                                       nEventsNegative=vals["nEventsNegative"], 
@@ -3951,31 +3936,21 @@ era = "2017"
                                                       verbose=beVerbose,
                                                      )
             the_df[name][lvl] = defineJets(the_df[name][lvl],
-                                           era="2017",
+                                           era=vals["era"],
                                            bTagger="DeepCSV",
                                            isData=vals["isData"],
                                            verbose=beVerbose,
                                           )
             the_df[name][lvl] = defineWeights(the_df[name][lvl],
-                                              isData = vals["isData"],
+                                              era=vals["era"],
+                                              isData=vals["isData"],
                                               final=False,
                                               verbose=beVerbose,
                                              )
             
             print("Need to make cuts on HT, MET, InvariantMass, ETC.")
-            #the_df[name][lvl] = the_df[name][lvl].Filter("nGJet > 2", "nJet > 2")
-            #the_df[name][lvl] = the_df[name][lvl].Filter("nGJet > 3", "nJet > 3")
-            #the_df[name][lvl] = the_df[name][lvl].Filter("nGJet_MediumDeepCSV > 1")
-            #the_df[name][lvl] = the_df[name][lvl].Filter("nGJet_MediumDeepJet > 1", "nMedDeepJet > 1")
-            #the_df[name][lvl] = the_df[name][lvl].Filter("METFixEE2017_pt > 40", "MET > 40")
-            #the_df[name][lvl] = the_df[name][lvl].Filter("METFixEE2017_pt > 0", "MET > 50")
-            #the_df[name][lvl] = the_df[name][lvl].Filter("GJet_HT > 450", "HT > 450")
-            #the_df[name][lvl] = the_df[name][lvl].Filter("GJet_HT > 500", "HT > 500")
             counts[name][lvl] = the_df[name][lvl].Count()
-            histos1D[name][lvl] = {}
-            histos1D_PU[name][lvl] = {}
-            histosNS[name][lvl] = {}
-            histos2D[name][lvl] = {}
+            histos[name][lvl] = {}
             stats[name][lvl] = {}
             effic[name][lvl] = {}
             btagging[name][lvl] = {}
@@ -4000,16 +3975,9 @@ era = "2017"
             ##    hv = h.GetValue()
             ##    n = hv.GetBinContent(1)
             ##    print(n)
-            #Calculate or load yields to produce the btag event weights
-            if doBtaggingYields == True:
-                loadTheYields = None
-                calculateTheYields = True
-            else:
-                loadTheYields = "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BTaggingYields.root"
-                calculateTheYields = False
             #Insert the yields or calculate them
-            the_df[name][lvl] = BtaggingYields(the_df[name][lvl], sampleName=name, isData = vals["isData"], 
-                                               histos_dict=btagging[name][lvl], loadYields=loadTheYields,
+            the_df[name][lvl] = BTaggingYields(the_df[name][lvl], sampleName=name, isData=vals["isData"], 
+                                               histosDict=btagging[name][lvl], loadYields=loadTheYields,
                                                useAggregate=True, calculateYields=calculateTheYields,
                                                HTBinWidth=10, HTMin=200, HTMax=3200,
                                                nJetBinWidth=1, nJetMin=4, nJetMax=20,
@@ -4018,24 +3986,25 @@ era = "2017"
             #Define the final weights/variations so long as we have btagging yields inserted...
             if loadTheYields:
                 the_df[name][lvl] = defineWeights(the_df[name][lvl],
+                                                  era = vals["era"],
                                                   isData = vals["isData"],
                                                   final=True,
                                                   verbose=beVerbose,
                                                  )
-            if doBtaggingEfficiencies == True:
-                BtaggingEfficiencies(the_df[name][lvl], sampleName=None, era="2017", wgtVar="wgt_SUMW_PU_LSF_L1PF", 
-                               isData = vals["isData"], histos_dict=btagging[name][lvl], 
-                               doDeepCSV=True, doDeepJet=True, debugInfo=False)
+            if doBTaggingEfficiencies == True:
+                BTaggingEfficiencies(the_df[name][lvl], sampleName=None, era = vals["era"], wgtVar="wgt_SUMW_PU_LSF_L1PF", 
+                               isData = vals["isData"], histosDict=btagging[name][lvl], 
+                               doDeepCSV=True, doDeepJet=True)
             if doJetEfficiency:
                 jetMatchingEfficiency(the_df[name][lvl], wgtVar="wgt_SUMW_PU_LSF_L1PF", stats_dict=effic[name][lvl],
                                       isData = vals["isData"])
             if doHLTMeans:
                 fillHLTMeans(the_df[name][lvl], wgtVar="wgt_SUMW_PU_L1PF", stats_dict=stats[name][lvl])
+
             #Hold the categorization nodes if doing histograms
             if doHistos:
                 cat_df[name][lvl] = fillHistos(the_df[name][lvl], wgtVar=None, isData = vals["isData"],
-                                               histos1D_dict=histos1D[name][lvl], histos2D_dict=histos2D[name][lvl], 
-                                               histosNS_dict=histosNS[name][lvl],
+                                               histosDict=histos[name][lvl],
                                                doMuons=False, doElectrons=False, doLeptons=False, 
                                                doJets=False, doWeights=False, doEventVars=False,
                                                makeMountains=True, useDeepCSV=True)
@@ -4046,8 +4015,9 @@ era = "2017"
             processed[name][lvl] = counts[name][lvl].GetValue()
             subfinish[name][lvl] = time.clock()
             theTime = subfinish[name][lvl] - substart[name][lvl]
+
             #Write the output!
-            if doBtaggingYields:
+            if doBTaggingYields:
                 writeHistos(btagging,
                             analysisDir + "/BTagging",
                             levelsOfInterest=[lvl],
@@ -4056,40 +4026,41 @@ era = "2017"
                             mode="RECREATE"
                            )
                 print("Wrote BTaggingYields for {} to this directory:\n{}".format(name, analysisDir + "/BTagging"))
-                print("To calculate the yield ratios, run 'BtaggingYieldsAnalyzer()' once all samples that are to be aggregated are in the directory")
+                print("To calculate the yield ratios, run 'BTaggingYieldsAnalyzer()' once all samples that are to be aggregated are in the directory")
             if doHistos:
-                writeHistos(histos1D,
+                writeHistos(histos,
                             analysisDir,
                             levelsOfInterest=[lvl],
                             samplesOfInterest=[name],
                             dict_keys="All",
                             mode="RECREATE"
                            )
-                print("Wrote Histograms for {} to this directory:\n{}".format(name, analysisDir + "/BTagging")
+                print("Wrote Histograms for {} to this directory:\n{}".format(name, analysisDir + "/BTagging"))
             #Add sample name to the list of processed samples and print it, in case things ****ing break in Jupyter Kernel
             processedSampleList.append(name)
             print("Processed Samples:")
             print(processedSampleList)
             print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theTime//60, theTime%60, theTime, processed[name][lvl], 
                          name, lvl, "".join(["\_/"]*25)))
-    #        fillHistos(the_df[name][lvl], wgtVar="wgt_SUMW_PU_LSF", histos1D_dict=histos1D[name][lvl], 
-    #                   histos2D_dict=histos2D[name][lvl], histosNS_dict=histosNS[name][lvl],
-    #                   doMuons=False, doElectrons=False, doLeptons=True, 
-    #                   doJets=False, doWeights=True, doEventVars=False)
-    #        fillHistos(the_df[name][lvl], wgtVar="wgt_SUMW_PU", histos1D_dict=histos1D[name][lvl], 
-    #                   histos2D_dict=histos2D[name][lvl], histosNS_dict=histosNS[name][lvl],
-    #                   doMuons=False, doElectrons=False, doLeptons=False, 
-    #                   doJets=False, doWeights=False, doEventVars=True)
-    #        fillHistos(the_df[name][lvl], wgtVar="wgt_SUMW_PU", histos1D_dict=histos1D_PU[name][lvl], 
-    #                   histos2D_dict=histos2D[name][lvl], histosNS_dict=histosNS[name][lvl],
-    #                   doMuons=True, doElectrons=True, doLeptons=True, 
-    #                   doJets=True, doWeights=True, doEventVars=False)
-    
-    
-    # In[ ]:
     
 def otherFuncs():
     """Code stripped from jupyter notebook when converted to script."""
+
+#This is example code for declaring TH2Lookup map and using it from python (also accessible from C++ side in RDataFrame                      
+#ROOT.gInterpreter.Declare("std::map<std::string, std::vector<TH2Lookup*>> LUM;")
+#ROOT.LUM["no"].push_back(ROOT.TH2Lookup("/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BTaggingYields.root"))
+#ROOT.LUM["no"].getEventYieldRatio("Aggregate", "_deepcsv", 5, 695.0)
+#ROOT.LUM["bleh"].size()
+#ROOT.LUM["no"].push_back(ROOT.TH2Lookup("/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BTaggingYields.root"))
+#ROOT.LUM["no"].size()
+#ROOT.LUM["no"][0].getEventYieldRatio("Aggregate", "_deepcsv", 5, 695.0)
+#ROOT.LUM["yes"].size()
+#str(type(ROOT.LUM))
+#getattr(ROOT, "LUM")["no"].size()
+#if str(type(getattr(ROOT, "LUM"))) == "<class 'ROOT.map<string,vector<TH2Lookup*> >'>":
+#    print("Okay!")
+
+
     print("Warning: if filtered[name][lvl] RDFs are not reset, then calling Define(*) on them will cause the error"      " with 'program state reset' due to multiple definitions for the same variable")
     loopcounter = 0
     masterstart = time.clock()
@@ -4145,26 +4116,25 @@ def otherFuncs():
     masterfinish = time.time() #clock gives cpu time, not accurate multi-core?
     print("Took {}m {}s to process in real-time".format((masterfinish - masterstart)//60, (masterfinish - masterstart)%60))
     
-    histDir = "select_20200414"
     mode="RECREATE"
     if doHLTMeans == True:
         makeHLTReport(stats, histDir)
     if doHistos == True:
-        writeHistos(histos1D, histDir, "All", mode=mode)
+        writeHistos(histos, histDir, "All", mode=mode)
         mode="UPDATE"
-    if doBtaggingEfficiencies == True:
+    if doBTaggingEfficiencies == True:
         writeHistos(btagging, histDir, "All", mode=mode)
         mode="UPDATE"
-        BtaggingEfficienciesAnalyzer("{}/ElMu_selection".format(histDir))
-    if doBtaggingYields == True:
-        writeHistos(btagging, histDir, "BtaggingYields", mode=mode)
+        BTaggingEfficienciesAnalyzer("{}/ElMu_selection".format(histDir))
+    if doBTaggingYields == True:
+        writeHistos(btagging, histDir, "BTaggingYields", mode=mode)
         mode="UPDATE"    
     
-    ChiSquareTest("select_20200403/ElMu_selection/BtaggingYields/BTaggingYields.root", test_against="Aggregate__deepcsv", 
+    ChiSquareTest("select_20200403/ElMu_selection/BTaggingYields/BTaggingYields.root", test_against="Aggregate__deepcsv", 
                   must_not_contain = ["up", "down"])
-    ChiSquareTest("select_20200403/ElMu_selection/BtaggingYields/BTaggingYields.root", test_against="Aggregate__deepcsv", 
+    ChiSquareTest("select_20200403/ElMu_selection/BTaggingYields/BTaggingYields.root", test_against="Aggregate__deepcsv", 
                   must_contain = ["Aggregate"])
-    rootToPDF("select_20200403/ElMu_selection/BtaggingYields",
+    rootToPDF("select_20200403/ElMu_selection/BTaggingYields",
                 outDirectory="{}/PDFSamples",
                 name_format="$NAME__$ALGO$VAR",
                 name_tuples=[("$NAME", ["Aggregate", "tt_DL-GF", "tt_DL", "tttt", "ttH"," tt_SL-GF", "tt_SL", 
@@ -4173,7 +4143,7 @@ def otherFuncs():
                              ("$ALGO", ["deepcsv"]),
                              ("$VAR", ["",])],
                 draw_option="COLZ TEXT45E", draw_min=0.8, draw_max=1.2)
-    rootToPDF("select_20200403/ElMu_selection/BtaggingYields",
+    rootToPDF("select_20200403/ElMu_selection/BTaggingYields",
                 outDirectory="{}/PDFVariations",
                 name_format="$NAME__$ALGO$VAR",
                 name_tuples=[("$NAME", ["Aggregate",]), 
@@ -4185,13 +4155,13 @@ def otherFuncs():
         histoCombine("{}/ElMu_selection".format(histDir))
     
     histDir = "select_20200323"
-    rootToPDF("{}/ElMu_selection/BtaggingEfficiencyNotWorking".format(histDir),
+    rootToPDF("{}/ElMu_selection/BTaggingEfficiencyNotWorking".format(histDir),
              name_tuples=[("$JETTYPE", ["bjets", "cjets", "udsgjets"]), ("$TAG", ["DeepCSV_M", "DeepJet_M"]),
                              ("$CAT", ["Inclusive",])],
              draw_option="COLZ TEXT45E",
             )
 
-    makeJetEfficiencyReport(effic, "{}/ElMu_selection/BtaggingEfficiency".format(histDir))
+    makeJetEfficiencyReport(effic, "{}/ElMu_selection/BTaggingEfficiency".format(histDir))
     
 
 if __name__ == '__main__':
