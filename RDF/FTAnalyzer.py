@@ -1,12 +1,17 @@
 #!/usr/bin/env python
 # coding: utf-8
 from __future__ import print_function
-import os, time, sys, collections, array
+import os
+import sys
+import time
 import argparse
-import subprocess
-import pprint
 import numpy as np
-import copy, collection, glob
+import subprocess
+import copy
+import glob
+import collections
+import array
+import pprint
 import ROOT
 #from IPython.display import Image, display, SVG
 #import graphviz
@@ -1246,10 +1251,13 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, useBackupChannel
             listOfDefinedColumns.push_back(defName)
     return rdf
 
-def defineInitWeights(input_df, crossSection=0, sumWeights=-1, lumi=0,
+def defineInitWeights(input_df, crossSection=0, era="2017", sumWeights=-1, lumiOverride=None,
                   nEvents=-1, nEventsPositive=2, nEventsNegative=1,
                   isData=True, verbose=False):
     leppostfix = "_nom"
+    lumiDict = {"2017": 41.53,
+                "2018": 1}
+    lumi = lumiDict.get(era, 41.53)
     
     mc_def = collections.OrderedDict()
     data_def = collections.OrderedDict()
@@ -1461,8 +1469,8 @@ def defineWeights(input_df, era, isData=False, verbose=False, final=False):
     leppostfix = "_nom"
 
 
-    lumi = {"2017": 41.53,
-            "2018": 1}
+    lumiDict = {"2017": 41.53,
+                "2018": 1}
     #era = "2017"
 
     
@@ -3635,7 +3643,9 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         line = path + "," + ",".join(path_values.values()) + "\n"
                         f.write(line)
             
-def main(BTaggingYieldsFile="/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BTaggingYields.root"):
+def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", useSkimmed=True, verbose=False):
+    analysisDir = "/eos/user/n/nmangane/analysis/20200417"
+
     ##################################################
     ##################################################
     ### CHOOSE SAMPLE DICT AND CHANNEL TO ANALYZE ####
@@ -3648,23 +3658,7 @@ def main(BTaggingYieldsFile="/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BT
     #levelsOfInterest = set(["ElEl_selection",])
     #levelsOfInterest = set(["selection", "ElMu_selection", "ElEl_selection", "MuMu_selection", "Mu_selection", "El_selection"])
     #levelsOfInterest = set(["baseline", "MuMu_baseline", "ElEl_baseline", "selection", "MuMu_selection", "ElMu_selection"])
-    #levelsOfInterest = set(["baseline", "MuMu_selection", "ElMu_selection"])
-    
-    #Choose the sample dictionary to run
-    #theSampleDict = ttbooker #needs modification to make work...
-    #theSampleDict = ttttbooker
-    #theSampleDict = microbooker #tttt, ttbar-DL unfiltered, DY, one single top sample
-    #theSampleDict = minibooker #tttt, all ttbar, both single top, DY
-    #theSampleDict = booker #All
-    #theSampleDict = bookerV2 #All with reprocessing (WIP: Other data streams, ttVJets, Filtered samples!)
-    #theSampleDict = tt_data_V2
-    #theSampleDict = pyrdfbooker
-    
-    #Where to write histograms
-    analysisDir = "hists20200414"
-    
-    #trigger verbose output for all the define and histo functions
-    beVerbose = True
+    #levelsOfInterest = set(["baseline", "MuMu_selection", "ElMu_selection"])    
     
     all_samples = ["ElMu", "MuMu", "ElEl", "tttt", "ST_tW", "ST_tbarW", "tt_DL", "tt_DL-GF", 
                      "tt_SL", "tt_SL-GF", "ttH", "ttWJets", "ttZJets", "ttWH", "ttWW", "ttWZ", 
@@ -3679,14 +3673,18 @@ def main(BTaggingYieldsFile="/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BT
     #valid_samples = ["ttWH", "ttWW", "ttWZ", "ttZZ", "ttZH", "ttHH", "tttW", "tttJ"]
     #valid_samples = ["DYJets_DL",]
     #valid_samples = ["ElMu", "tttt", "ST_tW", "ST_tbarW"]
-    valid_samples = all_samples
+    #valid_samples = all_samples
+    valid_samples = ["tttt", "ElMu", "tt_DL-GF"]
     
-    #Decide on things to do
-    doHLTMeans = False
-    doHistos = False
-    doBTaggingEfficiencies = False
-    doBTaggingYields = True
+    #Decide on things to do: either calculate yields for ratios or fill histograms
+    #Did we not chooose to do incompatible actions at the same time?
+    if doHistos and doBTaggingYields:
+        raise RuntimeError("Cannot calculate BTaggingYields and Fill Histograms simultaneously, choose only one mode")
+
+    #These are deprecated for now!
     doJetEfficiency = False
+    doBTaggingEfficiencies = False
+    doHLTMeans = False
     
     if doBTaggingYields:
         print("Loading all samples for calculating BTaggingYields")
@@ -3703,55 +3701,53 @@ def main(BTaggingYieldsFile="/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BT
         for sample in all_samples:
             if sample not in removeThese:
                 valid_samples.append(sample)
-        
     else:
         #If we're not calculating the yields, we need to have the string value of the Yields to be loaded...
         loadTheYields = BTaggingYieldsFile
+        print("Loading BTaggingYields from this path: {}".format(BTaggingYieldsFile))
+        #Where to write histograms
+        #Where to load BTaggingYields from
+        if BTaggingYieldsFile == "{}":
+            BTaggingYieldsFile = "{}/{}_selection/BTaggingYields".format(analysisDir, channel)
+
         #loadTheYields = "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BTaggingYields.root"
         calculateTheYields = False
-    #Use skimmed channels flag
-    useSkimmed = True
-    chooseChannel = "ElMu"
-    #chooseChannel = "MuMu"
-    #chooseChannel = "ElEl"
-    #chooseChannel = "Mu"
-    #chooseChannel = "El"
-    #chooseChannel = "test"
+
     source_level = "LJMLogic"
     #source_level = "LJMLogic/ElMu_selection"
     #source_level = "LJMLogic/MuMu_selection"
     #source_level = "LJMLogic/ElEl_selection"
-    if chooseChannel == "ElMu":
+    if channel == "ElMu":
         levelsOfInterest = set(["ElMu_selection",])
         theSampleDict = bookerV2_ElMu.copy()
         theSampleDict.update(bookerV2_MC)
         if useSkimmed == True:
             source_level = "LJMLogic/ElMu_selection"
-    elif chooseChannel == "MuMu":
+    elif channel == "MuMu":
         levelsOfInterest = set(["MuMu_selection",])
         theSampleDict = bookerV2_MuMu.copy()
         theSampleDict.update(bookerV2_MC)
         if useSkimmed == True:
             source_level = "LJMLogic/MuMu_selection"
-    elif chooseChannel == "ElEl":    
+    elif channel == "ElEl":    
         levelsOfInterest = set(["ElEl_selection",])
         theSampleDict = bookerV2_ElEl.copy()
         theSampleDict.update(bookerV2_MC)
         if useSkimmed == True:
             source_level = "LJMLogic/ElEl_selection"
-    elif chooseChannel == "Mu":    
+    elif channel == "Mu":    
         levelsOfInterest = set(["Mu_selection",])
         theSampleDict = bookerV2_Mu.copy()
         theSampleDict.update(bookerV2_MC)
         if useSkimmed == True:
             print("No skimmed samples prepared for this selection level, please advise")
-    elif chooseChannel == "El":    
+    elif channel == "El":    
         levelsOfInterest = set(["El_selection",])
         theSampleDict = bookerV2_El.copy()
         theSampleDict.update(bookerV2_MC)
         if useSkimmed == True:
             print("No skimmed samples prepared for this selection level, please advise")
-    # elif chooseChannel == "test":
+    # elif channel == "test":
     #     levelsOfInterest = set(["ElMu_selection", "MuMu_selection", "ElEl_selection"])
     #     theSampleDict = microbookerV2.copy()
     #     if useSkimmed == True:
@@ -3909,13 +3905,13 @@ def main(BTaggingYieldsFile="/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BT
                                           run_branch="run",
                                           era=vals["era"],
                                           isData=vals["isData"],
-                                          verbose=beVerbose,
+                                          verbose=verbose,
                                           )
             the_df[name][lvl] = defineLeptons(the_df[name][lvl], 
                                               input_lvl_filter=lvl,
                                               isData=vals["isData"], 
                                               useBackupChannel=False,
-                                              verbose=beVerbose,
+                                              verbose=verbose,
                                              )
             #Use the cutPV and METFilters function to do cutflow on these requirements...
             the_df[name][lvl] = cutPVandMETFilters(the_df[name][lvl], lvl, isData=vals["isData"])
@@ -3923,29 +3919,29 @@ def main(BTaggingYieldsFile="/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BT
                 the_df[name][lvl] = defineInitWeights(the_df[name][lvl],
                                                       crossSection=vals["crossSection"], 
                                                       sumWeights=vals["sumWeights"], 
-                                                      lumi=lumi[vals["era"]],
+                                                      era=vals["era"],
                                                       nEvents=vals["nEvents"], 
                                                       nEventsPositive=vals["nEventsPositive"], 
                                                       nEventsNegative=vals["nEventsNegative"], 
                                                       isData=vals["isData"], 
-                                                      verbose=beVerbose,
+                                                      verbose=verbose,
                                                      )
             else:
                 the_df[name][lvl] = defineInitWeights(the_df[name][lvl],
                                                       isData=True,
-                                                      verbose=beVerbose,
+                                                      verbose=verbose,
                                                      )
             the_df[name][lvl] = defineJets(the_df[name][lvl],
                                            era=vals["era"],
                                            bTagger="DeepCSV",
                                            isData=vals["isData"],
-                                           verbose=beVerbose,
+                                           verbose=verbose,
                                           )
             the_df[name][lvl] = defineWeights(the_df[name][lvl],
                                               era=vals["era"],
                                               isData=vals["isData"],
                                               final=False,
-                                              verbose=beVerbose,
+                                              verbose=verbose,
                                              )
             
             print("Need to make cuts on HT, MET, InvariantMass, ETC.")
@@ -3981,7 +3977,7 @@ def main(BTaggingYieldsFile="/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BT
                                                useAggregate=True, calculateYields=calculateTheYields,
                                                HTBinWidth=10, HTMin=200, HTMax=3200,
                                                nJetBinWidth=1, nJetMin=4, nJetMax=20,
-                                               verbose=beVerbose,
+                                               verbose=verbose,
                                               )
             #Define the final weights/variations so long as we have btagging yields inserted...
             if loadTheYields:
@@ -3989,7 +3985,7 @@ def main(BTaggingYieldsFile="/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BT
                                                   era = vals["era"],
                                                   isData = vals["isData"],
                                                   final=True,
-                                                  verbose=beVerbose,
+                                                  verbose=verbose,
                                                  )
             if doBTaggingEfficiencies == True:
                 BTaggingEfficiencies(the_df[name][lvl], sampleName=None, era = vals["era"], wgtVar="wgt_SUMW_PU_LSF_L1PF", 
@@ -4201,4 +4197,4 @@ if __name__ == '__main__':
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
 
-    main()
+    main(BTaggingYieldsFile="/eos/user/n/nmangane/BTaggingYields.root")
