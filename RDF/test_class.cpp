@@ -36,10 +36,11 @@ public:
 private:
   std::map<std::string, TH2*> lookupMap_;
   std::vector<std::string> validKeys_;
-  std::vector<float> ret_;
-  int nJet_;
-  float *Jet_eta_, *Jet_pt_;
-  int *Jet_flav_;
+  bool declaredFailure_;
+  // std::vector<float> ret_;
+  // int nJet_;
+  // float *Jet_eta_, *Jet_pt_;
+  // int *Jet_flav_;
 };
 
 TH2Lookup::TH2Lookup(std::string file, bool debug=false) {
@@ -47,7 +48,8 @@ TH2Lookup::TH2Lookup(std::string file, bool debug=false) {
   validKeys_.clear();
   TFile *f = TFile::Open(file.c_str(),"read");
   if(!f) {
-    std::cout << "WARNING! File " << file << " cannot be opened. Skipping this efficiency" << std::endl;
+    std::cout << "WARNING! File " << file << " cannot be opened." << std::endl;
+    declaredFailure_ = true;
   }
   for(const auto&& obj: *(f->GetListOfKeys())){
     std::string key = obj->GetName();
@@ -87,9 +89,16 @@ TH2Lookup::TH2Lookup(std::string file, std::vector<std::string> histos) {
   }*/
 
 float TH2Lookup::getLookup(std::string key, float x_val, float y_val) {
-  int binx = std::max(1, std::min(lookupMap_[key]->GetNbinsX(), lookupMap_[key]->GetXaxis()->FindBin(x_val)));
-  int biny = std::max(1, std::min(lookupMap_[key]->GetNbinsY(), lookupMap_[key]->GetYaxis()->FindBin(y_val)));
-  return lookupMap_[key]->GetBinContent(binx,biny);
+  if ( lookupMap_.find(key) == lookupMap_.end() ) {
+    // not found ... not sure how intensive this lookup is, but we need to guard against bad keys
+    double fail = -9999.9;
+    return fail;
+  } else {
+    //found
+    int binx = std::max(1, std::min(lookupMap_[key]->GetNbinsX(), lookupMap_[key]->GetXaxis()->FindBin(x_val)));
+    int biny = std::max(1, std::min(lookupMap_[key]->GetNbinsY(), lookupMap_[key]->GetYaxis()->FindBin(y_val)));
+    return lookupMap_[key]->GetBinContent(binx,biny);
+  }
 }
 
 float TH2Lookup::getLookupErr(std::string key, float x_val, float y_val) {
@@ -121,9 +130,11 @@ RVec_f TH2Lookup::getJetEfficiency(std::string category, std::string tagger_wp, 
 }
 
 double TH2Lookup::getEventYieldRatio(std::string sample, std::string variation, int nJet, double HT, bool debug=false){
+  //Latest version uses keys of form "Aggregate__nom", so sample = "Aggregate_" and variation = "_nom"
+  //For pseudo-1D lookups, this uses "<name>_1D<DIM>" such as "tttt_1DX" -> key = "tttt_1DY_nom" for example
   double yield = 1.0;
   std::string key = "";
-  key = sample + "_" + variation;
+  key = sample + variation;
   if(debug){std::cout << "getEventYield key: " << key << std::endl;}
   yield = getLookup(key, HT, nJet);
   return yield;

@@ -1552,10 +1552,14 @@ def defineWeights(input_df, era, isData=False, verbose=False, final=False):
         z = zFin
     else:
         z = zPre
+
+    listOfDefinedColumns = rdf.GetDefinedColumnNames()
     if isData:
-        rdf = rdf.Define("wgt_nom", "1")
+        defName = "wgt_nom"
+        defFunc = "int i = 1; return i"
+        if defName not in listOfDefinedColumns:
+            rdf = rdf.Define(defName, defFunc)
     else:
-        listOfDefinedColumns = rdf.GetDefinedColumnNames()
         for defName, defFunc in z:
             if defName in listOfDefinedColumns:
                 if verbose:
@@ -1573,6 +1577,8 @@ def defineWeights(input_df, era, isData=False, verbose=False, final=False):
 
 
 def BTaggingYields(input_df, sampleName, isData = True, histosDict=None, verbose=False,
+                   loadYields=None, lookupMap="LUM", useAggregate=True, useHTOnly=False, useNJetOnly=False, 
+                   calculateYields=True, HTBinWidth=10, HTMin=200, HTMax=3200, nJetBinWidth=1, nJetMin=4, nJetMax=20,
                    sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                              "jet_pt_var": "Jet_pt",
@@ -1618,27 +1624,53 @@ def BTaggingYields(input_df, sampleName, isData = True, histosDict=None, verbose
                                                                    "btagSF": "Jet_btagSF_deepcsv_shape_down_lf",
                                                                    "weightVariation": True},
                                               },
-                   loadYields=None,
-                   lookupMap="LUM",
-                   useAggregate=True,
-                   calculateYields=True,
-                   HTBinWidth=10, HTMin=200, HTMax=3200,
-                   nJetBinWidth=1, nJetMin=4, nJetMax=20):
+               ):
     """Calculate or load the event yields in various categories for the purpose of renormalizing btagging shape correction weights.
     
-    A btagging preweight (event level) must be calculated using the product of all SF(discriminant, pt, eta) for
+    A btagging preweight (event level) must be calculated using the product of all SF(function of discriminant, pt, eta) for
     all selected jets. Then a ratio of the sum(weights before)/sum(weights after) for application of this btagging 
     preweight serves as a renormalization, and this phase space extrapolation can be a function of multiple variables.
-    Minimally, for high-jet multiplicity analyses, it can be expected to depend on nJet. The final btagging event weight
+    For high-jet multiplicity analyses, it can be expected to depend on nJet. The final btagging event weight
     is then the product of this phase space ratio and the btagging preweight. This should be computed PRIOR to ANY
-    btagging requirements; after, the event yields and shapes are expected to shift.
+    btagging requirements (cut on number of BTags); after, the event yields and shapes are expected to shift.
     
     The final and preweight are computed separately from the input weight (that is, it must be multiplied with the non-btagging event weight)
     The yields are calculated as the sum of weights before and after multiplying the preweight with the input weight
+
+    <sampleName> should be passed to provide a 'unique' key for the declared lookupMap. This is purely to avoid namesplace conflicts
+    when aggregate yields are to be used. If not using aggregates, it provides the actual lookup key (into a yields histogram)
+    <isData> If running on data, disable all systematic variations besides $NOMINAL/'_nom'
+    <histosDict> dictionary for writing the histograms to fill yields
+
+    Group - Yield Loading
+    <loadYields> string path to the BTaggingYields.root file containing the ratios
+    <lookupMap> is a string name for the lookupMap object (std::map<std::string, std::vector<TH2Lookup*> > in the ROOT interpreter.
+    This object can be shared amongnst several dataframes, as the key (std::string) is the sampleName. For each thread/slot assigned
+    to an RDataFrame, there will be a TH2Lookup pointer, to avoid multiple threads accessing the same object (has state)
+    <useAggregate> will toggle using the weighted average of all processed samples (those used when choosing to analyze the files)
+    <useHTOnly> and <useNJetOnly> will toggle the lookup to use the 1D yield ratios computed in either HT only or nJet only
+
+    Group - Yield Computation
+    <calculateYields> as indicated, fill histograms for the yields, making an assumption that there is a weight named
+    "prewgt<SYSTEMATIC_POSTFIX>" where the postfix is the key inside sysVariations. i.e. "$NOMINAL" -> "prewgt_nom" due to 
+    special replacement for nominal, and "_jesTotalUp" -> "prewgt_jesTotalUp" is expected
+    <HTBinWidth>, <HTMin>, <HTMax> are as expected. Don't screw up the math on your end, (max-min) should be evenly divisible.
+    <nJetBinWidth>, <nJetMin>, <nJetMax> are similar
+
+    For more info on btagging, see...
     https://twiki.cern.ch/twiki/bin/viewauth/CMS/BTagShapeCalibration"""
                         
     JetBins = int((nJetMax - nJetMin)/nJetBinWidth)
     HTBins = int((HTMax-HTMin)/HTBinWidth)
+
+    if useAggregate:
+        yieldsKey = "Aggregate_"
+    else:
+        yieldsKey = "{}_".format(sampleName) #copy it, we'll modify
+    if useHTOnly:
+        yieldsKey += "1DX"
+    elif useNJetOnly:
+        yieldsKey += "1DY"        
     
     #internal variable/pointer to the TH2 lookup map, and the sample-specific one
     iLUM = None
@@ -1659,11 +1691,24 @@ def BTaggingYields(input_df, sampleName, isData = True, histosDict=None, verbose
         else:
             raise RuntimeError("lookupMap (used in BTaggingYields function) must either be a string name "                               "for the declared function's (C++ variable) name, used to find or declare one of type "                               "std::map<std::string, std::vector<TH2Lookup*>>")
         nSlots = input_df.GetNSlots()
+        assert os.path.isfile(loadYields), "BTaggingYield file does not appear to exist... aborting execution"
         while iLUM[sampleName].size() < nSlots:
             if type(loadYields) == str:
                 iLUM[sampleName].push_back(ROOT.TH2Lookup(loadYields))
-            elif loadYields == True:
-                iLUM[sampleName].push_back(ROOT.TH2Lookup("/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BTaggingYields.root"))
+            else:
+                raise RuntimeError("No string path to a yields file has been provided in BTaggingYields() ...")
+                
+        #Test to see that it's accessible...
+        testKeyA = yieldsKey
+        testKeyB = "_nom"
+        testNJ = 6
+        testHT = 689.0
+        testVal = iLUM[sampleName][0].getEventYieldRatio(testKeyA, testKeyB, testNJ, testHT)
+        if verbose:
+            print("BTaggingYield has done a test evaluation on the yield histogram with search for histogram {}{}, nJet={}, HT={} and found value {}"\
+                  .format(testKeyA, testKeyB, testNJ, testHT, testVal))
+        assert type(testVal) == float, "LookupMap did not provide a valid return type, something is wrong"
+        assert testVal < 5.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... (>5.0 is considered unrealistic...)"        
     
     #column guards
     listOfColumns = input_df.GetDefinedColumnNames()
@@ -1733,10 +1778,10 @@ def BTaggingYields(input_df, sampleName, isData = True, histosDict=None, verbose
             
             #loadYields path...
             if loadYields:
-                if useAggregate:
-                    z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{vk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk="Aggregate", vk=btagSFProduct.replace("nonorm_",""), nj=nJetName, ht=HTName)))
-                else:
-                    z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{vk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=sampleName, vk=btagSFProduct.replace("nonorm_",""), nj=nJetName, ht=HTName)))
+                # if useAggregate:
+                z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{spf}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=yieldsKey, spf=syspostfix, nj=nJetName, ht=HTName)))
+                # else:
+                #     z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{vk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=sampleName, vk=btagSFProduct.replace("nonorm_",""), nj=nJetName, ht=HTName)))
 
             for defName, defFunc in z[sysVar]:
                 if defName in listOfDefinedColumns:
@@ -1989,7 +2034,7 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 
 def fillHistos(input_df, sampleName=None, isData = True, histosDict=None,
                doMuons=False, doElectrons=False, doLeptons=False, doJets=False, doWeights=False, doEventVars=False, 
-               makeMountains=False, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
+               doCategorized=False, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
                HTCut=500, METCut=None, ZMassMETWindow=None, verbose=False,
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "wgt_final": "wgt_nom",
@@ -2030,7 +2075,7 @@ def fillHistos(input_df, sampleName=None, isData = True, histosDict=None,
     """
     
 
-    if doMuons == False and doElectrons == False and doLeptons == False                and doJets == False and doWeights == False and doEventVars == False                and makeMountains == False:
+    if doMuons == False and doElectrons == False and doLeptons == False                and doJets == False and doWeights == False and doEventVars == False                and doCategorized == False:
         raise RuntimeError("Must select something to plot:"                               "Set do{Muons,Electrons,Leptons,Jets,Weights,EventVars,etc} = True in init method")
     
 
@@ -2300,7 +2345,7 @@ def fillHistos(input_df, sampleName=None, isData = True, histosDict=None,
                     histosDict["EventVars"]["npvs_vs_nPU"] = input_df.Histo2D(("npvs_vs_nPU{}".format(postfix), ";nPU;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvs", wgtVar)
                 
             
-        if makeMountains == True:
+        if doCategorized == True:
             theCatsL0 = collections.OrderedDict()#Baseline nJet selection (inclusive!) for each systematic scale variation
             theCatsL1 = collections.OrderedDict() #Next level of selection, like nJet categories. If we need nBTag inclusive, they'll have to go here
             theCatsL2 = collections.OrderedDict() #Next level of selection, i.e. nBTag categories. 
@@ -2679,8 +2724,8 @@ def writeHistos(histDict, directory, levelsOfInterest="All", samplesOfInterest="
         f.Close()
 
 
-def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", stripKey=".root", incld=None, 
-                           excld=None, mode="RECREATE", doNumpyValidation=False, forceDefaultRebin=False, verbose=False,
+def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", stripKey=".root", includeSampleNames=None, 
+                           excludeSampleNames=None, mode="RECREATE", doNumpyValidation=False, forceDefaultRebin=False, verbose=False,
                            internalKeys = {"Numerators":["_sumW_before"],
                                            "Denominator": "_sumW_after",
                                           },
@@ -2739,6 +2784,12 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
         except Exception as e:
             raise RuntimeError("Could not import the copy module in method BTaggingYieldsAnalyzer")
     files = glob.glob("{}/{}".format(directory, globKey))
+    if includeSampleNames:
+        files = [f for f in files if f not in ["BTaggingYields.root"] + includeSampleNames]
+    elif excludeSampleNames:
+        files = [f for f in files if f in excludeSampleNames]
+    else:
+        files = [f for f in files if f not in ["BTaggingYields.root"]]
     #deduce names from the filenames, with optional stripKey parameter that defaults to .root
     names = [fname.split("/")[-1].replace(stripKey, "") for fname in files]
     fileDict = {}
@@ -2905,6 +2956,7 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
     #Do aggregate calculations...
     #Loop through all the aggregate histograms and write them
     name = "Aggregate"
+    print(name)
     #Get the rebinning lists with a default fallback, but it will be forced when doNumpyValidation is true
     if forceDefaultRebin == False:
         x_rebin = sampleRebin.get(name, sampleRebin.get("default"))["X"]
@@ -3651,8 +3703,8 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         line = path + "," + ",".join(path_values.values()) + "\n"
                         f.write(line)
             
-def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", useSkimmed=True, verbose=False):
-    analysisDir = "/eos/user/n/nmangane/analysis/20200417"
+def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=True,
+         useHTOnly=False, useNJetOnly=False, includeSampleNames=None, excludeSampleNames=None, verbose=False):
 
     ##################################################
     ##################################################
@@ -3671,23 +3723,25 @@ def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False
     all_samples = ["ElMu", "MuMu", "ElEl", "tttt", "ST_tW", "ST_tbarW", "tt_DL", "tt_DL-GF", 
                      "tt_SL", "tt_SL-GF", "ttH", "ttWJets", "ttZJets", "ttWH", "ttWW", "ttWZ", 
                      "ttZZ", "ttZH", "ttHH", "tttW", "tttJ", "DYJets_DL",]
-    #Mask samples to divy up work
-    #valid_samples = ["ElMu", "MuMu", "ElEl", ]
-    #valid_samples = ["tttt", "ST_tW", "ST_tbarW"]
-    #valid_samples = ["tt_DL",]
-    #valid_samples = ["tt_DL-GF",]
-    #valid_samples = ["tt_SL", "tt_SL-GF",]
-    #valid_samples = ["ttH", "ttWJets", "ttZJets"]
-    #valid_samples = ["ttWH", "ttWW", "ttWZ", "ttZZ", "ttZH", "ttHH", "tttW", "tttJ"]
-    #valid_samples = ["DYJets_DL",]
-    #valid_samples = ["ElMu", "tttt", "ST_tW", "ST_tbarW"]
-    #valid_samples = all_samples
-    valid_samples = ["tttt", "ElMu", "tt_DL-GF"]
-    
+    if includeSampleNames:
+        if (type(includeSampleNames) == list or type(includeSampleNames) == dict):
+            valid_samples = [s for s in all_samples if s in includeSampleNames]
+        else:
+            raise RuntimeError("include option is neither a list nor a dictionary, this is not expected")
+    elif excludeSampleNames:
+        if (type(excludeSampleNames) == list or type(excludeSampleNames) == dict):
+            valid_samples = [s for s in all_samples if s not in excludeSampleNames]
+        else:
+            raise RuntimeError("exclude option is neither a list nor a dictionary, this is not expected")
+    else:
+        valid_samples = all_samples
+
     #Decide on things to do: either calculate yields for ratios or fill histograms
     #Did we not chooose to do incompatible actions at the same time?
     if doHistos and doBTaggingYields:
         raise RuntimeError("Cannot calculate BTaggingYields and Fill Histograms simultaneously, choose only one mode")
+    elif not doHistos and not doBTaggingYields:
+        raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms, there is no work to be done.")
 
     #These are deprecated for now!
     doJetEfficiency = False
@@ -3695,72 +3749,46 @@ def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False
     doHLTMeans = False
     
     if doBTaggingYields:
-        print("Loading all samples for calculating BTaggingYields")
+        print("\nLoading all samples for calculating BTaggingYields")
         #Set these options for the BTaggingYields module, to differentiate between calculating and loading yields
-        loadTheYields = None
+        BTaggingYieldsFile = None
         calculateTheYields = True
-
-        #valid_samples = all_samples
-        removeThese = []
-        #removeThese += ['ttZJets', 'ttH', 'tttW', 'ttZZ', 'tt_SL', 'tttJ'] #done
-        #removeThese += ['ttWH', 'tt_SL-GF', 'tt_DL-GF', 'ST_tbarW', 'ttWZ', 'tttt', 'ttWJets'] #done
-        #removeThese += ['tt_DL', 'ttHH', 'ElMu', 'ttWW', 'ST_tW', 'DYJets_DL', 'ttZH'] #done
-        valid_samples = []
-        for sample in all_samples:
-            if sample not in removeThese:
-                valid_samples.append(sample)
     else:
         #If we're not calculating the yields, we need to have the string value of the Yields to be loaded...
-        loadTheYields = BTaggingYieldsFile
-        print("Loading BTaggingYields from this path: {}".format(BTaggingYieldsFile))
-        #Where to write histograms
         #Where to load BTaggingYields from
         if BTaggingYieldsFile == "{}":
-            BTaggingYieldsFile = "{}/{}_selection/BTaggingYields".format(analysisDir, channel)
-
-        #loadTheYields = "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/BTaggingYields.root"
+            BTaggingYieldsFile = "{}/BTaggingYields/{}_selection/BTaggingYields.root".format(analysisDir, channel)
         calculateTheYields = False
+        print("Loading BTaggingYields from this path: {}".format(BTaggingYieldsFile))
 
-    source_level = "LJMLogic"
-    #source_level = "LJMLogic/ElMu_selection"
-    #source_level = "LJMLogic/MuMu_selection"
-    #source_level = "LJMLogic/ElEl_selection"
+
+    #The source level used is... the source
+    source_level = source
+
     if channel == "ElMu":
         levelsOfInterest = set(["ElMu_selection",])
         theSampleDict = bookerV2_ElMu.copy()
         theSampleDict.update(bookerV2_MC)
-        if useSkimmed == True:
-            source_level = "LJMLogic/ElMu_selection"
     elif channel == "MuMu":
         levelsOfInterest = set(["MuMu_selection",])
         theSampleDict = bookerV2_MuMu.copy()
         theSampleDict.update(bookerV2_MC)
-        if useSkimmed == True:
-            source_level = "LJMLogic/MuMu_selection"
     elif channel == "ElEl":    
         levelsOfInterest = set(["ElEl_selection",])
         theSampleDict = bookerV2_ElEl.copy()
         theSampleDict.update(bookerV2_MC)
-        if useSkimmed == True:
-            source_level = "LJMLogic/ElEl_selection"
     elif channel == "Mu":    
         levelsOfInterest = set(["Mu_selection",])
         theSampleDict = bookerV2_Mu.copy()
         theSampleDict.update(bookerV2_MC)
-        if useSkimmed == True:
-            print("No skimmed samples prepared for this selection level, please advise")
     elif channel == "El":    
         levelsOfInterest = set(["El_selection",])
         theSampleDict = bookerV2_El.copy()
         theSampleDict.update(bookerV2_MC)
-        if useSkimmed == True:
-            print("No skimmed samples prepared for this selection level, please advise")
-    # elif channel == "test":
-    #     levelsOfInterest = set(["ElMu_selection", "MuMu_selection", "ElEl_selection"])
-    #     theSampleDict = microbookerV2.copy()
-    #     if useSkimmed == True:
-    #         print("No skimmed samples prepared for this selection level, please advise")
-    
+    elif channel == "test":
+        print("More work to be done, exiting")
+        sys.exit(2)
+        
     
     print("Creating selection and baseline bits")
     #Set up channel bits for selection and baseline. Separation not necessary in this stage, but convenient for loops
@@ -3780,25 +3808,32 @@ def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False
     
     b = {}
     b["ElMu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) > 0".format(Chan["ElMu_baseline"])
-    b["MuMu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0".format(Chan["ElMu_baseline"], 
-                                                                                                                                    Chan["MuMu_baseline"])
-    b["ElEl_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0".format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"], 
-                                                                                                                                    Chan["ElEl_baseline"])
-    b["Mu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0".format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"], Chan["Mu_baseline"])
-    b["El_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0".format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + 
-                                                                                                                        Chan["ElEl_baseline"] + Chan["Mu_baseline"], Chan["El_baseline"])
+    b["MuMu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
+        .format(Chan["ElMu_baseline"], 
+                Chan["MuMu_baseline"])
+    b["ElEl_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
+        .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"], Chan["ElEl_baseline"])
+    b["Mu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
+        .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"], Chan["Mu_baseline"])
+    b["El_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
+        .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"] + Chan["Mu_baseline"], Chan["El_baseline"])
     b["selection"] = "ESV_TriggerAndLeptonLogic_selection > 0"
     b["ElMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu_selection"])
-    b["MuMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0".format(Chan["ElMu_selection"], Chan["MuMu_selection"])
-    b["ElEl_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0".format(Chan["ElMu_selection"] + Chan["MuMu_selection"], Chan["ElEl_selection"])
-    b["Mu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0".format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"], Chan["Mu_selection"])
-    b["El_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0".format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"]
+    b["MuMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"], Chan["MuMu_selection"])
+    b["ElEl_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"], Chan["ElEl_selection"])
+    b["Mu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"], Chan["Mu_selection"])
+    b["El_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"]
                                                                                 + Chan["Mu_selection"], Chan["El_selection"]) 
+    #This is deprecated, use dedicated RDF module
     #b["ESV_JetMETLogic_baseline"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00001100011111111111) #This enables the MET pt cut (11) and nJet (15) and HT (16) cuts from PostProcessor
-    b["ESV_JetMETLogic_baseline"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00000000001111111111) #Only do the PV and MET filters, nothing else
+    #b["ESV_JetMETLogic_baseline"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00000000001111111111) #Only do the PV and MET filters, nothing else
     #b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00001100011111111111) #FIXME, this isn't right!
-    b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00001100011111111111)#This enables the MET pt cut (11) and nJet (15) and HT (16) cuts from PostProcessor
-    b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00000000001111111111)
+    #b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00001100011111111111)#This enables the MET pt cut (11) and nJet (15) and HT (16) cuts from PostProcessor
+    #b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00000000001111111111)
     #b["ESV_JetMETLogic_default"] = "(ESV_JetMETLogic_baseline & {}) > 0".format(0b11111111111111111111)
     #print(b["ESV_JetMETLogic_selection"])
     
@@ -3829,26 +3864,40 @@ def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False
     filtered = {}
     base = {}
     reports = {}
-    #theValidSet = set(["tt_SL", "tt_SL-GF", "tt_DL-GF"])
+    samples = {}
+    counts = {}
+    histos = {}
+    the_df = {}
+    stats = {} #Stats for HLT branches
+    effic = {} #Stats for jet matching efficiencies
+    btagging = {} #For btagging efficiencies
+    cat_df = {} #Categorization node dictionary, returned by fillHistos method
+    masterstart = time.clock()#Timers...
+    substart = {}
+    subfinish = {}
+    processed = {}
+    processedSampleList = []
     for name, vals in theSampleDict.items():
-        #print("Skipping all samples except {}".format(theValidSet))
-        if name not in valid_samples: continue
-        print("Initializing RDataFrame - {} - {}".format(name, vals["source"][source_level]))
+        if name not in valid_samples: 
+            print("Skipping sample {}".format(name))
+            continue
+        print("Initializing RDataFrame\n\t{} - {}".format(name, vals["source"][source_level]))
         filtered[name] = {}
         base[name] = RDF("Events", vals["source"][source_level])
         reports[name] = base[name].Report()
+        counts[name] = {}
+        histos[name] = {}
+        the_df[name] = {}
+        stats[name] = {}
+        effic[name] = {}
+        btagging[name] = {}
+        cat_df[name] = {}
+        substart[name] = {}
+        subfinish[name] = {}
+        processed[name] = {}
+        #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
         for lvl in levelsOfInterest:
-            if "baseline" in lvl:
-                JMLOG = "ESV_JetMETLogic_baseline"
-            elif "selection" in lvl:
-                JMLOG = "ESV_JetMETLogic_selection"
-            else:
-                JMLOG = "ESV_JetMETLogic_default"
-                
-            if lvl == "baseline":
-                filtered[name][lvl] = base[name]#.Filter(b[JMLOG], JMLOG)#.Cache()
-            else:
-                filtered[name][lvl] = base[name].Filter(b[lvl], lvl)#.Filter(b[JMLOG], JMLOG)#.Cache()
+            filtered[name][lvl] = base[name].Filter(b[lvl], lvl)
             #Cache() seemingly has an issue with the depth/breadth of full NanoAOD file. Perhaps one with fewer branches would work
             #filtered[name][lvl] = filtered[name][lvl].Cache()
             if vals.get("stitch") != None:
@@ -3866,63 +3915,32 @@ def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False
                 if vals.get("stitch").get("source") == "Nominal":
                     stitch_cut = "!({})".format(stitch_cut)
                 elif vals.get("stitch").get("source") == "Filtered":
-                    pass
+                    print("Filtered sample, not producing a filter (no events expected to fail filtering. If otherwise, alter code")
                 else:
                     print("Invalid stitching source type")
                     sys.exit(1)
-                print(stitch_cut)
+                if verbose:
+                    print(stitch_cut)
                 for k, v in stitch_def.items():
                     filtered[name][lvl] = filtered[name][lvl].Define("{}".format(k), "{}".format(v))
                 filtered[name][lvl] = filtered[name][lvl].Filter(stitch_cut, "nJet_GenHT_Filter")
-    
-    
-    # In[ ]:
-    
-    
-    samples = {}
-    counts = {}
-    histos = {}
-    the_df = {}
-    stats = {} #Stats for HLT branches
-    effic = {} #Stats for jet matching efficiencies
-    btagging = {} #For btagging efficiencies
-    cat_df = {} #Categorization node dictionary, returned by fillHistos method
-    masterstart = time.clock()#Timers...
-    substart = {}
-    subfinish = {}
-    processed = {}
-    processedSampleList = []
-    print("Starting loop for booking")
-    for name, vals in theSampleDict.items():
-        if name not in valid_samples: continue
-        #if name not in ["tttt", "ElMu_F"]: continue
-        print("Booking - {}".format(name))
-        counts[name] = {}
-        histos[name] = {}
-        the_df[name] = {}
-        stats[name] = {}
-        effic[name] = {}
-        btagging[name] = {}
-        cat_df[name] = {}
-        substart[name] = {}
-        subfinish[name] = {}
-        processed[name] = {}
-        #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
-        for lvl in levelsOfInterest:
+            #Add the MET corrections, creating a consistently named branch incorporating the systematics loaded
             the_df[name][lvl] = METXYCorr(filtered[name][lvl],
                                           run_branch="run",
                                           era=vals["era"],
                                           isData=vals["isData"],
                                           verbose=verbose,
                                           )
+            #Define the leptons based on LeptonLogic bits, to be updated and replaced with code based on triggers/thresholds/leptons present (on-the-fly cuts)
             the_df[name][lvl] = defineLeptons(the_df[name][lvl], 
                                               input_lvl_filter=lvl,
                                               isData=vals["isData"], 
                                               useBackupChannel=False,
                                               verbose=verbose,
                                              )
-            #Use the cutPV and METFilters function to do cutflow on these requirements...
+            #Use the cutPV and METFilters function to do cutflow on these requirements... this should be updated, still uses JetMETLogic bits... FIXME
             the_df[name][lvl] = cutPVandMETFilters(the_df[name][lvl], lvl, isData=vals["isData"])
+            #Init weights necessary for now, should be combined with defineWeights to do everything after the other defines are finished (Jets...)
             if vals["isData"] == False:
                 the_df[name][lvl] = defineInitWeights(the_df[name][lvl],
                                                       crossSection=vals["crossSection"], 
@@ -3941,7 +3959,7 @@ def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False
                                                      )
             the_df[name][lvl] = defineJets(the_df[name][lvl],
                                            era=vals["era"],
-                                           bTagger="DeepCSV",
+                                           bTagger=bTagger,
                                            isData=vals["isData"],
                                            verbose=verbose,
                                           )
@@ -3952,7 +3970,7 @@ def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False
                                               verbose=verbose,
                                              )
             
-            print("Need to make cuts on HT, MET, InvariantMass, ETC.")
+            print("FIXME: Need to make cuts on HT, MET, InvariantMass, ETC. properly")
             counts[name][lvl] = the_df[name][lvl].Count()
             histos[name][lvl] = {}
             stats[name][lvl] = {}
@@ -3981,14 +3999,15 @@ def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False
             ##    print(n)
             #Insert the yields or calculate them
             the_df[name][lvl] = BTaggingYields(the_df[name][lvl], sampleName=name, isData=vals["isData"], 
-                                               histosDict=btagging[name][lvl], loadYields=loadTheYields,
-                                               useAggregate=True, calculateYields=calculateTheYields,
+                                               histosDict=btagging[name][lvl], loadYields=BTaggingYieldsFile,
+                                               useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
+                                               calculateYields=calculateTheYields,
                                                HTBinWidth=10, HTMin=200, HTMax=3200,
                                                nJetBinWidth=1, nJetMin=4, nJetMax=20,
                                                verbose=verbose,
                                               )
             #Define the final weights/variations so long as we have btagging yields inserted...
-            if loadTheYields:
+            if BTaggingYieldsFile:
                 the_df[name][lvl] = defineWeights(the_df[name][lvl],
                                                   era = vals["era"],
                                                   isData = vals["isData"],
@@ -4007,11 +4026,12 @@ def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False
 
             #Hold the categorization nodes if doing histograms
             if doHistos:
-                cat_df[name][lvl] = fillHistos(the_df[name][lvl], wgtVar=None, isData = vals["isData"],
+                #Many of these have been deprecated, besides doCategorized... fix later
+                cat_df[name][lvl] = fillHistos(the_df[name][lvl], isData = vals["isData"],
                                                histosDict=histos[name][lvl],
                                                doMuons=False, doElectrons=False, doLeptons=False, 
                                                doJets=False, doWeights=False, doEventVars=False,
-                                               makeMountains=True, useDeepCSV=True)
+                                               doCategorized=True, bTagger=bTagger)
             #print(cat_df)
                 
             #Trigger the loop
@@ -4174,15 +4194,21 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
     parser.add_argument('stage', action='store', type=str, choices=['fill-yields', 'combine-yields', 'fill-histograms', 'prepare-for-combine'],
                         help='analysis stage to be produced')
-    parser.add_argument('--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
-                        help='output directory path defaulting to "."')
     parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic/{chan}_selection',
                         help='Stage of data storage to pull from, as referenced in Sample dictionaries as subkeys of the "source" key.'\
                         'Must be available in all samples to be processed. {chan} will be replaced with the channel analyzed')
     parser.add_argument('--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu'],
                         help='Decay channel for opposite-sign dilepton analysis')
-    parser.add_argument('--btagger', dest='btagger', action='store', default='DeepCSV', type=str, choices=['DeepCSV', 'DeepJet'],
-                        help='btagger algorithm to be used')
+    parser.add_argument('--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
+                        help='output directory path defaulting to "."')
+    parser.add_argument('--bTagger', dest='bTagger', action='store', default='DeepCSV', type=str, choices=['DeepCSV', 'DeepJet'],
+                        help='bTagger algorithm to be used')
+    parser.add_argument('--noAggregate', dest='noAggregate', action='store_true',
+                        help='Disable usage of aggregate BTagging Yields/Efficiencies in favor of individual per-sample maps')
+    parser.add_argument('--useHTOnly', dest='useHTOnly', action='store_true',
+                        help='For BTagging Yields, use 1D map depending on HT only')
+    parser.add_argument('--useNJetOnly', dest='useNJetOnly', action='store_true',
+                        help='For BTagging Yields, use 1D map depending on nJet only')
     parser.add_argument('--include', dest='include', action='store', default=None, type=str, nargs='*',
                         help='List of sample names to be used in the stage (if not called, defaults to all; takes precedene over exclude)')
     parser.add_argument('--exclude', dest='exclude', action='store', default=None, type=str, nargs='*',
@@ -4211,10 +4237,13 @@ if __name__ == '__main__':
     stage = args.stage
     channel = args.channel
     source = args.source.format(chan=channel)
-    btagger = args.btagger
-    incld = args.include
-    excld = args.exclude
+    bTagger = args.bTagger
+    includeSampleNames = args.include
+    excludeSampleNames = args.exclude
     verb = args.verbose
+    useAggregate = not args.noAggregate
+    useHTOnly = args.useHTOnly
+    useNJetOnly = args.useNJetOnly
     
     print("=========================================================")
     print("=               ____   _______      _                   =")
@@ -4231,11 +4260,13 @@ if __name__ == '__main__':
     print("Analysis stage: {stg}".format(stg=stage))
     print("Analysis directory: {adir}".format(adir=analysisDir))
     print("Channel to be analyzed: {chan}".format(chan=channel))
-    print("Btagger algorithm to be used: {tag}".format(tag=btagger))
-    if incld:
-        print("Include samples: {incld}".format(incld=incld))
-    elif excld:
-        print("Exclude samples: {excld}".format(excld=excld))
+    print("BTagger algorithm to be used: {tag}".format(tag=bTagger))
+    print("BTagging aggregate Yields/Efficiencies will be used ({uAgg}) and depend on HT only ({uHT}) or nJet only ({uNJ})"\
+          .format(uAgg=useAggregate, uHT=useHTOnly, uNJ=useNJetOnly))
+    if includeSampleNames:
+        print("Include samples: {incld}".format(incld=includeSampleNames))
+    elif excludeSampleNames:
+        print("Exclude samples: {excld}".format(excld=excludeSampleNames))
     else:
         print("Using all samples!")
     print("Verbose option: {verb}".format(verb=verb))
@@ -4247,19 +4278,34 @@ if __name__ == '__main__':
         print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
     elif stage == 'combine-yields':
         print("Combining BTagging yields and calculating ratios, a necessary ingredient for calculating the final btag event weight for filling histograms")
-        yieldDir = "{adir}/BTaggingYields/{chan}_selection"
+        yieldDir = "{adir}/BTaggingYields/{chan}_selection".format(adir=analysisDir, chan=channel)
+        globKey = "*.root"
         print("Looking for files to combine into yield ratios inside {ydir}".format(ydir=yieldDir))
-        print("BtaggingYieldsAnalyzer(yieldDir)")
+        if verb:
+            f = glob.glob("{}/{}".format(yieldDir, globKey))
+            print("\nFound these files: {files}\n\n".format(files=f))
+        BTaggingYieldsAnalyzer(yieldDir, outDirectory="{}", globKey=globKey, stripKey=".root", includeSampleNames=includeSampleNames, 
+                               excludeSampleNames=excludeSampleNames, mode="RECREATE", doNumpyValidation=False, forceDefaultRebin=False, verbose=verb,
+                               internalKeys = {"Numerators":["_sumW_before"],
+                                               "Denominator": "_sumW_after",
+                                           },
+                               internalKeysReplacements = {"BTaggingYield": "",
+                                                           "_sumW_before": "",
+                                                           "_sumW_after": "",
+                                                       },
+                               sampleRebin={"default": {"Y": [4, 5, 6, 7, 8, 9, 20],
+                                                        "X": [500.0, 600, 700.0, 900.0, 1100.0, 3200.0],
+                                                    },
+                                        },
+                               overrides={"Title": "$NAME BTaggingYield r=#frac{#Sigma#omega_{before}}{#Sigma#omega_{after}}($INTERNALS)",
+                                          "Xaxis": "H_{T}/Bin (GeV)",
+                                          "Yaxis": "nJet",
+                                      },
+                           )
     elif stage == 'fill-histograms':
-        print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=False, doHistos=True, BTaggingYieldsFile="{}", source=source, verbose=False)')
+        main(analysisDir, source, channel, bTagger=bTagger, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate,
+             useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
     elif stage == 'prepare-for-combine':
         print("This analysis stage is not yet finished. It will call the method histoCombine() which needs to be updated for the new internal key structure from fillHistos")
     else:
         print("stage {stag} is not yet prepared, please update the FTAnalyzer".format(stag))
-
-
-
-
-
-#def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", useSkimmed=True, verbose=False):
-#    main(BTaggingYieldsFile="/eos/user/n/nmangane/BTaggingYields.root")
