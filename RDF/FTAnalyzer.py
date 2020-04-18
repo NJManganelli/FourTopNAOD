@@ -2,8 +2,10 @@
 # coding: utf-8
 from __future__ import print_function
 import os
+import pwd #needed for username, together with os
 import sys
 import time
+import datetime
 import argparse
 import numpy as np
 import subprocess
@@ -2074,6 +2076,8 @@ def fillHistos(input_df, sampleName=None, isData = True, histosDict=None,
         fillJet_mass = "FTAJet{bpf}_mass".format(bpf=branchpostfix)
         fillMET_pt = "FTAMET{bpf}_pt".format(bpf=branchpostfix)
         fillMET_phi = "FTAMET{bpf}_phi".format(bpf=branchpostfix)
+        fillMET_uncorr_pt = sysDict.get("met_pt_var", "MET_pt")
+        fillMET_uncorr_phi = sysDict.get("met_phi_var", "MET_phi")
         
         #Get the appropriate weight defined in defineFinalWeights function
         wgtVar = sysDict.get("wgt_final", "wgt_nom")
@@ -2380,6 +2384,8 @@ def fillHistos(input_df, sampleName=None, isData = True, histosDict=None,
                         histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepJetB_sortedjet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_DeepJetB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepJetB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar)
                     histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_pt"] = cat_df[tc].Histo1D(("{name}__{cat}__MET_pt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), fillMET_pt, wgtVar)
                     histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_phi"] = cat_df[tc].Histo1D(("{name}__{cat}__MET_phi_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,-pi,pi), fillMET_phi, wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_uncorr_pt"] = cat_df[tc].Histo1D(("{name}__{cat}__MET_uncorr_pt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "Uncorrected MET", 20,0,1000), fillMET_uncorr_pt, wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_uncorr_phi"] = cat_df[tc].Histo1D(("{name}__{cat}__MET_uncorr_phi_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,-pi,pi), fillMET_uncorr_phi, wgtVar)
                     histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso03_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar)
                     histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso03_chg_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar)
                     histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso04_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso04_all".format(lpf=leppostfix), wgtVar)
@@ -2673,7 +2679,8 @@ def writeHistos(histDict, directory, levelsOfInterest="All", samplesOfInterest="
         f.Close()
 
 
-def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", stripKey=".root",
+def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", stripKey=".root", incld=None, 
+                           excld=None, mode="RECREATE", doNumpyValidation=False, forceDefaultRebin=False, verbose=False,
                            internalKeys = {"Numerators":["_sumW_before"],
                                            "Denominator": "_sumW_after",
                                           },
@@ -2681,7 +2688,7 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
                                                        "_sumW_before": "",
                                                        "_sumW_after": "",
                                                       },
-                           sample_rebin={"default": {"Y": [4, 5, 6, 7, 8, 9, 20],
+                           sampleRebin={"default": {"Y": [4, 5, 6, 7, 8, 9, 20],
                                                      "X": [500.0, 600, 700.0, 900.0, 1100.0, 3200.0],
                                                     },
                                          },
@@ -2689,20 +2696,21 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
                                       "Xaxis": "H_{T} (GeV)",
                                       "Yaxis": "nJet",
                                      },
-                           mode="RECREATE", doNumpyValidation=False, forceDefaultRebin=False, debug=False, debug_dict={}):
+                          ):
     """For btagging yield ratio calculations using method 1d (shape corrections)
     
     take list of files in <directory>, with optional <globKey>, and create individual root files containing
     each sample's btagging yield ratio histograms, based on derived categories. 
     
-    
-    #FIXME (below this line)
-    Keys can be parsed with 
-    <name_format> (default 'BTaggingYield*btagPreSF_$VARIATION*$SUM') where $CAT, $JETTYPE, and $TAG are cycled through from 
-    their respective input lists, format_dict{<categories>, <jettypes>, <tags>}. The format_dict{<untag>} option 
-    specifies the denominator histogram (where $TAG is replaced by <untag>). A file 'ttWH.root' with 
-    'BTagging*nJet4*bjets_DeepJet_T' will generate a file 'ttWH_BTagEff.root' containing the histogram 
-    'nJet4_bjets_DeepJet_T'"""
+    Keys can be parsed with a dictionary called <internalKeys>, which should have a key "Numerators" with a list of unique strings for identifying numerator histograms.
+    Another key, "Denominator", should be a string key (single) that uniquely identifies denominator histograms. Keys will be searched for these string contents.
+    For naming final yield ratios, the dictionary <internalKeysReplacements> takes a dictionary of key-value pairs where keys present in histogram names are replaced by the values
+    <sampleRebin> is a nested set of dictionaries. "default" must always be present, with keys for "Y" and "X" to provide lists of the bin edges for 2D rebinning.
+    <overrides> is a dictionary with keys "Title", "Xaxis", and "Yaxis" for overwriting those properties. Special identifiers $NAME and $INTERNALS
+    will be replaced with the name of the sample (Aggregate for weighted sum of all samples) and the systematic variation, respectively
+    <doNumpyValidation> toggles a numpy based calculation of errors to shadow ROOTs internal computation from adding and dividing histograms. This toggles <forceDefaultRebin>
+    <forceDefaultRebin> will ignore sample-specific rebinning schemes in the sampleRebin dictionary and force the default to be used instead
+    """
     
     if doNumpyValidation == True:
         #FORCE consistent binning and warn the user
@@ -2776,11 +2784,11 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
         
         #Get the rebinning lists with a default fallback, but it will be forced when doNumpyValidation is true
         if forceDefaultRebin == False:
-            x_rebin = sample_rebin.get(name, sample_rebin.get("default"))["X"]
-            y_rebin = sample_rebin.get(name, sample_rebin.get("default"))["Y"]
+            x_rebin = sampleRebin.get(name, sampleRebin.get("default"))["X"]
+            y_rebin = sampleRebin.get(name, sampleRebin.get("default"))["Y"]
         else:
-            x_rebin = sample_rebin.get("default")["X"]
-            y_rebin = sample_rebin.get("default")["Y"]
+            x_rebin = sampleRebin.get("default")["X"]
+            y_rebin = sampleRebin.get("default")["Y"]
             
         #index everything by the numerator for later naming purposes: $SAMPLENAME_$NUMERATOR style
         for tbr, stripped_numerator, stripped_denominator in uniqueTuples:
@@ -2899,11 +2907,11 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
     name = "Aggregate"
     #Get the rebinning lists with a default fallback, but it will be forced when doNumpyValidation is true
     if forceDefaultRebin == False:
-        x_rebin = sample_rebin.get(name, sample_rebin.get("default"))["X"]
-        y_rebin = sample_rebin.get(name, sample_rebin.get("default"))["Y"]
+        x_rebin = sampleRebin.get(name, sampleRebin.get("default"))["X"]
+        y_rebin = sampleRebin.get(name, sampleRebin.get("default"))["Y"]
     else:
-        x_rebin = sample_rebin.get("default")["X"]
-        y_rebin = sample_rebin.get("default")["Y"]
+        x_rebin = sampleRebin.get("default")["X"]
+        y_rebin = sampleRebin.get("default")["Y"]
     for numerator in numerators_dict["Aggregate"].keys():
         #Rebinning for this specific numerator. If "1DY" or "1DX" is in the name, there's only 1 bin 
         #in the other axis, i.e. 1DY = normal Y bins, 1 X bin
@@ -4014,24 +4022,26 @@ def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False
 
             #Write the output!
             if doBTaggingYields:
+                writeDir = analysisDir + "/BTaggingYields"
                 writeHistos(btagging,
-                            analysisDir + "/BTagging",
+                            writeDir,
                             levelsOfInterest=[lvl],
                             samplesOfInterest=[name],
                             dict_keys="All",
                             mode="RECREATE"
                            )
-                print("Wrote BTaggingYields for {} to this directory:\n{}".format(name, analysisDir + "/BTagging"))
+                print("Wrote BTaggingYields for {} to this directory:\n{}".format(name, writeDir))
                 print("To calculate the yield ratios, run 'BTaggingYieldsAnalyzer()' once all samples that are to be aggregated are in the directory")
             if doHistos:
+                writeDir = analysisDir + "/Histograms"
                 writeHistos(histos,
-                            analysisDir,
+                            writeDir,
                             levelsOfInterest=[lvl],
                             samplesOfInterest=[name],
                             dict_keys="All",
                             mode="RECREATE"
                            )
-                print("Wrote Histograms for {} to this directory:\n{}".format(name, analysisDir + "/BTagging"))
+                print("Wrote Histograms for {} to this directory:\n{}".format(name, writeDir))
             #Add sample name to the list of processed samples and print it, in case things ****ing break in Jupyter Kernel
             processedSampleList.append(name)
             print("Processed Samples:")
@@ -4161,40 +4171,95 @@ def otherFuncs():
     
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Nanovisor handles submission and bookkeeping for physics samples.')
-    parser.add_argument('--sample_cards', dest='sample_cards', action='store', nargs='*', type=str,
-                        help='path and name of the sample card(s) to be used')
-    parser.add_argument('--hadd', dest='hadd', action='store', nargs='?', type=str, const='hist*.root', default='NOJOIN',
-                        help='path of grandparent directory in which to join ROOT files on a per-directory bases, using hadd. Default arguments are hist.root, '\
-                        'with the assumption that NanoAOD files are inside subdirectories and will be joined as haddnano parsed_name.root hist_1.root hist_2.root ...'\
-                        ' Default parsed_name will be derived from the grandparent folder, as it is tailored to CRAB output structure.')
-    parser.add_argument('--haddnano', dest='haddnano', action='store', nargs='?', type=str, const='tree*.root', default='NOJOIN',
-                        help='path of grandparent directory in which to join NanoAOD files on a per-directory bases. Default arguments is tree.root, '\
-                        'with the assumption that NanoAOD files are inside subdirectories and will be joined as haddnano parsed_name.root tree_1.root tree_2.root ...'\
-                        ' Default parsed_name will be derived from the grandparent folder, as it is tailored to CRAB output structure.')
-    parser.add_argument('--check_events', dest='check_events', action='store', nargs='?', type=str, const='simple', default='NOCHECK',
-                        help='check that the number of events in source files match those in the sample card, optional argument "local" for files in the user space or optional argument "dbs" for lookup using dasgoclient query')
-    parser.add_argument('--fileLists', dest='fileLists', action='store', nargs='?', type=str, const='nanovisorFileLists', default=False,
-                        help='Write out fileLists for samples, with optional folder specified afterwards. Default folder will be "nanovisorFileLists"')
-    parser.add_argument('--filter', dest='filter', action='store', type=str, default=None,
-                        help='string to filter samples while checking events or generating configurations')
-    # parser.add_argument('--check_size', dest='check_size', action='store_true',
-    #                     help='check total dataset sizes')
-    parser.add_argument('--local_run', dest='local_run', action='store_true',
-                        help='run locally')
-    parser.add_argument('--crab_run', dest='crab_run', action='store_true',
-                        help='run with crab')
-    parser.add_argument('--percent_run', dest='percent_run', action='append', type=int,
-                        help='percent (as an integer) of each sample to process for local_run')
-    parser.add_argument('--stage', dest='stage', action='store', type=str,
+    parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
+    parser.add_argument('stage', action='store', type=str, choices=['fill-yields', 'combine-yields', 'fill-histograms', 'prepare-for-combine'],
                         help='analysis stage to be produced')
-    parser.add_argument('--source', dest='source', action='store', type=str, default='0',
-                        help='Stage of data storage from which to begin supervisor actions, such as source: 0 which is the unprocessed and centrally maintained data/MC')
-    parser.add_argument('--redir', dest='redir', action='append', type=str, default='root://cms-xrd-global.cern.ch/',
-                        help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
-    parser.add_argument('--btagger', dest='btagger', action='store', nargs='+', type=str, default=['DeepCSV', 'M'],
-                        help='tagger algorithm and working point to be used')
+    parser.add_argument('--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
+                        help='output directory path defaulting to "."')
+    parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic/{chan}_selection',
+                        help='Stage of data storage to pull from, as referenced in Sample dictionaries as subkeys of the "source" key.'\
+                        'Must be available in all samples to be processed. {chan} will be replaced with the channel analyzed')
+    parser.add_argument('--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu'],
+                        help='Decay channel for opposite-sign dilepton analysis')
+    parser.add_argument('--btagger', dest='btagger', action='store', default='DeepCSV', type=str, choices=['DeepCSV', 'DeepJet'],
+                        help='btagger algorithm to be used')
+    parser.add_argument('--include', dest='include', action='store', default=None, type=str, nargs='*',
+                        help='List of sample names to be used in the stage (if not called, defaults to all; takes precedene over exclude)')
+    parser.add_argument('--exclude', dest='exclude', action='store', default=None, type=str, nargs='*',
+                        help='List of sample names to not be used in the stage (if not called, defaults to none; include takes precedence)')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
+    # parser.add_argument('--sample_cards', dest='sample_cards', action='store', nargs='*', type=str,
+    #                     help='path and name of the sample card(s) to be used')
+    # parser.add_argument('--filter', dest='filter', action='store', type=str, default=None,
+    #                     help='string to filter samples while checking events or generating configurations')
+    # parser.add_argument('--redir', dest='redir', action='append', type=str, default='root://cms-xrd-global.cern.ch/',
+    #                     help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
+    # parser.add_argument('--era', dest='era', action='store', type=str, default="2017", choices=['2016', '2017', '2018'],
+    #                     help='simulation/run year')
+    #nargs='+' #this option requires a minimum of arguments, and all arguments are added to a list. '*' but minimum of 1 argument instead of none
 
-    main(BTaggingYieldsFile="/eos/user/n/nmangane/BTaggingYields.root")
+    #Parse the arguments
+    args = parser.parse_args()
+    #Get the username and today's date for default directory:
+    uname = pwd.getpwuid(os.getuid()).pw_name
+    uinitial = uname[0]
+    dateToday = datetime.date.today().strftime("%b-%d-%Y")
+
+    #Grab and format required and optional arguments
+    analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday)
+    stage = args.stage
+    channel = args.channel
+    source = args.source.format(chan=channel)
+    btagger = args.btagger
+    incld = args.include
+    excld = args.exclude
+    verb = args.verbose
+    
+    print("=========================================================")
+    print("=               ____   _______      _                   =")
+    print("=              |          |        / \                  =")
+    print("=              |___       |       /   \                 =")
+    print("=              |          |      /_____\                =")
+    print("=              |          |     /       \               =")
+    print("=                                                       =")
+    print("=========================================================")
+
+    print("Running the Four Top Analyzer")
+    print("Configuring according to the input parameters")
+
+    print("Analysis stage: {stg}".format(stg=stage))
+    print("Analysis directory: {adir}".format(adir=analysisDir))
+    print("Channel to be analyzed: {chan}".format(chan=channel))
+    print("Btagger algorithm to be used: {tag}".format(tag=btagger))
+    if incld:
+        print("Include samples: {incld}".format(incld=incld))
+    elif excld:
+        print("Exclude samples: {excld}".format(excld=excld))
+    else:
+        print("Using all samples!")
+    print("Verbose option: {verb}".format(verb=verb))
+
+
+    #Run algos appropriately for the given configuration
+    if stage == 'fill-yields':
+        print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
+        print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
+    elif stage == 'combine-yields':
+        print("Combining BTagging yields and calculating ratios, a necessary ingredient for calculating the final btag event weight for filling histograms")
+        yieldDir = "{adir}/BTaggingYields/{chan}_selection"
+        print("Looking for files to combine into yield ratios inside {ydir}".format(ydir=yieldDir))
+        print("BtaggingYieldsAnalyzer(yieldDir)")
+    elif stage == 'fill-histograms':
+        print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=False, doHistos=True, BTaggingYieldsFile="{}", source=source, verbose=False)')
+    elif stage == 'prepare-for-combine':
+        print("This analysis stage is not yet finished. It will call the method histoCombine() which needs to be updated for the new internal key structure from fillHistos")
+    else:
+        print("stage {stag} is not yet prepared, please update the FTAnalyzer".format(stag))
+
+
+
+
+
+#def main(analysisDir=None, channel="ElMu", doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", useSkimmed=True, verbose=False):
+#    main(BTaggingYieldsFile="/eos/user/n/nmangane/BTaggingYields.root")
