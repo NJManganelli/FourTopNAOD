@@ -1091,20 +1091,24 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, useBackupChannel
                                                                             Chan["ElEl_baseline"] + Chan["Mu_baseline"] + Chan["El_baseline"])
     
     b["ElMu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) > 0".format(Chan["ElMu_baseline"])
-    b["MuMu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0".format(Chan["ElMu_baseline"], 
-                                                                                                                                Chan["MuMu_baseline"])
-    b["ElEl_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0".format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"], 
-                                                                                                                                Chan["ElEl_baseline"])
-    b["Mu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0".format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"], Chan["Mu_baseline"])
-    b["El_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0".format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + 
-                                                                                                                    Chan["ElEl_baseline"] + Chan["Mu_baseline"], Chan["El_baseline"])
+    b["MuMu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
+        .format(Chan["ElMu_baseline"], Chan["MuMu_baseline"])
+    b["ElEl_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
+        .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"], Chan["ElEl_baseline"])
+    b["Mu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
+        .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"], Chan["Mu_baseline"])
+    b["El_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
+        .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"] + Chan["Mu_baseline"], Chan["El_baseline"])
     b["selection"] = "ESV_TriggerAndLeptonLogic_selection > 0"
     b["ElMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu_selection"])
-    b["MuMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0".format(Chan["ElMu_selection"], Chan["MuMu_selection"])
-    b["ElEl_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0".format(Chan["ElMu_selection"] + Chan["MuMu_selection"], Chan["ElEl_selection"])
-    b["Mu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0".format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"], Chan["Mu_selection"])
-    b["El_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0".format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"]
-                                                                                                                                 + Chan["Mu_selection"], Chan["El_selection"])
+    b["MuMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"], Chan["MuMu_selection"])
+    b["ElEl_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"], Chan["ElEl_selection"])
+    b["Mu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"], Chan["Mu_selection"])
+    b["El_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"] + Chan["Mu_selection"], Chan["El_selection"])
     if input_lvl_filter == None:
         rdf = input_df                .Define("mu_mask", "Muon_pt > 0").Define("e_mask", "Electron_pt > 0")
     else:
@@ -1728,7 +1732,7 @@ def BTaggingYields(input_df, sampleName, isData = True, histosDict=None, verbose
         for sysVar, sysDict in sysVariations.items():
             z[sysVar] = []
             isWeightVariation = sysDict.get("weightVariation")
-            branchpostfix = "_nom" if isWeightVariation else sysVar.replace("$NOMINAL", "_nom") #branch postfix for 
+            branchpostfix = "__nom" if isWeightVariation else "_" + sysVar.replace("$NOMINAL", "_nom") #branch postfix for 
             syspostfix = sysVar.replace("$NOMINAL", "_nom")
             jetMask = sysDict.get("jet_mask") #mask as defined for the jet collection under this systematic variation
             jetPt = sysDict.get("jet_pt_var") #colum name of jet pt collection for this systematic
@@ -2032,10 +2036,10 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 
 
 
-def fillHistos(input_df, sampleName=None, isData = True, histosDict=None,
+def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All", isData = True, histosDict=None,
                doMuons=False, doElectrons=False, doLeptons=False, doJets=False, doWeights=False, doEventVars=False, 
                doCategorized=False, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
-               HTCut=500, METCut=None, ZMassMETWindow=None, verbose=False,
+               HTCut=500, ZMassMETWindow=[-15.0, -30.0], verbose=False,
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "wgt_final": "wgt_nom",
                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -2075,9 +2079,15 @@ def fillHistos(input_df, sampleName=None, isData = True, histosDict=None,
     """
     
 
-    if doMuons == False and doElectrons == False and doLeptons == False                and doJets == False and doWeights == False and doEventVars == False                and doCategorized == False:
-        raise RuntimeError("Must select something to plot:"                               "Set do{Muons,Electrons,Leptons,Jets,Weights,EventVars,etc} = True in init method")
-    
+    if doMuons == False and doElectrons == False and doLeptons == False and doJets == False and doWeights == False and doEventVars == False and doCategorized == False:
+        raise RuntimeError("Must select something to plot: Set do{Muons,Electrons,Leptons,Jets,Weights,EventVars,etc} = True in init method")
+
+    if usePackedEventID:
+        print("Using packedEventID to categorize events into (sub)sample names and channel")
+    elif sampleName != None and channel != None:
+        print("Using input sampleName and channel to categorize events in histograms dictionary: {} - {}".format(sampleName, channel))
+    else:
+        raise RuntimeError("fillHistos() must be configured with the sampleName and channel or to deduce these internally based upon packedEventID (higher precedence)")
 
     if bTagger.lower() == "deepcsv":
         tagger = "CSV"
@@ -2091,8 +2101,56 @@ def fillHistos(input_df, sampleName=None, isData = True, histosDict=None,
     pi = ROOT.TMath.Pi()
     #Get the list of defined columns for checks
     listOfDefinedColumns = input_df.GetDefinedColumnNames()
-    #Dictionary to hold all the categorization nodes
-    cat_df = collections.OrderedDict()
+    # filterNodes = collections.OrderedDict() #For storing tuples to debug and be verbose about
+    # defineNodes = collections.OrderedDict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
+    # countNodes = collections.OrderedDict() #For storing the counts at each node
+    # histoNodes = collections.OrderedDict() #For storing all nodes to be histogrammed, with nicely parsed keys... 
+    # nodes = collections.OrderedDict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
+    filterNodes = dict() #For storing tuples to debug and be verbose about
+    defineNodes = dict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
+    countNodes = dict() #For storing the counts at each node
+    histoNodes = dict() #For storing all nodes to be histogrammed, with nicely parsed keys... 
+    nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
+    nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
+
+    if usePackedEventID:
+        raise NotImplementedError("usePackedEventID needs some work. Also, it isn't going to work for combined samples that have different systematic variations,"\
+                                  "unless special precautions are taken (easy to do with weight variations so long as the branch exists, even if length of vector"\
+                                  "s differ. Scale variations okay, there will be useless computations I guess... or don't emplace histo nodes on that processName's"\
+                                  "daughter nodes.")
+        #Use a method to get the list of potential samples from the packedEventID -> Probably method that calls a common dictionarymethod.
+        #Return std::vector<std::string> to iterate through, will include such things as ttbb_DL-GF, ttbbJets, ttll_DL, ttcc_SL, etc... fully complex-stitchable
+        #for processName in packedEventProcessNames:
+            #filterNodes[processName] = collections.OrderedDict()
+            #filterNodes[processName]["BaseNode"] = ("packedEventID == getPackedEventID('processName');", "{}".format(processName), processName, None, None, None, None)
+            #nodes[processName] = collections.OrderedDict()
+            #nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(packedEventID code goes here)
+            #countNodes[processName] = collections.OrderedDict()
+            #countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
+            #WE ARE DONE, prepared for systematic variation-dependent code looping through channels, 
+        #nodes[processName][chan]["BaseNode"] = input_df.Filter(packedEventID).Filter(chan) #pseudocode for creating these nodes
+        #Might need to do continue statements on "BaseNode" when it's the key in future loops
+        #Preparateion complete? Now we must create filters later on when we loop through the systematic variations
+        #Overall key set will be nodes[processName][decayChannel][scaleVariation-dependent-HTandZWindow==L0Nodes][nBTags==L1Nodes][nJet==L2Nodes]
+        #Histograms can be attached to L0 - L2 nodes, with the processName, decayChannel, HT/ZWindow, nBTags, nJets derived from the keys in the 5 nested for loops
+    else:
+        processName = sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
+
+        #The below references branchpostfix since we only need nodes for these types of scale variations...
+        if processName not in nodes:
+            #L-2 filter, should be the packedEventID filter in that case
+            # filterNodes[processName] = collections.OrderedDict()
+            filterNodes[processName] = dict()
+            filterNodes[processName]["BaseNode"] = ("return true;", "{}".format(processName), processName, None, None, None, None)
+            # nodes[processName] = collections.OrderedDict()
+            nodes[processName] = dict()
+            nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
+            # countNodes[processName] = collections.OrderedDict()
+            countNodes[processName] = dict()
+            countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
+
+
+
     #Make sure the nominal is done first so that categorization is successful
     for sysVar, sysDict in sorted(sysVariations.items(), key=lambda x: "$NOMINAL" in x[0], reverse=True):
         #skip systematic variations on data, only do the nominal
@@ -2109,9 +2167,9 @@ def fillHistos(input_df, sampleName=None, isData = True, histosDict=None,
         #name branches for filling with the nominal postfix if weight variations, and systematic postfix if scale variation (jes_up, etc.)
         branchpostfix = None
         if isWeightVariation:
-            branchpostfix = "_nom"
+            branchpostfix = "__nom"
         else:
-            branchpostfix = sysVar.replace("$NOMINAL", "_nom")
+            branchpostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
         leppostfix = "_nom" #No variation on this yet, but just in case
         
         fillJet = "FTAJet{bpf}".format(bpf=branchpostfix)
@@ -2123,7 +2181,19 @@ def fillHistos(input_df, sampleName=None, isData = True, histosDict=None,
         fillMET_phi = "FTAMET{bpf}_phi".format(bpf=branchpostfix)
         fillMET_uncorr_pt = sysDict.get("met_pt_var", "MET_pt")
         fillMET_uncorr_phi = sysDict.get("met_phi_var", "MET_phi")
-        
+
+        #if verbose:
+        print("Systematic: {spf} - Branch: {bpf} - Jets: {fj}=({fjp}, {fji}, {fje}, {fjm}) - MET: ({mpt}, {mph})".format(spf=syspostfix,
+                                                                                                                         bpf=branchpostfix,
+                                                                                                                         fj=fillJet,
+                                                                                                                         fjp=fillJet_pt,
+                                                                                                                         fji=fillJet_phi,
+                                                                                                                         fje=fillJet_eta,
+                                                                                                                         fjm=fillJet_mass,
+                                                                                                                         mpt=fillMET_pt,
+                                                                                                                         mph=fillMET_phi)
+          )
+
         #Get the appropriate weight defined in defineFinalWeights function
         wgtVar = sysDict.get("wgt_final", "wgt_nom")
         if wgtVar not in listOfDefinedColumns:
@@ -2135,360 +2205,291 @@ def fillHistos(input_df, sampleName=None, isData = True, histosDict=None,
             else:
                 raise RuntimeError("Couldn't find a valid fallback weight variation in fillHistos()")
             print("{} chosen as the weight for {} variation".format(wgtVar, syspostfix))
-
-    
-        if doWeights == True:
-            if histosDict != None:
-                if "EventVars" not in histosDict:
-                    histosDict["EventVars"] = {}
-                # histosDict["EventVars"]["wgt_NUMW"] = input_df.Histo1D("wgt_NUMW")
-                # histosDict["EventVars"]["wgt_diff"] = input_df.Histo1D(("wgt_diff", "(wgt_NUMW - wgt_SUMW)/wgt_SUMW", 2000, -1, 1), "wgt_diff", "1")
-                # histosDict["EventVars"]["wgt_PU"] = input_df.Histo1D(("wgt_PU", "", 2000, 0, 5), "puWeight", "wgt_SUMW")
-                # histosDict["EventVars"]["wgt_LSF"] = input_df.Histo1D(("wgt_LSF", "", 2000, 0, 5), "wgt_LSF", "wgt_SUMW")
-                # histosDict["EventVars"]["wgt_L1PF"] = input_df.Histo1D(("wgt_L1PF", "", 2000, 0, 5), "L1PreFiringWeight_Nom", "wgt_SUMW")
-                # histosDict["EventVars"]["wgt_PU_LSF_L1PF"] = input_df.Histo1D(("wgt_PU_LSF_L1PF", "", 2000, 0, 5), "wgt_PU_LSF_L1PF", "wgt_SUMW")
-        if doMuons == True:
-            if histosDict != None:
-                if "Muons" not in histosDict: 
-                    histosDict["Muons"] = {}
-                histosDict["Muons"]["idx"] = input_df.Histo1D(("idx{}".format(postfix), "", 5, 0, 5), "Muon_idx", wgtVar)
-                histosDict["Muons"]["Gidx"] = input_df.Histo1D(("Gidx{}".format(postfix), "", 5, 0, 5), "FTAMuon{lpf}_idx", wgtVar)
-                histosDict["Muons"]["nMu"] = input_df.Histo1D(("nMuon{}".format(postfix), "", 5, 0, 5), "nFTAMuon{lpf}", wgtVar)
-                histosDict["Muons"]["nLooseMu"] = input_df.Histo1D(("nLooseMuon{}".format(postfix), "", 5, 0, 5), "nLooseFTAMuon{lpf}", wgtVar)
-                histosDict["Muons"]["nMediumMu"] = input_df.Histo1D(("nMediumMuon{}".format(postfix), "", 5, 0, 5), "nMediumFTAMuon{lpf}", wgtVar)
-                histosDict["Muons"]["pt"] = input_df.Histo1D(("Muon_pt{}".format(postfix), "", 100, 0, 500), "FTAMuon{lpf}_pt", wgtVar)
-                histosDict["Muons"]["eta"] = input_df.Histo1D(("Muon_eta{}".format(postfix), "", 104, -2.6, 2.6), "FTAMuon{lpf}_eta", wgtVar)
-                histosDict["Muons"]["phi"] = input_df.Histo1D(("Muon_phi{}".format(postfix), "", 64, -pi, pi), "FTAMuon{lpf}_phi", wgtVar)
-                #histosDict["Muons"]["mass"] = input_df.Histo1D(("Muon_mass{}".format(postfix), "", 50, 0, 1), "FTAMuon{lpf}_mass", wgtVar)
-                histosDict["Muons"]["iso"] = input_df.Histo1D(("Muon_iso{}".format(postfix), "", 8, 0, 8), "FTAMuon{lpf}_pfIsoId", wgtVar)
-                histosDict["Muons"]["dz"] = input_df.Histo1D(("Muon_dz{}".format(postfix), "", 100, -0.01, 0.01), "FTAMuon{lpf}_dz", wgtVar)
-                histosDict["Muons"]["dxy"] = input_df.Histo1D(("Muon_dxy{}".format(postfix), "", 100, -0.1, 0.1), "FTAMuon{lpf}_dxy", wgtVar)
-                #histosDict["Muons"]["d0"] = input_df.Histo1D(("Muon_d0{}".format(postfix), "", 100, -0.01, 0.01), "FTAMuon{lpf}_d0", wgtVar)
-                histosDict["Muons"]["ip3d"] = input_df.Histo1D(("Muon_ip3d{}".format(postfix), "", 100, 0, 0.01), "FTAMuon{lpf}_ip3d", wgtVar)
-                histosDict["Muons"]["pfRelIso03_all"] = input_df.Histo1D(("Muon_pfRelIso03_all{}".format(postfix), "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_all", wgtVar)
-                histosDict["Muons"]["pfRelIso03_chg"] = input_df.Histo1D(("Muon_pfRelIso03_chg{}".format(postfix), "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_chg", wgtVar)
-                histosDict["Muons"]["pfRelIso04_all"] = input_df.Histo1D(("Muon_pfRelIso04_all{}".format(postfix), "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso04_all", wgtVar)
-            if histosDict != None:
-                if "Muons" not in histosDict:
-                    histosDict["Muons"] = {}
-                histosDict["Muons"]["eta_phi"] = input_df.Histo2D(("Muon_eta_phi{}".format(postfix), "",
-                                                                      104, -2.6, 2.6,
-                                                                      64, -pi, pi),
-                                                                     "FTAMuon{lpf}_eta", "FTAMuon{lpf}_phi", wgtVar)
-                histosDict["Muons"]["dz_ip3d"] = input_df.Histo2D(("Muon_dz_ip3d{}".format(postfix), "",
-                                                                      100, -0.01, 0.01,
-                                                                      100, 0, 0.01),
-                                                                     "FTAMuon{lpf}_dz", "FTAMuon{lpf}_ip3d", wgtVar)
-        if doElectrons == True:
-            if histosDict != None:
-                if "Electrons" not in histosDict: 
-                    histosDict["Electrons"] = {}
-                histosDict["Electrons"]["nEl"] = input_df.Histo1D(("nElectron{}".format(postfix), "", 5, 0, 5), "nFTAElectron{lpf}", wgtVar)
-                histosDict["Electrons"]["nLooseEl"] = input_df.Histo1D(("nLooseElectron{}".format(postfix), "", 5, 0, 5), "nLooseFTAElectron{lpf}", wgtVar)
-                histosDict["Electrons"]["nMediumEl"] = input_df.Histo1D(("nMediumElectron{}".format(postfix), "", 5, 0, 5), "nMediumFTAElectron{lpf}", wgtVar)
-                histosDict["Electrons"]["pt"] = input_df.Histo1D(("Electron_pt{}".format(postfix), "", 100, 0, 500), "FTAElectron{lpf}_pt", wgtVar)
-                histosDict["Electrons"]["eta"] = input_df.Histo1D(("Electron_eta{}".format(postfix), "", 104, -2.6, 2.6), "FTAElectron{lpf}_eta", wgtVar)
-                histosDict["Electrons"]["phi"] = input_df.Histo1D(("Electron_phi{}".format(postfix), "", 64, -pi, pi), "FTAElectron{lpf}_phi", wgtVar)
-                #histosDict["Electrons"]["mass"] = input_df.Histo1D(("Electron_mass{}".format(postfix), "", 50, 0, 1), "FTAElectron{lpf}_mass", wgtVar)
-                histosDict["Electrons"]["dz"] = input_df.Histo1D(("Electron_dz{}".format(postfix), "", 100, -0.01, 0.01), "FTAElectron{lpf}_dz", wgtVar)
-                #histosDict["Electrons"]["d0"] = input_df.Histo1D(("Electron_d0{}".format(postfix), "", 100, 0, 0.01), "FTAElectron{lpf}_d0", wgtVar)
-                histosDict["Electrons"]["ip3d"] = input_df.Histo1D(("Electron_ip3d{}".format(postfix), "", 100, 0, 0.01), "FTAElectron{lpf}_ip3d", wgtVar)
-                histosDict["Electrons"]["pfRelIso03_all"] = input_df.Histo1D(("Electron_pfRelIso03_all{}".format(postfix), "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_all", wgtVar)
-                histosDict["Electrons"]["pfRelIso03_chg"] = input_df.Histo1D(("Electron_pfRelIso03_chg{}".format(postfix), "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_chg", wgtVar)
-                histosDict["Electrons"]["cutBased"] = input_df.Histo1D(("Electron_cutBased{}".format(postfix), "", 5, 0, 5), "FTAElectron{lpf}_cutBased", wgtVar)
-            if histosDict != None:
-                if "Electrons" not in histosDict: 
-                    histosDict["Electrons"] = {}
-                histosDict["Electrons"]["eta_phi"] = input_df.Histo2D(("Electron_eta_phi{}".format(postfix), "",
-                                                                          104, -2.6, 2.6,
-                                                                          64, -pi, pi),
-                                                                         "FTAElectron{lpf}_eta", "FTAElectron{lpf}_phi", wgtVar)
-                histosDict["Electrons"]["dz_ip3d"] = input_df.Histo2D(("Electron_dz_ip3d{}".format(postfix), "",
-                                                                          100, -0.01, 0.01,
-                                                                          100, 0, 0.01),
-                                                                         "FTAElectron{lpf}_dz", "FTAElectron{lpf}_ip3d", wgtVar)
-        if doLeptons == True:
-            if histosDict != None:
-                if "Leptons" not in histosDict: 
-                    histosDict["Leptons"] = {}
-                histosDict["Leptons"]["pt_LeadLep"] = input_df                        .Histo1D(("FTALepton{lpf}_pt_LeadLep{}".format(postfix), "", 100, 0, 500),"FTALepton{lpf}_pt_LeadLep", wgtVar)
-                histosDict["Leptons"]["pt_SubleadLep"] = input_df                        .Histo1D(("FTALepton{lpf}_pt_SubleadLep{}".format(postfix), "", 100, 0, 500),"FTALepton{lpf}_pt_SubleadLep", wgtVar)
-                histosDict["Leptons"]["eta"] = input_df                        .Histo1D(("FTALepton{lpf}_eta{}".format(postfix), "", 104, -2.6, 2.6),"FTALepton{lpf}_eta", wgtVar)
-                histosDict["Leptons"]["phi"] = input_df                        .Histo1D(("FTALepton{lpf}_phi{}".format(postfix), "", 64, -pi, pi),"FTALepton{lpf}_phi", wgtVar)
-                histosDict["Leptons"]["nLepton"] = input_df                        .Histo1D(("nLepton{}".format(postfix), "", 5, 0, 5), "nFTALepton{lpf}", wgtVar)
-                histosDict["Leptons"]["pdgId"] = input_df                        .Histo1D(("Lepton_pdgId{}".format(postfix), "", 32, -16, 16), "FTALepton{lpf}_pdgId", wgtVar)
-                histosDict["Leptons"]["jetIdx"] = input_df                        .Histo1D(("Lepton_jetIdx{}".format(postfix), "", 20, 0, 20), "FTALepton{lpf}_jetIdx", wgtVar)
-                #histosDict["Leptons"]["LepSF"] = input_df\
-                #        .Histo1D(("Lepton_SF_({})".format("wgt_SUMW_PU:HARDCODED"), "", 100, 0.93, 1.03), "FTALepton{lpf}_SF_nom", "wgt_SUMW_PU")
-                #histosDict["Leptons"]["LSF"] = input_df\
-                #        .Histo1D(("LSF_({})".format("wgt_SUMW_PU:HARDCODED"), "", 200, 0.80, 1.1), "wgt_LSF", "wgt_SUMW_PU")
-                #histosDict["Leptons"]["SPL_SP"] = input_df\
-                #        .Histo1D(("SPL_SP_({})".format("wgt_SUMW_PU:HARDCODED"), "", 200, 0.80, 1.1), "SPL_SP", "wgt_SUMW_PU")
-                #histosDict["Leptons"]["LepSF"] = input_df.Histo1D("FTALepton{lpf}_SF_nom")#, "wgt_SUMW_PU")
-                #histosDict["Leptons"]["LSF"] = input_df.Histo1D("wgt_LSF")#, "wgt_SUMW_PU")
-                #histosDict["Leptons"]["SPL_SP"] = input_df.Histo1D("SPL_SP")#, "wgt_SUMW_PU")
-                #histosDict["Leptons"]["SUMW_PU"] = input_df.Histo1D("wgt_SUMW_PU")#, "wgt_SUMW_PU")
-                #histosDict["Leptons"]["SUMW_PU_LSF"] = input_df.Histo1D("wgt_SUMW_PU_LSF")#, "wgt_SUMW_PU")
-                #histosDict["Leptons"]["PU"] = input_df.Histo1D("puWeight")#, "wgt_SUMW_PU")
-        if doJets == True:
-            if histosDict != None:
-                if "Jets" not in histosDict:
-                    histosDict["Jets"] = {}
-                histosDict["Jets"]["pt"] = input_df.Histo1D(("Jet_pt{}".format(postfix), "", 100, 0, 500), fillJet_pt, wgtVar)
-                for x in xrange(nJetsToHisto):
-                    histosDict["Jets"]["pt_jet{}".format(x+1)] = input_df.Histo1D(("Jet_pt_jet{}({})".format(x+1, wgtVar), "", 100, 0, 500), "Jet{bpf}_pt_jet{}".format(x+1), wgtVar)
-                    histosDict["Jets"]["eta_jet{}".format(x+1)] = input_df.Histo1D(("Jet_eta_jet{}({})".format(x+1, wgtVar), "", 104, -2.6, 2.6), "Jet{bpf}_eta_jet{}".format(x+1), wgtVar)
-                    histosDict["Jets"]["phi_jet{}".format(x+1)] = input_df.Histo1D(("Jet_phi_jet{}({})".format(x+1, wgtVar), "", 64, -pi, pi), "Jet{bpf}_phi_jet{}".format(x+1), wgtVar)
-                histosDict["Jets"]["eta"] = input_df.Histo1D(("Jet_eta{}".format(postfix), "", 104, -2.6, 2.6), fillJet_eta, wgtVar)
-                histosDict["Jets"]["phi"] = input_df.Histo1D(("Jet_phi{}".format(postfix), "", 64, -pi, pi), fillJet_phi, wgtVar)
-                histosDict["Jets"]["mass"] = input_df.Histo1D(("Jet_mass{}".format(postfix), "", 100, 0, 500), fillJet_mass, wgtVar)
-                histosDict["Jets"]["jetId"] = input_df.Histo1D(("Jet_jetId{}".format(postfix), "", 8, 0, 8), "Jet{bpf}_jetId", wgtVar) #FIXME: not based on variation... okay? maybe not with masks...
-                #histosDict["Jets"]["btagDeepB_LeadtagJet"] = input_df.Histo1D(("Jet_btagDeepB_LeadtagJet{}".format(postfix), "", 101, -0.01, 1), "Jet{bpf}_btagDeepB_LeadtagJet", wgtVar)
-                #histosDict["Jets"]["btagDeepB_SubleadtagJet"] = input_df.Histo1D(("Jet_btagDeepB_SubleadtagJet{}".format(postfix), "", 101, -0.01, 1), "Jet{bpf}_btagDeepB_SubleadtagJet", wgtVar)
-                #histosDict["Jets"]["btagDeepJet_LeadtagJet"] = input_df.Histo1D(("Jet_btagDeepJetB_LeadtagJet{}".format(postfix), "", 101, -0.01, 1), "Jet{bpf}_btagDeepFlavB_sorted_LeadtagJet", wgtVar)
-                #histosDict["Jets"]["btagDeepJet_SubleadtagJet"] = input_df.Histo1D(("Jet_btagDeepJetB_SubleadtagJet{}".format(postfix), "", 101, -0.01, 1), "Jet{bpf}_btagDeepFlavB_sorted_SubleadtagJet", wgtVar)
-                #histosDict["Jets"]["nMediumCSVv2"] = input_df.Histo1D(("nJet_MediumCSVv2{}".format(postfix), "", 10, 0, 10), "nJet{bpf}_MediumCSVv2", wgtVar)
-                histosDict["Jets"]["nMediumDeepCSV"] = input_df.Histo1D(("nJet_MediumDeepCSV{}".format(postfix), "", 10, 0, 10), "nJet{bpf}_MediumDeepCSV", wgtVar)
-                histosDict["Jets"]["nMediumDeepJet"] = input_df.Histo1D(("nJet_MediumDeepJet{}".format(postfix), "", 10, 0, 10), "nJet{bpf}_MediumDeepJet", wgtVar)
-                histosDict["Jets"]["nJet"] = input_df.Histo1D(("nJet{}".format(postfix), "", 15, 0, 15), "nJet{bpf}", wgtVar)
-                histosDict["Jets"]["dR_Jet_Mu_leading"] = input_df.Histo1D(("dR_Jet_Mu_leading{}".format(postfix), "dR(Jet, #mu_{leading}); dR; Events)", 40, 0, 0.8), "dR_Jet_Mu_leading", wgtVar)
-                histosDict["Jets"]["dR_Jet_Mu_sublead"] = input_df.Histo1D(("dR_Jet_Mu_sublead{}".format(postfix), "dR(Jet, #mu_{subleading}); dR; Events)", 40, 0, 0.8), "dR_Jet_Mu_sublead", wgtVar)
-                histosDict["Jets"]["dR_Jet_El_leading"] = input_df.Histo1D(("dR_Jet_El_leading{}".format(postfix), "dR(Jet, #e_{leading}); dR; Events)", 40, 0, 0.8), "dR_Jet_El_leading", wgtVar)
-                histosDict["Jets"]["dR_Jet_El_sublead"] = input_df.Histo1D(("dR_Jet_El_sublead{}".format(postfix), "dR(Jet, #e_{subleading}); dR; Events)", 40, 0, 0.8), "dR_Jet_El_sublead", wgtVar)
-            
-                if debugInfo == True:
-                    #histosDict["Jets"]["DiffMaskVsALT"] = input_df.Histo1D(("DiffMaskVsALT", "", 10, -10, 10), "DiffMaskVsALT", wgtVar)
-                    #histosDict["Jets"]["DiffnJet"] = input_df.Histo1D(("DiffnJet", "", 10, -10, 10), "DiffnJet", wgtVar)
-                    histosDict["Jets"]["DeepJetSorted"] = input_df.Histo1D("DeepJetSorted", wgtVar)
-                    histosDict["Jets"]["DeepJetLeadtagMinusSubleadtag"] = input_df.Histo1D(("DeepJetLeadtagMinusSubleadtag", "DeepJet(Leadtag - Subleadtag);;Events", 100, -1, 1), "DeepJet0Minus1", wgtVar)
-                    histosDict["Jets"]["MediumDeepJetSorted"] = input_df.Histo1D("MediumDeepJetSorted", wgtVar)
-                    #histosDict["Jets"]["MediumDeepJet0Minus1"] = input_df.Histo1D(("MediumDeepJet0Minus1", "", 100, -1, 1), "MediumDeepJet0Minus1", wgtVar)
-                    #histosDict["Jets"]["btagDeepJet_jet0Med"] = input_df.Histo1D(("Jet_btagDeepJetB_jet0Med{}".format(postfix), "", 102, -0.02, 1), "Jet{bpf}_btagDeepFlavB_jet0Med", wgtVar)
-                    #histosDict["Jets"]["btagDeepJet_jet1Med"] = input_df.Histo1D(("Jet_btagDeepJetB_jet1Med{}".format(postfix), "", 102, -0.02, 1), "Jet{bpf}_btagDeepFlavB_jet1Med", wgtVar)
-                    #histosDict["Jets"]["nJetNUMW"] = input_df.Histo1D(("nJet_NUMW", "", 15, 0, 15), "nJet{bpf}", "wgt_NUMW_V2")
-                    #histosDict["Jets"]["nJetSUMW_PU"] = input_df.Histo1D(("nJet_SUMW_PU", "", 15, 0, 15), "nJet{bpf}", "wgt_SUMW_PU")
-                    #histosDict["Jets"]["nJetSUMW_LSF"] = input_df.Histo1D(("nJet_SUMW_LSF", "", 15, 0, 15), "nJet{bpf}", "wgt_SUMW_LSF")
-                    #histosDict["Jets"]["ptALT"] = input_df.Histo1D(("Jet_ptALT{}".format(postfix), "", 100, 0, 500), "Jet{bpf}_ptALT", wgtVar)
-                    #histosDict["Jets"]["etaALT"] = input_df.Histo1D(("Jet_etaALT{}".format(postfix), "", 104, -2.6, 2.6), "Jet{bpf}_etaALT", wgtVar)
-                    #histosDict["Jets"]["phiALT"] = input_df.Histo1D(("Jet_phiALT{}".format(postfix), "", 64, -pi, pi), "Jet{bpf}_phiALT", wgtVar)
-                    #histosDict["Jets"]["massALT"] = input_df.Histo1D(("Jet_massALT{}".format(postfix), "", 100, 0, 500), "Jet{bpf}_massALT", wgtVar)
-                    #histosDict["Jets"]["jetIdALT"] = input_df.Histo1D(("Jet_jetIdALT{}".format(postfix), "", 8, 0, 8), "Jet{bpf}_jetIdALT", wgtVar)
         
-            if histosDict != None:
-                if "Jets" not in histosDict:
-                    histosDict["Jets"] = {}
-                histosDict["Jets"]["eta_phi"] = input_df.Histo2D(("Jet_eta_phi{}".format(postfix), "",
-                                                                     104, -2.6, 2.6,
-                                                                     64, -pi, pi),
-                                                                    fillJet_eta, fillJet_phi, wgtVar)
-        if doEventVars == True:
-            if histosDict != None:
-                if "EventVars" not in histosDict:
-                    histosDict["EventVars"] = {}
-                #histosDict["EventVars"]["JML_baseline"] = input_df.Histo1D(("JML_baseline{}".format(postfix), "", 2,0,2), "JML_baseline_pass", wgtVar)
-                #histosDict["EventVars"]["JML_selection"] = input_df.Histo1D(("JML_selection{}".format(postfix), "", 2,0,2), "JML_selection_pass", wgtVar)
-                #histosDict["EventVars"]["HT_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HT_baseline{}".format(postfix), "", 100,400,1400), "ESV_JetMETLogic_HT_baseline", wgtVar)
-                #histosDict["EventVars"]["H_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_H_baseline{}".format(postfix), "", 100,400,1400), "ESV_JetMETLogic_H_baseline", wgtVar)
-                #histosDict["EventVars"]["HT2M_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HT2M_baseline{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_HT2M_baseline", wgtVar)
-                #histosDict["EventVars"]["H2M_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_H2M_baseline{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_H2M_baseline", wgtVar)
-                #histosDict["EventVars"]["HTb_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HTb_baseline{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_HTb_baseline", wgtVar)
-                #histosDict["EventVars"]["HTH_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HTH_baseline{}".format(postfix), "", 100,0,1), "ESV_JetMETLogic_HTH_baseline", wgtVar)
-                #histosDict["EventVars"]["HTRat_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_HTRat_baseline{}".format(postfix), "", 100,0,1), "ESV_JetMETLogic_HTRat_baseline", wgtVar)
-                #histosDict["EventVars"]["dRbb_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_dRbb_baseline{}".format(postfix), "", 64,0,2*pi), "ESV_JetMETLogic_dRbb_baseline", wgtVar)
-                #histosDict["EventVars"]["DiLepMass_baseline"] = input_df.Histo1D(("ESV_JetMETLogic_DiLepMass_baseline{}".format(postfix), "", 100,0,500), "ESV_JetMETLogic_DiLepMass_baseline", wgtVar)
-                #histosDict["EventVars"]["HT_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HT_selection{}".format(postfix), "", 100,400,1400), "ESV_JetMETLogic_HT_selection", wgtVar)
-                #histosDict["EventVars"]["H_selection"] = input_df.Histo1D(("ESV_JetMETLogic_H_selection{}".format(postfix), "", 100,400,1400), "ESV_JetMETLogic_H_selection", wgtVar)
-                #histosDict["EventVars"]["HT2M_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HT2M_selection{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_HT2M_selection", wgtVar)
-                #histosDict["EventVars"]["H2M_selection"] = input_df.Histo1D(("ESV_JetMETLogic_H2M_selection{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_H2M_selection", wgtVar)
-                #histosDict["EventVars"]["HTb_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HTb_selection{}".format(postfix), "", 100,400,900), "ESV_JetMETLogic_HTb_selection", wgtVar)
-                #histosDict["EventVars"]["HTH_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HTH_selection{}".format(postfix), "", 100,0,1), "ESV_JetMETLogic_HTH_selection", wgtVar)
-                #histosDict["EventVars"]["HTRat_selection"] = input_df.Histo1D(("ESV_JetMETLogic_HTRat_selection{}".format(postfix), "", 100,0,1), "ESV_JetMETLogic_HTRat_selection", wgtVar)
-                #histosDict["EventVars"]["dRbb_selection"] = input_df.Histo1D(("ESV_JetMETLogic_dRbb_selection{}".format(postfix), "", 64,0,2*pi), "ESV_JetMETLogic_dRbb_selection", wgtVar)
-                #histosDict["EventVars"]["DiLepMass_selection"] = input_df.Histo1D(("ESV_JetMETLogic_DiLepMass_selection{}".format(postfix), "", 100,0,500), "ESV_JetMETLogic_DiLepMass_selection", wgtVar)
-                histosDict["EventVars"]["MET_pt"] = input_df.Histo1D(("MET_xycorr_pt{}".format(postfix), "", 100,30,1030), fillMET_pt, wgtVar)
-                histosDict["EventVars"]["MET_phi"] = input_df.Histo1D(("MET_xycorr_phi{}".format(postfix), "", 100,-pi,pi), fillMET_phi, wgtVar)
-                histosDict["EventVars"]["HT"] = input_df.Histo1D(("HT{}".format(postfix), "", 130,400,1700), "FTAJet{bpf}_HT", wgtVar)
-                histosDict["EventVars"]["H"] = input_df.Histo1D(("H{}".format(postfix), "", 160,400,2000), "FTAJet{bpf}_H", wgtVar)
-                histosDict["EventVars"]["HT2M"] = input_df.Histo1D(("HT2M{}".format(postfix), "", 100,0,1000), "FTAJet{bpf}_HT2M", wgtVar)
-                histosDict["EventVars"]["H2M"] = input_df.Histo1D(("H2M{}".format(postfix), "", 150,0,1500), "FTAJet{bpf}_H2M", wgtVar)
-                histosDict["EventVars"]["HTb"] = input_df.Histo1D(("HTb{}".format(postfix), "", 100,0,1000), "FTAJet{bpf}_HTb", wgtVar)
-                histosDict["EventVars"]["HTH"] = input_df.Histo1D(("HTH{}".format(postfix), "", 100,0,1), "FTAJet{bpf}_HTH", wgtVar)
-                histosDict["EventVars"]["HTRat"] = input_df.Histo1D(("HTRat{}".format(postfix), "", 100,0,1), "FTAJet{bpf}_HTRat", wgtVar)
-                histosDict["EventVars"]["dRbb"] = input_df.Histo1D(("dRbb{}".format(postfix), "", 64,0,2*pi), "FTAJet{bpf}_dRbb", wgtVar)
-                histosDict["EventVars"]["dPhibb"] = input_df.Histo1D(("dPhibb{}".format(postfix), "", 64,-pi,pi), "FTAJet{bpf}_dPhibb", wgtVar)
-                histosDict["EventVars"]["dEtabb"] = input_df.Histo1D(("dEtabb{}".format(postfix), "", 50,0,5), "FTAJet{bpf}_dEtabb", wgtVar)
-                histosDict["EventVars"]["dRll"] = input_df.Histo1D(("dRll{}".format(postfix), "", 64,0,2*pi), "FTALepton{lpf}_dRll", wgtVar)
-                histosDict["EventVars"]["dPhill"] = input_df.Histo1D(("dPhill{}".format(postfix), "", 64,-pi,pi), "FTALepton{lpf}_dPhill", wgtVar)
-                histosDict["EventVars"]["dEtall"] = input_df.Histo1D(("dEtall{}".format(postfix), "", 50,0,5), "FTALepton{lpf}_dEtall", wgtVar)
-                histosDict["EventVars"]["MTofMETandEl"] = input_df.Histo1D(("MTofMETandEl{}".format(postfix), "", 100, 0, 200), "MTofMETandEl", wgtVar)
-                histosDict["EventVars"]["MTofMETandMu"] = input_df.Histo1D(("MTofMETandMu{}".format(postfix), "", 100, 0, 200), "MTofMETandMu", wgtVar)
-                histosDict["EventVars"]["MTofElandMu"] = input_df.Histo1D(("MTofElandMu{}".format(postfix), "", 100, 0, 200), "MTofElandMu", wgtVar)
-                #histosDict["EventVars"]["MTMasslessCheck"] = input_df.Histo1D(("MTMasslessCheck{}".format(postfix), "", 100, 0, 200), "MTMasslessCheck", wgtVar)
-                #histosDict["EventVars"]["MTCrossCheck"] = input_df.Histo1D(("MTCrossCheck{}".format(postfix), "", 100, 0, 200), "MTCrossCheck", wgtVar)
-                #histosDict["EventVars"]["MTCrossCheckDifference"] = input_df.Histo1D(("MTCrossCheckDifference{}".format(postfix), "", 100, 0, 10), "MTCrossCheckDifference", wgtVar)
-                #histosDict["EventVars"]["MTCrossCheckMasslessDifference"] = input_df.Histo1D(("MTCrossCheckMasslessDifference{}".format(postfix), "", 100, 0, 0.02), "MTCrossCheckMasslessDifference", wgtVar)
-                histosDict["EventVars"]["PV_npvsGood"] = input_df.Histo1D(("PV_npvsGood{}".format(postfix), "", 100, 0, 100), "PV_npvsGood", wgtVar)
-                histosDict["EventVars"]["PV_npvs"] = input_df.Histo1D(("PV_npvs{}".format(postfix), "", 150, 0, 150), "PV_npvs", wgtVar)
-                if isData == False:
-                    histosDict["EventVars"]["Pileup_nTrueInt"] = input_df.Histo1D(("Pileup_TrueInt{}".format(postfix), ";Pileup_TrueInt;Events", 150, 0, 150), "Pileup_nTrueInt", wgtVar)
-                    histosDict["EventVars"]["Pileup_nTrueInt_XS"] = input_df.Histo1D(("Pileup_TrueInt_({})".format("wgt_SUMW"), ";Pileup_TrueInt;Events", 150, 0, 150), "Pileup_nTrueInt", "wgt_SUMW")
-                    histosDict["EventVars"]["Pileup_nPU_XS"] = input_df.Histo1D(("Pileup_nPU_({})".format("wgt_SUMW"), ";Pileup_nPU;Events", 150, 0, 150), "Pileup_nPU", "wgt_SUMW")
-                    histosDict["EventVars"]["Pileup_nPU"] = input_df.Histo1D(("Pileup_nPU{}".format(postfix), ";Pileup_nPU;Events", 150, 0, 150), "Pileup_nPU", wgtVar)
-            
-            if histosDict != None:
-                if "EventVars" not in histosDict:
-                    histosDict["EventVars"] = {}
-                if isData == False:
-                    histosDict["EventVars"]["npvsGood_vs_nTrueInt"] = input_df.Histo2D(("npvsGood_vs_nTrueInt{}".format(postfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvsGood", wgtVar)
-                    histosDict["EventVars"]["npvsGood_vs_nPU"] = input_df.Histo2D(("npvsGood_vs_nPU{}".format(postfix), ";nPU;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvsGood", wgtVar)
-                    histosDict["EventVars"]["npvs_vs_nTrueInt"] = input_df.Histo2D(("npvs_vs_nTrueInt{}".format(postfix), ";nTrueInt;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvs", wgtVar)
-                    histosDict["EventVars"]["npvs_vs_nPU"] = input_df.Histo2D(("npvs_vs_nPU{}".format(postfix), ";nPU;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvs", wgtVar)
-                
-            
-        if doCategorized == True:
-            theCatsL0 = collections.OrderedDict()#Baseline nJet selection (inclusive!) for each systematic scale variation
-            theCatsL1 = collections.OrderedDict() #Next level of selection, like nJet categories. If we need nBTag inclusive, they'll have to go here
-            theCatsL2 = collections.OrderedDict() #Next level of selection, i.e. nBTag categories. 
-            theCatsL0["Inclusive{bpf}".format(bpf=branchpostfix)] = "nFTAJet{bpf} >= 4".format(bpf=branchpostfix)
-            
-            theCatsL1["nMediumDeep{tag}B0{bpf}".format(tag=tagger, bpf=branchpostfix)] = "nMediumDeep{tag}B{bpf} == 0".format(tag=tagger, bpf=branchpostfix)
-            theCatsL1["nMediumDeep{tag}B1{bpf}".format(tag=tagger, bpf=branchpostfix)] = "nMediumDeep{tag}B{bpf} == 1".format(tag=tagger, bpf=branchpostfix)
-            theCatsL1["nMediumDeep{tag}B2{bpf}".format(tag=tagger, bpf=branchpostfix)] = "nMediumDeep{tag}B{bpf} == 2".format(tag=tagger, bpf=branchpostfix)
-            theCatsL1["blind_nMediumDeep{tag}B3{bpf}".format(tag=tagger, bpf=branchpostfix)] = "nMediumDeep{tag}B{bpf} == 3".format(tag=tagger, bpf=branchpostfix)
-            theCatsL1["blind_nMediumDeep{tag}B4+{bpf}".format(tag=tagger, bpf=branchpostfix)] = "nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix)
-            
-            theCatsL2["nJet4{bpf}".format(bpf=branchpostfix)] = "nFTAJet{bpf} == 4".format(bpf=branchpostfix)
-            theCatsL2["nJet5{bpf}".format(bpf=branchpostfix)] = "nFTAJet{bpf} == 5".format(bpf=branchpostfix)
-            theCatsL2["blind_nJet6{bpf}".format(bpf=branchpostfix)] = "nFTAJet{bpf} == 6".format(bpf=branchpostfix)
-            theCatsL2["blind_nJet7{bpf}".format(bpf=branchpostfix)] = "nFTAJet{bpf} == 7".format(bpf=branchpostfix)
-            theCatsL2["blind_nJet8+{bpf}".format(bpf=branchpostfix)] = "nFTAJet{bpf} >= 8".format(bpf=branchpostfix)
-            
-            #Don't redefine the nodes by accident! Do not redo for weight variations
-            rdf = input_df
-            if HTCut:
-                if verbose:
-                    print("Filtering Events: HT{bpf} >= {cut}".format(bpf=branchpostfix, cut=HTCut))
-                rdf = rdf.Filter("HT{bpf} >= {cut}".format(bpf=branchpostfix, cut=HTCut),
-                                 "HT{bpf} >= {cut}".format(bpf=branchpostfix, cut=HTCut)
-                                )
-            if ZMassMETWindow:
-                if verbose:
-                    print("Filtering Events: {met} >= {metcut}".format(met=fillMET_pt, metcut=ZMassMETWindow[1]))
-                    print("Filtering Events: (FTAElectron{lpf}_InvariantMass > 0 && abs(FTAElectron{lpf}_InvariantMass - 91.2) < {zwidth}) || "                                 "(FTAMuon{lpf}_InvariantMass > 0 && abs(FTAMuon{lpf}_InvariantMass - 91.2) < {zwidth}) || "                                 "(FTAElectron{lpf}_InvariantMass < 0 && FTAMuon{lpf}_InvariantMass < 0".format(lpf=leppostfix,
-                                                                                                                zwidth=ZMassMETWindow[0]
-                                                                                                               )
-                         )
-                rdf = rdf.Filter("{met} >= {metcut} || (FTAElectron{lpf}_InvariantMass < 0 && FTAMuon{lpf}_InvariantMass < 0".format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1]),
-                                 "MET >= {metcut}".format(metcut=ZMassMETWindow[1])
-                                )
-                rdf = rdf.Filter("(FTAElectron{lpf}_InvariantMass > 0 && abs(FTAElectron{lpf}_InvariantMass - 91.2) < {zwidth}) || "                                 "(FTAMuon{lpf}_InvariantMass > 0 && abs(FTAMuon{lpf}_InvariantMass - 91.2) < {zwidth}) || "                                 "(FTAElectron{lpf}_InvariantMass < 0 && FTAMuon{lpf}_InvariantMass < 0".format(lpf=leppostfix,
-                                                                                                                zwidth=ZMassMETWindow[0]
-                                                                                                               ),
-                                 "abs(Dilepton Invariant Mass - Z_mass) < {zwidth}".format(zwidth=ZMassMETWindow[0])
-                                )
-            if not isWeightVariation:
-                for ck0, cs0 in theCatsL0.items():
-                    #Strip the FourTopAnalysis- (FTA) from the collection strings when naming the filters
-                    if ck0 in cat_df:
-                        print("ERROR! Attempted redefinition of the filter node for categorization. Check logic")
+        #We need to create filters that depend on scale variations like jesUp/Down, i.e. HT and Jet Pt can and will change
+        #Usually weight variations will be based upon the _nom (nominal) calculations/filters,
+        #Scale variations will usually have a special branch defined. Exeption is sample-based variations like ttbar hdamp, where the nominal branch is used for calculations
+        #but even there, the inputs should be tailored to point to 'nominal' jet pt
+        if not isWeightVariation:
+            #cycle through processes here, should we have many packed together in the sample (ttJets -> lepton decay channel, heavy flavor, light flavor, etc.
+            for processName in nodes:
+                if processName.lower() == "basenode": continue
+                #potentially add other channels here, like "IsoMuNonisoEl", etc. for QCD studies, or lpf-dependency
+                #NOTE: we append an extra underscore (postfixes should always have 1 to begin with) to enable use of split("__") to re-deduce postfix outside this 
+                #deeply nested loop
+                for decayChannel in ["ElMu_{lpf}".format(lpf=leppostfix), 
+                                     "MuMu_{lpf}".format(lpf=leppostfix),
+                                     "ElEl_{lpf}".format(lpf=leppostfix),
+                                     ]:
+                    testInputChannel = channel.lower().replace("_baseline", "").replace("_selection", "")
+                    testLoopChannel = decayChannel.lower().replace("_{lpf}".format(lpf=leppostfix), "").replace("_baseline", "").replace("_selection", "")
+                    if testInputChannel == "all": 
+                        pass
+                    elif testInputChannel != testLoopChannel: 
+                        print("Skipping channel {chan} in process {proc}".format(chan=decayChannel, proc=processName))
                         continue
-                    cat_df[ck0] = rdf.Filter(cs0, cs0.replace("FTA", ""))
-                    for ck1, cs1 in theCatsL1.items():
-                        #Strip the FourTopAnalysis- (FTA) from the collection strings when naming the filters
-                        cat_df[ck1] = cat_df[ck0].Filter(cs1, cs1.replace("FTA", ""))
-                        for ck2, cs2 in theCatsL2.items():
-                            l1 = ck1.replace("blind_", "").replace("{bpf}".format(bpf=branchpostfix), "")
-                            l2 = ck2.replace("blind_", "").replace("{bpf}".format(bpf=branchpostfix), "")
-                            if "nJet7" in l2 or "nJet8+" in l2 or "nMediumDeep{tag}B3".format(tag=tagger) in l1 or "nMediumDeep{tag}B4" in l1:
-                                #Blind these regions in the cross-group!
-                                cknest = "blind_{c1}_{c2}_{bpf}".format(c1=l2, c2=l1, bpf=branchpostfix)
-                            else:
-                                cknest = "{c1}_{c2}_{bpf}".format(c1=l2, c2=l1, bpf=branchpostfix)
-                            #Strip the FourTopAnalysis- (FTA) from the collection strings when naming the filters
-                            cat_df[cknest] = cat_df[ck1].Filter(cs2, "{} && {}".format(cs1.replace("FTA", ""), cs2.replace("FTA", "")))
-                                                                
+                    if decayChannel == "ElMu_{lpf}".format(lpf=leppostfix):
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 1 && nFTAElectron{lpf}== 1".format(lpf=leppostfix)
+                        channelFiltName = "1 el, 1 mu ({lpf})".format(lpf=leppostfix)
+                        L0String = "HT{bpf} >= {htc}".format(bpf=branchpostfix, htc=HTCut)
+                        L0Name = "HT{bpf} >= {htc}, {met} >= {metcut}, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        L0Key = "HT_MET_ZWindow{spf}".format(spf=syspostfix) #unique systematic key is needed
+                    elif decayChannel == "MuMu_{lpf}".format(lpf=leppostfix):
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 2".format(lpf=leppostfix)
+                        channelFiltName = "2 mu ({lpf})".format(lpf=leppostfix)
+                        L0String = "HT{bpf} >= {htc} && {met} >= {metcut} && FTAMuon{lpf}_InvariantMass > 20 && abs(FTAMuon{lpf}_InvariantMass - 91.2) < {zwidth}"\
+                            .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                        L0Name = "HT{bpf} >= {htc}, {met} >= {metcut}, Di-Muon Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        L0Key = "HT_MET_ZWindow{spf}".format(spf=syspostfix)
+                    elif decayChannel == "ElEl_{lpf}".format(lpf=leppostfix):
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
+                        channelFiltName = "2 el ({lpf})".format(lpf=leppostfix)
+                        L0String = "HT{bpf} >= {htc} && {met} >= {metcut} && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) < {zwidth}"\
+                            .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                        L0Name = "HT{bpf} >= {htc}, {met} >= {metcut}, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        L0Key = "HT_MET_ZWindow{spf}".format(spf=syspostfix)
+                    else:
+                        raise NotImplementedError("No definition for decayChannel = {} yet".format(decayChannel))
+                    #filter define, filter name, process, channel, L0 (HT/ZWindow <cross> SCALE variations), L1 (nBTags), L2 (nJet)
+                    #This is the layer -1 key, insert and proceed to layer 0
+                    if decayChannel not in nodes[processName]: 
+                        #protect against overwriting, as these nodes will be shared amongst non-weight variations!
+                        #There will be only one basenode per decay channel
+                        # filterNodes[processName][decayChannel] = collections.OrderedDict()
+                        filterNodes[processName][decayChannel] = dict()
+                        filterNodes[processName][decayChannel]["BaseNode"] = (channelFilter, channelFiltName, processName, decayChannel, None, None, None) #L-1 filter
+                        # nodes[processName][decayChannel] = collections.OrderedDict()
+                        nodes[processName][decayChannel] = dict()
+                        nodes[processName][decayChannel]["BaseNode"] = nodes[processName]["BaseNode"].Filter(filterNodes[processName][decayChannel]["BaseNode"][0],
+                                                                                                             filterNodes[processName][decayChannel]["BaseNode"][1])
+                        # countNodes[processName][decayChannel] = collections.OrderedDict()
+                        countNodes[processName][decayChannel] = dict()
+                        countNodes[processName][decayChannel]["BaseNode"] = nodes[processName][decayChannel]["BaseNode"].Count()
         
+                    #NOTE: This structure requires no dependency of L0 and higher nodes upon processName, leppostfix... potential problem later if that changes
+                    #The layer 0 key filter, this is where we intend to start doing histograms (plus subsequently nested nodes on layers 1 and 2
+                    if "L0Nodes" not in filterNodes[processName][decayChannel]:
+                        filterNodes[processName][decayChannel]["L0Nodes"] = []
+                        filterNodes[processName][decayChannel]["L1Nodes"] = []
+                        filterNodes[processName][decayChannel]["L2Nodes"] = [] 
+        
+                    #We need some indices to be able to sub-select the filter nodes we need to apply, this makes it more automated when we add different nodes
+                    #These indicate the start for slicing i.e list[start:stop]
+                    L0start = len(filterNodes[processName][decayChannel]["L0Nodes"])
+                    L1start = len(filterNodes[processName][decayChannel]["L1Nodes"])
+                    L2start = len(filterNodes[processName][decayChannel]["L2Nodes"])
+                        
+                    #L0 nodes must reference the process, decay chanel, and this L0Key, which will form the first 3 nested keys in nodes[...]
+                    #We'll create one of these for each decay channel, since this filter depends directly on the channel, and since it also depends on
+                    #scale variation, it necessarily depends on the process, since that process may or may not have such a scale variation to be applied
+                    filterNodes[processName][decayChannel]["L0Nodes"].append((L0String, L0Name, processName, decayChannel, L0Key, None, None)) #L0 filter
+                    #Tuple format: (filter code, filter name, process, channel, L0 key, L1 key, L2 key) where only one of L0, L1, L2 keys are non-None!
+                    
+                    #These nodes should apply to any/all L0Nodes
+                    filterNodes[processName][decayChannel]["L1Nodes"].append(
+                        ("nMediumDeep{tag}B{bpf} == 0".format(tag=tagger, bpf=branchpostfix), "0 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                         processName, decayChannel, None, "nMediumDeep{tag}B0_{bpf}".format(tag=tagger, bpf=branchpostfix), None))
+                    filterNodes[processName][decayChannel]["L1Nodes"].append(
+                        ("nMediumDeep{tag}B{bpf} == 1".format(tag=tagger, bpf=branchpostfix), "1 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                         processName, decayChannel, None, "nMediumDeep{tag}B1_{bpf}".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
+                    #     ("nMediumDeep{tag}B{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                    #      processName, decayChannel, None, "nMediumDeep{tag}B2_{bpf}".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
+                    #     ("nMediumDeep{tag}B{bpf} == 3".format(tag=tagger, bpf=branchpostfix), "3 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                    #      processName, decayChannel, None, "blind_nMediumDeep{tag}B3_{bpf}".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
+                    #     ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                    #      processName, decayChannel, None, "blind_nMediumDeep{tag}B4+_{bpf}".format(tag=tagger, bpf=branchpostfix), None))
+                    
+                    #These filters should apply to all L1Nodes
+                    filterNodes[processName][decayChannel]["L2Nodes"].append(
+                        ("nFTAJet{bpf} == 4".format(bpf=branchpostfix), "4 Jets ({bpf})".format(bpf=branchpostfix),
+                         processName, decayChannel, None, None, "nJet4_{bpf}".format(bpf=branchpostfix)))
+                    filterNodes[processName][decayChannel]["L2Nodes"].append(
+                        ("nFTAJet{bpf} == 5".format(bpf=branchpostfix), "5 Jets ({bpf})".format(bpf=branchpostfix),
+                         processName, decayChannel, None, None, "nJet5_{bpf}".format(bpf=branchpostfix)))
+                    # filterNodes[processName][decayChannel]["L2Nodes"].append(
+                    #     ("nFTAJet{bpf} == 6".format(bpf=branchpostfix), "6 Jets ({bpf})".format(bpf=branchpostfix),
+                    #      processName, decayChannel, None, None, "blind_nJet6_{bpf}".format(bpf=branchpostfix)))
+                    # filterNodes[processName][decayChannel]["L2Nodes"].append(
+                    #     ("nFTAJet{bpf} == 7".format(bpf=branchpostfix), "7 Jets ({bpf})".format(bpf=branchpostfix),
+                    #      processName, decayChannel, None, None, "blind_nJet7_{bpf}".format(bpf=branchpostfix)))
+                    # filterNodes[processName][decayChannel]["L2Nodes"].append(
+                    #     ("nFTAJet{bpf} >= 8".format(bpf=branchpostfix), "8+ Jets ({bpf})".format(bpf=branchpostfix),
+                    #      processName, decayChannel, None, None, "blind_nJet8+_{bpf}".format(bpf=branchpostfix)))
+
+                    #We need some indices to be able to sub-select the filter nodes we need to apply, this makes it more automated when we add different nodes
+                    #These indicate the end for slicing
+                    L0stop = len(filterNodes[processName][decayChannel]["L0Nodes"])
+                    L1stop = len(filterNodes[processName][decayChannel]["L1Nodes"])
+                    L2stop = len(filterNodes[processName][decayChannel]["L2Nodes"])
+
+                    #To avoid any additional complexity, since this is too far from KISS as is, continue applying the filters right after defining them (same depth)
+                    #unpack the tuple using lower case l prefix
+                    for l0Tuple in filterNodes[processName][decayChannel]["L0Nodes"][L0start:L0stop]:
+                        l0Code = l0Tuple[0]
+                        l0Name = l0Tuple[1]
+                        l0Proc = l0Tuple[2]
+                        l0Chan = l0Tuple[3]
+                        l0Key = l0Tuple[4]
+                        l0l1Key = l0Tuple[5]
+                        l0l2Key = l0Tuple[6]
+                        assert l0Proc == processName, "processName mismatch, was it formatted correctly?\n{}".format(l0Tuple)
+                        assert l0Chan == decayChannel, "decayChannel mismatch, was it formatted correctly?\n{}".format(l0Tuple)
+                        assert l0l1Key == None, "non-None key in tuple for L1, was it added in the correct place?\n{}".format(l0Tuple)
+                        assert l0l2Key == None, "non-None key in tuple for L2, was it added in the correct place?\n{}".format(l0Tuple)
+
+                        #Here we begin the complication of flattening the key-value structure. We do not nest any deeper, but instead
+                        #form keys as combinations of l0Key, l1Key, l2Key... 
+                        #Here, form the cross key, and note the reference key it must use
+                        crossl0Key = "{}".format(l0Key)
+                        referencel0Key = "BaseNode" #L0 Filters are applied to 'BaseNode' of the nodes[proc][chan] dictionary of dataframes
+                        nodes[processName][decayChannel][crossl0Key] = nodes[processName][decayChannel][referencel0Key].Filter(l0Code, l0Name)
+                        countNodes[processName][decayChannel][crossl0Key] = nodes[processName][decayChannel][crossl0Key].Count()
+
+                        #Begin the L1 nodes loop, mostly C+P
+                        for l1Tuple in filterNodes[processName][decayChannel]["L1Nodes"][L1start:L1stop]:
+                            l1Code = l1Tuple[0]
+                            l1Name = l1Tuple[1]
+                            l1Proc = l1Tuple[2]
+                            l1Chan = l1Tuple[3]
+                            l1l0Key = l1Tuple[4] #should be none
+                            l1Key = l1Tuple[5]
+                            l1l2Key = l1Tuple[6] #none
+                            assert l1Proc == processName, "processName mismatch, was it formatted correctly?\n{}".format(l1Tuple)
+                            assert l1Chan == decayChannel, "decayChannel mismatch, was it formatted correctly?\n{}".format(l1Tuple)
+                            assert l1l0Key == None, "non-None key in tuple for L0, was it added in the correct place?\n{}".format(l1Tuple)
+                            assert l1l2Key == None, "non-None key in tuple for L2, was it added in the correct place?\n{}".format(l1Tuple)
+    
+                            #Here we begin the complication of flattening the key-value structure. We do not nest any deeper, but instead
+                            #form keys as combinations of l0Key, l1Key, l2Key... 
+                            #Here, form the cross key, and note the reference key it must use
+                            crossl0l1Key = "{}<CROSS>{}".format(l0Key, l1Key)
+                            referencel0l1Key = l0Key #L1 Filters are applied to L0 filters, so this is the nodes[proc][chan][reference] to build filter on
+                            nodes[processName][decayChannel][crossl0l1Key] = nodes[processName][decayChannel][referencel0l1Key].Filter(l1Code, l1Name)
+                            countNodes[processName][decayChannel][crossl0l1Key] = nodes[processName][decayChannel][crossl0l1Key].Count()
+
+                            #Begin the L2 nodes loop, mostly C+P
+                            for l2Tuple in filterNodes[processName][decayChannel]["L2Nodes"][L2start:L2stop]:
+                                l2Code = l2Tuple[0]
+                                l2Name = l2Tuple[1]
+                                l2Proc = l2Tuple[2]
+                                l2Chan = l2Tuple[3]
+                                l2l0Key = l2Tuple[4] #should be none
+                                l2l1Key = l2Tuple[5] #none
+                                l2Key = l2Tuple[6]
+                                assert l2Proc == processName, "processName mismatch, was it formatted correctly?\n{}".format(l2Tuple)
+                                assert l2Chan == decayChannel, "decayChannel mismatch, was it formatted correctly?\n{}".format(l2Tuple)
+                                assert l2l0Key == None, "non-None key in tuple for L0, was it added in the correct place?\n{}".format(l2Tuple)
+                                assert l2l1Key == None, "non-None key in tuple for L1, was it added in the correct place?\n{}".format(l2Tuple)
+        
+                                #Here we begin the complication of flattening the key-value structure. We do not nest any deeper, but instead
+                                #form keys as combinations of l0Key, l1Key, l2Key... 
+                                #Here, form the cross key, and note the reference key it must use
+                                crossl0l1l2Key = "{}<CROSS>{}<CROSS>{}".format(l0Key, l1Key, l2Key)
+                                referencel0l1l2Key = "{}".format(crossl0l1Key)#L2 Filters are applied to L1 filters, so this is the nodes[proc][chan][reference] to build upon
+                                nodes[processName][decayChannel][crossl0l1l2Key] = nodes[processName][decayChannel][referencel0l1l2Key].Filter(l2Code, l2Name)
+                                countNodes[processName][decayChannel][crossl0l1l2Key] = nodes[processName][decayChannel][crossl0l1l2Key].Count()
+                    #Start defining histograms here
+                    #Name using unique identifying set: processName, decayChannel (no lpf), category (no bpf), histogram name, systematic postfix
+                    #The spf needs to uniquely identify the histogram relative to variations in lpf and bpf, so any given systematic should only referene these 
+                    #as a set... would need a rework to involve 
+        continue
+    print("========================================")
+    pprint.pprint(filterNodes)
+    print("========================================")
+    pprint.pprint(nodes)
+    print("========================================")
+    pprint.pprint(countNodes)
+    print("========================================")
+    return None
+                #ADD the relevant systematic to the tuple! it's embedded in the later key, but... make it consistent with what will happen with 
+                #histograms
             if histosDict != None:
                 if "sysVar{spf}".format(spf=syspostfix) not in histosDict:
                     histosDict["sysVar{spf}".format(spf=syspostfix)] = {}
-                for tc in cat_df.keys(): 
+                for tc in nodes.keys(): 
                     if tc not in histosDict["sysVar{spf}".format(spf=syspostfix)]: 
                         histosDict["sysVar{spf}".format(spf=syspostfix)][tc] = {}
-                for tc, node in cat_df.items():
+                for tc, node in nodes.items():
                     if verbose:
                         print("Histogramming the {} node".format(tc))
                     tcn = tc#.replace("blind_", "") #FIXME do I want blind stripped with new convention for naming?
                     for x in xrange(nJetsToHisto):
                         #FIXME: None of these are based upon jet scale variations, yet!
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_pt_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_pt_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0, 500), "{fj}_pt_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_eta_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_eta_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 104, -2.6, 2.6), "{fj}_eta_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_phi_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_phi_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 64, -pi, pi), "{fj}_phi_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepCSVB_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_DeepCSVB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepCSVB_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepJetB_jet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_DeepJetB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepJetB_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepCSVB_sortedjet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_DeepCSVB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepCSVB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepJetB_sortedjet{}".format(x+1)] = cat_df[tc].Histo1D(("{name}__{cat}__Jet_DeepJetB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepJetB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_pt"] = cat_df[tc].Histo1D(("{name}__{cat}__MET_pt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), fillMET_pt, wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_phi"] = cat_df[tc].Histo1D(("{name}__{cat}__MET_phi_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,-pi,pi), fillMET_phi, wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_uncorr_pt"] = cat_df[tc].Histo1D(("{name}__{cat}__MET_uncorr_pt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "Uncorrected MET", 20,0,1000), fillMET_uncorr_pt, wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_uncorr_phi"] = cat_df[tc].Histo1D(("{name}__{cat}__MET_uncorr_phi_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,-pi,pi), fillMET_uncorr_phi, wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso03_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso03_chg_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso04_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso04_all".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all"] = cat_df[tc].Histo1D(("{name}__{cat}__Electron_pfRelIso03_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg"] = cat_df[tc].Histo1D(("{name}__{cat}__Electron_pfRelIso03_chg_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HT"] = cat_df[tc].Histo1D(("{name}__{cat}__HT_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30,400,2000), "HT{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["H"] = cat_df[tc].Histo1D(("{name}__{cat}__H_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30,400,2000), "H{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HT2M"] = cat_df[tc].Histo1D(("{name}__{cat}__HT2M_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), "HT2M{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["H2M"] = cat_df[tc].Histo1D(("{name}__{cat}__H2M_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1500), "H2M{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HTb"] = cat_df[tc].Histo1D(("{name}__{cat}__HTb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), "HTb{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HTH"] = cat_df[tc].Histo1D(("{name}__{cat}__HTH_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1), "HTH{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HTRat"] = cat_df[tc].Histo1D(("{name}__{cat}__HTRat_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1), "HTRat{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dRbb"] = cat_df[tc].Histo1D(("{name}__{cat}__dRbb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,0,2*pi), "dRbb{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dPhibb"] = cat_df[tc].Histo1D(("{name}__{cat}__dPhibb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,-pi,pi), "dPhibb{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dEtabb"] = cat_df[tc].Histo1D(("{name}__{cat}__dEtabb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 10,0,5), "dEtabb{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_pt_LeadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_pt_LeadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 100,0,500), "FTALepton{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_pt_SubleadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_pt_SubleadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 100,0,500), "FTALepton{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon{lpf}_pt".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Muon{lpf}_pt_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 100,0,500), "FTAMuon{lpf}_pt".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_eta_LeadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_eta_LeadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 52,-2.6,2.6), "FTALepton{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_eta_SubleadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_eta_SubleadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 52,-2.6,2.6), "FTALepton{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_eta_SubleadLep".format(lpf=leppostfix)] = cat_df[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_eta_SubleadLep_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 52,-2.6,2.6), "FTALepton{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dRll"] = cat_df[tc].Histo1D(("{name}__{cat}__dRll_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,0,2*pi), "FTALepton{lpf}_dRll".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dPhill"] = cat_df[tc].Histo1D(("{name}__{cat}__dPhill_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,-pi,pi), "FTALepton{lpf}_dPhill".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dEtall"] = cat_df[tc].Histo1D(("{name}__{cat}__dEtall_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 10,0,5), "FTALepton{lpf}_dEtall".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandEl"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofMETandEl_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandEl{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandMu"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofMETandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandMu{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofElandMu"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofElandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofElandMu{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nJet"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 14, 0, 14), "n{fj}".format(fj=fillJet), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_pt_jet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_pt_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0, 500), "{fj}_pt_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_eta_jet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_eta_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 104, -2.6, 2.6), "{fj}_eta_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_phi_jet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_phi_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 64, -pi, pi), "{fj}_phi_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepCSVB_jet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_DeepCSVB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepCSVB_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepJetB_jet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_DeepJetB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepJetB_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepCSVB_sortedjet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_DeepCSVB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepCSVB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepJetB_sortedjet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_DeepJetB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepJetB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_pt"] = nodes[tc].Histo1D(("{name}__{cat}__MET_pt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), fillMET_pt, wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_phi"] = nodes[tc].Histo1D(("{name}__{cat}__MET_phi_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,-pi,pi), fillMET_phi, wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_uncorr_pt"] = nodes[tc].Histo1D(("{name}__{cat}__MET_uncorr_pt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "Uncorrected MET", 20,0,1000), fillMET_uncorr_pt, wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_uncorr_phi"] = nodes[tc].Histo1D(("{name}__{cat}__MET_uncorr_phi_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,-pi,pi), fillMET_uncorr_phi, wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all"] = nodes[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso03_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg"] = nodes[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso03_chg_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all"] = nodes[tc].Histo1D(("{name}__{cat}__Muon_pfRelIso04_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso04_all".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all"] = nodes[tc].Histo1D(("{name}__{cat}__Electron_pfRelIso03_all_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg"] = nodes[tc].Histo1D(("{name}__{cat}__Electron_pfRelIso03_chg_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HT"] = nodes[tc].Histo1D(("{name}__{cat}__HT_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30,400,2000), "HT{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["H"] = nodes[tc].Histo1D(("{name}__{cat}__H_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30,400,2000), "H{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HT2M"] = nodes[tc].Histo1D(("{name}__{cat}__HT2M_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), "HT2M{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["H2M"] = nodes[tc].Histo1D(("{name}__{cat}__H2M_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1500), "H2M{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HTb"] = nodes[tc].Histo1D(("{name}__{cat}__HTb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), "HTb{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HTH"] = nodes[tc].Histo1D(("{name}__{cat}__HTH_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1), "HTH{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["HTRat"] = nodes[tc].Histo1D(("{name}__{cat}__HTRat_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1), "HTRat{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dRbb"] = nodes[tc].Histo1D(("{name}__{cat}__dRbb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,0,2*pi), "dRbb{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dPhibb"] = nodes[tc].Histo1D(("{name}__{cat}__dPhibb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,-pi,pi), "dPhibb{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dEtabb"] = nodes[tc].Histo1D(("{name}__{cat}__dEtabb_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 10,0,5), "dEtabb{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_pt_LeadLep".format(lpf=leppostfix)] = nodes[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_pt_LeadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 100,0,500), "FTALepton{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_pt_SubleadLep".format(lpf=leppostfix)] = nodes[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_pt_SubleadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 100,0,500), "FTALepton{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon{lpf}_pt".format(lpf=leppostfix)] = nodes[tc].Histo1D(("{name}__{cat}__Muon{lpf}_pt_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 100,0,500), "FTAMuon{lpf}_pt".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_eta_LeadLep".format(lpf=leppostfix)] = nodes[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_eta_LeadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 52,-2.6,2.6), "FTALepton{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_eta_SubleadLep".format(lpf=leppostfix)] = nodes[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_eta_SubleadLep_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 52,-2.6,2.6), "FTALepton{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Lepton{lpf}_eta_SubleadLep".format(lpf=leppostfix)] = nodes[tc].Histo1D(("{name}__{cat}__Lepton{lpf}_eta_SubleadLep_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 52,-2.6,2.6), "FTALepton{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dRll"] = nodes[tc].Histo1D(("{name}__{cat}__dRll_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,0,2*pi), "FTALepton{lpf}_dRll".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dPhill"] = nodes[tc].Histo1D(("{name}__{cat}__dPhill_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 16,-pi,pi), "FTALepton{lpf}_dPhill".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["dEtall"] = nodes[tc].Histo1D(("{name}__{cat}__dEtall_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 10,0,5), "FTALepton{lpf}_dEtall".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandEl"] = nodes[tc].Histo1D(("{name}__{cat}__MTofMETandEl_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandEl{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandMu"] = nodes[tc].Histo1D(("{name}__{cat}__MTofMETandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandMu{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofElandMu"] = nodes[tc].Histo1D(("{name}__{cat}__MTofElandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofElandMu{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nJet"] = nodes[tc].Histo1D(("{name}__{cat}__nJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 14, 0, 14), "n{fj}".format(fj=fillJet), wgtVar)
                     if isData is False:
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nJet_genMatched"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_genMatched_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 14, 0, 14), "n{fj}_genMatched".format(fj=fillJet), wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nJet_genMatched_puIdLoose"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_genMatched_puIdLoose_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 14, 0, 14), "n{fj}_genMatched_puIdLoose".format(fj=fillJet), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseDeepCSV"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_LooseDeepCSV_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumDeepCSV"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_MediumDeepCSV_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightDeepCSV"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_TightDeepCSV_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nTightDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseDeepJet"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_LooseDeepJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nLooseDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumDeepJet"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_MediumDeepJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nMediumDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightDeepJet"] = cat_df[tc].Histo1D(("{name}__{cat}__nJet_TightDeepJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nTightDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseMuon"] = cat_df[tc].Histo1D(("{name}__{cat}__nLooseFTAMuon{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nLooseFTAMuon{lpf}".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumMuon"] = cat_df[tc].Histo1D(("{name}__{cat}__nMediumFTAMuon{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nMediumFTAMuon{lpf}".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightMuon"] = cat_df[tc].Histo1D(("{name}__{cat}__nTightFTAMuon{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nTightFTAMuon{lpf}".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseElectron"] = cat_df[tc].Histo1D(("{name}__{cat}__nLooseFTAElectron{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nLooseFTAElectron{lpf}".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumElectron"] = cat_df[tc].Histo1D(("{name}__{cat}__nMediumFTAElectron{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nMediumFTAElectron{lpf}".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightElectron"] = cat_df[tc].Histo1D(("{name}__{cat}__nTightFTAElectron{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nTightFTAElectron{lpf}".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseLepton"] = cat_df[tc].Histo1D(("{name}__{cat}__nLooseFTALepton{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nLooseFTALepton{lpf}".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumLepton"] = cat_df[tc].Histo1D(("{name}__{cat}__nMediumFTALepton{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nMediumFTALepton{lpf}".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightLepton"] = cat_df[tc].Histo1D(("{name}__{cat}__nTightFTALepton{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nTightFTALepton{lpf}".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandEl"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofMETandEl_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandEl{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandMu"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofMETandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandMu{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofElandMu"] = cat_df[tc].Histo1D(("{name}__{cat}__MTofElandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofElandMu{bpf}".format(bpf=branchpostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_InvMass"] = cat_df[tc].Histo1D(("{name}__{cat}__Muon_InvMass_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 60, 0, 150), "FTAMuon{lpf}_InvariantMass".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_InvMass"] = cat_df[tc].Histo1D(("{name}__{cat}__Electron_InvMass_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 60, 0, 150), "FTAElectron{lpf}_InvariantMass".format(lpf=leppostfix), wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_InvMass_v_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_InvMass_v_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30, 0, 150, 20, 0, 400), "FTAMuon{lpf}_InvariantMass".format(lpf=leppostfix), fillMET_pt, wgtVar)
-                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_InvMass_v_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_InvMass_v_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30, 0, 150, 20, 0, 400), "FTAElectron{lpf}_InvariantMass".format(lpf=leppostfix), fillMET_pt, wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0., 0.2, 20,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso04_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso04_all;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "RVec_MET_pt", wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nJet_genMatched"] = nodes[tc].Histo1D(("{name}__{cat}__nJet_genMatched_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 14, 0, 14), "n{fj}_genMatched".format(fj=fillJet), wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nJet_genMatched_puIdLoose"] = nodes[tc].Histo1D(("{name}__{cat}__nJet_genMatched_puIdLoose_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 14, 0, 14), "n{fj}_genMatched_puIdLoose".format(fj=fillJet), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseDeepCSV"] = nodes[tc].Histo1D(("{name}__{cat}__nJet_LooseDeepCSV_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumDeepCSV"] = nodes[tc].Histo1D(("{name}__{cat}__nJet_MediumDeepCSV_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightDeepCSV"] = nodes[tc].Histo1D(("{name}__{cat}__nJet_TightDeepCSV_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nTightDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseDeepJet"] = nodes[tc].Histo1D(("{name}__{cat}__nJet_LooseDeepJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nLooseDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumDeepJet"] = nodes[tc].Histo1D(("{name}__{cat}__nJet_MediumDeepJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nMediumDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightDeepJet"] = nodes[tc].Histo1D(("{name}__{cat}__nJet_TightDeepJet_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 6, 0, 6), "nTightDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseMuon"] = nodes[tc].Histo1D(("{name}__{cat}__nLooseFTAMuon{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nLooseFTAMuon{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumMuon"] = nodes[tc].Histo1D(("{name}__{cat}__nMediumFTAMuon{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nMediumFTAMuon{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightMuon"] = nodes[tc].Histo1D(("{name}__{cat}__nTightFTAMuon{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nTightFTAMuon{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseElectron"] = nodes[tc].Histo1D(("{name}__{cat}__nLooseFTAElectron{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nLooseFTAElectron{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumElectron"] = nodes[tc].Histo1D(("{name}__{cat}__nMediumFTAElectron{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nMediumFTAElectron{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightElectron"] = nodes[tc].Histo1D(("{name}__{cat}__nTightFTAElectron{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nTightFTAElectron{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nLooseLepton"] = nodes[tc].Histo1D(("{name}__{cat}__nLooseFTALepton{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nLooseFTALepton{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nMediumLepton"] = nodes[tc].Histo1D(("{name}__{cat}__nMediumFTALepton{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nMediumFTALepton{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["nTightLepton"] = nodes[tc].Histo1D(("{name}__{cat}__nTightFTALepton{lpf}_{spf}".format(name=sampleName, cat=tcn, lpf=leppostfix, spf=syspostfix), "", 4, 0, 4), "nTightFTALepton{lpf}".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandEl"] = nodes[tc].Histo1D(("{name}__{cat}__MTofMETandEl_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandEl{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofMETandMu"] = nodes[tc].Histo1D(("{name}__{cat}__MTofMETandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofMETandMu{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MTofElandMu"] = nodes[tc].Histo1D(("{name}__{cat}__MTofElandMu_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20, 0, 200), "MTofElandMu{bpf}".format(bpf=branchpostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_InvMass"] = nodes[tc].Histo1D(("{name}__{cat}__Muon_InvMass_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 60, 0, 150), "FTAMuon{lpf}_InvariantMass".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_InvMass"] = nodes[tc].Histo1D(("{name}__{cat}__Electron_InvMass_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 60, 0, 150), "FTAElectron{lpf}_InvariantMass".format(lpf=leppostfix), wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_InvMass_v_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Muon_InvMass_v_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30, 0, 150, 20, 0, 400), "FTAMuon{lpf}_InvariantMass".format(lpf=leppostfix), fillMET_pt, wgtVar)
+                    histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_InvMass_v_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Electron_InvMass_v_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 30, 0, 150, 20, 0, 400), "FTAElectron{lpf}_InvariantMass".format(lpf=leppostfix), fillMET_pt, wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0., 0.2, 20,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso04_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso04_all;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
                 
                     if isData == False:
                         pass                
@@ -2496,32 +2497,32 @@ def fillHistos(input_df, sampleName=None, isData = True, histosDict=None,
             if histosDict != None:
                 if "sysVar_{spf}".format(spf=syspostfix) not in histosDict:
                     histosDict["sysVar{spf}".format(spf=syspostfix)] = {}
-                for tc in cat_df.keys(): 
+                for tc in nodes.keys(): 
                     if tc not in histosDict["sysVar{spf}".format(spf=syspostfix)]: 
                         histosDict["sysVar{spf}".format(spf=syspostfix)][tc] = {}
-                for tc, node in cat_df.items():
+                for tc, node in nodes.items():
                     tcn = tc#.replace("blind_", "")
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0., 0.2, 20,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso04_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso04_all;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "RVec_MET_pt", wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0., 0.2, 20,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso04_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso04_all;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
                     #### Older versions
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 100, 0., 0.2, 100,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso04_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso04_all;MET", 100, 0, 0.2, 100,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "RVec_MET_pt", wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
-                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg_vs_MET"] = cat_df[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_all_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 100, 0., 0.2, 100,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso03_chg_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Muon_pfRelIso04_all_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Muon_pfRelIso04_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso04_all;MET", 100, 0, 0.2, 100,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_all_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_all_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_all;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "RVec_MET_pt", wgtVar)
+                    #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Electron_pfRelIso03_chg_vs_MET"] = nodes[tc].Histo2D(("{name}__{cat}__Electron_pfRelIso03_chg_vs_MET_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "RVec_MET_pt", wgtVar)
                     if isData == False:
-                        #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["test1"] = cat_df[tc].Histo2D(("{name}__{cat}__test1_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "PV_npvsGood", wgtVar)
-                        #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["test2"] = cat_df[tc].Histo2D(("{name}__{cat}__test2_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "METFixEE2017_pt", wgtVar)
-                        #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvsGood_vs_nTrueInttest"] = cat_df[tc].Histo2D(("{name}__{cat}__npvsGood_vs_nTrueInttest_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAElectron{lpf}_pfRelIso03_all", "MET_pt_flat", wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvsGood_vs_nTrueInt"] = cat_df[tc].Histo2D(("{name}__{cat}__npvsGood_vs_nTrueInt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvsGood", wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvsGood_vs_nPU"] = cat_df[tc].Histo2D(("{name}__{cat}__npvsGood_vs_nPU_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nPU;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvsGood", wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvs_vs_nTrueInt"] = cat_df[tc].Histo2D(("{name}__{cat}__npvs_vs_nTrueInt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvs", wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvs_vs_nPU"] = cat_df[tc].Histo2D(("{name}__{cat}__npvs_vs_nPU_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nPU;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvs", wgtVar)
+                        #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["test1"] = nodes[tc].Histo2D(("{name}__{cat}__test1_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "PV_npvsGood", wgtVar)
+                        #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["test2"] = nodes[tc].Histo2D(("{name}__{cat}__test2_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "METFixEE2017_pt", wgtVar)
+                        #histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvsGood_vs_nTrueInttest"] = nodes[tc].Histo2D(("{name}__{cat}__npvsGood_vs_nTrueInttest_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAElectron{lpf}_pfRelIso03_all", "MET_pt_flat", wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvsGood_vs_nTrueInt"] = nodes[tc].Histo2D(("{name}__{cat}__npvsGood_vs_nTrueInt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvsGood", wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvsGood_vs_nPU"] = nodes[tc].Histo2D(("{name}__{cat}__npvsGood_vs_nPU_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nPU;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvsGood", wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvs_vs_nTrueInt"] = nodes[tc].Histo2D(("{name}__{cat}__npvs_vs_nTrueInt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvs", wgtVar)
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvs_vs_nPU"] = nodes[tc].Histo2D(("{name}__{cat}__npvs_vs_nPU_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nPU;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvs", wgtVar)
       
-    return cat_df
+    return nodes
 
 def jetMatchingEfficiency(input_df, max_eta = 2.5, min_pt = 30.0, wgtVar="wgt_SUMW_PU_L1PF", stats_dict=None,
                          isData=True):
@@ -4028,10 +4029,12 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
             if doHistos:
                 #Many of these have been deprecated, besides doCategorized... fix later
                 cat_df[name][lvl] = fillHistos(the_df[name][lvl], isData = vals["isData"],
+                                               sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
                                                histosDict=histos[name][lvl],
                                                doMuons=False, doElectrons=False, doLeptons=False, 
                                                doJets=False, doWeights=False, doEventVars=False,
                                                doCategorized=True, bTagger=bTagger)
+                assert cat_df[name][lvl] != None, "Exiting early here, brah"
             #print(cat_df)
                 
             #Trigger the loop
