@@ -1801,6 +1801,15 @@ def BTaggingYields(input_df, sampleName, isData = True, histosDict=None, verbose
             if calculateYields:
                 k = btagSFProduct
                 histosDict["BTaggingYields"][k] = {}
+                #Prepare working variable-bin-size 2D models (root 6.20.04+ ?)
+                nJetArr = array.array('d', [4, 5, 6, 7, 8, 9, 20])
+                HTArr = array.array('d', [500, 650, 800, 1000, 1200, 10000])
+                ModelBefore = ("{}_BTaggingYield_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
+                                                                               "BTaggingYield #Sigma#omega_{before}; HT; nJet",
+                                                                               len(HTArr), HTArr, len(nJetArr), nJetArr)
+                ModelAfter = ("{}_BTaggingYield_{}_sumW_after".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
+                                                                               "BTaggingYield #Sigma#omega_{after}; HT; nJet",
+                                                                               len(HTArr), HTArr, len(nJetArr), nJetArr)
                 histosDict["BTaggingYields"][k]["sumW_before"] = rdf.Histo2D(("{}_BTaggingYield_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")), 
                                                                                "BTaggingYield #Sigma#omega_{before}; HT; nJet",
                                                                                HTBins, HTMin, HTMax,
@@ -2148,6 +2157,11 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
             # countNodes[processName] = collections.OrderedDict()
             countNodes[processName] = dict()
             countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
+            #defineNodes[processName] = collections.OrderedDict()
+            defineNodes[processName] = dict()
+            #histoNodes[processName] = collections.OrderedDict()
+            histoNodes[processName] = dict()
+            
 
 
 
@@ -2268,13 +2282,18 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                         # countNodes[processName][decayChannel] = collections.OrderedDict()
                         countNodes[processName][decayChannel] = dict()
                         countNodes[processName][decayChannel]["BaseNode"] = nodes[processName][decayChannel]["BaseNode"].Count()
-        
+
+                        #Make some key for the histonodes, lets stop at decayChannel for now...
+                        defineNodes[processName][decayChannel] = []
+                        histoNodes[processName][decayChannel] = []
+
                     #NOTE: This structure requires no dependency of L0 and higher nodes upon processName, leppostfix... potential problem later if that changes
                     #The layer 0 key filter, this is where we intend to start doing histograms (plus subsequently nested nodes on layers 1 and 2
                     if "L0Nodes" not in filterNodes[processName][decayChannel]:
                         filterNodes[processName][decayChannel]["L0Nodes"] = []
                         filterNodes[processName][decayChannel]["L1Nodes"] = []
                         filterNodes[processName][decayChannel]["L2Nodes"] = [] 
+
         
                     #We need some indices to be able to sub-select the filter nodes we need to apply, this makes it more automated when we add different nodes
                     #These indicate the start for slicing i.e list[start:stop]
@@ -2295,15 +2314,15 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                     filterNodes[processName][decayChannel]["L1Nodes"].append(
                         ("nMediumDeep{tag}B{bpf} == 1".format(tag=tagger, bpf=branchpostfix), "1 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
                          processName, decayChannel, None, "nMediumDeep{tag}B1_{bpf}".format(tag=tagger, bpf=branchpostfix), None))
-                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
-                    #     ("nMediumDeep{tag}B{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                    #      processName, decayChannel, None, "nMediumDeep{tag}B2_{bpf}".format(tag=tagger, bpf=branchpostfix), None))
-                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
-                    #     ("nMediumDeep{tag}B{bpf} == 3".format(tag=tagger, bpf=branchpostfix), "3 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                    #      processName, decayChannel, None, "blind_nMediumDeep{tag}B3_{bpf}".format(tag=tagger, bpf=branchpostfix), None))
-                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
-                    #     ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                    #      processName, decayChannel, None, "blind_nMediumDeep{tag}B4+_{bpf}".format(tag=tagger, bpf=branchpostfix), None))
+                    filterNodes[processName][decayChannel]["L1Nodes"].append(
+                        ("nMediumDeep{tag}B{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                         processName, decayChannel, None, "nMediumDeep{tag}B2_{bpf}".format(tag=tagger, bpf=branchpostfix), None))
+                    filterNodes[processName][decayChannel]["L1Nodes"].append(
+                        ("nMediumDeep{tag}B{bpf} == 3".format(tag=tagger, bpf=branchpostfix), "3 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                         processName, decayChannel, None, "blind_nMediumDeep{tag}B3_{bpf}".format(tag=tagger, bpf=branchpostfix), None))
+                    filterNodes[processName][decayChannel]["L1Nodes"].append(
+                        ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                         processName, decayChannel, None, "blind_nMediumDeep{tag}B4+_{bpf}".format(tag=tagger, bpf=branchpostfix), None))
                     
                     #These filters should apply to all L1Nodes
                     filterNodes[processName][decayChannel]["L2Nodes"].append(
@@ -2312,15 +2331,15 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                     filterNodes[processName][decayChannel]["L2Nodes"].append(
                         ("nFTAJet{bpf} == 5".format(bpf=branchpostfix), "5 Jets ({bpf})".format(bpf=branchpostfix),
                          processName, decayChannel, None, None, "nJet5_{bpf}".format(bpf=branchpostfix)))
-                    # filterNodes[processName][decayChannel]["L2Nodes"].append(
-                    #     ("nFTAJet{bpf} == 6".format(bpf=branchpostfix), "6 Jets ({bpf})".format(bpf=branchpostfix),
-                    #      processName, decayChannel, None, None, "blind_nJet6_{bpf}".format(bpf=branchpostfix)))
-                    # filterNodes[processName][decayChannel]["L2Nodes"].append(
-                    #     ("nFTAJet{bpf} == 7".format(bpf=branchpostfix), "7 Jets ({bpf})".format(bpf=branchpostfix),
-                    #      processName, decayChannel, None, None, "blind_nJet7_{bpf}".format(bpf=branchpostfix)))
-                    # filterNodes[processName][decayChannel]["L2Nodes"].append(
-                    #     ("nFTAJet{bpf} >= 8".format(bpf=branchpostfix), "8+ Jets ({bpf})".format(bpf=branchpostfix),
-                    #      processName, decayChannel, None, None, "blind_nJet8+_{bpf}".format(bpf=branchpostfix)))
+                    filterNodes[processName][decayChannel]["L2Nodes"].append(
+                        ("nFTAJet{bpf} == 6".format(bpf=branchpostfix), "6 Jets ({bpf})".format(bpf=branchpostfix),
+                         processName, decayChannel, None, None, "blind_nJet6_{bpf}".format(bpf=branchpostfix)))
+                    filterNodes[processName][decayChannel]["L2Nodes"].append(
+                        ("nFTAJet{bpf} == 7".format(bpf=branchpostfix), "7 Jets ({bpf})".format(bpf=branchpostfix),
+                         processName, decayChannel, None, None, "blind_nJet7_{bpf}".format(bpf=branchpostfix)))
+                    filterNodes[processName][decayChannel]["L2Nodes"].append(
+                        ("nFTAJet{bpf} >= 8".format(bpf=branchpostfix), "8+ Jets ({bpf})".format(bpf=branchpostfix),
+                         processName, decayChannel, None, None, "blind_nJet8+_{bpf}".format(bpf=branchpostfix)))
 
                     #We need some indices to be able to sub-select the filter nodes we need to apply, this makes it more automated when we add different nodes
                     #These indicate the end for slicing
@@ -2395,39 +2414,37 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                                 nodes[processName][decayChannel][crossl0l1l2Key] = nodes[processName][decayChannel][referencel0l1l2Key].Filter(l2Code, l2Name)
                                 countNodes[processName][decayChannel][crossl0l1l2Key] = nodes[processName][decayChannel][crossl0l1l2Key].Count()
                     #Start defining histograms here
-                    #Name using unique identifying set: processName, decayChannel (no lpf), category (no bpf), histogram name, systematic postfix
+                    #Name using unique identifying set: processName, decayChannel (lpf?), category (no bpf - non-unique), histogram name, systematic postfix
                     #The spf needs to uniquely identify the histogram relative to variations in lpf and bpf, so any given systematic should only referene these 
                     #as a set... would need a rework to involve 
-        continue
-    print("========================================")
-    pprint.pprint(filterNodes)
-    print("========================================")
-    pprint.pprint(nodes)
-    print("========================================")
-    pprint.pprint(countNodes)
-    print("========================================")
-    return None
-                #ADD the relevant systematic to the tuple! it's embedded in the later key, but... make it consistent with what will happen with 
-                #histograms
-            if histosDict != None:
-                if "sysVar{spf}".format(spf=syspostfix) not in histosDict:
-                    histosDict["sysVar{spf}".format(spf=syspostfix)] = {}
-                for tc in nodes.keys(): 
-                    if tc not in histosDict["sysVar{spf}".format(spf=syspostfix)]: 
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc] = {}
-                for tc, node in nodes.items():
-                    if verbose:
-                        print("Histogramming the {} node".format(tc))
-                    tcn = tc#.replace("blind_", "") #FIXME do I want blind stripped with new convention for naming?
+                    Hstop = len(defineNodes[processName][decayChannel])
+
+
+                    Hstart = len(defineNodes[processName][decayChannel])
                     for x in xrange(nJetsToHisto):
-                        #FIXME: None of these are based upon jet scale variations, yet!
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_pt_jet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_pt_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0, 500), "{fj}_pt_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_eta_jet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_eta_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 104, -2.6, 2.6), "{fj}_eta_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_phi_jet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_phi_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 64, -pi, pi), "{fj}_phi_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepCSVB_jet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_DeepCSVB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepCSVB_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepJetB_jet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_DeepJetB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepJetB_jet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepCSVB_sortedjet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_DeepCSVB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepCSVB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar)
-                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["Jet_DeepJetB_sortedjet{}".format(x+1)] = nodes[tc].Histo1D(("{name}__{cat}__Jet_DeepJetB_jet{n}_{spf}".format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0), "{fj}_DeepJetB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar)
+                        defineNodes[processName][decayChannel].append((("{name}__{chan}__{cat}__Jet_pt_jet{n}_{spf}"\
+                                                                        .format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0, 500),
+                                                                       "{fj}_pt_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
+                        defineNodes[processName][decayChannel].append((("{name}__{chan}__{cat}__Jet_eta_jet{n}_{spf}"\
+                          .format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 104, -2.6, 2.6),
+                         "{fj}_eta_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
+                        defineNodes[processName][decayChannel].append((("{name}__{chan}__{cat}__Jet_phi_jet{n}_{spf}"\
+                                                                        .format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 64, -pi, pi),
+                                                                       "{fj}_phi_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
+                        defineNodes[processName][decayChannel].append( (("{name}__{chan}__{cat}__Jet_DeepCSVB_jet{n}_{spf}"\
+                                                                         .format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0),
+                                                                        "{fj}_DeepCSVB_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
+                        defineNodes[processName][decayChannel].append( (("{name}__{chan}__{cat}__Jet_DeepJetB_jet{n}_{spf}"\
+                                                                         .format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0),
+                                                                        "{fj}_DeepJetB_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
+                        defineNodes[processName][decayChannel].append( (("{name}__{chan}__{cat}__Jet_DeepCSVB_jet{n}_{spf}"\
+                                                                         .format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0),
+                                                                        "{fj}_DeepCSVB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar))
+                        defineNodes[processName][decayChannel].append( (("{name}__{chan}__{cat}__Jet_DeepJetB_jet{n}_{spf}"\
+                                                                         .format(name=sampleName, n=x+1, cat=tcn, spf=syspostfix), "", 100, 0.0, 1.0),
+                                                                        "{fj}_DeepJetB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar))
+
+                    #FIXME, continue from here, note the indent
                     histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_pt"] = nodes[tc].Histo1D(("{name}__{cat}__MET_pt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,0,1000), fillMET_pt, wgtVar)
                     histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_phi"] = nodes[tc].Histo1D(("{name}__{cat}__MET_phi_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "", 20,-pi,pi), fillMET_phi, wgtVar)
                     histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["MET_uncorr_pt"] = nodes[tc].Histo1D(("{name}__{cat}__MET_uncorr_pt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), "Uncorrected MET", 20,0,1000), fillMET_uncorr_pt, wgtVar)
@@ -2521,6 +2538,31 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                         histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvsGood_vs_nPU"] = nodes[tc].Histo2D(("{name}__{cat}__npvsGood_vs_nPU_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nPU;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvsGood", wgtVar)
                         histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvs_vs_nTrueInt"] = nodes[tc].Histo2D(("{name}__{cat}__npvs_vs_nTrueInt_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nTrueInt;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvs", wgtVar)
                         histosDict["sysVar{spf}".format(spf=syspostfix)][tc]["npvs_vs_nPU"] = nodes[tc].Histo2D(("{name}__{cat}__npvs_vs_nPU_{spf}".format(name=sampleName, cat=tcn, spf=syspostfix), ";nPU;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvs", wgtVar)
+
+
+        continue
+    print("========================================")
+    pprint.pprint(filterNodes)
+    print("========================================")
+    pprint.pprint(nodes)
+    print("========================================")
+    pprint.pprint(countNodes)
+    print("========================================")
+    return None
+                #ADD the relevant systematic to the tuple! it's embedded in the later key, but... make it consistent with what will happen with 
+                #histograms
+            if histosDict != None:
+                if "sysVar{spf}".format(spf=syspostfix) not in histosDict:
+                    histosDict["sysVar{spf}".format(spf=syspostfix)] = {}
+                for tc in nodes.keys(): 
+                    if tc not in histosDict["sysVar{spf}".format(spf=syspostfix)]: 
+                        histosDict["sysVar{spf}".format(spf=syspostfix)][tc] = {}
+                for tc, node in nodes.items():
+                    if verbose:
+                        print("Histogramming the {} node".format(tc))
+                    tcn = tc#.replace("blind_", "") #FIXME do I want blind stripped with new convention for naming?
+
+                        #FIXME: None of these are based upon jet scale variations, yet!
       
     return nodes
 
