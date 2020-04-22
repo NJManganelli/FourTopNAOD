@@ -959,33 +959,36 @@ bookerV2UNSTITCHED = {
 
 def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_branch = "PV_npvs",
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt",
-                                             "jet_mass_var": "Jet_mass",
-                                             "met_pt_var": "METFixEE2017_pt",
-                                             "met_phi_var": "METFixEE2017_phi",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
+                                           "lep_postfix": "",
+                                           "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                           "jet_pt_var": "Jet_pt",
+                                           "jet_mass_var": "Jet_mass",
+                                           "met_pt_var": "METFixEE2017_pt",
+                                           "met_phi_var": "METFixEE2017_phi",
+                                           "btagSF": "Jet_btagSF_deepcsv_shape",
+                                           "weightVariation": False},
                               "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt_jesTotalUp",
-                                             "jet_mass_var": "Jet_mass_jesTotalUp",
-                                             "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                             "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
+                                              "lep_postfix": "",
+                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                              "jet_pt_var": "Jet_pt_jesTotalUp",
+                                              "jet_mass_var": "Jet_mass_jesTotalUp",
+                                              "met_pt_var": "METFixEE2017_pt_jesTotalUp",
+                                              "met_phi_var": "METFixEE2017_phi_jesTotalUp",
+                                              "btagSF": "Jet_btagSF_deepcsv_shape",
+                                              "weightVariation": False},
                               "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt_jesTotalDown",
-                                             "jet_mass_var": "Jet_mass_jesTotalDown",
-                                             "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                             "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
+                                                "lep_postfix": "",
+                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                                "jet_pt_var": "Jet_pt_jesTotalDown",
+                                                "jet_mass_var": "Jet_mass_jesTotalDown",
+                                                "met_pt_var": "METFixEE2017_pt_jesTotalDown",
+                                                "met_phi_var": "METFixEE2017_phi_jesTotalDown",
+                                                "btagSF": "Jet_btagSF_deepcsv_shape",
+                                                "weightVariation": False},
                                      },
                        verbose=False):
     rdf = input_df
-    listOfDefinedColumns = input_df.GetColumnNames()
+    listOfColumns = input_df.GetColumnNames()
     z = []
     for sysVar, sysDict in sysVariations.items():
         #skip systematic variations on data, only do the nominal
@@ -993,12 +996,16 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
             continue
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
-        if isWeightVariation == True: continue
+        branchpostfix = "ERROR_NO_BRANCH_POSTFIX_METXYCorr"
+        if isWeightVariation == True: 
+            continue
+        else:
+            branchpostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
         metPt = sysDict.get("met_pt_var")
         metPhi = sysDict.get("met_phi_var")
-        metDoublet = "MET_xycorr_doublet{pf}".format(pf=sysVar.replace("$NOMINAL", "_nom"))
-        metPtName = "FTAMET{pf}_pt".format(pf=sysVar.replace("$NOMINAL", "_nom"))
-        metPhiName = "FTAMET{pf}_phi".format(pf=sysVar.replace("$NOMINAL", "_nom"))
+        metDoublet = "MET_xycorr_doublet{bpf}".format(bpf=branchpostfix)
+        metPtName = "FTAMET{bpf}_pt".format(bpf=branchpostfix)
+        metPhiName = "FTAMET{bpf}_phi".format(bpf=branchpostfix)
         #XY correctors takes the: uncorrected pt and phi, run branch, year, C++ true/false for isData, and PV branch
         def_fnc = "FTA::METXYCorr({mpt}, {mph}, {run}, {era}, {isData}, {pv})".format(mpt=metPt,
                                                                         mph=metPhi,
@@ -1013,7 +1020,7 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
         z.append((metPhiName, "{}.second".format(metDoublet)))
 
     for defName, defFunc in z:
-        if defName in listOfDefinedColumns:
+        if defName in listOfColumns:
             if verbose:
                 print("{} already defined, skipping".format(defName))
             continue
@@ -1021,21 +1028,21 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
             if verbose:
                 print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
             rdf = rdf.Define(defName, defFunc)
-            listOfDefinedColumns.push_back(defName)
+            listOfColumns.push_back(defName)
     return rdf
-        #if metDoublet not in listOfDefinedColumns:
+        #if metDoublet not in listOfColumns:
             #if verbose: 
             #    print("Doing MET XY correction:\nrdf = rdf.Define(\"{0}\", \"{1}\")".format(metDoublet, def_fnc))
             #rdf = rdf.Define(metDoublet, def_fnc)
-            #listOfDefinedColumns.push_back(metDoublet)
-        #if metPt not in listOfDefinedColumns and metPhi not in listOfDefinedColumns:
+            #listOfColumns.push_back(metDoublet)
+        #if metPt not in listOfColumns and metPhi not in listOfColumns:
             #if verbose: 
             #    print("rdf = rdf.Define(\"{0}\", \"{1}\")".format(metPt, metDoublet))
             #    print("rdf = rdf.Define(\"{0}\", \"{1}\")".format(metPhi, metDoublet))
             #rdf = rdf.Define(metPt, "{}.first".format(metDoublet))
             #rdf = rdf.Define(metPhi, "{}.second".format(metDoublet))
-            #listOfDefinedColumns.push_back(metPt)
-            #listOfDefinedColumns.push_back(metPhi)
+            #listOfColumns.push_back(metPt)
+            #listOfColumns.push_back(metPhi)
     #return rdf
 
 
@@ -1044,6 +1051,7 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
 
 def defineLeptons(input_df, input_lvl_filter=None, isData=True, useBackupChannel=False, verbose=False,
                  sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
+                                             "lep_postfix": "",
                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                              "jet_pt_var": "Jet_pt",
                                              "jet_mass_var": "Jet_mass",
@@ -1052,21 +1060,23 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, useBackupChannel
                                              "btagSF": "Jet_btagSF_deepcsv_shape",
                                              "weightVariation": False},
                               "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt_jesTotalUp",
-                                             "jet_mass_var": "Jet_mass_jesTotalUp",
-                                             "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                             "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
+                                              "lep_postfix": "",
+                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                              "jet_pt_var": "Jet_pt_jesTotalUp",
+                                              "jet_mass_var": "Jet_mass_jesTotalUp",
+                                              "met_pt_var": "METFixEE2017_pt_jesTotalUp",
+                                              "met_phi_var": "METFixEE2017_phi_jesTotalUp",
+                                              "btagSF": "Jet_btagSF_deepcsv_shape",
+                                              "weightVariation": False},
                               "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt_jesTotalDown",
-                                             "jet_mass_var": "Jet_mass_jesTotalDown",
-                                             "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                             "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
+                                                "lep_postfix": "",
+                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                                "jet_pt_var": "Jet_pt_jesTotalDown",
+                                                "jet_mass_var": "Jet_mass_jesTotalDown",
+                                                "met_pt_var": "METFixEE2017_pt_jesTotalDown",
+                                                "met_phi_var": "METFixEE2017_phi_jesTotalDown",
+                                                "btagSF": "Jet_btagSF_deepcsv_shape",
+                                                "weightVariation": False},
                                 },
                  ):
     """Function to take in a dataframe and return one with new columns defined,
@@ -1136,8 +1146,8 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, useBackupChannel
     transverseMassLightCode = '''auto MT2 = 2*{pt1}*{pt2}*(1 - cos(ROOT::VecOps::DeltaPhi({phi1}, {phi2})));
                               return sqrt(MT2);'''
     z = []
-    #only valid postfix for leptons, excluding calculations involving MET, is "_nom"
-    leppostfix = "__nom"
+    #only valid postfix for leptons, excluding calculations involving MET, is "" for now, can become "__SOMETHING" inside a loop on systematic variations 
+    leppostfix = ""
     
     #MUONS
     z.append(("Muon_idx", "FTA::generateIndices(Muon_pt);"))
@@ -1229,24 +1239,25 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, useBackupChannel
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
         if isWeightVariation == True: continue
-        postfix = "_" + sysVar.replace("$NOMINAL", "_nom")
+        syspostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
+        branchpostfix = "__nom" if isWeightVariation else "_" + sysVar.replace("$NOMINAL", "_nom")
         #metPt = sysDict.get("met_pt_var")
         #metPhi = sysDict.get("met_phi_var")
         #These are the xy corrected MET values, to be used in the calculations
-        metPtName = "FTAMET{pf}_pt".format(pf=sysVar.replace("$NOMINAL", "_nom"))
-        metPhiName = "FTAMET{pf}_phi".format(pf=sysVar.replace("$NOMINAL", "_nom"))
-        z.append(("MTofMETandMu{pf}".format(pf=postfix), 
+        metPtName = "FTAMET{bpf}_pt".format(bpf=branchpostfix)#"source" variable so use the branchpostfix of this systematic, whereas defines should use syspostfix like "MTof..."
+        metPhiName = "FTAMET{bpf}_phi".format(bpf=branchpostfix)
+        z.append(("MTofMETandMu{spf}".format(spf=syspostfix), 
                          "FTA::transverseMassMET(FTAMuon{lpf}_pt, FTAMuon{lpf}_phi, FTAMuon{lpf}_mass, {mpt}, {mph})".format(lpf=leppostfix, mpt=metPtName, mph=metPhiName)))
-        z.append(("MTofMETandEl{pf}".format(pf=postfix),  
+        z.append(("MTofMETandEl{spf}".format(spf=syspostfix),  
                          "FTA::transverseMassMET(FTAElectron{lpf}_pt, FTAElectron{lpf}_phi, FTAElectron{lpf}_mass, {mpt}, {mph})".format(lpf=leppostfix, mpt=metPtName, mph=metPhiName)))
         #There shouldn't be any variation on this quantity, but... easier looping
-        z.append(("MTofElandMu{pf}".format(pf=postfix), 
+        z.append(("MTofElandMu{spf}".format(spf=syspostfix), 
                          "FTA::transverseMass(FTAMuon{lpf}_pt, FTAMuon{lpf}_phi, FTAMuon{lpf}_mass, FTAElectron{lpf}_pt, FTAElectron{lpf}_phi, FTAElectron{lpf}_mass)".format(lpf=leppostfix)))
     
-    listOfDefinedColumns = rdf.GetDefinedColumnNames()
+    listOfColumns = rdf.GetColumnNames()
     #Add them to the dataframe...
     for defName, defFunc in z:
-        if defName in listOfDefinedColumns:
+        if defName in listOfColumns:
             if verbose:
                 print("{} already defined, skipping".format(defName))
             continue
@@ -1254,13 +1265,13 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, useBackupChannel
             if verbose:
                 print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
             rdf = rdf.Define(defName, defFunc)
-            listOfDefinedColumns.push_back(defName)
+            listOfColumns.push_back(defName)
     return rdf
 
 def defineInitWeights(input_df, crossSection=0, era="2017", sumWeights=-1, lumiOverride=None,
                   nEvents=-1, nEventsPositive=2, nEventsNegative=1,
                   isData=True, verbose=False):
-    leppostfix = "__nom"
+    leppostfix = ""
     lumiDict = {"2017": 41.53,
                 "2018": 1}
     lumi = lumiDict.get(era, 41.53)
@@ -1300,31 +1311,34 @@ def defineInitWeights(input_df, crossSection=0, era="2017", sumWeights=-1, lumiO
 
 def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
                nJetsToHisto=10, bTagger="DeepCSV", verbose=False,
-               sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt",
-                                             "jet_mass_var": "Jet_mass",
-                                             "met_pt_var": "METFixEE2017_pt",
-                                             "met_phi_var": "METFixEE2017_phi",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
+               sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
+                                           "lep_postfix": "", 
+                                           "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                           "jet_pt_var": "Jet_pt",
+                                           "jet_mass_var": "Jet_mass",
+                                           "met_pt_var": "METFixEE2017_pt",
+                                           "met_phi_var": "METFixEE2017_phi",
+                                           "btagSF": "Jet_btagSF_deepcsv_shape",
+                                           "weightVariation": False},
                               "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt_jesTotalUp",
-                                             "jet_mass_var": "Jet_mass_jesTotalUp",
-                                             "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                             "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
+                                              "lep_postfix": "",
+                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                              "jet_pt_var": "Jet_pt_jesTotalUp",
+                                              "jet_mass_var": "Jet_mass_jesTotalUp",
+                                              "met_pt_var": "METFixEE2017_pt_jesTotalUp",
+                                              "met_phi_var": "METFixEE2017_phi_jesTotalUp",
+                                              "btagSF": "Jet_btagSF_deepcsv_shape",
+                                              "weightVariation": False},
                               "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt_jesTotalDown",
-                                             "jet_mass_var": "Jet_mass_jesTotalDown",
-                                             "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                             "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
-                                },
+                                                "lep_postfix": "",
+                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                                "jet_pt_var": "Jet_pt_jesTotalDown",
+                                                "jet_mass_var": "Jet_mass_jesTotalDown",
+                                                "met_pt_var": "METFixEE2017_pt_jesTotalDown",
+                                                "met_phi_var": "METFixEE2017_phi_jesTotalDown",
+                                                "btagSF": "Jet_btagSF_deepcsv_shape",
+                                                "weightVariation": False},
+                          },
               ):
     """Function to take in a dataframe and return one with new columns defined,
     plus event filtering based on the criteria defined inside the function"""
@@ -1352,7 +1366,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
     else:
         raise RuntimeError("{} is not a supported bTagger option in defineJets()".format(bTagger))
     print("FIXMEFIXME: Setting Jet_pt min to 30GeV! Must fix!")
-    leppostfix = "__nom"
+    leppostfix = ""
     #z will be a list of tuples to define, so that we can do cleaner error handling and checks
     z = []
     for sysVar, sysDict in sysVariations.items():
@@ -1448,9 +1462,9 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
             z.append(("HTb{pf}".format(pf=postfix), "Sum(FTAJet{pf}_pt[FTAJet{pf}_DeepJetB > {wpv}])".format(pf=postfix, wpv=bTagWorkingPointDict[era]["DeepJet"]["M"])))
         
     rdf = input_df
-    listOfDefinedColumns = rdf.GetDefinedColumnNames()
+    listOfColumns = rdf.GetColumnNames()
     for defName, defFunc in z:
-        if defName in listOfDefinedColumns:
+        if defName in listOfColumns:
             if verbose:
                 print("{} already defined, skipping".format(defName))
             continue
@@ -1458,7 +1472,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
             if verbose:
                 print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
             rdf = rdf.Define(defName, defFunc)
-            listOfDefinedColumns.push_back(defName)
+            listOfColumns.push_back(defName)
                 
     return rdf
 
@@ -1472,7 +1486,7 @@ def defineWeights(input_df, era, isData=False, verbose=False, final=False):
     prewgt_$SYSTEMATIC is form of weight for BTaggingYields calculation, should include everything but pwgt_btag__$SYSTEMATIC"""
     rdf = input_df
     #There's only one lepton branch variation (nominal), but if it ever changes, this will serve as sign it's referenced here and made need to be varied
-    leppostfix = "__nom"
+    leppostfix = ""
 
 
     lumiDict = {"2017": 41.53,
@@ -1557,15 +1571,15 @@ def defineWeights(input_df, era, isData=False, verbose=False, final=False):
     else:
         z = zPre
 
-    listOfDefinedColumns = rdf.GetDefinedColumnNames()
+    listOfColumns = rdf.GetColumnNames()
     if isData:
         defName = "wgt__nom"
         defFunc = "int i = 1; return i"
-        if defName not in listOfDefinedColumns:
+        if defName not in listOfColumns:
             rdf = rdf.Define(defName, defFunc)
     else:
         for defName, defFunc in z:
-            if defName in listOfDefinedColumns:
+            if defName in listOfColumns:
                 if verbose:
                     print("{} already defined, skipping".format(defName))
                 continue
@@ -1573,60 +1587,67 @@ def defineWeights(input_df, era, isData=False, verbose=False, final=False):
                 if verbose:
                     print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
                 rdf = rdf.Define(defName, defFunc)
-                listOfDefinedColumns.push_back(defName) 
+                listOfColumns.push_back(defName) 
     return rdf
 
 
 # In[ ]:
 
 
-def BTaggingYields(input_df, sampleName, isData = True, histosDict=None, verbose=False,
+def BTaggingYields(input_df, sampleName, channel="All", isData = True, histosDict=None, verbose=False,
                    loadYields=None, lookupMap="LUM", useAggregate=True, useHTOnly=False, useNJetOnly=False, 
                    calculateYields=True, HTBinWidth=10, HTMin=200, HTMax=3200, nJetBinWidth=1, nJetMin=4, nJetMax=20,
-                   sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt",
-                                             "jet_mass_var": "Jet_mass",
-                                             "met_pt_var": "METFixEE2017_pt",
-                                             "met_phi_var": "METFixEE2017_phi",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
+                   sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
+                                               "lep_postfix": "", 
+                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                               "jet_pt_var": "Jet_pt",
+                                               "jet_mass_var": "Jet_mass",
+                                               "met_pt_var": "METFixEE2017_pt",
+                                               "met_phi_var": "METFixEE2017_phi",
+                                               "btagSF": "Jet_btagSF_deepcsv_shape",
+                                               "weightVariation": False},
                               "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt_jesTotalUp",
-                                             "jet_mass_var": "Jet_mass_jesTotalUp",
-                                             "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                             "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
+                                              "lep_postfix": "",
+                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                              "jet_pt_var": "Jet_pt_jesTotalUp",
+                                              "jet_mass_var": "Jet_mass_jesTotalUp",
+                                              "met_pt_var": "METFixEE2017_pt_jesTotalUp",
+                                              "met_phi_var": "METFixEE2017_phi_jesTotalUp",
+                                              "btagSF": "Jet_btagSF_deepcsv_shape",
+                                              "weightVariation": False},
                               "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt_jesTotalDown",
-                                             "jet_mass_var": "Jet_mass_jesTotalDown",
-                                             "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                             "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
-                                  "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask", 
-                                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                 "jet_pt_var": "Jet_pt",
-                                                                 "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
-                                                                 "weightVariation": True},
-                                  "_btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask", 
-                                                                   "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                   "jet_pt_var": "Jet_pt",
-                                                                   "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
-                                                                   "weightVariation": True},
-                                  "_btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask", 
-                                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                 "jet_pt_var": "Jet_pt",
-                                                                 "btagSF": "Jet_btagSF_deepcsv_shape_up_lf",
-                                                                 "weightVariation": True},
-                                  "_btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask", 
-                                                                   "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                   "jet_pt_var": "Jet_pt",
-                                                                   "btagSF": "Jet_btagSF_deepcsv_shape_down_lf",
-                                                                   "weightVariation": True},
+                                                "lep_postfix": "",
+                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                                "jet_pt_var": "Jet_pt_jesTotalDown",
+                                                "jet_mass_var": "Jet_mass_jesTotalDown",
+                                                "met_pt_var": "METFixEE2017_pt_jesTotalDown",
+                                                "met_phi_var": "METFixEE2017_phi_jesTotalDown",
+                                                "btagSF": "Jet_btagSF_deepcsv_shape",
+                                                "weightVariation": False},
+                                  "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
+                                                                  "lep_postfix": "", 
+                                                                  "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                                  "jet_pt_var": "Jet_pt",
+                                                                  "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
+                                                                  "weightVariation": True},
+                                  "_btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
+                                                                    "lep_postfix": "", 
+                                                                    "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                                    "jet_pt_var": "Jet_pt",
+                                                                    "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
+                                                                    "weightVariation": True},
+                                  "_btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
+                                                                  "lep_postfix": "", 
+                                                                  "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                                  "jet_pt_var": "Jet_pt",
+                                                                  "btagSF": "Jet_btagSF_deepcsv_shape_up_lf",
+                                                                  "weightVariation": True},
+                                  "_btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
+                                                                    "lep_postfix": "", 
+                                                                    "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                                    "jet_pt_var": "Jet_pt",
+                                                                    "btagSF": "Jet_btagSF_deepcsv_shape_down_lf",
+                                                                    "weightVariation": True},
                                               },
                ):
     """Calculate or load the event yields in various categories for the purpose of renormalizing btagging shape correction weights.
@@ -1715,8 +1736,7 @@ def BTaggingYields(input_df, sampleName, isData = True, histosDict=None, verbose
         assert testVal < 5.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... (>5.0 is considered unrealistic...)"        
     
     #column guards
-    listOfColumns = input_df.GetDefinedColumnNames()
-    listOfDefinedColumns = input_df.GetColumnNames() #This is a superset, containing non-Define'd columns as well
+    listOfColumns = input_df.GetColumnNames() #This is a superset, containing non-Define'd columns as well
 
     if isData == True:
         return input_df
@@ -1749,25 +1769,25 @@ def BTaggingYields(input_df, sampleName, isData = True, histosDict=None, verbose
             btagFinalWeight = "pwgt_btag{spf}".format(spf=syspostfix)
             
             #Lets be really obvious about missing jet_masks... exception it
-            if jetMask not in listOfDefinedColumns:
+            if jetMask not in listOfColumns:
                 raise RuntimeError("Could not find {} column in method BTaggingYields".format(jetMask))
             
             #Skip SFs for which the requisite per-jet SFs are not present...
-            if jetSF not in listOfDefinedColumns:
+            if jetSF not in listOfColumns:
                 if verbose: print("Skipping {} in BTaggingYields as it is not a valid column name".format(jetSF))
                 continue
                 
             #Check we have the input weight for before btagSF and yield ratio multiplication
-            if calculationWeightBefore not in listOfDefinedColumns:
+            if calculationWeightBefore not in listOfColumns:
                 raise RuntimeError("{} is not defined, cannot continue with calculating BTaggingYields".format(calculationWeightBefore))
             
             #Now check if the event preweight SF is in the list of columns, and if not, define it (common to calculating yields and loading them...)
             #We might want to call this function twice to calculate yields for a future iteration and use an older iteration at the same time
-            if btagSFProduct not in listOfDefinedColumns:
+            if btagSFProduct not in listOfColumns:
                 if calculateYields and btagSFProduct not in histosDict["BTaggingYields"].keys():
                     histosDict["BTaggingYields"][btagSFProduct] = {}
                 z[sysVar].append(("{}".format(btagSFProduct), "FTA::btagEventWeight_shape({}, {})".format(jetSF, jetMask)))
-            if calculationWeightAfter not in listOfDefinedColumns:
+            if calculationWeightAfter not in listOfColumns:
                 z[sysVar].append(("{}".format(calculationWeightAfter), "{} * {}".format(calculationWeightBefore, 
                                                                                          btagSFProduct)))
                 
@@ -1775,9 +1795,9 @@ def BTaggingYields(input_df, sampleName, isData = True, histosDict=None, verbose
             #if isScaleVariation:
             nJetName = "nFTAJet{bpf}".format(bpf=branchpostfix)
             HTName = "HT{bpf}".format(bpf=branchpostfix)
-            if nJetName not in listOfDefinedColumns:
+            if nJetName not in listOfColumns:
                 z[sysVar].append((nJetName, "{0}[{1}].size()".format(jetPt, jetMask)))
-            if HTName not in listOfDefinedColumns:
+            if HTName not in listOfColumns:
                 z[sysVar].append((HTName, "Sum({0}[{1}])".format(jetPt, jetMask)))
             
             #loadYields path...
@@ -1788,7 +1808,7 @@ def BTaggingYields(input_df, sampleName, isData = True, histosDict=None, verbose
                 #     z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{vk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=sampleName, vk=btagSFProduct.replace("nonorm_",""), nj=nJetName, ht=HTName)))
 
             for defName, defFunc in z[sysVar]:
-                if defName in listOfDefinedColumns:
+                if defName in listOfColumns:
                     if verbose:
                         print("{} already defined, skipping".format(defName))
                     continue
@@ -1796,7 +1816,7 @@ def BTaggingYields(input_df, sampleName, isData = True, histosDict=None, verbose
                     if verbose:
                         print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
                     rdf = rdf.Define(defName, defFunc)
-                    listOfDefinedColumns.push_back(defName)        
+                    listOfColumns.push_back(defName)        
             #calculate Yields path
             if calculateYields:
                 k = btagSFProduct
@@ -2046,36 +2066,63 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 
 
 def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All", isData = True, histosDict=None,
-               doMuons=False, doElectrons=False, doLeptons=False, doJets=False, doWeights=False, doEventVars=False, 
                doCategorized=False, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
-               HTCut=500, ZMassMETWindow=[-15.0, -30.0], verbose=False,
+               HTCut=500, ZMassMETWindow=[15.0, 10.0], verbose=False,
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
-                                           "wgt_final": "wgt_nom",
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt",
-                                             "jet_mass_var": "Jet_mass",
-                                             "met_pt_var": "METFixEE2017_pt",
-                                             "met_phi_var": "METFixEE2017_phi",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
+                                           "lep_postfix": "",
+                                           "wgt_final": "wgt__nom",
+                                           "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                           "jet_pt_var": "Jet_pt",
+                                           "jet_mass_var": "Jet_mass",
+                                           "met_pt_var": "METFixEE2017_pt",
+                                           "met_phi_var": "METFixEE2017_phi",
+                                           "btagSF": "Jet_btagSF_deepcsv_shape",
+                                           "weightVariation": False},
                               "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
-                                             "wgt_final": "wgt_jesTotalUp",
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt_jesTotalUp",
-                                             "jet_mass_var": "Jet_mass_jesTotalUp",
-                                             "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                             "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
+                                              "lep_postfix": "",
+                                              "wgt_final": "wgt__jesTotalUp",
+                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                              "jet_pt_var": "Jet_pt_jesTotalUp",
+                                              "jet_mass_var": "Jet_mass_jesTotalUp",
+                                              "met_pt_var": "METFixEE2017_pt_jesTotalUp",
+                                              "met_phi_var": "METFixEE2017_phi_jesTotalUp",
+                                              "btagSF": "Jet_btagSF_deepcsv_shape",
+                                              "weightVariation": False},
                               "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown",
-                                             "wgt_final": "wgt_jesTotalDown", 
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt_jesTotalDown",
-                                             "jet_mass_var": "Jet_mass_jesTotalDown",
-                                             "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                             "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
+                                                "lep_postfix": "",
+                                                "wgt_final": "wgt__jesTotalDown", 
+                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                                "jet_pt_var": "Jet_pt_jesTotalDown",
+                                                "jet_mass_var": "Jet_mass_jesTotalDown",
+                                                "met_pt_var": "METFixEE2017_pt_jesTotalDown",
+                                                "met_phi_var": "METFixEE2017_phi_jesTotalDown",
+                                                "btagSF": "Jet_btagSF_deepcsv_shape",
+                                                "weightVariation": False},
+                              "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
+                                                              "lep_postfix": "", 
+                                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                              "jet_pt_var": "Jet_pt",
+                                                              "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
+                                                              "weightVariation": True},
+                              "_btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
+                                                                "lep_postfix": "", 
+                                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                                "jet_pt_var": "Jet_pt",
+                                                                "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
+                                                                "weightVariation": True},
+                              "_btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
+                                                              "lep_postfix": "", 
+                                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                              "jet_pt_var": "Jet_pt",
+                                                              "btagSF": "Jet_btagSF_deepcsv_shape_up_lf",
+                                                              "weightVariation": True},
+                              "_btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
+                                                                "lep_postfix": "", 
+                                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                                "jet_pt_var": "Jet_pt",
+                                                                "btagSF": "Jet_btagSF_deepcsv_shape_down_lf",
+                                                                "weightVariation": True},
+                              
                                      },
 ):
     """Method to fill histograms given an input RDataFrame, input sample/dataset name, input histogram dictionaries.
@@ -2089,8 +2136,8 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
     """
     
 
-    if doMuons == False and doElectrons == False and doLeptons == False and doJets == False and doWeights == False and doEventVars == False and doCategorized == False:
-        raise RuntimeError("Must select something to plot: Set do{Muons,Electrons,Leptons,Jets,Weights,EventVars,etc} = True in init method")
+    if doCategorized == False:
+        raise RuntimeError("Must select something to plot: Set do{Categorized,etc} = True in init method")
 
     if usePackedEventID:
         print("Using packedEventID to categorize events into (sub)sample names and channel")
@@ -2129,18 +2176,18 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
 
     pi = ROOT.TMath.Pi()
     #Get the list of defined columns for checks
-    listOfDefinedColumns = input_df.GetDefinedColumnNames()
+    listOfColumns = input_df.GetColumnNames()
     # filterNodes = collections.OrderedDict() #For storing tuples to debug and be verbose about
     # defineNodes = collections.OrderedDict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
     # countNodes = collections.OrderedDict() #For storing the counts at each node
-    # histoNodes = collections.OrderedDict() #For storing all nodes to be histogrammed, with nicely parsed keys... 
     # nodes = collections.OrderedDict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
     filterNodes = dict() #For storing tuples to debug and be verbose about
     defineNodes = dict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
     countNodes = dict() #For storing the counts at each node
-    histoNodes = dict() #For storing all nodes to be histogrammed, with nicely parsed keys... 
     nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
     nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
+
+    histoNodes = histosDict #Inherit this from initiliazation, this is where the histograms will actually be stored
 
     if usePackedEventID:
         raise NotImplementedError("usePackedEventID needs some work. Also, it isn't going to work for combined samples that have different systematic variations,"\
@@ -2179,6 +2226,7 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
             countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
             #defineNodes[processName] = collections.OrderedDict()
             defineNodes[processName] = dict()
+        if processName not in histoNodes:
             #histoNodes[processName] = collections.OrderedDict()
             histoNodes[processName] = dict()
             
@@ -2204,7 +2252,7 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
             branchpostfix = "__nom"
         else:
             branchpostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
-        leppostfix = "__nom" #No variation on this yet, but just in case
+        leppostfix = sysDict.get("lep_postfix", "") #No variation on this yet, but just in case
         
         fillJet = "FTAJet{bpf}".format(bpf=branchpostfix)
         fillJet_pt = "FTAJet{bpf}_pt".format(bpf=branchpostfix)
@@ -2216,25 +2264,25 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
         fillMET_uncorr_pt = sysDict.get("met_pt_var", "MET_pt")
         fillMET_uncorr_phi = sysDict.get("met_phi_var", "MET_phi")
 
-        #if verbose:
-        print("Systematic: {spf} - Branch: {bpf} - Jets: {fj}=({fjp}, {fji}, {fje}, {fjm}) - MET: ({mpt}, {mph})".format(spf=syspostfix,
-                                                                                                                         bpf=branchpostfix,
-                                                                                                                         fj=fillJet,
-                                                                                                                         fjp=fillJet_pt,
-                                                                                                                         fji=fillJet_phi,
-                                                                                                                         fje=fillJet_eta,
-                                                                                                                         fjm=fillJet_mass,
-                                                                                                                         mpt=fillMET_pt,
-                                                                                                                         mph=fillMET_phi)
-          )
+        if verbose:
+            print("Systematic: {spf} - Branch: {bpf} - Jets: {fj}=({fjp}, {fji}, {fje}, {fjm}) - MET: ({mpt}, {mph})".format(spf=syspostfix,
+                                                                                                                             bpf=branchpostfix,
+                                                                                                                             fj=fillJet,
+                                                                                                                             fjp=fillJet_pt,
+                                                                                                                             fji=fillJet_phi,
+                                                                                                                             fje=fillJet_eta,
+                                                                                                                             fjm=fillJet_mass,
+                                                                                                                             mpt=fillMET_pt,
+                                                                                                                             mph=fillMET_phi)
+              )
 
         #Get the appropriate weight defined in defineFinalWeights function
-        wgtVar = sysDict.get("wgt_final", "wgt_nom")
-        if wgtVar not in listOfDefinedColumns:
+        wgtVar = sysDict.get("wgt_final", "wgt__nom")
+        if wgtVar not in listOfColumns:
             print("{} not found as a valid weight variation, trying something else as backup".format(wgtVar))
-            if "wgt_SUMW_PU_LSF_L1PF" in listOfDefinedColumns:
+            if "wgt_SUMW_PU_LSF_L1PF" in listOfColumns:
                 wgtVar = "wgt_SUMW_PU_LSF_L1PF"
-            elif "wgt_SUMW" in listOfDefinedColumns:
+            elif "wgt_SUMW" in listOfColumns:
                 wgtVar = "wgt_SUMW"
             else:
                 raise RuntimeError("Couldn't find a valid fallback weight variation in fillHistos()")
@@ -2260,14 +2308,14 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                     if testInputChannel == "all": 
                         pass
                     elif testInputChannel != testLoopChannel: 
-                        print("Skipping channel {chan} in process {proc}".format(chan=decayChannel, proc=processName))
+                        print("Skipping channel {chan} in process {proc} for systematic {spf}".format(chan=decayChannel, proc=processName, spf=syspostfix))
                         continue
                     #Regarding keys: we'll insert the systematic when we insert all th L0 X L1 X L2 keys in the dictionaries, not here in the L($N) keys
                     if decayChannel == "ElMu{lpf}".format(lpf=leppostfix):
                         channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 1 && nFTAElectron{lpf}== 1".format(lpf=leppostfix)
                         channelFiltName = "1 el, 1 mu ({lpf})".format(lpf=leppostfix)
                         L0String = "HT{bpf} >= {htc}".format(bpf=branchpostfix, htc=HTCut)
-                        L0Name = "HT{bpf} >= {htc}, {met} >= {metcut}, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                        L0Name = "HT{bpf} >= {htc}"\
                             .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
                         L0Key = "HT{htc}_ZWindowMET{metcut}Width{zwidth}".format(spf=syspostfix, htc=HTCut, metcut=0, zwidth=0)
                     elif decayChannel == "MuMu{lpf}".format(lpf=leppostfix):
@@ -2304,9 +2352,10 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                         countNodes[processName][decayChannel] = dict()
                         countNodes[processName][decayChannel]["BaseNode"] = nodes[processName][decayChannel]["BaseNode"].Count()
 
-                        #Make some key for the histonodes, lets stop at decayChannel for now...
+                        #Make some key for the histonodes, lets stop at decayChannel for now for the tuples, but keep a dict with histoName as key for histos...
                         defineNodes[processName][decayChannel] = []
-                        histoNodes[processName][decayChannel] = []
+                    if decayChannel not in histoNodes[processName]:
+                        histoNodes[processName][decayChannel] = collections.OrderedDict()
 
                     #NOTE: This structure requires no dependency of L0 and higher nodes upon processName, leppostfix... potential problem later if that changes
                     #The layer 0 key filter, this is where we intend to start doing histograms (plus subsequently nested nodes on layers 1 and 2
@@ -2450,21 +2499,23 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                     #try sticking with valid C++ variable names (alphanumeric + _). Also note that _{spf} will result in 3 underscores as is currently defined
                     #CYCLE THROUGH CATEGORIES in the nodes that exist now, nodes[processName][decayChannel][CATEGORIES]
 
-                    for category in nodes[processName][decayChannel]:
+                    for category, categoryNode in nodes[processName][decayChannel].items():
+                        if category.lower() == "basenode": continue
                         isBlinded = False
                         for blindList in blindings:
                             matchedElements = [blindElem for blindElem in blindList if blindElem in category]
                             if len(matchedElements) == len(blindList): 
                                 isBlinded = True
                                 continue
-                        crossSeparated = category.split("_CROSS_")
+                        crossSeparated = category.split("___")[0].split("_CROSS_") #Strip the systematic name from the branch by taking only the first element
                         categoryName = "_".join(crossSeparated) #No extra references to (lep/branch/sys)postfixes...
                         if isBlinded:
                             categoryName = "blind_" + categoryName
-                        print("blind={}\n{}\n{}\n\n".format(isBlinded, crossSeparated, categoryName))
+                        if verbose:
+                            print("blind={}\n{}\n{}\n\n".format(isBlinded, crossSeparated, categoryName))
 
+                        #Append histogram tuples for HistoND() methods to the list
                         Hstart = len(defineNodes[processName][decayChannel])
-    
                         for x in xrange(nJetsToHisto):
                             defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_pt_jet{n}_{spf}"\
                                                                             .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 100, 0, 500),
@@ -2570,24 +2621,48 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
 
 
 
-                    #End of definitions for this channel
-                    Hstop = len(defineNodes[processName][decayChannel])
+                        #End of definitions for this channel
+                        Hstop = len(defineNodes[processName][decayChannel])
+                        #Guard against histogram names already included (via keys in histNodes) as well as variables that aren't present in branches
+                        for dnode in defineNodes[processName][decayChannel][Hstart:Hstop]:
+                            defHName = dnode[0][0]
+                            #Need to determine which kind of histo function to use... have to be careful, this guess will be wrong if anyone ever does an unweighted histo!
+                            if dnode[0][1] in histoNodes[processName][decayChannel]:
+                                raise RuntimeError("This histogram name already exists in memory or is intentionally being overwritten:"\
+                                                   "processName - {}\t decayChannel - {}\t defHName - {}".format(processName, decayChannel, defHName))
+                            else:
+                                for i in xrange(1, len(dnode)):
+                                    if dnode[i] not in listOfColumns:
+                                        raise RuntimeError("This histogram's variable/weight is not defined:"\
+                                                           "processName - {}\t decayChannel - {}\t variable/weight - {}".format(processName, decayChannel, dnode[i]))
 
-                  
-                    print("================= {} {} =======================".format(processName, decayChannel))
-                    pprint.pprint(defineNodes[processName][decayChannel][Hstart:Hstop])
+                                guessDim = 0
+                                if len(dnode) == 3:
+                                    guessDim = 1
+                                    histoNodes[processName][decayChannel][defHName] = categoryNode.Histo1D(dnode[0], dnode[1], dnode[2])
+                                elif len(dnode) == 4:
+                                    guessDim = 2
+                                    histoNodes[processName][decayChannel][defHName] = categoryNode.Histo2D(dnode[0], dnode[1], dnode[2], dnode[3])
+                                elif len(dnode) == 4:
+                                    guessDim = 3
+                                    histoNodes[processName][decayChannel][defHName] = categoryNode.Histo3D(dnode[0], dnode[1], dnode[2], dnode[3], dnode[4])
+    #                 print("================= {} {} =======================".format(processName, decayChannel))
+    #                 pprint.pprint(defineNodes[processName][decayChannel][Hstart:Hstop])
 
-        continue
-    print("========================================")
-    pprint.pprint(filterNodes)
-    print("========================================")
-    pprint.pprint(nodes)
-    print("========================================")
-    pprint.pprint(countNodes)
-    print("========================================")
-                                                     
-    return None
-    return nodes
+    #     continue
+    # print("========================================")
+    # pprint.pprint(filterNodes)
+    # print("========================================")
+    # pprint.pprint(nodes)
+    # print("========================================")
+    # pprint.pprint(countNodes)
+    # print("========================================")
+    packedNodes = {}
+    packedNodes["filterNodes"] = filterNodes
+    packedNodes["defineNodes"] = defineNodes
+    packedNodes["countNodes"] = countNodes
+    packedNodes["nodes"] = nodes
+    return packedNodes
 
 def jetMatchingEfficiency(input_df, max_eta = 2.5, min_pt = 30.0, wgtVar="wgt_SUMW_PU_L1PF", stats_dict=None,
                          isData=True):
@@ -2750,7 +2825,7 @@ def histoCombine(directory, outDirectory="{}/Combine", globKey="*.root", stripKe
         
         
         
-def writeHistos(histDict, directory, levelsOfInterest="All", samplesOfInterest="All", dict_keys="All", mode="RECREATE"):
+def writeHistosV1(histDict, directory, levelsOfInterest="All", samplesOfInterest="All", dict_keys="All", mode="RECREATE"):
     rootDict = {}
     if not os.path.isdir(directory):
         os.makedirs(directory)
@@ -2789,6 +2864,44 @@ def writeHistos(histDict, directory, levelsOfInterest="All", samplesOfInterest="
     for f in rootDict.values():
         f.Close()
 
+def writeHistos(histDict, directory, samplesOfInterest="All", channelsOfInterest="All", dict_keys="All", mode="RECREATE"):
+    rootDict = {}
+    if not os.path.isdir(directory):
+        os.makedirs(directory)
+    for name, channelsDict in histDict.items():
+        if samplesOfInterest == "All": pass
+        elif name not in samplesOfInterest: continue
+        for channel, objDict in channelsDict.items():
+            if channelsOfInterest == "All": pass
+            elif channel not in channelsOfInterest: continue
+            if not os.path.isdir(directory + "/" + channel):
+                os.makedirs(directory + "/" + channel)
+            rootDict[name] = ROOT.TFile.Open("{}.root".format(directory + "/" + channel + "/"+ name), mode)
+            for dict_key in objDict.keys():
+                if dict_keys == "All": pass
+                elif dict_key not in dict_keys: continue
+
+                for preObjName, objVal in objDict[dict_key].items():
+                    if type(objVal) == dict:
+                        for hname, hist in objVal.items():
+                            #help(hist)
+                            #dictKey = preObjName + "$" + hname
+                            #if dictKey not in rootDict:
+                            #rootDict[dictKey].cd()
+                            hptr = hist.GetPtr()
+                            oldname = hptr.GetName()
+                            #hptr.SetName("{}".format(dict_key + "*" + preObjName + "*" + hname))
+                            hptr.Write()
+                            #hptr.SetName("{}".format(oldname)) #Avoid overwriting things by switching back, save from segfault
+                    elif "ROOT.TH" in str(type(objVal)):
+                        hptr = objVal.GetPtr()
+                        oldname = hptr.GetName()
+                        #hptr.SetName("{}".format(dict_key + "*" + preObjName))
+                        hptr.Write()
+                        #hptr.SetName("{}".format(oldname)) #Avoid overwriting things by switching back, save from segfault
+            print("Wrote histogram file for {} - {}".format(name, directory + "/" + channel + "/"+ name))
+    for f in rootDict.values():
+        f.Close()
 
 def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", stripKey=".root", includeSampleNames=None, 
                            excludeSampleNames=None, mode="RECREATE", doNumpyValidation=False, forceDefaultRebin=False, verbose=False,
@@ -3933,6 +4046,7 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
     samples = {}
     counts = {}
     histos = {}
+    packedNodes = {}
     the_df = {}
     stats = {} #Stats for HLT branches
     effic = {} #Stats for jet matching efficiencies
@@ -3953,6 +4067,7 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
         reports[name] = base[name].Report()
         counts[name] = {}
         histos[name] = {}
+        packedNodes[name] = {}
         the_df[name] = {}
         stats[name] = {}
         effic[name] = {}
@@ -4038,7 +4153,8 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
             
             print("FIXME: Need to make cuts on HT, MET, InvariantMass, ETC. properly")
             counts[name][lvl] = the_df[name][lvl].Count()
-            histos[name][lvl] = {}
+            histos[name][lvl] = {} #new style, populated inside fillHistos... differs from BTaggingYields right now! Future work
+            packedNodes[name][lvl] = None
             stats[name][lvl] = {}
             effic[name][lvl] = {}
             btagging[name][lvl] = {}
@@ -4093,13 +4209,13 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
             #Hold the categorization nodes if doing histograms
             if doHistos:
                 #Many of these have been deprecated, besides doCategorized... fix later
-                cat_df[name][lvl] = fillHistos(the_df[name][lvl], isData = vals["isData"],
-                                               sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
-                                               histosDict=histos[name][lvl],
-                                               doMuons=False, doElectrons=False, doLeptons=False, 
-                                               doJets=False, doWeights=False, doEventVars=False,
-                                               doCategorized=True, bTagger=bTagger)
-                assert cat_df[name][lvl] != None, "Exiting early here, brah"
+                print("Using doubly nested histos[name][lvl][processName][decayChannel] until protection against overwriting histos from multiple runs is in")
+                packedNodes[name][lvl] = fillHistos(the_df[name][lvl], isData = vals["isData"],
+                                                    sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
+                                                    histosDict=histos[name][lvl], doCategorized=True, bTagger=bTagger, verbose=verb)
+                # print(packedNodes[name][lvl].keys())
+                # print(packedNodes[name][lvl].keys())
+                # assert False, "Exiting early here, brah"
             #print(cat_df)
                 
             #Trigger the loop
@@ -4111,7 +4227,7 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
             #Write the output!
             if doBTaggingYields:
                 writeDir = analysisDir + "/BTaggingYields"
-                writeHistos(btagging,
+                writeHistosV1(btagging,
                             writeDir,
                             levelsOfInterest=[lvl],
                             samplesOfInterest=[name],
@@ -4122,7 +4238,11 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
                 print("To calculate the yield ratios, run 'BTaggingYieldsAnalyzer()' once all samples that are to be aggregated are in the directory")
             if doHistos:
                 writeDir = analysisDir + "/Histograms"
-                writeHistos(histos,
+                print(histos[name][lvl])
+                print(histos[name][lvl][name])
+                for k, v in histos[name][lvl][name].items():
+                    print(k)
+                writeHistos(histos[name][lvl], 
                             writeDir,
                             levelsOfInterest=[lvl],
                             samplesOfInterest=[name],
@@ -4136,7 +4256,7 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
             print(processedSampleList)
             print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theTime//60, theTime%60, theTime, processed[name][lvl], 
                          name, lvl, "".join(["\_/"]*25)))
-    
+    return histos
 def otherFuncs():
     """Code stripped from jupyter notebook when converted to script."""
 
@@ -4371,8 +4491,8 @@ if __name__ == '__main__':
                                       },
                            )
     elif stage == 'fill-histograms':
-        main(analysisDir, source, channel, bTagger=bTagger, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate,
-             useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
+        histos = main(analysisDir, source, channel, bTagger=bTagger, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate,
+                      useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
     elif stage == 'prepare-for-combine':
         print("This analysis stage is not yet finished. It will call the method histoCombine() which needs to be updated for the new internal key structure from fillHistos")
     else:
