@@ -1395,7 +1395,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
         z.append(("FTAJet{pf}_mass".format(pf=postfix), "{jms}[{jm}]".format(jms=jetMass, jm=jetMask)))
         z.append(("FTAJet{pf}_jetId".format(pf=postfix), "Jet_jetId[{jm}]".format(jm=jetMask)))
         z.append(("FTAJet{pf}_puId".format(pf=postfix), "Jet_puId[{jm}]".format(jm=jetMask)))
-        if isData is False:
+        if isData == False:
             z.append(("FTAJet{pf}_genJetIdx".format(pf=postfix), "Jet_genJetIdx[{jm}]".format(jm=jetMask)))
             z.append(("nFTAJet{pf}_genMatched".format(pf=postfix), "FTAJet{pf}_genJetIdx[FTAJet{pf}_genJetIdx >= 0].size()".format(pf=postfix)))
             z.append(("nFTAJet{pf}_puIdLoose".format(pf=postfix), "FTAJet{pf}_genJetIdx[(FTAJet{pf}_puId >= 4 || FTAJet{pf}_pt >= 50)].size()".format(pf=postfix)))
@@ -2577,7 +2577,6 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                         defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofMETandMu_{spf}".format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 20, 0, 200), "MTofMETandMu{bpf}".format(bpf=branchpostfix), wgtVar))
                         defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofElandMu_{spf}".format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 20, 0, 200), "MTofElandMu{bpf}".format(bpf=branchpostfix), wgtVar))
                         defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_{spf}".format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 14, 0, 14), "n{fj}".format(fj=fillJet), wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_genMatched_puIdLoose_{spf}".format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 14, 0, 14), "n{fj}_genMatched_puIdLoose".format(fj=fillJet), wgtVar))
                         defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_LooseDeepCSV_{spf}".format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar))
                         defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_MediumDeepCSV_{spf}".format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar))
                         defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_TightDeepCSV_{spf}".format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), "nTightDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar))
@@ -2616,6 +2615,7 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                         #defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_vs_MET_{spf}".format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), ";pfRelIso03_all;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "fillMET_pt", wgtVar))
                         #defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg_vs_MET_{spf}".format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "fillMET_pt", wgtVar))
                         if isData == False:
+                            defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_genMatched_puIdLoose_{spf}".format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 14, 0, 14), "n{fj}_genMatched_puIdLoose".format(fj=fillJet), wgtVar))
                             defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_genMatched_{spf}".format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 14, 0, 14), "n{fj}_genMatched".format(fj=fillJet), wgtVar))
                             #defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___test1_{spf}".format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "PV_npvsGood", wgtVar))
                             #defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___test2_{spf}".format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "METFixEE2017_pt", wgtVar))
