@@ -1587,6 +1587,7 @@ def defineWeights(input_df, era, isData=False, verbose=False, final=False):
                 if verbose:
                     print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
                 rdf = rdf.Define(defName, defFunc)
+                
                 listOfColumns.push_back(defName) 
     return rdf
 
@@ -1803,7 +1804,8 @@ def BTaggingYields(input_df, sampleName, channel="All", isData = True, histosDic
             #loadYields path...
             if loadYields:
                 # if useAggregate:
-                z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{spf}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=yieldsKey, spf=syspostfix, nj=nJetName, ht=HTName)))
+                print("\nPROBLEM: syspostfix was assumed to have only one underscore before, now it has two. Until new Yields calculated, gonna hack this away...\n\n\n")
+                z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{spf}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=yieldsKey, spf=syspostfix.replace("__", "_"), nj=nJetName, ht=HTName)))
                 # else:
                 #     z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{vk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=sampleName, vk=btagSFProduct.replace("nonorm_",""), nj=nJetName, ht=HTName)))
 
@@ -1817,6 +1819,10 @@ def BTaggingYields(input_df, sampleName, channel="All", isData = True, histosDic
                         print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
                     rdf = rdf.Define(defName, defFunc)
                     listOfColumns.push_back(defName)        
+
+ #            test = rdf.Define("testThis", "{lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{spf}\", {nj}, {ht}, true);".format(bsf=btagSFProduct, lm=lookupMap,\
+ # sn=sampleName, yk=yieldsKey, spf=syspostfix, nj=nJetName, ht=HTName)).Stats("testThis").GetMean()
+            # print("Debugging test: {}".format(test))
             #calculate Yields path
             if calculateYields:
                 k = btagSFProduct
