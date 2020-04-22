@@ -2872,36 +2872,35 @@ def writeHistos(histDict, directory, samplesOfInterest="All", channelsOfInterest
         if samplesOfInterest == "All": pass
         elif name not in samplesOfInterest: continue
         for channel, objDict in channelsDict.items():
+            counter = 0
             if channelsOfInterest == "All": pass
-            elif channel not in channelsOfInterest: continue
+            elif channel  not in channelsOfInterest: continue
+            elif len(objDict.values()) < 1:
+                print("No objects to write, not creating directory or writing root file for {} {}".format(name, channel))
+                continue
             if not os.path.isdir(directory + "/" + channel):
                 os.makedirs(directory + "/" + channel)
             rootDict[name] = ROOT.TFile.Open("{}.root".format(directory + "/" + channel + "/"+ name), mode)
-            for dict_key in objDict.keys():
-                if dict_keys == "All": pass
-                elif dict_key not in dict_keys: continue
-
-                for preObjName, objVal in objDict[dict_key].items():
-                    if type(objVal) == dict:
-                        for hname, hist in objVal.items():
-                            #help(hist)
-                            #dictKey = preObjName + "$" + hname
-                            #if dictKey not in rootDict:
-                            #rootDict[dictKey].cd()
+            # for dict_key in objDict.keys():
+            #     if dict_keys == "All": pass
+            #     elif dict_key not in dict_keys: continue
+            for objname, obj in objDict.items():
+                if type(obj) == dict:
+                    for hname, hist in obj.items():
+                        if "ROOT.RDF.RResultPtr" in str(type(obj)):
                             hptr = hist.GetPtr()
-                            oldname = hptr.GetName()
-                            #hptr.SetName("{}".format(dict_key + "*" + preObjName + "*" + hname))
-                            hptr.Write()
-                            #hptr.SetName("{}".format(oldname)) #Avoid overwriting things by switching back, save from segfault
-                    elif "ROOT.TH" in str(type(objVal)):
-                        hptr = objVal.GetPtr()
-                        oldname = hptr.GetName()
-                        #hptr.SetName("{}".format(dict_key + "*" + preObjName))
+                        else:
+                            hptr = hist
                         hptr.Write()
-                        #hptr.SetName("{}".format(oldname)) #Avoid overwriting things by switching back, save from segfault
-            print("Wrote histogram file for {} - {}".format(name, directory + "/" + channel + "/"+ name))
-    for f in rootDict.values():
-        f.Close()
+                        counter += 1
+                elif "ROOT.RDF.RResultPtr" in str(type(obj)):
+                    hptr = obj.GetPtr()
+                else:
+                    hptr = obj
+                hptr.Write()
+                counter += 1
+            print("Wrote {} histograms into file for {}::{} - {}".format(counter, name, channel, directory + "/" + channel + "/"+ name))
+            rootDict[name].Close()
 
 def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", stripKey=".root", includeSampleNames=None, 
                            excludeSampleNames=None, mode="RECREATE", doNumpyValidation=False, forceDefaultRebin=False, verbose=False,
@@ -4066,7 +4065,7 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
         base[name] = RDF("Events", vals["source"][source_level])
         reports[name] = base[name].Report()
         counts[name] = {}
-        histos[name] = {}
+        # histos[name] = {}
         packedNodes[name] = {}
         the_df[name] = {}
         stats[name] = {}
@@ -4153,7 +4152,7 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
             
             print("FIXME: Need to make cuts on HT, MET, InvariantMass, ETC. properly")
             counts[name][lvl] = the_df[name][lvl].Count()
-            histos[name][lvl] = {} #new style, populated inside fillHistos... differs from BTaggingYields right now! Future work
+            # histos[name][lvl] = {} #new style, populated inside fillHistos... differs from BTaggingYields right now! Future work
             packedNodes[name][lvl] = None
             stats[name][lvl] = {}
             effic[name][lvl] = {}
@@ -4212,7 +4211,7 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
                 print("Using doubly nested histos[name][lvl][processName][decayChannel] until protection against overwriting histos from multiple runs is in")
                 packedNodes[name][lvl] = fillHistos(the_df[name][lvl], isData = vals["isData"],
                                                     sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
-                                                    histosDict=histos[name][lvl], doCategorized=True, bTagger=bTagger, verbose=verb)
+                                                    histosDict=histos, doCategorized=True, bTagger=bTagger, verbose=verb)
                 # print(packedNodes[name][lvl].keys())
                 # print(packedNodes[name][lvl].keys())
                 # assert False, "Exiting early here, brah"
@@ -4238,13 +4237,9 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
                 print("To calculate the yield ratios, run 'BTaggingYieldsAnalyzer()' once all samples that are to be aggregated are in the directory")
             if doHistos:
                 writeDir = analysisDir + "/Histograms"
-                print(histos[name][lvl])
-                print(histos[name][lvl][name])
-                for k, v in histos[name][lvl][name].items():
-                    print(k)
-                writeHistos(histos[name][lvl], 
+                writeHistos(histos, 
                             writeDir,
-                            levelsOfInterest=[lvl],
+                            channelsOfInterest="All",
                             samplesOfInterest=[name],
                             dict_keys="All",
                             mode="RECREATE"
