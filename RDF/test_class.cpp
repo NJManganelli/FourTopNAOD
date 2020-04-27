@@ -156,6 +156,158 @@ double TH2Lookup::getEventYieldRatio(std::string sample, std::string variation, 
 
 //namespace FourTop Analysis
 namespace FTA{
+  int packEventId(std::string dataset, std::string campaign, int genTtbarId = -1, int ttbarNGenJet = -1, double ttbarGenHT = -1, int otherPhaseSpaceID = -1){
+    //Store integer key packing info about dataset (TTTo2L2Nu...), campaign (RunIIFall17NanoAODv6...), ttbar categorization, phase space, etc.
+    // Reserve 1000 codes for dataset, 100 for campaign, 
+    int retCode = 0;
+    return retCode;
+  }
+  double unpackEventId(int packedEventId, double genWeight, double luminosity = -1, bool details = false){
+    //return the event level XS weight accounting for luminosity, genWeight, sumWeights, etc. 
+    //Use a default for luminosity based on the era determined by the campaign, perhaps...
+    double retCode = 0;
+    return retCode;
+  }
+  std::map<std::string, std::string> unpackEventIdMeta(int packedEventId, double genWeight, double luminosity = -1){
+    //return the event level XS weight accounting for luminosity, genWeight, sumWeights, etc. 
+    std::map<std::string, std::string> retCode;
+    if(luminosity < 0){
+      //code to get the luminosity lookup from the main function...
+      retCode["luminosity"] = std::to_string(unpackEventId(packedEventId, genWeight, luminosity, true));
+    } else {
+      retCode["luminosity"] = "This is probably a bad idea, KISS my friend! Drop the lumi and genWeight";
+    }
+    return retCode;
+  }
+  double ElMu2017HLTSF(double lep1pt, double lep2pt){
+    double sf = 1;
+    if(lep1pt > 20 && lep2pt > 15){
+      if(lep1pt < 40){
+	if(lep2pt < 30){
+	  sf = 0.948121;
+	  return sf;
+	}
+	else { // > 30
+	  sf = 0.958362; 
+	  return sf;
+	}
+      }
+      else if(lep1pt < 60){
+	if(lep2pt < 30){
+	  sf = 0.957376;
+	  return sf;
+	}
+	else if(lep2pt < 45){
+	  sf = 0.985497;
+	  return sf;
+	}
+	else { // > 45, < 60
+	  sf = 0.987867; 
+	  return sf;
+	}
+      }
+      else if(lep1pt < 80){
+	if(lep2pt < 30){
+	  sf = 0.981871;
+	  return sf;
+	}
+	else if(lep2pt < 45){
+	  sf = 0.989406;
+	  return sf;
+	}
+	else if(lep2pt < 60){
+	  sf = 0.993657;
+	  return sf;
+	}
+	else { // > 60, < 80
+	  sf = 0.992759; 
+	  return sf;
+	}
+      }
+      else if(lep1pt < 100){
+	if(lep2pt < 30){
+	  sf = 0.986281;
+	  return sf;
+	}
+	else if(lep2pt < 45){
+	  sf = 0.990969;
+	  return sf;
+	}
+	else if(lep2pt < 60){
+	  sf = 0.99191;
+	  return sf;
+	}
+	else if(lep2pt < 80){
+	  sf = 0.993743;
+	  return sf;
+	}
+	else { // > 80, < 100
+	  sf = 0.994792; 
+	  return sf;
+	}
+      }
+      else if(lep1pt < 150){
+	if(lep2pt < 30){
+	  sf = 0.972893;
+	  return sf;
+	}
+	else if(lep2pt < 45){
+	  sf = 0.98453;
+	  return sf;
+	}
+	else if(lep2pt < 60){
+	  sf = 0.992017;
+	  return sf;
+	}
+	else if(lep2pt < 80){
+	  sf = 0.994693;
+	  return sf;
+	}
+	else if(lep2pt < 100){
+	  sf = 0.995513;
+	  return sf;
+	}
+	else { // > 100, < 150
+	  sf = 0.995142; 
+	  return sf;
+	}
+      }
+      else { //lep1pt > 150
+	if(lep2pt < 30){
+	  sf = 0.986643;
+	  return sf;
+	}
+	else if(lep2pt < 45){
+	  sf = 0.977584;
+	  return sf;
+	}
+	else if(lep2pt < 60){
+	  sf = 0.986496;
+	  return sf;
+	}
+	else if(lep2pt < 80){
+	  sf = 0.988663;
+	  return sf;
+	}
+	else if(lep2pt < 100){
+	  sf = 0.990325;
+	  return sf;
+	}
+	else if(lep2pt < 150){
+	  sf = 0.996006;
+	  return sf;
+	}
+	else { // > 150
+	  sf = 0.996827; 
+	  return sf;
+	}
+      }
+    } else {
+      std::cout << "HLT SF cannot be computed for lep1pt " << lep1pt << " and lep2pt " << lep2pt << std::endl;
+      sf = -1000000000000;
+      return sf;
+    }
+  }
   double btagEventWeight_count(double btag_threshold, RVec_f *jets_eff, RVec_f *jets_sf, RVec_f *jets_btag){
     double weight = 1.0;
     double prob_data = 1, prob_mc = 1;
