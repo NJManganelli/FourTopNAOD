@@ -2,7 +2,7 @@ import ROOT
 import numpy
 import ctypes
 import array
-ROOT.gROOT.ProcessLine(".L test_class.cpp")
+ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
 
 print("Testing HLT SF for tight-tight ID leptons in emu channel")
 xvec = array.array('d', [20, 40, 60, 80, 100, 150, 200])
