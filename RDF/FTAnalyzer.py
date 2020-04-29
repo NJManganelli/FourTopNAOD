@@ -126,6 +126,150 @@ systematics_2017 = {"$NOMINAL": {"jet_mask": "jet_mask",
                                 "btagSF": "Jet_btagSF_deepcsv_shape",
                                 "weightVariation": True},
 }
+TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
+TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
+                            era="2017",
+                            subera="BCDEF",
+                            uniqueEraBit=14,
+                            tier=0,
+                            channel="ElMu",
+                            leadMuThresh=25,
+                            subMuThresh=99999,
+                            leadElThresh=99999,
+                            subElThresh=15,
+                            nontriggerLepThresh=15),
+               TriggerTuple(trigger="HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
+                            era="2017",
+                            subera="BCDEF",
+                            uniqueEraBit=13,
+                            tier=0,
+                            channel="ElMu",
+                            leadMuThresh=99999,
+                            subMuThresh=15,
+                            leadElThresh=25,
+                            subElThresh=99999,
+                            nontriggerLepThresh=15),
+               TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ",
+                            era="2017",
+                            subera="B",
+                            uniqueEraBit=12,
+                            tier=1,
+                            channel="MuMu",
+                            leadMuThresh=25,
+                            subMuThresh=15,
+                            leadElThresh=99999,
+                            subElThresh=99999,
+                            nontriggerLepThresh=15),
+               TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8",
+                            era="2017",
+                            subera="CDEF",
+                            uniqueEraBit=11,
+                            tier=1,
+                            channel="MuMu",
+                            leadMuThresh=25,
+                            subMuThresh=15,
+                            leadElThresh=99999,
+                            subElThresh=99999,
+                            nontriggerLepThresh=15),
+               TriggerTuple(trigger="HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
+                            era="2017",
+                            subera="BCDEF",
+                            uniqueEraBit=9,
+                            tier=2,
+                            channel="ElEl",
+                            leadMuThresh=99999,
+                            subMuThresh=99999,
+                            leadElThresh=25,
+                            subElThresh=15,
+                            nontriggerLepThresh=15),
+               TriggerTuple(trigger="HLT_IsoMu27",
+                            era="2017",
+                            subera="BCDEF",
+                            uniqueEraBit=7,
+                            tier=3,
+                            channel="Mu",
+                            leadMuThresh=28,
+                            subMuThresh=99999,
+                            leadElThresh=99999,
+                            subElThresh=99999,
+                            nontriggerLepThresh=15),
+               TriggerTuple(trigger="HLT_Ele35_WPTight_Gsf",
+                            era="2017",
+                            subera="BCDEF",
+                            uniqueEraBit=6,
+                            tier=4,
+                            channel="El",
+                            leadMuThresh=99999,
+                            subMuThresh=99999,
+                            leadElThresh=36,
+                            subElThresh=99999,
+                            nontriggerLepThresh=15),
+               TriggerTuple(trigger="HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
+                            era="2018",
+                            subera="ABCD",
+                            uniqueEraBit=14,
+                            tier=0,
+                            channel="ElMu",
+                            leadMuThresh=99999,
+                            subMuThresh=15,
+                            leadElThresh=25,
+                            subElThresh=99999,
+                            nontriggerLepThresh=15),
+               TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
+                            era="2018",
+                            subera="ABCD",
+                            uniqueEraBit=12,
+                            tier=0,
+                            channel="ElMu",
+                            leadMuThresh=25,
+                            subMuThresh=99999,
+                            leadElThresh=99999,
+                            subElThresh=15,
+                            nontriggerLepThresh=15),
+               TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8",
+                            era="2018",
+                            subera="ABCD",
+                            uniqueEraBit=11,
+                            tier=1,
+                            channel="MuMu",
+                            leadMuThresh=25,
+                            subMuThresh=15,
+                            leadElThresh=99999,
+                            subElThresh=99999,
+                            nontriggerLepThresh=15),
+               TriggerTuple(trigger="HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
+                            era="2018",
+                            subera="ABCD",
+                            uniqueEraBit=9,
+                            tier=2,
+                            channel="ElEl",
+                            leadMuThresh=99999,
+                            subMuThresh=99999,
+                            leadElThresh=25,
+                            subElThresh=15,
+                            nontriggerLepThresh=15),
+               TriggerTuple(trigger="HLT_IsoMu24",
+                            era="2018",
+                            subera="ABCD",
+                            uniqueEraBit=8,
+                            tier=3,
+                            channel="Mu",
+                            leadMuThresh=25,
+                            subMuThresh=99999,
+                            leadElThresh=99999,
+                            subElThresh=99999,
+                            nontriggerLepThresh=15),
+               TriggerTuple(trigger="HLT_Ele32_WPTight_Gsf",
+                            era="2018",
+                            subera="ABCD",
+                            uniqueEraBit=7,
+                            tier=4,
+                            channel="El",
+                            leadMuThresh=99999,
+                            subMuThresh=99999,
+                            leadElThresh=33,
+                            subElThresh=99999,
+                            nontriggerLepThresh=15)]
 bookerV2_MC = {
     "tttt":{
         "era": "2017",
@@ -1128,7 +1272,8 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
 # In[ ]:
 
 
-def defineLeptons(input_df, input_lvl_filter=None, isData=True, useBackupChannel=False, verbose=False,
+def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useBackupChannel=False, verbose=False,
+                  triggers=[],
                  sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
                                              "lep_postfix": "",
                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -1209,6 +1354,10 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, useBackupChannel
             raise RuntimeError("No such level permissable: must contain 'selection' or 'baseline'")
         rdf_input = input_df.Filter(b[input_lvl_filter], input_lvl_filter)
         rdf = rdf_input
+        for trgTup in triggers:
+            if trgTup.era != era: continue
+            trg = trgTup.trigger
+            rdf = rdf.Define("typecast___{}".format(trg), "return (int){} == true;".format(trg))
         rdf = rdf.Define("mu_mask", "(Muon_OSV_{0} & {1}) > 0".format(lvl_type, Chan[input_lvl_filter]))
         rdf = rdf.Define("e_mask", "(Electron_OSV_{0} & {1}) > 0".format(lvl_type, Chan[input_lvl_filter]))
     transverseMassCode = '''auto MT2 = {m1}*{m1} + {m2}*{m2} + 2*(sqrt({m1}*{m1} + {pt1}*{pt1})*sqrt({m2}*{m2} + {pt2}*{pt2}) - {pt1}*{pt2}*cos(ROOT::VecOps::DeltaPhi({phi1}, {phi2})));
@@ -2162,9 +2311,10 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 
 
 
-def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All", isData = True, histosDict=None,
-               doCategorized=False, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
+def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All", isData=True, era="2017", histosDict=None,
+               doCategorized=False, doDiagnostics=True, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
                HTCut=500, ZMassMETWindow=[15.0, 10.0], verbose=False,
+               triggers=[],
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "lep_postfix": "",
                                            "wgt_final": "wgt__nom",
@@ -2256,8 +2406,8 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
     """
     
 
-    if doCategorized == False:
-        raise RuntimeError("Must select something to plot: Set do{Categorized,etc} = True in init method")
+    if doCategorized == False and doDiagnostics == False:
+        raise RuntimeError("Must select something to plot: Set do{Categorized, Diagnostics, etc} = True in init method")
 
     if usePackedEventID:
         print("Using packedEventID to categorize events into (sub)sample names and channel")
@@ -2304,6 +2454,7 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
     filterNodes = dict() #For storing tuples to debug and be verbose about
     defineNodes = dict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
     countNodes = dict() #For storing the counts at each node
+    diagnosticNodes = dict()
     nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
     nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
 
@@ -2344,6 +2495,7 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
             # countNodes[processName] = collections.OrderedDict()
             countNodes[processName] = dict()
             countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
+            diagnosticNodes[processName] = dict()
             #defineNodes[processName] = collections.OrderedDict()
             defineNodes[processName] = dict()
         if processName not in histoNodes:
@@ -2474,6 +2626,9 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                         # countNodes[processName][decayChannel] = collections.OrderedDict()
                         countNodes[processName][decayChannel] = dict()
                         countNodes[processName][decayChannel]["BaseNode"] = nodes[processName][decayChannel]["BaseNode"].Count()
+
+                        #more freeform diagnostic nodes
+                        diagnosticNodes[processName][decayChannel] = dict()
 
                         #Make some key for the histonodes, lets stop at decayChannel for now for the tuples, but keep a dict with histoName as key for histos...
                         defineNodes[processName][decayChannel] = []
@@ -2628,6 +2783,32 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                 if decayChannel.lower() == "basenode": continue
                 for category, categoryNode in nodes[processName][decayChannel].items():
                     if category.lower() == "basenode": continue
+                    diagnosticNodes[processName][decayChannel][category] = dict()
+                    if doDiagnostics:
+                        for trgTup in triggers:
+                            if trgTup.era != era: continue
+                            trg = trgTup.trigger
+                            # diagnosticNodes[processName][decayChannel][category][trg] = categoryNode.Stats("typecast___{}".format(trg))
+                        diagnosticNodes[processName][decayChannel][category]["nLooseMuon"] = categoryNode.Stats("nLooseFTAMuon{lpf}".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Muon_pfIsoId"] = categoryNode.Stats("FTAMuon{lpf}_pfIsoId".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Muon_pt"] = categoryNode.Stats("FTAMuon{lpf}_pt".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Muon_eta"] = categoryNode.Stats("FTAMuon{lpf}_eta".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Muon_charge"] = categoryNode.Stats("FTAMuon{lpf}_charge".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Muon_dz"] = categoryNode.Stats("FTAMuon{lpf}_dz".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Muon_dxy"] = categoryNode.Stats("FTAMuon{lpf}_dxy".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Muon_d0"] = categoryNode.Stats("FTAMuon{lpf}_d0".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Muon_ip3d"] = categoryNode.Stats("FTAMuon{lpf}_ip3d".format(lpf=leppostfix))
+    
+                        diagnosticNodes[processName][decayChannel][category]["nLooseElectron"] = categoryNode.Stats("nLooseFTAElectron{lpf}".format(lpf=leppostfix))
+                        # diagnosticNodes[processName][decayChannel][category]["Electron_pfIsoId"] = categoryNode.Stats("FTAElectron{lpf}_pfIsoId".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Electron_pt"] = categoryNode.Stats("FTAElectron{lpf}_pt".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Electron_eta"] = categoryNode.Stats("FTAElectron{lpf}_eta".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Electron_charge"] = categoryNode.Stats("FTAElectron{lpf}_charge".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Electron_dz"] = categoryNode.Stats("FTAElectron{lpf}_dz".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Electron_dxy"] = categoryNode.Stats("FTAElectron{lpf}_dxy".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Electron_d0"] = categoryNode.Stats("FTAElectron{lpf}_d0".format(lpf=leppostfix))
+                        diagnosticNodes[processName][decayChannel][category]["Electron_ip3d"] = categoryNode.Stats("FTAElectron{lpf}_ip3d".format(lpf=leppostfix))
+                        
                     #IMPORTANT: Skip nodes that belong to other systematic variations, since it's a dictionary!
                     if category.split("___")[-1] != branchpostfix.replace("__", ""): continue 
                     isBlinded = False
@@ -2939,6 +3120,7 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
     packedNodes["filterNodes"] = filterNodes
     packedNodes["defineNodes"] = defineNodes
     packedNodes["countNodes"] = countNodes
+    packedNodes["diagnosticNodes"] = diagnosticNodes
     packedNodes["nodes"] = nodes
     return packedNodes
 
@@ -4159,8 +4341,8 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         line = path + "," + ",".join(path_values.values()) + "\n"
                         f.write(line)
             
-def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=True,
-         useHTOnly=False, useNJetOnly=False, includeSampleNames=None, excludeSampleNames=None, verbose=False):
+def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
+         BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, triggers=[], includeSampleNames=None, excludeSampleNames=None, verbose=False):
 
     ##################################################
     ##################################################
@@ -4194,10 +4376,10 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
 
     #Decide on things to do: either calculate yields for ratios or fill histograms
     #Did we not chooose to do incompatible actions at the same time?
-    if doHistos and doBTaggingYields:
+    if doBTaggingYields and (doHistos or doDiagnostics):
         raise RuntimeError("Cannot calculate BTaggingYields and Fill Histograms simultaneously, choose only one mode")
-    elif not doHistos and not doBTaggingYields:
-        raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms, there is no work to be done.")
+    elif not doHistos and not doBTaggingYields and not doDiagnostics:
+        raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics, there is no work to be done.")
 
     #These are deprecated for now!
     doJetEfficiency = False
@@ -4387,13 +4569,17 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
                                           run_branch="run",
                                           era=vals["era"],
                                           isData=vals["isData"],
+                                          sysVariations=systematics_2017, 
                                           verbose=verbose,
                                           )
             #Define the leptons based on LeptonLogic bits, to be updated and replaced with code based on triggers/thresholds/leptons present (on-the-fly cuts)
             the_df[name][lvl] = defineLeptons(the_df[name][lvl], 
                                               input_lvl_filter=lvl,
                                               isData=vals["isData"], 
+                                              era=vals["era"],
                                               useBackupChannel=False,
+                                              triggers=triggers,
+                                              sysVariations=systematics_2017, 
                                               verbose=verbose,
                                              )
             #Use the cutPV and METFilters function to do cutflow on these requirements... this should be updated, still uses JetMETLogic bits... FIXME
@@ -4419,6 +4605,7 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
                                            era=vals["era"],
                                            bTagger=bTagger,
                                            isData=vals["isData"],
+                                           sysVariations=systematics_2017, 
                                            verbose=verbose,
                                           )
             the_df[name][lvl] = defineWeights(the_df[name][lvl],
@@ -4486,11 +4673,15 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
 
             #Hold the categorization nodes if doing histograms
             if doHistos:
-                #Many of these have been deprecated, besides doCategorized... fix later
-                print("Using doubly nested histos[name][lvl][processName][decayChannel] until protection against overwriting histos from multiple runs is in")
-                packedNodes[name][lvl] = fillHistos(the_df[name][lvl], isData = vals["isData"],
+                packedNodes[name][lvl] = fillHistos(the_df[name][lvl], isData = vals["isData"], era = vals["era"], triggers = triggers,
                                                     sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
-                                                    histosDict=histos, sysVariations=systematics_2017, doCategorized=True, bTagger=bTagger, verbose=verb)
+                                                    histosDict=histos, sysVariations=systematics_2017, doCategorized=True, 
+                                                    doDiagnostics=True, bTagger=bTagger, verbose=verb)
+            if doDiagnostics:
+                packedNodes[name][lvl] = fillHistos(the_df[name][lvl], isData = vals["isData"], era = vals["era"], triggers = triggers,
+                                                    sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
+                                                    histosDict=histos, sysVariations=systematics_2017, doCategorized=False, 
+                                                    doDiagnostics=True, bTagger=bTagger, verbose=verb)
                 # print(packedNodes[name][lvl].keys())
                 # print(packedNodes[name][lvl].keys())
                 # assert False, "Exiting early here, brah"
@@ -4530,10 +4721,13 @@ def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields
             #Add sample name to the list of processed samples and print it, in case things ****ing break in Jupyter Kernel
             processedSampleList.append(name)
             print("Processed Samples:")
-            print(processedSampleList)
+            processedSamples = ""
+            for n in processedSampleList:
+                processedSamples += "{} ".format(name)
+            print(processedSamples)
             print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theTime//60, theTime%60, theTime, processed[name][lvl], 
                          name, lvl, "".join(["\_/"]*25)))
-    return histos
+    return packedNodes
 def otherFuncs():
     """Code stripped from jupyter notebook when converted to script."""
 
@@ -4657,7 +4851,7 @@ def otherFuncs():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
-    parser.add_argument('stage', action='store', type=str, choices=['fill-yields', 'combine-yields', 'fill-histograms', 'prepare-for-combine'],
+    parser.add_argument('stage', action='store', type=str, choices=['fill-yields', 'combine-yields', 'fill-diagnostics', 'fill-histograms', 'prepare-for-combine'],
                         help='analysis stage to be produced')
     parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic/{chan}_selection',
                         help='Stage of data storage to pull from, as referenced in Sample dictionaries as subkeys of the "source" key.'\
@@ -4767,9 +4961,14 @@ if __name__ == '__main__':
                                           "Yaxis": "nJet",
                                       },
                            )
+    elif stage == 'fill-diagnostics':
+        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, triggers=TriggerList,
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
     elif stage == 'fill-histograms':
-        histos = main(analysisDir, source, channel, bTagger=bTagger, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate,
-                      useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
+        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, triggers=TriggerList,
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
     elif stage == 'prepare-for-combine':
         print("This analysis stage is not yet finished. It will call the method histoCombine() which needs to be updated for the new internal key structure from fillHistos")
     else:
