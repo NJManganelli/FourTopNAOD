@@ -33,7 +33,7 @@ else:
 #Load functions, can eventually be changed to ROOT.gInterpreter.Declare(#include "someheader.h")
 #WARNING! Do not rerun this cell without restarting the kernel, it will kill it!
 ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way
-ROOT.gROOT.ProcessLine(".L /eos/user/n/nmangane/CMSSW/CMSSW_10_2_18/src/FourTopNAOD/RDF/FTFunctions.cpp")
+ROOT.gROOT.ProcessLine(".L /eos/user/n/nmangane/CMSSW/CMSSW_10_2_18/src/FourTopNAOD/RDF/test_class.cpp")
 
 #FIXME: Need filter efficiency calculated for single lepton generator filtered sample. First approximation will be from MCCM (0.15) but as seen before, it's not ideal. 
 #May need to recalculate using genWeight/sumWeights instead of sign(genWeight)/(nPositiveEvents - nNegativeEvents), confirm if there's any difference.
@@ -57,50 +57,6 @@ systematics_2017 = {"$NOMINAL": {"jet_mask": "jet_mask",
                                  "met_phi_var": "METFixEE2017_phi",
                                  "btagSF": "Jet_btagSF_deepcsv_shape",
                                  "weightVariation": False},
-                    "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
-                                    "lep_postfix": "",
-                                    "wgt_final": "wgt__jesTotalUp",
-                                    "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                    "jet_pt_var": "Jet_pt_jesTotalUp",
-                                    "jet_mass_var": "Jet_mass_jesTotalUp",
-                                    "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                    "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                    "btagSF": "Jet_btagSF_deepcsv_shape",
-                                    "weightVariation": False},
-                    "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown",
-                                      "lep_postfix": "",
-                                      "wgt_final": "wgt__jesTotalDown", 
-                                      "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                      "jet_pt_var": "Jet_pt_jesTotalDown",
-                                      "jet_mass_var": "Jet_mass_jesTotalDown",
-                                      "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                      "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                      "btagSF": "Jet_btagSF_deepcsv_shape",
-                                      "weightVariation": False},
-                    "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
-                                                    "lep_postfix": "", 
-                                                    "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                    "jet_pt_var": "Jet_pt",
-                                                    "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
-                                                    "weightVariation": True},
-                    "_btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
-                                                      "lep_postfix": "", 
-                                                      "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                      "jet_pt_var": "Jet_pt",
-                                                      "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
-                                                      "weightVariation": True},
-                    "_btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
-                                                    "lep_postfix": "", 
-                                                    "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                    "jet_pt_var": "Jet_pt",
-                                                    "btagSF": "Jet_btagSF_deepcsv_shape_up_lf",
-                                                    "weightVariation": True},
-                    "_btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
-                                                      "lep_postfix": "", 
-                                                      "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                      "jet_pt_var": "Jet_pt",
-                                                      "btagSF": "Jet_btagSF_deepcsv_shape_down_lf",
-                                                      "weightVariation": True},
                     "_no_btag_shape_reweight": {"jet_mask": "jet_mask",
                                                 "lep_postfix": "", 
                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
@@ -126,150 +82,6 @@ systematics_2017 = {"$NOMINAL": {"jet_mask": "jet_mask",
                                 "btagSF": "Jet_btagSF_deepcsv_shape",
                                 "weightVariation": True},
 }
-TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
-TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
-                            era="2017",
-                            subera="BCDEF",
-                            uniqueEraBit=14,
-                            tier=0,
-                            channel="ElMu",
-                            leadMuThresh=25,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=15,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
-                            era="2017",
-                            subera="BCDEF",
-                            uniqueEraBit=13,
-                            tier=0,
-                            channel="ElMu",
-                            leadMuThresh=99999,
-                            subMuThresh=15,
-                            leadElThresh=25,
-                            subElThresh=99999,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ",
-                            era="2017",
-                            subera="B",
-                            uniqueEraBit=12,
-                            tier=1,
-                            channel="MuMu",
-                            leadMuThresh=25,
-                            subMuThresh=15,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8",
-                            era="2017",
-                            subera="CDEF",
-                            uniqueEraBit=11,
-                            tier=1,
-                            channel="MuMu",
-                            leadMuThresh=25,
-                            subMuThresh=15,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
-                            era="2017",
-                            subera="BCDEF",
-                            uniqueEraBit=9,
-                            tier=2,
-                            channel="ElEl",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=25,
-                            subElThresh=15,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_IsoMu27",
-                            era="2017",
-                            subera="BCDEF",
-                            uniqueEraBit=7,
-                            tier=3,
-                            channel="Mu",
-                            leadMuThresh=28,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Ele35_WPTight_Gsf",
-                            era="2017",
-                            subera="BCDEF",
-                            uniqueEraBit=6,
-                            tier=4,
-                            channel="El",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=36,
-                            subElThresh=99999,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=14,
-                            tier=0,
-                            channel="ElMu",
-                            leadMuThresh=99999,
-                            subMuThresh=15,
-                            leadElThresh=25,
-                            subElThresh=99999,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=12,
-                            tier=0,
-                            channel="ElMu",
-                            leadMuThresh=25,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=15,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=11,
-                            tier=1,
-                            channel="MuMu",
-                            leadMuThresh=25,
-                            subMuThresh=15,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=9,
-                            tier=2,
-                            channel="ElEl",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=25,
-                            subElThresh=15,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_IsoMu24",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=8,
-                            tier=3,
-                            channel="Mu",
-                            leadMuThresh=25,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Ele32_WPTight_Gsf",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=7,
-                            tier=4,
-                            channel="El",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=33,
-                            subElThresh=99999,
-                            nontriggerLepThresh=15)]
 bookerV2_MC = {
     "tttt":{
         "era": "2017",
@@ -1272,8 +1084,7 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
 # In[ ]:
 
 
-def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useBackupChannel=False, verbose=False,
-                  triggers=[],
+def defineLeptons(input_df, input_lvl_filter=None, isData=True, useBackupChannel=False, verbose=False,
                  sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
                                              "lep_postfix": "",
                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -1354,10 +1165,6 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
             raise RuntimeError("No such level permissable: must contain 'selection' or 'baseline'")
         rdf_input = input_df.Filter(b[input_lvl_filter], input_lvl_filter)
         rdf = rdf_input
-        for trgTup in triggers:
-            if trgTup.era != era: continue
-            trg = trgTup.trigger
-            rdf = rdf.Define("typecast___{}".format(trg), "return (int){} == true;".format(trg))
         rdf = rdf.Define("mu_mask", "(Muon_OSV_{0} & {1}) > 0".format(lvl_type, Chan[input_lvl_filter]))
         rdf = rdf.Define("e_mask", "(Electron_OSV_{0} & {1}) > 0".format(lvl_type, Chan[input_lvl_filter]))
     transverseMassCode = '''auto MT2 = {m1}*{m1} + {m2}*{m2} + 2*(sqrt({m1}*{m1} + {pt1}*{pt1})*sqrt({m2}*{m2} + {pt2}*{pt2}) - {pt1}*{pt2}*cos(ROOT::VecOps::DeltaPhi({phi1}, {phi2})));
@@ -1509,7 +1316,7 @@ def defineInitWeights(input_df, crossSection=0, era="2017", sumWeights=-1, lumiO
     mc_def["wgt_NUMW"] = "({xs:s} * {lumi:s} * 1000 * genWeight) / (abs(genWeight) * ( {nevtp:s} - {nevtn:s} ) )".format(xs=str(crossSection), lumi=str(lumi), nevt=str(nEvents),
                     nevtp=str(nEventsPositive), nevtn=str(nEventsNegative))
     mc_def["wgt_SUMW"] = "({xs:s} * {lumi:s} * 1000 * genWeight) / {sumw:s}".format(xs=str(crossSection), lumi=str(lumi), sumw=str(sumWeights))
-    mc_def["wgt_LSF"] = "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)
+    mc_def["wgt_LSF"] = "(FTALepton{lpf}_SF_nom.size() > 1 ? FTA::ElMu2017HLTSF(FTALepton{lpf}_pt.at(0), FTALepton{lpf}_pt.at(1)) * FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)
     mc_def["wgt_SUMW_PU"] = "wgt_SUMW * puWeight"
     mc_def["wgt_SUMW_LSF"] = "wgt_SUMW * wgt_LSF"
     mc_def["wgt_SUMW_L1PF"] = "wgt_SUMW * L1PreFiringWeight_Nom"
@@ -1740,11 +1547,11 @@ def defineWeights(input_df, era, isData=False, verbose=False, final=False):
     zPre.append(("prewgt__nom", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
     
     #JES Up and Down - effectively the nominal weight, but with the CORRECT btag weight for those jets!
-    zFin.append(("wgt__jesTotalDown", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalDown"))
-    zFin.append(("wgt__jesTotalUp", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalUp"))
+    # zFin.append(("wgt__jesTotalDown", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalDown"))
+    # zFin.append(("wgt__jesTotalUp", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalUp"))
     
-    zPre.append(("prewgt__jesTotalDown", "prewgt__nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
-    zPre.append(("prewgt__jesTotalUp", "prewgt__nom"))
+    # zPre.append(("prewgt__jesTotalDown", "prewgt__nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
+    # zPre.append(("prewgt__jesTotalUp", "prewgt__nom"))
     
     #Pileup variations 
     print("FIXME: Using temporary definition of weights for PU variations (change pwgt_btag__VARIATION)")
@@ -1779,16 +1586,16 @@ def defineWeights(input_df, era, isData=False, verbose=False, final=False):
     #Pure BTagging variations, no other variations necessary. 
     #Since there may be many, use a common base factor for fewer multiplies... for pre-btagging, they're identical!
     zFin.append(("pwgt_btagSF_common", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    zFin.append(("wgt__btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_down_hf"))
-    zFin.append(("wgt__btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_up_hf"))
-    zFin.append(("wgt__btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_down_lf"))
-    zFin.append(("wgt__btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_up_lf"))
+    # zFin.append(("wgt__btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_down_hf"))
+    # zFin.append(("wgt__btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_up_hf"))
+    # zFin.append(("wgt__btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_down_lf"))
+    # zFin.append(("wgt__btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_up_lf"))
     
     zPre.append(("pwgt_btagSF_common", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    zPre.append(("prewgt__btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common"))#Really just aliases w/o btagging part
-    zPre.append(("prewgt__btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common"))
-    zPre.append(("prewgt__btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common"))
-    zPre.append(("prewgt__btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common"))
+    # zPre.append(("prewgt__btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common"))#Really just aliases w/o btagging part
+    # zPre.append(("prewgt__btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common"))
+    # zPre.append(("prewgt__btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common"))
+    # zPre.append(("prewgt__btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common"))
 
     #Special variations for testing central components
     zFin.append(("wgt__no_btag_shape_reweight", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
@@ -2311,10 +2118,9 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 
 
 
-def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All", isData=True, era="2017", histosDict=None,
-               doCategorized=False, doDiagnostics=True, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
+def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All", isData = True, histosDict=None,
+               doCategorized=False, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
                HTCut=500, ZMassMETWindow=[15.0, 10.0], verbose=False,
-               triggers=[],
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "lep_postfix": "",
                                            "wgt_final": "wgt__nom",
@@ -2406,8 +2212,8 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
     """
     
 
-    if doCategorized == False and doDiagnostics == False:
-        raise RuntimeError("Must select something to plot: Set do{Categorized, Diagnostics, etc} = True in init method")
+    if doCategorized == False:
+        raise RuntimeError("Must select something to plot: Set do{Categorized,etc} = True in init method")
 
     if usePackedEventID:
         print("Using packedEventID to categorize events into (sub)sample names and channel")
@@ -2454,7 +2260,6 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
     filterNodes = dict() #For storing tuples to debug and be verbose about
     defineNodes = dict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
     countNodes = dict() #For storing the counts at each node
-    diagnosticNodes = dict()
     nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
     nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
 
@@ -2495,7 +2300,6 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
             # countNodes[processName] = collections.OrderedDict()
             countNodes[processName] = dict()
             countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
-            diagnosticNodes[processName] = dict()
             #defineNodes[processName] = collections.OrderedDict()
             defineNodes[processName] = dict()
         if processName not in histoNodes:
@@ -2587,7 +2391,7 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                         continue
                     #Regarding keys: we'll insert the systematic when we insert all th L0 X L1 X L2 keys in the dictionaries, not here in the L($N) keys
                     if decayChannel == "ElMu{lpf}".format(lpf=leppostfix):
-                        channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 1 && nFTAElectron{lpf}== 1".format(lpf=leppostfix)
+                        channelFilter = "nTightFTALepton{lpf} == 2 && nFTAMuon{lpf} == 1 && nFTAElectron{lpf}== 1".format(lpf=leppostfix)
                         channelFiltName = "1 el, 1 mu ({lpf})".format(lpf=leppostfix)
                         L0String = "HT{bpf} >= {htc}".format(bpf=branchpostfix, htc=HTCut)
                         L0Name = "HT{bpf} >= {htc}"\
@@ -2626,9 +2430,6 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                         # countNodes[processName][decayChannel] = collections.OrderedDict()
                         countNodes[processName][decayChannel] = dict()
                         countNodes[processName][decayChannel]["BaseNode"] = nodes[processName][decayChannel]["BaseNode"].Count()
-
-                        #more freeform diagnostic nodes
-                        diagnosticNodes[processName][decayChannel] = dict()
 
                         #Make some key for the histonodes, lets stop at decayChannel for now for the tuples, but keep a dict with histoName as key for histos...
                         defineNodes[processName][decayChannel] = []
@@ -2783,32 +2584,6 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                 if decayChannel.lower() == "basenode": continue
                 for category, categoryNode in nodes[processName][decayChannel].items():
                     if category.lower() == "basenode": continue
-                    diagnosticNodes[processName][decayChannel][category] = dict()
-                    if doDiagnostics:
-                        for trgTup in triggers:
-                            if trgTup.era != era: continue
-                            trg = trgTup.trigger
-                            # diagnosticNodes[processName][decayChannel][category][trg] = categoryNode.Stats("typecast___{}".format(trg))
-                        diagnosticNodes[processName][decayChannel][category]["nLooseMuon"] = categoryNode.Stats("nLooseFTAMuon{lpf}".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Muon_pfIsoId"] = categoryNode.Stats("FTAMuon{lpf}_pfIsoId".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Muon_pt"] = categoryNode.Stats("FTAMuon{lpf}_pt".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Muon_eta"] = categoryNode.Stats("FTAMuon{lpf}_eta".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Muon_charge"] = categoryNode.Stats("FTAMuon{lpf}_charge".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Muon_dz"] = categoryNode.Stats("FTAMuon{lpf}_dz".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Muon_dxy"] = categoryNode.Stats("FTAMuon{lpf}_dxy".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Muon_d0"] = categoryNode.Stats("FTAMuon{lpf}_d0".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Muon_ip3d"] = categoryNode.Stats("FTAMuon{lpf}_ip3d".format(lpf=leppostfix))
-    
-                        diagnosticNodes[processName][decayChannel][category]["nLooseElectron"] = categoryNode.Stats("nLooseFTAElectron{lpf}".format(lpf=leppostfix))
-                        # diagnosticNodes[processName][decayChannel][category]["Electron_pfIsoId"] = categoryNode.Stats("FTAElectron{lpf}_pfIsoId".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Electron_pt"] = categoryNode.Stats("FTAElectron{lpf}_pt".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Electron_eta"] = categoryNode.Stats("FTAElectron{lpf}_eta".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Electron_charge"] = categoryNode.Stats("FTAElectron{lpf}_charge".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Electron_dz"] = categoryNode.Stats("FTAElectron{lpf}_dz".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Electron_dxy"] = categoryNode.Stats("FTAElectron{lpf}_dxy".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Electron_d0"] = categoryNode.Stats("FTAElectron{lpf}_d0".format(lpf=leppostfix))
-                        diagnosticNodes[processName][decayChannel][category]["Electron_ip3d"] = categoryNode.Stats("FTAElectron{lpf}_ip3d".format(lpf=leppostfix))
-                        
                     #IMPORTANT: Skip nodes that belong to other systematic variations, since it's a dictionary!
                     if category.split("___")[-1] != branchpostfix.replace("__", ""): continue 
                     isBlinded = False
@@ -3120,7 +2895,6 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
     packedNodes["filterNodes"] = filterNodes
     packedNodes["defineNodes"] = defineNodes
     packedNodes["countNodes"] = countNodes
-    packedNodes["diagnosticNodes"] = diagnosticNodes
     packedNodes["nodes"] = nodes
     return packedNodes
 
@@ -4341,8 +4115,8 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         line = path + "," + ",".join(path_values.values()) + "\n"
                         f.write(line)
             
-def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-         BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, triggers=[], includeSampleNames=None, excludeSampleNames=None, verbose=False):
+def main(analysisDir, source, channel, bTagger, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=True,
+         useHTOnly=False, useNJetOnly=False, includeSampleNames=None, excludeSampleNames=None, verbose=False):
 
     ##################################################
     ##################################################
@@ -4376,10 +4150,10 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
 
     #Decide on things to do: either calculate yields for ratios or fill histograms
     #Did we not chooose to do incompatible actions at the same time?
-    if doBTaggingYields and (doHistos or doDiagnostics):
+    if doHistos and doBTaggingYields:
         raise RuntimeError("Cannot calculate BTaggingYields and Fill Histograms simultaneously, choose only one mode")
-    elif not doHistos and not doBTaggingYields and not doDiagnostics:
-        raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics, there is no work to be done.")
+    elif not doHistos and not doBTaggingYields:
+        raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms, there is no work to be done.")
 
     #These are deprecated for now!
     doJetEfficiency = False
@@ -4569,17 +4343,13 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                           run_branch="run",
                                           era=vals["era"],
                                           isData=vals["isData"],
-                                          sysVariations=systematics_2017, 
                                           verbose=verbose,
                                           )
             #Define the leptons based on LeptonLogic bits, to be updated and replaced with code based on triggers/thresholds/leptons present (on-the-fly cuts)
             the_df[name][lvl] = defineLeptons(the_df[name][lvl], 
                                               input_lvl_filter=lvl,
                                               isData=vals["isData"], 
-                                              era=vals["era"],
                                               useBackupChannel=False,
-                                              triggers=triggers,
-                                              sysVariations=systematics_2017, 
                                               verbose=verbose,
                                              )
             #Use the cutPV and METFilters function to do cutflow on these requirements... this should be updated, still uses JetMETLogic bits... FIXME
@@ -4605,7 +4375,6 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                            era=vals["era"],
                                            bTagger=bTagger,
                                            isData=vals["isData"],
-                                           sysVariations=systematics_2017, 
                                            verbose=verbose,
                                           )
             the_df[name][lvl] = defineWeights(the_df[name][lvl],
@@ -4673,15 +4442,11 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
 
             #Hold the categorization nodes if doing histograms
             if doHistos:
-                packedNodes[name][lvl] = fillHistos(the_df[name][lvl], isData = vals["isData"], era = vals["era"], triggers = triggers,
+                #Many of these have been deprecated, besides doCategorized... fix later
+                print("Using doubly nested histos[name][lvl][processName][decayChannel] until protection against overwriting histos from multiple runs is in")
+                packedNodes[name][lvl] = fillHistos(the_df[name][lvl], isData = vals["isData"],
                                                     sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
-                                                    histosDict=histos, sysVariations=systematics_2017, doCategorized=True, 
-                                                    doDiagnostics=True, bTagger=bTagger, verbose=verb)
-            if doDiagnostics:
-                packedNodes[name][lvl] = fillHistos(the_df[name][lvl], isData = vals["isData"], era = vals["era"], triggers = triggers,
-                                                    sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
-                                                    histosDict=histos, sysVariations=systematics_2017, doCategorized=False, 
-                                                    doDiagnostics=True, bTagger=bTagger, verbose=verb)
+                                                    histosDict=histos, sysVariations=systematics_2017, doCategorized=True, bTagger=bTagger, verbose=verb)
                 # print(packedNodes[name][lvl].keys())
                 # print(packedNodes[name][lvl].keys())
                 # assert False, "Exiting early here, brah"
@@ -4721,13 +4486,10 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
             #Add sample name to the list of processed samples and print it, in case things ****ing break in Jupyter Kernel
             processedSampleList.append(name)
             print("Processed Samples:")
-            processedSamples = ""
-            for n in processedSampleList:
-                processedSamples += "{} ".format(name)
-            print(processedSamples)
+            print(processedSampleList)
             print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theTime//60, theTime%60, theTime, processed[name][lvl], 
                          name, lvl, "".join(["\_/"]*25)))
-    return packedNodes
+    return histos
 def otherFuncs():
     """Code stripped from jupyter notebook when converted to script."""
 
@@ -4851,7 +4613,7 @@ def otherFuncs():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
-    parser.add_argument('stage', action='store', type=str, choices=['fill-yields', 'combine-yields', 'fill-diagnostics', 'fill-histograms', 'prepare-for-combine'],
+    parser.add_argument('stage', action='store', type=str, choices=['fill-yields', 'combine-yields', 'fill-histograms', 'prepare-for-combine'],
                         help='analysis stage to be produced')
     parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic/{chan}_selection',
                         help='Stage of data storage to pull from, as referenced in Sample dictionaries as subkeys of the "source" key.'\
@@ -4961,14 +4723,9 @@ if __name__ == '__main__':
                                           "Yaxis": "nJet",
                                       },
                            )
-    elif stage == 'fill-diagnostics':
-        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, triggers=TriggerList,
-                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
     elif stage == 'fill-histograms':
-        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, triggers=TriggerList,
-                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
+        histos = main(analysisDir, source, channel, bTagger=bTagger, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate,
+                      useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
     elif stage == 'prepare-for-combine':
         print("This analysis stage is not yet finished. It will call the method histoCombine() which needs to be updated for the new internal key structure from fillHistos")
     else:

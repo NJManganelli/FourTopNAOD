@@ -1,7 +1,23 @@
 import ROOT
 import numpy
 import ctypes
-ROOT.gROOT.ProcessLine(".L test_class.cpp")
+import array
+ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
+
+print("Testing HLT SF for tight-tight ID leptons in emu channel")
+xvec = array.array('d', [20, 40, 60, 80, 100, 150, 200])
+yvec = array.array('d', [15, 30, 45, 60, 80, 100, 150, 200])
+HLTSF = ROOT.TH2D("HLTSF", "HLT SF test; lep1 pt(); lep2 pt()", 6, xvec, 7, yvec)
+for xin in [30, 50, 70, 90, 125, 175]:
+    for yin in [22.5, 37.5, 52.5, 70, 90, 125, 175]:
+        z = ROOT.FTA.ElMu2017HLTSF(xin, yin)
+        if z > 0:
+            HLTSF.Fill(xin, yin, z)
+hltcan = ROOT.TCanvas("HLTCAN", "", 800, 600)
+HLTSF.SetMinimum(0.88)
+HLTSF.SetMaximum(0.998)
+HLTSF.Draw("COLZ TEXT")
+hltcan.Draw()
 
 f_mc = "/eos/user/n/nmangane/data/20200403/mc_test_file.root"
 f_data = "/eos/user/n/nmangane/data/20200403/data_test_file.root"
