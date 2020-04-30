@@ -2554,6 +2554,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
         if type(splitProcess) == dict or type(splitProcess) == collections.OrderedDict:
             df_with_IDs = input_df
             IDs = splitProcess.get("ID")
+            listOfColumns = df_with_IDs.GetColumnNames()
             for IDname, IDbool in IDs.items():
                 if IDbool and IDname == "unpackGenTtbarId":
                     if "unpackedGenTtbarId" not in listOfColumns:
@@ -5044,7 +5045,9 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                                verbose=verbose,
                                               )
             #Define the final weights/variations so long as we have btagging yields inserted...
-            splitProcessConfig = vals.get("splitProcess", None)
+            # splitProcessConfig = vals.get("splitProcess", None)
+            splitProcessConfig=None
+            print("Forcing splitProcess to False for now, check this line!")
             if BTaggingYieldsFile:
                 prePackedNodes = splitProcess(the_df[name][lvl], 
                                               splitProcess = splitProcessConfig, 
