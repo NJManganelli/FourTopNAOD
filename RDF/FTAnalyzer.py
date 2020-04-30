@@ -14,6 +14,7 @@ import glob
 import collections
 import array
 import pprint
+import re
 import pdb
 import ROOT
 #from IPython.display import Image, display, SVG
@@ -48,7 +49,18 @@ leg_dict = {"tttt": ROOT.kAzure-2,
             "Data": ROOT.kBlack,
             "QCD": ROOT.kPink,
            }
-systematics_2017 = {"$NOMINAL": {"jet_mask": "jet_mask",
+systematics_2017_NOMINAL = {"$NOMINAL": {"jet_mask": "jet_mask",
+                                 "lep_postfix": "",
+                                 "wgt_final": "wgt__nom",
+                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                 "jet_pt_var": "Jet_pt",
+                                 "jet_mass_var": "Jet_mass",
+                                 "met_pt_var": "METFixEE2017_pt",
+                                 "met_phi_var": "METFixEE2017_phi",
+                                 "btagSF": "Jet_btagSF_deepcsv_shape",
+                                 "weightVariation": False},
+}
+systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                  "lep_postfix": "",
                                  "wgt_final": "wgt__nom",
                                  "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -127,6 +139,8 @@ systematics_2017 = {"$NOMINAL": {"jet_mask": "jet_mask",
                                 "btagSF": "Jet_btagSF_deepcsv_shape",
                                 "weightVariation": True},
 }
+print("Only using the nominal variations right now, see L142")
+systematics_2017 = systematics_2017_NOMINAL
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
                             era="2017",
@@ -1437,24 +1451,6 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
                                              "met_phi_var": "METFixEE2017_phi",
                                              "btagSF": "Jet_btagSF_deepcsv_shape",
                                              "weightVariation": False},
-                              "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
-                                              "lep_postfix": "",
-                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                              "jet_pt_var": "Jet_pt_jesTotalUp",
-                                              "jet_mass_var": "Jet_mass_jesTotalUp",
-                                              "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                              "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                              "btagSF": "Jet_btagSF_deepcsv_shape",
-                                              "weightVariation": False},
-                              "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
-                                                "lep_postfix": "",
-                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                                "jet_pt_var": "Jet_pt_jesTotalDown",
-                                                "jet_mass_var": "Jet_mass_jesTotalDown",
-                                                "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                                "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                                "btagSF": "Jet_btagSF_deepcsv_shape",
-                                                "weightVariation": False},
                                 },
                  ):
     """Function to take in a dataframe and return one with new columns defined,
@@ -1608,11 +1604,38 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
     z.append(("FTALepton{lpf}_pt_LeadLep".format(lpf=leppostfix), "FTALepton{lpf}_pt.size() > 0 ? FTALepton{lpf}_pt.at(0) : -0.000000000001".format(lpf=leppostfix)))
     z.append(("FTALepton{lpf}_pt_SubleadLep".format(lpf=leppostfix), "FTALepton{lpf}_pt.size() > 1 ? FTALepton{lpf}_pt.at(1) : -0.000000000001".format(lpf=leppostfix)))
     z.append(("FTALepton{lpf}_eta_LeadLep".format(lpf=leppostfix), "FTALepton{lpf}_eta.size() > 0 ? FTALepton{lpf}_eta.at(0) : -9999".format(lpf=leppostfix)))
-    z.append(("FTALepton{lpf}_eta_SubleadLep".format(lpf=leppostfix), "FTALepton{lpf}_eta.size() > 1 ? FTALepton{lpf}_eta.at(1) : -0.9999".format(lpf=leppostfix)))
+    z.append(("FTALepton{lpf}_eta_SubleadLep".format(lpf=leppostfix), "FTALepton{lpf}_eta.size() > 1 ? FTALepton{lpf}_eta.at(1) : -9999".format(lpf=leppostfix)))
     z.append(("FTALepton{lpf}_jetIdx_0".format(lpf=leppostfix), "FTALepton{lpf}_jetIdx.size() > 0 ? FTALepton{lpf}_jetIdx.at(0) : -1".format(lpf=leppostfix)))
     z.append(("FTALepton{lpf}_jetIdx_1".format(lpf=leppostfix), "FTALepton{lpf}_jetIdx.size() > 1 ? FTALepton{lpf}_jetIdx.at(1) : -1".format(lpf=leppostfix)))
     if isData == False:
         z.append(("FTALepton{lpf}_SF_nom".format(lpf=leppostfix), "Take(Concatenate(FTAMuon{lpf}_SF_ID_nom*FTAMuon{lpf}_SF_ISO_nom, FTAElectron{lpf}_SF_ID_nom*FTAElectron{lpf}_SF_EFF_nom), FTALepton{lpf}_argsort)".format(lpf=leppostfix)))
+
+    z.append(("FTAMuon{lpf}_pt_LeadLep".format(lpf=leppostfix), 
+              "FTALepton{lpf}_pt.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 13 ? FTALepton{lpf}_pt.at(0) : -0.000000000001".format(lpf=leppostfix)))
+    z.append(("FTAMuon{lpf}_pt_SubleadLep".format(lpf=leppostfix), 
+              "FTALepton{lpf}_pt.size() > 1 && abs(FTALepton{lpf}_pdgId.at(1)) == 13 ? FTALepton{lpf}_pt.at(1) : -0.000000000001".format(lpf=leppostfix)))
+    z.append(("FTAMuon{lpf}_eta_LeadLep".format(lpf=leppostfix), 
+              "FTALepton{lpf}_eta.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 13 ? FTALepton{lpf}_eta.at(0) : -9999".format(lpf=leppostfix)))
+    z.append(("FTAMuon{lpf}_eta_SubleadLep".format(lpf=leppostfix), 
+              "FTALepton{lpf}_eta.size() > 1 && abs(FTALepton{lpf}_pdgId.at(1)) == 13 ? FTALepton{lpf}_eta.at(1) : -9999".format(lpf=leppostfix)))
+    z.append(("FTAMuon{lpf}_phi_LeadLep".format(lpf=leppostfix), 
+              "FTALepton{lpf}_phi.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 13 ? FTALepton{lpf}_phi.at(0) : -9999".format(lpf=leppostfix)))
+    z.append(("FTAMuon{lpf}_phi_SubleadLep".format(lpf=leppostfix), 
+              "FTALepton{lpf}_phi.size() > 1 && abs(FTALepton{lpf}_pdgId.at(1)) == 13 ? FTALepton{lpf}_phi.at(1) : -9999".format(lpf=leppostfix)))
+
+    z.append(("FTAElectron{lpf}_pt_LeadLep".format(lpf=leppostfix), 
+              "FTALepton{lpf}_pt.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 11 ? FTALepton{lpf}_pt.at(0) : -0.000000000001".format(lpf=leppostfix)))
+    z.append(("FTAElectron{lpf}_pt_SubleadLep".format(lpf=leppostfix), 
+              "FTALepton{lpf}_pt.size() > 1 && abs(FTALepton{lpf}_pdgId.at(1)) == 11 ? FTALepton{lpf}_pt.at(1) : -0.000000000001".format(lpf=leppostfix)))
+    z.append(("FTAElectron{lpf}_eta_LeadLep".format(lpf=leppostfix), 
+              "FTALepton{lpf}_eta.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 11 ? FTALepton{lpf}_eta.at(0) : -9999".format(lpf=leppostfix)))
+    z.append(("FTAElectron{lpf}_eta_SubleadLep".format(lpf=leppostfix), 
+              "FTALepton{lpf}_eta.size() > 1 && abs(FTALepton{lpf}_pdgId.at(1)) == 11 ? FTALepton{lpf}_eta.at(1) : -9999".format(lpf=leppostfix)))
+    z.append(("FTAElectron{lpf}_phi_LeadLep".format(lpf=leppostfix), 
+              "FTALepton{lpf}_phi.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 11 ? FTALepton{lpf}_phi.at(0) : -9999".format(lpf=leppostfix)))
+    z.append(("FTAElectron{lpf}_phi_SubleadLep".format(lpf=leppostfix), 
+              "FTALepton{lpf}_phi.size() > 1 && abs(FTALepton{lpf}_pdgId.at(1)) == 11 ? FTALepton{lpf}_phi.at(1) : -9999".format(lpf=leppostfix)))
+
 
     for sysVar, sysDict in sysVariations.items():
         #skip systematic variations on data, only do the nominal
@@ -1635,6 +1658,7 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
         #There shouldn't be any variation on this quantity, but... easier looping
         z.append(("MTofElandMu{spf}".format(spf=syspostfix), 
                          "FTA::transverseMass(FTAMuon{lpf}_pt, FTAMuon{lpf}_phi, FTAMuon{lpf}_mass, FTAElectron{lpf}_pt, FTAElectron{lpf}_phi, FTAElectron{lpf}_mass)".format(lpf=leppostfix)))
+
     
     listOfColumns = rdf.GetColumnNames()
     #Add them to the dataframe...
@@ -1859,7 +1883,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
     return rdf
 
 
-def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbose=False, final=False):
+def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbose=False, final=False, sysVariations={"$NOMINAL":"NoValueNeeded"}):
     """Define all the pre-final or final weights and the variations, to be referened by the sysVariations dictionaries as wgt_final.
     if final=False, do the pre-final weights for BTaggingYields calculations.
     
@@ -1889,7 +1913,7 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     zFin = []
     zPre = []
     # zFin.append(("pwgt__XS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere #Now defined in the splitProcess function
-    zFin.append(("pwgt__LSF_nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
+    zFin.append(("pwgt_LSF__nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
     zPre.append(("pwgt__XS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere
     zPre.append(("pwgt_LSF__nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
     
@@ -1903,35 +1927,41 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     zPre.append(("prewgt__nom", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
     
     #JES Up and Down - effectively the nominal weight, but with the CORRECT btag weight for those jets!
-    zFin.append(("wgt__jesTotalDown", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalDown"))
-    zFin.append(("wgt__jesTotalUp", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalUp"))
-    
-    zPre.append(("prewgt__jesTotalDown", "prewgt__nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
-    zPre.append(("prewgt__jesTotalUp", "prewgt__nom"))
+    if "_jesTotalDown" in sysVariations.keys():
+        zFin.append(("wgt__jesTotalDown", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalDown"))
+        zPre.append(("prewgt__jesTotalDown", "prewgt__nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
+        
+    if "_jesTotalDown" in sysVariations.keys():
+        zPre.append(("prewgt__jesTotalUp", "prewgt__nom"))
+        zFin.append(("wgt__jesTotalUp", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalUp"))
     
     #Pileup variations 
     print("FIXME: Using temporary definition of weights for PU variations (change pwgt_btag__VARIATION)")
-    zFin.append(("wgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
-    zFin.append(("wgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
-    #zFin.append(("wgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__puWeightDown"))
-    #zFin.append(("wgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__puWeightUp"))
+    if "_puWeightDown" in sysVariations.keys():
+        zFin.append(("wgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
+        #zFin.append(("wgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__puWeightDown"))
+        zPre.append(("prewgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+        #zPre.append(("prewgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    if "_puWeightUp" in sysVariations.keys():
+        zFin.append(("wgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
+        #zFin.append(("wgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__puWeightUp"))
+        zPre.append(("prewgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+        #zPre.append(("prewgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
     
-    zPre.append(("prewgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    zPre.append(("prewgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    #zPre.append(("prewgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    #zPre.append(("prewgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
     
     #L1 PreFiring variations
     print("FIXME: Using temporary definition of weights for L1PreFire variations (change pwgt_btag__VARIATION)")
-    zFin.append(("wgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom * pwgt_btag__nom"))
-    zFin.append(("wgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom * pwgt_btag__nom"))
-    #zFin.append(("wgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom * pwgt_btag__L1PreFireDown"))
-    #zFin.append(("wgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom * pwgt_btag__L1PreFireUp"))
+    if "_L1PreFireDown" in sysVariations.keys():
+        zFin.append(("wgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom * pwgt_btag__nom"))
+        #zFin.append(("wgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom * pwgt_btag__L1PreFireDown"))
+        zPre.append(("prewgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom"))
+        #zPre.append(("prewgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom"))
     
-    zPre.append(("prewgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom"))
-    zPre.append(("prewgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom"))
-    #zPre.append(("prewgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom"))
-    #zPre.append(("prewgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom"))
+    if "_L1PreFireUp" in sysVariations.keys():
+        zFin.append(("wgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom * pwgt_btag__nom"))
+        #zFin.append(("wgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom * pwgt_btag__L1PreFireUp"))
+        zPre.append(("prewgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom"))
+        #zPre.append(("prewgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom"))
     
     #Lepton ScaleFactor variations
     #To be done, still...
@@ -1942,16 +1972,20 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #Pure BTagging variations, no other variations necessary. 
     #Since there may be many, use a common base factor for fewer multiplies... for pre-btagging, they're identical!
     zFin.append(("pwgt_btagSF_common", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    zFin.append(("wgt__btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_down_hf"))
-    zFin.append(("wgt__btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_up_hf"))
-    zFin.append(("wgt__btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_down_lf"))
-    zFin.append(("wgt__btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_up_lf"))
-    
     zPre.append(("pwgt_btagSF_common", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    zPre.append(("prewgt__btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common"))#Really just aliases w/o btagging part
-    zPre.append(("prewgt__btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common"))
-    zPre.append(("prewgt__btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common"))
-    zPre.append(("prewgt__btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common"))
+    
+    if "_btagSF_deepcsv_shape_down_hf" in sysVariations.keys():
+        zFin.append(("wgt__btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_down_hf"))
+        zPre.append(("prewgt__btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common"))#Really just aliases w/o btagging part
+    if "_btagSF_deepcsv_shape_up_hf" in sysVariations.keys():
+        zFin.append(("wgt__btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_up_hf"))
+        zPre.append(("prewgt__btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common"))
+    if "_btagSF_deepcsv_shape_down_lf" in sysVariations.keys():
+        zFin.append(("wgt__btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_down_lf"))
+        zPre.append(("prewgt__btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common"))
+    if "_btagSF_deepcsv_shape_up_lf" in sysVariations.keys():
+        zFin.append(("wgt__btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_up_lf"))
+        zPre.append(("prewgt__btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common"))
 
     #Special variations for testing central components
     zFin.append(("wgt__no_btag_shape_reweight", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
@@ -1988,11 +2022,21 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                             print("{} already defined, skipping".format(defName))
                         continue
                     else:
+                        # prereqs = re.findall(r"[\w']+", defFunc)
+                        # allPreReqs = True
+                        # for prereq in prereqs:
+                        #     if prereq not in listOfColumns: allPreReqs = False
                         if verbose:
                             print("nodes[processName][\"BaseNode\"] = nodes[processName][\"BaseNode\"].Define(\"{}\", \"{}\")".format(defName, defFunc))
                         nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
-                    
                         listOfColumns.push_back(defName) 
+
+                        # if allPreReqs:
+                        #     nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
+                        #     listOfColumns.push_back(defName) 
+                        # else:
+                        #     print("Skipping definition for {} due to missing prereqs in the list: {}".format(defName, prereqs))
+                    
         return input_df_or_nodes
 
     else:
@@ -2589,7 +2633,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
 
 def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="All", isData=True, era="2017", histosDict=None,
                doCategorized=False, doDiagnostics=True, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
-               HTCut=500, ZMassMETWindow=[15.0, 10.0], verbose=False,
+               HTCut=500, ZMassMETWindow=[15.0, 0.0], verbose=False,
                triggers=[],
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "lep_postfix": "",
@@ -2611,58 +2655,12 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                               "met_phi_var": "METFixEE2017_phi_jesTotalUp",
                                               "btagSF": "Jet_btagSF_deepcsv_shape",
                                               "weightVariation": False},
-                              "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown",
-                                                "lep_postfix": "",
-                                                "wgt_final": "wgt__jesTotalDown", 
-                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                                "jet_pt_var": "Jet_pt_jesTotalDown",
-                                                "jet_mass_var": "Jet_mass_jesTotalDown",
-                                                "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                                "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                                "btagSF": "Jet_btagSF_deepcsv_shape",
-                                                "weightVariation": False},
-                              "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
-                                                              "lep_postfix": "", 
-                                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                              "jet_pt_var": "Jet_pt",
-                                                              "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
-                                                              "weightVariation": True},
                               "_btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
                                                                 "lep_postfix": "", 
                                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                                 "jet_pt_var": "Jet_pt",
                                                                 "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
                                                                 "weightVariation": True},
-                              "_btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
-                                                              "lep_postfix": "", 
-                                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                              "jet_pt_var": "Jet_pt",
-                                                              "btagSF": "Jet_btagSF_deepcsv_shape_up_lf",
-                                                              "weightVariation": True},
-                              "_btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
-                                                                "lep_postfix": "", 
-                                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                "jet_pt_var": "Jet_pt",
-                                                                "btagSF": "Jet_btagSF_deepcsv_shape_down_lf",
-                                                                "weightVariation": True},
-                              "_no_btag_shape_reweight": {"jet_mask": "jet_mask",
-                                                          "lep_postfix": "", 
-                                                          "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                          "jet_pt_var": "Jet_pt",
-                                                          "btagSF": "Jet_btagSF_deepcsv_shape",
-                                                          "weightVariation": True},
-                              "_no_puWeight": {"jet_mask": "jet_mask",
-                                               "lep_postfix": "", 
-                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                               "jet_pt_var": "Jet_pt",
-                                               "btagSF": "Jet_btagSF_deepcsv_shape",
-                                               "weightVariation": True},
-                              "_no_L1PreFiringWeight": {"jet_mask": "jet_mask",
-                                                        "lep_postfix": "", 
-                                                        "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                        "jet_pt_var": "Jet_pt",
-                                                        "btagSF": "Jet_btagSF_deepcsv_shape",
-                                                        "weightVariation": True},
                               "_no_LSF": {"jet_mask": "jet_mask",
                                           "lep_postfix": "", 
                                           "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
@@ -3226,12 +3224,48 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_LeadLep_{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
+                                                                    "", 100, 10, 510), "FTAMuon{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_SubleadLep_{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
+                                                                    "", 100, 10, 510), "FTAMuon{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_eta_LeadLep_{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
+                                                                    "", 50, -2.5, 2.5), "FTAMuon{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_eta_SubleadLep_{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
+                                                                    "", 50, -2.5, 2.5), "FTAMuon{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_phi_LeadLep_{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
+                                                                    "", 62, -pi, pi), "FTAMuon{lpf}_phi_LeadLep".format(lpf=leppostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_phi_SubleadLep_{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
+                                                                    "", 62, -pi, pi), "FTAMuon{lpf}_phi_SubleadLep".format(lpf=leppostfix), wgtVar))
                     defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar))
                     defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                     "", 20, 0, 0.2), "FTAMuon{lpf}_pfRelIso04_all".format(lpf=leppostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_LeadLep_{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
+                                                                    "", 100, 10, 510), "FTAElectron{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_SubleadLep_{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
+                                                                    "", 100, 10, 510), "FTAElectron{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_eta_LeadLep_{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
+                                                                    "", 50, -2.5, 2.5), "FTAElectron{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_eta_SubleadLep_{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
+                                                                    "", 50, -2.5, 2.5), "FTAElectron{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_phi_LeadLep_{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
+                                                                    "", 62, -pi, pi), "FTAElectron{lpf}_phi_LeadLep".format(lpf=leppostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_phi_SubleadLep_{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
+                                                                    "", 62, -pi, pi), "FTAElectron{lpf}_phi_SubleadLep".format(lpf=leppostfix), wgtVar))
                     defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 20, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar))
@@ -3426,15 +3460,15 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nTrueInt_{spf}"\
                                                                         .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                         ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvsGood", wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nPU_{spf}"\
-                                                                        .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
-                                                                        ";nPU;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvsGood", wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvs_vs_nTrueInt_{spf}"\
-                                                                        .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
-                                                                        ";nTrueInt;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvs", wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvs_vs_nPU_{spf}"\
-                                                                        .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
-                                                                        ";nPU;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvs", wgtVar))
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nPU_{spf}"\
+                        #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
+                        #                                                 ";nPU;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvsGood", wgtVar))
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvs_vs_nTrueInt_{spf}"\
+                        #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
+                        #                                                 ";nTrueInt;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvs", wgtVar))
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvs_vs_nPU_{spf}"\
+                        #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
+                        #                                                 ";nPU;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvs", wgtVar))
 
 
                     #End of definitions for this process + channel + category, now define the histoNodes based upon this categoryNode (nodes[proc][chan][category + branchpostfix]
@@ -3707,7 +3741,7 @@ def writeHistos(histDict, directory, samplesOfInterest="All", channelsOfInterest
                     hptr = obj
                 hptr.Write()
                 counter += 1
-            print("Wrote {} histograms into file for {}::{} - {}".format(counter, name, channel, directory + "/" + channel + "/"+ name))
+            print("Wrote {} histograms into file for {}::{} - {}.root".format(counter, name, channel, directory + "/" + channel + "/"+ name))
             rootDict[name].Close()
 
 def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", stripKey=".root", includeSampleNames=None, 
@@ -4763,6 +4797,13 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         levelsOfInterest = set(["ElEl_selection",])
         theSampleDict = bookerV2_ElEl.copy()
         theSampleDict.update(bookerV2_MC)
+    # This doesn't work, need the corrections on all the samples and such...
+    # elif channel == "All":
+    #     levelsOfInterest = set(["ElMu_selection", "MuMu_selection", "ElEl_selection",])
+    #     theSampleDict = bookerV2_ElMu.copy()
+    #     theSampleDict.update(bookerV2_ElEl)
+    #     theSampleDict.update(bookerV2_MuMu)
+    #     theSampleDict.update(bookerV2_MC)
     elif channel == "Mu":    
         levelsOfInterest = set(["Mu_selection",])
         theSampleDict = bookerV2_Mu.copy()
@@ -4960,6 +5001,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                               era=vals["era"],
                                               isData=vals["isData"],
                                               final=False,
+                                              sysVariations=systematics_2017, 
                                               verbose=verbose,
                                              )
             
@@ -5014,6 +5056,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                                   era = vals["era"],
                                                   isData = vals["isData"],
                                                   final=True,
+                                                  sysVariations=systematics_2017, 
                                                   verbose=verbose,
                                                  )
             if doBTaggingEfficiencies == True:
@@ -5048,6 +5091,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
             processed[name][lvl] = counts[name][lvl].GetValue()
             subfinish[name][lvl] = time.clock()
             theTime = subfinish[name][lvl] - substart[name][lvl]
+            print("\nFINISHING THE EVENT LOOP")
 
             #Write the output!
             if doBTaggingYields:
@@ -5065,13 +5109,22 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
             if doHistos:
                 print("Writing outputs...")
                 writeDir = analysisDir + "/Histograms"
+                # pdb.set_trace()
+                processesOfInterest = []
+                if splitProcessConfig != None:
+                    for thisProc in splitProcessConfig.get("processes", {}).keys():
+                        processesOfInterest.append(thisProc)
+                else:
+                    processesOfInterest.append(vals.get("era") + "___" + name)
+                print("Writing historams for...{}".format(processesOfInterest))
+
                 writeHistos(histos, 
                             writeDir,
                             channelsOfInterest="All",
-                            samplesOfInterest=[name],
+                            samplesOfInterest=processesOfInterest,
                             dict_keys="All",
                             mode="RECREATE"
-                           )
+                        )
                 print("Wrote Histograms for {} to this directory:\n{}".format(name, writeDir))
             #Add sample name to the list of processed samples and print it, in case things ****ing break in Jupyter Kernel
             processedSampleList.append(name)
@@ -5211,7 +5264,7 @@ if __name__ == '__main__':
     parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic/{chan}_selection',
                         help='Stage of data storage to pull from, as referenced in Sample dictionaries as subkeys of the "source" key.'\
                         'Must be available in all samples to be processed. {chan} will be replaced with the channel analyzed')
-    parser.add_argument('--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu'],
+    parser.add_argument('--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'All'],
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
                         help='output directory path defaulting to "."')
@@ -5227,6 +5280,8 @@ if __name__ == '__main__':
                         help='List of sample names to be used in the stage (if not called, defaults to all; takes precedene over exclude)')
     parser.add_argument('--exclude', dest='exclude', action='store', default=None, type=str, nargs='*',
                         help='List of sample names to not be used in the stage (if not called, defaults to none; include takes precedence)')
+    parser.add_argument('--systematics', dest='systematics', action='store', default=None, type=str, nargs='*',
+                        help='List of systematic variations to compute (if not called, defaults to None and only nominal is run. Call with list of systematic names or "All"')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
     # parser.add_argument('--sample_cards', dest='sample_cards', action='store', nargs='*', type=str,
@@ -5284,12 +5339,20 @@ if __name__ == '__main__':
     else:
         print("Using all samples!")
     print("Verbose option: {verb}".format(verb=verb))
+    print("Systematics (This code not yet integrated... testing): {}".format(args.systematics))    
 
 
     #Run algos appropriately for the given configuration
     if stage == 'fill-yields':
+        print("This function needs reworking... work on it")
         print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
         print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
+        # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
+        #      verbose=False)
+        # packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, 
+        #               BTaggingYieldsFile="{}", triggers=TriggerList, includeSampleNames=includeSampleNames, 
+        #               sysVexcludeSampleNames=excludeSampleNames, verbose=verb)
+
     elif stage == 'combine-yields':
         print("Combining BTagging yields and calculating ratios, a necessary ingredient for calculating the final btag event weight for filling histograms")
         yieldDir = "{adir}/BTaggingYields/{chan}_selection".format(adir=analysisDir, chan=channel)
