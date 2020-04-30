@@ -14,6 +14,7 @@ import glob
 import collections
 import array
 import pprint
+import pdb
 import ROOT
 #from IPython.display import Image, display, SVG
 #import graphviz
@@ -327,6 +328,57 @@ bookerV2_MC = {
                    "source": "Nominal",
                    "channel": "DL"
                   },
+        "Notes": "crossSection folds in the branching ratio to DL. when splitting the process, need to know both the effective crossSection in each "\
+        "phase space and the effective number of events to combine multiple samples in that phase space proportional to the effective number of"\
+        "simulated events (N_eff = N_positive - N_negative) over the nEffectivePhaseSpace (sum of N_eff from all contributing samples)",
+        "splitProcess": {"ID":{"unpackGenTtbarId": True,
+                               "nGenJet/GenHT": True,
+                               "subera": False,
+                              },
+                         "processes": {"ttbb_DL_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttcc_DL_fr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttother_DL_fr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttbb_DL_nr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && (nGenJet < 7 || GenHT < 500)",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttcc_DL_nr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 1 && (nGenJet < 7 || GenHT < 500)",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttother_DL_nr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 1 && (nGenJet < 7 || GenHT < 500)",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                   },
+                     },
     },
     "tt_DL-GF":{
         "era": "2017",
@@ -354,6 +406,33 @@ bookerV2_MC = {
                    "source": "Filtered",
                    "channel": "DL"
                   },
+        "splitProcess": {"ID":{"unpackGenTtbarId": True,
+                               "nGenJet/GenHT": True,
+                               "subera": False,
+                              },
+                         "processes": {"ttbb_DL-GF_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttcc_DL-GF_fr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttother_DL-GF_fr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                   },
+                     },
     },
     "tt_SL":{
         "era": "2017",
@@ -378,6 +457,54 @@ bookerV2_MC = {
                    "source": "Nominal",
                    "channel": "SL"
                   },
+        "splitProcess": {"ID":{"unpackGenTtbarId": True,
+                               "nGenJet/GenHT": True,
+                               "subera": False,
+                              },
+                         "processes": {"ttbb_SL_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttcc_SL_fr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttbb_SL_nr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttcc_SL_nr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttother_SL_nr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                   },
+                     },
     },
     "tt_SL-GF":{
         "era": "2017",
@@ -402,6 +529,33 @@ bookerV2_MC = {
                    "source": "Filtered",
                    "channel": "SL"
                   },
+        "splitProcess": {"ID":{"unpackGenTtbarId": True,
+                               "nGenJet/GenHT": True,
+                               "subera": False,
+                              },
+                         "processes": {"ttbb_SL_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttcc_SL_fr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                   },
+                     },
     },
     "ST_tW":{
         "era": "2017",
@@ -1705,27 +1859,36 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
     return rdf
 
 
-def defineWeights(input_df, era, isData=False, verbose=False, final=False):
+def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbose=False, final=False):
     """Define all the pre-final or final weights and the variations, to be referened by the sysVariations dictionaries as wgt_final.
     if final=False, do the pre-final weights for BTaggingYields calculations.
     
     pwgt = partial weight, component for final weight
     wgt_$SYSTEMATIC is form of final event weights, i.e. wgt_nom or wgt_puWeightDown
     prewgt_$SYSTEMATIC is form of weight for BTaggingYields calculation, should include everything but pwgt_btag__$SYSTEMATIC"""
-    rdf = input_df
+    if splitProcess != None:
+        print("Splitting process in defineWeights()")
+        filterNodes = input_df_or_nodes.get("filterNodes")
+        nodes = input_df_or_nodes.get("nodes")
+        defineNodes = input_df_or_nodes.get("defineNodes")
+        diagnosticNodes = input_df_or_nodes.get("diagnosticNodes")
+        countNodes = input_df_or_nodes.get("countNodes")
+    else:
+        rdf = input_df_or_nodes
+
     #There's only one lepton branch variation (nominal), but if it ever changes, this will serve as sign it's referenced here and made need to be varied
     leppostfix = ""
-
-
     lumiDict = {"2017": 41.53,
                 "2018": 1}
-    #era = "2017"
 
-    
+
+    #era = "2017"
+    # mc_def["wgt_SUMW"] = "({xs:s} * {lumi:s} * 1000 * genWeight) / {sumw:s}".format(xs=str(crossSection), lumi=str(lumi), sumw=str(sumWeights))
+
     #Two lists of weight definitions, one or the other is chosen at the end via 'final' optional parameter
     zFin = []
     zPre = []
-    zFin.append(("pwgt__XS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere
+    # zFin.append(("pwgt__XS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere #Now defined in the splitProcess function
     zFin.append(("pwgt__LSF_nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
     zPre.append(("pwgt__XS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere
     zPre.append(("pwgt_LSF__nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
@@ -1808,29 +1971,53 @@ def defineWeights(input_df, era, isData=False, verbose=False, final=False):
     #Load the initial or final definitions
     if final:
         z = zFin
+        nodes = input_df_or_nodes.get("nodes")
+        for processName in nodes:
+            if processName.lower() == "basenode": continue
+            # pdb.set_trace()
+            listOfColumns = nodes[processName]["BaseNode"].GetColumnNames()
+            if isData:
+                defName = "wgt__nom"
+                defFunc = "int i = 1; return i"
+                if defName not in listOfColumns:
+                    nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
+            else:
+                for defName, defFunc in z:
+                    if defName in listOfColumns:
+                        if verbose:
+                            print("{} already defined, skipping".format(defName))
+                        continue
+                    else:
+                        if verbose:
+                            print("nodes[processName][\"BaseNode\"] = nodes[processName][\"BaseNode\"].Define(\"{}\", \"{}\")".format(defName, defFunc))
+                        nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
+                    
+                        listOfColumns.push_back(defName) 
+        return input_df_or_nodes
+
     else:
         z = zPre
 
-    listOfColumns = rdf.GetColumnNames()
-    if isData:
-        defName = "wgt__nom"
-        defFunc = "int i = 1; return i"
-        if defName not in listOfColumns:
-            rdf = rdf.Define(defName, defFunc)
-    else:
-        for defName, defFunc in z:
-            if defName in listOfColumns:
-                if verbose:
-                    print("{} already defined, skipping".format(defName))
-                continue
-            else:
-                if verbose:
-                    print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
+        listOfColumns = rdf.GetColumnNames()
+        if isData:
+            defName = "wgt__nom"
+            defFunc = "int i = 1; return i"
+            if defName not in listOfColumns:
                 rdf = rdf.Define(defName, defFunc)
-                
-                listOfColumns.push_back(defName) 
-    return rdf
-
+        else:
+            for defName, defFunc in z:
+                if defName in listOfColumns:
+                    if verbose:
+                        print("{} already defined, skipping".format(defName))
+                    continue
+                else:
+                    if verbose:
+                        print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
+                    rdf = rdf.Define(defName, defFunc)
+                    
+                    listOfColumns.push_back(defName) 
+        return rdf
+    
 
 # In[ ]:
 
@@ -2309,9 +2496,98 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 #    rdf = rdf.Define("JML_selection_pass", "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00000000001111111111))#Only PV and MET filters required to pass
 #    return rdf
 
+def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017"):
+    lumiDict = {"2017": 41.53,
+                "2018": 1}
+    filterNodes = dict() #For storing tuples to debug and be verbose about
+    defineNodes = dict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
+    countNodes = dict() #For storing the counts at each node
+    diagnosticNodes = dict()
+    nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
+    #Define the base node in nodes when we split/don't split the process
+
+    if splitProcess != None:
+        if type(splitProcess) == dict or type(splitProcess) == collections.OrderedDict:
+            df_with_IDs = input_df
+            IDs = splitProcess.get("ID")
+            for IDname, IDbool in IDs.items():
+                if IDbool and IDname == "unpackGenTtbarId":
+                    if "unpackedGenTtbarId" not in listOfColumns:
+                        df_with_IDs = df_with_IDs.Define("unpackedGenTtbarId", "FTA::unpackGenTtbarId(genTtbarId)")
+                        df_with_IDs = df_with_IDs.Define("nAdditionalBJets", "unpackedGenTtbarId[0]")
+                        # df_with_IDs = df_with_IDs.Define("n2BHadronJets", "unpackedGenTtbarId[1]")
+                        # df_with_IDs = df_with_IDs.Define("n1BHadronJets", "unpackedGenTtbarId[2]")
+                        df_with_IDs = df_with_IDs.Define("nAdditionalCJets", "unpackedGenTtbarId[3]")
+                        # df_with_IDs = df_with_IDs.Define("n2CHadronJets", "unpackedGenTtbarId[4]")
+                        # df_with_IDs = df_with_IDs.Define("n1CHadronJets", "unpackedGenTtbarId[5]")
+                        # df_with_IDs = df_with_IDs.Define("nBJetsFromTop", "unpackedGenTtbarId[6]")
+                        # df_with_IDs = df_with_IDs.Define("nBJetsFromW", "unpackedGenTtbarId[7]")
+                        # df_with_IDs = df_with_IDs.Define("nCJetsFromW", "unpackedGenTtbarId[8]")
+                if IDbool and IDname == "nGenJet/GenHT":
+                    if "nGenLep" not in listOfColumns:
+                        df_with_IDs = df_with_IDs.Define("nGenLep", "LHEPart_pdgId[stitch_lep_mask].size()")
+                        listOfColumns.push_back("nGenLep")
+                    if "nGenJet" not in listOfColumsn:
+                        df_with_IDs = df_with_IDs.Define("nGenJet", "GenJet_pt[GenJet_pt > 30].size()")
+                        listOfColumns.push_back("nGenJet")
+                    if "GenHT" not in listOfColumsn:
+                        df_with_IDs = df_with_IDs.Define("GenHT", "Sum(GenJet_pt[GenJet_pt > 30 && abs(GenJet_eta) < 2.4])")
+                        listOfColumns.push_back("GenHT")
+                if IDbool and IDname == "subera":
+                    pass
+            nodes["BaseNode"] = df_with_IDs #Always store the base node we'll build upon in the next level
+            splitProcs = splitProcess.get("processes")
+            for preProcessName, processDict in splitProcs.items():
+                processName = era + "___" + preProcessName
+                filterString = processDict.get("filter")
+                filterName = filterString.replace("&&", "and").replace("||", "or")
+                effectiveXS = processDict.get("effectiveCrossSection")
+                sumWeights = processDict.get("sumWeights")
+                # nEffective = processDict.get("nEventsPositive") - processDict.get("nEventsNegative")
+                fractionalContribution = processDict.get("fractionalContribution")
+                wgtFormula = "{eXS:s} * {lumi:s} * 1000 * genWeight * {frCon:s} / {sWPS:s}".format(eXS=effectiveXS,
+                                                                                                   lumi=lumiDict[era],
+                                                                                                   frCon=fractionalContribution,
+                                                                                                   sWPS=sumWeights
+                                                                                               )
+                if processName not in nodes:
+                    #L-2 filter, should be the packedEventID filter in that case
+                    filterNodes[processName] = dict()
+                    filterNodes[processName]["BaseNode"] = (filterString, filterName, processName, None, None, None, None)
+                    nodes[processName] = dict()
+                    nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])\
+                                                     .Define("pwgt__XS", wgtFormula)
+                    countNodes[processName] = dict()
+                    countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
+                    diagnosticNodes[processName] = dict()
+                    defineNodes[processName] = dict()
+        else:
+            raise RuntimeError("Invalid type passed for splitProcess. Require a dictionary containing keys 'ID' and 'processes' to split the sample.")
+    else:
+        processName = era + "___" + sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
+        nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
+        #The below references branchpostfix since we only need nodes for these types of scale variations...
+        if processName not in nodes:
+            #L-2 filter, should be the packedEventID filter in that case
+            filterNodes[processName] = dict()
+            filterNodes[processName]["BaseNode"] = ("return true;", "{}".format(processName), processName, None, None, None, None)
+            nodes[processName] = dict()
+            nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
+            countNodes[processName] = dict()
+            countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
+            diagnosticNodes[processName] = dict()
+            defineNodes[processName] = dict()
+            
+    prePackedNodes = {}
+    prePackedNodes["filterNodes"] = filterNodes
+    prePackedNodes["nodes"] = nodes
+    prePackedNodes["countNodes"] = countNodes
+    prePackedNodes["diagnosticNodes"] = diagnosticNodes
+    prePackedNodes["defineNodes"] = defineNodes
+    return prePackedNodes
 
 
-def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All", isData=True, era="2017", histosDict=None,
+def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="All", isData=True, era="2017", histosDict=None,
                doCategorized=False, doDiagnostics=True, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
                HTCut=500, ZMassMETWindow=[15.0, 10.0], verbose=False,
                triggers=[],
@@ -2409,7 +2685,7 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
     if doCategorized == False and doDiagnostics == False:
         raise RuntimeError("Must select something to plot: Set do{Categorized, Diagnostics, etc} = True in init method")
 
-    if usePackedEventID:
+    if splitProcess:
         print("Using packedEventID to categorize events into (sub)sample names and channel")
     elif sampleName != None and channel != None:
         print("Using input sampleName and channel to categorize events in histograms dictionary: {} - {}".format(sampleName, channel))
@@ -2446,61 +2722,132 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
 
     pi = ROOT.TMath.Pi()
     #Get the list of defined columns for checks
-    listOfColumns = input_df.GetColumnNames()
-    # filterNodes = collections.OrderedDict() #For storing tuples to debug and be verbose about
-    # defineNodes = collections.OrderedDict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
-    # countNodes = collections.OrderedDict() #For storing the counts at each node
-    # nodes = collections.OrderedDict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
-    filterNodes = dict() #For storing tuples to debug and be verbose about
-    defineNodes = dict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
-    countNodes = dict() #For storing the counts at each node
-    diagnosticNodes = dict()
-    nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
-    nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
-
     histoNodes = histosDict #Inherit this from initiliazation, this is where the histograms will actually be stored
-
-    if usePackedEventID:
-        raise NotImplementedError("usePackedEventID needs some work. Also, it isn't going to work for combined samples that have different systematic variations,"\
-                                  "unless special precautions are taken (easy to do with weight variations so long as the branch exists, even if length of vector"\
-                                  "s differ. Scale variations okay, there will be useless computations I guess... or don't emplace histo nodes on that processName's"\
-                                  "daughter nodes.")
-        #Use a method to get the list of potential samples from the packedEventID -> Probably method that calls a common dictionarymethod.
-        #Return std::vector<std::string> to iterate through, will include such things as ttbb_DL-GF, ttbbJets, ttll_DL, ttcc_SL, etc... fully complex-stitchable
-        #for processName in packedEventProcessNames:
-            #filterNodes[processName] = collections.OrderedDict()
-            #filterNodes[processName]["BaseNode"] = ("packedEventID == getPackedEventID('processName');", "{}".format(processName), processName, None, None, None, None)
-            #nodes[processName] = collections.OrderedDict()
-            #nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(packedEventID code goes here)
-            #countNodes[processName] = collections.OrderedDict()
-            #countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
-            #WE ARE DONE, prepared for systematic variation-dependent code looping through channels, 
-        #nodes[processName][chan]["BaseNode"] = input_df.Filter(packedEventID).Filter(chan) #pseudocode for creating these nodes
-        #Might need to do continue statements on "BaseNode" when it's the key in future loops
-        #Preparateion complete? Now we must create filters later on when we loop through the systematic variations
-        #Overall key set will be nodes[processName][decayChannel][scaleVariation-dependent-HTandZWindow==L0Nodes][nBTags==L1Nodes][nJet==L2Nodes]
-        #Histograms can be attached to L0 - L2 nodes, with the processName, decayChannel, HT/ZWindow, nBTags, nJets derived from the keys in the 5 nested for loops
+    if type(input_df_or_nodes) in [dict, collections.OrderedDict]:
+        filterNodes = input_df_or_nodes.get("filterNodes")
+        nodes = input_df_or_nodes.get("nodes")
+        defineNodes = input_df_or_nodes.get("defineNodes")
+        diagnosticNodes = input_df_or_nodes.get("diagnosticNodes")
+        countNodes = input_df_or_nodes.get("countNodes")
     else:
-        processName = sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
-
+        filterNodes = dict()
+        nodes = dict()
+        defineNodes = dict()
+        diagnosticNodes = dict()
+        countNodes = dict()
+        processName = era + "___" + sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
+        nodes["BaseNode"] = input_df_or_nodes #Always store the base node we'll build upon in the next level
         #The below references branchpostfix since we only need nodes for these types of scale variations...
         if processName not in nodes:
             #L-2 filter, should be the packedEventID filter in that case
-            # filterNodes[processName] = collections.OrderedDict()
             filterNodes[processName] = dict()
             filterNodes[processName]["BaseNode"] = ("return true;", "{}".format(processName), processName, None, None, None, None)
-            # nodes[processName] = collections.OrderedDict()
             nodes[processName] = dict()
             nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
-            # countNodes[processName] = collections.OrderedDict()
             countNodes[processName] = dict()
             countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
             diagnosticNodes[processName] = dict()
-            #defineNodes[processName] = collections.OrderedDict()
             defineNodes[processName] = dict()
-        if processName not in histoNodes:
-            #histoNodes[processName] = collections.OrderedDict()
-            histoNodes[processName] = dict()
+        
+        
+    # # filterNodes = collections.OrderedDict() #For storing tuples to debug and be verbose about
+    # # defineNodes = collections.OrderedDict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
+    # # countNodes = collections.OrderedDict() #For storing the counts at each node
+    # # nodes = collections.OrderedDict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
+    # filterNodes = dict() #For storing tuples to debug and be verbose about
+    # defineNodes = dict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
+    # countNodes = dict() #For storing the counts at each node
+    # diagnosticNodes = dict()
+    # nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
+    # #Define the base node in nodes when we split/don't split the process
+
+    # if splitProcess:
+    #     if type(splitProcess) == dict or type(splitProcess) == collections.OrderedDict:
+    #         df_with_IDs = input_df
+    #         IDs = splitProcess.get("ID")
+    #         for IDname, IDbool in IDs.items():
+    #             if IDbool and IDname == "unpackGenTtbarId":
+    #                 if "unpackedGenTtbarId" not in listOfColumns:
+    #                     df_with_IDs = df_with_IDs.Define("unpackedGenTtbarId", "FTA::unpackGenTtbarId(genTtbarId)")
+    #                     df_with_IDs = df_with_IDs.Define("nAdditionalBJets", "unpackedGenTtbarId[0]")
+    #                     # df_with_IDs = df_with_IDs.Define("n2BHadronJets", "unpackedGenTtbarId[1]")
+    #                     # df_with_IDs = df_with_IDs.Define("n1BHadronJets", "unpackedGenTtbarId[2]")
+    #                     df_with_IDs = df_with_IDs.Define("nAdditionalCJets", "unpackedGenTtbarId[3]")
+    #                     # df_with_IDs = df_with_IDs.Define("n2CHadronJets", "unpackedGenTtbarId[4]")
+    #                     # df_with_IDs = df_with_IDs.Define("n1CHadronJets", "unpackedGenTtbarId[5]")
+    #                     # df_with_IDs = df_with_IDs.Define("nBJetsFromTop", "unpackedGenTtbarId[6]")
+    #                     # df_with_IDs = df_with_IDs.Define("nBJetsFromW", "unpackedGenTtbarId[7]")
+    #                     # df_with_IDs = df_with_IDs.Define("nCJetsFromW", "unpackedGenTtbarId[8]")
+    #             if IDbool and IDname == "nGenJet/GenHT":
+    #                 if "nGenLep" not in listOfColumns:
+    #                     df_with_IDs = df_with_IDs.Define("nGenLep", "LHEPart_pdgId[stitch_lep_mask].size()")
+    #                     listOfColumns.push_back("nGenLep")
+    #                 if "nGenJet" not in listOfColumsn:
+    #                     df_with_IDs = df_with_IDs.Define("nGenJet", "GenJet_pt[GenJet_pt > 30].size()")
+    #                     listOfColumns.push_back("nGenJet")
+    #                 if "GenHT" not in listOfColumsn:
+    #                     df_with_IDs = df_with_IDs.Define("GenHT", "Sum(GenJet_pt[GenJet_pt > 30 && abs(GenJet_eta) < 2.4])")
+    #                     listOfColumns.push_back("GenHT")
+    #             if IDbool and IDname == "subera":
+    #                 pass
+    #         nodes["BaseNode"] = df_with_IDs #Always store the base node we'll build upon in the next level
+    #         splitProcs = splitProcess.get("processes")
+    #         for processName, processDict in splitProcs.items():
+    #             filterString = processDict.get("filter")
+    #             filterName = filterString.replace("&&", "and").replace("||", "or")
+    #             effectiveXS = processDict.get("effectiveCrossSection")
+    #             sumWeights = processDict.get("sumWeights")
+    #             # nEffective = processDict.get("nEventsPositive") - processDict.get("nEventsNegative")
+    #             fractionalContribution = processDict.get("fractionalContribution")
+    #             wgtFormula = "{eXS:s} * {lumi:s} * 1000 * genWeight * {frCon:s} / {sWPS:s}".format(eXS=effectiveXS,
+    #                                                                                                lumi=lumi,
+    #                                                                                                frCon=fractionalContribution,
+    #                                                                                                sWPS=sumWeights
+    #                                                                                            )
+    #             nodes[processName] = nodes["BaseNode"].Filter(filterString, filterName).Define("pwgt__XS", wgtFormula)
+            
+    #     else:
+    #         raise RuntimeError("Invalid type passed for splitProcess. Require a dictionary containing keys 'ID' and 'processes' to split the sample.")
+    #     # raise NotImplementedError("splitProcess needs some work. Also, it isn't going to work for combined samples that have different systematic variations,"\
+    #     #                           "unless special precautions are taken (easy to do with weight variations so long as the branch exists, even if length of vector"\
+    #     #                           "s differ. Scale variations okay, there will be useless computations I guess... or don't emplace histo nodes on that processName's"\
+    #     #                           "daughter nodes.")
+    #     #Use a method to get the list of potential samples from the packedEventID -> Probably method that calls a common dictionarymethod.
+    #     #Return std::vector<std::string> to iterate through, will include such things as ttbb_DL-GF, ttbbJets, ttll_DL, ttcc_SL, etc... fully complex-stitchable
+    #     #for processName in packedEventProcessNames:
+    #         #filterNodes[processName] = collections.OrderedDict()
+    #         #filterNodes[processName]["BaseNode"] = ("packedEventID == getPackedEventID('processName');", "{}".format(processName), processName, None, None, None, None)
+    #         #nodes[processName] = collections.OrderedDict()
+    #         #nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(packedEventID code goes here)
+    #         #countNodes[processName] = collections.OrderedDict()
+    #         #countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
+    #         #WE ARE DONE, prepared for systematic variation-dependent code looping through channels, 
+    #     #nodes[processName][chan]["BaseNode"] = input_df.Filter(packedEventID).Filter(chan) #pseudocode for creating these nodes
+    #     #Might need to do continue statements on "BaseNode" when it's the key in future loops
+    #     #Preparateion complete? Now we must create filters later on when we loop through the systematic variations
+    #     #Overall key set will be nodes[processName][decayChannel][scaleVariation-dependent-HTandZWindow==L0Nodes][nBTags==L1Nodes][nJet==L2Nodes]
+    #     #Histograms can be attached to L0 - L2 nodes, with the processName, decayChannel, HT/ZWindow, nBTags, nJets derived from the keys in the 5 nested for loops
+    # else:
+    #     processName = era + "___" + sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
+    #     nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
+    #     #The below references branchpostfix since we only need nodes for these types of scale variations...
+    #     if processName not in nodes:
+    #         #L-2 filter, should be the packedEventID filter in that case
+    #         # filterNodes[processName] = collections.OrderedDict()
+    #         filterNodes[processName] = dict()
+    #         filterNodes[processName]["BaseNode"] = ("return true;", "{}".format(processName), processName, None, None, None, None)
+    #         # nodes[processName] = collections.OrderedDict()
+    #         nodes[processName] = dict()
+    #         nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
+    #         # countNodes[processName] = collections.OrderedDict()
+    #         countNodes[processName] = dict()
+    #         countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
+    #         diagnosticNodes[processName] = dict()
+    #         #defineNodes[processName] = collections.OrderedDict()
+    #         defineNodes[processName] = dict()
+    #     if processName not in histoNodes:
+    #         #histoNodes[processName] = collections.OrderedDict()
+    #         histoNodes[processName] = dict()
             
 
 
@@ -2547,21 +2894,6 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
                                                                                                                              mpt=fillMET_pt,
                                                                                                                              mph=fillMET_phi)
               )
-
-        #Get the appropriate weight defined in defineFinalWeights function
-        # wgtVar = sysDict.get("wgt_final", "wgt__nom")
-        wgtVar = "wgt{spf}".format(spf=syspostfix)
-        if verbose:
-            print("\tFor systematic variation {}, weight branch is {}".format(syspostfix.replace("__", ""), wgtVar))
-        if wgtVar not in listOfColumns:
-            print("{} not found as a valid weight variation, trying something else as backup".format(wgtVar))
-            if "wgt_SUMW_PU_LSF_L1PF" in listOfColumns:
-                wgtVar = "wgt_SUMW_PU_LSF_L1PF"
-            elif "wgt_SUMW" in listOfColumns:
-                wgtVar = "wgt_SUMW"
-            else:
-                raise RuntimeError("Couldn't find a valid fallback weight variation in fillHistos()")
-            print("{} chosen as the weight for {} variation".format(wgtVar, syspostfix))
         
         #We need to create filters that depend on scale variations like jesUp/Down, i.e. HT and Jet Pt can and will change
         #Usually weight variations will be based upon the _nom (nominal) calculations/filters,
@@ -2571,6 +2903,22 @@ def fillHistos(input_df, usePackedEventID=False, sampleName=None, channel="All",
             #cycle through processes here, should we have many packed together in the sample (ttJets -> lepton decay channel, heavy flavor, light flavor, etc.
             for processName in nodes:
                 if processName.lower() == "basenode": continue
+                if processName not in histoNodes:
+                    histoNodes[processName] = dict()
+                listOfColumns = nodes[processName]["BaseNode"].GetColumnNames()
+
+                #Get the appropriate weight defined in defineFinalWeights function
+                # wgtVar = sysDict.get("wgt_final", "wgt__nom")
+                wgtVar = "wgt{spf}".format(spf=syspostfix)
+                if verbose:
+                    print("\tFor systematic variation {}, weight branch is {}".format(syspostfix.replace("__", ""), wgtVar))
+                if wgtVar not in listOfColumns:
+                    print("{} not found as a valid weight variation, no backup solution implemented".format(wgtVar))
+                    raise RuntimeError("Couldn't find a valid fallback weight variation in fillHistos()")
+                print("{} chosen as the weight for {} variation".format(wgtVar, syspostfix))
+
+
+
                 #potentially add other channels here, like "IsoMuNonisoEl", etc. for QCD studies, or lpf-dependency
                 #NOTE: we append an extra underscore (postfixes should always have 1 to begin with) to enable use of split("__") to re-deduce postfix outside this 
                 #deeply nested loop
@@ -4654,8 +5002,15 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                                verbose=verbose,
                                               )
             #Define the final weights/variations so long as we have btagging yields inserted...
+            splitProcessConfig = vals.get("splitProcess", None)
             if BTaggingYieldsFile:
-                the_df[name][lvl] = defineWeights(the_df[name][lvl],
+                prePackedNodes = splitProcess(the_df[name][lvl], 
+                                              splitProcess = splitProcessConfig, 
+                                              sampleName = name, 
+                                              isData = vals["isData"], 
+                                              era = vals["era"])
+                the_df[name][lvl] = defineWeights(prePackedNodes,
+                                                  splitProcess = splitProcessConfig,
                                                   era = vals["era"],
                                                   isData = vals["isData"],
                                                   final=True,
@@ -4673,12 +5028,12 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
 
             #Hold the categorization nodes if doing histograms
             if doHistos:
-                packedNodes[name][lvl] = fillHistos(the_df[name][lvl], isData = vals["isData"], era = vals["era"], triggers = triggers,
+                packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], era = vals["era"], triggers = triggers,
                                                     sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
                                                     histosDict=histos, sysVariations=systematics_2017, doCategorized=True, 
                                                     doDiagnostics=True, bTagger=bTagger, verbose=verb)
             if doDiagnostics:
-                packedNodes[name][lvl] = fillHistos(the_df[name][lvl], isData = vals["isData"], era = vals["era"], triggers = triggers,
+                packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], era = vals["era"], triggers = triggers,
                                                     sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
                                                     histosDict=histos, sysVariations=systematics_2017, doCategorized=False, 
                                                     doDiagnostics=True, bTagger=bTagger, verbose=verb)

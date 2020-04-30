@@ -360,7 +360,7 @@ namespace FTA{
     }
   }
 
-  std::vector<int> genTtbarCategorization(int genTtbarId){
+  std::vector<int> unpackGenTtbarId(int genTtbarId){
   // Implementation:
   //   The classification scheme returns an ID per event, and works as follows:
      
