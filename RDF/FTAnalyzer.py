@@ -141,12 +141,13 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
 }
 print("Only using the nominal variations right now, see L142")
 systematics_2017 = systematics_2017_NOMINAL
-TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
+TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier lumi channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
                             era="2017",
                             subera="BCDEF",
                             uniqueEraBit=14,
                             tier=0,
+                            lumi=0,
                             channel="ElMu",
                             leadMuThresh=25,
                             subMuThresh=99999,
@@ -158,6 +159,7 @@ TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_I
                             subera="BCDEF",
                             uniqueEraBit=13,
                             tier=0,
+                            lumi=0,
                             channel="ElMu",
                             leadMuThresh=99999,
                             subMuThresh=15,
@@ -169,6 +171,7 @@ TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_I
                             subera="B",
                             uniqueEraBit=12,
                             tier=1,
+                            lumi=0,
                             channel="MuMu",
                             leadMuThresh=25,
                             subMuThresh=15,
@@ -180,6 +183,7 @@ TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_I
                             subera="CDEF",
                             uniqueEraBit=11,
                             tier=1,
+                            lumi=0,
                             channel="MuMu",
                             leadMuThresh=25,
                             subMuThresh=15,
@@ -191,6 +195,7 @@ TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_I
                             subera="BCDEF",
                             uniqueEraBit=9,
                             tier=2,
+                            lumi=0,
                             channel="ElEl",
                             leadMuThresh=99999,
                             subMuThresh=99999,
@@ -202,6 +207,7 @@ TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_I
                             subera="BCDEF",
                             uniqueEraBit=7,
                             tier=3,
+                            lumi=0,
                             channel="Mu",
                             leadMuThresh=28,
                             subMuThresh=99999,
@@ -213,6 +219,7 @@ TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_I
                             subera="BCDEF",
                             uniqueEraBit=6,
                             tier=4,
+                            lumi=0,
                             channel="El",
                             leadMuThresh=99999,
                             subMuThresh=99999,
@@ -224,6 +231,7 @@ TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_I
                             subera="ABCD",
                             uniqueEraBit=14,
                             tier=0,
+                            lumi=0,
                             channel="ElMu",
                             leadMuThresh=99999,
                             subMuThresh=15,
@@ -235,6 +243,7 @@ TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_I
                             subera="ABCD",
                             uniqueEraBit=12,
                             tier=0,
+                            lumi=0,
                             channel="ElMu",
                             leadMuThresh=25,
                             subMuThresh=99999,
@@ -246,6 +255,7 @@ TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_I
                             subera="ABCD",
                             uniqueEraBit=11,
                             tier=1,
+                            lumi=0,
                             channel="MuMu",
                             leadMuThresh=25,
                             subMuThresh=15,
@@ -257,6 +267,7 @@ TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_I
                             subera="ABCD",
                             uniqueEraBit=9,
                             tier=2,
+                            lumi=0,
                             channel="ElEl",
                             leadMuThresh=99999,
                             subMuThresh=99999,
@@ -268,6 +279,7 @@ TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_I
                             subera="ABCD",
                             uniqueEraBit=8,
                             tier=3,
+                            lumi=0,
                             channel="Mu",
                             leadMuThresh=25,
                             subMuThresh=99999,
@@ -279,6 +291,7 @@ TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_I
                             subera="ABCD",
                             uniqueEraBit=7,
                             tier=4,
+                            lumi=0,
                             channel="El",
                             leadMuThresh=99999,
                             subMuThresh=99999,
@@ -316,7 +329,7 @@ bookerV2_MC = {
         "sumWeights2": 364913493679.955078,
         "isSignal": False,
         "doFilter": True,
-        "crossSection": 89.0482,
+        "crossSection": 87.3348, 
         "color": leg_dict["ttbar"],
         "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-*_2017_v2.root",
                    "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-NOM-*_2017_v2*.root",
@@ -344,7 +357,8 @@ bookerV2_MC = {
                   },
         "Notes": "crossSection folds in the branching ratio to DL. when splitting the process, need to know both the effective crossSection in each "\
         "phase space and the effective number of events to combine multiple samples in that phase space proportional to the effective number of"\
-        "simulated events (N_eff = N_positive - N_negative) over the nEffectivePhaseSpace (sum of N_eff from all contributing samples)",
+        "simulated events (N_eff = N_positive - N_negative) over the nEffectivePhaseSpace (sum of N_eff from all contributing samples)"\
+        "The old XS form 2018 PDG BRs was 89.0482, swapped to Brown's value... Need to update SL technically as well",
         "splitProcess": {"ID":{"unpackGenTtbarId": True,
                                "nGenJet/GenHT": True,
                                "subera": False,
@@ -404,7 +418,7 @@ bookerV2_MC = {
         "sumWeights2": 44925503249.097206,
         "isSignal": False,
         "doFilter": True,
-        "crossSection": 1.4815,
+        "crossSection": 1.4529,
         "color": leg_dict["ttbar"],
         "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-*_2017_v2.root",
                    "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-GF-*_2017_v2*.root",
@@ -420,6 +434,7 @@ bookerV2_MC = {
                    "source": "Filtered",
                    "channel": "DL"
                   },
+        "Notes": "1.4815 was the old XS * BR * stitching factor, now scaled down so that the XS matches Brown's lower BR calculation",
         "splitProcess": {"ID":{"unpackGenTtbarId": True,
                                "nGenJet/GenHT": True,
                                "subera": False,
@@ -458,7 +473,7 @@ bookerV2_MC = {
         "sumWeights2": 1850350248120.376221,
         "isSignal": False,
         "doFilter": True,
-        "crossSection": 366.2073,
+        "crossSection": 364.3109,
         "color": leg_dict["ttbar"],
         "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",
                    "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-NOM_2017_v2*.root",
@@ -530,7 +545,7 @@ bookerV2_MC = {
         "sumWeights2": 812201885978.209229,
         "isSignal": False,
         "doFilter": True,
-        "crossSection": 12.4071,
+        "crossSection": 12.3429,
         "color": leg_dict["ttbar"],
         "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-GF_2017_v2.root",
                    "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-GF_2017_v2*.root",
@@ -5149,7 +5164,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
             print(processedSamples)
             print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theTime//60, theTime%60, theTime, processed[name][lvl], 
                          name, lvl, "".join(["\_/"]*25)))
-    Benchmark.Summary()
+    # Benchmark.Summary()
     return packedNodes
 def otherFuncs():
     """Code stripped from jupyter notebook when converted to script."""
