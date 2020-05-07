@@ -959,7 +959,7 @@ bookerV2_ElEl = {
                         "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_F_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ElEl/NOMINAL",
         },
-    "ElEl_OnlyCPre301046":{
+    "ElEl_CPre301046":{
         "era": "2017",
         "subera": "B",
         "channel": "ElEl",
