@@ -5162,7 +5162,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
             print("Processed Samples:")
             processedSamples = ""
             for n in processedSampleList:
-                processedSamples += "{} ".format(name)
+                processedSamples += "{} ".format(n)
             print(processedSamples)
             print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theTime//60, theTime%60, theTime, processed[name][lvl], 
                          name, lvl, "".join(["\_/"]*25)))
