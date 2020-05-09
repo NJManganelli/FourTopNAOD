@@ -3009,7 +3009,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         continue
                     #Regarding keys: we'll insert the systematic when we insert all th L0 X L1 X L2 keys in the dictionaries, not here in the L($N) keys
                     if decayChannel == "ElMu{lpf}".format(lpf=leppostfix):
-                        channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 1 && nFTAElectron{lpf}== 1 && ((abs(FTALepton{lpf}_eta.at(0)) <= 1.2 && abs(FTALepton{lpf}_eta.at(1)) >= 1.4660) || (abs(FTALepton{lpf}_eta.at(0)) >= 1.4660 && abs(FTALepton{lpf}_eta.at(1)) <= 1.2))".format(lpf=leppostfix)
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 1 && nFTAElectron{lpf}== 1 && ((abs(FTALepton{lpf}_eta.at(0)) <= 1.2 && abs(FTALepton{lpf}_eta.at(1)) >= 1.5660) || (abs(FTALepton{lpf}_eta.at(0)) >= 1.5660 && abs(FTALepton{lpf}_eta.at(1)) <= 1.2))".format(lpf=leppostfix)
                         channelFiltName = "1 el, 1 mu ({lpf})".format(lpf=leppostfix)
                         L0String = "HT{bpf} >= {htc}".format(bpf=branchpostfix, htc=HTCut)
                         L0Name = "HT{bpf} >= {htc}"\
@@ -3017,7 +3017,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         L0Key = "HT{htc}_ZWindowMET{metcut}Width{zwidth}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), metcut=str(0).replace(".", "p"), 
                                                                                  zwidth=0)
                     elif decayChannel == "MuMu{lpf}".format(lpf=leppostfix):
-                        channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 2 && ((abs(FTALepton{lpf}_eta.at(0)) <= 1.2 && abs(FTALepton{lpf}_eta.at(1)) >= 1.4660) || (abs(FTALepton{lpf}_eta.at(0)) >= 1.4660 && abs(FTALepton{lpf}_eta.at(1)) <= 1.2))".format(lpf=leppostfix)
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 2 && ((abs(FTALepton{lpf}_eta.at(0)) <= 1.2 && abs(FTALepton{lpf}_eta.at(1)) >= 1.5660) || (abs(FTALepton{lpf}_eta.at(0)) >= 1.5660 && abs(FTALepton{lpf}_eta.at(1)) <= 1.2))".format(lpf=leppostfix)
                         channelFiltName = "2 mu ({lpf})".format(lpf=leppostfix)
                         L0String = "HT{bpf} >= {htc} && {met} >= {metcut} && FTAMuon{lpf}_InvariantMass > 20 && abs(FTAMuon{lpf}_InvariantMass - 91.2) > {zwidth}"\
                             .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
@@ -3027,7 +3027,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                                                                  metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
                                                                                  zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
                     elif decayChannel == "ElEl{lpf}".format(lpf=leppostfix):
-                        channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2 && ((abs(FTALepton{lpf}_eta.at(0)) <= 1.2 && abs(FTALepton{lpf}_eta.at(1)) >= 1.4660) || (abs(FTALepton{lpf}_eta.at(0)) >= 1.4660 && abs(FTALepton{lpf}_eta.at(1)) <= 1.2))".format(lpf=leppostfix)
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2 && ((abs(FTALepton{lpf}_eta.at(0)) <= 1.2 && abs(FTALepton{lpf}_eta.at(1)) >= 1.5660) || (abs(FTALepton{lpf}_eta.at(0)) >= 1.5660 && abs(FTALepton{lpf}_eta.at(1)) <= 1.2))".format(lpf=leppostfix)
                         channelFiltName = "2 el ({lpf})".format(lpf=leppostfix)
                         L0String = "HT{bpf} >= {htc} && {met} >= {metcut} && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
                             .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
