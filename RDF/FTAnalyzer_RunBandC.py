@@ -3083,6 +3083,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     #Tuple format: (filter code, filter name, process, channel, L0 key, L1 key, L2 key) where only one of L0, L1, L2 keys are non-None!
                     
                     #These nodes should apply to any/all L0Nodes
+                    filterNodes[processName][decayChannel]["L1Nodes"].append(
+                        ("return true;", "Any number of bTags"), processName, decayChannel, None, "nMediumDeep{tag}BAny".format(tag=tagger, bpf=branchpostfix), None))
                     # filterNodes[processName][decayChannel]["L1Nodes"].append(
                     #     ("nMediumDeep{tag}B{bpf} == 0".format(tag=tagger, bpf=branchpostfix), "0 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
                     #      processName, decayChannel, None, "nMediumDeep{tag}B0".format(tag=tagger, bpf=branchpostfix), None))
@@ -3092,12 +3094,12 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     filterNodes[processName][decayChannel]["L1Nodes"].append(
                         ("nMediumDeep{tag}B{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
                          processName, decayChannel, None, "nMediumDeep{tag}B2".format(tag=tagger, bpf=branchpostfix), None))
-                    filterNodes[processName][decayChannel]["L1Nodes"].append(
-                        ("nMediumDeep{tag}B{bpf} == 3".format(tag=tagger, bpf=branchpostfix), "3 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                         processName, decayChannel, None, "nMediumDeep{tag}B3".format(tag=tagger, bpf=branchpostfix), None))
-                    filterNodes[processName][decayChannel]["L1Nodes"].append(
-                        ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                         processName, decayChannel, None, "nMediumDeep{tag}B4+".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
+                    #     ("nMediumDeep{tag}B{bpf} == 3".format(tag=tagger, bpf=branchpostfix), "3 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                    #      processName, decayChannel, None, "nMediumDeep{tag}B3".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
+                    #     ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                    #      processName, decayChannel, None, "nMediumDeep{tag}B4+".format(tag=tagger, bpf=branchpostfix), None))
                     
                     #These filters should apply to all L1Nodes
                     filterNodes[processName][decayChannel]["L2Nodes"].append(
