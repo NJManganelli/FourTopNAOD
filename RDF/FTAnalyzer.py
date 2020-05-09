@@ -3024,7 +3024,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     
                     #These nodes should apply to any/all L0Nodes
                     filterNodes[processName][decayChannel]["L1Nodes"].append(
-                        ("return true;", "Any number of bTags"), processName, decayChannel, None, "nMediumDeep{tag}BAny".format(tag=tagger, bpf=branchpostfix), None))
+                        ("return true;", "Any number of bTags", processName, decayChannel, None, "nMediumDeep{tag}BAny".format(tag=tagger, bpf=branchpostfix), None))
                     # filterNodes[processName][decayChannel]["L1Nodes"].append(
                     #     ("nMediumDeep{tag}B{bpf} == 0".format(tag=tagger, bpf=branchpostfix), "0 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
                     #      processName, decayChannel, None, "nMediumDeep{tag}B0".format(tag=tagger, bpf=branchpostfix), None))
