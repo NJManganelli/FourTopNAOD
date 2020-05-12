@@ -3014,7 +3014,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         L0String = "HT{bpf} >= {htc}".format(bpf=branchpostfix, htc=HTCut)
                         L0Name = "HT{bpf} >= {htc}"\
                             .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        L0Key = "HT{htc}_ZWindowMET{metcut}Width{zwidth}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), metcut=str(0).replace(".", "p"), 
+                        L0Key = "ZWindowMET{metcut}Width{zwidth}HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), metcut=str(0).replace(".", "p"), 
                                                                                  zwidth=0)
                     elif decayChannel == "MuMu{lpf}".format(lpf=leppostfix):
                         channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 2".format(lpf=leppostfix)
@@ -3023,7 +3023,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                             .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
                         L0Name = "HT{bpf} >= {htc}, {met} >= {metcut}, Di-Muon Resonance > 20GeV and outside {zwidth}GeV Z Window"\
                             .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        L0Key = "HT{htc}_ZWindowMET{metcut}Width{zwidth}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                        L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
                                                                                  metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
                                                                                  zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
                     elif decayChannel == "ElEl{lpf}".format(lpf=leppostfix):
@@ -3033,7 +3033,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                             .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
                         L0Name = "HT{bpf} >= {htc}, {met} >= {metcut}, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
                             .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        L0Key = "HT{htc}_ZWindowMET{metcut}Width{zwidth}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                        L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
                                                                                  metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
                                                                                  zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
                     else:

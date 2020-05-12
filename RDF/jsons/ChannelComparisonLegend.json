@@ -1,0 +1,167 @@
+ {   
+     "DefaultLegend": {
+	"Header": "#sqrt{{s}} = 13 TeV, L_{{int}} = {lumi} fb^{{-1}}, B/EarlyC scaled/inverse Z_vtx corrected",
+	"HeaderPosition": 0.25,
+        "Supercategories": {
+            "Data-Post301046-ElEl": {
+                "Draw": "PE1", 
+                "Names": [
+                    "Data-Post301046-ElEl"
+                ], 
+                "Stack": false
+            }, 
+            "Data-Post301046-MuMu": {
+                "Draw": "HIST", 
+                "Names": [
+                    "Data-Post301046-MuMu"
+                ], 
+                "Stack": false
+            }, 
+            "Data-B-ElEl": {
+                "Draw": "PE1", 
+                "Names": [
+                    "Data-B-ElEl"
+                ], 
+                "Stack": false
+            }, 
+            "Data-B-MuMu": {
+                "Draw": "HIST", 
+                "Names": [
+                    "Data-B-MuMu"
+                ], 
+                "Stack": false
+            }, 
+            "Data-EarlyC-ElEl": {
+                "Draw": "PE1", 
+                "Names": [
+                    "Data-EarlyC-ElEl"
+                ], 
+                "Stack": false
+            },  
+            "Data-EarlyC-MuMu": {
+                "Draw": "HIST", 
+                "Names": [
+                    "Data-EarlyC-MuMu"
+                ], 
+                "Stack": false
+            }
+        }, 
+        "nColumns": 1, 
+        "OLDY-Coordinates": [
+            0.35, 
+            0.75, 
+            0.95, 
+            0.9
+        ], 
+        "Ratios": {
+            "ElEl/MuMu ( Era)": {
+                "Style": "Marker", 
+		"MarkerStyle": 20,
+		"Draw": "PXE1",
+                "Denominator": "Data-Post301046-MuMu", 
+                "Numerator": "Data-Post301046-ElEl"
+            },
+            "ElEl/MuMu (Era)": {
+                "Style": "Marker", 
+		"MarkerStyle": 21,
+		"Draw": "PXE1",
+                "Denominator": "Data-EarlyC-MuMu", 
+                "Numerator": "Data-EarlyC-ElEl"
+            },
+            "ElEl/MuMu (Era )": {
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+		"Draw": "PXE1",
+                "Denominator": "Data-B-MuMu", 
+                "Numerator": "Data-B-ElEl"
+            }
+        }, 
+        "Systematics": [], 
+        "OLDY-nColumns": 3, 
+        "Type": "DefaultLegend", 
+        "Coordinates": [
+            0.0, 
+            0.1, 
+            0.25, 
+            0.60
+        ], 
+        "Categories": {
+            "Data-B-ElEl": {
+                "Color": 416, 
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+                "Names": [
+		    "2017___ElMu_BOnly___ElEl___ZWindowMET0p0Width15p0", 
+		    "2017___MuMu_BOnly___ElEl___ZWindowMET0p0Width15p0", 
+		    "2017___ElEl_BOnly___ElEl___ZWindowMET0p0Width15p0", 
+		    "2017___El_BOnly___ElEl___ZWindowMET0p0Width15p0", 
+		    "2017___Mu_BOnly___ElEl___ZWindowMET0p0Width15p0"
+                ],
+		"ScaleArray": [6.82067, 6.82067, 6.82067, 6.82067, 6.82067]
+            }, 
+            "Data-B-MuMu": {
+                "Color": 416, 
+                "Style": "Line", 
+		"MarkerStyle": 23,
+                "Names": [
+		    "2017___ElMu_BOnly___MuMu___ZWindowMET0p0Width15p0", 
+		    "2017___MuMu_BOnly___MuMu___ZWindowMET0p0Width15p0", 
+		    "2017___ElEl_BOnly___MuMu___ZWindowMET0p0Width15p0", 
+		    "2017___El_BOnly___MuMu___ZWindowMET0p0Width15p0", 
+		    "2017___Mu_BOnly___MuMu___ZWindowMET0p0Width15p0"
+                ],
+		"ScaleArray": [6.37051, 6.37051, 6.37051, 6.37051, 6.37051]
+            }, 
+            "Data-EarlyC-ElEl": {
+                "Color": 616, 
+                "Style": "Marker",
+		"MarkerStyle": 21,
+                "Names": [
+		    "2017___ElMu_CPre301046___ElEl___ZWindowMET0p0Width15p0", 
+		    "2017___MuMu_CPre301046___ElEl___ZWindowMET0p0Width15p0", 
+		    "2017___ElEl_CPre301046___ElEl___ZWindowMET0p0Width15p0", 
+		    "2017___El_CPre301046___ElEl___ZWindowMET0p0Width15p0", 
+		    "2017___Mu_CPre301046___ElEl___ZWindowMET0p0Width15p0"
+                ],
+		"ScaleArray": [4.9908, 4.9908, 4.9908, 4.9908, 4.9908]
+            }, 
+            "Data-EarlyC-MuMu": {
+                "Color": 616, 
+                "Style": "Line",
+		"MarkerStyle": 21,
+                "Names": [
+		    "2017___ElMu_CPre301046___MuMu___ZWindowMET0p0Width15p0", 
+		    "2017___MuMu_CPre301046___MuMu___ZWindowMET0p0Width15p0", 
+		    "2017___ElEl_CPre301046___MuMu___ZWindowMET0p0Width15p0", 
+		    "2017___El_CPre301046___MuMu___ZWindowMET0p0Width15p0", 
+		    "2017___Mu_CPre301046___MuMu___ZWindowMET0p0Width15p0"
+                ],
+		"ScaleArray": [4.9284, 4.9284, 4.9284, 4.9284, 4.9284]
+            }, 
+            "Data-Post301046-ElEl": {
+                "Color": 864, 
+                "Style": "Marker",
+		"MarkerStyle": 20, 
+                "Names": [
+                    "2017___ElMu___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___El___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___Mu___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            },
+            "Data-Post301046-MuMu": {
+                "Color": 864, 
+                "Style": "Line",
+		"MarkerStyle": 20, 
+                "Names": [
+                    "2017___ElMu___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___El___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___Mu___MuMu___ZWindowMET0p0Width15p0"
+                ]
+            }
+        }
+    }
+}
