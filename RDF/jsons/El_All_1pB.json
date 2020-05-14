@@ -1430,11 +1430,11 @@
         "Title": "Electron_pfRelIso03_all", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu nMediumDeepCSVB1+ nJet4", 
-            "#it{e}#mu nMediumDeepCSVB1+ nJet5", 
-            "#it{e}#mu nMediumDeepCSVB1+ nJet6", 
-            "#it{e}#mu nMediumDeepCSVB1+ nJet7", 
-            "#it{e}#mu nMediumDeepCSVB1+ nJet8+"
+            "#it{ll} nJet4", 
+            "#it{ll} nJet5", 
+            "#it{ll} nJet6", 
+            "#it{ll} nJet7", 
+            "#it{ll} nJet8+"
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
