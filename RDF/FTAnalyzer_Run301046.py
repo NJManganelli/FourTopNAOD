@@ -3193,7 +3193,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         if len(matchedElements) == len(blindList): 
                             isBlinded = True
                             continue
-                    crossSeparated = category.split("___")[0].split("_CROSS_") #Strip the systematic name from the branch by taking only the first element
+                    crossSeparated = "___".join(category.split("___")[:-1]).split("_CROSS_")#Strip the systematic name from the branch by taking only the first element
                     categoryName = "_".join(crossSeparated) #No extra references to (lep/branch/sys)postfixes...
                     if isBlinded:
                         categoryName = "blind_" + categoryName

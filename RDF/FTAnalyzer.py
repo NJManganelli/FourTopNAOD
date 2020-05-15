@@ -370,35 +370,21 @@ bookerV2_MC = {
                                                       "sumWeights": 0,
                                                       "effectiveCrossSection": 0,
                                                   },
-                                       "ttcc_DL_fr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                       "ttother_DL_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
                                                       "nEventsPositive": 0,
                                                       "nEventsNegative": 0,
                                                       "fractionalContribution": 1,
                                                       "sumWeights": 0,
                                                       "effectiveCrossSection": 0,
                                                   },
-                                       "ttother_DL_fr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                       "ttbb_DL_nr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && (nGenJet < 7 || GenHT < 500)",
                                                       "nEventsPositive": 0,
                                                       "nEventsNegative": 0,
                                                       "fractionalContribution": 1,
                                                       "sumWeights": 0,
                                                       "effectiveCrossSection": 0,
                                                   },
-                                       "ttbb_DL_nr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && (nGenJet < 7 || GenHT < 500)",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
-                                                  },
-                                       "ttcc_DL_nr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 1 && (nGenJet < 7 || GenHT < 500)",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
-                                                  },
-                                       "ttother_DL_nr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 1 && (nGenJet < 7 || GenHT < 500)",
+                                       "ttother_DL_nr": {"filter": "nAdditionalBJets < 2 && nGenLep == 2 && (nGenJet < 7 || GenHT < 500)",
                                                       "nEventsPositive": 0,
                                                       "nEventsNegative": 0,
                                                       "fractionalContribution": 1,
@@ -446,14 +432,7 @@ bookerV2_MC = {
                                                       "sumWeights": 0,
                                                       "effectiveCrossSection": 0,
                                                   },
-                                       "ttcc_DL-GF_fr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
-                                                  },
-                                       "ttother_DL-GF_fr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                       "ttother_DL-GF_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
                                                       "nEventsPositive": 0,
                                                       "nEventsNegative": 0,
                                                       "fractionalContribution": 1,
@@ -497,14 +476,7 @@ bookerV2_MC = {
                                                       "sumWeights": 0,
                                                       "effectiveCrossSection": 0,
                                                   },
-                                       "ttcc_SL_fr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
-                                                  },
-                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
                                                       "nEventsPositive": 0,
                                                       "nEventsNegative": 0,
                                                       "fractionalContribution": 1,
@@ -518,14 +490,7 @@ bookerV2_MC = {
                                                       "sumWeights": 0,
                                                       "effectiveCrossSection": 0,
                                                   },
-                                       "ttcc_SL_nr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
-                                                  },
-                                       "ttother_SL_nr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
+                                       "ttother_SL_nr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
                                                       "nEventsPositive": 0,
                                                       "nEventsNegative": 0,
                                                       "fractionalContribution": 1,
@@ -569,14 +534,7 @@ bookerV2_MC = {
                                                       "sumWeights": 0,
                                                       "effectiveCrossSection": 0,
                                                   },
-                                       "ttcc_SL_fr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
-                                                  },
-                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
                                                       "nEventsPositive": 0,
                                                       "nEventsNegative": 0,
                                                       "fractionalContribution": 1,
@@ -1927,19 +1885,20 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #Two lists of weight definitions, one or the other is chosen at the end via 'final' optional parameter
     zFin = []
     zPre = []
-    # zFin.append(("pwgt__XS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere #Now defined in the splitProcess function
+    # zFin.append(("pwgt__XS", "wgt_SUMW")) #Now defined in the splitProcess function
     zFin.append(("pwgt_LSF__nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
     zPre.append(("pwgt__XS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere
     zPre.append(("pwgt_LSF__nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
+    zPre.append(("pwgt_Z_vtx__nom", "((FTALepton{lpf}_pdgId.size() > 1 && (abs(FTALepton{lpf}_pdgId.at(0)) == 11 || abs(FTALepton{lpf}_pdgId.at(1)) == 11)) || (FTALepton{lpf}_pdgId.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 11)) ? EGamma_HLT_ZVtx_SF_nom : 1.00000000000000".format(lpf=leppostfix)))
     
     #WARNING: on btag weights, it can ALWAYS be 'varied' to match the systematic, so that the event weight from
     #the correct jet collection, btag SFs, and yields is used. Always match! This duplicates some calculations uselessly
     #in the BTaggingYields function, but it should help avoid mistakes at the level of final calculations
     
     #Nominal weight
-    zFin.append(("wgt__nom", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
-    #pre-btagging yield weight. Careful modifying, it is 'inherited' for may other weights below!
-    zPre.append(("prewgt__nom", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    zFin.append(("wgt__nom", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_Z_vtx__nom * pwgt_btag__nom"))
+    #pre-btagging yield weight. Careful modifying, it is 'inherited' for many other weights below!
+    zPre.append(("prewgt__nom", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_Z_vtx__nom"))
     
     #JES Up and Down - effectively the nominal weight, but with the CORRECT btag weight for those jets!
     if "_jesTotalDown" in sysVariations.keys():
@@ -2051,7 +2010,8 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                         #     listOfColumns.push_back(defName) 
                         # else:
                         #     print("Skipping definition for {} due to missing prereqs in the list: {}".format(defName, prereqs))
-                    
+                   
+        #return the dictionary of all nodes
         return input_df_or_nodes
 
     else:
@@ -2585,7 +2545,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                         # df_with_IDs = df_with_IDs.Define("nCJetsFromW", "unpackedGenTtbarId[8]")
                 if IDbool and IDname == "nGenJet/GenHT":
                     if "nGenLep" not in listOfColumns:
-                        df_with_IDs = df_with_IDs.Define("nGenLep", "LHEPart_pdgId[stitch_lep_mask].size()")
+                        df_with_IDs = df_with_IDs.Define("nGenLep", "LHEPart_pdgId[abs(LHEPart_pdgId)==11 || abs(LHEPart_pdgId)==13 || abs(LHEPart_pdgId)==15].size()")
                         listOfColumns.push_back("nGenLep")
                     if "nGenJet" not in listOfColumsn:
                         df_with_IDs = df_with_IDs.Define("nGenJet", "GenJet_pt[GenJet_pt > 30].size()")
@@ -2939,6 +2899,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                 for decayChannel in ["ElMu{lpf}".format(lpf=leppostfix), 
                                      "MuMu{lpf}".format(lpf=leppostfix),
                                      "ElEl{lpf}".format(lpf=leppostfix),
+                                     "ElEl_LowMET{lpf}".format(lpf=leppostfix),
+                                     "ElEl_HighMET{lpf}".format(lpf=leppostfix),
                                      ]:
                     testInputChannel = channel.lower().replace("_baseline", "").replace("_selection", "")
                     testLoopChannel = decayChannel.lower().replace("{lpf}".format(lpf=leppostfix), "").replace("_baseline", "").replace("_selection", "")
@@ -2976,6 +2938,26 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
                                                                                  metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
                                                                                  zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
+                    elif decayChannel == "ElEl_LowMET{lpf}".format(lpf=leppostfix):
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
+                        channelFiltName = "2 el, Low MET ({lpf})".format(lpf=leppostfix)
+                        L0String = "HT{bpf} >= {htc} && {met} < 50 && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
+                            .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                        L0Name = "HT{bpf} >= {htc}, {met} < 50, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        L0Key = "ZWindowMET0to50Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                                                                                 metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
+                                                                                 zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
+                    elif decayChannel == "ElEl__HighMET{lpf}".format(lpf=leppostfix):
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
+                        channelFiltName = "2 el, High MET ({lpf})".format(lpf=leppostfix)
+                        L0String = "HT{bpf} >= {htc} && {met} >= 50 && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
+                            .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                        L0Name = "HT{bpf} >= {htc}, {met} >= 50, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        L0Key = "ZWindowMET50Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                                                                                 metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
+                                                                                 zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
                     else:
                         raise NotImplementedError("No definition for decayChannel = {} yet".format(decayChannel))
                     #filter define, filter name, process, channel, L0 (HT/ZWindow <cross> SCALE variations), L1 (nBTags), L2 (nJet)
@@ -2986,6 +2968,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         # filterNodes[processName][decayChannel] = collections.OrderedDict()
                         filterNodes[processName][decayChannel] = dict()
                         filterNodes[processName][decayChannel]["BaseNode"] = (channelFilter, channelFiltName, processName, decayChannel, None, None, None) #L-1 filter
+                        print(filterNodes[processName][decayChannel]["BaseNode"])
                         # nodes[processName][decayChannel] = collections.OrderedDict()
                         nodes[processName][decayChannel] = dict()
                         nodes[processName][decayChannel]["BaseNode"] = nodes[processName]["BaseNode"].Filter(filterNodes[processName][decayChannel]["BaseNode"][0],
@@ -3190,7 +3173,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         if len(matchedElements) == len(blindList): 
                             isBlinded = True
                             continue
-                    crossSeparated = category.split("___")[0].split("_CROSS_") #Strip the systematic name from the branch by taking only the first element
+                    crossSeparated = "___".join(category.split("___")[:-1]).split("_CROSS_")#Strip the systematic name from the branch by taking only the first element
                     categoryName = "_".join(crossSeparated) #No extra references to (lep/branch/sys)postfixes...
                     if isBlinded:
                         categoryName = "blind_" + categoryName
@@ -4804,7 +4787,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         #If we're not calculating the yields, we need to have the string value of the Yields to be loaded...
         #Where to load BTaggingYields from
         if BTaggingYieldsFile == "{}":
-            BTaggingYieldsFile = "{}/BTaggingYields/{}_selection/BTaggingYields.root".format(analysisDir, channel)
+            BTaggingYieldsFile = "{}/BTaggingYields/{}/BTaggingYields.root".format(analysisDir, channel)
         calculateTheYields = False
         print("Loading BTaggingYields from this path: {}".format(BTaggingYieldsFile))
 
@@ -4821,6 +4804,14 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         theSampleDict = bookerV2_MuMu.copy()
         theSampleDict.update(bookerV2_MC)
     elif channel == "ElEl":    
+        levelsOfInterest = set(["ElEl_selection",])
+        theSampleDict = bookerV2_ElEl.copy()
+        theSampleDict.update(bookerV2_MC)
+    elif channel == "ElEl_LowMET":    
+        levelsOfInterest = set(["ElEl_selection",])
+        theSampleDict = bookerV2_ElEl.copy()
+        theSampleDict.update(bookerV2_MC)
+    elif channel == "ElEl_HighMET":    
         levelsOfInterest = set(["ElEl_selection",])
         theSampleDict = bookerV2_ElEl.copy()
         theSampleDict.update(bookerV2_MC)
@@ -5300,7 +5291,7 @@ if __name__ == '__main__':
     parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic/{chan}_selection',
                         help='Stage of data storage to pull from, as referenced in Sample dictionaries as subkeys of the "source" key.'\
                         'Must be available in all samples to be processed. {chan} will be replaced with the channel analyzed')
-    parser.add_argument('--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'All'],
+    parser.add_argument('--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 'ElEl_HighMET'],
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
                         help='output directory path defaulting to "."')
