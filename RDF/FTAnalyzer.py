@@ -1431,12 +1431,14 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
         
     #Set up channel bits for selection and baseline. Separation not necessary in this stage, but convenient for loops
     Chan = {}
-    Chan["ElMu_selection"] = 24576
-    Chan["MuMu_selection"] = 6144
-    Chan["ElEl_selection"] = 512
-    Chan["Mu_selection"] = 128
-    Chan["El_selection"] = 64
-    Chan["selection"] = Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"] + Chan["Mu_selection"] + Chan["El_selection"]
+    Chan["ElMu"] = 24576
+    Chan["MuMu"] = 6144
+    Chan["ElEl"] = 512
+    Chan["ElEl_LowMET"] = Chan["ElEl"]
+    Chan["ElEl_HighMET"] = Chan["ElEl"]
+    Chan["Mu"] = 128
+    Chan["El"] = 64
+    Chan["selection"] = Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"] + Chan["El"]
     Chan["ElMu_baseline"] = 24576
     Chan["MuMu_baseline"] = 6144
     Chan["ElEl_baseline"] = 512
@@ -1457,24 +1459,24 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
     b["El_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
         .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"] + Chan["Mu_baseline"], Chan["El_baseline"])
     b["selection"] = "ESV_TriggerAndLeptonLogic_selection > 0"
-    b["ElMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu_selection"])
-    b["MuMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu_selection"], Chan["MuMu_selection"])
-    b["ElEl_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"], Chan["ElEl_selection"])
-    b["Mu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"], Chan["Mu_selection"])
-    b["El_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"] + Chan["Mu_selection"], Chan["El_selection"])
+    b["ElMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu"])
+    b["MuMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu"], Chan["MuMu"])
+    b["ElEl"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu"] + Chan["MuMu"], Chan["ElEl"])
+    b["ElEl_LowMET"] = b["ElEl"]
+    b["ElEl_HighMET"] = b["ElEl"]
+    b["Mu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"], Chan["Mu"])
+    b["El"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"], Chan["El"])
     if input_lvl_filter == None:
-        rdf = input_df                .Define("mu_mask", "Muon_pt > 0").Define("e_mask", "Electron_pt > 0")
+        rdf = input_df.Define("mu_mask", "Muon_pt > 0").Define("e_mask", "Electron_pt > 0")
     else:
         if "baseline" in input_lvl_filter:
             lvl_type = "baseline"
-        elif "selection" in input_lvl_filter:
-            lvl_type = "selection"
         else:
-            raise RuntimeError("No such level permissable: must contain 'selection' or 'baseline'")
+            lvl_type = "selection"
         rdf_input = input_df.Filter(b[input_lvl_filter], input_lvl_filter)
         rdf = rdf_input
         for trgTup in triggers:
@@ -2948,7 +2950,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         L0Key = "ZWindowMET0to50Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
                                                                                  metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
                                                                                  zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
-                    elif decayChannel == "ElEl__HighMET{lpf}".format(lpf=leppostfix):
+                    elif decayChannel == "ElEl_HighMET{lpf}".format(lpf=leppostfix):
                         channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
                         channelFiltName = "2 el, High MET ({lpf})".format(lpf=leppostfix)
                         L0String = "HT{bpf} >= {htc} && {met} >= 50 && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
@@ -4796,38 +4798,38 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     source_level = source
 
     if channel == "ElMu":
-        levelsOfInterest = set(["ElMu_selection",])
+        levelsOfInterest = set(["ElMu",])
         theSampleDict = bookerV2_ElMu.copy()
         theSampleDict.update(bookerV2_MC)
     elif channel == "MuMu":
-        levelsOfInterest = set(["MuMu_selection",])
+        levelsOfInterest = set(["MuMu",])
         theSampleDict = bookerV2_MuMu.copy()
         theSampleDict.update(bookerV2_MC)
     elif channel == "ElEl":    
-        levelsOfInterest = set(["ElEl_selection",])
+        levelsOfInterest = set(["ElEl",])
         theSampleDict = bookerV2_ElEl.copy()
         theSampleDict.update(bookerV2_MC)
     elif channel == "ElEl_LowMET":    
-        levelsOfInterest = set(["ElEl_selection",])
+        levelsOfInterest = set(["ElEl_LowMET",])
         theSampleDict = bookerV2_ElEl.copy()
         theSampleDict.update(bookerV2_MC)
     elif channel == "ElEl_HighMET":    
-        levelsOfInterest = set(["ElEl_selection",])
+        levelsOfInterest = set(["ElEl_HighMET",])
         theSampleDict = bookerV2_ElEl.copy()
         theSampleDict.update(bookerV2_MC)
     # This doesn't work, need the corrections on all the samples and such...
     # elif channel == "All":
-    #     levelsOfInterest = set(["ElMu_selection", "MuMu_selection", "ElEl_selection",])
+    #     levelsOfInterest = set(["ElMu", "MuMu", "ElEl",])
     #     theSampleDict = bookerV2_ElMu.copy()
     #     theSampleDict.update(bookerV2_ElEl)
     #     theSampleDict.update(bookerV2_MuMu)
     #     theSampleDict.update(bookerV2_MC)
     elif channel == "Mu":    
-        levelsOfInterest = set(["Mu_selection",])
+        levelsOfInterest = set(["Mu",])
         theSampleDict = bookerV2_Mu.copy()
         theSampleDict.update(bookerV2_MC)
     elif channel == "El":    
-        levelsOfInterest = set(["El_selection",])
+        levelsOfInterest = set(["El",])
         theSampleDict = bookerV2_El.copy()
         theSampleDict.update(bookerV2_MC)
     elif channel == "test":
@@ -4838,12 +4840,14 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     print("Creating selection and baseline bits")
     #Set up channel bits for selection and baseline. Separation not necessary in this stage, but convenient for loops
     Chan = {}
-    Chan["ElMu_selection"] = 24576
-    Chan["MuMu_selection"] = 6144
-    Chan["ElEl_selection"] = 512
-    Chan["Mu_selection"] = 128
-    Chan["El_selection"] = 64
-    Chan["selection"] = Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"] + Chan["Mu_selection"] + Chan["El_selection"]
+    Chan["ElMu"] = 24576
+    Chan["MuMu"] = 6144
+    Chan["ElEl"] = 512
+    Chan["ElEl_LowMET"] = Chan["ElEl"]
+    Chan["ElEl_HighMET"] = Chan["ElEl"]
+    Chan["Mu"] = 128
+    Chan["El"] = 64
+    Chan["selection"] = Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"] + Chan["El"]
     Chan["ElMu_baseline"] = 24576
     Chan["MuMu_baseline"] = 6144
     Chan["ElEl_baseline"] = 512
@@ -4863,16 +4867,17 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     b["El_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
         .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"] + Chan["Mu_baseline"], Chan["El_baseline"])
     b["selection"] = "ESV_TriggerAndLeptonLogic_selection > 0"
-    b["ElMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu_selection"])
-    b["MuMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu_selection"], Chan["MuMu_selection"])
-    b["ElEl_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"], Chan["ElEl_selection"])
-    b["Mu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"], Chan["Mu_selection"])
-    b["El_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"]
-                                                                                + Chan["Mu_selection"], Chan["El_selection"]) 
+    b["ElMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu"])
+    b["MuMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu"], Chan["MuMu"])
+    b["ElEl"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu"] + Chan["MuMu"], Chan["ElEl"])
+    b["ElEl_LowMET"] = b["ElEl"]
+    b["ElEl_HighMET"] = b["ElEl"]
+    b["Mu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"], Chan["Mu"])
+    b["El"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"], Chan["El"]) 
     #This is deprecated, use dedicated RDF module
     #b["ESV_JetMETLogic_baseline"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00001100011111111111) #This enables the MET pt cut (11) and nJet (15) and HT (16) cuts from PostProcessor
     #b["ESV_JetMETLogic_baseline"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00000000001111111111) #Only do the PV and MET filters, nothing else
