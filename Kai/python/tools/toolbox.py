@@ -503,6 +503,9 @@ doEOSHOME will override the redir string with the one formatted based on your us
     elif doGLOBAL:
         #Standard redirector
         redir = "root://cms-xrd-global.cern.ch/"
+    elif redir != "":
+        #accept redirector as-is
+        pass
     else:
         redir = ""
     if "dbs:" in query:
