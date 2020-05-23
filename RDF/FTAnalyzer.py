@@ -18,7 +18,7 @@ import re
 import pdb
 import ROOT
 from ruamel.yaml import YAML
-from FourTopNAOD.Kai.tools.toolbox import getFiles
+from FourTopNAOD.RDF.tools.toolbox import getFiles
 #from IPython.display import Image, display, SVG
 #import graphviz
 ROOT.PyConfig.IgnoreCommandLineOptions = True

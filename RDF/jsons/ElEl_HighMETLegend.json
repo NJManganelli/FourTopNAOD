@@ -1,0 +1,213 @@
+ {   
+     "DefaultLegend": {
+	"Header": "#sqrt{{s}} = 13 TeV, L_{{int}} = {lumi} fb^{{-1}}",
+	"HeaderPosition": 0.25,
+        "Supercategories": {
+            "Signal": {
+                "Draw": "L", 
+                "Names": [
+                    "tttt-MET50toInf"
+                ], 
+                "Stack": false
+            },
+            "Data-MET50toInf": {
+                "Draw": "PE1", 
+                "Names": [
+                    "Data-MET50toInf"
+                ], 
+                "Stack": false
+            }, 
+            "Data-MET0to50": {
+                "Draw": "PE1", 
+                "Names": [
+                    "Data-MET0to50"
+                ], 
+                "Stack": false
+            }, 
+            "Data-B": {
+                "Draw": "P", 
+                "Names": [
+                    "Data-B"
+                ], 
+                "Stack": false
+            }, 
+            "Data-EarlyC": {
+                "Draw": "P", 
+                "Names": [
+                    "Data-EarlyC"
+                ], 
+                "Stack": false
+            },  
+            "Background": {
+                "Draw": "HIST", 
+                "Names": [
+                    "ttbar-MET50toInf", 
+                    "singletop-MET50toInf", 
+                    "ttH-MET50toInf", 
+                    "ttVJets-MET50toInf", 
+                    "ttultrarare-MET50toInf", 
+                    "DY-MET50toInf", 
+                    "QCD-MET50toInf"
+                ], 
+                "Stack": true
+            }
+        }, 
+        "nColumns": 1, 
+        "OLDY-Coordinates": [
+            0.35, 
+            0.75, 
+            0.95, 
+            0.9
+        ], 
+        "Ratios": {
+            "Data/MC": {
+                "Style": "Marker", 
+		"MarkerStyle": 20,
+		"Draw": "PXE1",
+                "Denominator": "Background", 
+                "Numerator": "Data-MET50toInf"
+            },
+            "Data-MET0to50/MC": {
+                "Style": "Marker",  
+		"MarkerStyle": 23,
+		"Draw": "PXE1",
+                "Denominator": "Background", 
+                "Numerator": "Data-MET0to50"
+            }
+        }, 
+        "Systematics": [], 
+        "OLDY-nColumns": 3, 
+        "Type": "DefaultLegend", 
+        "Coordinates": [
+            0.0, 
+            0.1, 
+            0.25, 
+            0.60
+        ], 
+        "Categories": {
+            "ttH-MET50toInf": {
+                "Color": 616, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttH___ElEl_HighMET___ZWindowMET50Width15p0"
+                ]
+            }, 
+            "tttt-MET50toInf": {
+                "Color": 864, 
+                "Style": "Line", 
+                "Names": [
+                    "2017___tttt___ElEl_HighMET___ZWindowMET50Width15p0"
+                ]
+            }, 
+            "ttVJets-MET50toInf": {
+                "Color": 880, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttWJets___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___ttZJets___ElEl_HighMET___ZWindowMET50Width15p0"
+                ]
+            }, 
+            "DY-MET50toInf": {
+                "Color": 416, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___DYJets_DL___ElEl_HighMET___ZWindowMET50Width15p0"
+                ]
+            }, 
+            "Data-B": {
+                "Color": 416, 
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+                "Names": [
+		    "2017___ElMu_BOnly___ElEl_HighMET___ZWindowMET50Width15p0", 
+		    "2017___MuMu_BOnly___ElEl_HighMET___ZWindowMET50Width15p0", 
+		    "2017___ElEl_BOnly___ElEl_HighMET___ZWindowMET50Width15p0", 
+		    "2017___El_BOnly___ElEl_HighMET___ZWindowMET50Width15p0", 
+		    "2017___Mu_BOnly___ElEl_HighMET___ZWindowMET50Width15p0"
+                ],
+		"ScaleArray": [6.82067, 6.82067, 6.82067, 6.82067, 6.82067]
+            }, 
+            "Data-EarlyC": {
+                "Color": 600, 
+                "Style": "Marker",
+		"MarkerStyle": 21,
+                "Names": [
+		    "2017___ElMu_CPre301046___ElEl_HighMET___ZWindowMET50Width15p0", 
+		    "2017___MuMu_CPre301046___ElEl_HighMET___ZWindowMET50Width15p0", 
+		    "2017___ElEl_CPre301046___ElEl_HighMET___ZWindowMET50Width15p0", 
+		    "2017___El_CPre301046___ElEl_HighMET___ZWindowMET50Width15p0", 
+		    "2017___Mu_CPre301046___ElEl_HighMET___ZWindowMET50Width15p0"
+                ],
+		"ScaleArray": [4.9908, 4.9908, 4.9908, 4.9908, 4.9908]
+            }, 
+            "Data-MET50toInf": {
+                "Color": 1, 
+                "Style": "Marker",
+		"MarkerStyle": 20, 
+                "Names": [
+                    "2017___ElMu___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___MuMu___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___ElEl___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___El___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___Mu___ElEl_HighMET___ZWindowMET50Width15p0"
+                ]
+            }, 
+            "Data-MET0to50": {
+                "Color": 600, 
+                "Style": "Marker",
+		"MarkerStyle": 23, 
+                "Names": [
+                    "2017___ElMu___ElEl_LowMET___ZWindowMET0to50Width15p0", 
+                    "2017___MuMu___ElEl_LowMET___ZWindowMET0to50Width15p0", 
+                    "2017___ElEl___ElEl_LowMET___ZWindowMET0to50Width15p0", 
+                    "2017___El___ElEl_LowMET___ZWindowMET0to50Width15p0", 
+                    "2017___Mu___ElEl_LowMET___ZWindowMET0to50Width15p0"
+                ]
+            }, 
+            "ttbar-MET50toInf": {
+                "Color": 632, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___tt_DL___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___tt_SL___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___tt_DL-GF___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___tt_SL-GF___ElEl_HighMET___ZWindowMET50Width15p0"
+                ]
+            }, 
+            "QCD-MET50toInf": {
+                "Color": 900, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___QCD_HT200___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___QCD_HT300___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___QCD_HT500___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___QCD_HT700___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___QCD_HT1000___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___QCD_HT1500___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___QCD_HT2000___ElEl_HighMET___ZWindowMET50Width15p0"
+                ]
+            }, 
+            "singletop-MET50toInf": {
+                "Color": 400, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ST_tW___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___ST_tbarW___ElEl_HighMET___ZWindowMET50Width15p0"
+                ]
+            }, 
+            "ttultrarare-MET50toInf": {
+                "Color": 432, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttWW___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___ttWH___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___ttWZ___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___ttZZ___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___ttZH___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___ttHH___ElEl_HighMET___ZWindowMET50Width15p0", 
+                    "2017___tttJ___ElEl_HighMET___ZWindowMET50Width15p0"
+                ]
+            }
+        }
+    }
+}

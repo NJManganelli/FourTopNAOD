@@ -10,8 +10,7 @@ source /cvmfs/sft.cern.ch/lcg/views/LCG_97rc4/x86_64-centos7-gcc8-opt/setup.sh
 voms-proxy-init -voms cms --valid 192:00
 
 #Setup PYTHONPATH for modules to load
-source PhysicsTools/NanoAOD-tools/standalone/env_standalone.sh (or .zsh)
-source FourTopNAOD/Kai/standalone/env_standalone.sh (or .zsh)
+source FourTopNAOD/RDF/standalone/env_standalone.sh (or .zsh)
 
 #get KRB5 credentials if eosuser redirector not working (may be issue with registration of grid proxy with EOS
 kinit <username>@CERN.CH #kinit <username>@FNAL.GOV
@@ -19,7 +18,7 @@ kinit <username>@CERN.CH #kinit <username>@FNAL.GOV
 touch /eos/user/<userinitial>/<username>/test.txt
 xrdcp root://eosuser.cern.ch//eos/user/<userinitial>/<username>/test.txt xrdtest.txt
 
-#Run the analyzer on just the tttt sample
+#Run the analyzer on just the tttt sample in the ElMu channel
 python -u FTAnalyzer.py fill-yields --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory> --include tttt --channel ElMu
 python -u FTAnalyzer.py combine-yields --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory> --include tttt --channel ElMu
 python -u FTAnalyzer.py fill-histograms --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory> --include tttt --channel ElMu
