@@ -17,6 +17,8 @@ import pprint
 import re
 import pdb
 import ROOT
+from ruamel.yaml import YAML
+from FourTopNAOD.Kai.tools.toolbox import getFiles
 #from IPython.display import Image, display, SVG
 #import graphviz
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -310,13 +312,14 @@ bookerV2_MC = {
         "isSignal": True,
         "crossSection": 0.012,
         "color": leg_dict["tttt"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttt-*_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttt-*_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttt-*_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttt-*_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttt-*_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttt-*_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttt-*_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttt-*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttt-1_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/tttt-2_2017_v2.root"],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttt-1_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/tttt-2_2017_v2.root"],
         "destination": "/$HIST_CLASS/$HIST/tttt/$SYSTEMATIC",
     },
     "tt_DL":{
@@ -331,25 +334,27 @@ bookerV2_MC = {
         "doFilter": True,
         "crossSection": 87.3348, 
         "color": leg_dict["ttbar"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-*_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-NOM-*_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-NOM-*_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-NOM-*_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "NANOv5p1": "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-*_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-NOM-*_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-NOM-*_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-NOM-*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-1_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-2_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-3_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-4_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-5_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-6_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-7_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-8_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-9_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-10_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-11_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-12_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-13_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-14_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-1_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-2_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-3_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-4_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-5_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-6_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-7_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-8_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-9_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-10_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-11_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-12_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-13_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-14_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tt_DL/$SYSTEMATIC",
         "stitch": {"mode": "Flag",
                    "source": "Nominal",
@@ -406,15 +411,17 @@ bookerV2_MC = {
         "doFilter": True,
         "crossSection": 1.4529,
         "color": leg_dict["ttbar"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-*_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-GF-*_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-GF-*_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-GF-*_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "NANOv5p1": "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-*_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-GF-*_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-GF-*_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-GF-*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-1_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-2_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-3_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-4_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-1_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-2_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-3_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-4_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tt_DL-GF/$SYSTEMATIC",
         "stitch": {"mode": "Flag",
                    "source": "Filtered",
@@ -454,12 +461,14 @@ bookerV2_MC = {
         "doFilter": True,
         "crossSection": 364.3109,
         "color": leg_dict["ttbar"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-NOM_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-NOM_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-NOM_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "NANOv5p1": "dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-NOM_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-NOM_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-NOM_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tt_SL/$SYSTEMATIC",
         "stitch": {"mode": "Flag",
                    "source": "Nominal",
@@ -512,12 +521,14 @@ bookerV2_MC = {
         "doFilter": True,
         "crossSection": 12.3429,
         "color": leg_dict["ttbar"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-GF_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-GF_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-GF_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-GF_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "NANOv5p1": "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-GF_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-GF_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-GF_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-GF_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-GF_2017_v2.root"],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-GF_2017_v2.root"],
         "destination": "/$HIST_CLASS/$HIST/tt_SL-GF/$SYSTEMATIC",
         "stitch": {"mode": "Flag",
                    "source": "Filtered",
@@ -553,14 +564,16 @@ bookerV2_MC = {
         "sumWeights": 277241050.840222,
         "sumWeights2": 9823995766.508368,
         "isSignal": False,
-        "crossSection": 35.8,
+        "crossSection": 35.83,
         "color": leg_dict["singletop"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tW_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tW_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tW_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tW_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "NANOv5p1": "dbs:/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tW_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tW_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tW_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tW_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tW_2017_v2.root"],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tW_2017_v2.root"],
         "destination": "/$HIST_CLASS/$HIST/ST_tW/$SYSTEMATIC",
     },
     "ST_tbarW":{
@@ -572,14 +585,16 @@ bookerV2_MC = {
         "sumWeights": 270762750.172525,
         "sumWeights2": 9611964941.797768,
         "isSignal": False,
-        "crossSection": 35.8,
+        "crossSection": 35.83,
         "color": leg_dict["singletop"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tbarW_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tbarW_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tbarW_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tbarW_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "NANOv5p1": "dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tbarW_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tbarW_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tbarW_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tbarW_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tbarW_2017_v2.root"],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tbarW_2017_v2.root"],
         "destination": "/$HIST_CLASS/$HIST/ST_tbarW/$SYSTEMATIC",
     },
     "DYJets_DL":{
@@ -591,20 +606,21 @@ bookerV2_MC = {
         "sumWeights": 49082157.000000,
         "sumWeights2": 49125561.000000,
         "isSignal": False,
-        "crossSection": 5075.6,
+        "crossSection": 6077.22,
         "color": leg_dict["DY"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-*_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/DYJets_DL-*_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/DYJets_DL-*_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/DYJets_DL-*_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017RECOSIMstep_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-*_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/DYJets_DL-*_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/DYJets_DL-*_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/DYJets_DL-*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-1_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-2_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-3_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-4_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-5_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-6_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-7_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-1_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-2_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-3_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-4_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-5_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-6_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-7_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/DYJets_DL/$SYSTEMATIC",
     },
     "ttH":{
@@ -618,12 +634,13 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.2934,
         "color": leg_dict["ttH"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttH_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttH_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttH_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttH_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttH_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttH_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttH_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttH_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttH_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttH_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttH/$SYSTEMATIC",
     },
     "ttWJets":{
@@ -635,14 +652,15 @@ bookerV2_MC = {
         "sumWeights": 9384328.000000,
         "sumWeights2": 9425384.000000,
         "isSignal": False,
-        "crossSection": 0.611,
+        "crossSection": 0.6105,
         "color": leg_dict["ttVJets"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWJets_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWJets_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWJets_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWJets_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWJets_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWJets_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWJets_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWJets_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWJets_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWJets_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttWJets/$SYSTEMATIC",
     },
     "ttZJets":{
@@ -654,14 +672,15 @@ bookerV2_MC = {
         "sumWeights": 8519074.000000,
         "sumWeights2": 8536618.000000,
         "isSignal": False,
-        "crossSection": 0.783,
+        "crossSection": 0.7826,
         "color": leg_dict["ttVJets"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZJets_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZJets_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZJets_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZJets_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZJets_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZJets_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZJets_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZJets_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZJets_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZJets_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttZJets/$SYSTEMATIC",
     },
     "ttWH":{
@@ -675,12 +694,13 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.001572,
         "color": leg_dict["ttultrarare"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWH_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWH_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWH_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWH_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/TTWH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWH_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWH_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWH_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWH_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWH_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWH_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttWH/$SYSTEMATIC",
     },
     "ttWW":{
@@ -694,12 +714,13 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.007882,
         "color": leg_dict["ttultrarare"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWW_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWW_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWW_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWW_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWW_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWW_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWW_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWW_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWW_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWW_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttWW/$SYSTEMATIC",
     },
     "ttWZ":{
@@ -713,12 +734,13 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.002974,
         "color": leg_dict["ttultrarare"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWZ_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWZ_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWZ_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWZ_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWZ_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWZ_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWZ_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWZ_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWZ_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWZ_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttWZ/$SYSTEMATIC",
     },
     "ttZZ":{
@@ -732,12 +754,13 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.001572,
         "color": leg_dict["ttultrarare"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZZ_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZZ_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZZ_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZZ_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZZ_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZZ_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZZ_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZZ_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZZ_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZZ_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttZZ/$SYSTEMATIC",
     },
     "ttZH":{
@@ -751,12 +774,13 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.01253,
         "color": leg_dict["ttultrarare"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZH_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZH_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZH_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZH_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZH_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZH_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZH_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZH_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZH_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZH_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttZH/$SYSTEMATIC",
     },
     "ttHH":{
@@ -770,12 +794,13 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.0007408,
         "color": leg_dict["ttultrarare"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttHH_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttHH_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttHH_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttHH_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/TTHH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttHH_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttHH_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttHH_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttHH_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttHH_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttHH_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttHH/$SYSTEMATIC",
     },    
     "tttW":{
@@ -789,12 +814,13 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.007882,
         "color": leg_dict["ttultrarare"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttW_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttW_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttW_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttW_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttW_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttW_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttW_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttW_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttW_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttW_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tttW/$SYSTEMATIC",
     },
     "tttJ":{
@@ -808,12 +834,13 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.0004741,
         "color": leg_dict["ttultrarare"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttJ_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttJ_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttJ_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttJ_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttJ_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttJ_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttJ_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttJ_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttJ_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttJ_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tttJ/$SYSTEMATIC",
     },
 }
@@ -825,16 +852,16 @@ bookerV2_ElMu = {
         "isData": True,
         "nEvents": 4453465 + 15595214 + 9164365 + 19043421 + 25776363,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_*_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_ElMu_*_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_ElMu_*_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_ElMu_*_2017_v2*.root",
+        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_*_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_ElMu_*_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_ElMu_*_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_ElMu_*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_B_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_C_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_D_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_E_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_F_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_B_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_C_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_D_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_E_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_F_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ElMu/NOMINAL",
     },
 }
@@ -846,16 +873,16 @@ bookerV2_MuMu = {
         "isData": True,
         "nEvents": 14501767 + 49636525 + 23075733 + 51589091 + 79756560,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_*_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_MuMu_*_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_MuMu_*_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_MuMu_*_2017_v2*.root",
+        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_*_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_MuMu_*_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_MuMu_*_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_MuMu_*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_B_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_C_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_D_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_E_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_F_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_B_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_C_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_D_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_E_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_F_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/MuMu/NOMINAL",
         },
 }
@@ -867,16 +894,16 @@ bookerV2_ElEl = {
         "isData": True,
         "nEvents": 58088760 + 65181125 + 25911432 + 56233597 + 74307066,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_*_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_ElEl_*_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_ElEl_*_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_ElEl_*_2017_v2*.root",
+        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_*_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_ElEl_*_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_ElEl_*_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_ElEl_*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_B_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_C_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_D_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_E_2017_v2.root",
-                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_F_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_B_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_C_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_D_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_E_2017_v2.root",
+                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_F_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ElEl/NOMINAL",
         },
 }
@@ -888,10 +915,10 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 136300266 + 165652756 + 70361660 + 154630534 + 242135500,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_*_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_Mu_*_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_Mu_*_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_Mu_*_2017_v2*.root",
+        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_*_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_Mu_*_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_Mu_*_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_Mu_*_2017_v2*.root",
                   },
         },
     "El":{
@@ -901,10 +928,10 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 60537490 + 136637888 + 51526710 + 102121689 + 128467223,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_*_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_El_*_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_El_*_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_El_*_2017_v2*.root",
+        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_*_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_El_*_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_El_*_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_El_*_2017_v2*.root",
                   },
         },
     "QCD_HT200":{
@@ -918,12 +945,13 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 1712000.0,
         "color": leg_dict["QCD"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT200_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT200_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT200_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/QCD_HT200to300_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT200_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT200_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT200_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",],
     },
     "QCD_HT300":{
         "era": "2017",
@@ -936,12 +964,13 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 347700.0,
         "color": leg_dict["QCD"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT300_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT300_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT300_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT300_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT300_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT300_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",],
     },   
     "QCD_HT500":{
         "era": "2017",
@@ -954,12 +983,13 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 32100.0,
         "color": leg_dict["QCD"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT500_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT500_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT500_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/QCD_HT500to700_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT500_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT500_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT500_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",],
     },
     "QCD_HT700":{
         "era": "2017",
@@ -972,12 +1002,13 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 6831.0,
         "color": leg_dict["QCD"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT700_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT700_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT700_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/QCD_HT700to1000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT700_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT700_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT700_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",],
     },
     "QCD_HT1000":{
         "era": "2017",
@@ -990,12 +1021,13 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 1207.0,
         "color": leg_dict["QCD"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1000_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1000_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1000_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/QCD_HT1000to1500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1000_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1000_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1000_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",],
     },
     "QCD_HT1500":{
         "era": "2017",
@@ -1008,12 +1040,13 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 119.9,
         "color": leg_dict["QCD"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1500_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1500_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1500_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1500_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1500_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1500_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",],
     },
     "QCD_HT2000":{
         "era": "2017",
@@ -1026,12 +1059,13 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 25.24,
         "color": leg_dict["QCD"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT2000_2017_v2*.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT2000_2017_v2*.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT2000_2017_v2*.root",
+        "source": {"NANOv5": "dbs:/QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT2000_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT2000_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT2000_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",],
     },
     "ElMu_B":{
         "era": "2017",
@@ -1040,8 +1074,9 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 4453465,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_B*_2017_v2.root",},
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_B_2017.root",],
+        "source": {"NANOv5": "dbs:/MuonEG/Run2017B-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_B*_2017_v2.root",},
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_B_2017.root",],
         },
     "ElMu_C":{
         "era": "2017",
@@ -1050,8 +1085,9 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 15595214, 
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_C*_2017_v2.root",},
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_C_2017.root",],
+        "source": {"NANOv5": "dbs:/MuonEG/Run2017C-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_C*_2017_v2.root",},
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_C_2017.root",],
         },
     "ElMu_D":{
         "era": "2017",
@@ -1060,8 +1096,9 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 9164365,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_D*_2017_v2.root",},
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_D_2017.root",],
+        "source": {"NANOv5": "dbs:/MuonEG/Run2017D-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_D*_2017_v2.root",},
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_D_2017.root",],
         },
     "ElMu_E":{
         "era": "2017",
@@ -1070,8 +1107,9 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 19043421,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_E*_2017_v2.root",},
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_E_2017.root",],
+        "source": {"NANOv5": "dbs:/MuonEG/Run2017E-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_E*_2017_v2.root",},
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_E_2017.root",],
         },
     "ElMu_F":{
         "era": "2017",
@@ -1080,8 +1118,9 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 25776363,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_F*_2017_v2.root",},
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_F_2017.root",],
+        "source": {"NANOv5": "dbs:/MuonEG/Run2017F-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_F*_2017_v2.root",},
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_F_2017.root",],
         },
     "MuMu_B":{
         "era": "2017",
@@ -1090,7 +1129,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 14501767,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_B*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/DoubleMuon/Run2017B-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_B*_2017_v2.root",},
         },
     "MuMu_C":{
         "era": "2017",
@@ -1099,7 +1139,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 49636525,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_C*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/DoubleMuon/Run2017C-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_C*_2017_v2.root",},
         },
     "MuMu_D":{
         "era": "2017",
@@ -1108,7 +1149,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 23075733,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_D*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/DoubleMuon/Run2017D-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_D*_2017_v2.root",},
         },
     "MuMu_E":{
         "era": "2017",
@@ -1117,7 +1159,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 51589091,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_E*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/DoubleMuon/Run2017E-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_E*_2017_v2.root",},
         },
     "MuMu_F":{
         "era": "2017",
@@ -1126,7 +1169,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 79756560,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_F*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/DoubleMuon/Run2017F-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_F*_2017_v2.root",},
         },
     "ElEl_B":{
         "era": "2017",
@@ -1135,7 +1179,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 58088760,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_B*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/DoubleEG/Run2017B-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_B*_2017_v2.root",},
         },
     "ElEl_C":{
         "era": "2017",
@@ -1144,7 +1189,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 65181125,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_C*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/DoubleEG/Run2017C-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_C*_2017_v2.root",},
         },
     "ElEl_D":{
         "era": "2017",
@@ -1153,7 +1199,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 25911432,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_D*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/DoubleEG/Run2017D-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_D*_2017_v2.root",},
         },
     "ElEl_E":{
         "era": "2017",
@@ -1162,7 +1209,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 56233597,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_E*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/DoubleEG/Run2017E-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_E*_2017_v2.root",},
         },
     "ElEl_F":{
         "era": "2017",
@@ -1171,7 +1219,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 74307066,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_F*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/DoubleEG/Run2017F-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_F*_2017_v2.root",},
         },
     "Mu_B":{
         "era": "2017",
@@ -1180,7 +1229,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 136300266,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_B*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/SingleMuon/Run2017B-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_B*_2017_v2.root",},
         },
     "Mu_C":{
         "era": "2017",
@@ -1189,7 +1239,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 165652756,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_C*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/SingleMuon/Run2017C-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_C*_2017_v2.root",},
         },
     "Mu_D":{
         "era": "2017",
@@ -1198,7 +1249,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 70361660,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_D*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/SingleMuon/Run2017D-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_D*_2017_v2.root",},
         },
     "Mu_E":{
         "era": "2017",
@@ -1207,7 +1259,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 154630534,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_E*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/SingleMuon/Run2017E-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_E*_2017_v2.root",},
         },
     "Mu_F":{
         "era": "2017",
@@ -1216,7 +1269,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 242135500,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_F*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/SingleMuon/Run2017F-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_F*_2017_v2.root",},
         },
     "El_B":{
         "era": "2017",
@@ -1225,7 +1279,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 60537490,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_B*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/SingleElectron/Run2017B-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_B*_2017_v2.root",},
         },
     "El_C":{
         "era": "2017",
@@ -1234,7 +1289,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 136637888,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_C*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/SingleElectron/Run2017C-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_C*_2017_v2.root",},
         },
     "El_D":{
         "era": "2017",
@@ -1243,7 +1299,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 51526710,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_D*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/SingleElectron/Run2017D-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_D*_2017_v2.root",},
         },
     "El_E":{
         "era": "2017",
@@ -1252,7 +1309,8 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 102121689,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_E*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/SingleElectron/Run2017E-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_E*_2017_v2.root",},
         },
     "El_F":{
         "era": "2017",
@@ -1261,9 +1319,260 @@ cutoutV2_ToBeFixed = {
         "isData": True,
         "nEvents": 128467223,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_F*_2017_v2.root",},
+        "source": {"NANOv5": "dbs:/SingleElectron/Run2017F-Nano1June2019-v1/NANOAOD",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_F*_2017_v2.root",},
     },
 }
+bookerV2_UNPROCESSED = {
+    "ST_tbar_t-channel":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 136.02,
+        "source": {"NANOv5": "dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "NANOv5p1": "dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
+                  },
+    },
+    "ST_t_t-channel":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 80.95,
+        "source": {"NANOv5": "dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "NANOv5p1": "dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
+                  },
+    },
+    "ST_s-channel":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 11.36/3,
+        "source": {"NANOv5": "dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "NANOv5p1": "dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
+                  },
+    },
+    "DYJets_DL-HT100":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 147.4*1.23,
+        "color": leg_dict["DY"],
+        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                  },
+    },
+    "DYJets_DL-HT200":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 40.99*1.23,
+        "color": leg_dict["DY"],
+        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                  },
+    },
+    "DYJets_DL-HT400":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 5.678*1.23,
+        "color": leg_dict["DY"],
+        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                  },
+    },
+    "DYJets_DL-HT600":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 1.367*1.23,
+        "color": leg_dict["DY"],
+        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                  },
+    },
+    "DYJets_DL-HT800":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 0.6304*1.23,
+        "color": leg_dict["DY"],
+        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                  },
+    },
+    "DYJets_DL-HT1200":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 0.1514*1.23,
+        "color": leg_dict["DY"],
+        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                  },
+    },
+    "DYJets_DL-HT2500":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 0.003565*1.23,
+        "color": leg_dict["DY"],
+        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                  },
+    },
+    "tt_DL-TuneCP5down":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 831.76,
+        "color": leg_dict["ttbar"],
+        "source": {"NANOv5": "dbs:/TTTo2L2Nu_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                  },
+    },
+    "tt_DL-TuneCP5up":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 831.76,
+        "color": leg_dict["ttbar"],
+        "source": {"NANOv5": "dbs:/TTTo2L2Nu_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                  },
+    },
+    "tt_DL-HDAMPdown":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 831.76,
+        "color": leg_dict["ttbar"],
+        "source": {"NANOv5": "dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                  },
+    },
+    "tt_DL-HDAMPup":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 831.76,
+        "color": leg_dict["ttbar"],
+        "source": {"NANOv5": "dbs:/TTTo2L2Nu_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                  },
+    },
+    "tt_DL-CR2-GluonMove":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 831.76,
+        "color": leg_dict["ttbar"],
+        "source": {"NANOv5": "dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                  },
+    },
+    "tt_DL-CR1-QCD":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 1,
+        "nEventsPositive": 1,
+        "nEventsNegative": 0,
+        "sumWeights": 1,
+        "sumWeights2": 1,
+        "isSignal": False,
+        "crossSection": 831.76,
+        "color": leg_dict["ttbar"],
+        "source": {"NANOv5": "dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                  },
+    },
+}
+# 'TTZlM10':'TTZToLLNuNu_M-10_TuneCP5_PSweights_13TeV-amcatnlo-pythia8',
+# 'TTZlM1to10':'TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8',
+# 'TTHB':'ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8',
+# 'TTHnoB':'ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8',
+# 'TTJetsSemiLepUEdnTTbb':'TTToSemiLeptonic_TuneCP5down_PSweights_13TeV-powheg-pythia8',
+# 'TTJetsSemiLepUEupTTbb':'TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8',
+# 'TTJetsSemiLepHDAMPdnTTbb':'TTToSemiLeptonic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8',
+# 'TTJetsSemiLepHDAMPupTTbb':'TTToSemiLeptonic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8',
+
+# 'TTJets2L2nuTTbb':'TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8',
+# 'TTJetsHadTTbb':'TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8',
+# 'TTJetsSemiLepNjet9binTTbb':'TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8',
+# 'TTJetsSemiLepNjet0TTbb':'TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8_HT0Njet0',
+# 'TTJetsSemiLepNjet9TTbb':'TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8_HT500Njet9',
+
+# 'TTJets2L2nuUEdnTTbb':'TTTo2L2Nu_TuneCP5down_PSweights_13TeV-powheg-pythia8_ttbb',
+# 'TTJets2L2nuUEupTTbb':'TTTo2L2Nu_TuneCP5up_PSweights_13TeV-powheg-pythia8_ttbb',
+# 'TTJets2L2nuHDAMPdnTTbb':'TTTo2L2Nu_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8_ttbb',
+# 'TTJets2L2nuHDAMPupTTbb':'TTTo2L2Nu_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8_ttbb',
+
+# 'TTJetsHadUEdnTTbb':'TTToHadronic_TuneCP5down_PSweights_13TeV-powheg-pythia8_ttbb',
+# 'TTJetsHadUEupTTbb':'TTToHadronic_TuneCP5up_PSweights_13TeV-powheg-pythia8_ttbb',
+# 'TTJetsHadHDAMPdnTTbb':'TTToHadronic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8_ttbb',
+# 'TTJetsHadHDAMPupTTbb':'TTToHadronic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8_ttbb',
 bookerV2UNSTITCHED = {
     "tt_SL-UNSTITCHED":{
         "era": "2017",
@@ -1277,12 +1586,12 @@ bookerV2UNSTITCHED = {
         "doFilter": True,
         "crossSection": 366.2073,
         "color": leg_dict["ttbar"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-NOM_2017_v2.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-NOM_2017_v2.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-NOM_2017_v2.root",
+        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-NOM_2017_v2.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-NOM_2017_v2.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-NOM_2017_v2.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tt_SL/$SYSTEMATIC",
     },  
     "tt_DL-UNSTITCHED":{
@@ -1297,25 +1606,25 @@ bookerV2UNSTITCHED = {
         "doFilter": True,
         "crossSection": 89.0482,
         "color": leg_dict["ttbar"],
-        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-*_2017_v2.root",
-                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-NOM-*_2017_v2.root",
-                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-NOM-*_2017_v2.root",
-                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-NOM-*_2017_v2.root",
+        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-*_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-NOM-*_2017_v2.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-NOM-*_2017_v2.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-NOM-*_2017_v2.root",
                   },
-        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-1_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-2_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-3_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-4_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-5_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-6_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-7_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-8_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-9_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-10_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-11_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-12_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-13_2017_v2.root",
-                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-14_2017_v2.root",],
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-1_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-2_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-3_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-4_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-5_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-6_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-7_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-8_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-9_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-10_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-11_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-12_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-13_2017_v2.root",
+                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-14_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tt_DL/$SYSTEMATIC",
     },
 }
@@ -1654,7 +1963,7 @@ def defineInitWeights(input_df, crossSection=0, era="2017", sumWeights=-1, lumiO
                   isData=True, verbose=False):
     leppostfix = ""
     lumiDict = {"2017": 41.53,
-                "2018": 1}
+                "2018": 59.97}
     lumi = lumiDict.get(era, 41.53)
     
     mc_def = collections.OrderedDict()
@@ -1878,7 +2187,7 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #There's only one lepton branch variation (nominal), but if it ever changes, this will serve as sign it's referenced here and made need to be varied
     leppostfix = ""
     lumiDict = {"2017": 41.53,
-                "2018": 1}
+                "2018": 59.97}
 
 
     #era = "2017"
@@ -1897,6 +2206,7 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #the correct jet collection, btag SFs, and yields is used. Always match! This duplicates some calculations uselessly
     #in the BTaggingYields function, but it should help avoid mistakes at the level of final calculations
     
+    print("\nFIXME: Need to propagate pwgt_Z_vtx__nom to all non-nominal event weights properly.\n")
     #Nominal weight
     zFin.append(("wgt__nom", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_Z_vtx__nom * pwgt_btag__nom"))
     #pre-btagging yield weight. Careful modifying, it is 'inherited' for many other weights below!
@@ -2517,9 +2827,9 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 #    rdf = rdf.Define("JML_selection_pass", "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00000000001111111111))#Only PV and MET filters required to pass
 #    return rdf
 
-def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017"):
+def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017", printInfo=False):
     lumiDict = {"2017": 41.53,
-                "2018": 1}
+                "2018": 59.97}
     filterNodes = dict() #For storing tuples to debug and be verbose about
     defineNodes = dict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
     countNodes = dict() #For storing the counts at each node
@@ -2549,10 +2859,10 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     if "nGenLep" not in listOfColumns:
                         df_with_IDs = df_with_IDs.Define("nGenLep", "LHEPart_pdgId[abs(LHEPart_pdgId)==11 || abs(LHEPart_pdgId)==13 || abs(LHEPart_pdgId)==15].size()")
                         listOfColumns.push_back("nGenLep")
-                    if "nGenJet" not in listOfColumsn:
+                    if "nGenJet" not in listOfColumns:
                         df_with_IDs = df_with_IDs.Define("nGenJet", "GenJet_pt[GenJet_pt > 30].size()")
                         listOfColumns.push_back("nGenJet")
-                    if "GenHT" not in listOfColumsn:
+                    if "GenHT" not in listOfColumns:
                         df_with_IDs = df_with_IDs.Define("GenHT", "Sum(GenJet_pt[GenJet_pt > 30 && abs(GenJet_eta) < 2.4])")
                         listOfColumns.push_back("GenHT")
                 if IDbool and IDname == "subera":
@@ -2562,29 +2872,59 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
             for preProcessName, processDict in splitProcs.items():
                 processName = era + "___" + preProcessName
                 filterString = processDict.get("filter")
-                filterName = filterString.replace("&&", "and").replace("||", "or")
-                effectiveXS = processDict.get("effectiveCrossSection")
-                sumWeights = processDict.get("sumWeights")
-                # nEffective = processDict.get("nEventsPositive") - processDict.get("nEventsNegative")
-                fractionalContribution = processDict.get("fractionalContribution")
-                wgtFormula = "{eXS:s} * {lumi:s} * 1000 * genWeight * {frCon:s} / {sWPS:s}".format(eXS=effectiveXS,
-                                                                                                   lumi=lumiDict[era],
-                                                                                                   frCon=fractionalContribution,
-                                                                                                   sWPS=sumWeights
-                                                                                               )
+                filterName = "{} :: {}".format(processName, filterString.replace(" && ", " and ").replace(" || ", " or ")\
+                                               .replace("&&", " and ").replace("||", " or "))
+                if not isData:
+                    #Make the fractional contribution equal to N_eff(sample_j) / Sum(N_eff(sample_i)), where N_eff = nEventsPositive - nEventsNegative
+                    #Need to gather those bookkeeping stats from the original source rather than the ones after event selection
+                    effectiveXS = processDict.get("effectiveCrossSection")
+                    sumWeights = processDict.get("sumWeights")
+                    # nEffective = processDict.get("nEventsPositive") - processDict.get("nEventsNegative")
+                    fractionalContribution = processDict.get("fractionalContribution")
+                    wgtFormula = "{eXS:f} * {lumi:f} * 1000 * genWeight * {frCon:f} / {sW:f}".format(eXS=effectiveXS,
+                                                                                                     lumi=lumiDict[era],
+                                                                                                     frCon=fractionalContribution,
+                                                                                                     sW=sumWeights
+                                                                                                 )
                 if processName not in nodes:
                     #L-2 filter, should be the packedEventID filter in that case
                     filterNodes[processName] = dict()
                     filterNodes[processName]["BaseNode"] = (filterString, filterName, processName, None, None, None, None)
                     nodes[processName] = dict()
-                    nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])\
-                                                     .Define("pwgt__XS", wgtFormula)
+                    if not isData:
+                        nodes[processName]["BaseNode"] = nodes["BaseNode"]\
+                            .Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])\
+                            .Define("pwgt__XS", wgtFormula)
+                    else:
+                        nodes[processName]["BaseNode"] = nodes["BaseNode"]\
+                            .Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
                     countNodes[processName] = dict()
                     countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
                     diagnosticNodes[processName] = dict()
                     defineNodes[processName] = dict()
+                if not isData:
+                    #Need to gather those bookkeeping stats from the original source rather than the ones after event selection...
+                    diagnosticNodes[processName]["sumWeights::Sum"] = nodes[processName]["BaseNode"].Sum("genWeight")
+                    diagnosticNodes[processName]["nEventsPositive::Count"] = nodes[processName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
+                    diagnosticNodes[processName]["nEventsNegative::Count"] = nodes[processName]["BaseNode"].Filter("genWeight < 0", "genWeight < 0").Count()
+            if printInfo == True:
+                print("splitProcess(..., printInfo=True, ...) set, executing the event loop to gather and print diagnostic info (presumably from the non-event-selected source...")
+                for pName, pDict in diagnosticNodes.items():
+                    print("\tprocessName == {}".format(pName))
+                    for dName, dNode in pDict.items():
+                        print("\t\tdName == {}".format(dName))
+                        if "::Count" in dName:
+                            print("\t\t\tCount = {}".format(dNode.GetValue()))
+                        if "::Sum" in dName:
+                            print("\t\t\tSum = {}".format(dNode.GetValue()))
+                        if "::Stats" in dName:
+                            thisStat = dNode.GetValue()
+                            print("\t\t\tMin = {}\tMean = {}\tMax = {}".format(thisStat.GetMin(), thisStat.GetMean(), thisStat.GetMax()))
+                        if "::Histo" in dName:
+                            print("\t\t\tNo method implemented for histograms, yet")
         else:
             raise RuntimeError("Invalid type passed for splitProcess. Require a dictionary containing keys 'ID' and 'processes' to split the sample.")
+        
     else:
         processName = era + "___" + sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
         nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
@@ -2599,6 +2939,26 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
             countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
             diagnosticNodes[processName] = dict()
             defineNodes[processName] = dict()
+            if not isData:
+                #Need to gather those bookkeeping stats from the original source rather than the ones after event selection...
+                diagnosticNodes[processName]["sumWeights::Sum"] = nodes[processName]["BaseNode"].Sum("genWeight")
+                diagnosticNodes[processName]["nEventsPositive::Count"] = nodes[processName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
+                diagnosticNodes[processName]["nEventsNegative::Count"] = nodes[processName]["BaseNode"].Filter("genWeight < 0", "genWeight < 0").Count()
+            if printInfo == True:
+                print("splitProcess(..., printInfo=True, ...) set, executing the event loop to gather and print diagnostic info (presumably from the non-event-selected source...")
+                for pName, pDict in diagnosticNodes.items():
+                    print("\tprocessName == {}".format(pName))
+                    for dName, dNode in pDict.items():
+                        print("\t\tdName == {}".format(dName))
+                        if "::Count" in dName:
+                            print("\t\t\tCount = {}".format(dNode.GetValue()))
+                        if "::Sum" in dName:
+                            print("\t\t\tSum = {}".format(dNode.GetValue()))
+                        if "::Stats" in dName:
+                            thisStat = dNode.GetValue()
+                            print("\t\t\tMin = {}\tMean = {}\tMax = {}".format(thisStat.GetMin(), thisStat.GetMean(), thisStat.GetMax()))
+                        if "::Histo" in dName:
+                            print("\t\t\tNo method implemented for histograms, yet")
             
     prePackedNodes = {}
     prePackedNodes["filterNodes"] = filterNodes
@@ -4736,7 +5096,7 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         f.write(line)
             
 def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-         BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, triggers=[], includeSampleNames=None, excludeSampleNames=None, verbose=False):
+         BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, printSplitProcessBookkeeping=False, triggers=[], includeSampleNames=None, excludeSampleNames=None, verbose=False):
 
     ##################################################
     ##################################################
@@ -4770,10 +5130,10 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
 
     #Decide on things to do: either calculate yields for ratios or fill histograms
     #Did we not chooose to do incompatible actions at the same time?
-    if doBTaggingYields and (doHistos or doDiagnostics):
+    if doBTaggingYields and (doHistos or doDiagnostics or printSplitProcessBookkeeping):
         raise RuntimeError("Cannot calculate BTaggingYields and Fill Histograms simultaneously, choose only one mode")
-    elif not doHistos and not doBTaggingYields and not doDiagnostics:
-        raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics, there is no work to be done.")
+    elif not doHistos and not doBTaggingYields and not doDiagnostics and not printSplitProcessBookkeeping:
+        raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics and not printing Bookkeeping, there is no work to be done.")
 
     #These are deprecated for now!
     doJetEfficiency = False
@@ -4797,7 +5157,16 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     #The source level used is... the source
     source_level = source
 
-    if channel == "ElMu":
+
+    if channel == None:
+        levelsOfInterest=set([None])
+        theSampleDict = bookerV2_ElMu.copy()
+        theSampleDict.update(bookerV2_MuMu)
+        theSampleDict.update(bookerV2_ElEl)
+        theSampleDict.update(bookerV2_Mu)
+        theSampleDict.update(bookerV2_El)
+        theSampleDict.update(bookerV2_MC)
+    elif channel == "ElMu":
         levelsOfInterest = set(["ElMu",])
         theSampleDict = bookerV2_ElMu.copy()
         theSampleDict.update(bookerV2_MC)
@@ -4929,15 +5298,40 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     processed = {}
     processedSampleList = []
 
+    if not os.path.isdir(analysisDir):
+        os.makedirs(analysisDir)
 
     Benchmark = ROOT.TBenchmark()
     for name, vals in theSampleDict.items():
         if name not in valid_samples: 
             print("Skipping sample {}".format(name))
             continue
-        print("Initializing RDataFrame\n\t{} - {}".format(name, vals["source"][source_level]))
+        filelistDir = analysisDir + "/Filelists"
+        if not os.path.isdir(filelistDir):
+            os.makedirs(filelistDir)
+        sampleOutFile = "{base}/{era}__{src}__{sample}.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
+        fileList = []
+        if os.path.isfile(sampleOutFile):
+            fileList = getFiles(query="list:{}".format(sampleOutFile), outFileName=None)
+        else:
+            if "/eos/" in vals["source"][source_level]:
+                redir="root://eosuser.cern.ch/".format(str(pwd.getpwuid(os.getuid()).pw_name)[0])
+            else:
+                redir="root://cms-xrd-global.cern.ch/"
+            # if "dbs:" in vals["source"][source_level]:
+            fileList = getFiles(query=vals["source"][source_level], redir=redir, outFileName=sampleOutFile)
+            # else:
+            #     fileList = getFiles(query=vals["source"][source_level], outFileName=sampleOutFile)
+        transformedFileList = ROOT.std.vector(str)()
+        for fle in fileList:
+            transformedFileList.push_back(fle)
+        if transformedFileList.size() < 1:
+            print("No files located... skipping sample {}".format(name))
+            continue
+        # print("Initializing RDataFrame\n\t{} - {}".format(name, vals["source"][source_level]))
+        print("Initializing RDataFrame\n\t{} - {}".format(name, len(transformedFileList)))
         filtered[name] = {}
-        base[name] = RDF("Events", vals["source"][source_level])
+        base[name] = RDF("Events", transformedFileList)
         reports[name] = base[name].Report()
         counts[name] = {}
         # histos[name] = {}
@@ -5070,15 +5464,17 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                                verbose=verbose,
                                               )
             #Define the final weights/variations so long as we have btagging yields inserted...
-            # splitProcessConfig = vals.get("splitProcess", None)
-            splitProcessConfig=None
-            print("Forcing splitProcess to False for now, check this line!")
+            splitProcessConfig = vals.get("splitProcess", None)
+            # splitProcessConfig=None
+            # print("Forcing splitProcess to False for now, check this line!")
             if BTaggingYieldsFile:
                 prePackedNodes = splitProcess(the_df[name][lvl], 
                                               splitProcess = splitProcessConfig, 
                                               sampleName = name, 
                                               isData = vals["isData"], 
-                                              era = vals["era"])
+                                              era = vals["era"],
+                                              printInfo = printSplitProcessBookkeeping,
+                )
                 the_df[name][lvl] = defineWeights(prePackedNodes,
                                                   splitProcess = splitProcessConfig,
                                                   era = vals["era"],
@@ -5291,9 +5687,10 @@ def otherFuncs():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
-    parser.add_argument('stage', action='store', type=str, choices=['fill-yields', 'combine-yields', 'fill-diagnostics', 'fill-histograms', 'prepare-for-combine'],
+    parser.add_argument('stage', action='store', type=str, choices=['fill-yields', 'combine-yields', 'fill-diagnostics', 
+                                                                    'fill-histograms', 'prepare-for-combine', 'splitProcess-bookkeeping'],
                         help='analysis stage to be produced')
-    parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic/{chan}_selection',
+    parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic__{chan}_selection',
                         help='Stage of data storage to pull from, as referenced in Sample dictionaries as subkeys of the "source" key.'\
                         'Must be available in all samples to be processed. {chan} will be replaced with the channel analyzed')
     parser.add_argument('--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 'ElEl_HighMET'],
@@ -5413,12 +5810,16 @@ if __name__ == '__main__':
                            )
     elif stage == 'fill-diagnostics':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, triggers=TriggerList,
-                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
+                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printSplitProcessBookkeeping = False,
+                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
+    elif stage == 'splitProcess-bookkeeping':
+        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printSplitProcessBookkeeping = True, 
+                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
     elif stage == 'fill-histograms':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, triggers=TriggerList,
-                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
+                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printSplitProcessBookkeeping = False,
+                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
     elif stage == 'prepare-for-combine':
         print("This analysis stage is not yet finished. It will call the method histoCombine() which needs to be updated for the new internal key structure from fillHistos")
     else:
