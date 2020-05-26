@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# coding: utf-8
+# coding: utf-8 
 from __future__ import print_function
 import os
 import pwd #needed for username, together with os
@@ -369,32 +369,32 @@ bookerV2_MC = {
                                "subera": False,
                               },
                          "processes": {"ttbb_DL_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
+                                                      "nEventsPositive": 67634,
+                                                      "nEventsNegative": 347,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
+                                                      "sumWeights": 4889095.432,
+                                                      "effectiveCrossSection": 1.4529,
                                                   },
                                        "ttother_DL_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
+                                                      "nEventsPositive": 3408758,
+                                                      "nEventsNegative": 22020,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
+                                                      "sumWeights": 246081296.826,
+                                                      "effectiveCrossSection": 1.4529,
                                                   },
                                        "ttbb_DL_nr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && (nGenJet < 7 || GenHT < 500)",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
+                                                      "nEventsPositive": 179679,
+                                                      "nEventsNegative": 721,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
+                                                      "sumWeights": 13004577.2995,
+                                                      "effectiveCrossSection": 87.3348 - 1.4529,
                                                   },
                                        "ttother_DL_nr": {"filter": "nAdditionalBJets < 2 && nGenLep == 2 && (nGenJet < 7 || GenHT < 500)",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
+                                                      "nEventsPositive": 65162709,
+                                                      "nEventsNegative": 256776,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
+                                                      "sumWeights": 4716794347.47,
+                                                      "effectiveCrossSection": 87.3348 - 1.4529,
                                                   },
                                    },
                      },
@@ -433,18 +433,18 @@ bookerV2_MC = {
                                "subera": False,
                               },
                          "processes": {"ttbb_DL-GF_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
+                                                      "nEventsPositive": 282130,
+                                                      "nEventsNegative": 1215,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
+                                                      "sumWeights": 20410377.7205,
+                                                      "effectiveCrossSection": 1.4529,
                                                   },
                                        "ttother_DL-GF_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
+                                                      "nEventsPositive": 8185413,
+                                                      "nEventsNegative": 41630,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
+                                                      "sumWeights": 591691482.547,
+                                                      "effectiveCrossSection": 1.4529,
                                                   },
                                    },
                      },
@@ -479,32 +479,32 @@ bookerV2_MC = {
                                "subera": False,
                               },
                          "processes": {"ttbb_SL_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
+                                                      "nEventsPositive": 23468,
+                                                      "nEventsNegative": 109,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
+                                                      "sumWeights": 7082072.94812,
+                                                      "effectiveCrossSection": 12.3429, 
                                                   },
                                        "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
+                                                      "nEventsPositive": 1143940,
+                                                      "nEventsNegative": 6934,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
+                                                      "sumWeights": 344738631.304,
+                                                      "effectiveCrossSection": 12.3429,
                                                   },
                                        "ttbb_SL_nr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
+                                                      "nEventsPositive": 55323,
+                                                      "nEventsNegative": 217,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
+                                                      "sumWeights": 16710200.4913,
+                                                      "effectiveCrossSection": 364.3109 - 12.3429,
                                                   },
                                        "ttother_SL_nr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
+                                                      "nEventsPositive": 18817876,
+                                                      "nEventsNegative": 74143,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
+                                                      "sumWeights": 5683949482.73,
+                                                      "effectiveCrossSection": 364.3109 - 12.3429,
                                                   },
                                    },
                      },
@@ -538,19 +538,19 @@ bookerV2_MC = {
                                "nGenJet/GenHT": True,
                                "subera": False,
                               },
-                         "processes": {"ttbb_SL_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
+                         "processes": {"ttbb_SL-GF_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 391250,
+                                                      "nEventsNegative": 1780,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
+                                                      "sumWeights": 118077149.406,
+                                                      "effectiveCrossSection": 12.3429,
                                                   },
-                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
-                                                      "nEventsPositive": 0,
-                                                      "nEventsNegative": 0,
+                                       "ttother_SL-GF_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 8403212,
+                                                      "nEventsNegative": 40612,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 0,
-                                                      "effectiveCrossSection": 0,
+                                                      "sumWeights": 2535250765.6,
+                                                      "effectiveCrossSection": 12.3429,
                                                   },
                                    },
                      },
@@ -907,7 +907,7 @@ bookerV2_ElEl = {
         "destination": "/$HIST_CLASS/$HIST/ElEl/NOMINAL",
         },
 }
-cutoutV2_ToBeFixed = {
+bookerV2_Mu = {
     "Mu":{
         "era": "2017",
         "subera": "BCDEF",
@@ -921,6 +921,8 @@ cutoutV2_ToBeFixed = {
                    "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_Mu_*_2017_v2*.root",
                   },
         },
+}
+bookerV2_El = {
     "El":{
         "era": "2017",
         "subera": "BCDEF",
@@ -934,139 +936,8 @@ cutoutV2_ToBeFixed = {
                    "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_El_*_2017_v2*.root",
                   },
         },
-    "QCD_HT200":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 59200263,
-        "nEventsPositive": 59166789,
-        "nEventsNegative": 32544,
-        "sumWeights": 59133315.000000,
-        "sumWeights2": 59200263.000000,
-        "isSignal": False,
-        "crossSection": 1712000.0,
-        "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT200to300_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT200_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT200_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT200_2017_v2*.root",
-                  },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",],
-    },
-    "QCD_HT300":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 59569132,
-        "nEventsPositive": 59514373,
-        "nEventsNegative": 54759,
-        "sumWeights": 59459614.000000,
-        "sumWeights2": 59569132.000000,
-        "isSignal": False,
-        "crossSection": 347700.0,
-        "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT300_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT300_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT300_2017_v2*.root",
-                  },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",],
-    },   
-    "QCD_HT500":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 56207744,
-        "nEventsPositive": 56124381,
-        "nEventsNegative": 83363,
-        "sumWeights": 56041018.000000,
-        "sumWeights2": 56207744.000000,
-        "isSignal": False,
-        "crossSection": 32100.0,
-        "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT500to700_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT500_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT500_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT500_2017_v2*.root",
-                  },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",],
-    },
-    "QCD_HT700":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 46840955,
-        "nEventsPositive": 46739970,
-        "nEventsNegative": 100985,
-        "sumWeights": 46638985.000000,
-        "sumWeights2": 46840955.000000,
-        "isSignal": False,
-        "crossSection": 6831.0,
-        "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT700to1000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT700_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT700_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT700_2017_v2*.root",
-                  },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",],
-    },
-    "QCD_HT1000":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 16882838,
-        "nEventsPositive": 16826800,
-        "nEventsNegative": 56038,
-        "sumWeights": 16770762.000000,
-        "sumWeights2": 16882838.000000,
-        "isSignal": False,
-        "crossSection": 1207.0,
-        "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT1000to1500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1000_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1000_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1000_2017_v2*.root",
-                  },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",],
-    },
-    "QCD_HT1500":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 11634434,
-        "nEventsPositive": 11571519,
-        "nEventsNegative": 62915,
-        "sumWeights": 11508604.000000,
-        "sumWeights2": 11634434.000000,
-        "isSignal": False,
-        "crossSection": 119.9,
-        "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1500_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1500_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1500_2017_v2*.root",
-                  },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",],
-    },
-    "QCD_HT2000":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 5941306,
-        "nEventsPositive": 5883436,
-        "nEventsNegative": 57870,
-        "sumWeights": 5825566.000000,
-        "sumWeights2": 5941306.000000,
-        "isSignal": False,
-        "crossSection": 25.24,
-        "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT2000_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT2000_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT2000_2017_v2*.root",
-                  },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",],
-    },
+}
+bookerV2_SplitData = {
     "ElMu_B":{
         "era": "2017",
         "subera": "B",
@@ -1321,6 +1192,141 @@ cutoutV2_ToBeFixed = {
         "color": leg_dict["Data"],
         "source": {"NANOv5": "dbs:/SingleElectron/Run2017F-Nano1June2019-v1/NANOAOD",
                    "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_F*_2017_v2.root",},
+    },
+}
+cutoutV2_ToBeFixed = {
+    "QCD_HT200":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 59200263,
+        "nEventsPositive": 59166789,
+        "nEventsNegative": 32544,
+        "sumWeights": 59133315.000000,
+        "sumWeights2": 59200263.000000,
+        "isSignal": False,
+        "crossSection": 1712000.0,
+        "color": leg_dict["QCD"],
+        "source": {"NANOv5": "dbs:/QCD_HT200to300_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT200_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT200_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT200_2017_v2*.root",
+                  },
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",],
+    },
+    "QCD_HT300":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 59569132,
+        "nEventsPositive": 59514373,
+        "nEventsNegative": 54759,
+        "sumWeights": 59459614.000000,
+        "sumWeights2": 59569132.000000,
+        "isSignal": False,
+        "crossSection": 347700.0,
+        "color": leg_dict["QCD"],
+        "source": {"NANOv5": "dbs:/QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT300_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT300_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT300_2017_v2*.root",
+                  },
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",],
+    },   
+    "QCD_HT500":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 56207744,
+        "nEventsPositive": 56124381,
+        "nEventsNegative": 83363,
+        "sumWeights": 56041018.000000,
+        "sumWeights2": 56207744.000000,
+        "isSignal": False,
+        "crossSection": 32100.0,
+        "color": leg_dict["QCD"],
+        "source": {"NANOv5": "dbs:/QCD_HT500to700_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT500_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT500_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT500_2017_v2*.root",
+                  },
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",],
+    },
+    "QCD_HT700":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 46840955,
+        "nEventsPositive": 46739970,
+        "nEventsNegative": 100985,
+        "sumWeights": 46638985.000000,
+        "sumWeights2": 46840955.000000,
+        "isSignal": False,
+        "crossSection": 6831.0,
+        "color": leg_dict["QCD"],
+        "source": {"NANOv5": "dbs:/QCD_HT700to1000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT700_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT700_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT700_2017_v2*.root",
+                  },
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",],
+    },
+    "QCD_HT1000":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 16882838,
+        "nEventsPositive": 16826800,
+        "nEventsNegative": 56038,
+        "sumWeights": 16770762.000000,
+        "sumWeights2": 16882838.000000,
+        "isSignal": False,
+        "crossSection": 1207.0,
+        "color": leg_dict["QCD"],
+        "source": {"NANOv5": "dbs:/QCD_HT1000to1500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1000_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1000_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1000_2017_v2*.root",
+                  },
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",],
+    },
+    "QCD_HT1500":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 11634434,
+        "nEventsPositive": 11571519,
+        "nEventsNegative": 62915,
+        "sumWeights": 11508604.000000,
+        "sumWeights2": 11634434.000000,
+        "isSignal": False,
+        "crossSection": 119.9,
+        "color": leg_dict["QCD"],
+        "source": {"NANOv5": "dbs:/QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1500_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1500_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1500_2017_v2*.root",
+                  },
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",],
+    },
+    "QCD_HT2000":{
+        "era": "2017",
+        "isData": False,
+        "nEvents": 5941306,
+        "nEventsPositive": 5883436,
+        "nEventsNegative": 57870,
+        "sumWeights": 5825566.000000,
+        "sumWeights2": 5941306.000000,
+        "isSignal": False,
+        "crossSection": 25.24,
+        "color": leg_dict["QCD"],
+        "source": {"NANOv5": "dbs:/QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
+                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",
+                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT2000_2017_v2*.root",
+                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT2000_2017_v2*.root",
+                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT2000_2017_v2*.root",
+                  },
+        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",],
     },
 }
 bookerV2_UNPROCESSED = {
@@ -2196,9 +2202,9 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #Two lists of weight definitions, one or the other is chosen at the end via 'final' optional parameter
     zFin = []
     zPre = []
-    # zFin.append(("pwgt__XS", "wgt_SUMW")) #Now defined in the splitProcess function
+    # zFin.append(("pwgt__LumiXS", "wgt_SUMW")) #Now defined in the splitProcess function
     zFin.append(("pwgt_LSF__nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
-    zPre.append(("pwgt__XS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere
+    zPre.append(("pwgt__LumiXS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere
     zPre.append(("pwgt_LSF__nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
     zPre.append(("pwgt_Z_vtx__nom", "((FTALepton{lpf}_pdgId.size() > 1 && (abs(FTALepton{lpf}_pdgId.at(0)) == 11 || abs(FTALepton{lpf}_pdgId.at(1)) == 11)) || (FTALepton{lpf}_pdgId.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 11)) ? EGamma_HLT_ZVtx_SF_nom : 1.00000000000000".format(lpf=leppostfix)))
     
@@ -2208,46 +2214,46 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     
     print("\nFIXME: Need to propagate pwgt_Z_vtx__nom to all non-nominal event weights properly.\n")
     #Nominal weight
-    zFin.append(("wgt__nom", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_Z_vtx__nom * pwgt_btag__nom"))
+    zFin.append(("wgt__nom", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_Z_vtx__nom * pwgt_btag__nom"))
     #pre-btagging yield weight. Careful modifying, it is 'inherited' for many other weights below!
-    zPre.append(("prewgt__nom", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_Z_vtx__nom"))
+    zPre.append(("prewgt__nom", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_Z_vtx__nom"))
     
     #JES Up and Down - effectively the nominal weight, but with the CORRECT btag weight for those jets!
     if "_jesTotalDown" in sysVariations.keys():
-        zFin.append(("wgt__jesTotalDown", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalDown"))
+        zFin.append(("wgt__jesTotalDown", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalDown"))
         zPre.append(("prewgt__jesTotalDown", "prewgt__nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
         
     if "_jesTotalDown" in sysVariations.keys():
         zPre.append(("prewgt__jesTotalUp", "prewgt__nom"))
-        zFin.append(("wgt__jesTotalUp", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalUp"))
+        zFin.append(("wgt__jesTotalUp", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalUp"))
     
     #Pileup variations 
     print("FIXME: Using temporary definition of weights for PU variations (change pwgt_btag__VARIATION)")
     if "_puWeightDown" in sysVariations.keys():
-        zFin.append(("wgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
-        #zFin.append(("wgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__puWeightDown"))
-        zPre.append(("prewgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-        #zPre.append(("prewgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+        zFin.append(("wgt__puWeightDown", "pwgt__LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
+        #zFin.append(("wgt__puWeightDown", "pwgt__LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__puWeightDown"))
+        zPre.append(("prewgt__puWeightDown", "pwgt__LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+        #zPre.append(("prewgt__puWeightDown", "pwgt__LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
     if "_puWeightUp" in sysVariations.keys():
-        zFin.append(("wgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
-        #zFin.append(("wgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__puWeightUp"))
-        zPre.append(("prewgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-        #zPre.append(("prewgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+        zFin.append(("wgt__puWeightUp", "pwgt__LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
+        #zFin.append(("wgt__puWeightUp", "pwgt__LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__puWeightUp"))
+        zPre.append(("prewgt__puWeightUp", "pwgt__LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+        #zPre.append(("prewgt__puWeightUp", "pwgt__LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
     
     
     #L1 PreFiring variations
     print("FIXME: Using temporary definition of weights for L1PreFire variations (change pwgt_btag__VARIATION)")
     if "_L1PreFireDown" in sysVariations.keys():
-        zFin.append(("wgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom * pwgt_btag__nom"))
-        #zFin.append(("wgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom * pwgt_btag__L1PreFireDown"))
-        zPre.append(("prewgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom"))
-        #zPre.append(("prewgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom"))
+        zFin.append(("wgt__L1PreFireDown", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom * pwgt_btag__nom"))
+        #zFin.append(("wgt__L1PreFireDown", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom * pwgt_btag__L1PreFireDown"))
+        zPre.append(("prewgt__L1PreFireDown", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom"))
+        #zPre.append(("prewgt__L1PreFireDown", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom"))
     
     if "_L1PreFireUp" in sysVariations.keys():
-        zFin.append(("wgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom * pwgt_btag__nom"))
-        #zFin.append(("wgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom * pwgt_btag__L1PreFireUp"))
-        zPre.append(("prewgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom"))
-        #zPre.append(("prewgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom"))
+        zFin.append(("wgt__L1PreFireUp", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom * pwgt_btag__nom"))
+        #zFin.append(("wgt__L1PreFireUp", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom * pwgt_btag__L1PreFireUp"))
+        zPre.append(("prewgt__L1PreFireUp", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom"))
+        #zPre.append(("prewgt__L1PreFireUp", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom"))
     
     #Lepton ScaleFactor variations
     #To be done, still...
@@ -2257,8 +2263,8 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     
     #Pure BTagging variations, no other variations necessary. 
     #Since there may be many, use a common base factor for fewer multiplies... for pre-btagging, they're identical!
-    zFin.append(("pwgt_btagSF_common", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    zPre.append(("pwgt_btagSF_common", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    zFin.append(("pwgt_btagSF_common", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    zPre.append(("pwgt_btagSF_common", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
     
     if "_btagSF_deepcsv_shape_down_hf" in sysVariations.keys():
         zFin.append(("wgt__btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_down_hf"))
@@ -2274,15 +2280,15 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
         zPre.append(("prewgt__btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common"))
 
     #Special variations for testing central components
-    zFin.append(("wgt__no_btag_shape_reweight", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    zFin.append(("wgt__no_LSF", "pwgt__XS * puWeight * L1PreFiringWeight_Nom"))
-    zFin.append(("wgt__no_L1PreFiringWeight", "pwgt__XS * puWeight * pwgt_LSF__nom"))
-    zFin.append(("wgt__no_puWeight", "pwgt__XS * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    zFin.append(("wgt__no_btag_shape_reweight", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    zFin.append(("wgt__no_LSF", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom"))
+    zFin.append(("wgt__no_L1PreFiringWeight", "pwgt__LumiXS * puWeight * pwgt_LSF__nom"))
+    zFin.append(("wgt__no_puWeight", "pwgt__LumiXS * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
 
-    zPre.append(("prewgt__no_btag_shape_reweight", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    zPre.append(("prewgt__no_LSF", "pwgt__XS * puWeight * L1PreFiringWeight_Nom"))
-    zPre.append(("prewgt__no_L1PreFiringWeight", "pwgt__XS * puWeight * pwgt_LSF__nom"))
-    zPre.append(("prewgt__no_puWeight", "pwgt__XS * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    zPre.append(("prewgt__no_btag_shape_reweight", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    zPre.append(("prewgt__no_LSF", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom"))
+    zPre.append(("prewgt__no_L1PreFiringWeight", "pwgt__LumiXS * puWeight * pwgt_LSF__nom"))
+    zPre.append(("prewgt__no_puWeight", "pwgt__LumiXS * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
 
 
     #Factorization/Renormalization weights... depend on dividing genWeight back out?
@@ -2827,7 +2833,7 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 #    rdf = rdf.Define("JML_selection_pass", "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00000000001111111111))#Only PV and MET filters required to pass
 #    return rdf
 
-def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017", printInfo=False):
+def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017", printInfo=False, inclusiveProcess=None):
     lumiDict = {"2017": 41.53,
                 "2018": 59.97}
     filterNodes = dict() #For storing tuples to debug and be verbose about
@@ -2869,6 +2875,13 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     pass
             nodes["BaseNode"] = df_with_IDs #Always store the base node we'll build upon in the next level
             splitProcs = splitProcess.get("processes")
+            if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
+                inclusiveProc = inclusiveProcess.get("processes")
+                inclusiveDict = inclusiveProc.values()[0]
+                if splitProcs.get("inclusive", None) is None:
+                    splitProcs.update(inclusiveProc)
+                else:
+                    print("Inclusive process already defined, not overriding in splitProces")
             for preProcessName, processDict in splitProcs.items():
                 processName = era + "___" + preProcessName
                 filterString = processDict.get("filter")
@@ -2881,11 +2894,19 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     sumWeights = processDict.get("sumWeights")
                     # nEffective = processDict.get("nEventsPositive") - processDict.get("nEventsNegative")
                     fractionalContribution = processDict.get("fractionalContribution")
+                    #Calculate XS * Lumi
                     wgtFormula = "{eXS:f} * {lumi:f} * 1000 * genWeight * {frCon:f} / {sW:f}".format(eXS=effectiveXS,
                                                                                                      lumi=lumiDict[era],
                                                                                                      frCon=fractionalContribution,
                                                                                                      sW=sumWeights
                                                                                                  )
+                    if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
+                        formulaForNominalXS = "{nXS:f} * genWeight / {sW:f}".format(nXS=inclusiveDict.get("effectiveCrossSection"),
+                                                                                    sW=inclusiveDict.get("sumWeights")
+                        )
+                        formulaForEffectiveXS = "{nXS:f} * genWeight / {sW:f}".format(nXS=effectiveXS,
+                                                                                      sW=sumWeights
+                        )
                 if processName not in nodes:
                     #L-2 filter, should be the packedEventID filter in that case
                     filterNodes[processName] = dict()
@@ -2894,34 +2915,61 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     if not isData:
                         nodes[processName]["BaseNode"] = nodes["BaseNode"]\
                             .Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])\
-                            .Define("pwgt__XS", wgtFormula)
+                            .Define("pwgt__LumiXS", wgtFormula)
+                        if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
+                            nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"]\
+                                .Define("nominalXS", formulaForNominalXS).Define("effectiveXS", formulaForEffectiveXS)
+
                     else:
                         nodes[processName]["BaseNode"] = nodes["BaseNode"]\
                             .Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
                     countNodes[processName] = dict()
                     countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
-                    diagnosticNodes[processName] = dict()
+                    diagnosticNodes[processName] = collections.OrderedDict()
                     defineNodes[processName] = dict()
                 if not isData:
                     #Need to gather those bookkeeping stats from the original source rather than the ones after event selection...
                     diagnosticNodes[processName]["sumWeights::Sum"] = nodes[processName]["BaseNode"].Sum("genWeight")
+                    diagnosticNodes[processName]["nominalXS::Sum"] = nodes[processName]["BaseNode"].Sum("nominalXS")
                     diagnosticNodes[processName]["nEventsPositive::Count"] = nodes[processName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
                     diagnosticNodes[processName]["nEventsNegative::Count"] = nodes[processName]["BaseNode"].Filter("genWeight < 0", "genWeight < 0").Count()
+                if "nGenJet/GenHT" in IDs:
+                    diagnosticNodes[processName]["nLep2nJet7GenHT500-550-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
+                        .Filter("nGenLep == 2 && nGenJet == 7 && 500 <= GenHT && GenHT < 550", "nGenLep 2, nGenJet 7, GenHT 500-550").Sum("nominalXS")
+                    diagnosticNodes[processName]["nLep2nJet7pGenHT500p-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
+                        .Filter("nGenLep == 2 && nGenJet >= 7 && 500 <= GenHT", "nGenLep 2, nGenJet 7+, GenHT 500+").Sum("nominalXS")
+                    diagnosticNodes[processName]["nLep1nJet9GenHT500-550-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
+                        .Filter("nGenLep == 1 && nGenJet == 9 && 500 <= GenHT && GenHT < 550", "nGenLep 1, nGenJet 9, GenHT 500-550").Sum("nominalXS")
+                    diagnosticNodes[processName]["nLep1nJet9pGenHT500p-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
+                        .Filter("nGenLep == 1 && nGenJet >= 9 && 500 <= GenHT", "nGenLep 1, nGenJet 9+, GenHT 500+").Sum("nominalXS")
+
+
+                    diagnosticNodes[processName]["nLep2nJet7GenHT500-550-effectiveXS::Sum"] = nodes[processName]["BaseNode"]\
+                        .Filter("nGenLep == 2 && nGenJet == 7 && 500 <= GenHT && GenHT < 550", "nGenLep 2, nGenJet 7, GenHT 500-550").Sum("effectiveXS")
+                    diagnosticNodes[processName]["nLep2nJet7pGenHT500p-effectiveXS::Sum"] = nodes[processName]["BaseNode"]\
+                        .Filter("nGenLep == 2 && nGenJet >= 7 && 500 <= GenHT", "nGenLep 2, nGenJet 7+, GenHT 500+").Sum("effectiveXS")
+                    diagnosticNodes[processName]["nLep1nJet9GenHT500-550-effectiveXS::Sum"] = nodes[processName]["BaseNode"]\
+                        .Filter("nGenLep == 1 && nGenJet == 9 && 500 <= GenHT && GenHT < 550", "nGenLep 1, nGenJet 9, GenHT 500-550").Sum("effectiveXS")
+                    diagnosticNodes[processName]["nLep1nJet9pGenHT500p-effectiveXS::Sum"] = nodes[processName]["BaseNode"]\
+                        .Filter("nGenLep == 1 && nGenJet >= 9 && 500 <= GenHT", "nGenLep 1, nGenJet 9+, GenHT 500+").Sum("effectiveXS")
             if printInfo == True:
                 print("splitProcess(..., printInfo=True, ...) set, executing the event loop to gather and print diagnostic info (presumably from the non-event-selected source...")
                 for pName, pDict in diagnosticNodes.items():
-                    print("\tprocessName == {}".format(pName))
+                    print("processName == {}".format(pName))
                     for dName, dNode in pDict.items():
-                        print("\t\tdName == {}".format(dName))
-                        if "::Count" in dName:
-                            print("\t\t\tCount = {}".format(dNode.GetValue()))
-                        if "::Sum" in dName:
-                            print("\t\t\tSum = {}".format(dNode.GetValue()))
-                        if "::Stats" in dName:
+                        parseDName = dName.split("::")
+                        if parseDName[1] in ["Count", "Sum"]:
+                            dString = "\t\t\"{}\": {}".format(parseDName[0], dNode.GetValue())
+                        elif parseDName[1] in ["Stats"]:
                             thisStat = dNode.GetValue()
-                            print("\t\t\tMin = {}\tMean = {}\tMax = {}".format(thisStat.GetMin(), thisStat.GetMean(), thisStat.GetMax()))
-                        if "::Histo" in dName:
-                            print("\t\t\tNo method implemented for histograms, yet")
+                            dString = "\t\t\"{}::Min\": {}".format(parseDName[0], thisStat.GetMin())
+                            dString += "\n\t\t\"{}::Mean\": {}".format(parseDName[0], thisStat.GetMean())
+                            dString += "\n\t\t\"{}::Max\": {}".format(parseDName[0], thisStat.GetMax())
+                        elif parseDName[1] in ["Histo"]:
+                            dString = "\t\tNo method implemented for histograms, yet"
+                        else:
+                            dString = "\tDiagnostic node type not recognized: {}".format(parseDName[1])
+                        print(dString)
         else:
             raise RuntimeError("Invalid type passed for splitProcess. Require a dictionary containing keys 'ID' and 'processes' to split the sample.")
         
@@ -3140,7 +3188,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     #                                                                                                frCon=fractionalContribution,
     #                                                                                                sWPS=sumWeights
     #                                                                                            )
-    #             nodes[processName] = nodes["BaseNode"].Filter(filterString, filterName).Define("pwgt__XS", wgtFormula)
+    #             nodes[processName] = nodes["BaseNode"].Filter(filterString, filterName).Define("pwgt__LumiXS", wgtFormula)
             
     #     else:
     #         raise RuntimeError("Invalid type passed for splitProcess. Require a dictionary containing keys 'ID' and 'processes' to split the sample.")
@@ -5096,7 +5144,7 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         f.write(line)
             
 def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-         BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, printSplitProcessBookkeeping=False, triggers=[], includeSampleNames=None, excludeSampleNames=None, verbose=False):
+         BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, printBookkeeping=False, triggers=[], includeSampleNames=None, excludeSampleNames=None, verbose=False):
 
     ##################################################
     ##################################################
@@ -5130,9 +5178,9 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
 
     #Decide on things to do: either calculate yields for ratios or fill histograms
     #Did we not chooose to do incompatible actions at the same time?
-    if doBTaggingYields and (doHistos or doDiagnostics or printSplitProcessBookkeeping):
+    if doBTaggingYields and (doHistos or doDiagnostics or printBookkeeping):
         raise RuntimeError("Cannot calculate BTaggingYields and Fill Histograms simultaneously, choose only one mode")
-    elif not doHistos and not doBTaggingYields and not doDiagnostics and not printSplitProcessBookkeeping:
+    elif not doHistos and not doBTaggingYields and not doDiagnostics and not printBookkeeping:
         raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics and not printing Bookkeeping, there is no work to be done.")
 
     #These are deprecated for now!
@@ -5158,13 +5206,9 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     source_level = source
 
 
-    if channel == None:
-        levelsOfInterest=set([None])
-        theSampleDict = bookerV2_ElMu.copy()
-        theSampleDict.update(bookerV2_MuMu)
-        theSampleDict.update(bookerV2_ElEl)
-        theSampleDict.update(bookerV2_Mu)
-        theSampleDict.update(bookerV2_El)
+    if channel == "BOOKKEEPING":
+        levelsOfInterest=set(["BOOKKEEPING"])
+        theSampleDict = bookerV2_SplitData.copy()
         theSampleDict.update(bookerV2_MC)
     elif channel == "ElMu":
         levelsOfInterest = set(["ElMu",])
@@ -5346,7 +5390,29 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         processed[name] = {}
         #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
         for lvl in levelsOfInterest:
-            filtered[name][lvl] = base[name].Filter(b[lvl], lvl)
+            splitProcessConfig = vals.get("splitProcess", None)
+            inclusiveProcessConfig = {"processes": {"inclusive": {"filter": "return true;",
+                                                                  "nEventsPositive": vals["nEventsPositive"],
+                                                                  "nEventsNegative": vals["nEventsNegative"],
+                                                                  "fractionalContribution": 1,
+                                                                  "sumWeights": vals["sumWeights"],
+                                                                  "effectiveCrossSection": vals["crossSection"],
+                                                              }}}
+            
+            if lvl == "BOOKKEEPING":
+                #We just need the info printed on this one...
+                prePackedNodes = splitProcess(base[name], 
+                                              splitProcess = splitProcessConfig, 
+                                              inclusiveProcess = inclusiveProcessConfig,
+                                              sampleName = name, 
+                                              isData = vals["isData"], 
+                                              era = vals["era"],
+                                              printInfo = True,
+                )
+                #skip any further calculations for bookkeeping
+                continue
+            else:
+                filtered[name][lvl] = base[name].Filter(b[lvl], lvl)
             #Cache() seemingly has an issue with the depth/breadth of full NanoAOD file. Perhaps one with fewer branches would work
             #filtered[name][lvl] = filtered[name][lvl].Cache()
             if vals.get("stitch") != None:
@@ -5464,7 +5530,6 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                                verbose=verbose,
                                               )
             #Define the final weights/variations so long as we have btagging yields inserted...
-            splitProcessConfig = vals.get("splitProcess", None)
             # splitProcessConfig=None
             # print("Forcing splitProcess to False for now, check this line!")
             if BTaggingYieldsFile:
@@ -5473,10 +5538,11 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                               sampleName = name, 
                                               isData = vals["isData"], 
                                               era = vals["era"],
-                                              printInfo = printSplitProcessBookkeeping,
+                                              printInfo = printBookkeeping,
                 )
                 the_df[name][lvl] = defineWeights(prePackedNodes,
                                                   splitProcess = splitProcessConfig,
+                                                  inclusiveProcess = inclusiveProcessConfig,
                                                   era = vals["era"],
                                                   isData = vals["isData"],
                                                   final=True,
@@ -5687,8 +5753,8 @@ def otherFuncs():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
-    parser.add_argument('stage', action='store', type=str, choices=['fill-yields', 'combine-yields', 'fill-diagnostics', 
-                                                                    'fill-histograms', 'prepare-for-combine', 'splitProcess-bookkeeping'],
+    parser.add_argument('stage', action='store', type=str, choices=['bookkeeping', 'fill-yields', 'combine-yields', 'fill-diagnostics', 
+                                                                    'fill-histograms', 'prepare-for-combine'],
                         help='analysis stage to be produced')
     parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic__{chan}_selection',
                         help='Stage of data storage to pull from, as referenced in Sample dictionaries as subkeys of the "source" key.'\
@@ -5810,15 +5876,15 @@ if __name__ == '__main__':
                            )
     elif stage == 'fill-diagnostics':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printSplitProcessBookkeeping = False,
+                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
                       triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
-    elif stage == 'splitProcess-bookkeeping':
-        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printSplitProcessBookkeeping = True, 
+    elif stage == 'bookkeeping':
+        packed = main(analysisDir, source, "BOOKKEEPING", bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = True, 
                       triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
     elif stage == 'fill-histograms':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printSplitProcessBookkeeping = False,
+                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
                       triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
     elif stage == 'prepare-for-combine':
         print("This analysis stage is not yet finished. It will call the method histoCombine() which needs to be updated for the new internal key structure from fillHistos")
