@@ -369,34 +369,72 @@ bookerV2_MC = {
                                "subera": False,
                               },
                          "processes": {"ttbb_DL_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                      "sumWeights": 4889095.432,
+                                                      "nominalXS": 0.0857273569656,
                                                       "nEventsPositive": 67634,
                                                       "nEventsNegative": 347,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 4889095.432,
-                                                      "effectiveCrossSection": 1.4529,
-                                                  },
-                                       "ttother_DL_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
-                                                      "nEventsPositive": 3408758,
-                                                      "nEventsNegative": 22020,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 246081296.826,
-                                                      "effectiveCrossSection": 1.4529,
+                                                      "nLep2nJet7GenHT500-550-nominalXS": 0.00221842297312,
+                                                      "nLep2nJet7pGenHT500p-nominalXS": 0.0857273569656,
+                                                      "nLep1nJet9GenHT500-550-nominalXS": 0.0,
+                                                      "nLep1nJet9pGenHT500p-nominalXS": 0.0,
+                                                      "fractionalContribution": 0.19324127948,
+                                                      "effectiveCrossSection": 0.0857273569656,
                                                   },
                                        "ttbb_DL_nr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && (nGenJet < 7 || GenHT < 500)",
+                                                      "sumWeights": 13004577.2995,
+                                                      "nominalXS": 0.228027465581,
                                                       "nEventsPositive": 179679,
                                                       "nEventsNegative": 721,
+                                                      "nLep2nJet7GenHT500-550-nominalXS": 0.0,
+                                                      "nLep2nJet7pGenHT500p-nominalXS": 0.0,
+                                                      "nLep1nJet9GenHT500-550-nominalXS": 0.0,
+                                                      "nLep1nJet9pGenHT500p-nominalXS": 0.0,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 13004577.2995,
-                                                      "effectiveCrossSection": 87.3348 - 1.4529,
+                                                      "effectiveCrossSection": 0.228027465581,
+                                                  },
+                                       "ttother_DL_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                         "sumWeights": 246081296.826,
+                                                         "nominalXS": 4.3148879929,
+                                                         "nEventsPositive": 3408758,
+                                                         "nEventsNegative": 22020,
+                                                         "nLep2nJet7GenHT500-550-nominalXS": 0.27624205433,
+                                                         "nLep2nJet7pGenHT500p-nominalXS": 4.3148879929,
+                                                         "nLep1nJet9GenHT500-550-nominalXS": 0.0,
+                                                         "nLep1nJet9pGenHT500p-nominalXS": 0.0,
+                                                         "fractionalContribution": 0.29371942516,
+                                                         "effectiveCrossSection": 4.3148879929,
                                                   },
                                        "ttother_DL_nr": {"filter": "nAdditionalBJets < 2 && nGenLep == 2 && (nGenJet < 7 || GenHT < 500)",
-                                                      "nEventsPositive": 65162709,
-                                                      "nEventsNegative": 256776,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 4716794347.47,
-                                                      "effectiveCrossSection": 87.3348 - 1.4529,
-                                                  },
+                                                         "sumWeights": 4716794347.47,
+                                                         "nominalXS": 82.706160755,
+                                                         "nEventsPositive": 65162709,
+                                                         "nEventsNegative": 256776,
+                                                         "nLep2nJet7GenHT500-550-nominalXS": 0.0,
+                                                         "nLep2nJet7pGenHT500p-nominalXS": 0.0,
+                                                         "nLep1nJet9GenHT500-550-nominalXS": 0.0,
+                                                         "nLep1nJet9pGenHT500p-nominalXS": 0.0,
+                                                         "fractionalContribution": 1,
+                                                         "effectiveCrossSection": 82.706160755,
+                                                     },
+                                       "tt_DL_inclusive": {"filter": "return true;",
+                                                           "nEventsPositive": 68818780,
+                                                           "nEventsNegative": 279864,
+                                                           "sumWeights": 4980769113.241218,
+                                                           "sumWeights2": 364913493679.955078,
+                                                           "effectiveCrossSection": 87.3348, 
+                                                           "fractionalContribution": 1,
+                                                        },
                                    },
+                         "inclusiveProcess": {"tt_DL_inclusive": {"sumWeights": 4980769317.03,
+                                                                  "nominalXS": 87.3348035725,
+                                                                  "nEventsPositive": 68818780,
+                                                                  "nEventsNegative": 279864,
+                                                                  "nLep2nJet7GenHT500-550-nominalXS": 0.278460477303,
+                                                                  "nLep2nJet7pGenHT500p-nominalXS": 4.40061534987,
+                                                                  "nLep1nJet9GenHT500-550-nominalXS": 0.0,
+                                                                  "nLep1nJet9pGenHT500p-nominalXS": 0.0,
+                                                              },
+                                          },
                      },
     },
     "tt_DL-GF":{
@@ -409,7 +447,8 @@ bookerV2_MC = {
         "sumWeights2": 44925503249.097206,
         "isSignal": False,
         "doFilter": True,
-        "crossSection": 1.4529,
+        "crossSection": 1.0143422530103685 * (4.3148879929 + 0.0857273569656),
+        "crossSectionGenHT500-550nJet7Matching": 1.4529,
         "color": leg_dict["ttbar"],
         "source": {"NANOv5": "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
                    "NANOv5p1": "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
@@ -433,20 +472,42 @@ bookerV2_MC = {
                                "subera": False,
                               },
                          "processes": {"ttbb_DL-GF_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
-                                                      "nEventsPositive": 282130,
-                                                      "nEventsNegative": 1215,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 20410377.7205,
-                                                      "effectiveCrossSection": 1.4529,
-                                                  },
+                                                         "sumWeights": 20410377.7205,
+                                                         "sumWeights2": 1495802529.19,
+                                                         "nominalXS": 0.146737371183,
+                                                         "nEventsPositive": 282130,
+                                                         "nEventsNegative": 1215,
+                                                         "nLep2nJet7GenHT500-550-nominalXS": 0.000282883749252,
+                                                         "nLep2nJet7pGenHT500p-nominalXS": 0.0484465754426,
+                                                         "nLep1nJet9GenHT500-550-nominalXS": 0.0,
+                                                         "nLep1nJet9pGenHT500p-nominalXS": 0.0,
+                                                         "fractionalContribution": 0.19324127948,
+                                                         "effectiveCrossSection": 0.148841924565,
+                                                     },
                                        "ttother_DL-GF_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
-                                                      "nEventsPositive": 8185413,
-                                                      "nEventsNegative": 41630,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 591691482.547,
-                                                      "effectiveCrossSection": 1.4529,
-                                                  },
+                                                            "sumWeights": 591691482.547,
+                                                            "sumWeights2": 43429704245.5,
+                                                            "nominalXS": 4.2538778012,
+                                                            "nEventsPositive": 8185413,
+                                                            "nEventsNegative": 41630,
+                                                            "nLep2nJet7GenHT500-550-nominalXS": 0.0157443739497,
+                                                            "nLep2nJet7pGenHT500p-nominalXS": 1.4044534815,
+                                                            "nLep1nJet9GenHT500-550-nominalXS": 0.0,
+                                                            "nLep1nJet9pGenHT500p-nominalXS": 0.0,
+                                                            "fractionalContribution": 1-0.29371942516,
+                                                            "effectiveCrossSection": 4.31488825033,
+                                                        },
                                    },
+                         "inclusiveProcess": {"tt_DL-GF_inclusive": {"sumWeights": 612101860.267,
+                                                                     "nominalXS": 4.40061517238,
+                                                                     "nEventsPositive": 8467543,
+                                                                     "nEventsNegative": 42845,
+                                                                     "nLep2nJet7GenHT500-550-nominalXS": 0.016027257699,
+                                                                     "nLep2nJet7pGenHT500p-nominalXS": 1.45290005695,
+                                                                     "nLep1nJet9GenHT500-550-nominalXS": 0.0,
+                                                                     "nLep1nJet9pGenHT500p-nominalXS": 0.0,
+                                                                     },
+                                          },
                      },
     },
     "tt_SL":{
@@ -479,34 +540,72 @@ bookerV2_MC = {
                                "subera": False,
                               },
                          "processes": {"ttbb_SL_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "sumWeights": 7082072.94812,
+                                                      "nominalXS": 0.426284138437,
                                                       "nEventsPositive": 23468,
                                                       "nEventsNegative": 109,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 7082072.94812,
-                                                      "effectiveCrossSection": 12.3429, 
-                                                  },
-                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
-                                                      "nEventsPositive": 1143940,
-                                                      "nEventsNegative": 6934,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 344738631.304,
-                                                      "effectiveCrossSection": 12.3429,
+                                                      "nLep2nJet7GenHT500-550-nominalXS": 0.0,
+                                                      "nLep2nJet7pGenHT500p-nominalXS": 0.0,
+                                                      "nLep1nJet9GenHT500-550-nominalXS": 0.0176126003653,
+                                                      "nLep1nJet9pGenHT500p-nominalXS": 0.426284138437,
+                                                      "fractionalContribution": 0.05683177619,
+                                                      "effectiveCrossSection": 0.426284138437, 
                                                   },
                                        "ttbb_SL_nr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
+                                                      "sumWeights": 16710200.4913,
+                                                      "nominalXS": 1.00582039633,
                                                       "nEventsPositive": 55323,
                                                       "nEventsNegative": 217,
+                                                      "nLep2nJet7GenHT500-550-nominalXS": 0.0,
+                                                      "nLep2nJet7pGenHT500p-nominalXS": 0.0,
+                                                      "nLep1nJet9GenHT500-550-nominalXS": 0.0,
+                                                      "nLep1nJet9pGenHT500p-nominalXS": 0.0,
                                                       "fractionalContribution": 1,
-                                                      "sumWeights": 16710200.4913,
-                                                      "effectiveCrossSection": 364.3109 - 12.3429,
+                                                      "effectiveCrossSection": 1.00582039633,
+                                                  },
+                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                         "sumWeights": 344738631.304,
+                                                         "nominalXS": 20.750507868,
+                                                         "nEventsPositive": 1143940,
+                                                         "nEventsNegative": 6934,
+                                                         "nLep2nJet7GenHT500-550-nominalXS": 0.0,
+                                                         "nLep2nJet7pGenHT500p-nominalXS": 0.0,
+                                                         "nLep1nJet9GenHT500-550-nominalXS": 1.67376451561,
+                                                         "nLep1nJet9pGenHT500p-nominalXS": 20.750507868,
+                                                         "fractionalContribution": 0.11968980608,
+                                                         "effectiveCrossSection": 20.750507868,
                                                   },
                                        "ttother_SL_nr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
-                                                      "nEventsPositive": 18817876,
-                                                      "nEventsNegative": 74143,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 5683949482.73,
-                                                      "effectiveCrossSection": 364.3109 - 12.3429,
+                                                         "sumWeights": 5683949482.73,
+                                                         "nominalXS": 342.128290092,
+                                                         "nEventsPositive": 18817876,
+                                                         "nEventsNegative": 74143,
+                                                         "nLep2nJet7GenHT500-550-nominalXS": 0.0,
+                                                         "nLep2nJet7pGenHT500p-nominalXS": 0.0,
+                                                         "nLep1nJet9GenHT500-550-nominalXS": 0.0,
+                                                         "nLep1nJet9pGenHT500p-nominalXS": 0.0,
+                                                         "fractionalContribution": 1,
+                                                         "effectiveCrossSection": 342.128290092,
                                                   },
+                                       "tt_SL_inclusive": {"filter": "return true;",
+                                                           "nEventsPositive": 20040607,
+                                                           "nEventsNegative": 81403,
+                                                           "sumWeights": 6052480345.748356,
+                                                           "sumWeights2": 1850350248120.376221,
+                                                           "effectiveCrossSection": 364.3109,
+                                                           "fractionalContribution": 1,
+                                                        },
                                    },
+                         "inclusiveProcess": {"tt_SL_inclusive": {"sumWeights": 6052480387.47,
+                                                                  "nominalXS": 364.310902493,
+                                                                  "nEventsPositive": 20040607,
+                                                                  "nEventsNegative": 81403,
+                                                                  "nLep2nJet7GenHT500-550-nominalXS": 0.0,
+                                                                  "nLep2nJet7pGenHT500p-nominalXS": 0.0,
+                                                                  "nLep1nJet9GenHT500-550-nominalXS": 1.69137711597,
+                                                                  "nLep1nJet9pGenHT500p-nominalXS": 21.1767920064,
+                                                              },
+                                          },
                      },
     },
     "tt_SL-GF":{
@@ -519,7 +618,7 @@ bookerV2_MC = {
         "sumWeights2": 812201885978.209229,
         "isSignal": False,
         "doFilter": True,
-        "crossSection": 12.3429,
+        "crossSection": 1.0255070696930904 * (20.750507868 + 0.426284138437),
         "color": leg_dict["ttbar"],
         "source": {"NANOv5": "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
                    "NANOv5p1": "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
@@ -539,20 +638,40 @@ bookerV2_MC = {
                                "subera": False,
                               },
                          "processes": {"ttbb_SL-GF_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
-                                                      "nEventsPositive": 391250,
-                                                      "nEventsNegative": 1780,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 118077149.406,
-                                                      "effectiveCrossSection": 12.3429,
-                                                  },
+                                                         "sumWeights": 118077149.406,
+                                                         "nominalXS": 0.942399418075,
+                                                         "nEventsPositive": 391250,
+                                                         "nEventsNegative": 1780,
+                                                         "nLep2nJet7GenHT500-550-nominalXS": 0.0,
+                                                         "nLep2nJet7pGenHT500p-nominalXS": 0.0,
+                                                         "nLep1nJet9GenHT500-550-nominalXS": 0.00183963949743,
+                                                         "nLep1nJet9pGenHT500p-nominalXS": 0.54927780267,
+                                                         "fractionalContribution": 1-0.05683177619,
+                                                         "effectiveCrossSection": 0.966437269741,
+                                                     },
                                        "ttother_SL-GF_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
-                                                      "nEventsPositive": 8403212,
-                                                      "nEventsNegative": 40612,
-                                                      "fractionalContribution": 1,
-                                                      "sumWeights": 2535250765.6,
-                                                      "effectiveCrossSection": 12.3429,
-                                                  },
+                                                            "sumWeights": 2535250765.6,
+                                                            "nominalXS": 20.234387925,
+                                                            "nEventsPositive": 8403212,
+                                                            "nEventsNegative": 40612,
+                                                            "nLep2nJet7GenHT500-550-nominalXS": 0.0,
+                                                            "nLep2nJet7pGenHT500p-nominalXS": 0.0,
+                                                            "nLep1nJet9GenHT500-550-nominalXS": 0.0694849189731,
+                                                            "nLep1nJet9pGenHT500p-nominalXS": 11.7936194833,
+                                                            "fractionalContribution": 1-0.11968980608,
+                                                            "effectiveCrossSection": 20.7505079548,
+                                                        },
                                    },
+                         "inclusiveProcess": {"tt_SL_inclusive": {"sumWeights": 2653328518.69,
+                                                                  "nominalXS": 12.3429000943,
+                                                                  "nEventsPositive": 8794464,
+                                                                  "nEventsNegative": 42392,
+                                                                  "nLep2nJet7GenHT500-550-nominalXS": 0.0,
+                                                                  "nLep2nJet7pGenHT500p-nominalXS": 0.0,
+                                                                  "nLep1nJet9GenHT500-550-nominalXS": 0.0713245584705,
+                                                                  "nLep1nJet9pGenHT500p-nominalXS": 12.342897286,
+                                                              },
+                                          },
                      },
     },
     "ST_tW":{
@@ -2833,13 +2952,14 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 #    rdf = rdf.Define("JML_selection_pass", "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00000000001111111111))#Only PV and MET filters required to pass
 #    return rdf
 
-def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017", printInfo=False, inclusiveProcess=None):
+def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017", printInfo=False, inclusiveProcess=None, fillDiagnosticHistos=False):
     lumiDict = {"2017": 41.53,
                 "2018": 59.97}
     filterNodes = dict() #For storing tuples to debug and be verbose about
     defineNodes = dict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
     countNodes = dict() #For storing the counts at each node
     diagnosticNodes = dict()
+    diagnosticHistos = dict()
     nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
     #Define the base node in nodes when we split/don't split the process
 
@@ -2904,9 +3024,20 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                         formulaForNominalXS = "{nXS:f} * genWeight / {sW:f}".format(nXS=inclusiveDict.get("effectiveCrossSection"),
                                                                                     sW=inclusiveDict.get("sumWeights")
                         )
-                        formulaForEffectiveXS = "{nXS:f} * genWeight / {sW:f}".format(nXS=effectiveXS,
+                        print("{} - nominalXS - {}".format(processName, formulaForNominalXS))
+                        formulaForEffectiveXS = "{nXS:f} * genWeight * {frCon:f} / {sW:f}".format(nXS=effectiveXS,
+                                                                                      frCon=fractionalContribution,
                                                                                       sW=sumWeights
                         )
+                        print("{} - effectiveXS - {}".format(processName, formulaForEffectiveXS))
+                    if fillDiagnosticHistos == True:
+                        diagnostic_e_mask = "Electron_pt > 15 && Electron_cutBased >= 2 && ((abs(Electron_eta) < 1.4442 && abs(Electron_dxy) < 0.05 && abs(Electron_dz) < 0.1) || (abs(Electron_eta) > 1.5660 && abs(Electron_eta) < 2.5 && abs(Electron_dxy) < 0.10 && abs(Electron_dz) < 0.2))"
+                        diagnostic_mu_mask = "Muon_pt > 15 && abs(Muon_eta) < 2.4 && Muon_looseId == true"
+                        diagnostic_lepjet_idx = "Concatenate(Muon_jetIdx[diagnostic_mu_mask], Electron_jetIdx[diagnostic_e_mask])"
+                        diagnostic_jet_idx = "FTA::generateIndices(Jet_pt)"
+                        diagnostic_jet_mask = "ROOT::VecOps::RVec<int> jmask = (Jet_pt > 30 && abs(Jet_eta) < 2.5 && Jet_jetId > 2); "\
+                                              "for(int i=1; i < diagnostic_lepjet_idx.size(); ++i){jmask = jmask && diagnostic_jet_idx != diagnostic_lepjet_idx.at(i);}"\
+                                              "return jmask;"
                 if processName not in nodes:
                     #L-2 filter, should be the packedEventID filter in that case
                     filterNodes[processName] = dict()
@@ -2918,7 +3049,29 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                             .Define("pwgt__LumiXS", wgtFormula)
                         if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
                             nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"]\
-                                .Define("nominalXS", formulaForNominalXS).Define("effectiveXS", formulaForEffectiveXS)
+                                .Define("nominalXS", formulaForNominalXS)\
+                                .Define("nominalXS2", "pow(nominalXS, 2)")\
+                                .Define("effectiveXS", formulaForEffectiveXS)\
+                                .Define("effectiveXS2", "pow(effectiveXS, 2)")
+                        if fillDiagnosticHistos == True:
+                            nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"]\
+                                .Define("diagnostic_e_mask", diagnostic_e_mask)\
+                                .Define("diagnostic_mu_mask", diagnostic_mu_mask)\
+                                .Define("diagnostic_lepjet_idx", diagnostic_lepjet_idx)\
+                                .Define("diagnostic_jet_idx", diagnostic_jet_idx)\
+                                .Define("diagnostic_jet_mask", diagnostic_jet_mask)\
+                                .Define("diagnostic_HT", "Sum(Jet_pt[diagnostic_jet_mask])")\
+                                .Define("diagnostic_nJet", "Jet_pt[diagnostic_jet_mask].size()")\
+                                .Define("diagnostic_jet1_pt", "Sum(diagnostic_jet_mask) > 0 ? Jet_pt[diagnostic_jet_mask].at(0) : -0.01")\
+                                .Define("diagnostic_jet1_eta", "Sum(diagnostic_jet_mask) > 0 ? Jet_eta[diagnostic_jet_mask].at(0) : 9999.9")\
+                                .Define("diagnostic_jet5_pt", "Sum(diagnostic_jet_mask) > 4 ? Jet_pt[diagnostic_jet_mask].at(4) : -0.01")\
+                                .Define("diagnostic_jet5_eta", "Sum(diagnostic_jet_mask) > 4 ? Jet_eta[diagnostic_jet_mask].at(4) : 9999.9")\
+                                .Define("diagnostic_el_pt", "Electron_pt[diagnostic_e_mask]")\
+                                .Define("diagnostic_el_eta", "Electron_eta[diagnostic_e_mask]")\
+                                .Define("diagnostic_mu_pt", "Muon_pt[diagnostic_mu_mask]")\
+                                .Define("diagnostic_mu_eta", "Muon_eta[diagnostic_mu_mask]")
+                            
+
 
                     else:
                         nodes[processName]["BaseNode"] = nodes["BaseNode"]\
@@ -2926,23 +3079,109 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     countNodes[processName] = dict()
                     countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
                     diagnosticNodes[processName] = collections.OrderedDict()
+                    diagnosticHistos[processName] = collections.OrderedDict()
                     defineNodes[processName] = dict()
                 if not isData:
                     #Need to gather those bookkeeping stats from the original source rather than the ones after event selection...
                     diagnosticNodes[processName]["sumWeights::Sum"] = nodes[processName]["BaseNode"].Sum("genWeight")
-                    diagnosticNodes[processName]["nominalXS::Sum"] = nodes[processName]["BaseNode"].Sum("nominalXS")
+                    diagnosticNodes[processName]["sumWeights2::Sum"] = nodes[processName]["BaseNode"].Define("genWeight2", "pow(genWeight, 2)").Sum("genWeight2")
+                    if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
+                        diagnosticNodes[processName]["nominalXS::Sum"] = nodes[processName]["BaseNode"].Sum("nominalXS")
+                        diagnosticNodes[processName]["nominalXS2::Sum"] = nodes[processName]["BaseNode"].Sum("nominalXS2")
+                    diagnosticNodes[processName]["effectiveXS::Sum"] = nodes[processName]["BaseNode"].Sum("effectiveXS")
+                    diagnosticNodes[processName]["effectiveXS2::Sum"] = nodes[processName]["BaseNode"].Sum("effectiveXS2")
                     diagnosticNodes[processName]["nEventsPositive::Count"] = nodes[processName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
                     diagnosticNodes[processName]["nEventsNegative::Count"] = nodes[processName]["BaseNode"].Filter("genWeight < 0", "genWeight < 0").Count()
                 if "nGenJet/GenHT" in IDs:
-                    diagnosticNodes[processName]["nLep2nJet7GenHT500-550-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
-                        .Filter("nGenLep == 2 && nGenJet == 7 && 500 <= GenHT && GenHT < 550", "nGenLep 2, nGenJet 7, GenHT 500-550").Sum("nominalXS")
-                    diagnosticNodes[processName]["nLep2nJet7pGenHT500p-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
-                        .Filter("nGenLep == 2 && nGenJet >= 7 && 500 <= GenHT", "nGenLep 2, nGenJet 7+, GenHT 500+").Sum("nominalXS")
-                    diagnosticNodes[processName]["nLep1nJet9GenHT500-550-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
-                        .Filter("nGenLep == 1 && nGenJet == 9 && 500 <= GenHT && GenHT < 550", "nGenLep 1, nGenJet 9, GenHT 500-550").Sum("nominalXS")
-                    diagnosticNodes[processName]["nLep1nJet9pGenHT500p-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
-                        .Filter("nGenLep == 1 && nGenJet >= 9 && 500 <= GenHT", "nGenLep 1, nGenJet 9+, GenHT 500+").Sum("nominalXS")
-
+                    if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
+                        diagnosticNodes[processName]["nLep2nJet7GenHT500-550-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
+                            .Filter("nGenLep == 2 && nGenJet == 7 && 500 <= GenHT && GenHT < 550", "nGenLep 2, nGenJet 7, GenHT 500-550").Sum("nominalXS")
+                        diagnosticNodes[processName]["nLep2nJet7pGenHT500p-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
+                            .Filter("nGenLep == 2 && nGenJet >= 7 && 500 <= GenHT", "nGenLep 2, nGenJet 7+, GenHT 500+").Sum("nominalXS")
+                        diagnosticNodes[processName]["nLep1nJet9GenHT500-550-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
+                            .Filter("nGenLep == 1 && nGenJet == 9 && 500 <= GenHT && GenHT < 550", "nGenLep 1, nGenJet 9, GenHT 500-550").Sum("nominalXS")
+                        diagnosticNodes[processName]["nLep1nJet9pGenHT500p-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
+                            .Filter("nGenLep == 1 && nGenJet >= 9 && 500 <= GenHT", "nGenLep 1, nGenJet 9+, GenHT 500+").Sum("nominalXS")
+                    if fillDiagnosticHistos == True:
+                        diagnosticHistos[processName]["NoChannel"] = collections.OrderedDict()
+                        diagnosticHistos[processName]["NoChannel"]["GenHT-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___GenHT".format(proc=processName), 
+                                      "GenHT;GenHT;#sigma/GeV", 200, 0, 2000), "GenHT", "nominalXS")
+                        diagnosticHistos[processName]["NoChannel"]["GenHT-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___GenHT".format(proc=processName), 
+                                      "GenHT;GenHT;#sigma/GeV", 200, 0, 2000), "GenHT", "effectiveXS")
+                        diagnosticHistos[processName]["NoChannel"]["nGenJet-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___nGenJet".format(proc=processName), 
+                                      "nGenJet;nGenJet;#sigma/nGenJet", 20, 0, 20), "nGenJet", "nominalXS")
+                        diagnosticHistos[processName]["NoChannel"]["nGenJet-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___nGenJet".format(proc=processName), 
+                                      "nGenJet;nGenJet;#sigma/nGenJet", 20, 0, 20), "nGenJet", "effectiveXS")
+                        diagnosticHistos[processName]["NoChannel"]["nGenLep-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___nGenLep".format(proc=processName), 
+                                      "nGenLep;nGenLep;#sigma/nGenLep", 5, 0, 5), "nGenLep", "nominalXS")
+                        diagnosticHistos[processName]["NoChannel"]["nGenLep-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___nGenLep".format(proc=processName), 
+                                      "nGenLep;nGenLep;#sigma/nGenLep", 5, 0, 5), "nGenLep", "effectiveXS")
+                        diagnosticHistos[processName]["NoChannel"]["HT-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___HT".format(proc=processName), 
+                                      "HT;HT;#sigma/GeV", 200, 0, 2000), "diagnostic_HT", "nominalXS")
+                        diagnosticHistos[processName]["NoChannel"]["HT-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___HT".format(proc=processName), 
+                                      "HT;HT;#sigma/GeV", 200, 0, 2000), "diagnostic_HT", "effectiveXS")
+                        diagnosticHistos[processName]["NoChannel"]["nJet-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___nJet".format(proc=processName), 
+                                      "nJet;nJet;#sigma/nJet", 20, 0, 20), "diagnostic_nJet", "nominalXS")
+                        diagnosticHistos[processName]["NoChannel"]["nJet-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___nJet".format(proc=processName), 
+                                      "nJet;nJet;#sigma/nJet", 20, 0, 20), "diagnostic_nJet", "effectiveXS")
+                        diagnosticHistos[processName]["NoChannel"]["jet1_pt-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___jet1_pt".format(proc=processName), 
+                                      "Leading Jet p_{T};p_{T};#sigma/GeV", 100, 0, 500), "diagnostic_jet1_pt", "nominalXS")
+                        diagnosticHistos[processName]["NoChannel"]["jet1_pt-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___jet1_pt".format(proc=processName), 
+                                      "Leading Jet p_{T};p_{T};#sigma/GeV", 100, 0, 500), "diagnostic_jet1_pt", "effectiveXS")
+                        diagnosticHistos[processName]["NoChannel"]["jet1_eta-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___jet1_eta".format(proc=processName), 
+                                      "Leading Jet #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_jet1_eta", "nominalXS")
+                        diagnosticHistos[processName]["NoChannel"]["jet1_eta-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___jet1_eta".format(proc=processName), 
+                                      "Leading Jet #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_jet1_eta", "effectiveXS")
+                        diagnosticHistos[processName]["NoChannel"]["jet5_pt-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___jet5_pt".format(proc=processName), 
+                                      "Fifth Jet p_{T};p_{T};#sigma/GeV", 100, 0, 500), "diagnostic_jet5_pt", "nominalXS")
+                        diagnosticHistos[processName]["NoChannel"]["jet5_pt-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___jet5_pt".format(proc=processName), 
+                                      "Fifth Jet p_{T};p_{T};#sigma/GeV", 100, 0, 500), "diagnostic_jet5_pt", "effectiveXS")
+                        diagnosticHistos[processName]["NoChannel"]["jet5_eta-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___jet5_eta".format(proc=processName), 
+                                      "Fift Jet #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_jet5_eta", "nominalXS")
+                        diagnosticHistos[processName]["NoChannel"]["jet5_eta-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___jet5_eta".format(proc=processName), 
+                                      "Fift Jet #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_jet5_eta", "effectiveXS")
+                        diagnosticHistos[processName]["NoChannel"]["el_pt-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___el_pt".format(proc=processName), 
+                                      "e p_{T};p_{T};#sigma/GeV", 100, 0, 150), "diagnostic_el_pt", "nominalXS")
+                        diagnosticHistos[processName]["NoChannel"]["el_pt-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___el_pt".format(proc=processName), 
+                                      "e p_{T};p_{T};#sigma/GeV", 100, 0, 150), "diagnostic_el_pt", "effectiveXS")
+                        diagnosticHistos[processName]["NoChannel"]["el_eta-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___el_eta".format(proc=processName), 
+                                      "e #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_el_eta", "nominalXS")
+                        diagnosticHistos[processName]["NoChannel"]["el_eta-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___el_eta".format(proc=processName), 
+                                      "e #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_el_eta", "effectiveXS")
+                        diagnosticHistos[processName]["NoChannel"]["mu_pt-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___mu_pt".format(proc=processName), 
+                                      "#mu p_{T};p_{T};#sigma/GeV", 100, 0, 150), "diagnostic_mu_pt", "nominalXS")
+                        diagnosticHistos[processName]["NoChannel"]["mu_pt-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___mu_pt".format(proc=processName), 
+                                      "#mu p_{T};p_{T};#sigma/GeV", 100, 0, 150), "diagnostic_mu_pt", "effectiveXS")
+                        diagnosticHistos[processName]["NoChannel"]["mu_eta-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___mu_eta".format(proc=processName), 
+                                      "#mu #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_mu_eta", "nominalXS")
+                        diagnosticHistos[processName]["NoChannel"]["mu_eta-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___mu_eta".format(proc=processName), 
+                                      "#mu #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_mu_eta", "effectiveXS")
 
                     diagnosticNodes[processName]["nLep2nJet7GenHT500-550-effectiveXS::Sum"] = nodes[processName]["BaseNode"]\
                         .Filter("nGenLep == 2 && nGenJet == 7 && 500 <= GenHT && GenHT < 550", "nGenLep 2, nGenJet 7, GenHT 500-550").Sum("effectiveXS")
@@ -2959,7 +3198,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     for dName, dNode in pDict.items():
                         parseDName = dName.split("::")
                         if parseDName[1] in ["Count", "Sum"]:
-                            dString = "\t\t\"{}\": {}".format(parseDName[0], dNode.GetValue())
+                            dString = "\t\t\"{}\": {},".format(parseDName[0], dNode.GetValue())
                         elif parseDName[1] in ["Stats"]:
                             thisStat = dNode.GetValue()
                             dString = "\t\t\"{}::Min\": {}".format(parseDName[0], thisStat.GetMin())
@@ -3013,6 +3252,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
     prePackedNodes["nodes"] = nodes
     prePackedNodes["countNodes"] = countNodes
     prePackedNodes["diagnosticNodes"] = diagnosticNodes
+    prePackedNodes["diagnosticHistos"] = diagnosticHistos
     prePackedNodes["defineNodes"] = defineNodes
     return prePackedNodes
 
@@ -4130,13 +4370,25 @@ def writeHistos(histDict, directory, samplesOfInterest="All", channelsOfInterest
     rootDict = {}
     if not os.path.isdir(directory):
         os.makedirs(directory)
+    if len(histDict.keys()) < 1: print("writeHistos::no histDict keys")
+    nameCounter = 0
+    channelCounter = 0
+    objCounter = 0
+    nameCounterSkipped = 0
+    channelCounterSkipped = 0
     for name, channelsDict in histDict.items():
+        nameCounter += 1
         if samplesOfInterest == "All": pass
-        elif name not in samplesOfInterest: continue
+        elif name not in samplesOfInterest: 
+            nameCounterSkipped += 1
+            continue
         for channel, objDict in channelsDict.items():
+            channelCounter += 1
             counter = 0
             if channelsOfInterest == "All": pass
-            elif channel  not in channelsOfInterest: continue
+            elif channel  not in channelsOfInterest: 
+                channelCounterSkipped += 1
+                continue
             elif len(objDict.values()) < 1:
                 print("No objects to write, not creating directory or writing root file for {} {}".format(name, channel))
                 continue
@@ -4147,6 +4399,7 @@ def writeHistos(histDict, directory, samplesOfInterest="All", channelsOfInterest
             #     if dict_keys == "All": pass
             #     elif dict_key not in dict_keys: continue
             for objname, obj in objDict.items():
+                objCounter += 1
                 if type(obj) == dict:
                     for hname, hist in obj.items():
                         if "ROOT.RDF.RResultPtr" in str(type(obj)):
@@ -4163,6 +4416,14 @@ def writeHistos(histDict, directory, samplesOfInterest="All", channelsOfInterest
                 counter += 1
             print("Wrote {} histograms into file for {}::{} - {}.root".format(counter, name, channel, directory + "/" + channel + "/"+ name))
             rootDict[name].Close()
+    print("samples skipped/cycled: {}/{}\tchannels skipped/cycled: {}/{}\tobjects cycled: {}".format(nameCounterSkipped,
+                                                                                                     nameCounter, 
+                                                                                                     channelCounterSkipped,
+                                                                                                     channelCounter,
+                                                                                                     objCounter
+                                                                                                 ))
+
+
 
 def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", stripKey=".root", includeSampleNames=None, 
                            excludeSampleNames=None, mode="RECREATE", doNumpyValidation=False, forceDefaultRebin=False, verbose=False,
@@ -5391,7 +5652,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
         for lvl in levelsOfInterest:
             splitProcessConfig = vals.get("splitProcess", None)
-            inclusiveProcessConfig = {"processes": {"inclusive": {"filter": "return true;",
+            inclusiveProcessConfig = {"processes": {"{}_inclusive".format(name): {"filter": "return true;",
                                                                   "nEventsPositive": vals["nEventsPositive"],
                                                                   "nEventsNegative": vals["nEventsNegative"],
                                                                   "fractionalContribution": 1,
@@ -5408,7 +5669,19 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                               isData = vals["isData"], 
                                               era = vals["era"],
                                               printInfo = True,
+                                              fillDiagnosticHistos = True,
                 )
+                for k, v in prePackedNodes["diagnosticHistos"].items():
+                    print("{} - {}".format(k, v.keys()))
+                print("Writing diagnostic histos to {}".format(analysisDir + "/Diagnostics"))
+                writeHistos(prePackedNodes["diagnosticHistos"], 
+                            analysisDir + "/Diagnostics",
+                            channelsOfInterest="All",
+                            samplesOfInterest="All",
+                            dict_keys="All",
+                            mode="RECREATE"
+                )
+                
                 #skip any further calculations for bookkeeping
                 continue
             else:
