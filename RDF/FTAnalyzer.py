@@ -365,10 +365,10 @@ bookerV2_MC = {
         "simulated events (N_eff = N_positive - N_negative) over the nEffectivePhaseSpace (sum of N_eff from all contributing samples)"\
         "The old XS form 2018 PDG BRs was 89.0482, swapped to Brown's value... Need to update SL technically as well",
         "splitProcess": {"ID":{"unpackGenTtbarId": True,
-                               "nGenJet/GenHT": True,
+                               "nFTAGenJet/FTAGenHT": True,
                                "subera": False,
                               },
-                         "processes": {"ttbb_DL_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                         "processes": {"ttbb_DL_fr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500",
                                                       "sumWeights": 4889095.432,
                                                       "nominalXS": 0.0857273569656,
                                                       "nEventsPositive": 67634,
@@ -380,7 +380,7 @@ bookerV2_MC = {
                                                       "fractionalContribution": 0.19324127948,
                                                       "effectiveCrossSection": 0.0857273569656,
                                                   },
-                                       "ttbb_DL_nr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && (nGenJet < 7 || GenHT < 500)",
+                                       "ttbb_DL_nr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)",
                                                       "sumWeights": 13004577.2995,
                                                       "nominalXS": 0.228027465581,
                                                       "nEventsPositive": 179679,
@@ -392,7 +392,7 @@ bookerV2_MC = {
                                                       "fractionalContribution": 1,
                                                       "effectiveCrossSection": 0.228027465581,
                                                   },
-                                       "ttother_DL_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                       "ttother_DL_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500",
                                                          "sumWeights": 246081296.826,
                                                          "nominalXS": 4.3148879929,
                                                          "nEventsPositive": 3408758,
@@ -404,7 +404,7 @@ bookerV2_MC = {
                                                          "fractionalContribution": 0.29371942516,
                                                          "effectiveCrossSection": 4.3148879929,
                                                   },
-                                       "ttother_DL_nr": {"filter": "nAdditionalBJets < 2 && nGenLep == 2 && (nGenJet < 7 || GenHT < 500)",
+                                       "ttother_DL_nr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)",
                                                          "sumWeights": 4716794347.47,
                                                          "nominalXS": 82.706160755,
                                                          "nEventsPositive": 65162709,
@@ -468,10 +468,10 @@ bookerV2_MC = {
                   },
         "Notes": "1.4815 was the old XS * BR * stitching factor, now scaled down so that the XS matches Brown's lower BR calculation",
         "splitProcess": {"ID":{"unpackGenTtbarId": True,
-                               "nGenJet/GenHT": True,
+                               "nFTAGenJet/FTAGenHT": True,
                                "subera": False,
                               },
-                         "processes": {"ttbb_DL-GF_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                         "processes": {"ttbb_DL-GF_fr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500",
                                                          "sumWeights": 20410377.7205,
                                                          "sumWeights2": 1495802529.19,
                                                          "nominalXS": 0.146737371183,
@@ -484,7 +484,7 @@ bookerV2_MC = {
                                                          "fractionalContribution": 0.19324127948,
                                                          "effectiveCrossSection": 0.148841924565,
                                                      },
-                                       "ttother_DL-GF_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                       "ttother_DL-GF_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500",
                                                             "sumWeights": 591691482.547,
                                                             "sumWeights2": 43429704245.5,
                                                             "nominalXS": 4.2538778012,
@@ -536,10 +536,10 @@ bookerV2_MC = {
                    "channel": "SL"
                   },
         "splitProcess": {"ID":{"unpackGenTtbarId": True,
-                               "nGenJet/GenHT": True,
+                               "nFTAGenJet/FTAGenHT": True,
                                "subera": False,
                               },
-                         "processes": {"ttbb_SL_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                         "processes": {"ttbb_SL_fr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500",
                                                       "sumWeights": 7082072.94812,
                                                       "nominalXS": 0.426284138437,
                                                       "nEventsPositive": 23468,
@@ -551,7 +551,7 @@ bookerV2_MC = {
                                                       "fractionalContribution": 0.05683177619,
                                                       "effectiveCrossSection": 0.426284138437, 
                                                   },
-                                       "ttbb_SL_nr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
+                                       "ttbb_SL_nr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)",
                                                       "sumWeights": 16710200.4913,
                                                       "nominalXS": 1.00582039633,
                                                       "nEventsPositive": 55323,
@@ -563,7 +563,7 @@ bookerV2_MC = {
                                                       "fractionalContribution": 1,
                                                       "effectiveCrossSection": 1.00582039633,
                                                   },
-                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500",
                                                          "sumWeights": 344738631.304,
                                                          "nominalXS": 20.750507868,
                                                          "nEventsPositive": 1143940,
@@ -575,7 +575,7 @@ bookerV2_MC = {
                                                          "fractionalContribution": 0.11968980608,
                                                          "effectiveCrossSection": 20.750507868,
                                                   },
-                                       "ttother_SL_nr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
+                                       "ttother_SL_nr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)",
                                                          "sumWeights": 5683949482.73,
                                                          "nominalXS": 342.128290092,
                                                          "nEventsPositive": 18817876,
@@ -634,10 +634,10 @@ bookerV2_MC = {
                    "channel": "SL"
                   },
         "splitProcess": {"ID":{"unpackGenTtbarId": True,
-                               "nGenJet/GenHT": True,
+                               "nFTAGenJet/FTAGenHT": True,
                                "subera": False,
                               },
-                         "processes": {"ttbb_SL-GF_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                         "processes": {"ttbb_SL-GF_fr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500",
                                                          "sumWeights": 118077149.406,
                                                          "nominalXS": 0.942399418075,
                                                          "nEventsPositive": 391250,
@@ -649,7 +649,7 @@ bookerV2_MC = {
                                                          "fractionalContribution": 1-0.05683177619,
                                                          "effectiveCrossSection": 0.966437269741,
                                                      },
-                                       "ttother_SL-GF_fr": {"filter": "nAdditionalBJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                       "ttother_SL-GF_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500",
                                                             "sumWeights": 2535250765.6,
                                                             "nominalXS": 20.234387925,
                                                             "nEventsPositive": 8403212,
@@ -2981,15 +2981,20 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                         # df_with_IDs = df_with_IDs.Define("nBJetsFromTop", "unpackedGenTtbarId[6]")
                         # df_with_IDs = df_with_IDs.Define("nBJetsFromW", "unpackedGenTtbarId[7]")
                         # df_with_IDs = df_with_IDs.Define("nCJetsFromW", "unpackedGenTtbarId[8]")
-                if IDbool and IDname == "nGenJet/GenHT":
-                    if "nGenLep" not in listOfColumns:
-                        df_with_IDs = df_with_IDs.Define("nGenLep", "LHEPart_pdgId[abs(LHEPart_pdgId)==11 || abs(LHEPart_pdgId)==13 || abs(LHEPart_pdgId)==15].size()")
+                if IDbool and IDname == "nFTAGenJet/FTAGenHT":
+                    #Production notes (SL filter -> nGenJet 9)
+                    # Combination of filters is applied:
+                    # exactly 1 lepton (electron,muon or tau) in LHE record
+                    # HT calculated from jets with pT>30 and |eta|<2.4 > 500 GeV
+                    # Jet multiplicity (jet pT>30) >= 9
+                    if "nFTAGenLep" not in listOfColumns:
+                        df_with_IDs = df_with_IDs.Define("nFTAGenLep", "LHEPart_pdgId[abs(LHEPart_pdgId)==11 || abs(LHEPart_pdgId)==13 || abs(LHEPart_pdgId)==15].size()")
                         listOfColumns.push_back("nGenLep")
-                    if "nGenJet" not in listOfColumns:
-                        df_with_IDs = df_with_IDs.Define("nGenJet", "GenJet_pt[GenJet_pt > 30].size()")
+                    if "nFTAGenJet" not in listOfColumns:
+                        df_with_IDs = df_with_IDs.Define("nFTAGenJet", "GenJet_pt[GenJet_pt > 30].size()")
                         listOfColumns.push_back("nGenJet")
-                    if "GenHT" not in listOfColumns:
-                        df_with_IDs = df_with_IDs.Define("GenHT", "Sum(GenJet_pt[GenJet_pt > 30 && abs(GenJet_eta) < 2.4])")
+                    if "FTAGenHT" not in listOfColumns:
+                        df_with_IDs = df_with_IDs.Define("FTAGenHT", "Sum(GenJet_pt[GenJet_pt > 30 && abs(GenJet_eta) < 2.4])")
                         listOfColumns.push_back("GenHT")
                 if IDbool and IDname == "subera":
                     pass
@@ -3092,7 +3097,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     diagnosticNodes[processName]["effectiveXS2::Sum"] = nodes[processName]["BaseNode"].Sum("effectiveXS2")
                     diagnosticNodes[processName]["nEventsPositive::Count"] = nodes[processName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
                     diagnosticNodes[processName]["nEventsNegative::Count"] = nodes[processName]["BaseNode"].Filter("genWeight < 0", "genWeight < 0").Count()
-                if "nGenJet/GenHT" in IDs:
+                if "nFTAGenJet/FTAGenHT" in IDs:
                     if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
                         diagnosticNodes[processName]["nLep2nJet7GenHT500-550-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
                             .Filter("nGenLep == 2 && nGenJet == 7 && 500 <= GenHT && GenHT < 550", "nGenLep 2, nGenJet 7, GenHT 500-550").Sum("nominalXS")
@@ -3402,7 +3407,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     #                     # df_with_IDs = df_with_IDs.Define("nBJetsFromTop", "unpackedGenTtbarId[6]")
     #                     # df_with_IDs = df_with_IDs.Define("nBJetsFromW", "unpackedGenTtbarId[7]")
     #                     # df_with_IDs = df_with_IDs.Define("nCJetsFromW", "unpackedGenTtbarId[8]")
-    #             if IDbool and IDname == "nGenJet/GenHT":
+    #             if IDbool and IDname == "nFTAGenJet/FTAGenHT":
     #                 if "nGenLep" not in listOfColumns:
     #                     df_with_IDs = df_with_IDs.Define("nGenLep", "LHEPart_pdgId[stitch_lep_mask].size()")
     #                     listOfColumns.push_back("nGenLep")
