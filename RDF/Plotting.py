@@ -2317,6 +2317,9 @@ if False:
 replacementLegend1=None
 replacementLegend2=None
 replacementLegend3=None
+resultsS = None
+resultsMS = None
+resultsRS = None
 base="/eos/user/n/nmangane/analysis/Nominal_Zvtx/Diagnostics/NoChannel"
 with open("{}/stitched.json".format(base), "r") as jlegend1:
     replacementLegend1 = copy.copy(json_load_byteified(jlegend1))
@@ -2332,14 +2335,14 @@ with open("{}/plots.json".format(base), "r") as j1:
     loadedJSON2.update(replacementLegend2)
     loadedJSON3.update(replacementLegend3)
     #Plot results stitching unfiltered + filtered, using filtered sample exclusively in its phase space
-    resultsS = loopPlottingJSON(loadedJSON1, Cache=None, directory="{}".format(base), batchOutput=True, 
-                                pdfOutput="{}/stitched.pdf".format(base), verbose=False, nominalPostfix=None)
+    # resultsS = loopPlottingJSON(loadedJSON1, Cache=None, directory="{}".format(base), batchOutput=True, 
+    #                             pdfOutput="{}/stitched.pdf".format(base), verbose=False, nominalPostfix=None)
     #Plot results stitching unfiltered + filtered, using both nominal and filtered samples weighted proportional to their number of net simulated events (N_+ - N_-)
     resultsMS= loopPlottingJSON(loadedJSON2, Cache=None, directory="{}".format(base), batchOutput=True,
                                pdfOutput="{}/multistitched.pdf".format(base), verbose=False, nominalPostfix=None)
     #Plot results stitching unfiltered only back together, to ensure perfect agreement with the nominal sample when not split
-    resultsRS = loopPlottingJSON(loadedJSON3, Cache=None, directory="{}".format(base), batchOutput=True, 
-                                pdfOutput="{}/restitched.pdf".format(base), verbose=False, nominalPostfix=None)
+    # resultsRS = loopPlottingJSON(loadedJSON3, Cache=None, directory="{}".format(base), batchOutput=True, 
+    #                             pdfOutput="{}/restitched.pdf".format(base), verbose=False, nominalPostfix=None)
 
 
 

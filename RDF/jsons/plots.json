@@ -26,7 +26,7 @@
     }, 
     "Plot_diagnostic___el_pt": {
         "Files": "2017___Combined.root", 
-        "Rebin": 5, 
+        "Rebin": null, 
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
@@ -61,7 +61,7 @@
     }, 
     "Plot_diagnostic___mu_eta": {
         "Files": "2017___Combined.root", 
-        "Rebin": 5, 
+        "Rebin": null, 
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
@@ -71,7 +71,7 @@
     }, 
     "Plot_diagnostic___jet1_eta": {
         "Files": "2017___Combined.root", 
-        "Rebin": 5, 
+        "Rebin": null, 
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
@@ -151,7 +151,7 @@
     }, 
     "Plot_diagnostic___jet5_eta": {
         "Files": "2017___Combined.root", 
-        "Rebin": 5, 
+        "Rebin": null,  
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
@@ -186,7 +186,7 @@
     }, 
     "Plot_diagnostic___nGenJet": {
         "Files": "2017___Combined.root", 
-        "Rebin": 5, 
+        "Rebin": null, 
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
@@ -246,7 +246,7 @@
     }, 
     "Plot_diagnostic___GenHT": {
         "Files": "2017___Combined.root", 
-        "Rebin": 5, 
+        "Rebin": null, 
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
@@ -256,7 +256,7 @@
     }, 
     "Plot_diagnostic___el_eta": {
         "Files": "2017___Combined.root", 
-        "Rebin": 5, 
+        "Rebin": null, 
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
@@ -291,7 +291,7 @@
     }, 
     "Plot_diagnostic___HT": {
         "Files": "2017___Combined.root", 
-        "Rebin": 5, 
+        "Rebin": null, 
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
@@ -302,8 +302,8 @@
     "DefaultPlot": {
         "Files": null, 
         "Rebin": null, 
-        "RatioYMin": 0.5, 
-        "RatioYMax": 1.5, 
+        "RatioYMin": 0.85, 
+        "RatioYMax": 1.15, 
         "Title": "DefaultPlotTitle", 
         "Unblind": false, 
         "Type": "DefaultPlot"
@@ -400,7 +400,7 @@
     }, 
     "Plot_diagnostic___jet5_pt": {
         "Files": "2017___Combined.root", 
-        "Rebin": 5, 
+        "Rebin": null, 
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
@@ -410,7 +410,7 @@
     }, 
     "Plot_diagnostic___jet1_pt": {
         "Files": "2017___Combined.root", 
-        "Rebin": 5, 
+        "Rebin": null, 
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
@@ -445,7 +445,7 @@
     }, 
     "Plot_diagnostic___mu_pt": {
         "Files": "2017___Combined.root", 
-        "Rebin": 5, 
+        "Rebin": null, 
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
