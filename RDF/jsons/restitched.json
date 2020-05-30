@@ -1,0 +1,82 @@
+ {   
+     "DefaultLegend": {
+	"Header": "#sqrt{{s}} = 13 TeV, L_{{int}} = None",
+	"HeaderPosition": 0.25,
+        "Supercategories": {
+            "tt_DL-restitched": {
+                "Draw": "HIST", 
+                "Names": [
+                    "ttbb_DL_FR",
+		    "ttbb_DL_UR",
+		    "ttother_DL_FR",
+		    "ttother_DL_UR"
+                ], 
+                "Stack": true
+            },
+            "tt_DL-verification": {
+                "Draw": "PE1", 
+                "Names": [
+		    "tt_DL"
+                ], 
+                "Stack": false
+            }
+        }, 
+        "nColumns": 1, 
+        "Ratios": {
+            "Unstitched/Restitched": {
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+		"Draw": "PXE1",
+                "Denominator": "tt_DL-restitched", 
+                "Numerator": "tt_DL-verification"
+            }
+        }, 
+        "Systematics": [], 
+        "OLDY-nColumns": 3, 
+        "Type": "DefaultLegend", 
+        "Coordinates": [
+            0.80, 
+            0.35, 
+            0.98, 
+            0.60
+        ], 
+        "Categories": { 
+            "ttbb_DL_FR": {
+                "Color": 616, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttbb_DL_fr___nominalXS"
+                ]
+            }, 
+            "ttbb_DL_UR": {
+                "Color": 400, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttbb_DL_nr___nominalXS"
+                ]
+            }, 
+            "ttother_DL_UR": {
+                "Color": 900, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttother_DL_nr___nominalXS"
+                ]
+            }, 
+            "ttother_DL_FR": {
+                "Color": 432, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttother_DL_fr___nominalXS"
+                ]
+            }, 
+            "tt_DL": {
+                "Color": 1, 
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+                "Names": [
+                    "2017___tt_DL_inclusive___nominalXS"
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,180 @@
+ {   
+     "DefaultLegend": {
+	"Header": "#sqrt{{s}} = 13 TeV, L_{{int}} = None",
+	"HeaderPosition": 0.25,
+        "Supercategories": {
+            "tt_DL-stitched": {
+                "Draw": "L", 
+                "Names": [
+                    "ttbb_DL-GF_FR",
+		    "ttbb_DL_UR",
+		    "ttother_DL-GF_FR",
+		    "ttother_DL_UR"
+                ], 
+                "Stack": false
+            },
+            "tt_DL-restitched": {
+                "Draw": "L", 
+                "Names": [
+                    "ttbb_DL_FR",
+		    "ttbb_DL_UR",
+		    "ttother_DL_FR",
+		    "ttother_DL_UR"
+                ], 
+                "Stack": false
+            },
+            "tt_DL-verification": {
+                "Draw": "PE1", 
+                "Names": [
+		    "tt_DL"
+                ], 
+                "Stack": false
+            },
+            "tt_DL-multistiched": {
+                "Draw": "HIST", 
+                "Names": [
+                    "ttbb_DL-BOTH_FR",
+		    "ttbb_DL-BOTH_UR",
+		    "ttother_DL-BOTH_FR",
+		    "ttother_DL-BOTH_UR"
+                ], 
+                "Stack": true
+            }
+        }, 
+        "nColumns": 1, 
+        "OLDY-Coordinates": [
+            0.35, 
+            0.75, 
+            0.95, 
+            0.9
+        ], 
+        "Ratios": {
+            "Stitched/Multistitched": {
+                "Style": "Marker", 
+		"MarkerStyle": 21,
+		"Draw": "PXE1",
+                "Denominator": "tt_DL-multistitched",
+                "Numerator": "tt_DL-stitched"
+            },
+            "Restitched/MultiStitched": {
+                "Style": "Marker", 
+		"MarkerStyle": 20,
+		"Draw": "PXE1",
+                "Denominator": "tt_DL-multistitched",
+                "Numerator": "tt_DL-restitched"
+            },
+            "Unstitched/Multistitched": {
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+		"Draw": "PXE1",
+                "Denominator": "tt_DL-multistitched",
+                "Numerator": "tt_DL-verification"
+            }
+        }, 
+        "Systematics": [], 
+        "OLDY-nColumns": 3, 
+        "Type": "DefaultLegend", 
+        "Coordinates": [
+            0.0, 
+            0.1, 
+            0.25, 
+            0.60
+        ], 
+        "Categories": { 
+            "ttbb_DL-BOTH_FR": {
+                "Color": 864, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttbb_DL-GF_fr___effectiveXS",
+		    "2017___ttbb_DL_fr___effectiveXS"
+                ]
+            }, 
+            "ttbb_DL-BOTH_UR": {
+                "Color": 400, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttbb_DL_nr___effectiveXS"
+                ]
+            }, 
+            "ttother_DL-BOTH_FR": {
+                "Color": 880, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttother_DL-GF_fr___effectiveXS",
+		    "2017___ttother_DL_fr___effectiveXS"
+                ]
+            }, 
+            "ttother_DL-BOTH_UR": {
+                "Color": 900, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttother_DL_nr___effectiveXS"
+                ]
+            },
+            "tt_DL-GF_FR": {
+                "Color": 880, 
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+                "Names": [
+                    "2017___tt_DL-GF_inclusive___effectiveXS"
+                ]
+            }, 
+            "ttbb_DL-GF_FR": {
+                "Color": 880, 
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+                "Names": [
+                    "2017___ttbb_DL-GF_fr___effectiveXS"
+                ]
+            }, 
+            "ttother_DL-GF_FR": {
+                "Color": 880, 
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+                "Names": [
+                    "2017___ttother_DL-GF_nr___effectiveXS"
+                ]
+            }, 
+            "ttbb_DL_FR": {
+                "Color": 864, 
+                "Style": "Marker", 
+		"MarkerStyle": 21,
+                "Names": [
+                    "2017___ttbb_DL_fr___effectiveXS"
+                ]
+            }, 
+            "ttbb_DL_UR": {
+                "Color": 864, 
+                "Style": "Marker", 
+		"MarkerStyle": 21,
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttbb_DL_nr___effectiveXS"
+                ]
+            }, 
+            "ttother_DL_UR": {
+                "Color": 864, 
+                "Style": "Marker", 
+		"MarkerStyle": 21,
+                "Names": [
+                    "2017___ttother_DL_nr___effectiveXS"
+                ]
+            }, 
+            "ttother_DL_FR": {
+                "Color": 864, 
+                "Style": "Marker", 
+		"MarkerStyle": 21,
+                "Names": [
+                    "2017___ttother_DL_fr___effectiveXS"
+                ]
+            }, 
+            "tt_DL": {
+                "Color": 1, 
+                "Style": "Line", 
+                "Names": [
+                    "2017___tt_DL_inclusive___effectiveXS"
+                ]
+            }
+        }
+    }
+}
