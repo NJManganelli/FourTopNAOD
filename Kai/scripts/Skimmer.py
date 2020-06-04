@@ -26,6 +26,8 @@ parser.add_argument('--cut', dest='cut', action='store', type=str, default="",
                     help='cutstring valid for TTree::Draw()')
 parser.add_argument('--keepdrop', dest='keepdrop', action='store', type=str, default=None,
                     help='path to keepdrop text file for the PostProcessor')
+parser.add_argument('--nEvents', dest='nEvents', action='store', type=int, default=None,
+                    help='number of Events to process (input)')
 args = parser.parse_args()
 
 Tuples = []
@@ -61,7 +63,7 @@ p=PostProcessor(writeLocation,
                 noOut=False,
                 postfix=args.postfix,
                 haddFileName=haddName,
-                maxEntries=None,
+                maxEntries=args.nEvents,
                 # histFileName=hName,
                 # histDirName=hDirName,
 )
