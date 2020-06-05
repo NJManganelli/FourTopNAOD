@@ -38,6 +38,30 @@ else:
 #WARNING! Do not rerun this cell without restarting the kernel, it will kill it!
 ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way
 ROOT.gROOT.ProcessLine(".L /eos/user/n/nmangane/CMSSW/CMSSW_10_2_18/src/FourTopNAOD/RDF/FTFunctions.cpp")
+ROOT.gInterpreter.Declare("""
+    const UInt_t barWidth = 60;
+    ULong64_t processed = 0, totalEvents = 0;
+    std::string progressBar;
+    std::mutex barMutex; 
+    auto registerEvents = [](ULong64_t nIncrement) {totalEvents += nIncrement;};
+
+    ROOT::RDF::RResultPtr<ULong64_t> AddProgressBar(ROOT::RDF::RNode df, int everyN=10000, int totalN=100000) {
+        registerEvents(totalN);
+        auto c = df.Count();
+        c.OnPartialResultSlot(everyN, [everyN] (unsigned int slot, ULong64_t &cnt){
+            std::lock_guard<std::mutex> l(barMutex);
+            processed += everyN; //everyN captured by value for this lambda
+            progressBar = "[";
+            for(UInt_t i = 0; i < static_cast<UInt_t>(static_cast<Float_t>(processed)/totalEvents*barWidth); ++i){
+                progressBar.push_back('|');
+            }
+            // escape the '\' when defined in python string
+            std::cout << "\\r" << std::left << std::setw(barWidth) << progressBar << "] " << processed << "/" << totalEvents << std::flush;
+        });
+        return c;
+    }
+""")
+
 
 #FIXME: Need filter efficiency calculated for single lepton generator filtered sample. First approximation will be from MCCM (0.15) but as seen before, it's not ideal. 
 #May need to recalculate using genWeight/sumWeights instead of sign(genWeight)/(nPositiveEvents - nNegativeEvents), confirm if there's any difference.
@@ -3172,8 +3196,8 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                         )
                         print("{} - effectiveXS - {}".format(processName, formulaForEffectiveXS))
                     if fillDiagnosticHistos == True:
-                        diagnostic_e_mask = "Electron_pt > 15 && Electron_cutBased >= 2 && ((abs(Electron_eta) < 1.4442 && abs(Electron_dxy) < 0.05 && abs(Electron_dz) < 0.1) || (abs(Electron_eta) > 1.5660 && abs(Electron_eta) < 2.5 && abs(Electron_dxy) < 0.10 && abs(Electron_dz) < 0.2))"
-                        diagnostic_mu_mask = "Muon_pt > 15 && abs(Muon_eta) < 2.4 && Muon_looseId == true"
+                        diagnostic_e_mask = "Electron_pt > 15 && Electron_cutBased >= 2 && ((abs(Electron_eta) < 1.4442 && abs(Electron_ip3d) < 0.05 && abs(Electron_dz) < 0.1) || (abs(Electron_eta) > 1.5660 && abs(Electron_eta) < 2.5 && abs(Electron_ip3d) < 0.10 && abs(Electron_dz) < 0.2))"
+                        diagnostic_mu_mask = "Muon_pt > 15 && abs(Muon_eta) < 2.4 && Muon_looseId == true && Muon_pfIsoId >= 4 && abs(Muon_ip3d) < 0.10 && abs(Muon_dz) < 0.02"
                         diagnostic_lepjet_idx = "Concatenate(Muon_jetIdx[diagnostic_mu_mask], Electron_jetIdx[diagnostic_e_mask])"
                         diagnostic_jet_idx = "FTA::generateIndices(Jet_pt)"
                         diagnostic_jet_mask = "ROOT::VecOps::RVec<int> jmask = (Jet_pt > 30 && abs(Jet_eta) < 2.5 && Jet_jetId > 2); "\
@@ -5905,8 +5929,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                               verbose=verbose,
                                              )
             
-            print("FIXME: Need to make cuts on HT, MET, InvariantMass, ETC. properly")
-            counts[name][lvl] = the_df[name][lvl].Count()
+            counts[name][lvl] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(the_df[name][lvl]), max(100, int(event_counts[index]/5000)), int(event_counts[index]))
             # histos[name][lvl] = {} #new style, populated inside fillHistos... differs from BTaggingYields right now! Future work
             packedNodes[name][lvl] = None
             stats[name][lvl] = {}
