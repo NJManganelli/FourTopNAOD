@@ -5780,6 +5780,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         if not os.path.isdir(filelistDir):
             os.makedirs(filelistDir)
         sampleOutFile = "{base}/{era}__{src}__{sample}.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
+        # sampleFriendFile = "{base}/{era}__{src}__{sample}__Friend0.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
         fileList = []
         if os.path.isfile(sampleOutFile):
             fileList = getFiles(query="list:{}".format(sampleOutFile), outFileName=None)
@@ -5798,10 +5799,22 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         if transformedFileList.size() < 1:
             print("No files located... skipping sample {}".format(name))
             continue
+
+        #Construct TChain that we can add friends to potentially, but similarly constructin TChains and adding the chains with AddFriend
+        print("Creating TChain for sample {}".format(name))
+        tcmain = ROOT.TChain("Events")
+        for vfe in transformedFileList:
+            print("\t{}".format(vfe))
+            tcmain.Add(vfe)
+        # tcfriend0 = ROOT.TChain("Events")
+        # for vfef0 in transformedFileList_Friend0:
+        #     tcfriend0.Add(vfef0)
+        # tcmain.AddFriend(tcfriend0)
         # print("Initializing RDataFrame\n\t{} - {}".format(name, vals["source"][source_level]))
-        print("Initializing RDataFrame\n\t{} - {}".format(name, len(transformedFileList)))
+        # print("Initializing RDataFrame\n\t{} - {}".format(name, len(transformedFileList)))
+        print("Initializering RDataFrame with TChain")
         filtered[name] = {}
-        base[name] = RDF("Events", transformedFileList)
+        base[name] = RDF(tcmain)
         reports[name] = base[name].Report()
         counts[name] = {}
         # histos[name] = {}
@@ -5929,7 +5942,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                               verbose=verbose,
                                              )
             
-            counts[name][lvl] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(the_df[name][lvl]), max(100, int(event_counts[index]/5000)), int(event_counts[index]))
+            counts[name][lvl] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(the_df[name][lvl]), max(1000, int(event_counts[index]/5000)), int(event_counts[index]))
             # histos[name][lvl] = {} #new style, populated inside fillHistos... differs from BTaggingYields right now! Future work
             packedNodes[name][lvl] = None
             stats[name][lvl] = {}
@@ -5977,6 +5990,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                               era = vals["era"],
                                               printInfo = printBookkeeping,
                 )
+                print("What is happening in defineWeights here? Need to modify the prePackedNodes, then... pass on to the fillHistos method")
                 the_df[name][lvl] = defineWeights(prePackedNodes,
                                                   splitProcess = splitProcessConfig,
                                                   inclusiveProcess = inclusiveProcessConfig,
