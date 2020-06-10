@@ -410,7 +410,7 @@ bookerV2_MC = {
                                                       "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
                                                       "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                       "fractionalContribution": 0.11972537248,
-                                                      "effectiveCrossSection": 0.0486771857914,
+                                                      "effectiveCrossSection": 0.0486771857914 * 0.040/0.032,
                                                   },
                                        "ttbb_DL_nr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)",
                                                       "sumWeights": 15117576.3357,
@@ -430,7 +430,7 @@ bookerV2_MC = {
                                                       "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
                                                       "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                       "fractionalContribution": 1,
-                                                      "effectiveCrossSection": 0.265077636755,
+                                                      "effectiveCrossSection": 0.265077636755 * 0.040/0.032,
                                                   },
                                        "ttother_DL_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500",
                                                          "sumWeights": 80302570.8316,
@@ -450,7 +450,7 @@ bookerV2_MC = {
                                                          "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
                                                          "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                          "fractionalContribution": 0.11949870629,
-                                                         "effectiveCrossSection": 1.40805743121,
+                                                         "effectiveCrossSection": 1.40805743121 - 0.0486771857914 * (0.040 - 0.032)/0.032,
                                                   },
                                        "ttother_DL_nr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)",
                                                          "sumWeights": 4882573073.47,
@@ -470,7 +470,7 @@ bookerV2_MC = {
                                                          "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
                                                          "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                          "fractionalContribution": 1,
-                                                         "effectiveCrossSection": 85.6129913168,
+                                                         "effectiveCrossSection": 85.6129913168 - 0.265077636755 * (0.040 - 0.032)/0.032,
                                                      },
                                        "tt_DL_inclusive": {"filter": "return true;",
                                                            "sumWeights": 4980769317.03,
@@ -557,7 +557,7 @@ bookerV2_MC = {
                                                          "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
                                                          "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                          "fractionalContribution": 1 - 0.11972537248,
-                                                         "effectiveCrossSection": 0.0486771857914,
+                                                         "effectiveCrossSection": 0.0486771857914 * 0.040/0.032,
                                                      },
                                        "ttother_DL-GF_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500",
                                                             "sumWeights": 591691409.848,
@@ -577,7 +577,7 @@ bookerV2_MC = {
                                                             "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
                                                             "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                             "fractionalContribution": 1 - 0.11949870629,
-                                                            "effectiveCrossSection": 1.40805743121,
+                                                            "effectiveCrossSection": 1.40805743121 - 0.0486771857914 * (0.040 - 0.032)/0.032,
                                                         },
                                    },
                          "inclusiveProcess": {"tt_DL-GF_inclusive": {"sumWeights": 612101860.267,
@@ -647,7 +647,7 @@ bookerV2_MC = {
                                                       "nLep1nJet9GenHT500-550-effectiveXS": 0.000353660653723,
                                                       "nLep1nJet9pGenHT500p-effectiveXS": 0.00566776546042,
                                                       "fractionalContribution": 0.01384021714,
-                                                      "effectiveCrossSection": 0.0997284505393, 
+                                                      "effectiveCrossSection": 0.0997284505393 * 0.062/0.052, 
                                                   },
                                        "ttbb_SL_nr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)",
                                                       "sumWeights": 22135434.4955,
@@ -667,7 +667,7 @@ bookerV2_MC = {
                                                       "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
                                                       "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                       "fractionalContribution": 1,
-                                                      "effectiveCrossSection": 1.33237608423,
+                                                      "effectiveCrossSection": 1.33237608423 * 0.062/0.052,
                                                   },
                                        "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500",
                                                          "sumWeights": 36038396.785,
@@ -687,7 +687,7 @@ bookerV2_MC = {
                                                          "nLep1nJet9GenHT500-550-effectiveXS": 0.022473044957,
                                                          "nLep1nJet9pGenHT500p-effectiveXS": 0.259634326139,
                                                          "fractionalContribution": 0.01401549826,
-                                                         "effectiveCrossSection": 2.16922319732,
+                                                         "effectiveCrossSection": 2.16922319732 - 0.0997284505393 * (0.062 - 0.052)/0.052,
                                                   },
                                        "ttother_SL_nr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)",
                                                          "sumWeights": 5992649717.25,
@@ -707,7 +707,7 @@ bookerV2_MC = {
                                                          "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
                                                          "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                          "fractionalContribution": 1,
-                                                         "effectiveCrossSection": 360.709574761,
+                                                         "effectiveCrossSection": 360.709574761 - 1.33237608423 * (0.062 - 0.052)/0.052,
                                                   },
                                        "tt_SL_inclusive": {"filter": "return true;",
                                                            "sumWeights": 6052480387.47,
@@ -789,7 +789,7 @@ bookerV2_MC = {
                                                          "nLep1nJet9GenHT500-550-effectiveXS": 0.00620149363125,
                                                          "nLep1nJet9pGenHT500p-effectiveXS": 0.0983477644802,
                                                          "fractionalContribution": 1-0.01384021714,
-                                                         "effectiveCrossSection": 0.0997284505393,
+                                                         "effectiveCrossSection": 0.0997284505393 * 0.062/0.052,
                                                      },
                                        "ttother_SL-GF_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500",
                                                             "sumWeights": 2535249552.17,
@@ -809,7 +809,7 @@ bookerV2_MC = {
                                                             "nLep1nJet9GenHT500-550-effectiveXS": 0.182910323942,
                                                             "nLep1nJet9pGenHT500p-effectiveXS": 2.13882133962,
                                                             "fractionalContribution": 1 - 0.01401549826,
-                                                            "effectiveCrossSection": 2.16922319732,
+                                                            "effectiveCrossSection": 2.16922319732 - 0.0997284505393 * (0.062 - 0.052)/0.052,
                                                         },
                                    },
                          "inclusiveProcess": {"tt_SL_inclusive": {"sumWeights": 2653328518.69,
@@ -5570,7 +5570,8 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         f.write(line)
             
 def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-         BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, printBookkeeping=False, triggers=[], includeSampleNames=None, excludeSampleNames=None, verbose=False):
+         BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, printBookkeeping=False, triggers=[], includeSampleNames=None, 
+         excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True):
 
     ##################################################
     ##################################################
@@ -5752,6 +5753,8 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     
     filtered = {}
     base = {}
+    metanode = {}
+    metainfo = {}
     reports = {}
     samples = {}
     counts = {}
@@ -5803,9 +5806,12 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         #Construct TChain that we can add friends to potentially, but similarly constructin TChains and adding the chains with AddFriend
         print("Creating TChain for sample {}".format(name))
         tcmain = ROOT.TChain("Events")
+        tcmeta = ROOT.TChain("Runs")
         for vfe in transformedFileList:
             print("\t{}".format(vfe))
             tcmain.Add(vfe)
+            if checkMeta:
+                tcmeta.Add(vfe)
         # tcfriend0 = ROOT.TChain("Events")
         # for vfef0 in transformedFileList_Friend0:
         #     tcfriend0.Add(vfef0)
@@ -5815,6 +5821,25 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         print("Initializering RDataFrame with TChain")
         filtered[name] = {}
         base[name] = RDF(tcmain)
+        if checkMeta:
+            metanode[name] = RDF(tcmeta) #meta tree
+            if vals["isData"]:
+                metainfo[name] = {"run": metanode[name].Sum("run")}
+            else:
+                metainfo[name] = {"run": metanode[name].Sum("run"), 
+                                  "genEventCount": metanode[name].Sum("genEventCount"), 
+                                  "genEventSumw": metanode[name].Sum("genEventSumw"), 
+                                  "genEventSumw2": metanode[name].Sum("genEventSumw2"), 
+                                  "nLHEScaleSumw": metanode[name].Sum("nLHEScaleSumw"), 
+                                  "LHEScaleSumw": metanode[name].Sum("LHEScaleSumw"), 
+                                  "nLHEPdfSumw": metanode[name].Sum("nLHEPdfSumw"), 
+                                  "LHEPdfSumw": metanode[name].Sum("LHEPdfSumw")
+                              }
+            for mk, mv in metainfo[name].items():
+                metainfo[name][mk] = mv.GetValue()
+        metainfo[name]["totalEvents"] = tcmain.GetEntries()
+        print("\n{}".format(name))
+        pprint.pprint(metainfo[name])
         reports[name] = base[name].Report()
         counts[name] = {}
         # histos[name] = {}
@@ -5839,7 +5864,14 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                                               }}}
             
             if lvl == "BOOKKEEPING":
-                #We just need the info printed on this one...
+                #We just need the info printed on this one... book a Count node with progress bar if not quiet
+                if quiet:
+                    print("Going Quiet")
+                    booktrigger = base[name].Count()
+                else:
+                    print("Booking progress bar")
+                    booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(base[name]), 
+                                                      2000, long(metainfo[name]["totalEvents"]))
                 prePackedNodes = splitProcess(base[name], 
                                               splitProcess = splitProcessConfig, 
                                               inclusiveProcess = inclusiveProcessConfig,
@@ -5849,6 +5881,8 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                               printInfo = True,
                                               fillDiagnosticHistos = True,
                 )
+                #Trigger the loop
+                _ = booktrigger.GetValue()
                 for k, v in prePackedNodes["diagnosticHistos"].items():
                     print("{} - {}".format(k, v.keys()))
                 print("Writing diagnostic histos to {}".format(analysisDir + "/Diagnostics"))
@@ -5941,8 +5975,14 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                               sysVariations=systematics_2017, 
                                               verbose=verbose,
                                              )
-            
-            counts[name][lvl] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(the_df[name][lvl]), max(1000, int(event_counts[index]/5000)), int(event_counts[index]))
+
+            if quiet:
+                print("Going Quiet")
+                counts[name][lvl] = the_df[name][lvl].Count()
+            else:
+                print("Booking progress bar")
+                counts[name][lvl] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(the_df[name][lvl]), 
+                                                        min(5000, max(1000, int(event_counts[index]/5000))), long(metainfo[name]["totalEvents"]))
             # histos[name][lvl] = {} #new style, populated inside fillHistos... differs from BTaggingYields right now! Future work
             packedNodes[name][lvl] = None
             stats[name][lvl] = {}
@@ -6214,6 +6254,8 @@ if __name__ == '__main__':
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
                         help='output directory path defaulting to "."')
+    parser.add_argument('--quiet', dest='quiet', action='store_true',
+                        help='Disable progress bars')
     parser.add_argument('--bTagger', dest='bTagger', action='store', default='DeepCSV', type=str, choices=['DeepCSV', 'DeepJet'],
                         help='bTagger algorithm to be used')
     parser.add_argument('--noAggregate', dest='noAggregate', action='store_true',
@@ -6259,6 +6301,7 @@ if __name__ == '__main__':
     useAggregate = not args.noAggregate
     useHTOnly = args.useHTOnly
     useNJetOnly = args.useNJetOnly
+    quiet = args.quiet
     
     print("=========================================================")
     print("=               ____   _______      _                   =")
@@ -6285,6 +6328,7 @@ if __name__ == '__main__':
     else:
         print("Using all samples!")
     print("Verbose option: {verb}".format(verb=verb))
+    print("Queit option: {qt}".format(qt=quiet))
     print("Systematics (This code not yet integrated... testing): {}".format(args.systematics))    
 
 
@@ -6326,17 +6370,18 @@ if __name__ == '__main__':
                                       },
                            )
     elif stage == 'fill-diagnostics':
+        print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
-                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
+                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, source, "BOOKKEEPING", bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = True, 
-                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
+                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'fill-histograms':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
-                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
+                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'prepare-for-combine':
         print("This analysis stage is not yet finished. It will call the method histoCombine() which needs to be updated for the new internal key structure from fillHistos")
     else:
