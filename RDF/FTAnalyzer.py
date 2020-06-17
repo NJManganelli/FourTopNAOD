@@ -2499,7 +2499,7 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     zPre = []
     # zFin.append(("pwgt__LumiXS", "wgt_SUMW")) #Now defined in the splitProcess function
     zFin.append(("pwgt_LSF__nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
-    zPre.append(("pwgt__LumiXS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere
+    # zPre.append(("pwgt__LumiXS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere
     zPre.append(("pwgt_LSF__nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
     zPre.append(("pwgt_Z_vtx__nom", "((FTALepton{lpf}_pdgId.size() > 1 && (abs(FTALepton{lpf}_pdgId.at(0)) == 11 || abs(FTALepton{lpf}_pdgId.at(1)) == 11)) || (FTALepton{lpf}_pdgId.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 11)) ? EGamma_HLT_ZVtx_SF_nom : 1.00000000000000".format(lpf=leppostfix)))
     
@@ -2558,6 +2558,7 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     
     #Pure BTagging variations, no other variations necessary. 
     #Since there may be many, use a common base factor for fewer multiplies... for pre-btagging, they're identical!
+    print("\n\nWARNING! WARNING! L1PreFiringWeight Only applies to 2017 and perhaps 2016, drop it from calculations in 2018!")
     zFin.append(("pwgt_btagSF_common", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
     zPre.append(("pwgt_btagSF_common", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
     
@@ -2592,50 +2593,18 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #Load the initial or final definitions
     if final:
         z = zFin
-        nodes = input_df_or_nodes.get("nodes")
-        for processName in nodes:
-            if processName.lower() == "basenode": continue
-            # pdb.set_trace()
-            listOfColumns = nodes[processName]["BaseNode"].GetColumnNames()
-            if isData:
-                defName = "wgt__nom"
-                defFunc = "int i = 1; return i"
-                if defName not in listOfColumns:
-                    nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
-            else:
-                for defName, defFunc in z:
-                    if defName in listOfColumns:
-                        if verbose:
-                            print("{} already defined, skipping".format(defName))
-                        continue
-                    else:
-                        # prereqs = re.findall(r"[\w']+", defFunc)
-                        # allPreReqs = True
-                        # for prereq in prereqs:
-                        #     if prereq not in listOfColumns: allPreReqs = False
-                        if verbose:
-                            print("nodes[processName][\"BaseNode\"] = nodes[processName][\"BaseNode\"].Define(\"{}\", \"{}\")".format(defName, defFunc))
-                        nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
-                        listOfColumns.push_back(defName) 
-
-                        # if allPreReqs:
-                        #     nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
-                        #     listOfColumns.push_back(defName) 
-                        # else:
-                        #     print("Skipping definition for {} due to missing prereqs in the list: {}".format(defName, prereqs))
-                   
-        #return the dictionary of all nodes
-        return input_df_or_nodes
-
     else:
         z = zPre
-
-        listOfColumns = rdf.GetColumnNames()
+    nodes = input_df_or_nodes.get("nodes")
+    for processName in nodes:
+        if processName.lower() == "basenode": continue
+        # pdb.set_trace()
+        listOfColumns = nodes[processName]["BaseNode"].GetColumnNames()
         if isData:
             defName = "wgt__nom"
             defFunc = "int i = 1; return i"
             if defName not in listOfColumns:
-                rdf = rdf.Define(defName, defFunc)
+                nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
         else:
             for defName, defFunc in z:
                 if defName in listOfColumns:
@@ -2643,18 +2612,339 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                         print("{} already defined, skipping".format(defName))
                     continue
                 else:
+                    # prereqs = re.findall(r"[\w']+", defFunc)
+                    # allPreReqs = True
+                    # for prereq in prereqs:
+                    #     if prereq not in listOfColumns: allPreReqs = False
                     if verbose:
-                        print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
-                    rdf = rdf.Define(defName, defFunc)
-                    
+                        print("nodes[processName][\"BaseNode\"] = nodes[processName][\"BaseNode\"].Define(\"{}\", \"{}\")".format(defName, defFunc))
+                    nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
                     listOfColumns.push_back(defName) 
-        return rdf
+
+                    # if allPreReqs:
+                    #     nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
+                    #     listOfColumns.push_back(defName) 
+                    # else:
+                    #     print("Skipping definition for {} due to missing prereqs in the list: {}".format(defName, prereqs))
+               
+    #return the dictionary of all nodes
+    return input_df_or_nodes
+
+    # else:
+    #     z = zPre
+
+    #     listOfColumns = rdf.GetColumnNames()
+    #     if isData:
+    #         defName = "wgt__nom"
+    #         defFunc = "int i = 1; return i"
+    #         if defName not in listOfColumns:
+    #             rdf = rdf.Define(defName, defFunc)
+    #     else:
+    #         for defName, defFunc in z:
+    #             if defName in listOfColumns:
+    #                 if verbose:
+    #                     print("{} already defined, skipping".format(defName))
+    #                 continue
+    #             else:
+    #                 if verbose:
+    #                     print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
+    #                 rdf = rdf.Define(defName, defFunc)
+                    
+    #                 listOfColumns.push_back(defName) 
+    #     return rdf
     
+def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, histosDict=None, verbose=False,
+                   loadYields=None, lookupMap="LUM", useAggregate=True, useHTOnly=False, useNJetOnly=False, 
+                   calculateYields=True, HTArray=[500, 650, 800, 1000, 1200, 10000], nJetArray=[4,5,6,7,8,20],
+                   sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
+                                               "lep_postfix": "", 
+                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                               "jet_pt_var": "Jet_pt",
+                                               "jet_mass_var": "Jet_mass",
+                                               "met_pt_var": "METFixEE2017_pt",
+                                               "met_phi_var": "METFixEE2017_phi",
+                                               "btagSF": "Jet_btagSF_deepcsv_shape",
+                                               "weightVariation": False},
+                                  "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
+                                                                  "lep_postfix": "", 
+                                                                  "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                                  "jet_pt_var": "Jet_pt",
+                                                                  "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
+                                                                  "weightVariation": True},
+                                  "_btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
+                                                                    "lep_postfix": "", 
+                                                                    "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                                    "jet_pt_var": "Jet_pt",
+                                                                    "btagSF": "Jet_btagSF_deepcsv_shape_down_lf",
+                                                                    "weightVariation": True},
+                                              },
+               ):
+    """Calculate or load the event yields in various categories for the purpose of renormalizing btagging shape correction weights.
+    
+    A btagging preweight (event level) must be calculated using the product of all SF(function of discriminant, pt, eta) for
+    all selected jets. Then a ratio of the sum(weights before)/sum(weights after) for application of this btagging 
+    preweight serves as a renormalization, and this phase space extrapolation can be a function of multiple variables.
+    For high-jet multiplicity analyses, it can be expected to depend on nJet. The final btagging event weight
+    is then the product of this phase space ratio and the btagging preweight. This should be computed PRIOR to ANY
+    btagging requirements (cut on number of BTags); after, the event yields and shapes are expected to shift.
+    
+    The final and preweight are computed separately from the input weight (that is, it must be multiplied with the non-btagging event weight)
+    The yields are calculated as the sum of weights before and after multiplying the preweight with the input weight
 
-# In[ ]:
+    <sampleName> should be passed to provide a 'unique' key for the declared lookupMap. This is purely to avoid namesplace conflicts
+    when aggregate yields are to be used. If not using aggregates, it provides the actual lookup key (into a yields histogram)
+    <isData> If running on data, disable all systematic variations besides $NOMINAL/'_nom'
+    <histosDict> dictionary for writing the histograms to fill yields
+
+    Group - Yield Loading
+    <loadYields> string path to the BTaggingYields.root file containing the ratios
+    <lookupMap> is a string name for the lookupMap object (std::map<std::string, std::vector<TH2Lookup*> > in the ROOT interpreter.
+    This object can be shared amongnst several dataframes, as the key (std::string) is the sampleName. For each thread/slot assigned
+    to an RDataFrame, there will be a TH2Lookup pointer, to avoid multiple threads accessing the same object (has state)
+    <useAggregate> will toggle using the weighted average of all processed samples (those used when choosing to analyze the files)
+    <useHTOnly> and <useNJetOnly> will toggle the lookup to use the 1D yield ratios computed in either HT only or nJet only
+
+    Group - Yield Computation
+    <calculateYields> as indicated, fill histograms for the yields, making an assumption that there is a weight named
+    "prewgt<SYSTEMATIC_POSTFIX>" where the postfix is the key inside sysVariations. i.e. "$NOMINAL" -> "prewgt_nom" due to 
+    special replacement for nominal, and "_jesTotalUp" -> "prewgt_jesTotalUp" is expected
+    <HTBinWidth>, <HTMin>, <HTMax> are as expected. Don't screw up the math on your end, (max-min) should be evenly divisible.
+    <nJetBinWidth>, <nJetMin>, <nJetMax> are similar
+
+    For more info on btagging, see...
+    https://twiki.cern.ch/twiki/bin/viewauth/CMS/BTagShapeCalibration"""
+
+    if useAggregate:
+        yieldsKey = "Aggregate_"
+    else:
+        yieldsKey = "{}_".format(sampleName) #copy it, we'll modify
+    if useHTOnly:
+        yieldsKey += "1DX"
+    elif useNJetOnly:
+        yieldsKey += "1DY"        
+    
+    #internal variable/pointer to the TH2 lookup map, and the sample-specific one
+    iLUM = None
+    if loadYields != None:
+        calculateYields = False
+        #We need a lookupMap to store the TH2Lookup class with the yields loaded in them,
+        #With key1 based on the sample name and key2 based on slot number in the RDataFrame
+        #We need the string name for the object in the ROOT space, creating it if necessary
+        if type(lookupMap) == str:
+            #It's a string name, see if it's been declared in the ROOT instance and if not create it
+            try:
+                if str(type(getattr(ROOT, lookupMap))) == "<class 'ROOT.map<string,vector<TH2Lookup*> >'>":
+                    #We'll pick it up after the except statement
+                    pass
+            except:
+                ROOT.gInterpreter.Declare("std::map<std::string, std::vector<TH2Lookup*>> {0};".format(lookupMap))
+            iLUM = getattr(ROOT, lookupMap)
+        else:
+            raise RuntimeError("lookupMap (used in BTaggingYields function) must either be a string name "                               "for the declared function's (C++ variable) name, used to find or declare one of type "                               "std::map<std::string, std::vector<TH2Lookup*>>")
+        nSlots = input_df_or_nodes.GetNSlots()
+        assert os.path.isfile(loadYields), "BTaggingYield file does not appear to exist... aborting execution"
+        # while iLUM[sampleName].size() < nSlots:
+        #     if type(loadYields) == str:
+        #         iLUM[sampleName].push_back(ROOT.TH2Lookup(loadYields))
+        #     else:
+        #         raise RuntimeError("No string path to a yields file has been provided in BTaggingYields() ...")
+                
+        # #Test to see that it's accessible...
+        # testKeyA = yieldsKey
+        # testKeyB = "_nom"
+        # testNJ = 6
+        # testHT = 689.0
+        # testVal = iLUM[sampleName][0].getEventYieldRatio(testKeyA, testKeyB, testNJ, testHT)
+        # if verbose:
+        #     print("BTaggingYield has done a test evaluation on the yield histogram with search for histogram {}{}, nJet={}, HT={} and found value {}"\
+        #           .format(testKeyA, testKeyB, testNJ, testHT, testVal))
+        # assert type(testVal) == float, "LookupMap did not provide a valid return type, something is wrong"
+        # assert testVal < 5.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... (>5.0 is considered unrealistic...)"        
+    
+    if isData == True:
+        return input_df_or_nodes
+    else:
+    # if type(input_df_or_nodes) in [dict, collections.OrderedDict]:
+        histoNodes = histosDict #Inherit this from initiliazation, this is where the histograms will actually be stored
+        filterNodes = input_df_or_nodes.get("filterNodes")
+        nodes = input_df_or_nodes.get("nodes")
+        defineNodes = input_df_or_nodes.get("defineNodes", collections.OrderedDict())
+        diagnosticNodes = input_df_or_nodes.get("diagnosticNodes", collections.OrderedDict())
+        countNodes = input_df_or_nodes.get("countNodes", collections.OrderedDict())
+#Need to get the define nodes lengths and only define using those added in this function... 
+        #column guards
+        for processName in nodes.keys():
+            if processName not in defineNodes:
+                defineNodes[processName] = collections.OrderedDict()
+            if processName not in diagnosticNodes:
+                diagnosticNodes[processName] = collections.OrderedDict()
+            if processName not in countNodes:
+                countNodes[processName] = collections.OrderedDict()
+            # for decayChannel in nodes[processName].keys():
+            #     if processName not in nodes[processName]:
+            #         nodes[processName][decayChannel] = collections.OrderedDict()
+            #     if processName not in defineNodes[processName]:
+            #         defineNodes[processName][decayChannel] = collections.OrderedDict()
+            #     if processName not in diagnosticNodes[processName]:
+            #         diagnosticNodes[processName][decayChannel] = collections.OrderedDict()
+            #     if processName not in countNodes[processName]:
+            #         countNodes[processName][decayChannel] = collections.OrderedDict()
+            while iLUM[processName].size() < nSlots:
+                if type(loadYields) == str:
+                    iLUM[processName].push_back(ROOT.TH2Lookup(loadYields))
+                else:
+                    raise RuntimeError("No string path to a yields file has been provided in BTaggingYields() ...")
+                        
+            #Test to see that it's accessible...
+            testKeyA = yieldsKey
+            testKeyB = "_nom"
+            testNJ = 6
+            testHT = 689.0
+            testVal = iLUM[processName][0].getEventYieldRatio(testKeyA, testKeyB, testNJ, testHT)
+            if verbose:
+                print("BTaggingYield has done a test evaluation on the yield histogram with search for histogram {}{}, nJet={}, HT={} and found value {}"\
+                      .format(testKeyA, testKeyB, testNJ, testHT, testVal))
+            assert type(testVal) == float, "LookupMap did not provide a valid return type, something is wrong"
+            assert testVal >= 0.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... (<0.0 is considered unrealistic...)"        
+        
+
+            listOfColumns = nodes[processName].GetColumnNames() #This is a superset, containing non-Define'd columns as well
 
 
-def BTaggingYields(input_df, sampleName, channel="All", isData = True, histosDict=None, verbose=False,
+            # rdf = input_df
+            #Create list of the variations to be histogrammed (2D yields)
+            yieldList = []
+            #Add key to histos dictionary, if calculating the yields
+            if calculateYields and "BTaggingYields" not in histosDict.keys():
+                histosDict["BTaggingYields"] = {}
+            for sysVar, sysDict in sysVariations.items():
+                defineNodes[processName][sysVar] = []
+                isWeightVariation = sysDict.get("weightVariation")
+                branchpostfix = "__nom" if isWeightVariation else "_" + sysVar.replace("$NOMINAL", "_nom") #branch postfix for 
+                syspostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
+                jetMask = sysDict.get("jet_mask") #mask as defined for the jet collection under this systematic variation
+                jetPt = sysDict.get("jet_pt_var") #colum name of jet pt collection for this systematic
+                jetSF = sysDict.get("btagSF") #colum name of per-jet shape SFs
+                #We must get or calculate various weights, defined below
+                #This btagSFProduct is the product of the SFs for the selected jets from collection jetPt with mask jetMask
+                btagSFProduct = "btagSFProduct{spf}".format(spf=syspostfix)
+                #input weight, should include all corrections for this systematic variation except BTagging SF and yield ratio
+                calculationWeightBefore = "prewgt{spf}".format(spf=syspostfix)
+                #For calculating the yeild ratio, we need this weight, which will be the product of calculationWeightBefore and the product of btag SFs (no yield ratio!)
+                calculationWeightAfter = "calcBtagYields_after{spf}".format(spf=syspostfix)
+                #Define the form of the final name of the btagSFProduct * YieldRatio(HT, nJet)
+                #This needs to match what will be picked up in the final weight definitions!
+                btagFinalWeight = "pwgt_btag{spf}".format(spf=syspostfix)
+                
+                #Lets be really obvious about missing jet_masks... exception it
+                if jetMask not in listOfColumns:
+                    raise RuntimeError("Could not find {} column in method BTaggingYields".format(jetMask))
+                    
+                #Skip SFs for which the requisite per-jet SFs are not present...
+                if jetSF not in listOfColumns:
+                    if verbose: print("Skipping {} in BTaggingYields as it is not a valid column name".format(jetSF))
+                    continue
+                        
+                #Check we have the input weight for before btagSF and yield ratio multiplication
+                if calculationWeightBefore not in listOfColumns:
+                    raise RuntimeError("{} is not defined, cannot continue with calculating BTaggingYields".format(calculationWeightBefore))
+                
+                #Now check if the event preweight SF is in the list of columns, and if not, define it (common to calculating yields and loading them...)
+                #We might want to call this function twice to calculate yields for a future iteration and use an older iteration at the same time
+                if btagSFProduct not in listOfColumns:
+                    if calculateYields and btagSFProduct not in histosDict["BTaggingYields"].keys():
+                        histosDict["BTaggingYields"][btagSFProduct] = {}
+                    defineNodes[processName].append(("{}".format(btagSFProduct), "FTA::btagEventWeight_shape({}, {})".format(jetSF, jetMask)))
+                if calculationWeightAfter not in listOfColumns:
+                    defineNodes[processName].append(("{}".format(calculationWeightAfter), "{} * {}".format(calculationWeightBefore, 
+                                                                                                                                 btagSFProduct)))
+                        
+                #Check that the HT and nJet numbers are available to us, and if not, define them based on the available masks    
+                #if isScaleVariation:
+                nJetName = "nFTAJet{bpf}".format(bpf=branchpostfix)
+                HTName = "HT{bpf}".format(bpf=branchpostfix)
+                if nJetName not in listOfColumns:
+                    defineNodes[processName].append((nJetName, "{0}[{1}].size()".format(jetPt, jetMask)))
+                if HTName not in listOfColumns:
+                    defineNodes[processName].append((HTName, "Sum({0}[{1}])".format(jetPt, jetMask)))
+                    
+                #loadYields path...
+                if loadYields:
+                    # if useAggregate:
+                    # print("\nPROBLEM: syspostfix was assumed to have only one underscore before, now it has two. Until new Yields calculated, gonna hack this away...\n\n\n")
+                    defineNodes[processName].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{spf}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=processName, yk=yieldsKey, spf=syspostfix, nj=nJetName, ht=HTName))) #.replace("__", "_")
+                    # else:
+                    #     defineNodes[processName].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{vk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=processName, yk=processName, vk=btagSFProduct.replace("nonorm_",""), nj=nJetName, ht=HTName)))
+        
+                for defName, defFunc in defineNodes[processName][sysVar]:
+                    if defName in listOfColumns:
+                        if verbose:
+                            print("{} already defined, skipping".format(defName))
+                        continue
+                    else:
+                        if verbose:
+                            print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
+                        rdf = rdf.Define(defName, defFunc)
+                        listOfColumns.push_back(defName)        
+        
+         #            test = rdf.Define("testThis", "{lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{spf}\", {nj}, {ht}, true);".format(bsf=btagSFProduct, lm=lookupMap,\
+         # sn=processName, yk=yieldsKey, spf=syspostfix, nj=nJetName, ht=HTName)).Stats("testThis").GetMean()
+                    # print("Debugging test: {}".format(test))
+                    #calculate Yields path
+                    if calculateYields:
+                        k = btagSFProduct
+                        histosDict["BTaggingYields"][k] = {}
+                        #Prepare working variable-bin-size 2D models (root 6.20.04+ ?)
+                        nJetArr = array.array('d', nJetArray)
+                        HTArr = array.array('d', HTArray)
+                        ModelBefore = ("{}_BTaggingYield_{}_sumW_before".format(processName, btagSFProduct.replace("btagSFProduct_","")),
+                                       "BTaggingYield #Sigma#omega_{before}; HT; nJet",
+                                       len(HTArr)-1, HTArr, len(nJetArr), nJetArr)
+                        ModelAfter = ("{}_BTaggingYield_{}_sumW_after".format(processName, btagSFProduct.replace("btagSFProduct_","")),
+                                      "BTaggingYield #Sigma#omega_{after}; HT; nJet",
+                                      len(HTArr)-1, HTArr, len(nJetArr), nJetArr)
+                        ModelBefore1DX = ("{}_BTaggingYield1DX_{}_sumW_before".format(processName, btagSFProduct.replace("btagSFProduct_","")),
+                                          "BTaggingYield #Sigma#omega_{before}; HT; nJet",
+                                          len(HTArr)-1, HTArr, 1, [nJetArr[0], nJetArray[-1]])
+                        ModelAfter1DX = ("{}_BTaggingYield1DX_{}_sumW_after".format(processName, btagSFProduct.replace("btagSFProduct_","")),
+                                         "BTaggingYield #Sigma#omega_{after}; HT; nJet",
+                                         len(HTArr)-1, HTArr, 1, [nJetArr[0], nJetArray[-1]])
+                        ModelBefore1DY = ("{}_BTaggingYield1DY_{}_sumW_before".format(processName, btagSFProduct.replace("btagSFProduct_","")),
+                                          "BTaggingYield #Sigma#omega_{before}; HT; nJet",
+                                          1, [HTArr[0], HTArr[1]], len(nJetArr)-1, nJetArr)
+                        ModelAfter1DY = ("{}_BTaggingYield1DY_{}_sumW_after".format(processName, btagSFProduct.replace("btagSFProduct_","")),
+                                         "BTaggingYield #Sigma#omega_{after}; HT; nJet",
+                                         1, [HTArr[0], HTArr[1]], len(nJetArr)-1, nJetArr)
+                        histosDict["BTaggingYields"][k]["sumW_before"] = rdf.Histo2D(ModelBefore,
+                                                                                     HTName,
+                                                                                     nJetName,
+                                                                                     calculationWeightBefore)
+                        histosDict["BTaggingYields"][k]["sumW_after"] = rdf.Histo2D(ModelAfter,
+                                                                                      HTName,
+                                                                                      nJetName,
+                                                                                      calculationWeightAfter)
+                        #For Unified JetBinning calculation
+                        histosDict["BTaggingYields"][k]["1DXsumW_before"] = rdf.Histo2D(ModelBefore1DX,
+                                                                                     HTName,
+                                                                                     nJetName,
+                                                                                     calculationWeightBefore)
+                        histosDict["BTaggingYields"][k]["1DXsumW_after"] =  rdf.Histo2D(ModelAfter,
+                                                                                      HTName,
+                                                                                      nJetName,
+                                                                                      calculationWeightAfter)
+                        #For Unified HTBinning calculation
+                        histosDict["BTaggingYields"][k]["1DYsumW_before"] = rdf.Histo2D(ModelBefore,
+                                                                                     HTName,
+                                                                                     nJetName,
+                                                                                     calculationWeightBefore)
+                        histosDict["BTaggingYields"][k]["1DYsumW_after"] =  rdf.Histo2D(ModelAfter,
+                                                                                      HTName,
+                                                                                      nJetName,
+                                                                                      calculationWeightAfter)
+                return input_df_or_nodes
+        
+
+def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosDict=None, verbose=False,
                    loadYields=None, lookupMap="LUM", useAggregate=True, useHTOnly=False, useNJetOnly=False, 
                    calculateYields=True, HTBinWidth=10, HTMin=200, HTMax=3200, nJetBinWidth=1, nJetMin=4, nJetMax=20,
                    sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
@@ -2666,41 +2956,11 @@ def BTaggingYields(input_df, sampleName, channel="All", isData = True, histosDic
                                                "met_phi_var": "METFixEE2017_phi",
                                                "btagSF": "Jet_btagSF_deepcsv_shape",
                                                "weightVariation": False},
-                              "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
-                                              "lep_postfix": "",
-                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                              "jet_pt_var": "Jet_pt_jesTotalUp",
-                                              "jet_mass_var": "Jet_mass_jesTotalUp",
-                                              "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                              "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                              "btagSF": "Jet_btagSF_deepcsv_shape",
-                                              "weightVariation": False},
-                              "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
-                                                "lep_postfix": "",
-                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                                "jet_pt_var": "Jet_pt_jesTotalDown",
-                                                "jet_mass_var": "Jet_mass_jesTotalDown",
-                                                "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                                "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                                "btagSF": "Jet_btagSF_deepcsv_shape",
-                                                "weightVariation": False},
                                   "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
                                                                   "lep_postfix": "", 
                                                                   "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                                   "jet_pt_var": "Jet_pt",
                                                                   "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
-                                                                  "weightVariation": True},
-                                  "_btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
-                                                                    "lep_postfix": "", 
-                                                                    "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                    "jet_pt_var": "Jet_pt",
-                                                                    "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
-                                                                    "weightVariation": True},
-                                  "_btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
-                                                                  "lep_postfix": "", 
-                                                                  "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                  "jet_pt_var": "Jet_pt",
-                                                                  "btagSF": "Jet_btagSF_deepcsv_shape_up_lf",
                                                                   "weightVariation": True},
                                   "_btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
                                                                     "lep_postfix": "", 
@@ -2887,7 +3147,7 @@ def BTaggingYields(input_df, sampleName, channel="All", isData = True, histosDic
                 k = btagSFProduct
                 histosDict["BTaggingYields"][k] = {}
                 #Prepare working variable-bin-size 2D models (root 6.20.04+ ?)
-                nJetArr = array.array('d', [4, 5, 6, 7, 8, 9, 20])
+                nJetArr = array.array('d', [4, 5, 6, 7, 8, 20])
                 HTArr = array.array('d', [500, 650, 800, 1000, 1200, 10000])
                 ModelBefore = ("{}_BTaggingYield_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
                                                                                "BTaggingYield #Sigma#omega_{before}; HT; nJet",
@@ -3132,7 +3392,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
     lumiDict = {"2017": 41.53,
                 "2018": 59.97}
     filterNodes = dict() #For storing tuples to debug and be verbose about
-    defineNodes = dict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
+    defineNodes = collections.OrderedDict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
     countNodes = dict() #For storing the counts at each node
     diagnosticNodes = dict()
     diagnosticHistos = dict()
@@ -3269,6 +3529,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
                         diagnosticNodes[processName]["nominalXS::Sum"] = nodes[processName]["BaseNode"].Sum("nominalXS")
                         diagnosticNodes[processName]["nominalXS2::Sum"] = nodes[processName]["BaseNode"].Sum("nominalXS2")
+                    # pdb.set_trace()
                     diagnosticNodes[processName]["effectiveXS::Sum"] = nodes[processName]["BaseNode"].Sum("effectiveXS")
                     diagnosticNodes[processName]["effectiveXS2::Sum"] = nodes[processName]["BaseNode"].Sum("effectiveXS2")
                     diagnosticNodes[processName]["nEventsPositive::Count"] = nodes[processName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
@@ -3415,20 +3676,23 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
             if printInfo == True:
                 print("splitProcess(..., printInfo=True, ...) set, executing the event loop to gather and print diagnostic info (presumably from the non-event-selected source...")
                 for pName, pDict in diagnosticNodes.items():
-                    print("\tprocessName == {}".format(pName))
+                    print("processName == {}".format(pName))
                     for dName, dNode in pDict.items():
-                        print("\t\tdName == {}".format(dName))
-                        if "::Count" in dName:
-                            print("\t\t\tCount = {}".format(dNode.GetValue()))
-                        if "::Sum" in dName:
-                            print("\t\t\tSum = {}".format(dNode.GetValue()))
-                        if "::Stats" in dName:
+                        parseDName = dName.split("::")
+                        if parseDName[1] in ["Count", "Sum"]:
+                            dString = "\t\t\"{}\": {},".format(parseDName[0], dNode.GetValue())
+                        elif parseDName[1] in ["Stats"]:
                             thisStat = dNode.GetValue()
-                            print("\t\t\tMin = {}\tMean = {}\tMax = {}".format(thisStat.GetMin(), thisStat.GetMean(), thisStat.GetMax()))
-                        if "::Histo" in dName:
-                            print("\t\t\tNo method implemented for histograms, yet")
+                            dString = "\t\t\"{}::Min\": {}".format(parseDName[0], thisStat.GetMin())
+                            dString += "\n\t\t\"{}::Mean\": {}".format(parseDName[0], thisStat.GetMean())
+                            dString += "\n\t\t\"{}::Max\": {}".format(parseDName[0], thisStat.GetMax())
+                        elif parseDName[1] in ["Histo"]:
+                            dString = "\t\tNo method implemented for histograms, yet"
+                        else:
+                            dString = "\tDiagnostic node type not recognized: {}".format(parseDName[1])
+                        print(dString)
             
-    prePackedNodes = {}
+    prePackedNodes = dict()
     prePackedNodes["filterNodes"] = filterNodes
     prePackedNodes["nodes"] = nodes
     prePackedNodes["countNodes"] = countNodes
@@ -5985,21 +6249,13 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                            sysVariations=systematics_2017, 
                                            verbose=verbose,
                                           )
-            the_df[name][lvl] = defineWeights(the_df[name][lvl],
-                                              era=vals["era"],
-                                              isData=vals["isData"],
-                                              final=False,
-                                              sysVariations=systematics_2017, 
-                                              verbose=verbose,
-                                             )
-
             if quiet:
                 print("Going Quiet")
                 counts[name][lvl] = the_df[name][lvl].Count()
             else:
                 print("Booking progress bar")
                 counts[name][lvl] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(the_df[name][lvl]), 
-                                                        min(5000, max(1000, int(event_counts[index]/5000))), long(metainfo[name]["totalEvents"]))
+                                                        min(5000, max(1000, int(metainfo[name]["totalEvents"]/5000))), long(metainfo[name]["totalEvents"]))
             # histos[name][lvl] = {} #new style, populated inside fillHistos... differs from BTaggingYields right now! Future work
             packedNodes[name][lvl] = None
             stats[name][lvl] = {}
@@ -6027,26 +6283,34 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
             ##    n = hv.GetBinContent(1)
             ##    print(n)
             #Insert the yields or calculate them
-            the_df[name][lvl] = BTaggingYields(the_df[name][lvl], sampleName=name, isData=vals["isData"], 
-                                               histosDict=btagging[name][lvl], loadYields=BTaggingYieldsFile,
-                                               useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
-                                               sysVariations=systematics_2017, 
-                                               calculateYields=calculateTheYields,
-                                               HTBinWidth=10, HTMin=200, HTMax=3200,
-                                               nJetBinWidth=1, nJetMin=4, nJetMax=20,
-                                               verbose=verbose,
-                                              )
             #Define the final weights/variations so long as we have btagging yields inserted...
             # splitProcessConfig=None
             # print("Forcing splitProcess to False for now, check this line!")
+            prePackedNodes = splitProcess(the_df[name][lvl], 
+                                          splitProcess = splitProcessConfig, 
+                                          inclusiveProcess = inclusiveProcessConfig,
+                                          sampleName = name, 
+                                          isData = vals["isData"], 
+                                          era = vals["era"],
+                                          printInfo = printBookkeeping,
+            )
+            prePackedNodes = defineWeights(prePackedNodes,
+                                           era=vals["era"],
+                                           isData=vals["isData"],
+                                           final=False,
+                                           sysVariations=systematics_2017, 
+                                           verbose=verbose,
+            )
+            prePackedNodes = BTaggingYields(prePackedNodes, sampleName=name, isData=vals["isData"], 
+                                            histosDict=btagging[name][lvl], loadYields=BTaggingYieldsFile,
+                                            useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
+                                            sysVariations=systematics_2017, 
+                                            calculateYields=calculateTheYields,
+                                            HTArray=[500, 650, 800, 1000, 1200, 10000], 
+                                            nJetArray=[4,5,6,7,8,20],
+                                            verbose=verbose,
+            )
             if BTaggingYieldsFile:
-                prePackedNodes = splitProcess(the_df[name][lvl], 
-                                              splitProcess = splitProcessConfig, 
-                                              sampleName = name, 
-                                              isData = vals["isData"], 
-                                              era = vals["era"],
-                                              printInfo = printBookkeeping,
-                )
                 print("What is happening in defineWeights here? Need to modify the prePackedNodes, then... pass on to the fillHistos method")
                 the_df[name][lvl] = defineWeights(prePackedNodes,
                                                   splitProcess = splitProcessConfig,
@@ -6354,6 +6618,9 @@ if __name__ == '__main__':
         print("This function needs reworking... work on it")
         print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
         print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
+        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
+                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
+                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
         #      verbose=False)
         # packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, 
