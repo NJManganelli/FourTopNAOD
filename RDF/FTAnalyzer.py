@@ -4999,10 +4999,11 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
             #in the other axis, i.e. 1DY = normal Y bins, 1 X bin
             this_y_rebin = copy.copy(y_rebin)
             this_x_rebin = copy.copy(x_rebin)
-            if "1DY" in numerator:
-                this_x_rebin = [x_rebin[0]] + [x_rebin[-1]]
-            if "1DX" in numerator:
-                this_y_rebin = [y_rebin[0]] + [y_rebin[-1]]
+            #Not needed anymore, explicit maps created
+            # if "1DY" in numerator:
+            #     this_x_rebin = [x_rebin[0]] + [x_rebin[-1]]
+            # if "1DX" in numerator:
+            #     this_y_rebin = [y_rebin[0]] + [y_rebin[-1]]
                 
             internals = copy.copy(stripped_numerator)
             for k, v in internalKeysReplacements.items():
@@ -5021,13 +5022,13 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
                 
             #Do rebinning, with flow control for optional numpy validation calculations
             if doNumpyValidation:
-                numerators_dict[name][numerator], yield_dict_num[name][numerator], yield_err_dict_num[name][numerator] =                                                                 rebin2D(numerators_dict[name][numerator],
+                numerators_dict[name][numerator], yield_dict_num[name][numerator], yield_err_dict_num[name][numerator] =                                                                                                                rebin2D(numerators_dict[name][numerator],
                                                                 "{}_{}".format(name, internals),
                                                                 this_x_rebin,
                                                                 this_y_rebin,
                                                                 return_numpy_arrays=True,
                                                                 )
-                denominator_dict[name][numerator], yield_dict_den[name][numerator], yield_err_dict_den[name][numerator] =                                                                 rebin2D(denominator_dict[name][numerator],
+                denominator_dict[name][numerator], yield_dict_den[name][numerator], yield_err_dict_den[name][numerator] =                                                                                                               rebin2D(denominator_dict[name][numerator],
                                                                 "{}_{}_denominator".format(name, internals),
                                                                 this_x_rebin,
                                                                 this_y_rebin,
@@ -5114,15 +5115,17 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
     else:
         x_rebin = sampleRebin.get("default")["X"]
         y_rebin = sampleRebin.get("default")["Y"]
+    pdb.set_trace()
     for numerator in numerators_dict["Aggregate"].keys():
         #Rebinning for this specific numerator. If "1DY" or "1DX" is in the name, there's only 1 bin 
         #in the other axis, i.e. 1DY = normal Y bins, 1 X bin
         that_y_rebin = copy.copy(y_rebin)
         that_x_rebin = copy.copy(x_rebin)
-        if "1DY" in numerator:
-            that_x_rebin = [x_rebin[0]] + [x_rebin[-1]]
-        if "1DX" in numerator:
-            that_y_rebin = [y_rebin[0]] + [y_rebin[-1]]
+        #Not needed
+        # if "1DY" in numerator:
+        #     that_x_rebin = [x_rebin[0]] + [x_rebin[-1]]
+        # if "1DX" in numerator:
+        #     that_y_rebin = [y_rebin[0]] + [y_rebin[-1]]
         internals = copy.copy(numerator)
         for k, v in internalKeysReplacements.items():
             internals = internals.replace(k, v)
@@ -5463,12 +5466,34 @@ def BTaggingEfficienciesAnalyzer(directory, outDirectory="{}/BTaggingEfficiencie
 def rebin2D(hist, name, xbins, ybins, return_numpy_arrays=False):
     """Rebin a 2D histogram by project slices in Y, adding them together, and using TH1::Rebin along the X axes,
     then create a new histogram with the content of these slices"""
+
     if return_numpy_arrays:
         if 'numpy' not in dir() and 'np' not in dir():
             try:
                 import numpy as np
             except Exception as e:
                 raise RuntimeError("Could not import the numpy module in method rebin2D")
+        #Early return workaround in case no rebinning is necessary, the trivial case. Would be better to split this into a separate function, but, ya know... PhD life!
+    if xbins is None and ybins is None:
+        final_hist = hist.Clone(name)
+        if return_numpy_arrays:
+            #Create arrays of zeros to be filled after rebinning, with extra rows and columns for over/underflows
+            #Note: actual bins are len(<axis>bins) - 1, and we add 2 for the x axis to account for under/overflow
+            #since y-axis will account for it via the ranges actually included when slicing and projections are done
+            nBinsX = final_hist.GetXaxis().GetNbins()+2
+            nBinsY = final_hist.GetYaxis().GetNbins()+2
+            hist_contents = np.zeros((nBinsY, nBinsX), dtype=float)
+            hist_errors = np.zeros((nBinsY, nBinsX), dtype=float)
+            #Reverse the y array since numpy counts from top to bottom, and swap X and Y coordinates (row-column)
+            for x in xrange(nBinsX):
+                for y in xrange(nBinsY):
+                    hist_contents[nBinsY-1-y, x] = final_hist.GetBinContent(x, y)
+                    hist_errors[nBinsY-1-y, x] = final_hist.GetBinError(x, y)
+            return final_hist, hist_contents, hist_errors
+        else:
+            return final_hist
+
+
     #xbins_vec = ROOT.std.vector(float)(len(xbins))
     nxbins = []
     xbins_vec = array.array('d', xbins)
@@ -6638,12 +6663,14 @@ if __name__ == '__main__':
 
     elif stage == 'combine-yields':
         print("Combining BTagging yields and calculating ratios, a necessary ingredient for calculating the final btag event weight for filling histograms")
-        yieldDir = "{adir}/BTaggingYields/{chan}_selection".format(adir=analysisDir, chan=channel)
+        yieldDir = "{adir}/BTaggingYields/{chan}".format(adir=analysisDir, chan=channel)
         globKey = "*.root"
         print("Looking for files to combine into yield ratios inside {ydir}".format(ydir=yieldDir))
         if verb:
             f = glob.glob("{}/{}".format(yieldDir, globKey))
-            print("\nFound these files: {files}\n\n".format(files=f))
+            f = [fiter for fiter in f if fiter.split("/")[-1] != "BTaggingYields.root"]
+            print("\nFound these files: ")
+            for fiter in f: print("\t\t{}".format(fiter))
         BTaggingYieldsAnalyzer(yieldDir, outDirectory="{}", globKey=globKey, stripKey=".root", includeSampleNames=includeSampleNames, 
                                excludeSampleNames=excludeSampleNames, mode="RECREATE", doNumpyValidation=False, forceDefaultRebin=False, verbose=verb,
                                internalKeys = {"Numerators":["_sumW_before"],
@@ -6653,14 +6680,18 @@ if __name__ == '__main__':
                                                            "_sumW_before": "",
                                                            "_sumW_after": "",
                                                        },
-                               sampleRebin={"default": {"Y": [4, 5, 6, 7, 8, 9, 20],
-                                                        "X": [500.0, 600, 700.0, 900.0, 1100.0, 3200.0],
+                               sampleRebin={"default": {"Y": None,
+                                                        "X": None,
                                                     },
                                         },
-                               overrides={"Title": "$NAME BTaggingYield r=#frac{#Sigma#omega_{before}}{#Sigma#omega_{after}}($INTERNALS)",
-                                          "Xaxis": "H_{T}/Bin (GeV)",
-                                          "Yaxis": "nJet",
-                                      },
+                               # sampleRebin={"default": {"Y": [4, 5, 6, 7, 8, 9, 20],
+                               #                          "X": [500.0, 600, 700.0, 900.0, 1100.0, 3200.0],
+                               #                      },
+                               #          },
+                               # overrides={"Title": "$NAME BTaggingYield r=#frac{#Sigma#omega_{before}}{#Sigma#omega_{after}}($INTERNALS)",
+                               #            "Xaxis": "H_{T}/Bin (GeV)",
+                               #            "Yaxis": "nJet",
+                               #        },
                            )
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
