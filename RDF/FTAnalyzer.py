@@ -2771,9 +2771,13 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
         bTaggingDefineNodes = input_df_or_nodes.get("bTaggingDefineNodes", collections.OrderedDict())
         diagnosticNodes = input_df_or_nodes.get("diagnosticNodes", collections.OrderedDict())
         countNodes = input_df_or_nodes.get("countNodes", collections.OrderedDict())
-#Need to get the define nodes lengths and only define using those added in this function... 
         #column guards
         for processName in nodes.keys():
+            if processName.lower() == "basenode": continue
+            #Add key to histos dictionary, if calculating the yields
+            if calculateYields and processName not in histosDict:
+                histosDict[processName] = collections.OrderedDict()
+                histosDict[processName][channel] = collections.OrderedDict()
             if processName not in  bTaggingDefineNodes:
                  bTaggingDefineNodes[processName] = collections.OrderedDict()
             if processName not in diagnosticNodes:
@@ -2791,7 +2795,6 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
             #         countNodes[processName][decayChannel] = collections.OrderedDict()
             
             if loadYields != None:
-                pdb.set_trace()
                 while iLUM[processName].size() < nSlots:
                     if isinstance(loadYields, str):
                         iLUM[processName].push_back(ROOT.TH2Lookup(loadYields))
@@ -2810,16 +2813,12 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                 assert type(testVal) == float, "LookupMap did not provide a valid return type, something is wrong"
                 assert testVal >= 0.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... (<0.0 is considered unrealistic...)"        
         
-
             listOfColumns = nodes[processName]["BaseNode"].GetColumnNames() #This is a superset, containing non-Define'd columns as well
 
 
             # rdf = input_df
             #Create list of the variations to be histogrammed (2D yields)
             yieldList = []
-            #Add key to histos dictionary, if calculating the yields
-            if calculateYields and "BTaggingYields" not in histosDict.keys():
-                histosDict["BTaggingYields"] = {}
             for sysVar, sysDict in sysVariations.items():
                 bTaggingDefineNodes[processName][sysVar] = []
                 isWeightVariation = sysDict.get("weightVariation")
@@ -2855,8 +2854,8 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                 #Now check if the event preweight SF is in the list of columns, and if not, define it (common to calculating yields and loading them...)
                 #We might want to call this function twice to calculate yields for a future iteration and use an older iteration at the same time
                 if btagSFProduct not in listOfColumns:
-                    if calculateYields and btagSFProduct not in histosDict["BTaggingYields"].keys():
-                        histosDict["BTaggingYields"][btagSFProduct] = {}
+                    # if calculateYields and btagSFProduct not in histosDict["BTaggingYields"].keys():
+                    #     histosDict["BTaggingYields"][btagSFProduct] = {}
                     bTaggingDefineNodes[processName][sysVar].append(("{}".format(btagSFProduct), "FTA::btagEventWeight_shape({}, {})".format(jetSF, jetMask)))
                 if calculationWeightAfter not in listOfColumns:
                     bTaggingDefineNodes[processName][sysVar].append(("{}".format(calculationWeightAfter), "{} * {}".format(calculationWeightBefore, 
@@ -2879,15 +2878,11 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                     bTaggingDefineNodes[processName][sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{pn}\"][rdfslot_]->getEventYieldRatio(\"{lk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, pn=processName, lk=yieldsKey+"_"+syspostfix, nj=nJetName, ht=HTName))) #.replace("__", "_")
         
                 for defName, defFunc in bTaggingDefineNodes[processName][sysVar]:
-                    print(defName)
-                    print(defFunc)
                     if defName in listOfColumns:
-                        print("Skipped")
                         if verbose:
                             print("{} already defined, skipping".format(defName))
                         continue
                     else:
-                        print("Defining")
                         if verbose:
                             print("nodes[processName][\"BaseNode\"] = nodes[processName][\"BaseNode\"].Define(\"{}\", \"{}\")".format(defName, defFunc))
                         nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
@@ -2899,7 +2894,7 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                     #calculate Yields path
                 if calculateYields:
                     k = btagSFProduct
-                    histosDict["BTaggingYields"][k] = {}
+                    # histosDict["BTaggingYields"][k] = {}
                     #Prepare working variable-bin-size 2D models (root 6.20.04+ ?)
                     nJetArr = array.array('d', nJetArray)
                     nJet1Bin = array.array('d', [nJetArray[0], nJetArray[-1]])
@@ -2924,34 +2919,33 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                     ModelAfter1DY = ROOT.RDF.TH2DModel("{}_BTaggingYield1DY_{}_sumW_after".format(processName, btagSFProduct.replace("btagSFProduct_","")),
                                                        "BTaggingYield #Sigma#omega_{after}; HT; nJet",
                                                        1, HT1Bin, len(nJetArr)-1, nJetArr)
-                    pdb.set_trace()
-                    histosDict["BTaggingYields"][k]["sumW_before"] = nodes[processName]["BaseNode"].Histo2D(ModelBefore,
-                                                                                 HTName,
-                                                                                 nJetName,
-                                                                                 calculationWeightBefore)
-                    histosDict["BTaggingYields"][k]["sumW_after"] = nodes[processName]["BaseNode"].Histo2D(ModelAfter,
-                                                                                  HTName,
-                                                                                  nJetName,
-                                                                                  calculationWeightAfter)
+                    histosDict[processName][channel][k+"__sumW_before"] = nodes[processName]["BaseNode"].Histo2D(ModelBefore,
+                                                                                                                 HTName,
+                                                                                                                 nJetName,
+                                                                                                                 calculationWeightBefore)
+                    histosDict[processName][channel][k+"__sumW_after"] = nodes[processName]["BaseNode"].Histo2D(ModelAfter,
+                                                                                                                HTName,
+                                                                                                                nJetName,
+                                                                                                                calculationWeightAfter)
                     #For Unified JetBinning calculation
-                    histosDict["BTaggingYields"][k]["1DXsumW_before"] = nodes[processName]["BaseNode"].Histo2D(ModelBefore1DX,
-                                                                                 HTName,
-                                                                                 nJetName,
-                                                                                 calculationWeightBefore)
-                    histosDict["BTaggingYields"][k]["1DXsumW_after"] =  nodes[processName]["BaseNode"].Histo2D(ModelAfter,
-                                                                                  HTName,
-                                                                                  nJetName,
-                                                                                  calculationWeightAfter)
+                    histosDict[processName][channel][k+"__1DXsumW_before"] = nodes[processName]["BaseNode"].Histo2D(ModelBefore1DX,
+                                                                                                                    HTName,
+                                                                                                                    nJetName,
+                                                                                                                    calculationWeightBefore)
+                    histosDict[processName][channel][k+"__1DXsumW_after"] =  nodes[processName]["BaseNode"].Histo2D(ModelAfter1DX,
+                                                                                                                    HTName,
+                                                                                                                    nJetName,
+                                                                                                                    calculationWeightAfter)
                     #For Unified HTBinning calculation
-                    histosDict["BTaggingYields"][k]["1DYsumW_before"] = nodes[processName]["BaseNode"].Histo2D(ModelBefore,
-                                                                                 HTName,
-                                                                                 nJetName,
-                                                                                 calculationWeightBefore)
-                    histosDict["BTaggingYields"][k]["1DYsumW_after"] =  nodes[processName]["BaseNode"].Histo2D(ModelAfter,
-                                                                                  HTName,
-                                                                                  nJetName,
-                                                                                  calculationWeightAfter)
-                return input_df_or_nodes
+                    histosDict[processName][channel][k+"__1DYsumW_before"] = nodes[processName]["BaseNode"].Histo2D(ModelBefore1DY,
+                                                                                                                    HTName,
+                                                                                                                    nJetName,
+                                                                                                                    calculationWeightBefore)
+                    histosDict[processName][channel][k+"__1DYsumW_after"] =  nodes[processName]["BaseNode"].Histo2D(ModelAfter1DY,
+                                                                                                                    HTName,
+                                                                                                                    nJetName,
+                                                                                                                    calculationWeightAfter)
+        return input_df_or_nodes
         
 
 def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosDict=None, verbose=False,
@@ -6137,7 +6131,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         the_df[name] = {}
         stats[name] = {}
         effic[name] = {}
-        btagging[name] = {}
+        # btagging[name] = {}
         cat_df[name] = {}
         substart[name] = {}
         subfinish[name] = {}
@@ -6270,7 +6264,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
             packedNodes[name][lvl] = None
             stats[name][lvl] = {}
             effic[name][lvl] = {}
-            btagging[name][lvl] = {}
+            # btagging[name][lvl] = {}
             cat_df[name][lvl] = {'fillHistos(...)':'NotRunOrFailed'} #will be a dictionary returned by fillHistos, so empty histo if fillHistos not run or fails
             #Define all the btag event weights or calculate yields based on defining the btag pre-event weight
             #as well as nJet_variation, HT_variation if necessary (move to defineJets function later)
@@ -6311,8 +6305,8 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                            sysVariations=systematics_2017, 
                                            verbose=verbose,
             )
-            prePackedNodes = BTaggingYields(prePackedNodes, sampleName=name, isData=vals["isData"], 
-                                            histosDict=btagging[name][lvl], loadYields=BTaggingYieldsFile,
+            prePackedNodes = BTaggingYields(prePackedNodes, sampleName=name, isData=vals["isData"], channel=lvl,
+                                            histosDict=btagging, loadYields=BTaggingYieldsFile,
                                             useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
                                             sysVariations=systematics_2017, 
                                             calculateYields=calculateTheYields,
@@ -6369,31 +6363,34 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
             theTime = subfinish[name][lvl] - substart[name][lvl]
 
             #Write the output!
-            if doBTaggingYields:
+            # if doBTaggingYields:
+            #     print("Writing outputs...")
+            #     writeDir = analysisDir + "/BTaggingYields"
+            #     writeHistosV1(btagging,
+            #                 writeDir,
+            #                 levelsOfInterest=[lvl],
+            #                 samplesOfInterest=[name],
+            #                 dict_keys="All",
+            #                 mode="RECREATE"
+            #                )
+            if doHistos or doBTaggingYields:
                 print("Writing outputs...")
-                writeDir = analysisDir + "/BTaggingYields"
-                writeHistosV1(btagging,
-                            writeDir,
-                            levelsOfInterest=[lvl],
-                            samplesOfInterest=[name],
-                            dict_keys="All",
-                            mode="RECREATE"
-                           )
-                print("Wrote BTaggingYields for {} to this directory:\n{}".format(name, writeDir))
-                print("To calculate the yield ratios, run 'BTaggingYieldsAnalyzer()' once all samples that are to be aggregated are in the directory")
-            if doHistos:
-                print("Writing outputs...")
-                writeDir = analysisDir + "/Histograms"
-                # pdb.set_trace()
                 processesOfInterest = []
                 if splitProcessConfig != None:
                     for thisProc in splitProcessConfig.get("processes", {}).keys():
-                        processesOfInterest.append(thisProc)
+                        processesOfInterest.append(vals.get("era") + "___" + thisProc)
                 else:
                     processesOfInterest.append(vals.get("era") + "___" + name)
                 print("Writing historams for...{}".format(processesOfInterest))
 
-                writeHistos(histos, 
+                if doHistos:
+                    writeDir = analysisDir + "/Histograms"
+                    writeDict = histos
+                if doBTaggingYields:
+                    writeDir = analysisDir + "/BTaggingYields"
+                    writeDict = btagging
+                pdb.set_trace()
+                writeHistos(writeDict, 
                             writeDir,
                             channelsOfInterest="All",
                             samplesOfInterest=processesOfInterest,
@@ -6401,6 +6398,8 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                             mode="RECREATE"
                         )
                 print("Wrote Histograms for {} to this directory:\n{}".format(name, writeDir))
+            if doBTaggingYields:
+                print("To calculate the yield ratios, run 'BTaggingYieldsAnalyzer()' once all samples that are to be aggregated are in the directory")
             #Add sample name to the list of processed samples and print it, in case things ****ing break in Jupyter Kernel
             processedSampleList.append(name)
             print("Processed Samples:")
