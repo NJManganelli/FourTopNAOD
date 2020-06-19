@@ -86,6 +86,50 @@ systematics_2017_NOMINAL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                  "btagSF": "Jet_btagSF_deepcsv_shape",
                                  "weightVariation": False},
 }
+systematics_2017_LIMITEDTEST = {"$NOMINAL": {"jet_mask": "jet_mask",
+                                             "lep_postfix": "",
+                                             "wgt_final": "wgt__nom",
+                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                             "jet_pt_var": "Jet_pt",
+                                             "jet_mass_var": "Jet_mass",
+                                             "met_pt_var": "METFixEE2017_pt",
+                                             "met_phi_var": "METFixEE2017_phi",
+                                             "btagSF": "Jet_btagSF_deepcsv_shape",
+                                             "weightVariation": False},
+                                "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
+                                                "lep_postfix": "",
+                                                "wgt_final": "wgt__jesTotalUp",
+                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                                "jet_pt_var": "Jet_pt_jesTotalUp",
+                                                "jet_mass_var": "Jet_mass_jesTotalUp",
+                                                "met_pt_var": "METFixEE2017_pt_jesTotalUp",
+                                                "met_phi_var": "METFixEE2017_phi_jesTotalUp",
+                                                "btagSF": "Jet_btagSF_deepcsv_shape",
+                                                "weightVariation": False},
+                                "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown",
+                                                  "lep_postfix": "",
+                                                  "wgt_final": "wgt__jesTotalDown", 
+                                                  "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                                  "jet_pt_var": "Jet_pt_jesTotalDown",
+                                                  "jet_mass_var": "Jet_mass_jesTotalDown",
+                                                  "met_pt_var": "METFixEE2017_pt_jesTotalDown",
+                                                  "met_phi_var": "METFixEE2017_phi_jesTotalDown",
+                                                  "btagSF": "Jet_btagSF_deepcsv_shape",
+                                                  "weightVariation": False},
+                                "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
+                                                                "lep_postfix": "", 
+                                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                                "jet_pt_var": "Jet_pt",
+                                                                "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
+                                                                "weightVariation": True},
+                                "_btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
+                                                                  "lep_postfix": "", 
+                                                                  "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                                  "jet_pt_var": "Jet_pt",
+                                                                  "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
+                                                                  "weightVariation": True},
+                                
+}
 systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                  "lep_postfix": "",
                                  "wgt_final": "wgt__nom",
@@ -167,6 +211,8 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
 }
 print("Only using the nominal variations right now, see L142")
 systematics_2017 = systematics_2017_NOMINAL
+systematics_2017 = systematics_2017_LIMITEDTEST
+
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier lumi channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
                             era="2017",
@@ -4935,11 +4981,11 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
             raise RuntimeError("Could not import the copy module in method BTaggingYieldsAnalyzer")
     files = glob.glob("{}/{}".format(directory, globKey))
     if includeSampleNames:
-        files = [f for f in files if f not in ["BTaggingYields.root"] + includeSampleNames]
+        files = [f for f in files if f.split("/")[-1] in includeSampleNames and f.split("/")[-1] not in ["BTaggingYields.root"]]
     elif excludeSampleNames:
-        files = [f for f in files if f in excludeSampleNames]
+        files = [f for f in files if f.split("/")[-1] not in excludeSampleNames and f.split("/")[-1] not in ["BTaggingYields.root"]]
     else:
-        files = [f for f in files if f not in ["BTaggingYields.root"]]
+        files = [f for f in files if f.split("/")[-1] not in ["BTaggingYields.root"]]
     #deduce names from the filenames, with optional stripKey parameter that defaults to .root
     names = [fname.split("/")[-1].replace(stripKey, "") for fname in files]
     fileDict = {}
@@ -5008,6 +5054,7 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
             internals = copy.copy(stripped_numerator)
             for k, v in internalKeysReplacements.items():
                 internals = internals.replace(k, v)
+            
             #Get the original numerator/denominator histograms...
             numerators_dict[name][numerator] = fileDict[name].Get(numerator)
             denominator_dict[name][numerator] = fileDict[name].Get(denominator) #Yeah, this will be duplicated x (number of numerators per denominator)
@@ -5115,7 +5162,6 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
     else:
         x_rebin = sampleRebin.get("default")["X"]
         y_rebin = sampleRebin.get("default")["Y"]
-    pdb.set_trace()
     for numerator in numerators_dict["Aggregate"].keys():
         #Rebinning for this specific numerator. If "1DY" or "1DX" is in the name, there's only 1 bin 
         #in the other axis, i.e. 1DY = normal Y bins, 1 X bin
@@ -6210,30 +6256,30 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                 filtered[name][lvl] = base[name].Filter(b[lvl], lvl)
             #Cache() seemingly has an issue with the depth/breadth of full NanoAOD file. Perhaps one with fewer branches would work
             #filtered[name][lvl] = filtered[name][lvl].Cache()
-            if vals.get("stitch") != None:
-                stitch_def = collections.OrderedDict()
-                stitch_def["stitch_jet_mask"] = "GenJet_pt > 30"
-                stitch_def["stitch_HT_mask"] = "GenJet_pt > 30 && abs(GenJet_eta) < 2.4"
-                stitch_def["stitch_lep_mask"] = "abs(LHEPart_pdgId) == 15 || abs(LHEPart_pdgId) == 13 || abs(LHEPart_pdgId) == 11"
-                stitch_def["stitch_nGenLep"] = "LHEPart_pdgId[stitch_lep_mask].size()"
-                stitch_def["stitch_nGenJet"] = "GenJet_pt[stitch_jet_mask].size()"
-                stitch_def["stitch_GenHT"] = "Sum(GenJet_pt[stitch_HT_mask])"
+            # if vals.get("stitch") != None:
+            #     stitch_def = collections.OrderedDict()
+            #     stitch_def["stitch_jet_mask"] = "GenJet_pt > 30"
+            #     stitch_def["stitch_HT_mask"] = "GenJet_pt > 30 && abs(GenJet_eta) < 2.4"
+            #     stitch_def["stitch_lep_mask"] = "abs(LHEPart_pdgId) == 15 || abs(LHEPart_pdgId) == 13 || abs(LHEPart_pdgId) == 11"
+            #     stitch_def["stitch_nGenLep"] = "LHEPart_pdgId[stitch_lep_mask].size()"
+            #     stitch_def["stitch_nGenJet"] = "GenJet_pt[stitch_jet_mask].size()"
+            #     stitch_def["stitch_GenHT"] = "Sum(GenJet_pt[stitch_HT_mask])"
                 
-                stdict = stitchDict[vals.get("era")][vals.get("stitch").get("channel")]
-                stitch_cut = "stitch_nGenLep == {} && stitch_nGenJet >= {} && stitch_GenHT >= {}"\
-                    .format(stdict.get("nGenLeps"), stdict.get("nGenJets"), stdict.get("GenHT"))
-                if vals.get("stitch").get("source") == "Nominal":
-                    stitch_cut = "!({})".format(stitch_cut)
-                elif vals.get("stitch").get("source") == "Filtered":
-                    print("Filtered sample, not producing a filter (no events expected to fail filtering. If otherwise, alter code")
-                else:
-                    print("Invalid stitching source type")
-                    sys.exit(1)
-                if verbose:
-                    print(stitch_cut)
-                for k, v in stitch_def.items():
-                    filtered[name][lvl] = filtered[name][lvl].Define("{}".format(k), "{}".format(v))
-                filtered[name][lvl] = filtered[name][lvl].Filter(stitch_cut, "nJet_GenHT_Filter")
+            #     stdict = stitchDict[vals.get("era")][vals.get("stitch").get("channel")]
+            #     stitch_cut = "stitch_nGenLep == {} && stitch_nGenJet >= {} && stitch_GenHT >= {}"\
+            #         .format(stdict.get("nGenLeps"), stdict.get("nGenJets"), stdict.get("GenHT"))
+            #     if vals.get("stitch").get("source") == "Nominal":
+            #         stitch_cut = "!({})".format(stitch_cut)
+            #     elif vals.get("stitch").get("source") == "Filtered":
+            #         print("Filtered sample, not producing a filter (no events expected to fail filtering. If otherwise, alter code")
+            #     else:
+            #         print("Invalid stitching source type")
+            #         sys.exit(1)
+            #     if verbose:
+            #         print(stitch_cut)
+            #     for k, v in stitch_def.items():
+            #         filtered[name][lvl] = filtered[name][lvl].Define("{}".format(k), "{}".format(v))
+            #     filtered[name][lvl] = filtered[name][lvl].Filter(stitch_cut, "nJet_GenHT_Filter")
             #Add the MET corrections, creating a consistently named branch incorporating the systematics loaded
             the_df[name][lvl] = METXYCorr(filtered[name][lvl],
                                           run_branch="run",
@@ -6414,7 +6460,6 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                 if doBTaggingYields:
                     writeDir = analysisDir + "/BTaggingYields"
                     writeDict = btagging
-                pdb.set_trace()
                 writeHistos(writeDict, 
                             writeDir,
                             channelsOfInterest="All",
@@ -6643,7 +6688,7 @@ if __name__ == '__main__':
     else:
         print("Using all samples!")
     print("Verbose option: {verb}".format(verb=verb))
-    print("Queit option: {qt}".format(qt=quiet))
+    print("Quiet option: {qt}".format(qt=quiet))
     print("Systematics (This code not yet integrated... testing): {}".format(args.systematics))    
 
 
