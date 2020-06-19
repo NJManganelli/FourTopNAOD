@@ -518,7 +518,8 @@ bookerV2_MC = {
                                                          "fractionalContribution": 1,
                                                          "effectiveCrossSection": 85.6129913168 - 0.265077636755 * (0.040 - 0.032)/0.032,
                                                      },
-                                       "tt_DL_inclusive": {"filter": "return true;",
+                                   },
+                         "inclusiveProcess": {"tt_DL_inclusive": {"filter": "return true;",
                                                            "sumWeights": 4980769317.03,
                                                            "sumWeights2": 3.64913523596e+11,
                                                            "nominalXS": 87.3348035714,
@@ -538,24 +539,7 @@ bookerV2_MC = {
                                                            "fractionalContribution": 1,
                                                            "effectiveCrossSection": 87.3348, 
                                                         },
-                                   },
-                         "inclusiveProcess": {"tt_DL_inclusive": {"sumWeights": 4980769317.03,
-                                                                  "sumWeights2": 3.64913523595e+11,
-                                                                  "nominalXS": 87.3348035713,
-                                                                  "nominalXS2": 0.000112194559601,
-                                                                  "effectiveXS": 87.3348035713,
-                                                                  "effectiveXS2": 0.000112194559601,
-                                                                  "nEventsPositive": 68818780,
-                                                                  "nEventsNegative": 279864,
-                                                                  "nLep2nJet7GenHT500-550-nominalXS": 0.181324102052,
-                                                                  "nLep2nJet7pGenHT500p-nominalXS": 1.456734617,
-                                                                  "nLep1nJet9GenHT500-550-nominalXS": 0.0,
-                                                                  "nLep1nJet9pGenHT500p-nominalXS": 0.0,
-                                                                  "nLep2nJet7GenHT500-550-effectiveXS": 0.181324102052,
-                                                                  "nLep2nJet7pGenHT500p-effectiveXS": 1.456734617,
-                                                                  "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
-                                                                  "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
-                                                              },
+
                                           },
                      },
     },
@@ -763,28 +747,9 @@ bookerV2_MC = {
                                                          "fractionalContribution": 1,
                                                          "effectiveCrossSection": 360.709574761 - 1.33237608423 * (0.062 - 0.052)/0.052,
                                                   },
-                                       "tt_SL_inclusive": {"filter": "return true;",
-                                                           "sumWeights": 6052480387.47,
-                                                           "sumWeights2": 1.85035027359e+12,
-                                                           "nominalXS": 364.310902493,
-                                                           "nominalXS2": 0.00670396137791,
-                                                           "effectiveXS": 364.310902493,
-                                                           "effectiveXS2": 0.00670396137791,
-                                                           "nEventsPositive": 20040607,
-                                                           "nEventsNegative": 81403,
-                                                           "nLep2nJet7GenHT500-550-nominalXS": 0.0,
-                                                           "nLep2nJet7pGenHT500p-nominalXS": 0.0,
-                                                           "nLep1nJet9GenHT500-550-nominalXS": 0.193983337319,
-                                                           "nLep1nJet9pGenHT500p-nominalXS": 2.26895164785,
-                                                           "nLep2nJet7GenHT500-550-effectiveXS": 0.0,
-                                                           "nLep2nJet7pGenHT500p-effectiveXS": 0.0,
-                                                           "nLep1nJet9GenHT500-550-effectiveXS": 0.193983337319,
-                                                           "nLep1nJet9pGenHT500p-effectiveXS": 2.26895164785,
-                                                           "effectiveCrossSection": 364.3109,
-                                                           "fractionalContribution": 1,
-                                                        },
                                    },
-                         "inclusiveProcess": {"tt_SL_inclusive": {"sumWeights": 6052480387.47,
+                         "inclusiveProcess": {"tt_SL_inclusive": {"filter": "return true;",
+                                                                  "sumWeights": 6052480387.47,
                                                                   "sumWeights2": 1.85035027359e+12,
                                                                   "nominalXS": 364.310902493,
                                                                   "nominalXS2": 0.00670396137791,
@@ -800,7 +765,10 @@ bookerV2_MC = {
                                                                   "nLep2nJet7pGenHT500p-effectiveXS": 0.0,
                                                                   "nLep1nJet9GenHT500-550-effectiveXS": 0.193983337319,
                                                                   "nLep1nJet9pGenHT500p-effectiveXS": 2.26895164785,
+                                                                  "effectiveCrossSection": 364.3109,
+                                                                  "fractionalContribution": 1,
                                                               },
+                                              
                                           },
                      },
     },
@@ -874,7 +842,7 @@ bookerV2_MC = {
                                                             "effectiveCrossSection": 2.16922319732 - 0.0997284505393 * (0.062 - 0.052)/0.052,
                                                         },
                                    },
-                         "inclusiveProcess": {"tt_SL_inclusive": {"sumWeights": 2653328518.69,
+                         "inclusiveProcess": {"tt_SL-GF_inclusive": {"sumWeights": 2653328518.69,
                                                                   "sumWeights2": 8.12201898319e+11,
                                                                   "nominalXS": 2.26895201732,
                                                                   "nominalXS2": 5.93926322975e-07,
@@ -3449,10 +3417,23 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
     nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
     #Define the base node in nodes when we split/don't split the process
 
-    if splitProcess != None:
-        if type(splitProcess) == dict or type(splitProcess) == collections.OrderedDict:
+    # if splitProcess != None:
+    if True: #Deprecate the alternate code path to reduce duplication, use the inclusiveProcess instead
+        if isinstance(splitProcess, (dict, collections.OrderedDict)) or isinstance(inclusiveProcess, (dict, collections.OrderedDict)):
             df_with_IDs = input_df
-            IDs = splitProcess.get("ID")
+            if isinstance(splitProcess, (dict, collections.OrderedDict)):
+                splitProcs = splitProcess.get("processes")
+                IDs = splitProcess.get("ID")  
+            else:
+                splitProcs = collections.OrderedDict()
+                IDs = {}
+            if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
+                inclusiveProc = inclusiveProcess.get("processes")
+                inclusiveDict = inclusiveProc.values()[0]
+                if inclusiveProc.keys()[0] not in splitProcs:
+                    splitProcs.update(inclusiveProc)
+                else:
+                    print("Inclusive process already defined, not overriding in splitProces")
             listOfColumns = df_with_IDs.GetColumnNames()
             for IDname, IDbool in IDs.items():
                 if IDbool and IDname == "unpackGenTtbarId":
@@ -3483,16 +3464,8 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                         df_with_IDs = df_with_IDs.Define("FTAGenHT", "Sum(GenJet_pt[GenJet_pt > 30 && abs(GenJet_eta) < 2.4])")
                         listOfColumns.push_back("FTAGenHT")
                 if IDbool and IDname == "subera":
-                    pass
+                    raise NotImplementedError("splitProcess 'subera' not yet implemented")
             nodes["BaseNode"] = df_with_IDs #Always store the base node we'll build upon in the next level
-            splitProcs = splitProcess.get("processes")
-            if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
-                inclusiveProc = inclusiveProcess.get("processes")
-                inclusiveDict = inclusiveProc.values()[0]
-                if splitProcs.get("inclusive", None) is None:
-                    splitProcs.update(inclusiveProc)
-                else:
-                    print("Inclusive process already defined, not overriding in splitProces")
             for preProcessName, processDict in splitProcs.items():
                 processName = era + "___" + preProcessName
                 filterString = processDict.get("filter")
@@ -3705,42 +3678,43 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
             raise RuntimeError("Invalid type passed for splitProcess. Require a dictionary containing keys 'ID' and 'processes' to split the sample.")
         
     else:
-        processName = era + "___" + sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
-        nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
-        #The below references branchpostfix since we only need nodes for these types of scale variations...
-        if processName not in nodes:
-            #L-2 filter, should be the packedEventID filter in that case
-            filterNodes[processName] = dict()
-            filterNodes[processName]["BaseNode"] = ("return true;", "{}".format(processName), processName, None, None, None, None)
-            nodes[processName] = dict()
-            nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
-            countNodes[processName] = collections.OrderedDict()
-            countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
-            diagnosticNodes[processName] = collections.OrderedDict()
-            defineNodes[processName] = collections.OrderedDict()
-            if not isData:
-                #Need to gather those bookkeeping stats from the original source rather than the ones after event selection...
-                diagnosticNodes[processName]["sumWeights::Sum"] = nodes[processName]["BaseNode"].Sum("genWeight")
-                diagnosticNodes[processName]["nEventsPositive::Count"] = nodes[processName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
-                diagnosticNodes[processName]["nEventsNegative::Count"] = nodes[processName]["BaseNode"].Filter("genWeight < 0", "genWeight < 0").Count()
-            if printInfo == True:
-                print("splitProcess(..., printInfo=True, ...) set, executing the event loop to gather and print diagnostic info (presumably from the non-event-selected source...")
-                for pName, pDict in diagnosticNodes.items():
-                    print("processName == {}".format(pName))
-                    for dName, dNode in pDict.items():
-                        parseDName = dName.split("::")
-                        if parseDName[1] in ["Count", "Sum"]:
-                            dString = "\t\t\"{}\": {},".format(parseDName[0], dNode.GetValue())
-                        elif parseDName[1] in ["Stats"]:
-                            thisStat = dNode.GetValue()
-                            dString = "\t\t\"{}::Min\": {}".format(parseDName[0], thisStat.GetMin())
-                            dString += "\n\t\t\"{}::Mean\": {}".format(parseDName[0], thisStat.GetMean())
-                            dString += "\n\t\t\"{}::Max\": {}".format(parseDName[0], thisStat.GetMax())
-                        elif parseDName[1] in ["Histo"]:
-                            dString = "\t\tNo method implemented for histograms, yet"
-                        else:
-                            dString = "\tDiagnostic node type not recognized: {}".format(parseDName[1])
-                        print(dString)
+        raise RuntimeError("Deprecated, form an inclusive process and configure splitProcess with it.")
+        # processName = era + "___" + sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
+        # nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
+        # #The below references branchpostfix since we only need nodes for these types of scale variations...
+        # if processName not in nodes:
+        #     #L-2 filter, should be the packedEventID filter in that case
+        #     filterNodes[processName] = dict()
+        #     filterNodes[processName]["BaseNode"] = ("return true;", "{}".format(processName), processName, None, None, None, None)
+        #     nodes[processName] = dict()
+        #     nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
+        #     countNodes[processName] = collections.OrderedDict()
+        #     countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
+        #     diagnosticNodes[processName] = collections.OrderedDict()
+        #     defineNodes[processName] = collections.OrderedDict()
+        #     if not isData:
+        #         #Need to gather those bookkeeping stats from the original source rather than the ones after event selection...
+        #         diagnosticNodes[processName]["sumWeights::Sum"] = nodes[processName]["BaseNode"].Sum("genWeight")
+        #         diagnosticNodes[processName]["nEventsPositive::Count"] = nodes[processName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
+        #         diagnosticNodes[processName]["nEventsNegative::Count"] = nodes[processName]["BaseNode"].Filter("genWeight < 0", "genWeight < 0").Count()
+        #     if printInfo == True:
+        #         print("splitProcess(..., printInfo=True, ...) set, executing the event loop to gather and print diagnostic info (presumably from the non-event-selected source...")
+        #         for pName, pDict in diagnosticNodes.items():
+        #             print("processName == {}".format(pName))
+        #             for dName, dNode in pDict.items():
+        #                 parseDName = dName.split("::")
+        #                 if parseDName[1] in ["Count", "Sum"]:
+        #                     dString = "\t\t\"{}\": {},".format(parseDName[0], dNode.GetValue())
+        #                 elif parseDName[1] in ["Stats"]:
+        #                     thisStat = dNode.GetValue()
+        #                     dString = "\t\t\"{}::Min\": {}".format(parseDName[0], thisStat.GetMin())
+        #                     dString += "\n\t\t\"{}::Mean\": {}".format(parseDName[0], thisStat.GetMean())
+        #                     dString += "\n\t\t\"{}::Max\": {}".format(parseDName[0], thisStat.GetMax())
+        #                 elif parseDName[1] in ["Histo"]:
+        #                     dString = "\t\tNo method implemented for histograms, yet"
+        #                 else:
+        #                     dString = "\tDiagnostic node type not recognized: {}".format(parseDName[1])
+        #                 print(dString)
             
     prePackedNodes = dict()
     prePackedNodes["filterNodes"] = filterNodes
@@ -6210,13 +6184,14 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
         for lvl in levelsOfInterest:
             splitProcessConfig = vals.get("splitProcess", None)
-            inclusiveProcessConfig = {"processes": {"{}_inclusive".format(name): {"filter": "return true;",
+            inclusiveProcessConfig = {"processes": {"{}{}".format(name, ""): {"filter": "return true;",
                                                                   "nEventsPositive": vals["nEventsPositive"],
                                                                   "nEventsNegative": vals["nEventsNegative"],
                                                                   "fractionalContribution": 1,
                                                                   "sumWeights": vals["sumWeights"],
                                                                   "effectiveCrossSection": vals["crossSection"],
                                                               }}}
+            pprint.pprint(inclusiveProcessConfig)
             
             if lvl == "BOOKKEEPING":
                 #We just need the info printed on this one... book a Count node with progress bar if not quiet
