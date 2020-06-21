@@ -96,7 +96,7 @@ systematics_2017_LIMITEDTEST = {"$NOMINAL": {"jet_mask": "jet_mask",
                                              "met_phi_var": "METFixEE2017_phi",
                                              "btagSF": "Jet_btagSF_deepcsv_shape",
                                              "weightVariation": False},
-                                "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
+                                "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
                                                 "lep_postfix": "",
                                                 "wgt_final": "wgt__jesTotalUp",
                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -106,7 +106,7 @@ systematics_2017_LIMITEDTEST = {"$NOMINAL": {"jet_mask": "jet_mask",
                                                 "met_phi_var": "METFixEE2017_phi_jesTotalUp",
                                                 "btagSF": "Jet_btagSF_deepcsv_shape",
                                                 "weightVariation": False},
-                                "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown",
+                                "jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown",
                                                   "lep_postfix": "",
                                                   "wgt_final": "wgt__jesTotalDown", 
                                                   "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -116,13 +116,13 @@ systematics_2017_LIMITEDTEST = {"$NOMINAL": {"jet_mask": "jet_mask",
                                                   "met_phi_var": "METFixEE2017_phi_jesTotalDown",
                                                   "btagSF": "Jet_btagSF_deepcsv_shape",
                                                   "weightVariation": False},
-                                "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
+                                "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
                                                                 "lep_postfix": "", 
                                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                                 "jet_pt_var": "Jet_pt",
                                                                 "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
                                                                 "weightVariation": True},
-                                "_btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
+                                "btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
                                                                   "lep_postfix": "", 
                                                                   "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                                   "jet_pt_var": "Jet_pt",
@@ -140,7 +140,7 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                  "met_phi_var": "METFixEE2017_phi",
                                  "btagSF": "Jet_btagSF_deepcsv_shape",
                                  "weightVariation": False},
-                    "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
+                    "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
                                     "lep_postfix": "",
                                     "wgt_final": "wgt__jesTotalUp",
                                     "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -150,7 +150,7 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                     "met_phi_var": "METFixEE2017_phi_jesTotalUp",
                                     "btagSF": "Jet_btagSF_deepcsv_shape",
                                     "weightVariation": False},
-                    "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown",
+                    "jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown",
                                       "lep_postfix": "",
                                       "wgt_final": "wgt__jesTotalDown", 
                                       "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -160,49 +160,49 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                       "met_phi_var": "METFixEE2017_phi_jesTotalDown",
                                       "btagSF": "Jet_btagSF_deepcsv_shape",
                                       "weightVariation": False},
-                    "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
+                    "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
                                                     "lep_postfix": "", 
                                                     "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                     "jet_pt_var": "Jet_pt",
                                                     "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
                                                     "weightVariation": True},
-                    "_btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
+                    "btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
                                                       "lep_postfix": "", 
                                                       "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                       "jet_pt_var": "Jet_pt",
                                                       "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
                                                       "weightVariation": True},
-                    "_btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
+                    "btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
                                                     "lep_postfix": "", 
                                                     "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                     "jet_pt_var": "Jet_pt",
                                                     "btagSF": "Jet_btagSF_deepcsv_shape_up_lf",
                                                     "weightVariation": True},
-                    "_btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
+                    "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
                                                       "lep_postfix": "", 
                                                       "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                       "jet_pt_var": "Jet_pt",
                                                       "btagSF": "Jet_btagSF_deepcsv_shape_down_lf",
                                                       "weightVariation": True},
-                    "_no_btag_shape_reweight": {"jet_mask": "jet_mask",
+                    "no_btag_shape_reweight": {"jet_mask": "jet_mask",
                                                 "lep_postfix": "", 
                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                 "jet_pt_var": "Jet_pt",
                                                 "btagSF": "Jet_btagSF_deepcsv_shape",
                                                 "weightVariation": True},
-                    "_no_puWeight": {"jet_mask": "jet_mask",
+                    "no_puWeight": {"jet_mask": "jet_mask",
                                      "lep_postfix": "", 
                                      "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                      "jet_pt_var": "Jet_pt",
                                      "btagSF": "Jet_btagSF_deepcsv_shape",
                                      "weightVariation": True},
-                    "_no_L1PreFiringWeight": {"jet_mask": "jet_mask",
+                    "no_L1PreFiringWeight": {"jet_mask": "jet_mask",
                                               "lep_postfix": "", 
                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                               "jet_pt_var": "Jet_pt",
                                               "btagSF": "Jet_btagSF_deepcsv_shape",
                                               "weightVariation": True},
-                    "_no_LSF": {"jet_mask": "jet_mask",
+                    "no_LSF": {"jet_mask": "jet_mask",
                                 "lep_postfix": "", 
                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                 "jet_pt_var": "Jet_pt",
@@ -1955,7 +1955,7 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
                                            "met_phi_var": "METFixEE2017_phi",
                                            "btagSF": "Jet_btagSF_deepcsv_shape",
                                            "weightVariation": False},
-                              "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
+                              "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
                                               "lep_postfix": "",
                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                               "jet_pt_var": "Jet_pt_jesTotalUp",
@@ -1964,7 +1964,7 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
                                               "met_phi_var": "METFixEE2017_phi_jesTotalUp",
                                               "btagSF": "Jet_btagSF_deepcsv_shape",
                                               "weightVariation": False},
-                              "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
+                              "jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
                                                 "lep_postfix": "",
                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                                 "jet_pt_var": "Jet_pt_jesTotalDown",
@@ -1988,7 +1988,7 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
         if isWeightVariation == True: 
             continue
         else:
-            branchpostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
+            branchpostfix = "__" + sysVar.replace("$NOMINAL", "nom")
         metPt = sysDict.get("met_pt_var")
         metPhi = sysDict.get("met_phi_var")
         metDoublet = "MET_xycorr_doublet{bpf}".format(bpf=branchpostfix)
@@ -2243,19 +2243,19 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
         if isWeightVariation == True: continue
-        syspostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
-        branchpostfix = "__nom" if isWeightVariation else "_" + sysVar.replace("$NOMINAL", "_nom")
+        syspostfix = "___" + sysVar.replace("$NOMINAL", "nom")
+        branchpostfix = "__nom" if isWeightVariation else "__" + sysVar.replace("$NOMINAL", "nom")
         #metPt = sysDict.get("met_pt_var")
         #metPhi = sysDict.get("met_phi_var")
         #These are the xy corrected MET values, to be used in the calculations
         metPtName = "FTAMET{bpf}_pt".format(bpf=branchpostfix)#"source" variable so use the branchpostfix of this systematic, whereas defines should use syspostfix like "MTof..."
         metPhiName = "FTAMET{bpf}_phi".format(bpf=branchpostfix)
-        z.append(("MTofMETandMu{spf}".format(spf=syspostfix), 
+        z.append(("MTofMETandMu{bpf}".format(bpf=branchpostfix), 
                          "FTA::transverseMassMET(FTAMuon{lpf}_pt, FTAMuon{lpf}_phi, FTAMuon{lpf}_mass, {mpt}, {mph})".format(lpf=leppostfix, mpt=metPtName, mph=metPhiName)))
-        z.append(("MTofMETandEl{spf}".format(spf=syspostfix),  
+        z.append(("MTofMETandEl{bpf}".format(bpf=branchpostfix),  
                          "FTA::transverseMassMET(FTAElectron{lpf}_pt, FTAElectron{lpf}_phi, FTAElectron{lpf}_mass, {mpt}, {mph})".format(lpf=leppostfix, mpt=metPtName, mph=metPhiName)))
         #There shouldn't be any variation on this quantity, but... easier looping
-        z.append(("MTofElandMu{spf}".format(spf=syspostfix), 
+        z.append(("MTofElandMu{bpf}".format(bpf=branchpostfix), 
                          "FTA::transverseMass(FTAMuon{lpf}_pt, FTAMuon{lpf}_phi, FTAMuon{lpf}_mass, FTAElectron{lpf}_pt, FTAElectron{lpf}_phi, FTAElectron{lpf}_mass)".format(lpf=leppostfix)))
 
     
@@ -2325,7 +2325,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
                                            "met_phi_var": "METFixEE2017_phi",
                                            "btagSF": "Jet_btagSF_deepcsv_shape",
                                            "weightVariation": False},
-                              "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
+                              "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
                                               "lep_postfix": "",
                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                               "jet_pt_var": "Jet_pt_jesTotalUp",
@@ -2334,7 +2334,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
                                               "met_phi_var": "METFixEE2017_phi_jesTotalUp",
                                               "btagSF": "Jet_btagSF_deepcsv_shape",
                                               "weightVariation": False},
-                              "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
+                              "jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
                                                 "lep_postfix": "",
                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                                 "jet_pt_var": "Jet_pt_jesTotalDown",
@@ -2384,7 +2384,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
         jetMask = sysDict.get("jet_mask")
         jetPt = sysDict.get("jet_pt_var")
         jetMass = sysDict.get("jet_mass_var")
-        postfix = "_" + sysVar.replace("$NOMINAL", "_nom")
+        postfix = "__" + sysVar.replace("$NOMINAL", "nom")
         
         #Fill lists
         z.append(("Jet_idx", "FTA::generateIndices(Jet_pt)"))
@@ -2489,7 +2489,8 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     pwgt = partial weight, component for final weight
     wgt_$SYSTEMATIC is form of final event weights, i.e. wgt_nom or wgt_puWeightDown
     prewgt_$SYSTEMATIC is form of weight for BTaggingYields calculation, should include everything but pwgt_btag__$SYSTEMATIC"""
-    if splitProcess != None:
+    # if splitProcess != None:
+    if isinstance(input_df_or_nodes, (dict, collections.OrderedDict)):
         print("Splitting process in defineWeights()")
         filterNodes = input_df_or_nodes.get("filterNodes")
         nodes = input_df_or_nodes.get("nodes")
@@ -2497,7 +2498,8 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
         diagnosticNodes = input_df_or_nodes.get("diagnosticNodes")
         countNodes = input_df_or_nodes.get("countNodes")
     else:
-        rdf = input_df_or_nodes
+        raise NotImplementedError("Non-split process has been deprecated in defineWeights, wrap the RDF nodes in nodes['<process-name>'] dictionary")
+        # rdf = input_df_or_nodes
 
     #There's only one lepton branch variation (nominal), but if it ever changes, this will serve as sign it's referenced here and made need to be varied
     leppostfix = ""
@@ -2511,58 +2513,61 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #Two lists of weight definitions, one or the other is chosen at the end via 'final' optional parameter
     zFin = []
     zPre = []
-    # zFin.append(("pwgt__LumiXS", "wgt_SUMW")) #Now defined in the splitProcess function
-    zFin.append(("pwgt_LSF__nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
-    # zPre.append(("pwgt__LumiXS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere
-    zPre.append(("pwgt_LSF__nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
-    zPre.append(("pwgt_Z_vtx__nom", "((FTALepton{lpf}_pdgId.size() > 1 && (abs(FTALepton{lpf}_pdgId.at(0)) == 11 || abs(FTALepton{lpf}_pdgId.at(1)) == 11)) || (FTALepton{lpf}_pdgId.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 11)) ? EGamma_HLT_ZVtx_SF_nom : 1.00000000000000".format(lpf=leppostfix)))
+    # zFin.append(("pwgt___LumiXS", "wgt_SUMW")) #Now defined in the splitProcess function
+    zFin.append(("pwgt_LSF___nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
+    # zPre.append(("pwgt___LumiXS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere
+    zPre.append(("pwgt_LSF___nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
+    if era == "2017": #This only applies to 2017
+        zPre.append(("pwgt_Z_vtx___nom", "((FTALepton{lpf}_pdgId.size() > 1 && (abs(FTALepton{lpf}_pdgId.at(0)) == 11 || abs(FTALepton{lpf}_pdgId.at(1)) == 11)) || (FTALepton{lpf}_pdgId.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 11)) ? EGamma_HLT_ZVtx_SF_nom : 1.00000000000000".format(lpf=leppostfix)))
+    else:
+        zPre.append(("pwgt_Z_vtx___nom", "(Int_t)1;"))
     
     #WARNING: on btag weights, it can ALWAYS be 'varied' to match the systematic, so that the event weight from
     #the correct jet collection, btag SFs, and yields is used. Always match! This duplicates some calculations uselessly
     #in the BTaggingYields function, but it should help avoid mistakes at the level of final calculations
     
-    print("\nFIXME: Need to propagate pwgt_Z_vtx__nom to all non-nominal event weights properly.\n")
+    print("\nFIXME: Need to propagate pwgt_Z_vtx___nom to all non-nominal event weights properly.\n")
     #Nominal weight
-    zFin.append(("wgt__nom", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_Z_vtx__nom * pwgt_btag__nom"))
+    zFin.append(("wgt___nom", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_btag___nom"))
     #pre-btagging yield weight. Careful modifying, it is 'inherited' for many other weights below!
-    zPre.append(("prewgt__nom", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_Z_vtx__nom"))
+    zPre.append(("prewgt___nom", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     
     #JES Up and Down - effectively the nominal weight, but with the CORRECT btag weight for those jets!
-    if "_jesTotalDown" in sysVariations.keys():
-        zFin.append(("wgt__jesTotalDown", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalDown"))
-        zPre.append(("prewgt__jesTotalDown", "prewgt__nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
+    if "jesTotalDown" in sysVariations.keys():
+        zFin.append(("wgt___jesTotalDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jesTotalDown"))
+        zPre.append(("prewgt___jesTotalDown", "prewgt___nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
         
-    if "_jesTotalDown" in sysVariations.keys():
-        zPre.append(("prewgt__jesTotalUp", "prewgt__nom"))
-        zFin.append(("wgt__jesTotalUp", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalUp"))
+    if "jesTotalDown" in sysVariations.keys():
+        zPre.append(("prewgt___jesTotalUp", "prewgt___nom"))
+        zFin.append(("wgt___jesTotalUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jesTotalUp"))
     
     #Pileup variations 
     print("FIXME: Using temporary definition of weights for PU variations (change pwgt_btag__VARIATION)")
-    if "_puWeightDown" in sysVariations.keys():
-        zFin.append(("wgt__puWeightDown", "pwgt__LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
-        #zFin.append(("wgt__puWeightDown", "pwgt__LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__puWeightDown"))
-        zPre.append(("prewgt__puWeightDown", "pwgt__LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-        #zPre.append(("prewgt__puWeightDown", "pwgt__LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    if "_puWeightUp" in sysVariations.keys():
-        zFin.append(("wgt__puWeightUp", "pwgt__LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
-        #zFin.append(("wgt__puWeightUp", "pwgt__LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__puWeightUp"))
-        zPre.append(("prewgt__puWeightUp", "pwgt__LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-        #zPre.append(("prewgt__puWeightUp", "pwgt__LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    if "puWeightDown" in sysVariations.keys():
+        zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom"))
+        #zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightDown"))
+        zPre.append(("prewgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
+        #zPre.append(("prewgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
+    if "puWeightUp" in sysVariations.keys():
+        zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom"))
+        #zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightUp"))
+        zPre.append(("prewgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
+        #zPre.append(("prewgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
     
     
     #L1 PreFiring variations
     print("FIXME: Using temporary definition of weights for L1PreFire variations (change pwgt_btag__VARIATION)")
-    if "_L1PreFireDown" in sysVariations.keys():
-        zFin.append(("wgt__L1PreFireDown", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom * pwgt_btag__nom"))
-        #zFin.append(("wgt__L1PreFireDown", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom * pwgt_btag__L1PreFireDown"))
-        zPre.append(("prewgt__L1PreFireDown", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom"))
-        #zPre.append(("prewgt__L1PreFireDown", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom"))
+    if "L1PreFireDown" in sysVariations.keys():
+        zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag___nom"))
+        #zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag__L1PreFireDown"))
+        zPre.append(("prewgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom"))
+        #zPre.append(("prewgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom"))
     
-    if "_L1PreFireUp" in sysVariations.keys():
-        zFin.append(("wgt__L1PreFireUp", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom * pwgt_btag__nom"))
-        #zFin.append(("wgt__L1PreFireUp", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom * pwgt_btag__L1PreFireUp"))
-        zPre.append(("prewgt__L1PreFireUp", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom"))
-        #zPre.append(("prewgt__L1PreFireUp", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom"))
+    if "L1PreFireUp" in sysVariations.keys():
+        zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag___nom"))
+        #zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag__L1PreFireUp"))
+        zPre.append(("prewgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom"))
+        #zPre.append(("prewgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom"))
     
     #Lepton ScaleFactor variations
     #To be done, still...
@@ -2573,32 +2578,32 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #Pure BTagging variations, no other variations necessary. 
     #Since there may be many, use a common base factor for fewer multiplies... for pre-btagging, they're identical!
     print("\n\nWARNING! WARNING! L1PreFiringWeight Only applies to 2017 and perhaps 2016, drop it from calculations in 2018!")
-    zFin.append(("pwgt_btagSF_common", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    zPre.append(("pwgt_btagSF_common", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    zFin.append(("pwgt_btagSF_common", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
+    zPre.append(("pwgt_btagSF_common", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
     
-    if "_btagSF_deepcsv_shape_down_hf" in sysVariations.keys():
-        zFin.append(("wgt__btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_down_hf"))
-        zPre.append(("prewgt__btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common"))#Really just aliases w/o btagging part
-    if "_btagSF_deepcsv_shape_up_hf" in sysVariations.keys():
-        zFin.append(("wgt__btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_up_hf"))
-        zPre.append(("prewgt__btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common"))
-    if "_btagSF_deepcsv_shape_down_lf" in sysVariations.keys():
-        zFin.append(("wgt__btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_down_lf"))
-        zPre.append(("prewgt__btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common"))
-    if "_btagSF_deepcsv_shape_up_lf" in sysVariations.keys():
-        zFin.append(("wgt__btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_up_lf"))
-        zPre.append(("prewgt__btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common"))
+    if "btagSF_deepcsv_shape_down_hf" in sysVariations.keys():
+        zFin.append(("wgt___btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_down_hf"))
+        zPre.append(("prewgt___btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common"))#Really just aliases w/o btagging part
+    if "btagSF_deepcsv_shape_up_hf" in sysVariations.keys():
+        zFin.append(("wgt___btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_up_hf"))
+        zPre.append(("prewgt___btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common"))
+    if "btagSF_deepcsv_shape_down_lf" in sysVariations.keys():
+        zFin.append(("wgt___btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_down_lf"))
+        zPre.append(("prewgt___btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common"))
+    if "btagSF_deepcsv_shape_up_lf" in sysVariations.keys():
+        zFin.append(("wgt___btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_up_lf"))
+        zPre.append(("prewgt___btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common"))
 
     #Special variations for testing central components
-    zFin.append(("wgt__no_btag_shape_reweight", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    zFin.append(("wgt__no_LSF", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom"))
-    zFin.append(("wgt__no_L1PreFiringWeight", "pwgt__LumiXS * puWeight * pwgt_LSF__nom"))
-    zFin.append(("wgt__no_puWeight", "pwgt__LumiXS * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    zFin.append(("wgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
+    zFin.append(("wgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom"))
+    zFin.append(("wgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom"))
+    zFin.append(("wgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
 
-    zPre.append(("prewgt__no_btag_shape_reweight", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
-    zPre.append(("prewgt__no_LSF", "pwgt__LumiXS * puWeight * L1PreFiringWeight_Nom"))
-    zPre.append(("prewgt__no_L1PreFiringWeight", "pwgt__LumiXS * puWeight * pwgt_LSF__nom"))
-    zPre.append(("prewgt__no_puWeight", "pwgt__LumiXS * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    zPre.append(("prewgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
+    zPre.append(("prewgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom"))
+    zPre.append(("prewgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom"))
+    zPre.append(("prewgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
 
 
     #Factorization/Renormalization weights... depend on dividing genWeight back out?
@@ -2615,7 +2620,7 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
         # pdb.set_trace()
         listOfColumns = nodes[processName]["BaseNode"].GetColumnNames()
         if isData:
-            defName = "wgt__nom"
+            defName = "wgt___nom"
             defFunc = "int i = 1; return i"
             if defName not in listOfColumns:
                 nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
@@ -2649,7 +2654,7 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
 
     #     listOfColumns = rdf.GetColumnNames()
     #     if isData:
-    #         defName = "wgt__nom"
+    #         defName = "wgt___nom"
     #         defFunc = "int i = 1; return i"
     #         if defName not in listOfColumns:
     #             rdf = rdf.Define(defName, defFunc)
@@ -2679,13 +2684,13 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                                                "met_phi_var": "METFixEE2017_phi",
                                                "btagSF": "Jet_btagSF_deepcsv_shape",
                                                "weightVariation": False},
-                                  "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
+                                  "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
                                                                   "lep_postfix": "", 
                                                                   "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                                   "jet_pt_var": "Jet_pt",
                                                                   "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
                                                                   "weightVariation": True},
-                                  "_btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
+                                  "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
                                                                     "lep_postfix": "", 
                                                                     "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                                     "jet_pt_var": "Jet_pt",
@@ -2721,7 +2726,7 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
     Group - Yield Computation
     <calculateYields> as indicated, fill histograms for the yields, making an assumption that there is a weight named
     "prewgt<SYSTEMATIC_POSTFIX>" where the postfix is the key inside sysVariations. i.e. "$NOMINAL" -> "prewgt_nom" due to 
-    special replacement for nominal, and "_jesTotalUp" -> "prewgt_jesTotalUp" is expected
+    special replacement for nominal, and "jesTotalUp" -> "prewgt_jesTotalUp" is expected
     <HTBinWidth>, <HTMin>, <HTMax> are as expected. Don't screw up the math on your end, (max-min) should be evenly divisible.
     <nJetBinWidth>, <nJetMin>, <nJetMax> are similar
 
@@ -2729,13 +2734,13 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
     https://twiki.cern.ch/twiki/bin/viewauth/CMS/BTagShapeCalibration"""
 
     if useAggregate:
-        yieldsKey = "Aggregate_"
+        yieldsKey = "Aggregate"
     else:
-        yieldsKey = "{}_".format(sampleName) #copy it, we'll modify
+        yieldsKey = "{}".format(sampleName) #copy it, we'll modify
     if useHTOnly:
-        yieldsKey += "1DX"
+        yieldsKey += "_1DX"
     elif useNJetOnly:
-        yieldsKey += "1DY"        
+        yieldsKey += "_1DY"        
     
     #internal variable/pointer to the TH2 lookup map, and the sample-specific one
     iLUM = None
@@ -2754,9 +2759,15 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                 ROOT.gInterpreter.Declare("std::map<std::string, std::vector<TH2Lookup*>> {0};".format(lookupMap))
             iLUM = getattr(ROOT, lookupMap)
         else:
-            raise RuntimeError("lookupMap (used in BTaggingYields function) must either be a string name "                               "for the declared function's (C++ variable) name, used to find or declare one of type "                               "std::map<std::string, std::vector<TH2Lookup*>>")
-        nSlots = input_df_or_nodes.GetNSlots()
-        assert os.path.isfile(loadYields), "BTaggingYield file does not appear to exist... aborting execution"
+            raise RuntimeError("lookupMap (used in BTaggingYields function) must either be a string name "\
+                               "for the declared function's (C++ variable) name, used to find or declare one of type "\
+                               "std::map<std::string, std::vector<TH2Lookup*>>")
+        nSlots = 1
+        try:
+            nSlots = input_df_or_nodes.get("nodes").get("BaseNode").GetNSlots()
+        except:
+            nSlots = ROOT.ROOT.RDataFrame(10).GetNSlots()
+        assert os.path.isfile(loadYields), "BTaggingYield file does not appear to exist... aborting execution\n{}".format(loadYields)
         # while iLUM[sampleName].size() < nSlots:
         #     if type(loadYields) == str:
         #         iLUM[sampleName].push_back(ROOT.TH2Lookup(loadYields))
@@ -2765,7 +2776,7 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                 
         # #Test to see that it's accessible...
         # testKeyA = yieldsKey
-        # testKeyB = "_nom"
+        # testKeyB = "nom"
         # testNJ = 6
         # testHT = 689.0
         # testVal = iLUM[sampleName][0].getEventYieldRatio(testKeyA, testKeyB, testNJ, testHT)
@@ -2782,7 +2793,9 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
         histoNodes = histosDict #Inherit this from initiliazation, this is where the histograms will actually be stored
         filterNodes = input_df_or_nodes.get("filterNodes")
         nodes = input_df_or_nodes.get("nodes")
-        bTaggingDefineNodes = input_df_or_nodes.get("bTaggingDefineNodes", collections.OrderedDict())
+        if "bTaggingDefineNodes" not in input_df_or_nodes:
+            input_df_or_nodes["bTaggingDefineNodes"] = collections.OrderedDict()
+        bTaggingDefineNodes = input_df_or_nodes.get("bTaggingDefineNodes")
         diagnosticNodes = input_df_or_nodes.get("diagnosticNodes", collections.OrderedDict())
         countNodes = input_df_or_nodes.get("countNodes", collections.OrderedDict())
         #column guards
@@ -2816,16 +2829,20 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                         raise RuntimeError("No string path to a yields file has been provided in BTaggingYields() ...")
                         
                 #Test to see that it's accessible...
-                testKeyA = yieldsKey
-                testKeyB = "_nom"
+                testKeyA = yieldsKey + "___nom"
+                # testKeyB = "__nom"
                 testNJ = 6
                 testHT = 689.0
-                testVal = iLUM[processName][0].getEventYieldRatio(testKeyA, testKeyB, testNJ, testHT)
                 if verbose:
+                    testVal = iLUM[processName][0].getEventYieldRatio(testKeyA, testNJ, testHT, True)
                     print("BTaggingYield has done a test evaluation on the yield histogram with search for histogram {}{}, nJet={}, HT={} and found value {}"\
-                          .format(testKeyA, testKeyB, testNJ, testHT, testVal))
+                          .format(testKeyA, testNJ, testHT, testVal))
+                else:
+                    testVal = iLUM[processName][0].getEventYieldRatio(testKeyA, testNJ, testHT)
+                # pdb.set_trace()
                 assert type(testVal) == float, "LookupMap did not provide a valid return type, something is wrong"
-                assert testVal >= 0.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... (<0.0 is considered unrealistic...)"        
+                assert testVal >= 0.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... ({} is considered unrealistic...)".format(testVal)
+                assert testVal <= 5.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... ({} is considered unrealistic...)".format(testVal)
         
             listOfColumns = nodes[processName]["BaseNode"].GetColumnNames() #This is a superset, containing non-Define'd columns as well
 
@@ -2836,8 +2853,8 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
             for sysVar, sysDict in sysVariations.items():
                 bTaggingDefineNodes[processName][sysVar] = []
                 isWeightVariation = sysDict.get("weightVariation")
-                branchpostfix = "__nom" if isWeightVariation else "_" + sysVar.replace("$NOMINAL", "_nom") #branch postfix for 
-                syspostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
+                branchpostfix = "__nom" if isWeightVariation else "__" + sysVar.replace("$NOMINAL", "nom") #branch postfix for identifying input branch variation
+                syspostfix = "___" + sysVar.replace("$NOMINAL", "nom")
                 jetMask = sysDict.get("jet_mask") #mask as defined for the jet collection under this systematic variation
                 jetPt = sysDict.get("jet_pt_var") #colum name of jet pt collection for this systematic
                 jetSF = sysDict.get("btagSF") #colum name of per-jet shape SFs
@@ -2846,6 +2863,7 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                 btagSFProduct = "btagSFProduct{spf}".format(spf=syspostfix)
                 #input weight, should include all corrections for this systematic variation except BTagging SF and yield ratio
                 calculationWeightBefore = "prewgt{spf}".format(spf=syspostfix)
+                print(calculationWeightBefore)
                 #For calculating the yeild ratio, we need this weight, which will be the product of calculationWeightBefore and the product of btag SFs (no yield ratio!)
                 calculationWeightAfter = "calcBtagYields_after{spf}".format(spf=syspostfix)
                 #Define the form of the final name of the btagSFProduct * YieldRatio(HT, nJet)
@@ -2889,7 +2907,7 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                     # if useAggregate:
                     # print("\nPROBLEM: syspostfix was assumed to have only one underscore before, now it has two. Until new Yields calculated, gonna hack this away...\n\n\n")
                     # bTaggingDefineNodes[processName][sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{pn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{spf}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, pn=processName, yk=yieldsKey, spf=syspostfix, nj=nJetName, ht=HTName))) #.replace("__", "_")
-                    bTaggingDefineNodes[processName][sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{pn}\"][rdfslot_]->getEventYieldRatio(\"{lk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, pn=processName, lk=yieldsKey+"_"+syspostfix, nj=nJetName, ht=HTName))) #.replace("__", "_")
+                    bTaggingDefineNodes[processName][sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{pn}\"][rdfslot_]->getEventYieldRatio(\"{lk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, pn=processName, lk=yieldsKey+syspostfix, nj=nJetName, ht=HTName))) #.replace("__", "_")
         
                 for defName, defFunc in bTaggingDefineNodes[processName][sysVar]:
                     if defName in listOfColumns:
@@ -2974,13 +2992,13 @@ def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosD
                                                "met_phi_var": "METFixEE2017_phi",
                                                "btagSF": "Jet_btagSF_deepcsv_shape",
                                                "weightVariation": False},
-                                  "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
+                                  "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
                                                                   "lep_postfix": "", 
                                                                   "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                                   "jet_pt_var": "Jet_pt",
                                                                   "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
                                                                   "weightVariation": True},
-                                  "_btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
+                                  "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
                                                                     "lep_postfix": "", 
                                                                     "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                                     "jet_pt_var": "Jet_pt",
@@ -3016,7 +3034,7 @@ def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosD
     Group - Yield Computation
     <calculateYields> as indicated, fill histograms for the yields, making an assumption that there is a weight named
     "prewgt<SYSTEMATIC_POSTFIX>" where the postfix is the key inside sysVariations. i.e. "$NOMINAL" -> "prewgt_nom" due to 
-    special replacement for nominal, and "_jesTotalUp" -> "prewgt_jesTotalUp" is expected
+    special replacement for nominal, and "jesTotalUp" -> "prewgt_jesTotalUp" is expected
     <HTBinWidth>, <HTMin>, <HTMax> are as expected. Don't screw up the math on your end, (max-min) should be evenly divisible.
     <nJetBinWidth>, <nJetMin>, <nJetMax> are similar
 
@@ -3090,8 +3108,8 @@ def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosD
         for sysVar, sysDict in sysVariations.items():
             z[sysVar] = []
             isWeightVariation = sysDict.get("weightVariation")
-            branchpostfix = "__nom" if isWeightVariation else "_" + sysVar.replace("$NOMINAL", "_nom") #branch postfix for 
-            syspostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
+            branchpostfix = "__nom" if isWeightVariation else "__" + sysVar.replace("$NOMINAL", "nom") #branch postfix for 
+            syspostfix = "___" + sysVar.replace("$NOMINAL", "nom")
             jetMask = sysDict.get("jet_mask") #mask as defined for the jet collection under this systematic variation
             jetPt = sysDict.get("jet_pt_var") #colum name of jet pt collection for this systematic
             jetSF = sysDict.get("btagSF") #colum name of per-jet shape SFs
@@ -3142,7 +3160,7 @@ def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosD
             if loadYields:
                 # if useAggregate:
                 print("\nPROBLEM: syspostfix was assumed to have only one underscore before, now it has two. Until new Yields calculated, gonna hack this away...\n\n\n")
-                z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{spf}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=yieldsKey, spf=syspostfix.replace("__", "_"), nj=nJetName, ht=HTName)))
+                z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=yieldsKey + syspostfix, nj=nJetName, ht=HTName)))
                 # else:
                 #     z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{vk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=sampleName, vk=btagSFProduct.replace("nonorm_",""), nj=nJetName, ht=HTName)))
 
@@ -3510,7 +3528,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     if not isData:
                         nodes[processName]["BaseNode"] = nodes["BaseNode"]\
                             .Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])\
-                            .Define("pwgt__LumiXS", wgtFormula)
+                            .Define("pwgt___LumiXS", wgtFormula)
                         if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
                             nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"]\
                                 .Define("nominalXS", formulaForNominalXS)\
@@ -3816,7 +3834,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     pi = ROOT.TMath.Pi()
     #Get the list of defined columns for checks
     histoNodes = histosDict #Inherit this from initiliazation, this is where the histograms will actually be stored
-    if type(input_df_or_nodes) in [dict, collections.OrderedDict]:
+    if isinstance(input_df_or_nodes, (dict, collections.OrderedDict)):
         filterNodes = input_df_or_nodes.get("filterNodes")
         nodes = input_df_or_nodes.get("nodes")
         defineNodes = input_df_or_nodes.get("defineNodes")
@@ -3897,7 +3915,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     #                                                                                                frCon=fractionalContribution,
     #                                                                                                sWPS=sumWeights
     #                                                                                            )
-    #             nodes[processName] = nodes["BaseNode"].Filter(filterString, filterName).Define("pwgt__LumiXS", wgtFormula)
+    #             nodes[processName] = nodes["BaseNode"].Filter(filterString, filterName).Define("pwgt___LumiXS", wgtFormula)
             
     #     else:
     #         raise RuntimeError("Invalid type passed for splitProcess. Require a dictionary containing keys 'ID' and 'processes' to split the sample.")
@@ -3957,13 +3975,13 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         #jetMass = sysDict.get("jet_mass_var")
         #Name histograms with their actual systematic variation postfix, using the convention that HISTO_NAME__nom is
         # the nominal and HISTO_NAME__$SYSTEMATIC is the variation, like so:
-        syspostfix = "__nom" if sysVar == "$NOMINAL" else "_{}".format(sysVar)
+        syspostfix = "___nom" if sysVar == "$NOMINAL" else "___{}".format(sysVar)
         #name branches for filling with the nominal postfix if weight variations, and systematic postfix if scale variation (jes_up, etc.)
         branchpostfix = None
         if isWeightVariation:
             branchpostfix = "__nom"
         else:
-            branchpostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
+            branchpostfix = "__" + sysVar.replace("$NOMINAL", "nom")
         leppostfix = sysDict.get("lep_postfix", "") #No variation on this yet, but just in case
         
         fillJet = "FTAJet{bpf}".format(bpf=branchpostfix)
@@ -4004,11 +4022,11 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                 # wgtVar = sysDict.get("wgt_final", "wgt__nom")
                 wgtVar = "wgt{spf}".format(spf=syspostfix)
                 if verbose:
-                    print("\tFor systematic variation {}, weight branch is {}".format(syspostfix.replace("__", ""), wgtVar))
+                    print("\tFor systematic variation {}, weight branch is {}".format(syspostfix.replace("___", ""), wgtVar))
                 if wgtVar not in listOfColumns:
                     print("{} not found as a valid weight variation, no backup solution implemented".format(wgtVar))
                     raise RuntimeError("Couldn't find a valid fallback weight variation in fillHistos()")
-                print("{} chosen as the weight for {} variation".format(wgtVar, syspostfix))
+                print("{} chosen as the weight for {} variation".format(wgtVar, syspostfix.replace("___", "")))
 
 
 
@@ -4026,7 +4044,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     if testInputChannel == "all": 
                         pass
                     elif testInputChannel != testLoopChannel: 
-                        print("Skipping channel {chan} in process {proc} for systematic {spf}".format(chan=decayChannel, proc=processName, spf=syspostfix))
+                        print("Skipping channel {chan} in process {proc} for systematic {spf}".format(chan=decayChannel, proc=processName, spf=syspostfix.replace("___", "")))
                         continue
                     #Regarding keys: we'll insert the systematic when we insert all th L0 X L1 X L2 keys in the dictionaries, not here in the L($N) keys
                     if decayChannel == "ElMu{lpf}".format(lpf=leppostfix):
@@ -4085,15 +4103,15 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         #protect against overwriting, as these nodes will be shared amongst non-weight variations!
                         #There will be only one basenode per decay channel
                         # filterNodes[processName][decayChannel] = collections.OrderedDict()
-                        filterNodes[processName][decayChannel] = dict()
+                        filterNodes[processName][decayChannel] = collections.OrderedDict()
                         filterNodes[processName][decayChannel]["BaseNode"] = (channelFilter, channelFiltName, processName, decayChannel, None, None, None) #L-1 filter
                         print(filterNodes[processName][decayChannel]["BaseNode"])
                         # nodes[processName][decayChannel] = collections.OrderedDict()
-                        nodes[processName][decayChannel] = dict()
+                        nodes[processName][decayChannel] = collections.OrderedDict()
                         nodes[processName][decayChannel]["BaseNode"] = nodes[processName]["BaseNode"].Filter(filterNodes[processName][decayChannel]["BaseNode"][0],
                                                                                                              filterNodes[processName][decayChannel]["BaseNode"][1])
                         # countNodes[processName][decayChannel] = collections.OrderedDict()
-                        countNodes[processName][decayChannel] = dict()
+                        countNodes[processName][decayChannel] = collections.OrderedDict()
                         countNodes[processName][decayChannel]["BaseNode"] = nodes[processName][decayChannel]["BaseNode"].Count()
 
                         #more freeform diagnostic nodes
@@ -4188,7 +4206,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         #Here we begin the complication of flattening the key-value structure. We do not nest any deeper, but instead
                         #form keys as combinations of l0Key, l1Key, l2Key... 
                         #Here, form the cross key, and note the reference key it must use
-                        crossl0Key = "{l0}_{spf}".format(l0=l0Key, spf=syspostfix) #3 underscore for separation later
+                        crossl0Key = "{l0}{spf}".format(l0=l0Key, spf=syspostfix)
                         referencel0Key = "BaseNode" #L0 Filters are applied to 'BaseNode' of the nodes[proc][chan] dictionary of dataframes
                         if crossl0Key in nodes[processName][decayChannel]:
                             raise RuntimeError("Tried to redefine rdf node due to use of the same key: {}".format(crossl0Key))
@@ -4212,7 +4230,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                             #Here we begin the complication of flattening the key-value structure. We do not nest any deeper, but instead
                             #form keys as combinations of l0Key, l1Key, l2Key... 
                             #Here, form the cross key, and note the reference key it must use
-                            crossl0l1Key = "{l0}_CROSS_{l1}_{spf}".format(l0=l0Key, l1=l1Key, spf=syspostfix)
+                            crossl0l1Key = "{l0}_CROSS_{l1}{spf}".format(l0=l0Key, l1=l1Key, spf=syspostfix)
                             referencel0l1Key = "{}".format(crossl0Key) #L1 Filters are applied to L0 filters, so this is the nodes[proc][chan][reference] to build filter on
                             if crossl0l1Key in nodes[processName][decayChannel]:
                                 raise RuntimeError("Tried to redefine rdf node due to use of the same key: {}".format(crossl0l1Key))
@@ -4236,7 +4254,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                 #Here we begin the complication of flattening the key-value structure. We do not nest any deeper, but instead
                                 #form keys as combinations of l0Key, l1Key, l2Key... 
                                 #Here, form the cross key, and note the reference key it must use
-                                crossl0l1l2Key = "{l0}_CROSS_{l1}_CROSS_{l2}_{spf}".format(l0=l0Key, l1=l1Key, l2=l2Key, spf=syspostfix)
+                                crossl0l1l2Key = "{l0}_CROSS_{l1}_CROSS_{l2}{spf}".format(l0=l0Key, l1=l1Key, l2=l2Key, spf=syspostfix)
                                 referencel0l1l2Key = "{}".format(crossl0l1Key)#L2 Filters are applied to L1 filters, so this is the nodes[proc][chan][reference] to build upon
                                 if crossl0l1l2Key in nodes[processName][decayChannel]:
                                     raise RuntimeError("Tried to redefine rdf node due to use of the same key: {}".format(crossl0l1l2Key))
@@ -4292,7 +4310,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         if len(matchedElements) == len(blindList): 
                             isBlinded = True
                             continue
-                    crossSeparated = "___".join(category.split("___")[:-1]).split("_CROSS_")#Strip the systematic name from the branch by taking only the first element
+                    crossSeparated = "___".join(category.split("___")[:-1]).split("_CROSS_")#Strip the systematic name from the branch by taking all but the last element
                     categoryName = "_".join(crossSeparated) #No extra references to (lep/branch/sys)postfixes...
                     if isBlinded:
                         categoryName = "blind_" + categoryName
@@ -4302,300 +4320,300 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     #Append histogram tuples for HistoND() methods to the list, the list should overall contain each set grouped by systematic variation
                     Hstart = len(defineNodes[processName][decayChannel])
                     for x in xrange(nJetsToHisto):
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_pt_jet{n}_{spf}"\
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_pt_jet{n}{spf}"\
                                                                         .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                         "Jet_{n} p_{{T}} ({spf}); p_{{T}}; Events"\
                                                                         .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0, 500),
                                                                        "{fj}_pt_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_eta_jet{n}_{spf}"\
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_eta_jet{n}{spf}"\
                                                                         .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                         "Jet_{n} #eta ({spf}); #eta; Events"\
                                                                         .format(n=x+1, spf=syspostfix.replace("__", "")), 100, -2.6, 2.6),
                                                                        "{fj}_eta_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_phi_jet{n}_{spf}"\
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_phi_jet{n}{spf}"\
                                                                         .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                         "Jet_{n} #phi ({spf}); #phi; Events".format(n=x+1, spf=syspostfix.replace("__", "")), 100, -pi, pi),
                                                                        "{fj}_phi_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepCSVB_jet{n}_{spf}"\
+                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepCSVB_jet{n}{spf}"\
                                                                          .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                          "Jet_{n} (p_{{T}} sorted) DeepCSV B Discriminant ({spf}); Discriminant; Events"\
                                                                          .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0.0, 1.0),
                                                                         "{fj}_DeepCSVB_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepJetB_jet{n}_{spf}"\
+                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepJetB_jet{n}{spf}"\
                                                                          .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                          "Jet_{n} (p_{{T}} sorted) DeepJet B Discriminant ({spf}); Discriminant; Events"\
                                                                          .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0.0, 1.0),
                                                                         "{fj}_DeepJetB_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepCSVB_sortedjet{n}_{spf}"\
+                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepCSVB_sortedjet{n}{spf}"\
                                                                          .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                          "Jet_{n} (DeepCSVB sorted) DeepCSV B Discriminant ({spf}); Discriminant; Events"\
                                                                          .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0.0, 1.0),
                                                                         "{fj}_DeepCSVB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepJetB_sortedjet{n}_{spf}"\
+                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepJetB_sortedjet{n}{spf}"\
                                                                          .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                          "Jet_{n} (DeepJetB sorted) DeepCSV B Discriminant ({spf}); Discriminant; Events"\
                                                                          .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0.0, 1.0),
                                                                         "{fj}_DeepJetB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_pt_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_pt{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "MET ({spf}); Magnitude (GeV); Events".format(spf=syspostfix.replace("__", "")), 
                                                                     100,0,1000), fillMET_pt, wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_phi_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_phi{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                     "MET #phi({spf}); #phi; Events".format(spf=syspostfix.replace("__", "")), 
                                                                     100,-pi,pi), fillMET_phi, wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_uncorr_pt_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_uncorr_pt{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "Uncorrected MET", 100,0,1000), fillMET_uncorr_pt, wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_uncorr_phi_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_uncorr_phi{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,-pi,pi), fillMET_uncorr_phi, wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_LeadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_LeadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, 10, 510), "FTAMuon{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_SubleadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_SubleadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, 10, 510), "FTAMuon{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_eta_LeadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_eta_LeadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -2.5, 2.5), "FTAMuon{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_eta_SubleadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_eta_SubleadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -2.5, 2.5), "FTAMuon{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_phi_LeadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_phi_LeadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -pi, pi), "FTAMuon{lpf}_phi_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_phi_SubleadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_phi_SubleadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -pi, pi), "FTAMuon{lpf}_phi_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                     "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso04_all".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_LeadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_LeadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, 10, 510), "FTAElectron{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_SubleadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_SubleadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, 10, 510), "FTAElectron{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_eta_LeadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_eta_LeadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -2.5, 2.5), "FTAElectron{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_eta_SubleadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_eta_SubleadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -2.5, 2.5), "FTAElectron{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_phi_LeadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_phi_LeadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -pi, pi), "FTAElectron{lpf}_phi_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_phi_SubleadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_phi_SubleadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -pi, pi), "FTAElectron{lpf}_phi_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HT_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HT{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,400,2000), "HT{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___H_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___H{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,400,2000), "H{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HT2M_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HT2M{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,1000), "HT2M{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___H2M_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___H2M{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,1500), "H2M{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HTb_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HTb{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,1000), "HTb{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HTH_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HTH{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,1), "HTH{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HTRat_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HTRat{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,1), "HTRat{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dRbb_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dRbb{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,2*pi), "dRbb{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dPhibb_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dPhibb{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,-pi,pi), "dPhibb{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dEtabb_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dEtabb{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,5), "dEtabb{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_pt_LeadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_pt_LeadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 100,0,500), "FTALepton{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_pt_SubleadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_pt_SubleadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 100,0,500), "FTALepton{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_eta_LeadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_eta_LeadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 100,-2.6,2.6), "FTALepton{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_eta_SubleadLep_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_eta_SubleadLep{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 100,-2.6,2.6), "FTALepton{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 100,0,500), "FTAMuon{lpf}_pt".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 100,0,500), "FTAElectron{lpf}_pt".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dRll_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dRll{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 100,0,2*pi), 
                                                                    "FTALepton{lpf}_dRll".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dPhill_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dPhill{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 100,-pi,pi), 
                                                                    "FTALepton{lpf}_dPhill".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dEtall_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dEtall{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 100,0,5), 
                                                                    "FTALepton{lpf}_dEtall".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofMETandEl_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofMETandEl{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 100, 0, 200), 
                                                                    "MTofMETandEl{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofMETandMu_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofMETandMu{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 100, 0, 200), 
                                                                    "MTofMETandMu{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofElandMu_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofElandMu{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 100, 0, 200), 
                                                                    "MTofElandMu{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 14, 0, 14), 
                                                                    "n{fj}".format(fj=fillJet), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_LooseDeepCSV_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_LooseDeepCSV{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), 
                                                                    "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_MediumDeepCSV_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_MediumDeepCSV{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), 
                                                                    "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_TightDeepCSV_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_TightDeepCSV{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), 
                                                                    "nTightDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_LooseDeepJet_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_LooseDeepJet{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), 
                                                                    "nLooseDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_MediumDeepJet_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_MediumDeepJet{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), 
                                                                    "nMediumDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_TightDeepJet_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_TightDeepJet{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), 
                                                                    "nTightDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nLooseFTAMuon{lpf}_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nLooseFTAMuon{lpf}{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nLooseFTAMuon{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nMediumFTAMuon{lpf}_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nMediumFTAMuon{lpf}{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nMediumFTAMuon{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nTightFTAMuon{lpf}_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nTightFTAMuon{lpf}{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nTightFTAMuon{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nLooseFTAElectron{lpf}_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nLooseFTAElectron{lpf}{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nLooseFTAElectron{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nMediumFTAElectron{lpf}_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nMediumFTAElectron{lpf}{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nMediumFTAElectron{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nTightFTAElectron{lpf}_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nTightFTAElectron{lpf}{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nTightFTAElectron{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nLooseFTALepton{lpf}_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nLooseFTALepton{lpf}{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nLooseFTALepton{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nMediumFTALepton{lpf}_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nMediumFTALepton{lpf}{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nMediumFTALepton{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nTightFTALepton{lpf}_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nTightFTALepton{lpf}{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nTightFTALepton{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_InvMass_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_InvMass{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100, 0, 150), "FTAMuon{lpf}_InvariantMass".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_InvMass_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_InvMass{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100, 0, 150), "FTAElectron{lpf}_InvariantMass".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_InvMass_v_MET_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_InvMass_v_MET{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 30, 0, 150, 20, 0, 400), "FTAMuon{lpf}_InvariantMass".format(lpf=leppostfix), fillMET_pt, wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_InvMass_v_MET_{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_InvMass_v_MET{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 30, 0, 150, 20, 0, 400), "FTAElectron{lpf}_InvariantMass".format(lpf=leppostfix), fillMET_pt, wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_vs_MET{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_all;MET", 30, 0., 0.2, 20,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_vs_MET{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_vs_MET{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso04_all;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_vs_MET{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_all;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg_vs_MET{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_vs_MET{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_all;MET", 30, 0., 0.2, 20,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_vs_MET{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_vs_MET{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso04_all;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_vs_MET{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_all;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "fillMET_pt", wgtVar))
                     # Older versions
-                    # defineNodes[processName][decayChannel].append(("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append(("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_vs_MET{spf}"\
                     #                                                .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                ";pfRelIso03_all;MET", 100, 0., 0.2, 100,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_vs_MET{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_vs_MET{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso04_all;MET", 100, 0, 0.2, 100,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_vs_MET{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_all;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg_vs_MET_{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg_vs_MET{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "fillMET_pt", wgtVar))
                     if isData == False:
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_genMatched_puIdLoose_{spf}"\
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_genMatched_puIdLoose{spf}"\
                                                                         .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                         "", 14, 0, 14), "n{fj}_genMatched_puIdLoose".format(fj=fillJet), wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_genMatched_{spf}"\
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_genMatched{spf}"\
                                                                         .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                         "", 14, 0, 14), "n{fj}_genMatched".format(fj=fillJet), wgtVar))
-                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___test1_{spf}"
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___test1{spf}"
                         #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                         #                                                 ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "PV_npvsGood", wgtVar))
-                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___test2_{spf}"
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___test2{spf}"
                         #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                         #                                                 ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "METFixEE2017_pt", wgtVar))
-                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nTrueInttest_{spf}"
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nTrueInttest{spf}"
                         #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                         #                                                ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAElectron{lpf}_pfRelIso03_all", "MET_pt_flat", wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nTrueInt_{spf}"\
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nTrueInt{spf}"\
                                                                         .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                         ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvsGood", wgtVar))
-                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nPU_{spf}"\
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nPU{spf}"\
                         #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                         #                                                 ";nPU;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvsGood", wgtVar))
-                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvs_vs_nTrueInt_{spf}"\
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvs_vs_nTrueInt{spf}"\
                         #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                         #                                                 ";nTrueInt;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvs", wgtVar))
-                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvs_vs_nPU_{spf}"\
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvs_vs_nPU{spf}"\
                         #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                         #                                                 ";nPU;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvs", wgtVar))
 
@@ -6345,6 +6363,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                           printInfo = printBookkeeping,
             )
             prePackedNodes = defineWeights(prePackedNodes,
+                                           splitProcess = splitProcessConfig,
                                            era=vals["era"],
                                            isData=vals["isData"],
                                            final=False,
@@ -6362,24 +6381,25 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
             )
             if BTaggingYieldsFile:
                 print("What is happening in defineWeights here? Need to modify the prePackedNodes, then... pass on to the fillHistos method")
-                the_df[name][lvl] = defineWeights(prePackedNodes,
-                                                  splitProcess = splitProcessConfig,
-                                                  inclusiveProcess = inclusiveProcessConfig,
-                                                  era = vals["era"],
-                                                  isData = vals["isData"],
-                                                  final=True,
-                                                  sysVariations=systematics_2017, 
-                                                  verbose=verbose,
-                                                 )
-            if doBTaggingEfficiencies == True:
-                BTaggingEfficiencies(the_df[name][lvl], sampleName=None, era = vals["era"], wgtVar="wgt_SUMW_PU_LSF_L1PF", 
-                               isData = vals["isData"], histosDict=btagging[name][lvl], 
-                               doDeepCSV=True, doDeepJet=True)
-            if doJetEfficiency:
-                jetMatchingEfficiency(the_df[name][lvl], wgtVar="wgt_SUMW_PU_LSF_L1PF", stats_dict=effic[name][lvl],
-                                      isData = vals["isData"])
-            if doHLTMeans:
-                fillHLTMeans(the_df[name][lvl], wgtVar="wgt_SUMW_PU_L1PF", stats_dict=stats[name][lvl])
+                prePackedNodes = defineWeights(prePackedNodes,
+                                               splitProcess = splitProcessConfig,
+                                               # inclusiveProcess = inclusiveProcessConfig,
+                                               era = vals["era"],
+                                               isData = vals["isData"],
+                                               final=True,
+                                               sysVariations=systematics_2017, 
+                                               verbose=verbose,
+                )
+            #All of these are deprecated as-is
+            # if doBTaggingEfficiencies == True:
+            #     BTaggingEfficiencies(the_df[name][lvl], sampleName=None, era = vals["era"], wgtVar="wgt_SUMW_PU_LSF_L1PF", 
+            #                    isData = vals["isData"], histosDict=btagging[name][lvl], 
+            #                    doDeepCSV=True, doDeepJet=True)
+            # if doJetEfficiency:
+            #     jetMatchingEfficiency(the_df[name][lvl], wgtVar="wgt_SUMW_PU_LSF_L1PF", stats_dict=effic[name][lvl],
+            #                           isData = vals["isData"])
+            # if doHLTMeans:
+            #     fillHLTMeans(the_df[name][lvl], wgtVar="wgt_SUMW_PU_L1PF", stats_dict=stats[name][lvl])
 
             #Hold the categorization nodes if doing histograms
             if doHistos:
