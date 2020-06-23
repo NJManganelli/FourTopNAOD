@@ -2739,9 +2739,9 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
     else:
         yieldsKey = "{}".format(sampleName) #copy it, we'll modify
     if useHTOnly:
-        yieldsKey += "_1DX"
+        yieldsKey += "1DX"
     elif useNJetOnly:
-        yieldsKey += "_1DY"        
+        yieldsKey += "1DY"        
     
     #internal variable/pointer to the TH2 lookup map, and the sample-specific one
     iLUM = None
@@ -2836,7 +2836,7 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                 testHT = 689.0
                 if verbose:
                     testVal = iLUM[processName][0].getEventYieldRatio(testKeyA, testNJ, testHT, True)
-                    print("BTaggingYield has done a test evaluation on the yield histogram with search for histogram {}{}, nJet={}, HT={} and found value {}"\
+                    print("BTaggingYield has done a test evaluation on the yield histogram with search for histogram {}, nJet={}, HT={} and found value {}"\
                           .format(testKeyA, testNJ, testHT, testVal))
                 else:
                     testVal = iLUM[processName][0].getEventYieldRatio(testKeyA, testNJ, testHT)
@@ -4974,11 +4974,15 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
             raise RuntimeError("Could not import the copy module in method BTaggingYieldsAnalyzer")
     files = glob.glob("{}/{}".format(directory, globKey))
     if includeSampleNames:
-        files = [f for f in files if f.split("/")[-1] in includeSampleNames and f.split("/")[-1] not in ["BTaggingYields.root"]]
+        if verbose:
+            print("Including these files: {}".format([f for f in files if f.split("/")[-1].replace(".root", "") in includeSampleNames]))
+        files = [f for f in files if f.split("/")[-1].replace(".root", "") in includeSampleNames and f.split("/")[-1].replace(".root", "") not in ["BTaggingYields"]]
     elif excludeSampleNames:
-        files = [f for f in files if f.split("/")[-1] not in excludeSampleNames and f.split("/")[-1] not in ["BTaggingYields.root"]]
+        if verbose:
+            print("Excluding these files: {}".format([f for f in files if f.split("/")[-1].replace(".root", "") in excludeSampleNames]))
+        files = [f for f in files if f.split("/")[-1].replace(".root", "") not in excludeSampleNames and f.split("/")[-1] not in ["BTaggingYields"]]
     else:
-        files = [f for f in files if f.split("/")[-1] not in ["BTaggingYields.root"]]
+        files = [f for f in files if f.split("/")[-1].replace(".root", "") not in ["BTaggingYields"]]
     #deduce names from the filenames, with optional stripKey parameter that defaults to .root
     names = [fname.split("/")[-1].replace(stripKey, "") for fname in files]
     fileDict = {}
@@ -5165,35 +5169,37 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
         #     that_x_rebin = [x_rebin[0]] + [x_rebin[-1]]
         # if "1DX" in numerator:
         #     that_y_rebin = [y_rebin[0]] + [y_rebin[-1]]
+        #Form the replacement values for the name, i.e. Aggregate1DX___nom
         internals = copy.copy(numerator)
         for k, v in internalKeysReplacements.items():
             internals = internals.replace(k, v)
         if doNumpyValidation:
             numerators_dict[name][numerator], yield_dict_num[name][numerator + "Cross"], yield_err_dict_num[name][numerator + "Cross"] =                                                             rebin2D(numerators_dict[name][numerator],
-                                                            "{}_{}".format(name, internals),
+                                                            "{}{}".format(name, internals),
                                                             that_x_rebin,
                                                             that_y_rebin,
                                                             return_numpy_arrays=True,
                                                             )
             denominator_dict[name][numerator], yield_dict_den[name][numerator + "Cross"], yield_err_dict_den[name][numerator + "Cross"] =                                                             rebin2D(denominator_dict[name][numerator],
-                                                            "{}_{}_denominator".format(name, internals),
+                                                            "{}{}_denominator".format(name, internals),
                                                             that_x_rebin,
                                                             that_y_rebin,
                                                             return_numpy_arrays=True,
                                                             )
         else:
             numerators_dict[name][numerator] = rebin2D(numerators_dict[name][numerator],
-                                                        "{}_{}".format(name, internals),
+                                                        "{}{}".format(name, internals),
                                                         that_x_rebin,
                                                         that_y_rebin,
                                                         )
             denominator_dict[name][numerator] = rebin2D(denominator_dict[name][numerator],
-                                                        "{}_{}_denominator".format(name, internals),
+                                                        "{}{}_denominator".format(name, internals),
                                                         that_x_rebin,
                                                         that_y_rebin,
                                                         )
         #Do the yield division
         #numerators_dict[name][numerator].GetXaxis().SetRange(1, jets_dict[name][jettype][cat][tag].GetNbinsX())
+        print("The map name is: {}".format(numerators_dict[name][numerator].GetName()))
         numerators_dict[name][numerator].Divide(denominator_dict[name][numerator])
         #Do some overrides to change titles, axis laabels...
         if overrides != None:
@@ -6203,12 +6209,12 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
         for lvl in levelsOfInterest:
             splitProcessConfig = vals.get("splitProcess", None)
-            inclusiveProcessConfig = {"processes": {"{}{}".format(name, ""): {"filter": "return true;",
-                                                                  "nEventsPositive": vals["nEventsPositive"],
-                                                                  "nEventsNegative": vals["nEventsNegative"],
+            inclusiveProcessConfig = {"processes": {"{}".format(name): {"filter": "return true;",
+                                                                  "nEventsPositive": vals.get("nEventsPositive", -1),
+                                                                  "nEventsNegative": vals.get("nEventsNegative", -1),
                                                                   "fractionalContribution": 1,
-                                                                  "sumWeights": vals["sumWeights"],
-                                                                  "effectiveCrossSection": vals["crossSection"],
+                                                                  "sumWeights": vals.get("sumWeights", -1.0),
+                                                                  "effectiveCrossSection": vals.get("crossSection", 0),
                                                               }}}
             pprint.pprint(inclusiveProcessConfig)
             
