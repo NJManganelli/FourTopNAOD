@@ -211,7 +211,8 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
 }
 print("Only using the nominal variations right now, see L142")
 systematics_2017 = systematics_2017_NOMINAL
-systematics_2017 = systematics_2017_LIMITEDTEST
+# systematics_2017 = systematics_2017_LIMITEDTEST
+# systematics_2017 = systematics_2017_ALL
 
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier lumi channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
@@ -2534,8 +2535,8 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     
     #JES Up and Down - effectively the nominal weight, but with the CORRECT btag weight for those jets!
     if "jesTotalDown" in sysVariations.keys():
-        zFin.append(("wgt___jesTotalDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jesTotalDown"))
-        zPre.append(("prewgt___jesTotalDown", "prewgt___nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
+        zFin.append(("wgt___jesTotalDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jesTotalDown * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___jesTotalDown", "prewgt___nom * pwgt_Z_vtx___nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
         
     if "jesTotalDown" in sysVariations.keys():
         zPre.append(("prewgt___jesTotalUp", "prewgt___nom"))
@@ -2544,30 +2545,30 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #Pileup variations 
     print("FIXME: Using temporary definition of weights for PU variations (change pwgt_btag__VARIATION)")
     if "puWeightDown" in sysVariations.keys():
-        zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom"))
-        #zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightDown"))
-        zPre.append(("prewgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
-        #zPre.append(("prewgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
+        zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
+        #zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightDown * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+        #zPre.append(("prewgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     if "puWeightUp" in sysVariations.keys():
-        zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom"))
-        #zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightUp"))
-        zPre.append(("prewgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
-        #zPre.append(("prewgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
+        zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
+        #zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightUp * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+        #zPre.append(("prewgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     
     
     #L1 PreFiring variations
     print("FIXME: Using temporary definition of weights for L1PreFire variations (change pwgt_btag__VARIATION)")
     if "L1PreFireDown" in sysVariations.keys():
-        zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag___nom"))
-        #zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag__L1PreFireDown"))
-        zPre.append(("prewgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom"))
-        #zPre.append(("prewgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom"))
+        zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
+        #zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag__L1PreFireDown * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+        #zPre.append(("prewgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     
     if "L1PreFireUp" in sysVariations.keys():
-        zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag___nom"))
-        #zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag__L1PreFireUp"))
-        zPre.append(("prewgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom"))
-        #zPre.append(("prewgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom"))
+        zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
+        #zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag__L1PreFireUp * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+        #zPre.append(("prewgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     
     #Lepton ScaleFactor variations
     #To be done, still...
@@ -2578,32 +2579,32 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #Pure BTagging variations, no other variations necessary. 
     #Since there may be many, use a common base factor for fewer multiplies... for pre-btagging, they're identical!
     print("\n\nWARNING! WARNING! L1PreFiringWeight Only applies to 2017 and perhaps 2016, drop it from calculations in 2018!")
-    zFin.append(("pwgt_btagSF_common", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
-    zPre.append(("pwgt_btagSF_common", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
+    zFin.append(("pwgt_btagSF_common", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    zPre.append(("pwgt_btagSF_common", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     
     if "btagSF_deepcsv_shape_down_hf" in sysVariations.keys():
-        zFin.append(("wgt___btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_down_hf"))
-        zPre.append(("prewgt___btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common"))#Really just aliases w/o btagging part
+        zFin.append(("wgt___btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_down_hf * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_Z_vtx___nom"))#Really just aliases w/o btagging part
     if "btagSF_deepcsv_shape_up_hf" in sysVariations.keys():
-        zFin.append(("wgt___btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_up_hf"))
-        zPre.append(("prewgt___btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common"))
+        zFin.append(("wgt___btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_up_hf * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_Z_vtx___nom"))
     if "btagSF_deepcsv_shape_down_lf" in sysVariations.keys():
-        zFin.append(("wgt___btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_down_lf"))
-        zPre.append(("prewgt___btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common"))
+        zFin.append(("wgt___btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_down_lf * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_Z_vtx___nom"))
     if "btagSF_deepcsv_shape_up_lf" in sysVariations.keys():
-        zFin.append(("wgt___btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_up_lf"))
-        zPre.append(("prewgt___btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common"))
+        zFin.append(("wgt___btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_up_lf * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_Z_vtx___nom"))
 
     #Special variations for testing central components
-    zFin.append(("wgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
-    zFin.append(("wgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom"))
-    zFin.append(("wgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom"))
-    zFin.append(("wgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
+    zFin.append(("wgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    zFin.append(("wgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_Z_vtx___nom"))
+    zFin.append(("wgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    zFin.append(("wgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
 
-    zPre.append(("prewgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
-    zPre.append(("prewgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom"))
-    zPre.append(("prewgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom"))
-    zPre.append(("prewgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom"))
+    zPre.append(("prewgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    zPre.append(("prewgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_Z_vtx___nom"))
+    zPre.append(("prewgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    zPre.append(("prewgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
 
 
     #Factorization/Renormalization weights... depend on dividing genWeight back out?
@@ -3758,7 +3759,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                            "met_phi_var": "METFixEE2017_phi",
                                            "btagSF": "Jet_btagSF_deepcsv_shape",
                                            "weightVariation": False},
-                              "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
+                              "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
                                               "lep_postfix": "",
                                               "wgt_final": "wgt__jesTotalUp",
                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -3768,13 +3769,13 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                               "met_phi_var": "METFixEE2017_phi_jesTotalUp",
                                               "btagSF": "Jet_btagSF_deepcsv_shape",
                                               "weightVariation": False},
-                              "_btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
+                              "btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
                                                                 "lep_postfix": "", 
                                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                                 "jet_pt_var": "Jet_pt",
                                                                 "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
                                                                 "weightVariation": True},
-                              "_no_LSF": {"jet_mask": "jet_mask",
+                              "no_LSF": {"jet_mask": "jet_mask",
                                           "lep_postfix": "", 
                                           "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                           "jet_pt_var": "Jet_pt",
@@ -5936,7 +5937,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     
     all_samples = ["ElMu", "MuMu", "ElEl", "tttt", "ST_tW", "ST_tbarW", "tt_DL", "tt_DL-GF", 
                      "tt_SL", "tt_SL-GF", "ttH", "ttWJets", "ttZJets", "ttWH", "ttWW", "ttWZ", 
-                     "ttZZ", "ttZH", "ttHH", "tttW", "tttJ", "DYJets_DL",]
+                     "ttZZ", "ttZH", "ttHH", "tttW", "tttJ", "DYJets_DL"]
     if includeSampleNames:
         if (type(includeSampleNames) == list or type(includeSampleNames) == dict):
             valid_samples = [s for s in all_samples if s in includeSampleNames]
