@@ -5199,7 +5199,6 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
                                                         )
         #Do the yield division
         #numerators_dict[name][numerator].GetXaxis().SetRange(1, jets_dict[name][jettype][cat][tag].GetNbinsX())
-        print("The map name is: {}".format(numerators_dict[name][numerator].GetName()))
         numerators_dict[name][numerator].Divide(denominator_dict[name][numerator])
         #Do some overrides to change titles, axis laabels...
         if overrides != None:
