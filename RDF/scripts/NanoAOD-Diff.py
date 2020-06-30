@@ -8,16 +8,57 @@ import traceback #For handling exceptions
 import math
 import copy
 import ROOT
+from datetime import datetime
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
+ROOT.gInterpreter.Declare("""
+    ROOT::RDF::RResultPtr<ULong64_t> AddProgressPrinter(ROOT::RDF::RNode df, int everyN=10000) {
+        auto c = df.Count();
+        c.OnPartialResult(/*every=*/everyN, [] (ULong64_t e) { std::cout << e << std::endl; });
+        return c;
+    }
+""")
+ROOT.gInterpreter.Declare("""
+    const UInt_t barWidth = 60;
+    ULong64_t processed = 0, totalEvents = 0;
+    std::string progressBar;
+    std::mutex barMutex; 
+    auto registerEvents = [](ULong64_t nIncrement) {totalEvents += nIncrement;};
 
-from datetime import datetime
+    ROOT::RDF::RResultPtr<ULong64_t> AddProgressBar(ROOT::RDF::RNode df, int everyN=10000, int totalN=100000) {
+        registerEvents(totalN);
+        auto c = df.Count();
+        c.OnPartialResultSlot(everyN, [everyN] (unsigned int slot, ULong64_t &cnt){
+            std::lock_guard<std::mutex> l(barMutex);
+            processed += everyN; //everyN captured by value for this lambda
+            progressBar = "[";
+            for(UInt_t i = 0; i < static_cast<UInt_t>(static_cast<Float_t>(processed)/totalEvents*barWidth); ++i){
+                progressBar.push_back('|');
+            }
+            // escape the '\' when defined in python string
+            std::cout << "\\r" << std::left << std::setw(barWidth) << progressBar << "] " << processed << "/" << totalEvents << std::flush;
+        });
+        return c;
+    }
+""")
+
 parser = argparse.ArgumentParser(description='NanoAOD-Diff Does comparisons between two samples of NanoAOD')
-parser.add_argument('--input', dest='input', action='append', nargs='*', type=str,
-                    help='globbable path to an input. May be used multiple times, once per set of inputs')
-parser.add_argument('--labels', dest='labels', action='store', nargs='*', type=str, default=None,
-                    help='labels of inputs')
-parser.add_argument('--weights', dest='weights', action='store', nargs='*', type=str, default=None,
+
+parser.add_argument('--stage', dest='stage', choices=['report', 'stats', 'plots'],
+                    help='Stage for NanoAOD-Diff. Report produces text file of common and unique branches. Stats produces text files of Min, Max, Mean, Variance, etc. for branches. Plots produces histograms of branches.')
+parser.add_argument('--nThreads', dest='nThreads', action='store', type=int, default=4,
+                    help='CPU threads for computation')
+parser.add_argument('--reportEvery', dest='reportEvery', action='store', type=int, default=10000,
+                    help='Number of events to process before notifying of progress')
+parser.add_argument('--doHLT', dest='doHLT', action='store_true', 
+                    help='Do computations for HLT branches')
+parser.add_argument('--doL1', dest='doL1', action='store_true', 
+                    help='Do computations for L1 branches')
+parser.add_argument('--input', '-i', dest='input', action='append', nargs='*', type=str,
+                    help='globbable path to an input or list. Call once for each set of input files')
+parser.add_argument('--label', '-l', dest='label', action='append', nargs='?', type=str, default=None,
+                    help='label of inputs')
+parser.add_argument('--weight', '-w', dest='weight', action='append', nargs='?', type=str, default=None,
                     help='weight formulas for inputs')
 parser.add_argument('--WL', dest='WL', action='store', nargs='*', type=str, default=None,
                     help='WhiteList for plotting')
@@ -25,10 +66,8 @@ parser.add_argument('--BL', dest='BL', action='store', nargs='*', type=str, defa
                     help='BlackList for plotting')
 parser.add_argument('--match', dest='match', choices=['exact', 'subexpression'],
                     help='Whether WhiteList/BlackList elements must match exactly or may be subexpressions of plotted variables')
-parser.add_argument('--backend', dest='backend', choices=['RDF', 'PP', 'PyROOT'],
-                    help='Backend used for computation.\nRDF = RDataFrame (https://root.cern.ch/doc/master/classROOT_1_1RDataFrame.html),'\
-                    '\nPP = PostProcessor (https://github.com/cms-nanoAOD/nanoAOD-tools.git),'\
-                    '\nPyROOT = Straight PyROOT event loop')
+parser.add_argument('--backend', dest='backend', choices=['RDF', 'PyRDF'],
+                    help='Backend used for computation.\nRDF = RDataFrame (https://root.cern.ch/doc/master/classROOT_1_1RDataFrame.html)')
 parser.add_argument('--noIMT', dest='noIMT', action='store_true', 
                     help='Disable Implicit MultiThread for RDataFrame')
 parser.add_argument('--noBatch', dest='noBatch', action='store_true', 
@@ -46,16 +85,28 @@ parser.add_argument('--histOut', dest='histOut', action='store', nargs='?', type
 parser.add_argument('--noPlots', dest='noPlots', action='store_true', 
                     help='Disable plotting')
 args = parser.parse_args()
+
+
+#Call RDataFrame backend, if chosen
+if args.backend == "RDF":
+    print("\tRDataFrame Implicit Multi-threading {}".format("ENABLED" if args.noIMT == False else "DISABLED"))
+    print("====================")
+    if not args.noIMT:
+        ROOT.ROOT.EnableImplicitMT(args.nThreads)
+    RDF = ROOT.ROOT.RDataFrame
+if args.backend == "PyRDF":
+    import PyRDF
+    PyRDF.use("spark", {'npartitions': '64'}) #was 32 in example
+    RDF = PyRDF.RDataFrame
+            
 procstart = collections.OrderedDict()
 procfinish = collections.OrderedDict()
 nToLabel = {}
 labelToN = {}
-for ln, label in enumerate(args.labels):
+print(args.label)
+for ln, label in enumerate(args.label):
     nToLabel[ln] = label
     labelToN[label] = ln
-
-
-
 
 def main():
   
@@ -65,7 +116,7 @@ def main():
             print("\t\t{}".format(fname))
             
     #inputFiles = [fs[0].split() for fs in args.input]
-    weightFormulas = args.weights
+    weightFormulas = args.weight
     try: 
         match_subexpression = (args.match.lower() == 'subexpression')
     except:
@@ -75,8 +126,8 @@ def main():
     except:
         match_exact = False
     print("\tInputs - {}".format(args.input))
-    print("\tLabels - {}".format(args.labels))
-    print("\tWeights - {}".format(args.weights))
+    print("\tLabels - {}".format(args.label))
+    print("\tWeights - {}".format(args.weight))
     print("\tBlackList file - {}".format(args.BL))
     print("\tWhiteList file - {}".format(args.WL))
     print("\tplotcard files - {}".format(args.plotcards))
@@ -84,51 +135,70 @@ def main():
     print("\n\tUsing backend - {}".format(args.backend))
 
     #Check for mismatch in labels or weights, since expecting 1-1 correspondence
-    if args.labels != None:
-        if len(args.input) != len(args.labels):
+    if args.label != None:
+        if len(args.input) != len(args.label):
             raise RuntimeError("Mismatch in mumber of labels and input sets. If labels are specified, must be equal calls to --label and --input")
-    if args.weights != None:
-        if len(args.input) != len(args.weights):
+    if args.weight != None:
+        if len(args.input) != len(args.weight):
             raise RuntimeError("Mismatch in mumber of weight formulas and input sets. If weights are specified, must be equal calls to --weight and --input")
 
     if args.noBatch == False:
         ROOT.gROOT.SetBatch()
 
-    #Call RDataFrame backend, if chosen
-    if args.backend == "RDF":
-        print("\tRDataFrame Implicit Multi-threading disabled - {}".format(args.noIMT))
-        print("====================")
-        if not args.noIMT:
-            ROOT.ROOT.EnableImplicitMT()
+    if args.backend in ["RDF", "PyRDF"]:
         inputSets = []
         for fn, f in enumerate(args.input):
             #convert a list (len(f) > 1) of inputs for a given sample to a vector of strings, an acceptable input type for RDF
-            if len(f) > 1:
-                tmp = ROOT.std.vector(str)(len(f))
-                for sn, subf in enumerate(f):
-                    tmp[sn] = subf
-                inputSets.append(tmp)
+            fList = []
+            print(f)
+            if isinstance(f, list) and len(f) == 1 and ".txt" in f[0] or "list:" in f[0]:
+                with open(f[0], "r") as ifl:
+                    for line in ifl:
+                        fList.append(line.rstrip())
             else:
-                inputSets.append(f[0])
+                fList = f
+            print(fList)
+            if isinstance(fList, list):
+                if args.backend == "RDF":
+                    tmp = ROOT.std.vector(str)(len(fList))
+                    for sn, subf in enumerate(fList):
+                        tmp[sn] = subf
+                    inputSets.append(tmp)
+                elif args.backend == "PyRDF":
+                    inputSets.append(fList)
+                else:
+                    raise NotImplementedError("Unhandled backend")
+            # elif isinstance(fList, list):
+            #     inputSets.append(f[0])
+            else:
+                raise ValueError("Unhandled file input of type {} and value {}".format(type(f), f))
+        print(inputSets)
         branchDict = getBranchInfo_RDF(inputSets, whiteList = args.WL, blackList = args.BL)
-        branchReport_RDF(branchDict, reportFile = "branchReport.txt")
-        if args.noPlots == False:
-            plotDict = makePlotDict(args.plotcards)
-            histDict, uniqueHistDict = makeHists_RDF(branchDict, plotDict, eventsKey = "Events", weightsKey = "Weights")
-            #Make histogram file if option histOut is called, which optionally contains a non-default filename.
-            if args.histOut != None:
-                print("Writing hist file")
-                for sn, flatDict in histDict.items():
-                    dictToFile(flatDict, args.histOut, update=True, prefix=nToLabel[sn])
-            #Make the function for plotting here
-            if args.pdfOut != None:
-                canvasDict = makePlots_RDF(histDict, args.pdfOut)
-            
+        if args.stage.lower() == 'report':
+            branchReport_RDF(branchDict, reportFile = "branchReport.txt")
+        elif args.stage.lower() == 'stats':
+            branchStats_RDF(branchDict, reportFile = "branchStats.txt", plotCard = "plotCard_{label}.txt")
+        elif args.stage.lower() == 'plots':
+            if args.noPlots == False:
+                plotDict = makePlotDict(args.plotcards)
+                histDict, uniqueHistDict = makeHists_RDF(branchDict, plotDict, eventsKey = "Events", weightsKey = "Weights")
+                #Make histogram file if option histOut is called, which optionally contains a non-default filename.
+                if args.histOut != None:
+                    print("Writing hist file")
+                    for sn, flatDict in histDict.items():
+                        dictToFile(flatDict, args.histOut, update=True, prefix=nToLabel[sn])
+                #Make the function for plotting here
+                if args.pdfOut != None:
+                    canvasDict = makePlots_RDF(histDict, args.pdfOut)
+                
             
     timeReport(prnt=True)
 
 def getBranchInfo_RDF(inputSets, blackList = None, whiteList = None):
-    """Get dictionary of branch info including fields like SumWeights, SumEvents, BranchTypes, BranchSetsFiltered, etc. See method getBranchInfo_*"""
+    """
+    Get dictionary of branch info including fields like SumWeights, SumEvents, BranchTypes, BranchSetsFiltered, etc. See method getBranchInfo_*
+    """
+
     procstart['getBranchInfo_RDF'] = datetime.now()
     #["HLT_", "L1_", "nTau", "nSubJet", "nSubGenJetAK8", "nSoftActivityJet", "nSV", "nPhoton", "nOtherPV", "nMuon", ]
     #["Electron", "Muon", "Photon", "Jet", "GenJet", "FatJet", "GenJetAK8", "GenPart", "Tau", "MET", "SubJet", "PV", "SV"]
@@ -162,10 +232,13 @@ def getBranchInfo_RDF(inputSets, blackList = None, whiteList = None):
     for fn, f in enumerate(inputSets):
         indices.append(fn)
         Files[fn] = f
-        Runs[fn] = ROOT.ROOT.RDataFrame("Runs", f)
-        SumEventsBranchName[fn] = [cn for cn in Runs[fn].GetColumnNames() if "genEventCount" in cn]
-        SumWeightsBranchName[fn] = [cn for cn in Runs[fn].GetColumnNames() if "genEventSumw" in cn and "genEventSumw2" not in cn]
-        SumWeights2BranchName[fn] = [cn for cn in Runs[fn].GetColumnNames() if "genEventSumw2" in cn]
+        # Runs[fn] = ROOT.ROOT.RDataFrame("Runs", f) #Keep standard RDF for this computation
+        Runs[fn] = RDF("Runs", f) #Keep standard RDF for this computation
+        listOfMetaColumns = [cn for cn in Runs[fn].GetColumnNames()]
+        SumEventsBranchName[fn] = [cn for cn in listOfMetaColumns if "genEventCount" in cn.__str__()]
+        SumWeightsBranchName[fn] = [cn for cn in listOfMetaColumns if "genEventSumw" in cn and "genEventSumw2" not in cn.__str__()]
+        SumWeights2BranchName[fn] = [cn for cn in listOfMetaColumns if "genEventSumw2" in cn.__str__()]
+        print(SumEventsBranchName)
         if len(SumEventsBranchName[fn]) > 0:
             SumEvents[fn] = Runs[fn].Define("se", SumEventsBranchName[fn][0]).Sum("se").GetValue() #Stats available
         else: 
@@ -179,19 +252,19 @@ def getBranchInfo_RDF(inputSets, blackList = None, whiteList = None):
         else:
             SumWeights2[fn] = None
         #Make use of meta info to replace keyword values in Weights definitions
-        if args.weights != None:
-            Weights[fn] = args.weights[fn]\
-                              .replace(SumWeights2BranchName[fn][0], str(SumWeights2[fn]))\
-                              .replace("genEventSumw2", str(SumWeights2[fn]))\
-                              .replace(SumWeightsBranchName[fn][0], str(SumWeights[fn]))\
-                              .replace("genEventSumw", str(SumWeights[fn]))\
-                              .replace(SumEventsBranchName[fn][0], str(SumEvents[fn]))\
-                              .replace("genEventCount", str(SumEvents[fn]))
+        if args.weight != None:
+            Weights[fn] = "(Float_t)" + args.weight[fn]\
+                                            .replace(SumWeights2BranchName[fn][0], str(SumWeights2[fn]))\
+                                            .replace("genEventSumw2", str(SumWeights2[fn]))\
+                                            .replace(SumWeightsBranchName[fn][0], str(SumWeights[fn]))\
+                                            .replace("genEventSumw", str(SumWeights[fn]))\
+                                            .replace(SumEventsBranchName[fn][0], str(SumEvents[fn]))\
+                                            .replace("genEventCount", str(SumEvents[fn]))
             print("For dataset {}, will define 'diffWeight' = '{}'".format(nToLabel[fn], Weights[fn]))
         else:
-            Weights[fn] = "1"
+            Weights[fn] = "(UInt_t)1"
 
-        Events[fn] = ROOT.ROOT.RDataFrame("Events", f).Define("diffWeight", str(Weights[fn]))
+        Events[fn] = RDF("Events", f).Define("diffWeight", str(Weights[fn]))
         Branches[fn] = [b for b in Events[fn].GetColumnNames()]
         BranchTypesRaw[fn] = {}
         BranchTypes[fn] = {}
@@ -262,35 +335,85 @@ def getBranchInfo_RDF(inputSets, blackList = None, whiteList = None):
     return retDict
 
 def makeHists_RDF(branchDict, plotDict, eventsKey = "Events", weightsKey = "Weights"):
+    triggers = collections.OrderedDict()
+    rdf_nodes = branchDict.get("Events")
+    event_counts = branchDict.get("SumEvents")
+    branches_all = branchDict.get("Branches")
+    branch_types_all = branchDict.get("BranchTypesRaw")
+    
+
     procstart['makeHists_RDF(Define)'] = datetime.now()
     histDict = collections.OrderedDict()
     uniqueHistDict = collections.OrderedDict()
-    for fn in branchDict[eventsKey].keys():
-        histDict[fn] = collections.OrderedDict()
-        uniqueHistDict[fn] = collections.OrderedDict()
-    for br, plot in plotDict.items():
-        for fn, rdf in branchDict[eventsKey].items():
-            if br in histDict[fn]: 
-                print("Warning, dual definition of branch {} when making Histograms from plotcards. Will keep first branch only.")
-                continue
-            if br not in branchDict["BranchSetsFiltered"][fn]:
-                uniqueHistDict[fn][br] = rdf.Histo1D(plot, str(br), "diffWeight")
-            # print("({}, {}, {})".format(plot, br, branchDict[weightsKey][fn]))
-            else:
-                #change the plot name in memory by replacing 
-                plot_labeled = (plot[0].replace("$INPUT", nToLabel[fn]), plot[1], plot[2], plot[3], plot[4])
-                histDict[fn][br] = rdf.Histo1D(plot_labeled, str(br), "diffWeight")
+    for index in branchDict[eventsKey].keys():
+        histDict[index] = collections.OrderedDict()
+        uniqueHistDict[index] = collections.OrderedDict()
+    for branch, plot in plotDict.items():
+        #Catch the devectorized boolean branches in the plot cards:
+        if branch[0:4] == "HLT_":
+            if not doHLT: continue
+        if branch[0:3] == "L1_":
+            if not doL1: continue
+        if branch[0:4] == "DVB_":
+            branch_type = 'ROOT::VecOps::RVec<Bool_t>'
+        else:
+            branch_type = "UNKNOWN"
+        print("{} - {}".format(branch, branch_type))
+        if branch_type == 'ROOT::VecOps::RVec<Bool_t>':
+            print("Skipping branch that must be devectorized from boolean")
+            continue
+            # for index, rdf in rdf_nodes.items():
+                
+            #     if branch in histDict[index]: 
+            #         print("Warning, dual definition of branch {} when making Histograms from plotcards. Will keep first branch only.")
+            #         continue
+            #     if branch not in rdf.GetColumnNames():
+            #         print(branch)
+            #         uniqueHistDict[index][branch] = rdf.Histo1D(plot, str(branch), "diffWeight")
+            #     # print("({}, {}, {})".format(plot, branch, branchDict[weightsKey][index]))
+            #     else:
+            #         #change the plot name in memory by replacing 
+            #         plot_labeled = (plot[0].replace("$INPUT", nToLabel[index]), plot[1], plot[2], plot[3], plot[4])
+            #         histDict[index][branch] = rdf.Histo1D(plot_labeled, str(branch), "diffWeight")
+
+            # if branch not in 
+            # #need to unpack these (root 6.22 dev)
+            # dnode, dcolumns = devectorizeBool(rdf_nodes[index], branch, )
+            # for dcolumn in dcolumns:
+            #     stats[index][dcolumn] = (dnode.Filter("{dcol} > -1".format(dcol=dcolumn)).(dcolumn, "diffWeight"), branch_type)
+        else:
+            for index, rdf in rdf_nodes.items():
+                if branch in histDict[index]: 
+                    print("Warning, dual definition of branch {} when making Histograms from plotcards. Will keep first branch only.")
+                    continue
+                if branch not in branchDict["BranchSetsFiltered"][index]:
+                    print(branch)
+                    uniqueHistDict[index][branch] = rdf.Histo1D(plot, str(branch), "diffWeight")
+                # print("({}, {}, {})".format(plot, branch, branchDict[weightsKey][index]))
+                else:
+                    #change the plot name in memory by replacing 
+                    plot_labeled = (plot[0].replace("$INPUT", nToLabel[index]), plot[1], plot[2], plot[3], plot[4])
+                    histDict[index][branch] = rdf.Histo1D(plot_labeled, str(branch), "diffWeight")
+        # elif branch_type == 'ULong64_t':
+        #     #run number
+        #     pass
+        # else:
+        #     print("Skipping unhandled branch (name={}, type={})".format(branch, branch_type))
+
     procfinish['makeHists_RDF(Define)'] = datetime.now()
     procstart['makeHists_RDF(Run)'] = datetime.now()
-    counts = {}
-    #Trigger the event loops and replace the histogram RResultPtr's with the actual filled histograms
+    for index, rdf in branchDict[eventsKey].items():
+        triggers[index] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(rdf), max(100, int(event_counts[index]/50000)), int(event_counts[index]))
+
     print("Starting event loop...")
-    for fn, rdf in branchDict[eventsKey].items():
-        counts[fn] = rdf.Count().GetValue()
-        for br, hist in histDict[fn].items():
-            histDict[fn][br] = hist.GetPtr().Clone()
-        for br, hist in uniqueHistDict[fn].items():
-            histDict[fn][br] = hist.GetPtr().Clone()
+    for index, count in triggers.items():
+        print(count.GetValue())
+    # counts = map(lambda x: x.GetValue(), triggers.values())
+    for index, rdf in branchDict[eventsKey].items():
+        for branch, hist in histDict[index].items():
+            histDict[index][branch] = hist.GetPtr().Clone()
+        for branch, hist in uniqueHistDict[index].items():
+            histDict[index][branch] = hist.GetPtr().Clone()
     procfinish['makeHists_RDF(Run)'] = datetime.now()
     return histDict, uniqueHistDict
 
@@ -401,6 +524,143 @@ def branchReport_RDF(branchDict, reportFile = "branchReport.txt"):
         o.write("==================================\n")
     procfinish['branchReport_RDF'] = datetime.now()
 
+def branchStats_RDF(branchDict, reportFile = "branchStats.txt", plotCard="plotCard_{label}.txt", doHLT=False, doL1=False):
+    procstart['branchStats_RDF'] = datetime.now()
+    uniquePairs = [(a,b) for a in branchDict["indices"] for b in branchDict["indices"] if a < b]
+
+    stats = collections.OrderedDict()
+    triggers = collections.OrderedDict()
+    rdf_nodes = branchDict.get("Events")
+    event_counts = branchDict.get("SumEvents")
+    branches_all = branchDict.get("Branches")
+    branch_types_all = branchDict.get("BranchTypesRaw")
+    for index in branchDict.get("indices"):
+        label = nToLabel[index]
+        stats[index] = collections.OrderedDict()
+        # triggers[index] = rdf_nodes[index].Count()
+        triggers[index] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(rdf_nodes[index]), max(100, int(event_counts[index]/50000)), int(event_counts[index]))
+        branches = branches_all[index]
+        branch_types = branch_types_all[index]
+        for branch in branches:
+            branch_type = branch_types[branch]
+            if branch_type == 'Bool_t':
+                if branch[0:4] == "HLT_":
+                    if not doHLT: continue
+                if branch[0:3] == "L1_":
+                    if not doL1: continue
+                stats[index][branch] = (rdf_nodes[index].Stats(branch, "diffWeight"), branch_type)
+            elif branch_type in ['Int_t', 'UChar_t', 'UInt_t', 'Float_t', 'double']:
+                stats[index][branch] = (rdf_nodes[index].Stats(branch, "diffWeight"), branch_type)
+            elif branch_type in ['ROOT::VecOps::RVec<Int_t>', 'ROOT::VecOps::RVec<UChar_t>', 'ROOT::VecOps::RVec<Float_t>']:
+                #Potentially unpack these
+                stats[index][branch] = (rdf_nodes[index].Stats(branch, "diffWeight"), branch_type)
+            elif branch_type == 'ROOT::VecOps::RVec<Bool_t>':
+                #need to unpack these (root 6.22 dev)
+                dnode, dcolumns = devectorizeBool(rdf_nodes[index], branch)
+                for dcolumn in dcolumns:
+                    stats[index][dcolumn] = (dnode.Filter("{dcol} > -1".format(dcol=dcolumn)).Stats(dcolumn, "diffWeight"), branch_type)
+            elif branch_type == 'ULong64_t':
+                #run number
+                pass
+            else:
+                print("Skipping unhandled branch (name={}, type={})".format(branch, branch_type))
+    for index, count in triggers.items():
+        print(count.GetValue())
+    final_stats = collections.OrderedDict()
+    for index, stats_dict in stats.items():
+        label = nToLabel[index]
+        final_stats[index] = collections.OrderedDict()
+        plotcard_name = copy.copy(plotCard).format(label=label)
+        with open(plotcard_name, "w") as pc:
+            print("Filling plotcard {}".format(plotcard_name))
+            for branch , branch_stats in stats_dict.items():
+                temp = branch_stats[0].GetValue()
+                if "Bool" in branch_stats[1]:
+                    plot = [str(branch), str(2), str(0), str(2)]
+                    final_stats[index][branch] =  [branch, 0, temp.GetMean(), 1, 0, 0]
+                elif "int" in branch_stats[1].lower():
+                    plot = [str(branch), str(100), str(temp.GetMin()), str(temp.GetMax()+1)]
+                    final_stats[index][branch] = [branch, temp.GetMin(), temp.GetMean(), temp.GetMax(), temp.GetM2(), temp.GetRMS()]
+                else:
+                    plot = [str(branch), str(100), str(temp.GetMin()), str(temp.GetMax())]
+                    final_stats[index][branch] = [branch, temp.GetMin(), temp.GetMean(), temp.GetMax(), temp.GetM2(), temp.GetRMS()]
+                pc.write("    ".join(plot) + "\n")
+    with open(reportFile, "w") as o:
+        for indexA, indexB in uniquePairs:
+            labelA = nToLabel[indexA]
+            labelB = nToLabel[indexB]
+            # inCommon = branchDict["BranchSets"][indexA].intersection(branchDict["BranchSets"][indexB])
+            # onlyInA = branchDict["BranchSets"][indexA] - branchDict["BranchSets"][indexB]
+            # onlyInB = branchDict["BranchSets"][indexB] - branchDict["BranchSets"][indexA]
+            inCommon = set(final_stats[indexA].keys()).intersection(set(final_stats[indexB].keys()))
+            onlyInA = set(final_stats[indexA].keys()) - set(final_stats[indexB].keys())
+            onlyInB = set(final_stats[indexB].keys()) - set(final_stats[indexA].keys())
+            o.write("==================================\n")
+            o.write("Report on inputs {iA} and {iB}:\n    files[{iA}]: {fA}\n    files[{iB}]: {fB}\n"\
+                    "\n    SumEvents[{iA}]: {seA}\n    SumEvents[{iB}]: {seB}"\
+                    "\n    SumWeights[{iA}]: {swA}\n    SumWeights[{iB}]: {swB}\n"\
+                    .format(iA = labelA, iB = labelB, fA = branchDict["Files"][indexA], fB = branchDict["Files"][indexB],
+                            seA = branchDict["SumEvents"][indexA], seB = branchDict["SumEvents"][indexB],
+                            swA = branchDict["SumWeights"][indexA], swB = branchDict["SumWeights"][indexB]))
+            o.write("\n======== Common Branches % Change ({} - {})/{}========\n".format(labelA, labelB, labelA))
+            for b in sorted(inCommon):
+                if final_stats[indexA].get(b, None) is None or final_stats[indexB].get(b, None) is None:
+                    o.write("{branch} Stats not computed due to type or name".format(branch=b))
+                    continue
+                # print("{} - {}".format(b, final_stats[indexA][b]))
+                printout = "{branch} Min: {cminN}/{cminD} Mean: {cmeanN}/{cmeanD} Max: {cmaxN}/{cmaxD} Moment2: {cmomN}/{cmomD} RMS: {crmsN}/{crmsD}\n".format(
+                    branch=b,
+                    cminN=(final_stats[indexA][b][1] - final_stats[indexB][b][1]),
+                    cminD=final_stats[indexA][b][1],
+                    cmeanN=(final_stats[indexA][b][2] - final_stats[indexB][b][2]),
+                    cmeanD=final_stats[indexA][b][2],
+                    cmaxN=(final_stats[indexA][b][3] - final_stats[indexB][b][3]),
+                    cmaxD=final_stats[indexA][b][3],
+                    cmomN=(final_stats[indexA][b][4] - final_stats[indexB][b][4]),
+                    cmomD=final_stats[indexA][b][4],
+                    crmsN=(final_stats[indexA][b][5] - final_stats[indexB][b][5]),
+                    crmsD=final_stats[indexA][b][5])
+                o.write(printout)
+            o.write("\n======== Branches only in {iA} ========\n".format(iA = labelA))
+            for b in sorted(onlyInA): 
+                if final_stats[indexA].get(b, None) is None:
+                    o.write("{branch} Stats not computed due to type or name".format(branch=b))
+                    continue
+                printout = "{branch} Min: {cmin} Mean: {cmean} Max: {cmax} Moment2: {cmom} RMS: {crms}\n".format(
+                    branch=b,
+                    cmin=final_stats[indexA][b][1],
+                    cmean=final_stats[indexA][b][2],
+                    cmax=final_stats[indexA][b][3],
+                    cmom=final_stats[indexA][b][4],
+                    crms=final_stats[indexA][b][5])
+                o.write(printout)
+            o.write("\n======== Branches only in {iB} ========\n".format(iB = labelB))
+            for b in sorted(onlyInB): 
+                if final_stats[indexB].get(b, None) is None:
+                    o.write("{branch} Stats not computed due to type or name".format(branch=b))
+                    continue
+                printout = "{branch} Min: {cmin} Mean: {cmean} Max: {cmax} Moment2: {cmom} RMS: {crms}\n".format(
+                    branch=b,
+                    cmin=final_stats[indexB][b][1],
+                    cmean=final_stats[indexB][b][2],
+                    cmax=final_stats[indexB][b][3],
+                    cmom=final_stats[indexB][b][4],
+                    crms=final_stats[indexB][b][5])
+                o.write(printout)
+    procfinish['branchStats_RDF'] = datetime.now()
+# GetN()
+# GetNeff()
+# GetM2()
+# GetMean()
+# GetMeanErr()
+# GetRMS()
+# GetVar()
+# GetW()
+# GetW2()
+# GetMin()
+# GetMax()
+
+
 def makePlots_RDF(histDict, pdfFile, colorList = [ROOT.kBlack, ROOT.kRed, ROOT.kGreen, ROOT.kAzure]):
     procstart['makePlots_RDF'] = datetime.now()
     last = len(histDict[0].keys()) - 1
@@ -459,6 +719,18 @@ def makePlots_RDF(histDict, pdfFile, colorList = [ROOT.kBlack, ROOT.kRed, ROOT.k
         else:
             c.SaveAs("{}".format(pdfFile))
     procfinish['makePlots_RDF'] = datetime.now()
+
+def devectorizeBool(node, column_name, length=10):
+    derived_node = node
+    column_names = node.GetColumnNames()
+    derived_columns = []
+    for i in xrange(length):
+        col_name = "DVB_{col}_bit{it}".format(col=column_name, it=i+1)
+        if col_name not in column_names:
+            derived_node = derived_node.Define(col_name, "Char_t ret = ({col}.size() > {it} ? (Char_t){col}.at({it}) : (Char_t)(-1)); return ret;".format(col=column_name, it=i))
+        derived_columns.append(col_name)
+    return (derived_node, derived_columns)
+
 
 def createRatio(h1, h2, ratioTitle="input 0 vs input 1", ratioColor = ROOT.kBlack):
     #h3 = h1.Clone("rat_{}_{}".format(h1.GetName(), ratioTitle.replace(" ", "_")))

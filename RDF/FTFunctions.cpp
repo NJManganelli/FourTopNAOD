@@ -31,6 +31,7 @@ public:
   RVec_f getJetEfficiencySimple(ROOT::VecOps::RVec<int>* jets_flav, ROOT::VecOps::RVec<float>* jets_pt, ROOT::VecOps::RVec<float>* jets_eta);
   RVec_f getJetEfficiency(std::string category, std::string tagger_WP, RVec_i* jets_flav, RVec_f* jets_pt, RVec_f* jets_eta);
   double getEventYieldRatio(std::string sample, std::string variation, int nJet, double HT, bool debug=false);
+  double getEventYieldRatio(std::string key, int nJet, double HT, bool debug=false);
   //const std::vector<float> & run();
 
 private:
@@ -135,6 +136,15 @@ double TH2Lookup::getEventYieldRatio(std::string sample, std::string variation, 
   double yield = 1.0;
   std::string key = "";
   key = sample + variation;
+  if(debug){std::cout << "getEventYield key: " << key << std::endl;}
+  yield = getLookup(key, HT, nJet);
+  return yield;
+}
+
+double TH2Lookup::getEventYieldRatio(std::string key, int nJet, double HT, bool debug=false){
+  //Latest version uses keys of form "Aggregate__nom", so sample = "Aggregate_" and variation = "_nom"
+  //For pseudo-1D lookups, this uses "<name>_1D<DIM>" such as "tttt_1DX" -> key = "tttt_1DY_nom" for example
+  double yield = 1.0;
   if(debug){std::cout << "getEventYield key: " << key << std::endl;}
   yield = getLookup(key, HT, nJet);
   return yield;
@@ -360,7 +370,7 @@ namespace FTA{
     }
   }
 
-  std::vector<int> genTtbarCategorization(int genTtbarId){
+  std::vector<int> unpackGenTtbarId(int genTtbarId){
   // Implementation:
   //   The classification scheme returns an ID per event, and works as follows:
      

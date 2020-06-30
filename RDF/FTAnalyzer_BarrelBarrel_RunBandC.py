@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# coding: utf-8 
+# coding: utf-8
 from __future__ import print_function
 import os
 import pwd #needed for username, together with os
@@ -17,8 +17,6 @@ import pprint
 import re
 import pdb
 import ROOT
-from ruamel.yaml import YAML
-from FourTopNAOD.RDF.tools.toolbox import getFiles
 #from IPython.display import Image, display, SVG
 #import graphviz
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -38,30 +36,6 @@ else:
 #WARNING! Do not rerun this cell without restarting the kernel, it will kill it!
 ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way
 ROOT.gROOT.ProcessLine(".L /eos/user/n/nmangane/CMSSW/CMSSW_10_2_18/src/FourTopNAOD/RDF/FTFunctions.cpp")
-ROOT.gInterpreter.Declare("""
-    const UInt_t barWidth = 60;
-    ULong64_t processed = 0, totalEvents = 0;
-    std::string progressBar;
-    std::mutex barMutex; 
-    auto registerEvents = [](ULong64_t nIncrement) {totalEvents += nIncrement;};
-
-    ROOT::RDF::RResultPtr<ULong64_t> AddProgressBar(ROOT::RDF::RNode df, int everyN=10000, int totalN=100000) {
-        registerEvents(totalN);
-        auto c = df.Count();
-        c.OnPartialResultSlot(everyN, [everyN] (unsigned int slot, ULong64_t &cnt){
-            std::lock_guard<std::mutex> l(barMutex);
-            processed += everyN; //everyN captured by value for this lambda
-            progressBar = "[";
-            for(UInt_t i = 0; i < static_cast<UInt_t>(static_cast<Float_t>(processed)/totalEvents*barWidth); ++i){
-                progressBar.push_back('|');
-            }
-            // escape the '\' when defined in python string
-            std::cout << "\\r" << std::left << std::setw(barWidth) << progressBar << "] " << processed << "/" << totalEvents << std::flush;
-        });
-        return c;
-    }
-""")
-
 
 #FIXME: Need filter efficiency calculated for single lepton generator filtered sample. First approximation will be from MCCM (0.15) but as seen before, it's not ideal. 
 #May need to recalculate using genWeight/sumWeights instead of sign(genWeight)/(nPositiveEvents - nNegativeEvents), confirm if there's any difference.
@@ -86,50 +60,6 @@ systematics_2017_NOMINAL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                  "btagSF": "Jet_btagSF_deepcsv_shape",
                                  "weightVariation": False},
 }
-systematics_2017_LIMITEDTEST = {"$NOMINAL": {"jet_mask": "jet_mask",
-                                             "lep_postfix": "",
-                                             "wgt_final": "wgt__nom",
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                             "jet_pt_var": "Jet_pt",
-                                             "jet_mass_var": "Jet_mass",
-                                             "met_pt_var": "METFixEE2017_pt",
-                                             "met_phi_var": "METFixEE2017_phi",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
-                                "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
-                                                "lep_postfix": "",
-                                                "wgt_final": "wgt__jesTotalUp",
-                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                                "jet_pt_var": "Jet_pt_jesTotalUp",
-                                                "jet_mass_var": "Jet_mass_jesTotalUp",
-                                                "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                                "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                                "btagSF": "Jet_btagSF_deepcsv_shape",
-                                                "weightVariation": False},
-                                "jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown",
-                                                  "lep_postfix": "",
-                                                  "wgt_final": "wgt__jesTotalDown", 
-                                                  "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                                  "jet_pt_var": "Jet_pt_jesTotalDown",
-                                                  "jet_mass_var": "Jet_mass_jesTotalDown",
-                                                  "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                                  "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                                  "btagSF": "Jet_btagSF_deepcsv_shape",
-                                                  "weightVariation": False},
-                                "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
-                                                                "lep_postfix": "", 
-                                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                "jet_pt_var": "Jet_pt",
-                                                                "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
-                                                                "weightVariation": True},
-                                "btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
-                                                                  "lep_postfix": "", 
-                                                                  "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                  "jet_pt_var": "Jet_pt",
-                                                                  "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
-                                                                  "weightVariation": True},
-                                
-}
 systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                  "lep_postfix": "",
                                  "wgt_final": "wgt__nom",
@@ -140,7 +70,7 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                  "met_phi_var": "METFixEE2017_phi",
                                  "btagSF": "Jet_btagSF_deepcsv_shape",
                                  "weightVariation": False},
-                    "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
+                    "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
                                     "lep_postfix": "",
                                     "wgt_final": "wgt__jesTotalUp",
                                     "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -150,7 +80,7 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                     "met_phi_var": "METFixEE2017_phi_jesTotalUp",
                                     "btagSF": "Jet_btagSF_deepcsv_shape",
                                     "weightVariation": False},
-                    "jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown",
+                    "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown",
                                       "lep_postfix": "",
                                       "wgt_final": "wgt__jesTotalDown", 
                                       "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -160,49 +90,49 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                       "met_phi_var": "METFixEE2017_phi_jesTotalDown",
                                       "btagSF": "Jet_btagSF_deepcsv_shape",
                                       "weightVariation": False},
-                    "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
+                    "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
                                                     "lep_postfix": "", 
                                                     "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                     "jet_pt_var": "Jet_pt",
                                                     "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
                                                     "weightVariation": True},
-                    "btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
+                    "_btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
                                                       "lep_postfix": "", 
                                                       "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                       "jet_pt_var": "Jet_pt",
                                                       "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
                                                       "weightVariation": True},
-                    "btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
+                    "_btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
                                                     "lep_postfix": "", 
                                                     "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                     "jet_pt_var": "Jet_pt",
                                                     "btagSF": "Jet_btagSF_deepcsv_shape_up_lf",
                                                     "weightVariation": True},
-                    "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
+                    "_btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
                                                       "lep_postfix": "", 
                                                       "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                       "jet_pt_var": "Jet_pt",
                                                       "btagSF": "Jet_btagSF_deepcsv_shape_down_lf",
                                                       "weightVariation": True},
-                    "no_btag_shape_reweight": {"jet_mask": "jet_mask",
+                    "_no_btag_shape_reweight": {"jet_mask": "jet_mask",
                                                 "lep_postfix": "", 
                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                 "jet_pt_var": "Jet_pt",
                                                 "btagSF": "Jet_btagSF_deepcsv_shape",
                                                 "weightVariation": True},
-                    "no_puWeight": {"jet_mask": "jet_mask",
+                    "_no_puWeight": {"jet_mask": "jet_mask",
                                      "lep_postfix": "", 
                                      "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                      "jet_pt_var": "Jet_pt",
                                      "btagSF": "Jet_btagSF_deepcsv_shape",
                                      "weightVariation": True},
-                    "no_L1PreFiringWeight": {"jet_mask": "jet_mask",
+                    "_no_L1PreFiringWeight": {"jet_mask": "jet_mask",
                                               "lep_postfix": "", 
                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                               "jet_pt_var": "Jet_pt",
                                               "btagSF": "Jet_btagSF_deepcsv_shape",
                                               "weightVariation": True},
-                    "no_LSF": {"jet_mask": "jet_mask",
+                    "_no_LSF": {"jet_mask": "jet_mask",
                                 "lep_postfix": "", 
                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                 "jet_pt_var": "Jet_pt",
@@ -211,9 +141,6 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
 }
 print("Only using the nominal variations right now, see L142")
 systematics_2017 = systematics_2017_NOMINAL
-# systematics_2017 = systematics_2017_LIMITEDTEST
-# systematics_2017 = systematics_2017_ALL
-
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier lumi channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
                             era="2017",
@@ -383,14 +310,13 @@ bookerV2_MC = {
         "isSignal": True,
         "crossSection": 0.012,
         "color": leg_dict["tttt"],
-        "source": {"NANOv5": "dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttt-*_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttt-*_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttt-*_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttt-*_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttt-*_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttt-*_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttt-*_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttt-*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttt-1_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/tttt-2_2017_v2.root"],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttt-1_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/tttt-2_2017_v2.root"],
         "destination": "/$HIST_CLASS/$HIST/tttt/$SYSTEMATIC",
     },
     "tt_DL":{
@@ -405,27 +331,25 @@ bookerV2_MC = {
         "doFilter": True,
         "crossSection": 87.3348, 
         "color": leg_dict["ttbar"],
-        "source": {"NANOv5": "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "NANOv5p1": "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-*_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-NOM-*_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-NOM-*_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-NOM-*_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-*_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-NOM-*_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-NOM-*_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-NOM-*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-1_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-2_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-3_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-4_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-5_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-6_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-7_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-8_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-9_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-10_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-11_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-12_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-13_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-14_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-1_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-2_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-3_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-4_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-5_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-6_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-7_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-8_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-9_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-10_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-11_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-12_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-13_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-14_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tt_DL/$SYSTEMATIC",
         "stitch": {"mode": "Flag",
                    "source": "Nominal",
@@ -436,112 +360,52 @@ bookerV2_MC = {
         "simulated events (N_eff = N_positive - N_negative) over the nEffectivePhaseSpace (sum of N_eff from all contributing samples)"\
         "The old XS form 2018 PDG BRs was 89.0482, swapped to Brown's value... Need to update SL technically as well",
         "splitProcess": {"ID":{"unpackGenTtbarId": True,
-                               "nFTAGenJet/FTAGenHT": True,
+                               "nGenJet/GenHT": True,
                                "subera": False,
                               },
-                         "processes": {"ttbb_DL_fr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500",
-                                                      "sumWeights": 2776096.39581,
-                                                      "sumWeights2": 203548428.082,
-                                                      "nominalXS": 0.0486771857914,
-                                                      "nominalXS2": 6.25820222319e-08,
-                                                      "effectiveXS": 0.00728478735001,
-                                                      "effectiveXS2": 1.40162690665e-09,
-                                                      "nEventsPositive": 38381,
-                                                      "nEventsNegative": 174,
-                                                      "nLep2nJet7GenHT500-550-nominalXS": 0.00453612161001,
-                                                      "nLep2nJet7pGenHT500p-nominalXS": 0.0486771857914,
-                                                      "nLep1nJet9GenHT500-550-nominalXS": 0.0,
-                                                      "nLep1nJet9pGenHT500p-nominalXS": 0.0,
-                                                      "nLep2nJet7GenHT500-550-effectiveXS": 0.000678853569398,
-                                                      "nLep2nJet7pGenHT500p-effectiveXS": 0.00728478735001,
-                                                      "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
-                                                      "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
-                                                      "fractionalContribution": 0.11972537248,
-                                                      "effectiveCrossSection": 0.0486771857914 * 0.040/0.032,
-                                                  },
-                                       "ttbb_DL_nr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)",
-                                                      "sumWeights": 15117576.3357,
-                                                      "sumWeights2": 1108001380.45,
-                                                      "nominalXS": 0.265077636755,
-                                                      "nominalXS2": 3.40660783667e-07,
-                                                      "effectiveXS": 0.331347,
-                                                      "effectiveXS2": 5.32282326868e-07,
-                                                      "nEventsPositive": 208932,
-                                                      "nEventsNegative": 894,
-                                                      "nLep2nJet7GenHT500-550-nominalXS": 0.0,
-                                                      "nLep2nJet7pGenHT500p-nominalXS": 0.0,
-                                                      "nLep1nJet9GenHT500-550-nominalXS": 0.0,
-                                                      "nLep1nJet9pGenHT500p-nominalXS": 0.0,
-                                                      "nLep2nJet7GenHT500-550-effectiveXS": 0.0,
-                                                      "nLep2nJet7pGenHT500p-effectiveXS": 0.0,
-                                                      "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
-                                                      "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
+                         "processes": {"ttbb_DL_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
                                                       "fractionalContribution": 1,
-                                                      "effectiveCrossSection": 0.265077636755 * 0.040/0.032,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
                                                   },
-                                       "ttother_DL_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500",
-                                                         "sumWeights": 80302570.8316,
-                                                         "sumWeights2": 5895277293.01,
-                                                         "nominalXS": 1.40805743121,
-                                                         "nominalXS2": 1.81253364662e-06,
-                                                         "effectiveXS": 0.166807220112,
-                                                         "effectiveXS2": 2.54375352784e-08,
-                                                         "nEventsPositive": 1111004,
-                                                         "nEventsNegative": 5757,
-                                                         "nLep2nJet7GenHT500-550-nominalXS": 0.176787980442,
-                                                         "nLep2nJet7pGenHT500p-nominalXS": 1.40805743121,
-                                                         "nLep1nJet9GenHT500-550-nominalXS": 0.0,
-                                                         "nLep1nJet9pGenHT500p-nominalXS": 0.0,
-                                                         "nLep2nJet7GenHT500-550-effectiveXS": 0.0209434011092,
-                                                         "nLep2nJet7pGenHT500p-effectiveXS": 0.166807220112,
-                                                         "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
-                                                         "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
-                                                         "fractionalContribution": 0.11949870629,
-                                                         "effectiveCrossSection": 1.40805743121 - 0.0486771857914 * (0.040 - 0.032)/0.032,
+                                       "ttcc_DL_fr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
                                                   },
-                                       "ttother_DL_nr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)",
-                                                         "sumWeights": 4882573073.47,
-                                                         "sumWeights2": 3.57706696495e+11,
-                                                         "nominalXS": 85.6129913169,
-                                                         "nominalXS2": 0.000109978783148,
-                                                         "effectiveXS": 85.5467219936,
-                                                         "effectiveXS2": 0.000109808589394,
-                                                         "nEventsPositive": 67460463,
-                                                         "nEventsNegative": 273039,
-                                                         "nLep2nJet7GenHT500-550-nominalXS": 0.0,
-                                                         "nLep2nJet7pGenHT500p-nominalXS": 0.0,
-                                                         "nLep1nJet9GenHT500-550-nominalXS": 0.0,
-                                                         "nLep1nJet9pGenHT500p-nominalXS": 0.0,
-                                                         "nLep2nJet7GenHT500-550-effectiveXS": 0.0,
-                                                         "nLep2nJet7pGenHT500p-effectiveXS": 0.0,
-                                                         "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
-                                                         "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
-                                                         "fractionalContribution": 1,
-                                                         "effectiveCrossSection": 85.6129913168 - 0.265077636755 * (0.040 - 0.032)/0.032,
-                                                     },
+                                       "ttother_DL_fr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttbb_DL_nr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && (nGenJet < 7 || GenHT < 500)",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttcc_DL_nr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 1 && (nGenJet < 7 || GenHT < 500)",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttother_DL_nr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 1 && (nGenJet < 7 || GenHT < 500)",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
                                    },
-                         "inclusiveProcess": {"tt_DL_inclusive": {"filter": "return true;",
-                                                           "sumWeights": 4980769317.03,
-                                                           "sumWeights2": 3.64913523596e+11,
-                                                           "nominalXS": 87.3348035714,
-                                                           "nominalXS2": 0.000112194559601,
-                                                           "effectiveXS": 87.3348035714,
-                                                           "effectiveXS2": 0.000112194559601,
-                                                           "nEventsPositive": 68818780,
-                                                           "nEventsNegative": 279864,
-                                                           "nLep2nJet7GenHT500-550-nominalXS": 0.181324102052,
-                                                           "nLep2nJet7pGenHT500p-nominalXS": 1.456734617,
-                                                           "nLep1nJet9GenHT500-550-nominalXS": 0.0,
-                                                           "nLep1nJet9pGenHT500p-nominalXS": 0.0,
-                                                           "nLep2nJet7GenHT500-550-effectiveXS": 0.181324102052,
-                                                           "nLep2nJet7pGenHT500p-effectiveXS": 1.456734617,
-                                                           "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
-                                                           "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
-                                                           "fractionalContribution": 1,
-                                                           "effectiveCrossSection": 87.3348, 
-                                                        },
-
-                                          },
                      },
     },
     "tt_DL-GF":{
@@ -554,20 +418,17 @@ bookerV2_MC = {
         "sumWeights2": 44925503249.097206,
         "isSignal": False,
         "doFilter": True,
-        "crossSection": 0.0486771857914 + 1.40805743121,
-        "crossSectionGenHT500-550nJet7Matching": 1.4529,
+        "crossSection": 1.4529,
         "color": leg_dict["ttbar"],
-        "source": {"NANOv5": "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "NANOv5p1": "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-*_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-GF-*_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-GF-*_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-GF-*_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-*_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-GF-*_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-GF-*_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-GF-*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-1_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-2_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-3_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-4_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-1_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-2_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-3_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-4_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tt_DL-GF/$SYSTEMATIC",
         "stitch": {"mode": "Flag",
                    "source": "Filtered",
@@ -575,68 +436,31 @@ bookerV2_MC = {
                   },
         "Notes": "1.4815 was the old XS * BR * stitching factor, now scaled down so that the XS matches Brown's lower BR calculation",
         "splitProcess": {"ID":{"unpackGenTtbarId": True,
-                               "nFTAGenJet/FTAGenHT": True,
+                               "nGenJet/GenHT": True,
                                "subera": False,
                               },
-                         "processes": {"ttbb_DL-GF_fr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500",
-                                                         "sumWeights": 20410377.7205,
-                                                         "sumWeights2": 1495802529.19,
-                                                         "nominalXS": 0.0485744525276,
-                                                         "nominalXS2": 8.47204020682e-09,
-                                                         "effectiveXS": 0.0535612126499,
-                                                         "effectiveXS2": 1.03008480636e-08,
-                                                         "nEventsPositive": 282130,
-                                                         "nEventsNegative": 1215,
-                                                         "nLep2nJet7GenHT500-550-nominalXS": 0.00446767251882,
-                                                         "nLep2nJet7pGenHT500p-nominalXS": 0.0485744525276,
-                                                         "nLep1nJet9GenHT500-550-nominalXS": 0.0,
-                                                         "nLep1nJet9pGenHT500p-nominalXS": 0.0,
-                                                         "nLep2nJet7GenHT500-550-effectiveXS": 0.00492633360499,
-                                                         "nLep2nJet7pGenHT500p-effectiveXS": 0.0535612126499,
-                                                         "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
-                                                         "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
-                                                         "fractionalContribution": 1 - 0.11972537248,
-                                                         "effectiveCrossSection": 0.0486771857914 * 0.040/0.032,
-                                                     },
-                                       "ttother_DL-GF_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500",
-                                                            "sumWeights": 591691409.848,
-                                                            "sumWeights2": 43429698960.3,
-                                                            "nominalXS": 1.40816043153,
-                                                            "nominalXS2": 2.45980434304e-07,
-                                                            "effectiveXS": 1.2290807799,
-                                                            "effectiveXS2": 1.87394631545e-07,
-                                                            "nEventsPositive": 8185412,
-                                                            "nEventsNegative": 41630,
-                                                            "nLep2nJet7GenHT500-550-nominalXS": 0.17731136686,
-                                                            "nLep2nJet7pGenHT500p-nominalXS": 1.40816043153,
-                                                            "nLep1nJet9GenHT500-550-nominalXS": 0.0,
-                                                            "nLep1nJet9pGenHT500p-nominalXS": 0.0,
-                                                            "nLep2nJet7GenHT500-550-effectiveXS": 0.154762190574,
-                                                            "nLep2nJet7pGenHT500p-effectiveXS": 1.2290807799,
-                                                            "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
-                                                            "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
-                                                            "fractionalContribution": 1 - 0.11949870629,
-                                                            "effectiveCrossSection": 1.40805743121 - 0.0486771857914 * (0.040 - 0.032)/0.032,
-                                                        },
+                         "processes": {"ttbb_DL-GF_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttcc_DL-GF_fr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttother_DL-GF_fr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 2 && nGenJet >= 7 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
                                    },
-                         "inclusiveProcess": {"tt_DL-GF_inclusive": {"sumWeights": 612101860.267,
-                                                                     "sumWeights2": 44925506774.5,
-                                                                     "nominalXS": 1.45673505707,
-                                                                     "nominalXS2": 2.54452504445e-07,
-                                                                     "effectiveXS": 1.45673505707,
-                                                                     "effectiveXS2": 2.54452504445e-07,
-                                                                     "nEventsPositive": 8467543,
-                                                                     "nEventsNegative": 42845,
-                                                                     "nLep2nJet7GenHT500-550-nominalXS": 0.181779039379,
-                                                                     "nLep2nJet7pGenHT500p-nominalXS": 1.45673488406,
-                                                                     "nLep1nJet9GenHT500-550-nominalXS": 0.0,
-                                                                     "nLep1nJet9pGenHT500p-nominalXS": 0.0,
-                                                                     "nLep2nJet7GenHT500-550-effectiveXS": 0.181779039379,
-                                                                     "nLep2nJet7pGenHT500p-effectiveXS": 1.45673488406,
-                                                                     "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
-                                                                     "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
-                                                                     },
-                                          },
                      },
     },
     "tt_SL":{
@@ -651,126 +475,64 @@ bookerV2_MC = {
         "doFilter": True,
         "crossSection": 364.3109,
         "color": leg_dict["ttbar"],
-        "source": {"NANOv5": "dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "NANOv5p1": "dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-NOM_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-NOM_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-NOM_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-NOM_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-NOM_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-NOM_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tt_SL/$SYSTEMATIC",
         "stitch": {"mode": "Flag",
                    "source": "Nominal",
                    "channel": "SL"
                   },
         "splitProcess": {"ID":{"unpackGenTtbarId": True,
-                               "nFTAGenJet/FTAGenHT": True,
+                               "nGenJet/GenHT": True,
                                "subera": False,
                               },
-                         "processes": {"ttbb_SL_fr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500",
-                                                      "sumWeights": 1656838.94388,
-                                                      "sumWeights2": 506713855.51,
-                                                      "nominalXS": 0.0997284505393,
-                                                      "nominalXS2": 1.83586327709e-06,
-                                                      "effectiveXS": 0.00164567288,
-                                                      "effectiveXS2": 4.99906997665e-10,
-                                                      "nEventsPositive": 5490,
-                                                      "nEventsNegative": 24,
-                                                      "nLep2nJet7GenHT500-550-nominalXS": 0.0,
-                                                      "nLep2nJet7pGenHT500p-nominalXS": 0.0,
-                                                      "nLep1nJet9GenHT500-550-nominalXS": 0.00622291611373,
-                                                      "nLep1nJet9pGenHT500p-nominalXS": 0.0997284505393,
-                                                      "nLep2nJet7GenHT500-550-effectiveXS": 0.0,
-                                                      "nLep2nJet7pGenHT500p-effectiveXS": 0.0,
-                                                      "nLep1nJet9GenHT500-550-effectiveXS": 0.000102687690699,
-                                                      "nLep1nJet9pGenHT500p-effectiveXS": 0.00164567288,
-                                                      "fractionalContribution": 0.01384021714,
-                                                      "effectiveCrossSection": 0.0997284505393 * 0.062/0.052, 
-                                                  },
-                                       "ttbb_SL_nr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)",
-                                                      "sumWeights": 22135434.4955,
-                                                      "sumWeights2": 6767694727.14,
-                                                      "nominalXS": 1.33237608423,
-                                                      "nominalXS2": 2.45198785962e-05,
-                                                      "effectiveXS": 1.588602,
-                                                      "effectiveXS2": 3.48573902185e-05,
-                                                      "nEventsPositive": 73301,
-                                                      "nEventsNegative": 302,
-                                                      "nLep2nJet7GenHT500-550-nominalXS": 0.0,
-                                                      "nLep2nJet7pGenHT500p-nominalXS": 0.0,
-                                                      "nLep1nJet9GenHT500-550-nominalXS": 0.0,
-                                                      "nLep1nJet9pGenHT500p-nominalXS": 0.0,
-                                                      "nLep2nJet7GenHT500-550-effectiveXS": 0.0,
-                                                      "nLep2nJet7pGenHT500p-effectiveXS": 0.0,
-                                                      "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
-                                                      "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
+                         "processes": {"ttbb_SL_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
                                                       "fractionalContribution": 1,
-                                                      "effectiveCrossSection": 1.33237608423 * 0.062/0.052,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
                                                   },
-                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500",
-                                                         "sumWeights": 36038396.785,
-                                                         "sumWeights2": 11028806959.9,
-                                                         "nominalXS": 2.16922319732,
-                                                         "nominalXS2": 3.99582159982e-05,
-                                                         "effectiveXS": 0.030132880675,
-                                                         "effectiveXS2": 7.71043559122e-09,
-                                                         "nEventsPositive": 119432,
-                                                         "nEventsNegative": 560,
-                                                         "nLep2nJet7GenHT500-550-nominalXS": 0.0,
-                                                         "nLep2nJet7pGenHT500p-nominalXS": 0.0,
-                                                         "nLep1nJet9GenHT500-550-nominalXS": 0.187760421205,
-                                                         "nLep1nJet9pGenHT500p-nominalXS": 2.16922319732,
-                                                         "nLep2nJet7GenHT500-550-effectiveXS": 0.0,
-                                                         "nLep2nJet7pGenHT500p-effectiveXS": 0.0,
-                                                         "nLep1nJet9GenHT500-550-effectiveXS": 0.00260819742969,
-                                                         "nLep1nJet9pGenHT500p-effectiveXS": 0.030132880675,
-                                                         "fractionalContribution": 0.01401549826,
-                                                         "effectiveCrossSection": 2.16922319732 - 0.0997284505393 * (0.062 - 0.052)/0.052,
+                                       "ttcc_SL_fr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
                                                   },
-                                       "ttother_SL_nr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)",
-                                                         "sumWeights": 5992649717.25,
-                                                         "sumWeights2": 1.83204705804e+12,
-                                                         "nominalXS": 360.709574761,
-                                                         "nominalXS2": 0.00663764742005,
-                                                         "effectiveXS": 360.453348999,
-                                                         "effectiveXS2": 0.0066282208208,
-                                                         "nEventsPositive": 19842384,
-                                                         "nEventsNegative": 80517,
-                                                         "nLep2nJet7GenHT500-550-nominalXS": 0.0,
-                                                         "nLep2nJet7pGenHT500p-nominalXS": 0.0,
-                                                         "nLep1nJet9GenHT500-550-nominalXS": 0.0,
-                                                         "nLep1nJet9pGenHT500p-nominalXS": 0.0,
-                                                         "nLep2nJet7GenHT500-550-effectiveXS": 0.0,
-                                                         "nLep2nJet7pGenHT500p-effectiveXS": 0.0,
-                                                         "nLep1nJet9GenHT500-550-effectiveXS": 0.0,
-                                                         "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
-                                                         "fractionalContribution": 1,
-                                                         "effectiveCrossSection": 360.709574761 - 1.33237608423 * (0.062 - 0.052)/0.052,
+                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttbb_SL_nr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttcc_SL_nr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttother_SL_nr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 1 && (nGenJet < 9 || GenHT < 500)",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
                                                   },
                                    },
-                         "inclusiveProcess": {"tt_SL_inclusive": {"filter": "return true;",
-                                                                  "sumWeights": 6052480387.47,
-                                                                  "sumWeights2": 1.85035027359e+12,
-                                                                  "nominalXS": 364.310902493,
-                                                                  "nominalXS2": 0.00670396137791,
-                                                                  "effectiveXS": 364.310902493,
-                                                                  "effectiveXS2": 0.00670396137791,
-                                                                  "nEventsPositive": 20040607,
-                                                                  "nEventsNegative": 81403,
-                                                                  "nLep2nJet7GenHT500-550-nominalXS": 0.0,
-                                                                  "nLep2nJet7pGenHT500p-nominalXS": 0.0,
-                                                                  "nLep1nJet9GenHT500-550-nominalXS": 0.193983337319,
-                                                                  "nLep1nJet9pGenHT500p-nominalXS": 2.26895164785,
-                                                                  "nLep2nJet7GenHT500-550-effectiveXS": 0.0,
-                                                                  "nLep2nJet7pGenHT500p-effectiveXS": 0.0,
-                                                                  "nLep1nJet9GenHT500-550-effectiveXS": 0.193983337319,
-                                                                  "nLep1nJet9pGenHT500p-effectiveXS": 2.26895164785,
-                                                                  "effectiveCrossSection": 364.3109,
-                                                                  "fractionalContribution": 1,
-                                                              },
-                                              
-                                          },
                      },
     },
     "tt_SL-GF":{
@@ -783,86 +545,45 @@ bookerV2_MC = {
         "sumWeights2": 812201885978.209229,
         "isSignal": False,
         "doFilter": True,
-        "crossSection": 0.0997284505393 + 2.16922319732,
+        "crossSection": 12.3429,
         "color": leg_dict["ttbar"],
-        "source": {"NANOv5": "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "NANOv5p1": "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-GF_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-GF_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-GF_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-GF_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-GF_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-GF_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-GF_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-GF_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-GF_2017_v2.root"],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-GF_2017_v2.root"],
         "destination": "/$HIST_CLASS/$HIST/tt_SL-GF/$SYSTEMATIC",
         "stitch": {"mode": "Flag",
                    "source": "Filtered",
                    "channel": "SL"
                   },
         "splitProcess": {"ID":{"unpackGenTtbarId": True,
-                               "nFTAGenJet/FTAGenHT": True,
+                               "nGenJet/GenHT": True,
                                "subera": False,
                               },
-                         "processes": {"ttbb_SL-GF_fr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500",
-                                                         "sumWeights": 118077149.406,
-                                                         "sumWeights2": 36125534258.9,
-                                                         "nominalXS": 0.100971811238,
-                                                         "nominalXS2": 2.64169608221e-08,
-                                                         "effectiveXS": 0.11726132712,
-                                                         "effectiveXS2": 3.56280594874e-08,
-                                                         "nEventsPositive": 391250,
-                                                         "nEventsNegative": 1780,
-                                                         "nLep2nJet7GenHT500-550-nominalXS": 0.0,
-                                                         "nLep2nJet7pGenHT500p-nominalXS": 0.0,
-                                                         "nLep1nJet9GenHT500-550-nominalXS": 0.00636695757789,
-                                                         "nLep1nJet9pGenHT500p-nominalXS": 0.100971811238,
-                                                         "nLep2nJet7GenHT500-550-effectiveXS": 0.0,
-                                                         "nLep2nJet7pGenHT500p-effectiveXS": 0.0,
-                                                         "nLep1nJet9GenHT500-550-effectiveXS": 0.00739412204407,
-                                                         "nLep1nJet9pGenHT500p-effectiveXS": 0.11726132712,
-                                                         "fractionalContribution": 1-0.01384021714,
-                                                         "effectiveCrossSection": 0.0997284505393 * 0.062/0.052,
-                                                     },
-                                       "ttother_SL-GF_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500",
-                                                            "sumWeights": 2535249552.17,
-                                                            "sumWeights2": 7.76075813737e+11,
-                                                            "nominalXS": 2.1679786522,
-                                                            "nominalXS2": 5.67508959725e-07,
-                                                            "effectiveXS": 2.11991211931,
-                                                            "effectiveXS2": 5.42623295899e-07,
-                                                            "nEventsPositive": 8403208,
-                                                            "nEventsNegative": 40612,
-                                                            "nLep2nJet7GenHT500-550-nominalXS": 0.0,
-                                                            "nLep2nJet7pGenHT500p-nominalXS": 0.0,
-                                                            "nLep1nJet9GenHT500-550-nominalXS": 0.185403834447,
-                                                            "nLep1nJet9pGenHT500p-nominalXS": 2.1679786522,
-                                                            "nLep2nJet7GenHT500-550-effectiveXS": 0.0,
-                                                            "nLep2nJet7pGenHT500p-effectiveXS": 0.0,
-                                                            "nLep1nJet9GenHT500-550-effectiveXS": 0.181293222246,
-                                                            "nLep1nJet9pGenHT500p-effectiveXS": 2.11991211931,
-                                                            "fractionalContribution": 1 - 0.01401549826,
-                                                            "effectiveCrossSection": 2.16922319732 - 0.0997284505393 * (0.062 - 0.052)/0.052,
-                                                        },
+                         "processes": {"ttbb_SL_fr": {"filter": "nAdditionalBJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttcc_SL_fr": {"filter": "nAdditionalCJets >= 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
+                                       "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nAdditionalCJets < 2 && nGenLep == 1 && nGenJet >= 9 && GenHT >= 500",
+                                                      "nEventsPositive": 0,
+                                                      "nEventsNegative": 0,
+                                                      "fractionalContribution": 1,
+                                                      "sumWeights": 0,
+                                                      "effectiveCrossSection": 0,
+                                                  },
                                    },
-                         "inclusiveProcess": {"tt_SL-GF_inclusive": {"sumWeights": 2653328518.69,
-                                                                  "sumWeights2": 8.12201898319e+11,
-                                                                  "nominalXS": 2.26895201732,
-                                                                  "nominalXS2": 5.93926322975e-07,
-                                                                  "effectiveXS": 2.26895201732,
-                                                                  "effectiveXS2": 5.93926322975e-07,
-                                                                  "nEventsPositive": 8794464,
-                                                                  "nEventsNegative": 42392,
-                                                                  "nLep2nJet7GenHT500-550-nominalXS": 0.0,
-                                                                  "nLep2nJet7pGenHT500p-nominalXS": 0.0,
-                                                                  "nLep1nJet9GenHT500-550-nominalXS": 0.191770792025,
-                                                                  "nLep1nJet9pGenHT500p-nominalXS": 2.26895046344,
-                                                                  "nLep2nJet7GenHT500-550-effectiveXS": 0.0,
-                                                                  "nLep2nJet7pGenHT500p-effectiveXS": 0.0,
-                                                                  "nLep1nJet9GenHT500-550-effectiveXS": 0.191770792025,
-                                                                  "nLep1nJet9pGenHT500p-effectiveXS": 2.26895046344,
-                                                                  "fractionalContribution": 1,
-                                                                  "effectiveCrossSection": 0.0997284505393 + 2.16922319732,
-                                                              },
-                                          },
                      },
     },
     "ST_tW":{
@@ -874,16 +595,14 @@ bookerV2_MC = {
         "sumWeights": 277241050.840222,
         "sumWeights2": 9823995766.508368,
         "isSignal": False,
-        "crossSection": 35.83,
+        "crossSection": 35.8,
         "color": leg_dict["singletop"],
-        "source": {"NANOv5": "dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "NANOv5p1": "dbs:/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tW_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tW_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tW_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tW_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tW_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tW_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tW_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tW_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tW_2017_v2.root"],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tW_2017_v2.root"],
         "destination": "/$HIST_CLASS/$HIST/ST_tW/$SYSTEMATIC",
     },
     "ST_tbarW":{
@@ -895,16 +614,14 @@ bookerV2_MC = {
         "sumWeights": 270762750.172525,
         "sumWeights2": 9611964941.797768,
         "isSignal": False,
-        "crossSection": 35.83,
+        "crossSection": 35.8,
         "color": leg_dict["singletop"],
-        "source": {"NANOv5": "dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "NANOv5p1": "dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tbarW_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tbarW_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tbarW_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tbarW_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tbarW_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tbarW_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tbarW_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tbarW_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tbarW_2017_v2.root"],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tbarW_2017_v2.root"],
         "destination": "/$HIST_CLASS/$HIST/ST_tbarW/$SYSTEMATIC",
     },
     "DYJets_DL":{
@@ -916,21 +633,20 @@ bookerV2_MC = {
         "sumWeights": 49082157.000000,
         "sumWeights2": 49125561.000000,
         "isSignal": False,
-        "crossSection": 6077.22,
+        "crossSection": 5075.6,
         "color": leg_dict["DY"],
-        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017RECOSIMstep_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-*_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/DYJets_DL-*_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/DYJets_DL-*_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/DYJets_DL-*_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-*_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/DYJets_DL-*_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/DYJets_DL-*_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/DYJets_DL-*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-1_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-2_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-3_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-4_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-5_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-6_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-7_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-1_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-2_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-3_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-4_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-5_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-6_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-7_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/DYJets_DL/$SYSTEMATIC",
     },
     "ttH":{
@@ -944,13 +660,12 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.2934,
         "color": leg_dict["ttH"],
-        "source": {"NANOv5": "dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttH_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttH_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttH_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttH_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttH_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttH_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttH_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttH_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttH_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttH_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttH/$SYSTEMATIC",
     },
     "ttWJets":{
@@ -962,15 +677,14 @@ bookerV2_MC = {
         "sumWeights": 9384328.000000,
         "sumWeights2": 9425384.000000,
         "isSignal": False,
-        "crossSection": 0.6105,
+        "crossSection": 0.611,
         "color": leg_dict["ttVJets"],
-        "source": {"NANOv5": "dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWJets_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWJets_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWJets_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWJets_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWJets_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWJets_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWJets_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWJets_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWJets_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWJets_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttWJets/$SYSTEMATIC",
     },
     "ttZJets":{
@@ -982,15 +696,14 @@ bookerV2_MC = {
         "sumWeights": 8519074.000000,
         "sumWeights2": 8536618.000000,
         "isSignal": False,
-        "crossSection": 0.7826,
+        "crossSection": 0.783,
         "color": leg_dict["ttVJets"],
-        "source": {"NANOv5": "dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZJets_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZJets_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZJets_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZJets_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZJets_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZJets_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZJets_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZJets_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZJets_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZJets_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttZJets/$SYSTEMATIC",
     },
     "ttWH":{
@@ -1004,13 +717,12 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.001572,
         "color": leg_dict["ttultrarare"],
-        "source": {"NANOv5": "dbs:/TTWH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWH_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWH_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWH_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWH_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWH_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWH_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWH_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWH_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWH_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWH_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttWH/$SYSTEMATIC",
     },
     "ttWW":{
@@ -1024,13 +736,12 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.007882,
         "color": leg_dict["ttultrarare"],
-        "source": {"NANOv5": "dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWW_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWW_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWW_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWW_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWW_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWW_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWW_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWW_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWW_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWW_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttWW/$SYSTEMATIC",
     },
     "ttWZ":{
@@ -1044,13 +755,12 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.002974,
         "color": leg_dict["ttultrarare"],
-        "source": {"NANOv5": "dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWZ_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWZ_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWZ_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWZ_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWZ_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWZ_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWZ_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWZ_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWZ_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWZ_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttWZ/$SYSTEMATIC",
     },
     "ttZZ":{
@@ -1064,13 +774,12 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.001572,
         "color": leg_dict["ttultrarare"],
-        "source": {"NANOv5": "dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZZ_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZZ_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZZ_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZZ_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZZ_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZZ_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZZ_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZZ_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZZ_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZZ_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttZZ/$SYSTEMATIC",
     },
     "ttZH":{
@@ -1084,13 +793,12 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.01253,
         "color": leg_dict["ttultrarare"],
-        "source": {"NANOv5": "dbs:/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZH_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZH_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZH_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZH_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZH_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZH_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZH_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZH_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZH_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZH_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttZH/$SYSTEMATIC",
     },
     "ttHH":{
@@ -1104,13 +812,12 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.0007408,
         "color": leg_dict["ttultrarare"],
-        "source": {"NANOv5": "dbs:/TTHH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttHH_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttHH_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttHH_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttHH_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttHH_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttHH_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttHH_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttHH_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttHH_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttHH_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ttHH/$SYSTEMATIC",
     },    
     "tttW":{
@@ -1124,13 +831,12 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.007882,
         "color": leg_dict["ttultrarare"],
-        "source": {"NANOv5": "dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttW_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttW_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttW_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttW_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttW_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttW_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttW_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttW_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttW_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttW_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tttW/$SYSTEMATIC",
     },
     "tttJ":{
@@ -1144,80 +850,136 @@ bookerV2_MC = {
         "isSignal": False,
         "crossSection": 0.0004741,
         "color": leg_dict["ttultrarare"],
-        "source": {"NANOv5": "dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttJ_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttJ_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttJ_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttJ_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttJ_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttJ_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttJ_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttJ_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttJ_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttJ_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tttJ/$SYSTEMATIC",
     },
 }
 bookerV2_ElMu = {
-    "ElMu":{
+    "ElMu_BOnly":{
         "era": "2017",
         "subera": "BCDEF",
         "channel": "ElMu",
         "isData": True,
-        "nEvents": 4453465 + 15595214 + 9164365 + 19043421 + 25776363,
+        "nEvents": 4453465,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_*_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_ElMu_*_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_ElMu_*_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_ElMu_*_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_*_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_ElMu_B*_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_ElMu_B*_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_ElMu_B*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_B_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_C_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_D_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_E_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_F_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_B_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_C_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_D_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_E_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_F_2017_v2.root",],
+        "destination": "/$HIST_CLASS/$HIST/ElMu/NOMINAL",
+    },
+    "ElMu_CPre301046":{
+        "era": "2017",
+        "subera": "C",
+        "channel": "ElMu",
+        "isData": True,
+        "nEvents": 15595214,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_*_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_ElMu_C*_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_ElMu_C*_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_ElMu_C*_2017_v2*.root",
+                  },
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_B_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_C_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_D_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_E_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_F_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ElMu/NOMINAL",
     },
 }
 bookerV2_MuMu = {
-    "MuMu":{
+    "MuMu_BOnly":{
         "era": "2017",
         "subera": "BCDEF",
         "channel": "MuMu",
         "isData": True,
-        "nEvents": 14501767 + 49636525 + 23075733 + 51589091 + 79756560,
+        "nEvents": 14501767,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_*_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_MuMu_*_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_MuMu_*_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_MuMu_*_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_*_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_MuMu_B*_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_MuMu_B*_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_MuMu_B*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_B_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_C_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_D_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_E_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_F_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_B_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_C_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_D_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_E_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_F_2017_v2.root",],
+        "destination": "/$HIST_CLASS/$HIST/MuMu/NOMINAL",
+        },
+    "MuMu_CPre301046":{
+        "era": "2017",
+        "subera": "BCDEF",
+        "channel": "MuMu",
+        "isData": True,
+        "nEvents": 49636525,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_*_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_MuMu_C*_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_MuMu_C*_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_MuMu_C*_2017_v2*.root",
+                  },
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_B_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_C_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_D_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_E_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_F_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/MuMu/NOMINAL",
         },
 }
 bookerV2_ElEl = {
-    "ElEl":{
+    "ElEl_BOnly":{
         "era": "2017",
         "subera": "B",
         "channel": "ElEl",
         "isData": True,
-        "nEvents": 58088760 + 65181125 + 25911432 + 56233597 + 74307066,
+        "nEvents": 58088760,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_*_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_ElEl_*_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_ElEl_*_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_ElEl_*_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_*_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_ElEl_B*_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_ElEl_B*_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_ElEl_B*_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_B_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_C_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_D_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_E_2017_v2.root",
-                        "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_F_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_B_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_C_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_D_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_E_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_F_2017_v2.root",],
+        "destination": "/$HIST_CLASS/$HIST/ElEl/NOMINAL",
+        },
+    "ElEl_CPre301046":{
+        "era": "2017",
+        "subera": "B",
+        "channel": "ElEl",
+        "isData": True,
+        "nEvents": 65181125,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_*_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_ElEl_C*_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_ElEl_C*_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_ElEl_C*_2017_v2*.root",
+                  },
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_B_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_C_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_D_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_E_2017_v2.root",
+                        "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_F_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/ElEl/NOMINAL",
         },
 }
-bookerV2_Mu = {
+cutoutV2_ToBeFixed = {
     "Mu":{
         "era": "2017",
         "subera": "BCDEF",
@@ -1225,14 +987,12 @@ bookerV2_Mu = {
         "isData": True,
         "nEvents": 136300266 + 165652756 + 70361660 + 154630534 + 242135500,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_*_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_Mu_*_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_Mu_*_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_Mu_*_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_*_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_Mu_*_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_Mu_*_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_Mu_*_2017_v2*.root",
                   },
         },
-}
-bookerV2_El = {
     "El":{
         "era": "2017",
         "subera": "BCDEF",
@@ -1240,271 +1000,12 @@ bookerV2_El = {
         "isData": True,
         "nEvents": 60537490 + 136637888 + 51526710 + 102121689 + 128467223,
         "color": leg_dict["Data"],
-        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_*_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_El_*_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_El_*_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_El_*_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_*_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/data_El_*_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/data_El_*_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/data_El_*_2017_v2*.root",
                   },
         },
-}
-bookerV2_SplitData = {
-    "ElMu_B":{
-        "era": "2017",
-        "subera": "B",
-        "channel": "ElMu",
-        "isData": True,
-        "nEvents": 4453465,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/MuonEG/Run2017B-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_B*_2017_v2.root",},
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_B_2017.root",],
-        },
-    "ElMu_C":{
-        "era": "2017",
-        "subera": "C",
-        "channel": "ElMu",
-        "isData": True,
-        "nEvents": 15595214, 
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/MuonEG/Run2017C-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_C*_2017_v2.root",},
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_C_2017.root",],
-        },
-    "ElMu_D":{
-        "era": "2017",
-        "subera": "D",
-        "channel": "ElMu",
-        "isData": True,
-        "nEvents": 9164365,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/MuonEG/Run2017D-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_D*_2017_v2.root",},
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_D_2017.root",],
-        },
-    "ElMu_E":{
-        "era": "2017",
-        "subera": "E",
-        "channel": "ElMu",
-        "isData": True,
-        "nEvents": 19043421,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/MuonEG/Run2017E-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_E*_2017_v2.root",},
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_E_2017.root",],
-        },
-    "ElMu_F":{
-        "era": "2017",
-        "subera": "F",
-        "channel": "ElMu",
-        "isData": True,
-        "nEvents": 25776363,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/MuonEG/Run2017F-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_F*_2017_v2.root",},
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_F_2017.root",],
-        },
-    "MuMu_B":{
-        "era": "2017",
-        "subera": "B",
-        "channel": "MuMu",
-        "isData": True,
-        "nEvents": 14501767,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/DoubleMuon/Run2017B-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_B*_2017_v2.root",},
-        },
-    "MuMu_C":{
-        "era": "2017",
-        "subera": "C",
-        "channel": "MuMu",
-        "isData": True,
-        "nEvents": 49636525,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/DoubleMuon/Run2017C-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_C*_2017_v2.root",},
-        },
-    "MuMu_D":{
-        "era": "2017",
-        "subera": "D",
-        "channel": "MuMu",
-        "isData": True,
-        "nEvents": 23075733,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/DoubleMuon/Run2017D-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_D*_2017_v2.root",},
-        },
-    "MuMu_E":{
-        "era": "2017",
-        "subera": "E",
-        "channel": "MuMu",
-        "isData": True,
-        "nEvents": 51589091,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/DoubleMuon/Run2017E-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_E*_2017_v2.root",},
-        },
-    "MuMu_F":{
-        "era": "2017",
-        "subera": "F",
-        "channel": "MuMu",
-        "isData": True,
-        "nEvents": 79756560,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/DoubleMuon/Run2017F-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_F*_2017_v2.root",},
-        },
-    "ElEl_B":{
-        "era": "2017",
-        "subera": "B",
-        "channel": "ElEl",
-        "isData": True,
-        "nEvents": 58088760,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/DoubleEG/Run2017B-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_B*_2017_v2.root",},
-        },
-    "ElEl_C":{
-        "era": "2017",
-        "subera": "C",
-        "channel": "ElEl",
-        "isData": True,
-        "nEvents": 65181125,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/DoubleEG/Run2017C-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_C*_2017_v2.root",},
-        },
-    "ElEl_D":{
-        "era": "2017",
-        "subera": "D",
-        "channel": "ElEl",
-        "isData": True,
-        "nEvents": 25911432,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/DoubleEG/Run2017D-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_D*_2017_v2.root",},
-        },
-    "ElEl_E":{
-        "era": "2017",
-        "subera": "E",
-        "channel": "ElEl",
-        "isData": True,
-        "nEvents": 56233597,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/DoubleEG/Run2017E-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_E*_2017_v2.root",},
-        },
-    "ElEl_F":{
-        "era": "2017",
-        "subera": "F",
-        "channel": "ElEl",
-        "isData": True,
-        "nEvents": 74307066,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/DoubleEG/Run2017F-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_F*_2017_v2.root",},
-        },
-    "Mu_B":{
-        "era": "2017",
-        "subera": "B",
-        "channel": "Mu",
-        "isData": True,
-        "nEvents": 136300266,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/SingleMuon/Run2017B-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_B*_2017_v2.root",},
-        },
-    "Mu_C":{
-        "era": "2017",
-        "subera": "C",
-        "channel": "Mu",
-        "isData": True,
-        "nEvents": 165652756,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/SingleMuon/Run2017C-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_C*_2017_v2.root",},
-        },
-    "Mu_D":{
-        "era": "2017",
-        "subera": "D",
-        "channel": "Mu",
-        "isData": True,
-        "nEvents": 70361660,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/SingleMuon/Run2017D-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_D*_2017_v2.root",},
-        },
-    "Mu_E":{
-        "era": "2017",
-        "subera": "E",
-        "channel": "Mu",
-        "isData": True,
-        "nEvents": 154630534,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/SingleMuon/Run2017E-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_E*_2017_v2.root",},
-        },
-    "Mu_F":{
-        "era": "2017",
-        "subera": "F",
-        "channel": "Mu",
-        "isData": True,
-        "nEvents": 242135500,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/SingleMuon/Run2017F-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_F*_2017_v2.root",},
-        },
-    "El_B":{
-        "era": "2017",
-        "subera": "B",
-        "channel": "El",
-        "isData": True,
-        "nEvents": 60537490,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/SingleElectron/Run2017B-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_B*_2017_v2.root",},
-        },
-    "El_C":{
-        "era": "2017",
-        "subera": "C",
-        "channel": "El",
-        "isData": True,
-        "nEvents": 136637888,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/SingleElectron/Run2017C-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_C*_2017_v2.root",},
-        },
-    "El_D":{
-        "era": "2017",
-        "subera": "D",
-        "channel": "El",
-        "isData": True,
-        "nEvents": 51526710,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/SingleElectron/Run2017D-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_D*_2017_v2.root",},
-        },
-    "El_E":{
-        "era": "2017",
-        "subera": "E",
-        "channel": "El",
-        "isData": True,
-        "nEvents": 102121689,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/SingleElectron/Run2017E-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_E*_2017_v2.root",},
-        },
-    "El_F":{
-        "era": "2017",
-        "subera": "F",
-        "channel": "El",
-        "isData": True,
-        "nEvents": 128467223,
-        "color": leg_dict["Data"],
-        "source": {"NANOv5": "dbs:/SingleElectron/Run2017F-Nano1June2019-v1/NANOAOD",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_F*_2017_v2.root",},
-    },
-}
-cutoutV2_ToBeFixed = {
     "QCD_HT200":{
         "era": "2017",
         "isData": False,
@@ -1516,13 +1017,12 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 1712000.0,
         "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT200to300_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT200_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT200_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT200_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT200_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT200_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT200_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",],
     },
     "QCD_HT300":{
         "era": "2017",
@@ -1535,13 +1035,12 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 347700.0,
         "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT300_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT300_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT300_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT300_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT300_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT300_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",],
     },   
     "QCD_HT500":{
         "era": "2017",
@@ -1554,13 +1053,12 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 32100.0,
         "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT500to700_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT500_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT500_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT500_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT500_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT500_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT500_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",],
     },
     "QCD_HT700":{
         "era": "2017",
@@ -1573,13 +1071,12 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 6831.0,
         "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT700to1000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT700_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT700_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT700_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT700_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT700_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT700_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",],
     },
     "QCD_HT1000":{
         "era": "2017",
@@ -1592,13 +1089,12 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 1207.0,
         "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT1000to1500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1000_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1000_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1000_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1000_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1000_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1000_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",],
     },
     "QCD_HT1500":{
         "era": "2017",
@@ -1611,13 +1107,12 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 119.9,
         "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1500_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1500_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1500_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1500_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1500_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1500_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",],
     },
     "QCD_HT2000":{
         "era": "2017",
@@ -1630,265 +1125,244 @@ cutoutV2_ToBeFixed = {
         "isSignal": False,
         "crossSection": 25.24,
         "color": leg_dict["QCD"],
-        "source": {"NANOv5": "dbs:/QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT2000_2017_v2*.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT2000_2017_v2*.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT2000_2017_v2*.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT2000_2017_v2*.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT2000_2017_v2*.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT2000_2017_v2*.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",],
+    },
+    "ElMu_B":{
+        "era": "2017",
+        "subera": "B",
+        "channel": "ElMu",
+        "isData": True,
+        "nEvents": 4453465,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_B*_2017_v2.root",},
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_B_2017.root",],
+        },
+    "ElMu_C":{
+        "era": "2017",
+        "subera": "C",
+        "channel": "ElMu",
+        "isData": True,
+        "nEvents": 15595214, 
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_C*_2017_v2.root",},
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_C_2017.root",],
+        },
+    "ElMu_D":{
+        "era": "2017",
+        "subera": "D",
+        "channel": "ElMu",
+        "isData": True,
+        "nEvents": 9164365,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_D*_2017_v2.root",},
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_D_2017.root",],
+        },
+    "ElMu_E":{
+        "era": "2017",
+        "subera": "E",
+        "channel": "ElMu",
+        "isData": True,
+        "nEvents": 19043421,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_E*_2017_v2.root",},
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_E_2017.root",],
+        },
+    "ElMu_F":{
+        "era": "2017",
+        "subera": "F",
+        "channel": "ElMu",
+        "isData": True,
+        "nEvents": 25776363,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_F*_2017_v2.root",},
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_F_2017.root",],
+        },
+    "MuMu_B":{
+        "era": "2017",
+        "subera": "B",
+        "channel": "MuMu",
+        "isData": True,
+        "nEvents": 14501767,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_B*_2017_v2.root",},
+        },
+    "MuMu_C":{
+        "era": "2017",
+        "subera": "C",
+        "channel": "MuMu",
+        "isData": True,
+        "nEvents": 49636525,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_C*_2017_v2.root",},
+        },
+    "MuMu_D":{
+        "era": "2017",
+        "subera": "D",
+        "channel": "MuMu",
+        "isData": True,
+        "nEvents": 23075733,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_D*_2017_v2.root",},
+        },
+    "MuMu_E":{
+        "era": "2017",
+        "subera": "E",
+        "channel": "MuMu",
+        "isData": True,
+        "nEvents": 51589091,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_E*_2017_v2.root",},
+        },
+    "MuMu_F":{
+        "era": "2017",
+        "subera": "F",
+        "channel": "MuMu",
+        "isData": True,
+        "nEvents": 79756560,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_F*_2017_v2.root",},
+        },
+    "ElEl_B":{
+        "era": "2017",
+        "subera": "B",
+        "channel": "ElEl",
+        "isData": True,
+        "nEvents": 58088760,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_B*_2017_v2.root",},
+        },
+    "ElEl_C":{
+        "era": "2017",
+        "subera": "C",
+        "channel": "ElEl",
+        "isData": True,
+        "nEvents": 65181125,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_C*_2017_v2.root",},
+        },
+    "ElEl_D":{
+        "era": "2017",
+        "subera": "D",
+        "channel": "ElEl",
+        "isData": True,
+        "nEvents": 25911432,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_D*_2017_v2.root",},
+        },
+    "ElEl_E":{
+        "era": "2017",
+        "subera": "E",
+        "channel": "ElEl",
+        "isData": True,
+        "nEvents": 56233597,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_E*_2017_v2.root",},
+        },
+    "ElEl_F":{
+        "era": "2017",
+        "subera": "F",
+        "channel": "ElEl",
+        "isData": True,
+        "nEvents": 74307066,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_F*_2017_v2.root",},
+        },
+    "Mu_B":{
+        "era": "2017",
+        "subera": "B",
+        "channel": "Mu",
+        "isData": True,
+        "nEvents": 136300266,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_B*_2017_v2.root",},
+        },
+    "Mu_C":{
+        "era": "2017",
+        "subera": "C",
+        "channel": "Mu",
+        "isData": True,
+        "nEvents": 165652756,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_C*_2017_v2.root",},
+        },
+    "Mu_D":{
+        "era": "2017",
+        "subera": "D",
+        "channel": "Mu",
+        "isData": True,
+        "nEvents": 70361660,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_D*_2017_v2.root",},
+        },
+    "Mu_E":{
+        "era": "2017",
+        "subera": "E",
+        "channel": "Mu",
+        "isData": True,
+        "nEvents": 154630534,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_E*_2017_v2.root",},
+        },
+    "Mu_F":{
+        "era": "2017",
+        "subera": "F",
+        "channel": "Mu",
+        "isData": True,
+        "nEvents": 242135500,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_F*_2017_v2.root",},
+        },
+    "El_B":{
+        "era": "2017",
+        "subera": "B",
+        "channel": "El",
+        "isData": True,
+        "nEvents": 60537490,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_B*_2017_v2.root",},
+        },
+    "El_C":{
+        "era": "2017",
+        "subera": "C",
+        "channel": "El",
+        "isData": True,
+        "nEvents": 136637888,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_C*_2017_v2.root",},
+        },
+    "El_D":{
+        "era": "2017",
+        "subera": "D",
+        "channel": "El",
+        "isData": True,
+        "nEvents": 51526710,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_D*_2017_v2.root",},
+        },
+    "El_E":{
+        "era": "2017",
+        "subera": "E",
+        "channel": "El",
+        "isData": True,
+        "nEvents": 102121689,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_E*_2017_v2.root",},
+        },
+    "El_F":{
+        "era": "2017",
+        "subera": "F",
+        "channel": "El",
+        "isData": True,
+        "nEvents": 128467223,
+        "color": leg_dict["Data"],
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_F*_2017_v2.root",},
     },
 }
-bookerV2_UNPROCESSED = {
-    "ST_tbar_t-channel":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 136.02,
-        "source": {"NANOv5": "dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "NANOv5p1": "dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
-                  },
-    },
-    "ST_t_t-channel":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 80.95,
-        "source": {"NANOv5": "dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "NANOv5p1": "dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
-                  },
-    },
-    "ST_s-channel":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 11.36/3,
-        "source": {"NANOv5": "dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                   "NANOv5p1": "dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER",
-                  },
-    },
-    "DYJets_DL-HT100":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 147.4*1.23,
-        "color": leg_dict["DY"],
-        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                  },
-    },
-    "DYJets_DL-HT200":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 40.99*1.23,
-        "color": leg_dict["DY"],
-        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                  },
-    },
-    "DYJets_DL-HT400":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 5.678*1.23,
-        "color": leg_dict["DY"],
-        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                  },
-    },
-    "DYJets_DL-HT600":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 1.367*1.23,
-        "color": leg_dict["DY"],
-        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                  },
-    },
-    "DYJets_DL-HT800":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 0.6304*1.23,
-        "color": leg_dict["DY"],
-        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                  },
-    },
-    "DYJets_DL-HT1200":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 0.1514*1.23,
-        "color": leg_dict["DY"],
-        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                  },
-    },
-    "DYJets_DL-HT2500":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 0.003565*1.23,
-        "color": leg_dict["DY"],
-        "source": {"NANOv5": "dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                  },
-    },
-    "tt_DL-TuneCP5down":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 831.76,
-        "color": leg_dict["ttbar"],
-        "source": {"NANOv5": "dbs:/TTTo2L2Nu_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                  },
-    },
-    "tt_DL-TuneCP5up":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 831.76,
-        "color": leg_dict["ttbar"],
-        "source": {"NANOv5": "dbs:/TTTo2L2Nu_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                  },
-    },
-    "tt_DL-HDAMPdown":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 831.76,
-        "color": leg_dict["ttbar"],
-        "source": {"NANOv5": "dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                  },
-    },
-    "tt_DL-HDAMPup":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 831.76,
-        "color": leg_dict["ttbar"],
-        "source": {"NANOv5": "dbs:/TTTo2L2Nu_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                  },
-    },
-    "tt_DL-CR2-GluonMove":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 831.76,
-        "color": leg_dict["ttbar"],
-        "source": {"NANOv5": "dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                  },
-    },
-    "tt_DL-CR1-QCD":{
-        "era": "2017",
-        "isData": False,
-        "nEvents": 1,
-        "nEventsPositive": 1,
-        "nEventsNegative": 0,
-        "sumWeights": 1,
-        "sumWeights2": 1,
-        "isSignal": False,
-        "crossSection": 831.76,
-        "color": leg_dict["ttbar"],
-        "source": {"NANOv5": "dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-                  },
-    },
-}
-# 'TTZlM10':'TTZToLLNuNu_M-10_TuneCP5_PSweights_13TeV-amcatnlo-pythia8',
-# 'TTZlM1to10':'TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8',
-# 'TTHB':'ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8',
-# 'TTHnoB':'ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8',
-# 'TTJetsSemiLepUEdnTTbb':'TTToSemiLeptonic_TuneCP5down_PSweights_13TeV-powheg-pythia8',
-# 'TTJetsSemiLepUEupTTbb':'TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8',
-# 'TTJetsSemiLepHDAMPdnTTbb':'TTToSemiLeptonic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8',
-# 'TTJetsSemiLepHDAMPupTTbb':'TTToSemiLeptonic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8',
-
-# 'TTJets2L2nuTTbb':'TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8',
-# 'TTJetsHadTTbb':'TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8',
-# 'TTJetsSemiLepNjet9binTTbb':'TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8',
-# 'TTJetsSemiLepNjet0TTbb':'TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8_HT0Njet0',
-# 'TTJetsSemiLepNjet9TTbb':'TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8_HT500Njet9',
-
-# 'TTJets2L2nuUEdnTTbb':'TTTo2L2Nu_TuneCP5down_PSweights_13TeV-powheg-pythia8_ttbb',
-# 'TTJets2L2nuUEupTTbb':'TTTo2L2Nu_TuneCP5up_PSweights_13TeV-powheg-pythia8_ttbb',
-# 'TTJets2L2nuHDAMPdnTTbb':'TTTo2L2Nu_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8_ttbb',
-# 'TTJets2L2nuHDAMPupTTbb':'TTTo2L2Nu_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8_ttbb',
-
-# 'TTJetsHadUEdnTTbb':'TTToHadronic_TuneCP5down_PSweights_13TeV-powheg-pythia8_ttbb',
-# 'TTJetsHadUEupTTbb':'TTToHadronic_TuneCP5up_PSweights_13TeV-powheg-pythia8_ttbb',
-# 'TTJetsHadHDAMPdnTTbb':'TTToHadronic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8_ttbb',
-# 'TTJetsHadHDAMPupTTbb':'TTToHadronic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8_ttbb',
 bookerV2UNSTITCHED = {
     "tt_SL-UNSTITCHED":{
         "era": "2017",
@@ -1902,12 +1376,12 @@ bookerV2UNSTITCHED = {
         "doFilter": True,
         "crossSection": 366.2073,
         "color": leg_dict["ttbar"],
-        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-NOM_2017_v2.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-NOM_2017_v2.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-NOM_2017_v2.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-NOM_2017_v2.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-NOM_2017_v2.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-NOM_2017_v2.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tt_SL/$SYSTEMATIC",
     },  
     "tt_DL-UNSTITCHED":{
@@ -1922,25 +1396,25 @@ bookerV2UNSTITCHED = {
         "doFilter": True,
         "crossSection": 89.0482,
         "color": leg_dict["ttbar"],
-        "source": {"LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-*_2017_v2.root",
-                   "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-NOM-*_2017_v2.root",
-                   "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-NOM-*_2017_v2.root",
-                   "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-NOM-*_2017_v2.root",
+        "source": {"LJMLogic": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-*_2017_v2.root",
+                   "LJMLogic/ElMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-NOM-*_2017_v2.root",
+                   "LJMLogic/MuMu_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-NOM-*_2017_v2.root",
+                   "LJMLogic/ElEl_selection": "/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-NOM-*_2017_v2.root",
                   },
-        "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-1_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-2_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-3_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-4_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-5_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-6_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-7_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-8_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-9_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-10_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-11_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-12_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-13_2017_v2.root",
-                       "root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-14_2017_v2.root",],
+        "sourceSPARK": ["root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-1_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-2_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-3_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-4_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-5_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-6_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-7_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-8_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-9_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-10_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-11_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-12_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-13_2017_v2.root",
+                       "root://eoshome-n.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-14_2017_v2.root",],
         "destination": "/$HIST_CLASS/$HIST/tt_DL/$SYSTEMATIC",
     },
 }
@@ -1956,7 +1430,7 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
                                            "met_phi_var": "METFixEE2017_phi",
                                            "btagSF": "Jet_btagSF_deepcsv_shape",
                                            "weightVariation": False},
-                              "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
+                              "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
                                               "lep_postfix": "",
                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                               "jet_pt_var": "Jet_pt_jesTotalUp",
@@ -1965,7 +1439,7 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
                                               "met_phi_var": "METFixEE2017_phi_jesTotalUp",
                                               "btagSF": "Jet_btagSF_deepcsv_shape",
                                               "weightVariation": False},
-                              "jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
+                              "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
                                                 "lep_postfix": "",
                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                                 "jet_pt_var": "Jet_pt_jesTotalDown",
@@ -1989,7 +1463,7 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
         if isWeightVariation == True: 
             continue
         else:
-            branchpostfix = "__" + sysVar.replace("$NOMINAL", "nom")
+            branchpostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
         metPt = sysDict.get("met_pt_var")
         metPhi = sysDict.get("met_phi_var")
         metDoublet = "MET_xycorr_doublet{bpf}".format(bpf=branchpostfix)
@@ -2056,14 +1530,12 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
         
     #Set up channel bits for selection and baseline. Separation not necessary in this stage, but convenient for loops
     Chan = {}
-    Chan["ElMu"] = 24576
-    Chan["MuMu"] = 6144
-    Chan["ElEl"] = 512
-    Chan["ElEl_LowMET"] = Chan["ElEl"]
-    Chan["ElEl_HighMET"] = Chan["ElEl"]
-    Chan["Mu"] = 128
-    Chan["El"] = 64
-    Chan["selection"] = Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"] + Chan["El"]
+    Chan["ElMu_selection"] = 24576
+    Chan["MuMu_selection"] = 6144
+    Chan["ElEl_selection"] = 512
+    Chan["Mu_selection"] = 128
+    Chan["El_selection"] = 64
+    Chan["selection"] = Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"] + Chan["Mu_selection"] + Chan["El_selection"]
     Chan["ElMu_baseline"] = 24576
     Chan["MuMu_baseline"] = 6144
     Chan["ElEl_baseline"] = 512
@@ -2084,24 +1556,24 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
     b["El_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
         .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"] + Chan["Mu_baseline"], Chan["El_baseline"])
     b["selection"] = "ESV_TriggerAndLeptonLogic_selection > 0"
-    b["ElMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu"])
-    b["MuMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu"], Chan["MuMu"])
-    b["ElEl"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu"] + Chan["MuMu"], Chan["ElEl"])
-    b["ElEl_LowMET"] = b["ElEl"]
-    b["ElEl_HighMET"] = b["ElEl"]
-    b["Mu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"], Chan["Mu"])
-    b["El"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"], Chan["El"])
+    b["ElMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu_selection"])
+    b["MuMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"], Chan["MuMu_selection"])
+    b["ElEl_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"], Chan["ElEl_selection"])
+    b["Mu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"], Chan["Mu_selection"])
+    b["El_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"] + Chan["Mu_selection"], Chan["El_selection"])
     if input_lvl_filter == None:
-        rdf = input_df.Define("mu_mask", "Muon_pt > 0").Define("e_mask", "Electron_pt > 0")
+        rdf = input_df                .Define("mu_mask", "Muon_pt > 0").Define("e_mask", "Electron_pt > 0")
     else:
         if "baseline" in input_lvl_filter:
             lvl_type = "baseline"
-        else:
+        elif "selection" in input_lvl_filter:
             lvl_type = "selection"
+        else:
+            raise RuntimeError("No such level permissable: must contain 'selection' or 'baseline'")
         rdf_input = input_df.Filter(b[input_lvl_filter], input_lvl_filter)
         rdf = rdf_input
         for trgTup in triggers:
@@ -2244,19 +1716,19 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
         if isWeightVariation == True: continue
-        syspostfix = "___" + sysVar.replace("$NOMINAL", "nom")
-        branchpostfix = "__nom" if isWeightVariation else "__" + sysVar.replace("$NOMINAL", "nom")
+        syspostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
+        branchpostfix = "__nom" if isWeightVariation else "_" + sysVar.replace("$NOMINAL", "_nom")
         #metPt = sysDict.get("met_pt_var")
         #metPhi = sysDict.get("met_phi_var")
         #These are the xy corrected MET values, to be used in the calculations
         metPtName = "FTAMET{bpf}_pt".format(bpf=branchpostfix)#"source" variable so use the branchpostfix of this systematic, whereas defines should use syspostfix like "MTof..."
         metPhiName = "FTAMET{bpf}_phi".format(bpf=branchpostfix)
-        z.append(("MTofMETandMu{bpf}".format(bpf=branchpostfix), 
+        z.append(("MTofMETandMu{spf}".format(spf=syspostfix), 
                          "FTA::transverseMassMET(FTAMuon{lpf}_pt, FTAMuon{lpf}_phi, FTAMuon{lpf}_mass, {mpt}, {mph})".format(lpf=leppostfix, mpt=metPtName, mph=metPhiName)))
-        z.append(("MTofMETandEl{bpf}".format(bpf=branchpostfix),  
+        z.append(("MTofMETandEl{spf}".format(spf=syspostfix),  
                          "FTA::transverseMassMET(FTAElectron{lpf}_pt, FTAElectron{lpf}_phi, FTAElectron{lpf}_mass, {mpt}, {mph})".format(lpf=leppostfix, mpt=metPtName, mph=metPhiName)))
         #There shouldn't be any variation on this quantity, but... easier looping
-        z.append(("MTofElandMu{bpf}".format(bpf=branchpostfix), 
+        z.append(("MTofElandMu{spf}".format(spf=syspostfix), 
                          "FTA::transverseMass(FTAMuon{lpf}_pt, FTAMuon{lpf}_phi, FTAMuon{lpf}_mass, FTAElectron{lpf}_pt, FTAElectron{lpf}_phi, FTAElectron{lpf}_mass)".format(lpf=leppostfix)))
 
     
@@ -2278,8 +1750,8 @@ def defineInitWeights(input_df, crossSection=0, era="2017", sumWeights=-1, lumiO
                   nEvents=-1, nEventsPositive=2, nEventsNegative=1,
                   isData=True, verbose=False):
     leppostfix = ""
-    lumiDict = {"2017": 41.53,
-                "2018": 59.97}
+    lumiDict = {"2017": 30.54,
+                "2018": 1}
     lumi = lumiDict.get(era, 41.53)
     
     mc_def = collections.OrderedDict()
@@ -2326,7 +1798,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
                                            "met_phi_var": "METFixEE2017_phi",
                                            "btagSF": "Jet_btagSF_deepcsv_shape",
                                            "weightVariation": False},
-                              "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
+                              "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
                                               "lep_postfix": "",
                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                               "jet_pt_var": "Jet_pt_jesTotalUp",
@@ -2335,7 +1807,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
                                               "met_phi_var": "METFixEE2017_phi_jesTotalUp",
                                               "btagSF": "Jet_btagSF_deepcsv_shape",
                                               "weightVariation": False},
-                              "jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
+                              "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
                                                 "lep_postfix": "",
                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                                 "jet_pt_var": "Jet_pt_jesTotalDown",
@@ -2385,7 +1857,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
         jetMask = sysDict.get("jet_mask")
         jetPt = sysDict.get("jet_pt_var")
         jetMass = sysDict.get("jet_mass_var")
-        postfix = "__" + sysVar.replace("$NOMINAL", "nom")
+        postfix = "_" + sysVar.replace("$NOMINAL", "_nom")
         
         #Fill lists
         z.append(("Jet_idx", "FTA::generateIndices(Jet_pt)"))
@@ -2490,8 +1962,7 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     pwgt = partial weight, component for final weight
     wgt_$SYSTEMATIC is form of final event weights, i.e. wgt_nom or wgt_puWeightDown
     prewgt_$SYSTEMATIC is form of weight for BTaggingYields calculation, should include everything but pwgt_btag__$SYSTEMATIC"""
-    # if splitProcess != None:
-    if isinstance(input_df_or_nodes, (dict, collections.OrderedDict)):
+    if splitProcess != None:
         print("Splitting process in defineWeights()")
         filterNodes = input_df_or_nodes.get("filterNodes")
         nodes = input_df_or_nodes.get("nodes")
@@ -2499,13 +1970,12 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
         diagnosticNodes = input_df_or_nodes.get("diagnosticNodes")
         countNodes = input_df_or_nodes.get("countNodes")
     else:
-        raise NotImplementedError("Non-split process has been deprecated in defineWeights, wrap the RDF nodes in nodes['<process-name>'] dictionary")
-        # rdf = input_df_or_nodes
+        rdf = input_df_or_nodes
 
     #There's only one lepton branch variation (nominal), but if it ever changes, this will serve as sign it's referenced here and made need to be varied
     leppostfix = ""
-    lumiDict = {"2017": 41.53,
-                "2018": 59.97}
+    lumiDict = {"2017": 30.54,
+                "2018": 1}
 
 
     #era = "2017"
@@ -2514,61 +1984,56 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #Two lists of weight definitions, one or the other is chosen at the end via 'final' optional parameter
     zFin = []
     zPre = []
-    # zFin.append(("pwgt___LumiXS", "wgt_SUMW")) #Now defined in the splitProcess function
-    zFin.append(("pwgt_LSF___nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
-    # zPre.append(("pwgt___LumiXS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere
-    zPre.append(("pwgt_LSF___nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
-    if era == "2017": #This only applies to 2017
-        zPre.append(("pwgt_Z_vtx___nom", "((FTALepton{lpf}_pdgId.size() > 1 && (abs(FTALepton{lpf}_pdgId.at(0)) == 11 || abs(FTALepton{lpf}_pdgId.at(1)) == 11)) || (FTALepton{lpf}_pdgId.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 11)) ? EGamma_HLT_ZVtx_SF_nom : 1.00000000000000".format(lpf=leppostfix)))
-    else:
-        zPre.append(("pwgt_Z_vtx___nom", "(Int_t)1;"))
+    # zFin.append(("pwgt__XS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere #Now defined in the splitProcess function
+    zFin.append(("pwgt_LSF__nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
+    zPre.append(("pwgt__XS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere
+    zPre.append(("pwgt_LSF__nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
     
     #WARNING: on btag weights, it can ALWAYS be 'varied' to match the systematic, so that the event weight from
     #the correct jet collection, btag SFs, and yields is used. Always match! This duplicates some calculations uselessly
     #in the BTaggingYields function, but it should help avoid mistakes at the level of final calculations
     
-    print("\nFIXME: Need to propagate pwgt_Z_vtx___nom to all non-nominal event weights properly.\n")
     #Nominal weight
-    zFin.append(("wgt___nom", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_btag___nom"))
-    #pre-btagging yield weight. Careful modifying, it is 'inherited' for many other weights below!
-    zPre.append(("prewgt___nom", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    zFin.append(("wgt__nom", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
+    #pre-btagging yield weight. Careful modifying, it is 'inherited' for may other weights below!
+    zPre.append(("prewgt__nom", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
     
     #JES Up and Down - effectively the nominal weight, but with the CORRECT btag weight for those jets!
-    if "jesTotalDown" in sysVariations.keys():
-        zFin.append(("wgt___jesTotalDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jesTotalDown * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___jesTotalDown", "prewgt___nom * pwgt_Z_vtx___nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
+    if "_jesTotalDown" in sysVariations.keys():
+        zFin.append(("wgt__jesTotalDown", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalDown"))
+        zPre.append(("prewgt__jesTotalDown", "prewgt__nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
         
-    if "jesTotalDown" in sysVariations.keys():
-        zPre.append(("prewgt___jesTotalUp", "prewgt___nom"))
-        zFin.append(("wgt___jesTotalUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jesTotalUp"))
+    if "_jesTotalDown" in sysVariations.keys():
+        zPre.append(("prewgt__jesTotalUp", "prewgt__nom"))
+        zFin.append(("wgt__jesTotalUp", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__jesTotalUp"))
     
     #Pileup variations 
     print("FIXME: Using temporary definition of weights for PU variations (change pwgt_btag__VARIATION)")
-    if "puWeightDown" in sysVariations.keys():
-        zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
-        #zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightDown * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        #zPre.append(("prewgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-    if "puWeightUp" in sysVariations.keys():
-        zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
-        #zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightUp * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        #zPre.append(("prewgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    if "_puWeightDown" in sysVariations.keys():
+        zFin.append(("wgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
+        #zFin.append(("wgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__puWeightDown"))
+        zPre.append(("prewgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+        #zPre.append(("prewgt__puWeightDown", "pwgt__XS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    if "_puWeightUp" in sysVariations.keys():
+        zFin.append(("wgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__nom"))
+        #zFin.append(("wgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom * pwgt_btag__puWeightUp"))
+        zPre.append(("prewgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+        #zPre.append(("prewgt__puWeightUp", "pwgt__XS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
     
     
     #L1 PreFiring variations
     print("FIXME: Using temporary definition of weights for L1PreFire variations (change pwgt_btag__VARIATION)")
-    if "L1PreFireDown" in sysVariations.keys():
-        zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
-        #zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag__L1PreFireDown * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        #zPre.append(("prewgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    if "_L1PreFireDown" in sysVariations.keys():
+        zFin.append(("wgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom * pwgt_btag__nom"))
+        #zFin.append(("wgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom * pwgt_btag__L1PreFireDown"))
+        zPre.append(("prewgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom"))
+        #zPre.append(("prewgt__L1PreFireDown", "pwgt__XS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF__nom"))
     
-    if "L1PreFireUp" in sysVariations.keys():
-        zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
-        #zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag__L1PreFireUp * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        #zPre.append(("prewgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    if "_L1PreFireUp" in sysVariations.keys():
+        zFin.append(("wgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom * pwgt_btag__nom"))
+        #zFin.append(("wgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom * pwgt_btag__L1PreFireUp"))
+        zPre.append(("prewgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom"))
+        #zPre.append(("prewgt__L1PreFireUp", "pwgt__XS * puWeight * L1PreFiringWeight_Up * pwgt_LSF__nom"))
     
     #Lepton ScaleFactor variations
     #To be done, still...
@@ -2578,33 +2043,32 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     
     #Pure BTagging variations, no other variations necessary. 
     #Since there may be many, use a common base factor for fewer multiplies... for pre-btagging, they're identical!
-    print("\n\nWARNING! WARNING! L1PreFiringWeight Only applies to 2017 and perhaps 2016, drop it from calculations in 2018!")
-    zFin.append(("pwgt_btagSF_common", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-    zPre.append(("pwgt_btagSF_common", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    zFin.append(("pwgt_btagSF_common", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    zPre.append(("pwgt_btagSF_common", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
     
-    if "btagSF_deepcsv_shape_down_hf" in sysVariations.keys():
-        zFin.append(("wgt___btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_down_hf * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_Z_vtx___nom"))#Really just aliases w/o btagging part
-    if "btagSF_deepcsv_shape_up_hf" in sysVariations.keys():
-        zFin.append(("wgt___btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_up_hf * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_Z_vtx___nom"))
-    if "btagSF_deepcsv_shape_down_lf" in sysVariations.keys():
-        zFin.append(("wgt___btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_down_lf * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_Z_vtx___nom"))
-    if "btagSF_deepcsv_shape_up_lf" in sysVariations.keys():
-        zFin.append(("wgt___btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_up_lf * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_Z_vtx___nom"))
+    if "_btagSF_deepcsv_shape_down_hf" in sysVariations.keys():
+        zFin.append(("wgt__btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_down_hf"))
+        zPre.append(("prewgt__btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common"))#Really just aliases w/o btagging part
+    if "_btagSF_deepcsv_shape_up_hf" in sysVariations.keys():
+        zFin.append(("wgt__btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_up_hf"))
+        zPre.append(("prewgt__btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common"))
+    if "_btagSF_deepcsv_shape_down_lf" in sysVariations.keys():
+        zFin.append(("wgt__btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_down_lf"))
+        zPre.append(("prewgt__btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common"))
+    if "_btagSF_deepcsv_shape_up_lf" in sysVariations.keys():
+        zFin.append(("wgt__btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_btag__btagSF_deepcsv_shape_up_lf"))
+        zPre.append(("prewgt__btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common"))
 
     #Special variations for testing central components
-    zFin.append(("wgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-    zFin.append(("wgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_Z_vtx___nom"))
-    zFin.append(("wgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-    zFin.append(("wgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    zFin.append(("wgt__no_btag_shape_reweight", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    zFin.append(("wgt__no_LSF", "pwgt__XS * puWeight * L1PreFiringWeight_Nom"))
+    zFin.append(("wgt__no_L1PreFiringWeight", "pwgt__XS * puWeight * pwgt_LSF__nom"))
+    zFin.append(("wgt__no_puWeight", "pwgt__XS * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
 
-    zPre.append(("prewgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-    zPre.append(("prewgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_Z_vtx___nom"))
-    zPre.append(("prewgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-    zPre.append(("prewgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    zPre.append(("prewgt__no_btag_shape_reweight", "pwgt__XS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
+    zPre.append(("prewgt__no_LSF", "pwgt__XS * puWeight * L1PreFiringWeight_Nom"))
+    zPre.append(("prewgt__no_L1PreFiringWeight", "pwgt__XS * puWeight * pwgt_LSF__nom"))
+    zPre.append(("prewgt__no_puWeight", "pwgt__XS * L1PreFiringWeight_Nom * pwgt_LSF__nom"))
 
 
     #Factorization/Renormalization weights... depend on dividing genWeight back out?
@@ -2613,18 +2077,49 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #Load the initial or final definitions
     if final:
         z = zFin
+        nodes = input_df_or_nodes.get("nodes")
+        for processName in nodes:
+            if processName.lower() == "basenode": continue
+            # pdb.set_trace()
+            listOfColumns = nodes[processName]["BaseNode"].GetColumnNames()
+            if isData:
+                defName = "wgt__nom"
+                defFunc = "int i = 1; return i"
+                if defName not in listOfColumns:
+                    nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
+            else:
+                for defName, defFunc in z:
+                    if defName in listOfColumns:
+                        if verbose:
+                            print("{} already defined, skipping".format(defName))
+                        continue
+                    else:
+                        # prereqs = re.findall(r"[\w']+", defFunc)
+                        # allPreReqs = True
+                        # for prereq in prereqs:
+                        #     if prereq not in listOfColumns: allPreReqs = False
+                        if verbose:
+                            print("nodes[processName][\"BaseNode\"] = nodes[processName][\"BaseNode\"].Define(\"{}\", \"{}\")".format(defName, defFunc))
+                        nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
+                        listOfColumns.push_back(defName) 
+
+                        # if allPreReqs:
+                        #     nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
+                        #     listOfColumns.push_back(defName) 
+                        # else:
+                        #     print("Skipping definition for {} due to missing prereqs in the list: {}".format(defName, prereqs))
+                    
+        return input_df_or_nodes
+
     else:
         z = zPre
-    nodes = input_df_or_nodes.get("nodes")
-    for processName in nodes:
-        if processName.lower() == "basenode": continue
-        # pdb.set_trace()
-        listOfColumns = nodes[processName]["BaseNode"].GetColumnNames()
+
+        listOfColumns = rdf.GetColumnNames()
         if isData:
-            defName = "wgt___nom"
+            defName = "wgt__nom"
             defFunc = "int i = 1; return i"
             if defName not in listOfColumns:
-                nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
+                rdf = rdf.Define(defName, defFunc)
         else:
             for defName, defFunc in z:
                 if defName in listOfColumns:
@@ -2632,356 +2127,18 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                         print("{} already defined, skipping".format(defName))
                     continue
                 else:
-                    # prereqs = re.findall(r"[\w']+", defFunc)
-                    # allPreReqs = True
-                    # for prereq in prereqs:
-                    #     if prereq not in listOfColumns: allPreReqs = False
                     if verbose:
-                        print("nodes[processName][\"BaseNode\"] = nodes[processName][\"BaseNode\"].Define(\"{}\", \"{}\")".format(defName, defFunc))
-                    nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
+                        print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
+                    rdf = rdf.Define(defName, defFunc)
+                    
                     listOfColumns.push_back(defName) 
-
-                    # if allPreReqs:
-                    #     nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
-                    #     listOfColumns.push_back(defName) 
-                    # else:
-                    #     print("Skipping definition for {} due to missing prereqs in the list: {}".format(defName, prereqs))
-               
-    #return the dictionary of all nodes
-    return input_df_or_nodes
-
-    # else:
-    #     z = zPre
-
-    #     listOfColumns = rdf.GetColumnNames()
-    #     if isData:
-    #         defName = "wgt___nom"
-    #         defFunc = "int i = 1; return i"
-    #         if defName not in listOfColumns:
-    #             rdf = rdf.Define(defName, defFunc)
-    #     else:
-    #         for defName, defFunc in z:
-    #             if defName in listOfColumns:
-    #                 if verbose:
-    #                     print("{} already defined, skipping".format(defName))
-    #                 continue
-    #             else:
-    #                 if verbose:
-    #                     print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
-    #                 rdf = rdf.Define(defName, defFunc)
-                    
-    #                 listOfColumns.push_back(defName) 
-    #     return rdf
+        return rdf
     
-def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, histosDict=None, verbose=False,
-                   loadYields=None, lookupMap="LUM", useAggregate=True, useHTOnly=False, useNJetOnly=False, 
-                   calculateYields=True, HTArray=[500, 650, 800, 1000, 1200, 10000], nJetArray=[4,5,6,7,8,20],
-                   sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
-                                               "lep_postfix": "", 
-                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                               "jet_pt_var": "Jet_pt",
-                                               "jet_mass_var": "Jet_mass",
-                                               "met_pt_var": "METFixEE2017_pt",
-                                               "met_phi_var": "METFixEE2017_phi",
-                                               "btagSF": "Jet_btagSF_deepcsv_shape",
-                                               "weightVariation": False},
-                                  "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
-                                                                  "lep_postfix": "", 
-                                                                  "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                  "jet_pt_var": "Jet_pt",
-                                                                  "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
-                                                                  "weightVariation": True},
-                                  "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
-                                                                    "lep_postfix": "", 
-                                                                    "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                    "jet_pt_var": "Jet_pt",
-                                                                    "btagSF": "Jet_btagSF_deepcsv_shape_down_lf",
-                                                                    "weightVariation": True},
-                                              },
-               ):
-    """Calculate or load the event yields in various categories for the purpose of renormalizing btagging shape correction weights.
-    
-    A btagging preweight (event level) must be calculated using the product of all SF(function of discriminant, pt, eta) for
-    all selected jets. Then a ratio of the sum(weights before)/sum(weights after) for application of this btagging 
-    preweight serves as a renormalization, and this phase space extrapolation can be a function of multiple variables.
-    For high-jet multiplicity analyses, it can be expected to depend on nJet. The final btagging event weight
-    is then the product of this phase space ratio and the btagging preweight. This should be computed PRIOR to ANY
-    btagging requirements (cut on number of BTags); after, the event yields and shapes are expected to shift.
-    
-    The final and preweight are computed separately from the input weight (that is, it must be multiplied with the non-btagging event weight)
-    The yields are calculated as the sum of weights before and after multiplying the preweight with the input weight
 
-    <sampleName> should be passed to provide a 'unique' key for the declared lookupMap. This is purely to avoid namesplace conflicts
-    when aggregate yields are to be used. If not using aggregates, it provides the actual lookup key (into a yields histogram)
-    <isData> If running on data, disable all systematic variations besides $NOMINAL/'_nom'
-    <histosDict> dictionary for writing the histograms to fill yields
-
-    Group - Yield Loading
-    <loadYields> string path to the BTaggingYields.root file containing the ratios
-    <lookupMap> is a string name for the lookupMap object (std::map<std::string, std::vector<TH2Lookup*> > in the ROOT interpreter.
-    This object can be shared amongnst several dataframes, as the key (std::string) is the sampleName. For each thread/slot assigned
-    to an RDataFrame, there will be a TH2Lookup pointer, to avoid multiple threads accessing the same object (has state)
-    <useAggregate> will toggle using the weighted average of all processed samples (those used when choosing to analyze the files)
-    <useHTOnly> and <useNJetOnly> will toggle the lookup to use the 1D yield ratios computed in either HT only or nJet only
-
-    Group - Yield Computation
-    <calculateYields> as indicated, fill histograms for the yields, making an assumption that there is a weight named
-    "prewgt<SYSTEMATIC_POSTFIX>" where the postfix is the key inside sysVariations. i.e. "$NOMINAL" -> "prewgt_nom" due to 
-    special replacement for nominal, and "jesTotalUp" -> "prewgt_jesTotalUp" is expected
-    <HTBinWidth>, <HTMin>, <HTMax> are as expected. Don't screw up the math on your end, (max-min) should be evenly divisible.
-    <nJetBinWidth>, <nJetMin>, <nJetMax> are similar
-
-    For more info on btagging, see...
-    https://twiki.cern.ch/twiki/bin/viewauth/CMS/BTagShapeCalibration"""
-
-    if useAggregate:
-        yieldsKey = "Aggregate"
-    else:
-        yieldsKey = "{}".format(sampleName) #copy it, we'll modify
-    if useHTOnly:
-        yieldsKey += "1DX"
-    elif useNJetOnly:
-        yieldsKey += "1DY"        
-    
-    #internal variable/pointer to the TH2 lookup map, and the sample-specific one
-    iLUM = None
-    if loadYields != None:
-        calculateYields = False
-        #We need a lookupMap to store the TH2Lookup class with the yields loaded in them,
-        #With key1 based on the sample name and key2 based on slot number in the RDataFrame
-        #We need the string name for the object in the ROOT space, creating it if necessary
-        if type(lookupMap) == str:
-            #It's a string name, see if it's been declared in the ROOT instance and if not create it
-            try:
-                if str(type(getattr(ROOT, lookupMap))) == "<class 'ROOT.map<string,vector<TH2Lookup*> >'>":
-                    #We'll pick it up after the except statement
-                    pass
-            except:
-                ROOT.gInterpreter.Declare("std::map<std::string, std::vector<TH2Lookup*>> {0};".format(lookupMap))
-            iLUM = getattr(ROOT, lookupMap)
-        else:
-            raise RuntimeError("lookupMap (used in BTaggingYields function) must either be a string name "\
-                               "for the declared function's (C++ variable) name, used to find or declare one of type "\
-                               "std::map<std::string, std::vector<TH2Lookup*>>")
-        nSlots = 1
-        try:
-            nSlots = input_df_or_nodes.get("nodes").get("BaseNode").GetNSlots()
-        except:
-            nSlots = ROOT.ROOT.RDataFrame(10).GetNSlots()
-        assert os.path.isfile(loadYields), "BTaggingYield file does not appear to exist... aborting execution\n{}".format(loadYields)
-        # while iLUM[sampleName].size() < nSlots:
-        #     if type(loadYields) == str:
-        #         iLUM[sampleName].push_back(ROOT.TH2Lookup(loadYields))
-        #     else:
-        #         raise RuntimeError("No string path to a yields file has been provided in BTaggingYields() ...")
-                
-        # #Test to see that it's accessible...
-        # testKeyA = yieldsKey
-        # testKeyB = "nom"
-        # testNJ = 6
-        # testHT = 689.0
-        # testVal = iLUM[sampleName][0].getEventYieldRatio(testKeyA, testKeyB, testNJ, testHT)
-        # if verbose:
-        #     print("BTaggingYield has done a test evaluation on the yield histogram with search for histogram {}{}, nJet={}, HT={} and found value {}"\
-        #           .format(testKeyA, testKeyB, testNJ, testHT, testVal))
-        # assert type(testVal) == float, "LookupMap did not provide a valid return type, something is wrong"
-        # assert testVal < 5.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... (>5.0 is considered unrealistic...)"        
-    
-    if isData == True:
-        return input_df_or_nodes
-    else:
-    # if type(input_df_or_nodes) in [dict, collections.OrderedDict]:
-        histoNodes = histosDict #Inherit this from initiliazation, this is where the histograms will actually be stored
-        filterNodes = input_df_or_nodes.get("filterNodes")
-        nodes = input_df_or_nodes.get("nodes")
-        if "bTaggingDefineNodes" not in input_df_or_nodes:
-            input_df_or_nodes["bTaggingDefineNodes"] = collections.OrderedDict()
-        bTaggingDefineNodes = input_df_or_nodes.get("bTaggingDefineNodes")
-        diagnosticNodes = input_df_or_nodes.get("diagnosticNodes", collections.OrderedDict())
-        countNodes = input_df_or_nodes.get("countNodes", collections.OrderedDict())
-        #column guards
-        for processName in nodes.keys():
-            if processName.lower() == "basenode": continue
-            #Add key to histos dictionary, if calculating the yields
-            if calculateYields and processName not in histosDict:
-                histosDict[processName] = collections.OrderedDict()
-                histosDict[processName][channel] = collections.OrderedDict()
-            if processName not in  bTaggingDefineNodes:
-                 bTaggingDefineNodes[processName] = collections.OrderedDict()
-            if processName not in diagnosticNodes:
-                diagnosticNodes[processName] = collections.OrderedDict()
-            if processName not in countNodes:
-                countNodes[processName] = collections.OrderedDict()
-            # for decayChannel in nodes[processName].keys():
-            #     if processName not in nodes[processName]:
-            #         nodes[processName][decayChannel] = collections.OrderedDict()
-            #     if processName not in  bTaggingDefineNodes[processName]:
-            #          bTaggingDefineNodes[processName][decayChannel] = collections.OrderedDict()
-            #     if processName not in diagnosticNodes[processName]:
-            #         diagnosticNodes[processName][decayChannel] = collections.OrderedDict()
-            #     if processName not in countNodes[processName]:
-            #         countNodes[processName][decayChannel] = collections.OrderedDict()
-            
-            if loadYields != None:
-                while iLUM[processName].size() < nSlots:
-                    if isinstance(loadYields, str):
-                        iLUM[processName].push_back(ROOT.TH2Lookup(loadYields))
-                    else:
-                        raise RuntimeError("No string path to a yields file has been provided in BTaggingYields() ...")
-                        
-                #Test to see that it's accessible...
-                testKeyA = yieldsKey + "___nom"
-                # testKeyB = "__nom"
-                testNJ = 6
-                testHT = 689.0
-                if verbose:
-                    testVal = iLUM[processName][0].getEventYieldRatio(testKeyA, testNJ, testHT, True)
-                    print("BTaggingYield has done a test evaluation on the yield histogram with search for histogram {}, nJet={}, HT={} and found value {}"\
-                          .format(testKeyA, testNJ, testHT, testVal))
-                else:
-                    testVal = iLUM[processName][0].getEventYieldRatio(testKeyA, testNJ, testHT)
-                # pdb.set_trace()
-                assert type(testVal) == float, "LookupMap did not provide a valid return type, something is wrong"
-                assert testVal >= 0.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... ({} is considered unrealistic...)".format(testVal)
-                assert testVal <= 5.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... ({} is considered unrealistic...)".format(testVal)
-        
-            listOfColumns = nodes[processName]["BaseNode"].GetColumnNames() #This is a superset, containing non-Define'd columns as well
+# In[ ]:
 
 
-            # rdf = input_df
-            #Create list of the variations to be histogrammed (2D yields)
-            yieldList = []
-            for sysVar, sysDict in sysVariations.items():
-                bTaggingDefineNodes[processName][sysVar] = []
-                isWeightVariation = sysDict.get("weightVariation")
-                branchpostfix = "__nom" if isWeightVariation else "__" + sysVar.replace("$NOMINAL", "nom") #branch postfix for identifying input branch variation
-                syspostfix = "___" + sysVar.replace("$NOMINAL", "nom")
-                jetMask = sysDict.get("jet_mask") #mask as defined for the jet collection under this systematic variation
-                jetPt = sysDict.get("jet_pt_var") #colum name of jet pt collection for this systematic
-                jetSF = sysDict.get("btagSF") #colum name of per-jet shape SFs
-                #We must get or calculate various weights, defined below
-                #This btagSFProduct is the product of the SFs for the selected jets from collection jetPt with mask jetMask
-                btagSFProduct = "btagSFProduct{spf}".format(spf=syspostfix)
-                #input weight, should include all corrections for this systematic variation except BTagging SF and yield ratio
-                calculationWeightBefore = "prewgt{spf}".format(spf=syspostfix)
-                print(calculationWeightBefore)
-                #For calculating the yeild ratio, we need this weight, which will be the product of calculationWeightBefore and the product of btag SFs (no yield ratio!)
-                calculationWeightAfter = "calcBtagYields_after{spf}".format(spf=syspostfix)
-                #Define the form of the final name of the btagSFProduct * YieldRatio(HT, nJet)
-                #This needs to match what will be picked up in the final weight definitions!
-                btagFinalWeight = "pwgt_btag{spf}".format(spf=syspostfix)
-                
-                #Lets be really obvious about missing jet_masks... exception it
-                if jetMask not in listOfColumns:
-                    raise RuntimeError("Could not find {} column in method BTaggingYields".format(jetMask))
-                    
-                #Skip SFs for which the requisite per-jet SFs are not present...
-                if jetSF not in listOfColumns:
-                    if verbose: print("Skipping {} in BTaggingYields as it is not a valid column name".format(jetSF))
-                    continue
-                        
-                #Check we have the input weight for before btagSF and yield ratio multiplication
-                if calculationWeightBefore not in listOfColumns:
-                    raise RuntimeError("{} is not defined, cannot continue with calculating BTaggingYields".format(calculationWeightBefore))
-                
-                #Now check if the event preweight SF is in the list of columns, and if not, define it (common to calculating yields and loading them...)
-                #We might want to call this function twice to calculate yields for a future iteration and use an older iteration at the same time
-                if btagSFProduct not in listOfColumns:
-                    # if calculateYields and btagSFProduct not in histosDict["BTaggingYields"].keys():
-                    #     histosDict["BTaggingYields"][btagSFProduct] = {}
-                    bTaggingDefineNodes[processName][sysVar].append(("{}".format(btagSFProduct), "FTA::btagEventWeight_shape({}, {})".format(jetSF, jetMask)))
-                if calculationWeightAfter not in listOfColumns:
-                    bTaggingDefineNodes[processName][sysVar].append(("{}".format(calculationWeightAfter), "{} * {}".format(calculationWeightBefore, 
-                                                                                                                                 btagSFProduct)))
-                        
-                #Check that the HT and nJet numbers are available to us, and if not, define them based on the available masks    
-                #if isScaleVariation:
-                nJetName = "nFTAJet{bpf}".format(bpf=branchpostfix)
-                HTName = "HT{bpf}".format(bpf=branchpostfix)
-                if nJetName not in listOfColumns:
-                    bTaggingDefineNodes[processName][sysVar].append((nJetName, "{0}[{1}].size()".format(jetPt, jetMask)))
-                if HTName not in listOfColumns:
-                    bTaggingDefineNodes[processName][sysVar].append((HTName, "Sum({0}[{1}])".format(jetPt, jetMask)))
-                    
-                #loadYields path...
-                if loadYields:
-                    # if useAggregate:
-                    # print("\nPROBLEM: syspostfix was assumed to have only one underscore before, now it has two. Until new Yields calculated, gonna hack this away...\n\n\n")
-                    # bTaggingDefineNodes[processName][sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{pn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{spf}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, pn=processName, yk=yieldsKey, spf=syspostfix, nj=nJetName, ht=HTName))) #.replace("__", "_")
-                    bTaggingDefineNodes[processName][sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{pn}\"][rdfslot_]->getEventYieldRatio(\"{lk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, pn=processName, lk=yieldsKey+syspostfix, nj=nJetName, ht=HTName))) #.replace("__", "_")
-        
-                for defName, defFunc in bTaggingDefineNodes[processName][sysVar]:
-                    if defName in listOfColumns:
-                        if verbose:
-                            print("{} already defined, skipping".format(defName))
-                        continue
-                    else:
-                        if verbose:
-                            print("nodes[processName][\"BaseNode\"] = nodes[processName][\"BaseNode\"].Define(\"{}\", \"{}\")".format(defName, defFunc))
-                        nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
-                        listOfColumns.push_back(defName)        
-        
-         #            test = nodes[processName]["BaseNode"].Define("testThis", "{lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{spf}\", {nj}, {ht}, true);".format(bsf=btagSFProduct, lm=lookupMap,\
-         # sn=processName, yk=yieldsKey, spf=syspostfix, nj=nJetName, ht=HTName)).Stats("testThis").GetMean()
-                    # print("Debugging test: {}".format(test))
-                    #calculate Yields path
-                if calculateYields:
-                    k = btagSFProduct
-                    # histosDict["BTaggingYields"][k] = {}
-                    #Prepare working variable-bin-size 2D models (root 6.20.04+ ?)
-                    nJetArr = array.array('d', nJetArray)
-                    nJet1Bin = array.array('d', [nJetArray[0], nJetArray[-1]])
-                    HTArr = array.array('d', HTArray)
-                    HT1Bin = array.array('d', [HTArray[0], HTArray[-1]])
-                    
-                    ModelBefore = ROOT.RDF.TH2DModel("{}_BTaggingYield_{}_sumW_before".format(processName, btagSFProduct.replace("btagSFProduct_","")),
-                                                     "BTaggingYield #Sigma#omega_{before}; HT; nJet",
-                                                     len(HTArr)-1, HTArr, len(nJetArr)-1, nJetArr)
-                    ModelAfter = ROOT.RDF.TH2DModel("{}_BTaggingYield_{}_sumW_after".format(processName, btagSFProduct.replace("btagSFProduct_","")),
-                                                    "BTaggingYield #Sigma#omega_{after}; HT; nJet",
-                                                    len(HTArr)-1, HTArr, len(nJetArr)-1, nJetArr)
-                    ModelBefore1DX = ROOT.RDF.TH2DModel("{}_BTaggingYield1DX_{}_sumW_before".format(processName, btagSFProduct.replace("btagSFProduct_","")),
-                                                        "BTaggingYield #Sigma#omega_{before}; HT; nJet",
-                                                        len(HTArr)-1, HTArr, 1, nJet1Bin)
-                    ModelAfter1DX = ROOT.RDF.TH2DModel("{}_BTaggingYield1DX_{}_sumW_after".format(processName, btagSFProduct.replace("btagSFProduct_","")),
-                                                       "BTaggingYield #Sigma#omega_{after}; HT; nJet",
-                                                       len(HTArr)-1, HTArr, 1, nJet1Bin)
-                    ModelBefore1DY = ROOT.RDF.TH2DModel("{}_BTaggingYield1DY_{}_sumW_before".format(processName, btagSFProduct.replace("btagSFProduct_","")),
-                                                        "BTaggingYield #Sigma#omega_{before}; HT; nJet",
-                                                        1, HT1Bin, len(nJetArr)-1, nJetArr)
-                    ModelAfter1DY = ROOT.RDF.TH2DModel("{}_BTaggingYield1DY_{}_sumW_after".format(processName, btagSFProduct.replace("btagSFProduct_","")),
-                                                       "BTaggingYield #Sigma#omega_{after}; HT; nJet",
-                                                       1, HT1Bin, len(nJetArr)-1, nJetArr)
-                    histosDict[processName][channel][k+"__sumW_before"] = nodes[processName]["BaseNode"].Histo2D(ModelBefore,
-                                                                                                                 HTName,
-                                                                                                                 nJetName,
-                                                                                                                 calculationWeightBefore)
-                    histosDict[processName][channel][k+"__sumW_after"] = nodes[processName]["BaseNode"].Histo2D(ModelAfter,
-                                                                                                                HTName,
-                                                                                                                nJetName,
-                                                                                                                calculationWeightAfter)
-                    #For Unified JetBinning calculation
-                    histosDict[processName][channel][k+"__1DXsumW_before"] = nodes[processName]["BaseNode"].Histo2D(ModelBefore1DX,
-                                                                                                                    HTName,
-                                                                                                                    nJetName,
-                                                                                                                    calculationWeightBefore)
-                    histosDict[processName][channel][k+"__1DXsumW_after"] =  nodes[processName]["BaseNode"].Histo2D(ModelAfter1DX,
-                                                                                                                    HTName,
-                                                                                                                    nJetName,
-                                                                                                                    calculationWeightAfter)
-                    #For Unified HTBinning calculation
-                    histosDict[processName][channel][k+"__1DYsumW_before"] = nodes[processName]["BaseNode"].Histo2D(ModelBefore1DY,
-                                                                                                                    HTName,
-                                                                                                                    nJetName,
-                                                                                                                    calculationWeightBefore)
-                    histosDict[processName][channel][k+"__1DYsumW_after"] =  nodes[processName]["BaseNode"].Histo2D(ModelAfter1DY,
-                                                                                                                    HTName,
-                                                                                                                    nJetName,
-                                                                                                                    calculationWeightAfter)
-        return input_df_or_nodes
-        
-
-def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosDict=None, verbose=False,
+def BTaggingYields(input_df, sampleName, channel="All", isData = True, histosDict=None, verbose=False,
                    loadYields=None, lookupMap="LUM", useAggregate=True, useHTOnly=False, useNJetOnly=False, 
                    calculateYields=True, HTBinWidth=10, HTMin=200, HTMax=3200, nJetBinWidth=1, nJetMin=4, nJetMax=20,
                    sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
@@ -2993,13 +2150,43 @@ def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosD
                                                "met_phi_var": "METFixEE2017_phi",
                                                "btagSF": "Jet_btagSF_deepcsv_shape",
                                                "weightVariation": False},
-                                  "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
+                              "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
+                                              "lep_postfix": "",
+                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                              "jet_pt_var": "Jet_pt_jesTotalUp",
+                                              "jet_mass_var": "Jet_mass_jesTotalUp",
+                                              "met_pt_var": "METFixEE2017_pt_jesTotalUp",
+                                              "met_phi_var": "METFixEE2017_phi_jesTotalUp",
+                                              "btagSF": "Jet_btagSF_deepcsv_shape",
+                                              "weightVariation": False},
+                              "_jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
+                                                "lep_postfix": "",
+                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
+                                                "jet_pt_var": "Jet_pt_jesTotalDown",
+                                                "jet_mass_var": "Jet_mass_jesTotalDown",
+                                                "met_pt_var": "METFixEE2017_pt_jesTotalDown",
+                                                "met_phi_var": "METFixEE2017_phi_jesTotalDown",
+                                                "btagSF": "Jet_btagSF_deepcsv_shape",
+                                                "weightVariation": False},
+                                  "_btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
                                                                   "lep_postfix": "", 
                                                                   "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                                   "jet_pt_var": "Jet_pt",
                                                                   "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
                                                                   "weightVariation": True},
-                                  "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
+                                  "_btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
+                                                                    "lep_postfix": "", 
+                                                                    "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                                    "jet_pt_var": "Jet_pt",
+                                                                    "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
+                                                                    "weightVariation": True},
+                                  "_btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
+                                                                  "lep_postfix": "", 
+                                                                  "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
+                                                                  "jet_pt_var": "Jet_pt",
+                                                                  "btagSF": "Jet_btagSF_deepcsv_shape_up_lf",
+                                                                  "weightVariation": True},
+                                  "_btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
                                                                     "lep_postfix": "", 
                                                                     "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                                     "jet_pt_var": "Jet_pt",
@@ -3035,7 +2222,7 @@ def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosD
     Group - Yield Computation
     <calculateYields> as indicated, fill histograms for the yields, making an assumption that there is a weight named
     "prewgt<SYSTEMATIC_POSTFIX>" where the postfix is the key inside sysVariations. i.e. "$NOMINAL" -> "prewgt_nom" due to 
-    special replacement for nominal, and "jesTotalUp" -> "prewgt_jesTotalUp" is expected
+    special replacement for nominal, and "_jesTotalUp" -> "prewgt_jesTotalUp" is expected
     <HTBinWidth>, <HTMin>, <HTMax> are as expected. Don't screw up the math on your end, (max-min) should be evenly divisible.
     <nJetBinWidth>, <nJetMin>, <nJetMax> are similar
 
@@ -3109,8 +2296,8 @@ def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosD
         for sysVar, sysDict in sysVariations.items():
             z[sysVar] = []
             isWeightVariation = sysDict.get("weightVariation")
-            branchpostfix = "__nom" if isWeightVariation else "__" + sysVar.replace("$NOMINAL", "nom") #branch postfix for 
-            syspostfix = "___" + sysVar.replace("$NOMINAL", "nom")
+            branchpostfix = "__nom" if isWeightVariation else "_" + sysVar.replace("$NOMINAL", "_nom") #branch postfix for 
+            syspostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
             jetMask = sysDict.get("jet_mask") #mask as defined for the jet collection under this systematic variation
             jetPt = sysDict.get("jet_pt_var") #colum name of jet pt collection for this systematic
             jetSF = sysDict.get("btagSF") #colum name of per-jet shape SFs
@@ -3161,7 +2348,7 @@ def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosD
             if loadYields:
                 # if useAggregate:
                 print("\nPROBLEM: syspostfix was assumed to have only one underscore before, now it has two. Until new Yields calculated, gonna hack this away...\n\n\n")
-                z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=yieldsKey + syspostfix, nj=nJetName, ht=HTName)))
+                z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{spf}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=yieldsKey, spf=syspostfix.replace("__", "_"), nj=nJetName, ht=HTName)))
                 # else:
                 #     z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{vk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=sampleName, vk=btagSFProduct.replace("nonorm_",""), nj=nJetName, ht=HTName)))
 
@@ -3184,7 +2371,7 @@ def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosD
                 k = btagSFProduct
                 histosDict["BTaggingYields"][k] = {}
                 #Prepare working variable-bin-size 2D models (root 6.20.04+ ?)
-                nJetArr = array.array('d', [4, 5, 6, 7, 8, 20])
+                nJetArr = array.array('d', [4, 5, 6, 7, 8, 9, 20])
                 HTArr = array.array('d', [500, 650, 800, 1000, 1200, 10000])
                 ModelBefore = ("{}_BTaggingYield_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
                                                                                "BTaggingYield #Sigma#omega_{before}; HT; nJet",
@@ -3322,6 +2509,9 @@ def cutPVandMETFilters(input_df, level, isData=False):
     else:
         METbits = METbits_MC
     rdf = input_df.Filter("(ESV_JetMETLogic_{lvl} & {bits}) >= {bits}".format(lvl=lvl, bits=METbits), "PV, MET Filters")
+    print("cutPVandMETFilters() is cutting on event number 301046(full mitigation) or 300079 (begin 2017C) for the Z_vtx issue")
+    if isData:
+        rdf = rdf.Filter("run >= 294927 && run < 301046", "run inside 2017B or early 2017C for studying Z_vtx issue")
     return rdf
 
 def insertPVandMETFilters(input_df, level, era="2017", isData=False):
@@ -3425,34 +2615,20 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 #    rdf = rdf.Define("JML_selection_pass", "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00000000001111111111))#Only PV and MET filters required to pass
 #    return rdf
 
-def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017", printInfo=False, inclusiveProcess=None, fillDiagnosticHistos=False):
-    lumiDict = {"2017": 41.53,
-                "2018": 59.97}
+def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017"):
+    lumiDict = {"2017": 30.54,
+                "2018": 1}
     filterNodes = dict() #For storing tuples to debug and be verbose about
-    defineNodes = collections.OrderedDict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
+    defineNodes = dict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
     countNodes = dict() #For storing the counts at each node
     diagnosticNodes = dict()
-    diagnosticHistos = dict()
     nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
     #Define the base node in nodes when we split/don't split the process
 
-    # if splitProcess != None:
-    if True: #Deprecate the alternate code path to reduce duplication, use the inclusiveProcess instead
-        if isinstance(splitProcess, (dict, collections.OrderedDict)) or isinstance(inclusiveProcess, (dict, collections.OrderedDict)):
+    if splitProcess != None:
+        if type(splitProcess) == dict or type(splitProcess) == collections.OrderedDict:
             df_with_IDs = input_df
-            if isinstance(splitProcess, (dict, collections.OrderedDict)):
-                splitProcs = splitProcess.get("processes")
-                IDs = splitProcess.get("ID")  
-            else:
-                splitProcs = collections.OrderedDict()
-                IDs = {}
-            if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
-                inclusiveProc = inclusiveProcess.get("processes")
-                inclusiveDict = inclusiveProc.values()[0]
-                if inclusiveProc.keys()[0] not in splitProcs:
-                    splitProcs.update(inclusiveProc)
-                else:
-                    print("Inclusive process already defined, not overriding in splitProces")
+            IDs = splitProcess.get("ID")
             listOfColumns = df_with_IDs.GetColumnNames()
             for IDname, IDbool in IDs.items():
                 if IDbool and IDname == "unpackGenTtbarId":
@@ -3467,280 +2643,66 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                         # df_with_IDs = df_with_IDs.Define("nBJetsFromTop", "unpackedGenTtbarId[6]")
                         # df_with_IDs = df_with_IDs.Define("nBJetsFromW", "unpackedGenTtbarId[7]")
                         # df_with_IDs = df_with_IDs.Define("nCJetsFromW", "unpackedGenTtbarId[8]")
-                if IDbool and IDname == "nFTAGenJet/FTAGenHT":
-                    #Production notes (SL filter -> nGenJet 9)
-                    # Combination of filters is applied:
-                    # exactly 1 lepton (electron,muon or tau) in LHE record
-                    # HT calculated from jets with pT>30 and |eta|<2.4 > 500 GeV
-                    # Jet multiplicity (jet pT>30) >= 9
-                    if "nFTAGenLep" not in listOfColumns:
-                        df_with_IDs = df_with_IDs.Define("nFTAGenLep", "LHEPart_pdgId[abs(LHEPart_pdgId)==11 || abs(LHEPart_pdgId)==13 || abs(LHEPart_pdgId)==15].size()")
-                        listOfColumns.push_back("nFTAGenLep")
-                    if "nFTAGenJet" not in listOfColumns:
-                        df_with_IDs = df_with_IDs.Define("nFTAGenJet", "GenJet_pt[GenJet_pt > 30].size()")
-                        listOfColumns.push_back("nFTAGenJet")
-                    if "FTAGenHT" not in listOfColumns:
-                        df_with_IDs = df_with_IDs.Define("FTAGenHT", "Sum(GenJet_pt[GenJet_pt > 30 && abs(GenJet_eta) < 2.4])")
-                        listOfColumns.push_back("FTAGenHT")
+                if IDbool and IDname == "nGenJet/GenHT":
+                    if "nGenLep" not in listOfColumns:
+                        df_with_IDs = df_with_IDs.Define("nGenLep", "LHEPart_pdgId[stitch_lep_mask].size()")
+                        listOfColumns.push_back("nGenLep")
+                    if "nGenJet" not in listOfColumsn:
+                        df_with_IDs = df_with_IDs.Define("nGenJet", "GenJet_pt[GenJet_pt > 30].size()")
+                        listOfColumns.push_back("nGenJet")
+                    if "GenHT" not in listOfColumsn:
+                        df_with_IDs = df_with_IDs.Define("GenHT", "Sum(GenJet_pt[GenJet_pt > 30 && abs(GenJet_eta) < 2.4])")
+                        listOfColumns.push_back("GenHT")
                 if IDbool and IDname == "subera":
-                    raise NotImplementedError("splitProcess 'subera' not yet implemented")
+                    pass
             nodes["BaseNode"] = df_with_IDs #Always store the base node we'll build upon in the next level
+            splitProcs = splitProcess.get("processes")
             for preProcessName, processDict in splitProcs.items():
                 processName = era + "___" + preProcessName
                 filterString = processDict.get("filter")
-                filterName = "{} :: {}".format(processName, filterString.replace(" && ", " and ").replace(" || ", " or ")\
-                                               .replace("&&", " and ").replace("||", " or "))
-                if not isData:
-                    #Make the fractional contribution equal to N_eff(sample_j) / Sum(N_eff(sample_i)), where N_eff = nEventsPositive - nEventsNegative
-                    #Need to gather those bookkeeping stats from the original source rather than the ones after event selection
-                    effectiveXS = processDict.get("effectiveCrossSection")
-                    sumWeights = processDict.get("sumWeights")
-                    # nEffective = processDict.get("nEventsPositive") - processDict.get("nEventsNegative")
-                    fractionalContribution = processDict.get("fractionalContribution")
-                    #Calculate XS * Lumi
-                    wgtFormula = "{eXS:f} * {lumi:f} * 1000 * genWeight * {frCon:f} / {sW:f}".format(eXS=effectiveXS,
-                                                                                                     lumi=lumiDict[era],
-                                                                                                     frCon=fractionalContribution,
-                                                                                                     sW=sumWeights
-                                                                                                 )
-                    if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
-                        formulaForNominalXS = "{nXS:f} * genWeight / {sW:f}".format(nXS=inclusiveDict.get("effectiveCrossSection"),
-                                                                                    sW=inclusiveDict.get("sumWeights")
-                        )
-                        print("{} - nominalXS - {}".format(processName, formulaForNominalXS))
-                        formulaForEffectiveXS = "{nXS:f} * genWeight * {frCon:f} / {sW:f}".format(nXS=effectiveXS,
-                                                                                      frCon=fractionalContribution,
-                                                                                      sW=sumWeights
-                        )
-                        print("{} - effectiveXS - {}".format(processName, formulaForEffectiveXS))
-                    if fillDiagnosticHistos == True:
-                        diagnostic_e_mask = "Electron_pt > 15 && Electron_cutBased >= 2 && ((abs(Electron_eta) < 1.4442 && abs(Electron_ip3d) < 0.05 && abs(Electron_dz) < 0.1) || (abs(Electron_eta) > 1.5660 && abs(Electron_eta) < 2.5 && abs(Electron_ip3d) < 0.10 && abs(Electron_dz) < 0.2))"
-                        diagnostic_mu_mask = "Muon_pt > 15 && abs(Muon_eta) < 2.4 && Muon_looseId == true && Muon_pfIsoId >= 4 && abs(Muon_ip3d) < 0.10 && abs(Muon_dz) < 0.02"
-                        diagnostic_lepjet_idx = "Concatenate(Muon_jetIdx[diagnostic_mu_mask], Electron_jetIdx[diagnostic_e_mask])"
-                        diagnostic_jet_idx = "FTA::generateIndices(Jet_pt)"
-                        diagnostic_jet_mask = "ROOT::VecOps::RVec<int> jmask = (Jet_pt > 30 && abs(Jet_eta) < 2.5 && Jet_jetId > 2); "\
-                                              "for(int i=1; i < diagnostic_lepjet_idx.size(); ++i){jmask = jmask && diagnostic_jet_idx != diagnostic_lepjet_idx.at(i);}"\
-                                              "return jmask;"
+                filterName = filterString.replace("&&", "and").replace("||", "or")
+                effectiveXS = processDict.get("effectiveCrossSection")
+                sumWeights = processDict.get("sumWeights")
+                # nEffective = processDict.get("nEventsPositive") - processDict.get("nEventsNegative")
+                fractionalContribution = processDict.get("fractionalContribution")
+                wgtFormula = "{eXS:s} * {lumi:s} * 1000 * genWeight * {frCon:s} / {sWPS:s}".format(eXS=effectiveXS,
+                                                                                                   lumi=lumiDict[era],
+                                                                                                   frCon=fractionalContribution,
+                                                                                                   sWPS=sumWeights
+                                                                                               )
                 if processName not in nodes:
                     #L-2 filter, should be the packedEventID filter in that case
                     filterNodes[processName] = dict()
                     filterNodes[processName]["BaseNode"] = (filterString, filterName, processName, None, None, None, None)
                     nodes[processName] = dict()
-                    if not isData:
-                        nodes[processName]["BaseNode"] = nodes["BaseNode"]\
-                            .Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])\
-                            .Define("pwgt___LumiXS", wgtFormula)
-                        if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
-                            nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"]\
-                                .Define("nominalXS", formulaForNominalXS)\
-                                .Define("nominalXS2", "pow(nominalXS, 2)")\
-                                .Define("effectiveXS", formulaForEffectiveXS)\
-                                .Define("effectiveXS2", "pow(effectiveXS, 2)")
-                        if fillDiagnosticHistos == True:
-                            nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"]\
-                                .Define("diagnostic_e_mask", diagnostic_e_mask)\
-                                .Define("diagnostic_mu_mask", diagnostic_mu_mask)\
-                                .Define("diagnostic_lepjet_idx", diagnostic_lepjet_idx)\
-                                .Define("diagnostic_jet_idx", diagnostic_jet_idx)\
-                                .Define("diagnostic_jet_mask", diagnostic_jet_mask)\
-                                .Define("diagnostic_HT", "Sum(Jet_pt[diagnostic_jet_mask])")\
-                                .Define("diagnostic_nJet", "Jet_pt[diagnostic_jet_mask].size()")\
-                                .Define("diagnostic_jet1_pt", "Sum(diagnostic_jet_mask) > 0 ? Jet_pt[diagnostic_jet_mask].at(0) : -0.01")\
-                                .Define("diagnostic_jet1_eta", "Sum(diagnostic_jet_mask) > 0 ? Jet_eta[diagnostic_jet_mask].at(0) : 9999.9")\
-                                .Define("diagnostic_jet5_pt", "Sum(diagnostic_jet_mask) > 4 ? Jet_pt[diagnostic_jet_mask].at(4) : -0.01")\
-                                .Define("diagnostic_jet5_eta", "Sum(diagnostic_jet_mask) > 4 ? Jet_eta[diagnostic_jet_mask].at(4) : 9999.9")\
-                                .Define("diagnostic_el_pt", "Electron_pt[diagnostic_e_mask]")\
-                                .Define("diagnostic_el_eta", "Electron_eta[diagnostic_e_mask]")\
-                                .Define("diagnostic_mu_pt", "Muon_pt[diagnostic_mu_mask]")\
-                                .Define("diagnostic_mu_eta", "Muon_eta[diagnostic_mu_mask]")
-                            
-
-
-                    else:
-                        nodes[processName]["BaseNode"] = nodes["BaseNode"]\
-                            .Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
+                    nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])\
+                                                     .Define("pwgt__XS", wgtFormula)
                     countNodes[processName] = dict()
                     countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
-                    diagnosticNodes[processName] = collections.OrderedDict()
-                    diagnosticHistos[processName] = collections.OrderedDict()
-                    defineNodes[processName] = collections.OrderedDict()
-                if not isData:
-                    #Need to gather those bookkeeping stats from the original source rather than the ones after event selection...
-                    diagnosticNodes[processName]["sumWeights::Sum"] = nodes[processName]["BaseNode"].Sum("genWeight")
-                    diagnosticNodes[processName]["sumWeights2::Sum"] = nodes[processName]["BaseNode"].Define("genWeight2", "pow(genWeight, 2)").Sum("genWeight2")
-                    if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
-                        diagnosticNodes[processName]["nominalXS::Sum"] = nodes[processName]["BaseNode"].Sum("nominalXS")
-                        diagnosticNodes[processName]["nominalXS2::Sum"] = nodes[processName]["BaseNode"].Sum("nominalXS2")
-                    # pdb.set_trace()
-                    diagnosticNodes[processName]["effectiveXS::Sum"] = nodes[processName]["BaseNode"].Sum("effectiveXS")
-                    diagnosticNodes[processName]["effectiveXS2::Sum"] = nodes[processName]["BaseNode"].Sum("effectiveXS2")
-                    diagnosticNodes[processName]["nEventsPositive::Count"] = nodes[processName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
-                    diagnosticNodes[processName]["nEventsNegative::Count"] = nodes[processName]["BaseNode"].Filter("genWeight < 0", "genWeight < 0").Count()
-                if "nFTAGenJet/FTAGenHT" in IDs:
-                    if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
-                        diagnosticNodes[processName]["nLep2nJet7GenHT500-550-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
-                            .Filter("nFTAGenLep == 2 && nFTAGenJet == 7 && 500 <= FTAGenHT && FTAGenHT < 550", "nFTAGenLep 2, nFTAGenJet 7, FTAGenHT 500-550").Sum("nominalXS")
-                        diagnosticNodes[processName]["nLep2nJet7pGenHT500p-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
-                            .Filter("nFTAGenLep == 2 && nFTAGenJet >= 7 && 500 <= FTAGenHT", "nFTAGenLep 2, nFTAGenJet 7+, FTAGenHT 500+").Sum("nominalXS")
-                        diagnosticNodes[processName]["nLep1nJet9GenHT500-550-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
-                            .Filter("nFTAGenLep == 1 && nFTAGenJet == 9 && 500 <= FTAGenHT && FTAGenHT < 550", "nFTAGenLep 1, nFTAGenJet 9, FTAGenHT 500-550").Sum("nominalXS")
-                        diagnosticNodes[processName]["nLep1nJet9pGenHT500p-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
-                            .Filter("nFTAGenLep == 1 && nFTAGenJet >= 9 && 500 <= FTAGenHT", "nFTAGenLep 1, nFTAGenJet 9+, FTAGenHT 500+").Sum("nominalXS")
-                    if fillDiagnosticHistos == True:
-                        diagnosticHistos[processName]["NoChannel"] = collections.OrderedDict()
-                        diagnosticHistos[processName]["NoChannel"]["GenHT-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___nominalXS___diagnostic___GenHT".format(proc=processName), 
-                                      "GenHT;GenHT;#sigma/GeV", 200, 0, 2000), "FTAGenHT", "nominalXS")
-                        diagnosticHistos[processName]["NoChannel"]["GenHT-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___GenHT".format(proc=processName), 
-                                      "GenHT;GenHT;#sigma/GeV", 200, 0, 2000), "FTAGenHT", "effectiveXS")
-                        diagnosticHistos[processName]["NoChannel"]["nGenJet-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___nominalXS___diagnostic___nGenJet".format(proc=processName), 
-                                      "nGenJet;nGenJet;#sigma/nGenJet", 20, 0, 20), "nFTAGenJet", "nominalXS")
-                        diagnosticHistos[processName]["NoChannel"]["nGenJet-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___nGenJet".format(proc=processName), 
-                                      "nGenJet;nGenJet;#sigma/nGenJet", 20, 0, 20), "nFTAGenJet", "effectiveXS")
-                        diagnosticHistos[processName]["NoChannel"]["nGenLep-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___nominalXS___diagnostic___nGenLep".format(proc=processName), 
-                                      "nGenLep;nGenLep;#sigma/nGenLep", 5, 0, 5), "nFTAGenLep", "nominalXS")
-                        diagnosticHistos[processName]["NoChannel"]["nGenLep-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___nGenLep".format(proc=processName), 
-                                      "nGenLep;nGenLep;#sigma/nGenLep", 5, 0, 5), "nFTAGenLep", "effectiveXS")
-                        diagnosticHistos[processName]["NoChannel"]["HT-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___nominalXS___diagnostic___HT".format(proc=processName), 
-                                      "HT;HT;#sigma/GeV", 200, 0, 2000), "diagnostic_HT", "nominalXS")
-                        diagnosticHistos[processName]["NoChannel"]["HT-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___HT".format(proc=processName), 
-                                      "HT;HT;#sigma/GeV", 200, 0, 2000), "diagnostic_HT", "effectiveXS")
-                        diagnosticHistos[processName]["NoChannel"]["nJet-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___nominalXS___diagnostic___nJet".format(proc=processName), 
-                                      "nJet;nJet;#sigma/nJet", 20, 0, 20), "diagnostic_nJet", "nominalXS")
-                        diagnosticHistos[processName]["NoChannel"]["nJet-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___nJet".format(proc=processName), 
-                                      "nJet;nJet;#sigma/nJet", 20, 0, 20), "diagnostic_nJet", "effectiveXS")
-                        diagnosticHistos[processName]["NoChannel"]["jet1_pt-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___nominalXS___diagnostic___jet1_pt".format(proc=processName), 
-                                      "Leading Jet p_{T};p_{T};#sigma/GeV", 100, 0, 500), "diagnostic_jet1_pt", "nominalXS")
-                        diagnosticHistos[processName]["NoChannel"]["jet1_pt-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___jet1_pt".format(proc=processName), 
-                                      "Leading Jet p_{T};p_{T};#sigma/GeV", 100, 0, 500), "diagnostic_jet1_pt", "effectiveXS")
-                        diagnosticHistos[processName]["NoChannel"]["jet1_eta-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___nominalXS___diagnostic___jet1_eta".format(proc=processName), 
-                                      "Leading Jet #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_jet1_eta", "nominalXS")
-                        diagnosticHistos[processName]["NoChannel"]["jet1_eta-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___jet1_eta".format(proc=processName), 
-                                      "Leading Jet #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_jet1_eta", "effectiveXS")
-                        diagnosticHistos[processName]["NoChannel"]["jet5_pt-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___nominalXS___diagnostic___jet5_pt".format(proc=processName), 
-                                      "Fifth Jet p_{T};p_{T};#sigma/GeV", 100, 0, 500), "diagnostic_jet5_pt", "nominalXS")
-                        diagnosticHistos[processName]["NoChannel"]["jet5_pt-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___jet5_pt".format(proc=processName), 
-                                      "Fifth Jet p_{T};p_{T};#sigma/GeV", 100, 0, 500), "diagnostic_jet5_pt", "effectiveXS")
-                        diagnosticHistos[processName]["NoChannel"]["jet5_eta-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___nominalXS___diagnostic___jet5_eta".format(proc=processName), 
-                                      "Fift Jet #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_jet5_eta", "nominalXS")
-                        diagnosticHistos[processName]["NoChannel"]["jet5_eta-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___jet5_eta".format(proc=processName), 
-                                      "Fift Jet #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_jet5_eta", "effectiveXS")
-                        diagnosticHistos[processName]["NoChannel"]["el_pt-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___nominalXS___diagnostic___el_pt".format(proc=processName), 
-                                      "e p_{T};p_{T};#sigma/GeV", 100, 0, 150), "diagnostic_el_pt", "nominalXS")
-                        diagnosticHistos[processName]["NoChannel"]["el_pt-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___el_pt".format(proc=processName), 
-                                      "e p_{T};p_{T};#sigma/GeV", 100, 0, 150), "diagnostic_el_pt", "effectiveXS")
-                        diagnosticHistos[processName]["NoChannel"]["el_eta-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___nominalXS___diagnostic___el_eta".format(proc=processName), 
-                                      "e #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_el_eta", "nominalXS")
-                        diagnosticHistos[processName]["NoChannel"]["el_eta-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___el_eta".format(proc=processName), 
-                                      "e #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_el_eta", "effectiveXS")
-                        diagnosticHistos[processName]["NoChannel"]["mu_pt-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___nominalXS___diagnostic___mu_pt".format(proc=processName), 
-                                      "#mu p_{T};p_{T};#sigma/GeV", 100, 0, 150), "diagnostic_mu_pt", "nominalXS")
-                        diagnosticHistos[processName]["NoChannel"]["mu_pt-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___mu_pt".format(proc=processName), 
-                                      "#mu p_{T};p_{T};#sigma/GeV", 100, 0, 150), "diagnostic_mu_pt", "effectiveXS")
-                        diagnosticHistos[processName]["NoChannel"]["mu_eta-nominalXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___nominalXS___diagnostic___mu_eta".format(proc=processName), 
-                                      "#mu #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_mu_eta", "nominalXS")
-                        diagnosticHistos[processName]["NoChannel"]["mu_eta-effectiveXS::Histo"] = nodes[processName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___mu_eta".format(proc=processName), 
-                                      "#mu #Eta;#Eta;#sigma/GeV", 100, -3, 3), "diagnostic_mu_eta", "effectiveXS")
-
-                    diagnosticNodes[processName]["nLep2nJet7GenHT500-550-effectiveXS::Sum"] = nodes[processName]["BaseNode"]\
-                        .Filter("nFTAGenLep == 2 && nFTAGenJet == 7 && 500 <= FTAGenHT && FTAGenHT < 550", "nFTAGenLep 2, nFTAGenJet 7, FTAGenHT 500-550").Sum("effectiveXS")
-                    diagnosticNodes[processName]["nLep2nJet7pGenHT500p-effectiveXS::Sum"] = nodes[processName]["BaseNode"]\
-                        .Filter("nFTAGenLep == 2 && nFTAGenJet >= 7 && 500 <= FTAGenHT", "nFTAGenLep 2, nFTAGenJet 7+, FTAGenHT 500+").Sum("effectiveXS")
-                    diagnosticNodes[processName]["nLep1nJet9GenHT500-550-effectiveXS::Sum"] = nodes[processName]["BaseNode"]\
-                        .Filter("nFTAGenLep == 1 && nFTAGenJet == 9 && 500 <= FTAGenHT && FTAGenHT < 550", "nFTAGenLep 1, nFTAGenJet 9, FTAGenHT 500-550").Sum("effectiveXS")
-                    diagnosticNodes[processName]["nLep1nJet9pGenHT500p-effectiveXS::Sum"] = nodes[processName]["BaseNode"]\
-                        .Filter("nFTAGenLep == 1 && nFTAGenJet >= 9 && 500 <= FTAGenHT", "nFTAGenLep 1, nFTAGenJet 9+, FTAGenHT 500+").Sum("effectiveXS")
-            if printInfo == True:
-                print("splitProcess(..., printInfo=True, ...) set, executing the event loop to gather and print diagnostic info (presumably from the non-event-selected source...")
-                for pName, pDict in diagnosticNodes.items():
-                    print("processName == {}".format(pName))
-                    for dName, dNode in pDict.items():
-                        parseDName = dName.split("::")
-                        if parseDName[1] in ["Count", "Sum"]:
-                            dString = "\t\t\"{}\": {},".format(parseDName[0], dNode.GetValue())
-                        elif parseDName[1] in ["Stats"]:
-                            thisStat = dNode.GetValue()
-                            dString = "\t\t\"{}::Min\": {}".format(parseDName[0], thisStat.GetMin())
-                            dString += "\n\t\t\"{}::Mean\": {}".format(parseDName[0], thisStat.GetMean())
-                            dString += "\n\t\t\"{}::Max\": {}".format(parseDName[0], thisStat.GetMax())
-                        elif parseDName[1] in ["Histo"]:
-                            dString = "\t\tNo method implemented for histograms, yet"
-                        else:
-                            dString = "\tDiagnostic node type not recognized: {}".format(parseDName[1])
-                        print(dString)
+                    diagnosticNodes[processName] = dict()
+                    defineNodes[processName] = dict()
         else:
             raise RuntimeError("Invalid type passed for splitProcess. Require a dictionary containing keys 'ID' and 'processes' to split the sample.")
-        
     else:
-        raise RuntimeError("Deprecated, form an inclusive process and configure splitProcess with it.")
-        # processName = era + "___" + sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
-        # nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
-        # #The below references branchpostfix since we only need nodes for these types of scale variations...
-        # if processName not in nodes:
-        #     #L-2 filter, should be the packedEventID filter in that case
-        #     filterNodes[processName] = dict()
-        #     filterNodes[processName]["BaseNode"] = ("return true;", "{}".format(processName), processName, None, None, None, None)
-        #     nodes[processName] = dict()
-        #     nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
-        #     countNodes[processName] = collections.OrderedDict()
-        #     countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
-        #     diagnosticNodes[processName] = collections.OrderedDict()
-        #     defineNodes[processName] = collections.OrderedDict()
-        #     if not isData:
-        #         #Need to gather those bookkeeping stats from the original source rather than the ones after event selection...
-        #         diagnosticNodes[processName]["sumWeights::Sum"] = nodes[processName]["BaseNode"].Sum("genWeight")
-        #         diagnosticNodes[processName]["nEventsPositive::Count"] = nodes[processName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
-        #         diagnosticNodes[processName]["nEventsNegative::Count"] = nodes[processName]["BaseNode"].Filter("genWeight < 0", "genWeight < 0").Count()
-        #     if printInfo == True:
-        #         print("splitProcess(..., printInfo=True, ...) set, executing the event loop to gather and print diagnostic info (presumably from the non-event-selected source...")
-        #         for pName, pDict in diagnosticNodes.items():
-        #             print("processName == {}".format(pName))
-        #             for dName, dNode in pDict.items():
-        #                 parseDName = dName.split("::")
-        #                 if parseDName[1] in ["Count", "Sum"]:
-        #                     dString = "\t\t\"{}\": {},".format(parseDName[0], dNode.GetValue())
-        #                 elif parseDName[1] in ["Stats"]:
-        #                     thisStat = dNode.GetValue()
-        #                     dString = "\t\t\"{}::Min\": {}".format(parseDName[0], thisStat.GetMin())
-        #                     dString += "\n\t\t\"{}::Mean\": {}".format(parseDName[0], thisStat.GetMean())
-        #                     dString += "\n\t\t\"{}::Max\": {}".format(parseDName[0], thisStat.GetMax())
-        #                 elif parseDName[1] in ["Histo"]:
-        #                     dString = "\t\tNo method implemented for histograms, yet"
-        #                 else:
-        #                     dString = "\tDiagnostic node type not recognized: {}".format(parseDName[1])
-        #                 print(dString)
+        processName = era + "___" + sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
+        nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
+        #The below references branchpostfix since we only need nodes for these types of scale variations...
+        if processName not in nodes:
+            #L-2 filter, should be the packedEventID filter in that case
+            filterNodes[processName] = dict()
+            filterNodes[processName]["BaseNode"] = ("return true;", "{}".format(processName), processName, None, None, None, None)
+            nodes[processName] = dict()
+            nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
+            countNodes[processName] = dict()
+            countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
+            diagnosticNodes[processName] = dict()
+            defineNodes[processName] = dict()
             
-    prePackedNodes = dict()
+    prePackedNodes = {}
     prePackedNodes["filterNodes"] = filterNodes
     prePackedNodes["nodes"] = nodes
     prePackedNodes["countNodes"] = countNodes
     prePackedNodes["diagnosticNodes"] = diagnosticNodes
-    prePackedNodes["diagnosticHistos"] = diagnosticHistos
     prePackedNodes["defineNodes"] = defineNodes
     return prePackedNodes
 
@@ -3759,7 +2721,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                            "met_phi_var": "METFixEE2017_phi",
                                            "btagSF": "Jet_btagSF_deepcsv_shape",
                                            "weightVariation": False},
-                              "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
+                              "_jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
                                               "lep_postfix": "",
                                               "wgt_final": "wgt__jesTotalUp",
                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
@@ -3769,13 +2731,13 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                               "met_phi_var": "METFixEE2017_phi_jesTotalUp",
                                               "btagSF": "Jet_btagSF_deepcsv_shape",
                                               "weightVariation": False},
-                              "btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
+                              "_btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
                                                                 "lep_postfix": "", 
                                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                                 "jet_pt_var": "Jet_pt",
                                                                 "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
                                                                 "weightVariation": True},
-                              "no_LSF": {"jet_mask": "jet_mask",
+                              "_no_LSF": {"jet_mask": "jet_mask",
                                           "lep_postfix": "", 
                                           "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                           "jet_pt_var": "Jet_pt",
@@ -3813,7 +2775,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     else:
         raise RuntimeError("{} is not a supported bTagger option in fillHistos()".format(bTagger))
 
-    #Define blinded regions here, each sublist with multiple elements must have matches for BOTH to mark the category as blinded
+    #Define blinded regions here, each sublist with multiple elements must have mathes for BOTH to mark the category as blinded
     blindings = [["nMediumDeep{tag}B2".format(tag=tagger), "nJet7"],
                  ["nMediumDeep{tag}B2".format(tag=tagger), "nJet8+"],
                  ["nMediumDeep{tag}B3".format(tag=tagger), "nJet4"],
@@ -3835,31 +2797,31 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     pi = ROOT.TMath.Pi()
     #Get the list of defined columns for checks
     histoNodes = histosDict #Inherit this from initiliazation, this is where the histograms will actually be stored
-    if isinstance(input_df_or_nodes, (dict, collections.OrderedDict)):
+    if type(input_df_or_nodes) in [dict, collections.OrderedDict]:
         filterNodes = input_df_or_nodes.get("filterNodes")
         nodes = input_df_or_nodes.get("nodes")
         defineNodes = input_df_or_nodes.get("defineNodes")
         diagnosticNodes = input_df_or_nodes.get("diagnosticNodes")
         countNodes = input_df_or_nodes.get("countNodes")
     else:
-        filterNodes = collections.OrderedDict()
-        nodes = collections.OrderedDict()
-        defineNodes = collections.OrderedDict()
-        diagnosticNodes = collections.OrderedDict()
-        countNodes = collections.OrderedDict()
+        filterNodes = dict()
+        nodes = dict()
+        defineNodes = dict()
+        diagnosticNodes = dict()
+        countNodes = dict()
         processName = era + "___" + sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
         nodes["BaseNode"] = input_df_or_nodes #Always store the base node we'll build upon in the next level
         #The below references branchpostfix since we only need nodes for these types of scale variations...
         if processName not in nodes:
             #L-2 filter, should be the packedEventID filter in that case
-            filterNodes[processName] = collections.OrderedDict()
+            filterNodes[processName] = dict()
             filterNodes[processName]["BaseNode"] = ("return true;", "{}".format(processName), processName, None, None, None, None)
-            nodes[processName] = collections.OrderedDict()
+            nodes[processName] = dict()
             nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
-            countNodes[processName] = collections.OrderedDict()
+            countNodes[processName] = dict()
             countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
-            diagnosticNodes[processName] = collections.OrderedDict()
-            defineNodes[processName] = collections.OrderedDict()
+            diagnosticNodes[processName] = dict()
+            defineNodes[processName] = dict()
         
         
     # # filterNodes = collections.OrderedDict() #For storing tuples to debug and be verbose about
@@ -3890,16 +2852,16 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     #                     # df_with_IDs = df_with_IDs.Define("nBJetsFromTop", "unpackedGenTtbarId[6]")
     #                     # df_with_IDs = df_with_IDs.Define("nBJetsFromW", "unpackedGenTtbarId[7]")
     #                     # df_with_IDs = df_with_IDs.Define("nCJetsFromW", "unpackedGenTtbarId[8]")
-    #             if IDbool and IDname == "nFTAGenJet/FTAGenHT":
-    #                 if "nFTAGenLep" not in listOfColumns:
-    #                     df_with_IDs = df_with_IDs.Define("nFTAGenLep", "LHEPart_pdgId[stitch_lep_mask].size()")
-    #                     listOfColumns.push_back("nFTAGenLep")
-    #                 if "nFTAGenJet" not in listOfColumsn:
-    #                     df_with_IDs = df_with_IDs.Define("nFTAGenJet", "GenJet_pt[GenJet_pt > 30].size()")
-    #                     listOfColumns.push_back("nFTAGenJet")
-    #                 if "FTAGenHT" not in listOfColumsn:
-    #                     df_with_IDs = df_with_IDs.Define("FTAGenHT", "Sum(GenJet_pt[GenJet_pt > 30 && abs(GenJet_eta) < 2.4])")
-    #                     listOfColumns.push_back("FTAGenHT")
+    #             if IDbool and IDname == "nGenJet/GenHT":
+    #                 if "nGenLep" not in listOfColumns:
+    #                     df_with_IDs = df_with_IDs.Define("nGenLep", "LHEPart_pdgId[stitch_lep_mask].size()")
+    #                     listOfColumns.push_back("nGenLep")
+    #                 if "nGenJet" not in listOfColumsn:
+    #                     df_with_IDs = df_with_IDs.Define("nGenJet", "GenJet_pt[GenJet_pt > 30].size()")
+    #                     listOfColumns.push_back("nGenJet")
+    #                 if "GenHT" not in listOfColumsn:
+    #                     df_with_IDs = df_with_IDs.Define("GenHT", "Sum(GenJet_pt[GenJet_pt > 30 && abs(GenJet_eta) < 2.4])")
+    #                     listOfColumns.push_back("GenHT")
     #             if IDbool and IDname == "subera":
     #                 pass
     #         nodes["BaseNode"] = df_with_IDs #Always store the base node we'll build upon in the next level
@@ -3916,7 +2878,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     #                                                                                                frCon=fractionalContribution,
     #                                                                                                sWPS=sumWeights
     #                                                                                            )
-    #             nodes[processName] = nodes["BaseNode"].Filter(filterString, filterName).Define("pwgt___LumiXS", wgtFormula)
+    #             nodes[processName] = nodes["BaseNode"].Filter(filterString, filterName).Define("pwgt__XS", wgtFormula)
             
     #     else:
     #         raise RuntimeError("Invalid type passed for splitProcess. Require a dictionary containing keys 'ID' and 'processes' to split the sample.")
@@ -3976,13 +2938,13 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         #jetMass = sysDict.get("jet_mass_var")
         #Name histograms with their actual systematic variation postfix, using the convention that HISTO_NAME__nom is
         # the nominal and HISTO_NAME__$SYSTEMATIC is the variation, like so:
-        syspostfix = "___nom" if sysVar == "$NOMINAL" else "___{}".format(sysVar)
+        syspostfix = "__nom" if sysVar == "$NOMINAL" else "_{}".format(sysVar)
         #name branches for filling with the nominal postfix if weight variations, and systematic postfix if scale variation (jes_up, etc.)
         branchpostfix = None
         if isWeightVariation:
             branchpostfix = "__nom"
         else:
-            branchpostfix = "__" + sysVar.replace("$NOMINAL", "nom")
+            branchpostfix = "_" + sysVar.replace("$NOMINAL", "_nom")
         leppostfix = sysDict.get("lep_postfix", "") #No variation on this yet, but just in case
         
         fillJet = "FTAJet{bpf}".format(bpf=branchpostfix)
@@ -4023,11 +2985,11 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                 # wgtVar = sysDict.get("wgt_final", "wgt__nom")
                 wgtVar = "wgt{spf}".format(spf=syspostfix)
                 if verbose:
-                    print("\tFor systematic variation {}, weight branch is {}".format(syspostfix.replace("___", ""), wgtVar))
+                    print("\tFor systematic variation {}, weight branch is {}".format(syspostfix.replace("__", ""), wgtVar))
                 if wgtVar not in listOfColumns:
                     print("{} not found as a valid weight variation, no backup solution implemented".format(wgtVar))
                     raise RuntimeError("Couldn't find a valid fallback weight variation in fillHistos()")
-                print("{} chosen as the weight for {} variation".format(wgtVar, syspostfix.replace("___", "")))
+                print("{} chosen as the weight for {} variation".format(wgtVar, syspostfix))
 
 
 
@@ -4037,63 +2999,41 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                 for decayChannel in ["ElMu{lpf}".format(lpf=leppostfix), 
                                      "MuMu{lpf}".format(lpf=leppostfix),
                                      "ElEl{lpf}".format(lpf=leppostfix),
-                                     "ElEl_LowMET{lpf}".format(lpf=leppostfix),
-                                     "ElEl_HighMET{lpf}".format(lpf=leppostfix),
                                      ]:
                     testInputChannel = channel.lower().replace("_baseline", "").replace("_selection", "")
                     testLoopChannel = decayChannel.lower().replace("{lpf}".format(lpf=leppostfix), "").replace("_baseline", "").replace("_selection", "")
                     if testInputChannel == "all": 
                         pass
                     elif testInputChannel != testLoopChannel: 
-                        print("Skipping channel {chan} in process {proc} for systematic {spf}".format(chan=decayChannel, proc=processName, spf=syspostfix.replace("___", "")))
+                        print("Skipping channel {chan} in process {proc} for systematic {spf}".format(chan=decayChannel, proc=processName, spf=syspostfix))
                         continue
                     #Regarding keys: we'll insert the systematic when we insert all th L0 X L1 X L2 keys in the dictionaries, not here in the L($N) keys
                     if decayChannel == "ElMu{lpf}".format(lpf=leppostfix):
-                        channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 1 && nFTAElectron{lpf}== 1".format(lpf=leppostfix)
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 1 && nFTAElectron{lpf}== 1 && abs(FTALepton{lpf}_eta.at(0)) <= 1.2 && abs(FTALepton{lpf}_eta.at(1)) <= 1.2".format(lpf=leppostfix)
                         channelFiltName = "1 el, 1 mu ({lpf})".format(lpf=leppostfix)
                         L0String = "HT{bpf} >= {htc}".format(bpf=branchpostfix, htc=HTCut)
                         L0Name = "HT{bpf} >= {htc}"\
                             .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), metcut=str(0).replace(".", "p"), 
+                        L0Key = "HT{htc}_ZWindowMET{metcut}Width{zwidth}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), metcut=str(0).replace(".", "p"), 
                                                                                  zwidth=0)
                     elif decayChannel == "MuMu{lpf}".format(lpf=leppostfix):
-                        channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 2".format(lpf=leppostfix)
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 2 && abs(FTALepton{lpf}_eta.at(0)) <= 1.2 && abs(FTALepton{lpf}_eta.at(1)) <= 1.2".format(lpf=leppostfix)
                         channelFiltName = "2 mu ({lpf})".format(lpf=leppostfix)
                         L0String = "HT{bpf} >= {htc} && {met} >= {metcut} && FTAMuon{lpf}_InvariantMass > 20 && abs(FTAMuon{lpf}_InvariantMass - 91.2) > {zwidth}"\
                             .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
                         L0Name = "HT{bpf} >= {htc}, {met} >= {metcut}, Di-Muon Resonance > 20GeV and outside {zwidth}GeV Z Window"\
                             .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                        L0Key = "HT{htc}_ZWindowMET{metcut}Width{zwidth}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
                                                                                  metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
                                                                                  zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
                     elif decayChannel == "ElEl{lpf}".format(lpf=leppostfix):
-                        channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2 && abs(FTALepton{lpf}_eta.at(0)) <= 1.2 && abs(FTALepton{lpf}_eta.at(1)) <= 1.2".format(lpf=leppostfix)
                         channelFiltName = "2 el ({lpf})".format(lpf=leppostfix)
                         L0String = "HT{bpf} >= {htc} && {met} >= {metcut} && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
                             .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
                         L0Name = "HT{bpf} >= {htc}, {met} >= {metcut}, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
                             .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
-                                                                                 metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
-                                                                                 zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
-                    elif decayChannel == "ElEl_LowMET{lpf}".format(lpf=leppostfix):
-                        channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
-                        channelFiltName = "2 el, Low MET ({lpf})".format(lpf=leppostfix)
-                        L0String = "HT{bpf} >= {htc} && {met} < 50 && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
-                            .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
-                        L0Name = "HT{bpf} >= {htc}, {met} < 50, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
-                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        L0Key = "ZWindowMET0to50Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
-                                                                                 metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
-                                                                                 zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
-                    elif decayChannel == "ElEl_HighMET{lpf}".format(lpf=leppostfix):
-                        channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
-                        channelFiltName = "2 el, High MET ({lpf})".format(lpf=leppostfix)
-                        L0String = "HT{bpf} >= {htc} && {met} >= 50 && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
-                            .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
-                        L0Name = "HT{bpf} >= {htc}, {met} >= 50, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
-                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        L0Key = "ZWindowMET50Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                        L0Key = "HT{htc}_ZWindowMET{metcut}Width{zwidth}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
                                                                                  metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
                                                                                  zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
                     else:
@@ -4104,15 +3044,14 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         #protect against overwriting, as these nodes will be shared amongst non-weight variations!
                         #There will be only one basenode per decay channel
                         # filterNodes[processName][decayChannel] = collections.OrderedDict()
-                        filterNodes[processName][decayChannel] = collections.OrderedDict()
+                        filterNodes[processName][decayChannel] = dict()
                         filterNodes[processName][decayChannel]["BaseNode"] = (channelFilter, channelFiltName, processName, decayChannel, None, None, None) #L-1 filter
-                        print(filterNodes[processName][decayChannel]["BaseNode"])
                         # nodes[processName][decayChannel] = collections.OrderedDict()
-                        nodes[processName][decayChannel] = collections.OrderedDict()
+                        nodes[processName][decayChannel] = dict()
                         nodes[processName][decayChannel]["BaseNode"] = nodes[processName]["BaseNode"].Filter(filterNodes[processName][decayChannel]["BaseNode"][0],
                                                                                                              filterNodes[processName][decayChannel]["BaseNode"][1])
                         # countNodes[processName][decayChannel] = collections.OrderedDict()
-                        countNodes[processName][decayChannel] = collections.OrderedDict()
+                        countNodes[processName][decayChannel] = dict()
                         countNodes[processName][decayChannel]["BaseNode"] = nodes[processName][decayChannel]["BaseNode"].Count()
 
                         #more freeform diagnostic nodes
@@ -4144,27 +3083,21 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     #Tuple format: (filter code, filter name, process, channel, L0 key, L1 key, L2 key) where only one of L0, L1, L2 keys are non-None!
                     
                     #These nodes should apply to any/all L0Nodes
-                    filterNodes[processName][decayChannel]["L1Nodes"].append(
-                        ("return true;".format(tag=tagger, bpf=branchpostfix), "0+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),processName, decayChannel, None, "nMediumDeep{tag}B0+".format(tag=tagger, bpf=branchpostfix), None))
-                    filterNodes[processName][decayChannel]["L1Nodes"].append(
-                        ("nMediumDeep{tag}B{bpf} >= 1".format(tag=tagger, bpf=branchpostfix), "1+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix), processName, decayChannel, None, "nMediumDeep{tag}B1+".format(tag=tagger, bpf=branchpostfix), None))
-                    filterNodes[processName][decayChannel]["L1Nodes"].append(
-                        ("nMediumDeep{tag}B{bpf} >= 2".format(tag=tagger, bpf=branchpostfix), "2+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix), processName, decayChannel, None, "nMediumDeep{tag}B2+".format(tag=tagger, bpf=branchpostfix), None))
                     # filterNodes[processName][decayChannel]["L1Nodes"].append(
                     #     ("nMediumDeep{tag}B{bpf} == 0".format(tag=tagger, bpf=branchpostfix), "0 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
                     #      processName, decayChannel, None, "nMediumDeep{tag}B0".format(tag=tagger, bpf=branchpostfix), None))
                     # filterNodes[processName][decayChannel]["L1Nodes"].append(
                     #     ("nMediumDeep{tag}B{bpf} == 1".format(tag=tagger, bpf=branchpostfix), "1 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
                     #      processName, decayChannel, None, "nMediumDeep{tag}B1".format(tag=tagger, bpf=branchpostfix), None))
-                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
-                    #     ("nMediumDeep{tag}B{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                    #      processName, decayChannel, None, "nMediumDeep{tag}B2".format(tag=tagger, bpf=branchpostfix), None))
-                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
-                    #     ("nMediumDeep{tag}B{bpf} == 3".format(tag=tagger, bpf=branchpostfix), "3 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                    #      processName, decayChannel, None, "nMediumDeep{tag}B3".format(tag=tagger, bpf=branchpostfix), None))
-                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
-                    #     ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                    #      processName, decayChannel, None, "nMediumDeep{tag}B4+".format(tag=tagger, bpf=branchpostfix), None))
+                    filterNodes[processName][decayChannel]["L1Nodes"].append(
+                        ("nMediumDeep{tag}B{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                         processName, decayChannel, None, "nMediumDeep{tag}B2".format(tag=tagger, bpf=branchpostfix), None))
+                    filterNodes[processName][decayChannel]["L1Nodes"].append(
+                        ("nMediumDeep{tag}B{bpf} == 3".format(tag=tagger, bpf=branchpostfix), "3 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                         processName, decayChannel, None, "nMediumDeep{tag}B3".format(tag=tagger, bpf=branchpostfix), None))
+                    filterNodes[processName][decayChannel]["L1Nodes"].append(
+                        ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                         processName, decayChannel, None, "nMediumDeep{tag}B4+".format(tag=tagger, bpf=branchpostfix), None))
                     
                     #These filters should apply to all L1Nodes
                     filterNodes[processName][decayChannel]["L2Nodes"].append(
@@ -4207,7 +3140,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         #Here we begin the complication of flattening the key-value structure. We do not nest any deeper, but instead
                         #form keys as combinations of l0Key, l1Key, l2Key... 
                         #Here, form the cross key, and note the reference key it must use
-                        crossl0Key = "{l0}{spf}".format(l0=l0Key, spf=syspostfix)
+                        crossl0Key = "{l0}_{spf}".format(l0=l0Key, spf=syspostfix) #3 underscore for separation later
                         referencel0Key = "BaseNode" #L0 Filters are applied to 'BaseNode' of the nodes[proc][chan] dictionary of dataframes
                         if crossl0Key in nodes[processName][decayChannel]:
                             raise RuntimeError("Tried to redefine rdf node due to use of the same key: {}".format(crossl0Key))
@@ -4231,7 +3164,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                             #Here we begin the complication of flattening the key-value structure. We do not nest any deeper, but instead
                             #form keys as combinations of l0Key, l1Key, l2Key... 
                             #Here, form the cross key, and note the reference key it must use
-                            crossl0l1Key = "{l0}_CROSS_{l1}{spf}".format(l0=l0Key, l1=l1Key, spf=syspostfix)
+                            crossl0l1Key = "{l0}_CROSS_{l1}_{spf}".format(l0=l0Key, l1=l1Key, spf=syspostfix)
                             referencel0l1Key = "{}".format(crossl0Key) #L1 Filters are applied to L0 filters, so this is the nodes[proc][chan][reference] to build filter on
                             if crossl0l1Key in nodes[processName][decayChannel]:
                                 raise RuntimeError("Tried to redefine rdf node due to use of the same key: {}".format(crossl0l1Key))
@@ -4255,7 +3188,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                 #Here we begin the complication of flattening the key-value structure. We do not nest any deeper, but instead
                                 #form keys as combinations of l0Key, l1Key, l2Key... 
                                 #Here, form the cross key, and note the reference key it must use
-                                crossl0l1l2Key = "{l0}_CROSS_{l1}_CROSS_{l2}{spf}".format(l0=l0Key, l1=l1Key, l2=l2Key, spf=syspostfix)
+                                crossl0l1l2Key = "{l0}_CROSS_{l1}_CROSS_{l2}_{spf}".format(l0=l0Key, l1=l1Key, l2=l2Key, spf=syspostfix)
                                 referencel0l1l2Key = "{}".format(crossl0l1Key)#L2 Filters are applied to L1 filters, so this is the nodes[proc][chan][reference] to build upon
                                 if crossl0l1l2Key in nodes[processName][decayChannel]:
                                     raise RuntimeError("Tried to redefine rdf node due to use of the same key: {}".format(crossl0l1l2Key))
@@ -4311,7 +3244,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         if len(matchedElements) == len(blindList): 
                             isBlinded = True
                             continue
-                    crossSeparated = "___".join(category.split("___")[:-1]).split("_CROSS_")#Strip the systematic name from the branch by taking all but the last element
+                    crossSeparated = category.split("___")[0].split("_CROSS_") #Strip the systematic name from the branch by taking only the first element
                     categoryName = "_".join(crossSeparated) #No extra references to (lep/branch/sys)postfixes...
                     if isBlinded:
                         categoryName = "blind_" + categoryName
@@ -4321,300 +3254,300 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     #Append histogram tuples for HistoND() methods to the list, the list should overall contain each set grouped by systematic variation
                     Hstart = len(defineNodes[processName][decayChannel])
                     for x in xrange(nJetsToHisto):
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_pt_jet{n}{spf}"\
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_pt_jet{n}_{spf}"\
                                                                         .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                         "Jet_{n} p_{{T}} ({spf}); p_{{T}}; Events"\
                                                                         .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0, 500),
                                                                        "{fj}_pt_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_eta_jet{n}{spf}"\
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_eta_jet{n}_{spf}"\
                                                                         .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                         "Jet_{n} #eta ({spf}); #eta; Events"\
                                                                         .format(n=x+1, spf=syspostfix.replace("__", "")), 100, -2.6, 2.6),
                                                                        "{fj}_eta_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_phi_jet{n}{spf}"\
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_phi_jet{n}_{spf}"\
                                                                         .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                         "Jet_{n} #phi ({spf}); #phi; Events".format(n=x+1, spf=syspostfix.replace("__", "")), 100, -pi, pi),
                                                                        "{fj}_phi_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepCSVB_jet{n}{spf}"\
+                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepCSVB_jet{n}_{spf}"\
                                                                          .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                          "Jet_{n} (p_{{T}} sorted) DeepCSV B Discriminant ({spf}); Discriminant; Events"\
                                                                          .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0.0, 1.0),
                                                                         "{fj}_DeepCSVB_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepJetB_jet{n}{spf}"\
+                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepJetB_jet{n}_{spf}"\
                                                                          .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                          "Jet_{n} (p_{{T}} sorted) DeepJet B Discriminant ({spf}); Discriminant; Events"\
                                                                          .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0.0, 1.0),
                                                                         "{fj}_DeepJetB_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepCSVB_sortedjet{n}{spf}"\
+                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepCSVB_sortedjet{n}_{spf}"\
                                                                          .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                          "Jet_{n} (DeepCSVB sorted) DeepCSV B Discriminant ({spf}); Discriminant; Events"\
                                                                          .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0.0, 1.0),
                                                                         "{fj}_DeepCSVB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepJetB_sortedjet{n}{spf}"\
+                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepJetB_sortedjet{n}_{spf}"\
                                                                          .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                          "Jet_{n} (DeepJetB sorted) DeepCSV B Discriminant ({spf}); Discriminant; Events"\
                                                                          .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0.0, 1.0),
                                                                         "{fj}_DeepJetB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_pt{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_pt_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "MET ({spf}); Magnitude (GeV); Events".format(spf=syspostfix.replace("__", "")), 
                                                                     100,0,1000), fillMET_pt, wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_phi{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_phi_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                     "MET #phi({spf}); #phi; Events".format(spf=syspostfix.replace("__", "")), 
                                                                     100,-pi,pi), fillMET_phi, wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_uncorr_pt{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_uncorr_pt_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "Uncorrected MET", 100,0,1000), fillMET_uncorr_pt, wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_uncorr_phi{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_uncorr_phi_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,-pi,pi), fillMET_uncorr_phi, wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_LeadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_LeadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, 10, 510), "FTAMuon{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_SubleadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_SubleadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, 10, 510), "FTAMuon{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_eta_LeadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_eta_LeadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -2.5, 2.5), "FTAMuon{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_eta_SubleadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_eta_SubleadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -2.5, 2.5), "FTAMuon{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_phi_LeadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_phi_LeadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -pi, pi), "FTAMuon{lpf}_phi_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_phi_SubleadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_phi_SubleadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -pi, pi), "FTAMuon{lpf}_phi_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                     "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso04_all".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_LeadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_LeadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, 10, 510), "FTAElectron{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_SubleadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_SubleadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, 10, 510), "FTAElectron{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_eta_LeadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_eta_LeadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -2.5, 2.5), "FTAElectron{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_eta_SubleadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_eta_SubleadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -2.5, 2.5), "FTAElectron{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_phi_LeadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_phi_LeadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -pi, pi), "FTAElectron{lpf}_phi_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_phi_SubleadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_phi_SubleadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix, lpf=leppostfix), 
                                                                     "", 100, -pi, pi), "FTAElectron{lpf}_phi_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HT{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HT_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,400,2000), "HT{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___H{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___H_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,400,2000), "H{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HT2M{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HT2M_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,1000), "HT2M{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___H2M{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___H2M_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,1500), "H2M{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HTb{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HTb_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,1000), "HTb{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HTH{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HTH_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,1), "HTH{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HTRat{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HTRat_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,1), "HTRat{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dRbb{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dRbb_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,2*pi), "dRbb{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dPhibb{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dPhibb_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,-pi,pi), "dPhibb{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dEtabb{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dEtabb_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,0,5), "dEtabb{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_pt_LeadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_pt_LeadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 100,0,500), "FTALepton{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_pt_SubleadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_pt_SubleadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 100,0,500), "FTALepton{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_eta_LeadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_eta_LeadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 100,-2.6,2.6), "FTALepton{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_eta_SubleadLep{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Lepton{lpf}_eta_SubleadLep_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 100,-2.6,2.6), "FTALepton{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 100,0,500), "FTAMuon{lpf}_pt".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 100,0,500), "FTAElectron{lpf}_pt".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dRll{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dRll_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 100,0,2*pi), 
                                                                    "FTALepton{lpf}_dRll".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dPhill{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dPhill_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 100,-pi,pi), 
                                                                    "FTALepton{lpf}_dPhill".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dEtall{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___dEtall_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 100,0,5), 
                                                                    "FTALepton{lpf}_dEtall".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofMETandEl{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofMETandEl_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 100, 0, 200), 
                                                                    "MTofMETandEl{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofMETandMu{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofMETandMu_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 100, 0, 200), 
                                                                    "MTofMETandMu{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofElandMu{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MTofElandMu_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 100, 0, 200), 
                                                                    "MTofElandMu{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 14, 0, 14), 
                                                                    "n{fj}".format(fj=fillJet), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_LooseDeepCSV{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_LooseDeepCSV_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), 
                                                                    "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_MediumDeepCSV{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_MediumDeepCSV_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), 
                                                                    "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_TightDeepCSV{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_TightDeepCSV_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), 
                                                                    "nTightDeepCSVB{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_LooseDeepJet{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_LooseDeepJet_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), 
                                                                    "nLooseDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_MediumDeepJet{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_MediumDeepJet_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), 
                                                                    "nMediumDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_TightDeepJet{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_TightDeepJet_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), "", 6, 0, 6), 
                                                                    "nTightDeepJetB{bpf}".format(bpf=branchpostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nLooseFTAMuon{lpf}{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nLooseFTAMuon{lpf}_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nLooseFTAMuon{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nMediumFTAMuon{lpf}{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nMediumFTAMuon{lpf}_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nMediumFTAMuon{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nTightFTAMuon{lpf}{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nTightFTAMuon{lpf}_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nTightFTAMuon{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nLooseFTAElectron{lpf}{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nLooseFTAElectron{lpf}_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nLooseFTAElectron{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nMediumFTAElectron{lpf}{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nMediumFTAElectron{lpf}_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nMediumFTAElectron{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nTightFTAElectron{lpf}{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nTightFTAElectron{lpf}_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nTightFTAElectron{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nLooseFTALepton{lpf}{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nLooseFTALepton{lpf}_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nLooseFTALepton{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nMediumFTALepton{lpf}{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nMediumFTALepton{lpf}_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nMediumFTALepton{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nTightFTALepton{lpf}{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nTightFTALepton{lpf}_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, spf=syspostfix), 
                                                                     "", 4, 0, 4), "nTightFTALepton{lpf}".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_InvMass{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_InvMass_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100, 0, 150), "FTAMuon{lpf}_InvariantMass".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_InvMass{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_InvMass_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100, 0, 150), "FTAElectron{lpf}_InvariantMass".format(lpf=leppostfix), wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_InvMass_v_MET{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_InvMass_v_MET_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 30, 0, 150, 20, 0, 400), "FTAMuon{lpf}_InvariantMass".format(lpf=leppostfix), fillMET_pt, wgtVar))
-                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_InvMass_v_MET{spf}"\
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_InvMass_v_MET_{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 30, 0, 150, 20, 0, 400), "FTAElectron{lpf}_InvariantMass".format(lpf=leppostfix), fillMET_pt, wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_vs_MET_{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_all;MET", 30, 0., 0.2, 20,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_vs_MET_{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_vs_MET_{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso04_all;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_vs_MET_{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_all;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg_vs_MET_{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_vs_MET_{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_all;MET", 30, 0., 0.2, 20,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_vs_MET_{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_chg;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_vs_MET_{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso04_all;MET", 30, 0, 0.2, 20,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_vs_MET_{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_all;MET", 30, 0, 0.2, 20,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "fillMET_pt", wgtVar))
                     # Older versions
-                    # defineNodes[processName][decayChannel].append(("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append(("{proc}___{chan}___{cat}___Muon_pfRelIso03_all_vs_MET_{spf}"\
                     #                                                .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                ";pfRelIso03_all;MET", 100, 0., 0.2, 100,30.,1030.), "FTAMuon{lpf}_pfRelIso03_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg_vs_MET_{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAMuon{lpf}_pfRelIso03_chg", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all_vs_MET_{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso04_all;MET", 100, 0, 0.2, 100,30,1030), "FTAMuon{lpf}_pfRelIso04_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all_vs_MET_{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_all;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_all", "fillMET_pt", wgtVar))
-                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg_vs_MET{spf}"\
+                    # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg_vs_MET_{spf}"\
                     #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                     #                                                 ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "fillMET_pt", wgtVar))
                     if isData == False:
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_genMatched_puIdLoose{spf}"\
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_genMatched_puIdLoose_{spf}"\
                                                                         .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                         "", 14, 0, 14), "n{fj}_genMatched_puIdLoose".format(fj=fillJet), wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_genMatched{spf}"\
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_genMatched_{spf}"\
                                                                         .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                         "", 14, 0, 14), "n{fj}_genMatched".format(fj=fillJet), wgtVar))
-                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___test1{spf}"
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___test1_{spf}"
                         #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                         #                                                 ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "PV_npvsGood", wgtVar))
-                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___test2{spf}"
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___test2_{spf}"
                         #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                         #                                                 ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "METFixEE2017_pt", wgtVar))
-                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nTrueInttest{spf}"
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nTrueInttest_{spf}"
                         #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                         #                                                ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAElectron{lpf}_pfRelIso03_all", "MET_pt_flat", wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nTrueInt{spf}"\
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nTrueInt_{spf}"\
                                                                         .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                         ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvsGood", wgtVar))
-                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nPU{spf}"\
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nPU_{spf}"\
                         #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                         #                                                 ";nPU;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvsGood", wgtVar))
-                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvs_vs_nTrueInt{spf}"\
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvs_vs_nTrueInt_{spf}"\
                         #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                         #                                                 ";nTrueInt;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvs", wgtVar))
-                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvs_vs_nPU{spf}"\
+                        # defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvs_vs_nPU_{spf}"\
                         #                                                 .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                         #                                                 ";nPU;npvs", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvs", wgtVar))
 
@@ -4858,25 +3791,13 @@ def writeHistos(histDict, directory, samplesOfInterest="All", channelsOfInterest
     rootDict = {}
     if not os.path.isdir(directory):
         os.makedirs(directory)
-    if len(histDict.keys()) < 1: print("writeHistos::no histDict keys")
-    nameCounter = 0
-    channelCounter = 0
-    objCounter = 0
-    nameCounterSkipped = 0
-    channelCounterSkipped = 0
     for name, channelsDict in histDict.items():
-        nameCounter += 1
         if samplesOfInterest == "All": pass
-        elif name not in samplesOfInterest: 
-            nameCounterSkipped += 1
-            continue
+        elif name not in samplesOfInterest: continue
         for channel, objDict in channelsDict.items():
-            channelCounter += 1
             counter = 0
             if channelsOfInterest == "All": pass
-            elif channel  not in channelsOfInterest: 
-                channelCounterSkipped += 1
-                continue
+            elif channel  not in channelsOfInterest: continue
             elif len(objDict.values()) < 1:
                 print("No objects to write, not creating directory or writing root file for {} {}".format(name, channel))
                 continue
@@ -4887,7 +3808,6 @@ def writeHistos(histDict, directory, samplesOfInterest="All", channelsOfInterest
             #     if dict_keys == "All": pass
             #     elif dict_key not in dict_keys: continue
             for objname, obj in objDict.items():
-                objCounter += 1
                 if type(obj) == dict:
                     for hname, hist in obj.items():
                         if "ROOT.RDF.RResultPtr" in str(type(obj)):
@@ -4904,14 +3824,6 @@ def writeHistos(histDict, directory, samplesOfInterest="All", channelsOfInterest
                 counter += 1
             print("Wrote {} histograms into file for {}::{} - {}.root".format(counter, name, channel, directory + "/" + channel + "/"+ name))
             rootDict[name].Close()
-    print("samples skipped/cycled: {}/{}\tchannels skipped/cycled: {}/{}\tobjects cycled: {}".format(nameCounterSkipped,
-                                                                                                     nameCounter, 
-                                                                                                     channelCounterSkipped,
-                                                                                                     channelCounter,
-                                                                                                     objCounter
-                                                                                                 ))
-
-
 
 def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", stripKey=".root", includeSampleNames=None, 
                            excludeSampleNames=None, mode="RECREATE", doNumpyValidation=False, forceDefaultRebin=False, verbose=False,
@@ -4974,15 +3886,11 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
             raise RuntimeError("Could not import the copy module in method BTaggingYieldsAnalyzer")
     files = glob.glob("{}/{}".format(directory, globKey))
     if includeSampleNames:
-        if verbose:
-            print("Including these files: {}".format([f for f in files if f.split("/")[-1].replace(".root", "") in includeSampleNames]))
-        files = [f for f in files if f.split("/")[-1].replace(".root", "") in includeSampleNames and f.split("/")[-1].replace(".root", "") not in ["BTaggingYields"]]
+        files = [f for f in files if f not in ["BTaggingYields.root"] + includeSampleNames]
     elif excludeSampleNames:
-        if verbose:
-            print("Excluding these files: {}".format([f for f in files if f.split("/")[-1].replace(".root", "") in excludeSampleNames]))
-        files = [f for f in files if f.split("/")[-1].replace(".root", "") not in excludeSampleNames and f.split("/")[-1] not in ["BTaggingYields"]]
+        files = [f for f in files if f in excludeSampleNames]
     else:
-        files = [f for f in files if f.split("/")[-1].replace(".root", "") not in ["BTaggingYields"]]
+        files = [f for f in files if f not in ["BTaggingYields.root"]]
     #deduce names from the filenames, with optional stripKey parameter that defaults to .root
     names = [fname.split("/")[-1].replace(stripKey, "") for fname in files]
     fileDict = {}
@@ -5042,16 +3950,14 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
             #in the other axis, i.e. 1DY = normal Y bins, 1 X bin
             this_y_rebin = copy.copy(y_rebin)
             this_x_rebin = copy.copy(x_rebin)
-            #Not needed anymore, explicit maps created
-            # if "1DY" in numerator:
-            #     this_x_rebin = [x_rebin[0]] + [x_rebin[-1]]
-            # if "1DX" in numerator:
-            #     this_y_rebin = [y_rebin[0]] + [y_rebin[-1]]
+            if "1DY" in numerator:
+                this_x_rebin = [x_rebin[0]] + [x_rebin[-1]]
+            if "1DX" in numerator:
+                this_y_rebin = [y_rebin[0]] + [y_rebin[-1]]
                 
             internals = copy.copy(stripped_numerator)
             for k, v in internalKeysReplacements.items():
                 internals = internals.replace(k, v)
-            
             #Get the original numerator/denominator histograms...
             numerators_dict[name][numerator] = fileDict[name].Get(numerator)
             denominator_dict[name][numerator] = fileDict[name].Get(denominator) #Yeah, this will be duplicated x (number of numerators per denominator)
@@ -5066,13 +3972,13 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
                 
             #Do rebinning, with flow control for optional numpy validation calculations
             if doNumpyValidation:
-                numerators_dict[name][numerator], yield_dict_num[name][numerator], yield_err_dict_num[name][numerator] =                                                                                                                rebin2D(numerators_dict[name][numerator],
+                numerators_dict[name][numerator], yield_dict_num[name][numerator], yield_err_dict_num[name][numerator] =                                                                 rebin2D(numerators_dict[name][numerator],
                                                                 "{}_{}".format(name, internals),
                                                                 this_x_rebin,
                                                                 this_y_rebin,
                                                                 return_numpy_arrays=True,
                                                                 )
-                denominator_dict[name][numerator], yield_dict_den[name][numerator], yield_err_dict_den[name][numerator] =                                                                                                               rebin2D(denominator_dict[name][numerator],
+                denominator_dict[name][numerator], yield_dict_den[name][numerator], yield_err_dict_den[name][numerator] =                                                                 rebin2D(denominator_dict[name][numerator],
                                                                 "{}_{}_denominator".format(name, internals),
                                                                 this_x_rebin,
                                                                 this_y_rebin,
@@ -5164,36 +4070,34 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
         #in the other axis, i.e. 1DY = normal Y bins, 1 X bin
         that_y_rebin = copy.copy(y_rebin)
         that_x_rebin = copy.copy(x_rebin)
-        #Not needed
-        # if "1DY" in numerator:
-        #     that_x_rebin = [x_rebin[0]] + [x_rebin[-1]]
-        # if "1DX" in numerator:
-        #     that_y_rebin = [y_rebin[0]] + [y_rebin[-1]]
-        #Form the replacement values for the name, i.e. Aggregate1DX___nom
+        if "1DY" in numerator:
+            that_x_rebin = [x_rebin[0]] + [x_rebin[-1]]
+        if "1DX" in numerator:
+            that_y_rebin = [y_rebin[0]] + [y_rebin[-1]]
         internals = copy.copy(numerator)
         for k, v in internalKeysReplacements.items():
             internals = internals.replace(k, v)
         if doNumpyValidation:
             numerators_dict[name][numerator], yield_dict_num[name][numerator + "Cross"], yield_err_dict_num[name][numerator + "Cross"] =                                                             rebin2D(numerators_dict[name][numerator],
-                                                            "{}{}".format(name, internals),
+                                                            "{}_{}".format(name, internals),
                                                             that_x_rebin,
                                                             that_y_rebin,
                                                             return_numpy_arrays=True,
                                                             )
             denominator_dict[name][numerator], yield_dict_den[name][numerator + "Cross"], yield_err_dict_den[name][numerator + "Cross"] =                                                             rebin2D(denominator_dict[name][numerator],
-                                                            "{}{}_denominator".format(name, internals),
+                                                            "{}_{}_denominator".format(name, internals),
                                                             that_x_rebin,
                                                             that_y_rebin,
                                                             return_numpy_arrays=True,
                                                             )
         else:
             numerators_dict[name][numerator] = rebin2D(numerators_dict[name][numerator],
-                                                        "{}{}".format(name, internals),
+                                                        "{}_{}".format(name, internals),
                                                         that_x_rebin,
                                                         that_y_rebin,
                                                         )
             denominator_dict[name][numerator] = rebin2D(denominator_dict[name][numerator],
-                                                        "{}{}_denominator".format(name, internals),
+                                                        "{}_{}_denominator".format(name, internals),
                                                         that_x_rebin,
                                                         that_y_rebin,
                                                         )
@@ -5510,34 +4414,12 @@ def BTaggingEfficienciesAnalyzer(directory, outDirectory="{}/BTaggingEfficiencie
 def rebin2D(hist, name, xbins, ybins, return_numpy_arrays=False):
     """Rebin a 2D histogram by project slices in Y, adding them together, and using TH1::Rebin along the X axes,
     then create a new histogram with the content of these slices"""
-
     if return_numpy_arrays:
         if 'numpy' not in dir() and 'np' not in dir():
             try:
                 import numpy as np
             except Exception as e:
                 raise RuntimeError("Could not import the numpy module in method rebin2D")
-        #Early return workaround in case no rebinning is necessary, the trivial case. Would be better to split this into a separate function, but, ya know... PhD life!
-    if xbins is None and ybins is None:
-        final_hist = hist.Clone(name)
-        if return_numpy_arrays:
-            #Create arrays of zeros to be filled after rebinning, with extra rows and columns for over/underflows
-            #Note: actual bins are len(<axis>bins) - 1, and we add 2 for the x axis to account for under/overflow
-            #since y-axis will account for it via the ranges actually included when slicing and projections are done
-            nBinsX = final_hist.GetXaxis().GetNbins()+2
-            nBinsY = final_hist.GetYaxis().GetNbins()+2
-            hist_contents = np.zeros((nBinsY, nBinsX), dtype=float)
-            hist_errors = np.zeros((nBinsY, nBinsX), dtype=float)
-            #Reverse the y array since numpy counts from top to bottom, and swap X and Y coordinates (row-column)
-            for x in xrange(nBinsX):
-                for y in xrange(nBinsY):
-                    hist_contents[nBinsY-1-y, x] = final_hist.GetBinContent(x, y)
-                    hist_errors[nBinsY-1-y, x] = final_hist.GetBinError(x, y)
-            return final_hist, hist_contents, hist_errors
-        else:
-            return final_hist
-
-
     #xbins_vec = ROOT.std.vector(float)(len(xbins))
     nxbins = []
     xbins_vec = array.array('d', xbins)
@@ -5923,8 +4805,7 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         f.write(line)
             
 def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-         BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, printBookkeeping=False, triggers=[], includeSampleNames=None, 
-         excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True):
+         BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, triggers=[], includeSampleNames=None, excludeSampleNames=None, verbose=False):
 
     ##################################################
     ##################################################
@@ -5942,7 +4823,9 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     
     all_samples = ["ElMu", "MuMu", "ElEl", "tttt", "ST_tW", "ST_tbarW", "tt_DL", "tt_DL-GF", 
                      "tt_SL", "tt_SL-GF", "ttH", "ttWJets", "ttZJets", "ttWH", "ttWW", "ttWZ", 
-                     "ttZZ", "ttZH", "ttHH", "tttW", "tttJ", "DYJets_DL"]
+                     "ttZZ", "ttZH", "ttHH", "tttW", "tttJ", "DYJets_DL",
+                   "ElMu_BOnly", "ElMu_CPre301046", "MuMu_BOnly", "MuMu_CPre301046", "ElEl_BOnly", "ElEl_CPre301046", 
+]
     if includeSampleNames:
         if (type(includeSampleNames) == list or type(includeSampleNames) == dict):
             valid_samples = [s for s in all_samples if s in includeSampleNames]
@@ -5958,10 +4841,10 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
 
     #Decide on things to do: either calculate yields for ratios or fill histograms
     #Did we not chooose to do incompatible actions at the same time?
-    if doBTaggingYields and (doHistos or doDiagnostics or printBookkeeping):
+    if doBTaggingYields and (doHistos or doDiagnostics):
         raise RuntimeError("Cannot calculate BTaggingYields and Fill Histograms simultaneously, choose only one mode")
-    elif not doHistos and not doBTaggingYields and not doDiagnostics and not printBookkeeping:
-        raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics and not printing Bookkeeping, there is no work to be done.")
+    elif not doHistos and not doBTaggingYields and not doDiagnostics:
+        raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics, there is no work to be done.")
 
     #These are deprecated for now!
     doJetEfficiency = False
@@ -5977,7 +4860,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         #If we're not calculating the yields, we need to have the string value of the Yields to be loaded...
         #Where to load BTaggingYields from
         if BTaggingYieldsFile == "{}":
-            BTaggingYieldsFile = "{}/BTaggingYields/{}/BTaggingYields.root".format(analysisDir, channel)
+            BTaggingYieldsFile = "{}/BTaggingYields/{}_selection/BTaggingYields.root".format(analysisDir, channel)
         calculateTheYields = False
         print("Loading BTaggingYields from this path: {}".format(BTaggingYieldsFile))
 
@@ -5985,46 +4868,33 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     #The source level used is... the source
     source_level = source
 
-
-    if channel == "BOOKKEEPING":
-        levelsOfInterest=set(["BOOKKEEPING"])
-        theSampleDict = bookerV2_SplitData.copy()
-        theSampleDict.update(bookerV2_MC)
-    elif channel == "ElMu":
-        levelsOfInterest = set(["ElMu",])
+    if channel == "ElMu":
+        levelsOfInterest = set(["ElMu_selection",])
         theSampleDict = bookerV2_ElMu.copy()
-        theSampleDict.update(bookerV2_MC)
+        # theSampleDict.update(bookerV2_MC)
     elif channel == "MuMu":
-        levelsOfInterest = set(["MuMu",])
+        levelsOfInterest = set(["MuMu_selection",])
         theSampleDict = bookerV2_MuMu.copy()
-        theSampleDict.update(bookerV2_MC)
+        # theSampleDict.update(bookerV2_MC)
     elif channel == "ElEl":    
-        levelsOfInterest = set(["ElEl",])
+        levelsOfInterest = set(["ElEl_selection",])
         theSampleDict = bookerV2_ElEl.copy()
-        theSampleDict.update(bookerV2_MC)
-    elif channel == "ElEl_LowMET":    
-        levelsOfInterest = set(["ElEl_LowMET",])
-        theSampleDict = bookerV2_ElEl.copy()
-        theSampleDict.update(bookerV2_MC)
-    elif channel == "ElEl_HighMET":    
-        levelsOfInterest = set(["ElEl_HighMET",])
-        theSampleDict = bookerV2_ElEl.copy()
-        theSampleDict.update(bookerV2_MC)
+        # theSampleDict.update(bookerV2_MC)
     # This doesn't work, need the corrections on all the samples and such...
     # elif channel == "All":
-    #     levelsOfInterest = set(["ElMu", "MuMu", "ElEl",])
+    #     levelsOfInterest = set(["ElMu_selection", "MuMu_selection", "ElEl_selection",])
     #     theSampleDict = bookerV2_ElMu.copy()
     #     theSampleDict.update(bookerV2_ElEl)
     #     theSampleDict.update(bookerV2_MuMu)
     #     theSampleDict.update(bookerV2_MC)
     elif channel == "Mu":    
-        levelsOfInterest = set(["Mu",])
+        levelsOfInterest = set(["Mu_selection",])
         theSampleDict = bookerV2_Mu.copy()
-        theSampleDict.update(bookerV2_MC)
+        # theSampleDict.update(bookerV2_MC)
     elif channel == "El":    
-        levelsOfInterest = set(["El",])
+        levelsOfInterest = set(["El_selection",])
         theSampleDict = bookerV2_El.copy()
-        theSampleDict.update(bookerV2_MC)
+        # theSampleDict.update(bookerV2_MC)
     elif channel == "test":
         print("More work to be done, exiting")
         sys.exit(2)
@@ -6033,14 +4903,12 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     print("Creating selection and baseline bits")
     #Set up channel bits for selection and baseline. Separation not necessary in this stage, but convenient for loops
     Chan = {}
-    Chan["ElMu"] = 24576
-    Chan["MuMu"] = 6144
-    Chan["ElEl"] = 512
-    Chan["ElEl_LowMET"] = Chan["ElEl"]
-    Chan["ElEl_HighMET"] = Chan["ElEl"]
-    Chan["Mu"] = 128
-    Chan["El"] = 64
-    Chan["selection"] = Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"] + Chan["El"]
+    Chan["ElMu_selection"] = 24576
+    Chan["MuMu_selection"] = 6144
+    Chan["ElEl_selection"] = 512
+    Chan["Mu_selection"] = 128
+    Chan["El_selection"] = 64
+    Chan["selection"] = Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"] + Chan["Mu_selection"] + Chan["El_selection"]
     Chan["ElMu_baseline"] = 24576
     Chan["MuMu_baseline"] = 6144
     Chan["ElEl_baseline"] = 512
@@ -6060,17 +4928,16 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     b["El_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
         .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"] + Chan["Mu_baseline"], Chan["El_baseline"])
     b["selection"] = "ESV_TriggerAndLeptonLogic_selection > 0"
-    b["ElMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu"])
-    b["MuMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu"], Chan["MuMu"])
-    b["ElEl"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu"] + Chan["MuMu"], Chan["ElEl"])
-    b["ElEl_LowMET"] = b["ElEl"]
-    b["ElEl_HighMET"] = b["ElEl"]
-    b["Mu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"], Chan["Mu"])
-    b["El"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"], Chan["El"]) 
+    b["ElMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu_selection"])
+    b["MuMu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"], Chan["MuMu_selection"])
+    b["ElEl_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"], Chan["ElEl_selection"])
+    b["Mu_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"], Chan["Mu_selection"])
+    b["El_selection"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+        .format(Chan["ElMu_selection"] + Chan["MuMu_selection"] + Chan["ElEl_selection"]
+                                                                                + Chan["Mu_selection"], Chan["El_selection"]) 
     #This is deprecated, use dedicated RDF module
     #b["ESV_JetMETLogic_baseline"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00001100011111111111) #This enables the MET pt cut (11) and nJet (15) and HT (16) cuts from PostProcessor
     #b["ESV_JetMETLogic_baseline"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00000000001111111111) #Only do the PV and MET filters, nothing else
@@ -6106,8 +4973,6 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     
     filtered = {}
     base = {}
-    metanode = {}
-    metainfo = {}
     reports = {}
     samples = {}
     counts = {}
@@ -6124,75 +4989,15 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     processed = {}
     processedSampleList = []
 
-    if not os.path.isdir(analysisDir):
-        os.makedirs(analysisDir)
 
     Benchmark = ROOT.TBenchmark()
     for name, vals in theSampleDict.items():
         if name not in valid_samples: 
             print("Skipping sample {}".format(name))
             continue
-        filelistDir = analysisDir + "/Filelists"
-        if not os.path.isdir(filelistDir):
-            os.makedirs(filelistDir)
-        sampleOutFile = "{base}/{era}__{src}__{sample}.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
-        # sampleFriendFile = "{base}/{era}__{src}__{sample}__Friend0.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
-        fileList = []
-        if os.path.isfile(sampleOutFile):
-            fileList = getFiles(query="list:{}".format(sampleOutFile), outFileName=None)
-        else:
-            if "/eos/" in vals["source"][source_level]:
-                redir="root://eosuser.cern.ch/".format(str(pwd.getpwuid(os.getuid()).pw_name)[0])
-            else:
-                redir="root://cms-xrd-global.cern.ch/"
-            # if "dbs:" in vals["source"][source_level]:
-            fileList = getFiles(query=vals["source"][source_level], redir=redir, outFileName=sampleOutFile)
-            # else:
-            #     fileList = getFiles(query=vals["source"][source_level], outFileName=sampleOutFile)
-        transformedFileList = ROOT.std.vector(str)()
-        for fle in fileList:
-            transformedFileList.push_back(fle)
-        if transformedFileList.size() < 1:
-            print("No files located... skipping sample {}".format(name))
-            continue
-
-        #Construct TChain that we can add friends to potentially, but similarly constructin TChains and adding the chains with AddFriend
-        print("Creating TChain for sample {}".format(name))
-        tcmain = ROOT.TChain("Events")
-        tcmeta = ROOT.TChain("Runs")
-        for vfe in transformedFileList:
-            print("\t{}".format(vfe))
-            tcmain.Add(vfe)
-            if checkMeta:
-                tcmeta.Add(vfe)
-        # tcfriend0 = ROOT.TChain("Events")
-        # for vfef0 in transformedFileList_Friend0:
-        #     tcfriend0.Add(vfef0)
-        # tcmain.AddFriend(tcfriend0)
-        # print("Initializing RDataFrame\n\t{} - {}".format(name, vals["source"][source_level]))
-        # print("Initializing RDataFrame\n\t{} - {}".format(name, len(transformedFileList)))
-        print("Initializing RDataFrame with TChain")
+        print("Initializing RDataFrame\n\t{} - {}".format(name, vals["source"][source_level]))
         filtered[name] = {}
-        base[name] = RDF(tcmain)
-        if checkMeta:
-            metanode[name] = RDF(tcmeta) #meta tree
-            if vals["isData"]:
-                metainfo[name] = {"run": metanode[name].Sum("run")}
-            else:
-                metainfo[name] = {"run": metanode[name].Sum("run"), 
-                                  "genEventCount": metanode[name].Sum("genEventCount"), 
-                                  "genEventSumw": metanode[name].Sum("genEventSumw"), 
-                                  "genEventSumw2": metanode[name].Sum("genEventSumw2"), 
-                                  "nLHEScaleSumw": metanode[name].Sum("nLHEScaleSumw"), 
-                                  "LHEScaleSumw": metanode[name].Sum("LHEScaleSumw"), 
-                                  "nLHEPdfSumw": metanode[name].Sum("nLHEPdfSumw"), 
-                                  "LHEPdfSumw": metanode[name].Sum("LHEPdfSumw")
-                              }
-            for mk, mv in metainfo[name].items():
-                metainfo[name][mk] = mv.GetValue()
-        metainfo[name]["totalEvents"] = tcmain.GetEntries()
-        print("\n{}".format(name))
-        pprint.pprint(metainfo[name])
+        base[name] = RDF("Events", vals["source"][source_level])
         reports[name] = base[name].Report()
         counts[name] = {}
         # histos[name] = {}
@@ -6200,85 +5005,40 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
         the_df[name] = {}
         stats[name] = {}
         effic[name] = {}
-        # btagging[name] = {}
+        btagging[name] = {}
         cat_df[name] = {}
         substart[name] = {}
         subfinish[name] = {}
         processed[name] = {}
         #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
         for lvl in levelsOfInterest:
-            splitProcessConfig = vals.get("splitProcess", None)
-            inclusiveProcessConfig = {"processes": {"{}".format(name): {"filter": "return true;",
-                                                                  "nEventsPositive": vals.get("nEventsPositive", -1),
-                                                                  "nEventsNegative": vals.get("nEventsNegative", -1),
-                                                                  "fractionalContribution": 1,
-                                                                  "sumWeights": vals.get("sumWeights", -1.0),
-                                                                  "effectiveCrossSection": vals.get("crossSection", 0),
-                                                              }}}
-            pprint.pprint(inclusiveProcessConfig)
-            
-            if lvl == "BOOKKEEPING":
-                #We just need the info printed on this one... book a Count node with progress bar if not quiet
-                if quiet:
-                    print("Going Quiet")
-                    booktrigger = base[name].Count()
-                else:
-                    print("Booking progress bar")
-                    booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(base[name]), 
-                                                      2000, long(metainfo[name]["totalEvents"]))
-                prePackedNodes = splitProcess(base[name], 
-                                              splitProcess = splitProcessConfig, 
-                                              inclusiveProcess = inclusiveProcessConfig,
-                                              sampleName = name, 
-                                              isData = vals["isData"], 
-                                              era = vals["era"],
-                                              printInfo = True,
-                                              fillDiagnosticHistos = True,
-                )
-                #Trigger the loop
-                _ = booktrigger.GetValue()
-                print("Finished processing")
-                for k, v in prePackedNodes["diagnosticHistos"].items():
-                    print("{} - {}".format(k, v.keys()))
-                print("Writing diagnostic histos to {}".format(analysisDir + "/Diagnostics"))
-                writeHistos(prePackedNodes["diagnosticHistos"], 
-                            analysisDir + "/Diagnostics",
-                            channelsOfInterest="All",
-                            samplesOfInterest="All",
-                            dict_keys="All",
-                            mode="RECREATE"
-                )
-                
-                #skip any further calculations for bookkeeping
-                continue
-            else:
-                filtered[name][lvl] = base[name].Filter(b[lvl], lvl)
+            filtered[name][lvl] = base[name].Filter(b[lvl], lvl)
             #Cache() seemingly has an issue with the depth/breadth of full NanoAOD file. Perhaps one with fewer branches would work
             #filtered[name][lvl] = filtered[name][lvl].Cache()
-            # if vals.get("stitch") != None:
-            #     stitch_def = collections.OrderedDict()
-            #     stitch_def["stitch_jet_mask"] = "GenJet_pt > 30"
-            #     stitch_def["stitch_HT_mask"] = "GenJet_pt > 30 && abs(GenJet_eta) < 2.4"
-            #     stitch_def["stitch_lep_mask"] = "abs(LHEPart_pdgId) == 15 || abs(LHEPart_pdgId) == 13 || abs(LHEPart_pdgId) == 11"
-            #     stitch_def["stitch_nGenLep"] = "LHEPart_pdgId[stitch_lep_mask].size()"
-            #     stitch_def["stitch_nGenJet"] = "GenJet_pt[stitch_jet_mask].size()"
-            #     stitch_def["stitch_GenHT"] = "Sum(GenJet_pt[stitch_HT_mask])"
+            if vals.get("stitch") != None:
+                stitch_def = collections.OrderedDict()
+                stitch_def["stitch_jet_mask"] = "GenJet_pt > 30"
+                stitch_def["stitch_HT_mask"] = "GenJet_pt > 30 && abs(GenJet_eta) < 2.4"
+                stitch_def["stitch_lep_mask"] = "abs(LHEPart_pdgId) == 15 || abs(LHEPart_pdgId) == 13 || abs(LHEPart_pdgId) == 11"
+                stitch_def["stitch_nGenLep"] = "LHEPart_pdgId[stitch_lep_mask].size()"
+                stitch_def["stitch_nGenJet"] = "GenJet_pt[stitch_jet_mask].size()"
+                stitch_def["stitch_GenHT"] = "Sum(GenJet_pt[stitch_HT_mask])"
                 
-            #     stdict = stitchDict[vals.get("era")][vals.get("stitch").get("channel")]
-            #     stitch_cut = "stitch_nGenLep == {} && stitch_nGenJet >= {} && stitch_GenHT >= {}"\
-            #         .format(stdict.get("nGenLeps"), stdict.get("nGenJets"), stdict.get("GenHT"))
-            #     if vals.get("stitch").get("source") == "Nominal":
-            #         stitch_cut = "!({})".format(stitch_cut)
-            #     elif vals.get("stitch").get("source") == "Filtered":
-            #         print("Filtered sample, not producing a filter (no events expected to fail filtering. If otherwise, alter code")
-            #     else:
-            #         print("Invalid stitching source type")
-            #         sys.exit(1)
-            #     if verbose:
-            #         print(stitch_cut)
-            #     for k, v in stitch_def.items():
-            #         filtered[name][lvl] = filtered[name][lvl].Define("{}".format(k), "{}".format(v))
-            #     filtered[name][lvl] = filtered[name][lvl].Filter(stitch_cut, "nJet_GenHT_Filter")
+                stdict = stitchDict[vals.get("era")][vals.get("stitch").get("channel")]
+                stitch_cut = "stitch_nGenLep == {} && stitch_nGenJet >= {} && stitch_GenHT >= {}"\
+                    .format(stdict.get("nGenLeps"), stdict.get("nGenJets"), stdict.get("GenHT"))
+                if vals.get("stitch").get("source") == "Nominal":
+                    stitch_cut = "!({})".format(stitch_cut)
+                elif vals.get("stitch").get("source") == "Filtered":
+                    print("Filtered sample, not producing a filter (no events expected to fail filtering. If otherwise, alter code")
+                else:
+                    print("Invalid stitching source type")
+                    sys.exit(1)
+                if verbose:
+                    print(stitch_cut)
+                for k, v in stitch_def.items():
+                    filtered[name][lvl] = filtered[name][lvl].Define("{}".format(k), "{}".format(v))
+                filtered[name][lvl] = filtered[name][lvl].Filter(stitch_cut, "nJet_GenHT_Filter")
             #Add the MET corrections, creating a consistently named branch incorporating the systematics loaded
             the_df[name][lvl] = METXYCorr(filtered[name][lvl],
                                           run_branch="run",
@@ -6323,18 +5083,21 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                            sysVariations=systematics_2017, 
                                            verbose=verbose,
                                           )
-            if quiet:
-                print("Going Quiet")
-                counts[name][lvl] = the_df[name][lvl].Count()
-            else:
-                print("Booking progress bar")
-                counts[name][lvl] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(the_df[name][lvl]), 
-                                                        min(5000, max(1000, int(metainfo[name]["totalEvents"]/5000))), long(metainfo[name]["totalEvents"]))
+            the_df[name][lvl] = defineWeights(the_df[name][lvl],
+                                              era=vals["era"],
+                                              isData=vals["isData"],
+                                              final=False,
+                                              sysVariations=systematics_2017, 
+                                              verbose=verbose,
+                                             )
+            
+            print("FIXME: Need to make cuts on HT, MET, InvariantMass, ETC. properly")
+            counts[name][lvl] = the_df[name][lvl].Count()
             # histos[name][lvl] = {} #new style, populated inside fillHistos... differs from BTaggingYields right now! Future work
             packedNodes[name][lvl] = None
             stats[name][lvl] = {}
             effic[name][lvl] = {}
-            # btagging[name][lvl] = {}
+            btagging[name][lvl] = {}
             cat_df[name][lvl] = {'fillHistos(...)':'NotRunOrFailed'} #will be a dictionary returned by fillHistos, so empty histo if fillHistos not run or fails
             #Define all the btag event weights or calculate yields based on defining the btag pre-event weight
             #as well as nJet_variation, HT_variation if necessary (move to defineJets function later)
@@ -6357,55 +5120,42 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
             ##    n = hv.GetBinContent(1)
             ##    print(n)
             #Insert the yields or calculate them
-            #Define the final weights/variations so long as we have btagging yields inserted...
-            # splitProcessConfig=None
-            # print("Forcing splitProcess to False for now, check this line!")
-            prePackedNodes = splitProcess(the_df[name][lvl], 
-                                          splitProcess = splitProcessConfig, 
-                                          inclusiveProcess = inclusiveProcessConfig,
-                                          sampleName = name, 
-                                          isData = vals["isData"], 
-                                          era = vals["era"],
-                                          printInfo = printBookkeeping,
-            )
-            prePackedNodes = defineWeights(prePackedNodes,
-                                           splitProcess = splitProcessConfig,
-                                           era=vals["era"],
-                                           isData=vals["isData"],
-                                           final=False,
-                                           sysVariations=systematics_2017, 
-                                           verbose=verbose,
-            )
-            prePackedNodes = BTaggingYields(prePackedNodes, sampleName=name, isData=vals["isData"], channel=lvl,
-                                            histosDict=btagging, loadYields=BTaggingYieldsFile,
-                                            useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
-                                            sysVariations=systematics_2017, 
-                                            calculateYields=calculateTheYields,
-                                            HTArray=[500, 650, 800, 1000, 1200, 10000], 
-                                            nJetArray=[4,5,6,7,8,20],
-                                            verbose=verbose,
-            )
-            if BTaggingYieldsFile:
-                print("What is happening in defineWeights here? Need to modify the prePackedNodes, then... pass on to the fillHistos method")
-                prePackedNodes = defineWeights(prePackedNodes,
-                                               splitProcess = splitProcessConfig,
-                                               # inclusiveProcess = inclusiveProcessConfig,
-                                               era = vals["era"],
-                                               isData = vals["isData"],
-                                               final=True,
+            the_df[name][lvl] = BTaggingYields(the_df[name][lvl], sampleName=name, isData=vals["isData"], 
+                                               histosDict=btagging[name][lvl], loadYields=BTaggingYieldsFile,
+                                               useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
                                                sysVariations=systematics_2017, 
+                                               calculateYields=calculateTheYields,
+                                               HTBinWidth=10, HTMin=200, HTMax=3200,
+                                               nJetBinWidth=1, nJetMin=4, nJetMax=20,
                                                verbose=verbose,
-                )
-            #All of these are deprecated as-is
-            # if doBTaggingEfficiencies == True:
-            #     BTaggingEfficiencies(the_df[name][lvl], sampleName=None, era = vals["era"], wgtVar="wgt_SUMW_PU_LSF_L1PF", 
-            #                    isData = vals["isData"], histosDict=btagging[name][lvl], 
-            #                    doDeepCSV=True, doDeepJet=True)
-            # if doJetEfficiency:
-            #     jetMatchingEfficiency(the_df[name][lvl], wgtVar="wgt_SUMW_PU_LSF_L1PF", stats_dict=effic[name][lvl],
-            #                           isData = vals["isData"])
-            # if doHLTMeans:
-            #     fillHLTMeans(the_df[name][lvl], wgtVar="wgt_SUMW_PU_L1PF", stats_dict=stats[name][lvl])
+                                              )
+            #Define the final weights/variations so long as we have btagging yields inserted...
+            # splitProcessConfig = vals.get("splitProcess", None)
+            splitProcessConfig=None
+            print("Forcing splitProcess to False for now, check this line!")
+            if BTaggingYieldsFile:
+                prePackedNodes = splitProcess(the_df[name][lvl], 
+                                              splitProcess = splitProcessConfig, 
+                                              sampleName = name, 
+                                              isData = vals["isData"], 
+                                              era = vals["era"])
+                the_df[name][lvl] = defineWeights(prePackedNodes,
+                                                  splitProcess = splitProcessConfig,
+                                                  era = vals["era"],
+                                                  isData = vals["isData"],
+                                                  final=True,
+                                                  sysVariations=systematics_2017, 
+                                                  verbose=verbose,
+                                                 )
+            if doBTaggingEfficiencies == True:
+                BTaggingEfficiencies(the_df[name][lvl], sampleName=None, era = vals["era"], wgtVar="wgt_SUMW_PU_LSF_L1PF", 
+                               isData = vals["isData"], histosDict=btagging[name][lvl], 
+                               doDeepCSV=True, doDeepJet=True)
+            if doJetEfficiency:
+                jetMatchingEfficiency(the_df[name][lvl], wgtVar="wgt_SUMW_PU_LSF_L1PF", stats_dict=effic[name][lvl],
+                                      isData = vals["isData"])
+            if doHLTMeans:
+                fillHLTMeans(the_df[name][lvl], wgtVar="wgt_SUMW_PU_L1PF", stats_dict=stats[name][lvl])
 
             #Hold the categorization nodes if doing histograms
             if doHistos:
@@ -6435,33 +5185,31 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
             theTime = subfinish[name][lvl] - substart[name][lvl]
 
             #Write the output!
-            # if doBTaggingYields:
-            #     print("Writing outputs...")
-            #     writeDir = analysisDir + "/BTaggingYields"
-            #     writeHistosV1(btagging,
-            #                 writeDir,
-            #                 levelsOfInterest=[lvl],
-            #                 samplesOfInterest=[name],
-            #                 dict_keys="All",
-            #                 mode="RECREATE"
-            #                )
-            if doHistos or doBTaggingYields:
+            if doBTaggingYields:
                 print("Writing outputs...")
+                writeDir = analysisDir + "/BTaggingYields"
+                writeHistosV1(btagging,
+                            writeDir,
+                            levelsOfInterest=[lvl],
+                            samplesOfInterest=[name],
+                            dict_keys="All",
+                            mode="RECREATE"
+                           )
+                print("Wrote BTaggingYields for {} to this directory:\n{}".format(name, writeDir))
+                print("To calculate the yield ratios, run 'BTaggingYieldsAnalyzer()' once all samples that are to be aggregated are in the directory")
+            if doHistos:
+                print("Writing outputs...")
+                writeDir = analysisDir + "/Histograms"
+                # pdb.set_trace()
                 processesOfInterest = []
                 if splitProcessConfig != None:
                     for thisProc in splitProcessConfig.get("processes", {}).keys():
-                        processesOfInterest.append(vals.get("era") + "___" + thisProc)
+                        processesOfInterest.append(thisProc)
                 else:
                     processesOfInterest.append(vals.get("era") + "___" + name)
                 print("Writing historams for...{}".format(processesOfInterest))
 
-                if doHistos:
-                    writeDir = analysisDir + "/Histograms"
-                    writeDict = histos
-                if doBTaggingYields:
-                    writeDir = analysisDir + "/BTaggingYields"
-                    writeDict = btagging
-                writeHistos(writeDict, 
+                writeHistos(histos, 
                             writeDir,
                             channelsOfInterest="All",
                             samplesOfInterest=processesOfInterest,
@@ -6469,14 +5217,12 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                             mode="RECREATE"
                         )
                 print("Wrote Histograms for {} to this directory:\n{}".format(name, writeDir))
-            if doBTaggingYields:
-                print("To calculate the yield ratios, run 'BTaggingYieldsAnalyzer()' once all samples that are to be aggregated are in the directory")
             #Add sample name to the list of processed samples and print it, in case things ****ing break in Jupyter Kernel
             processedSampleList.append(name)
             print("Processed Samples:")
             processedSamples = ""
             for n in processedSampleList:
-                processedSamples += "{} ".format(n)
+                processedSamples += "{} ".format(name)
             print(processedSamples)
             print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theTime//60, theTime%60, theTime, processed[name][lvl], 
                          name, lvl, "".join(["\_/"]*25)))
@@ -6605,18 +5351,15 @@ def otherFuncs():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
-    parser.add_argument('stage', action='store', type=str, choices=['bookkeeping', 'fill-yields', 'combine-yields', 'fill-diagnostics', 
-                                                                    'fill-histograms', 'prepare-for-combine'],
+    parser.add_argument('stage', action='store', type=str, choices=['fill-yields', 'combine-yields', 'fill-diagnostics', 'fill-histograms', 'prepare-for-combine'],
                         help='analysis stage to be produced')
-    parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic__{chan}_selection',
+    parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic/{chan}_selection',
                         help='Stage of data storage to pull from, as referenced in Sample dictionaries as subkeys of the "source" key.'\
                         'Must be available in all samples to be processed. {chan} will be replaced with the channel analyzed')
-    parser.add_argument('--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 'ElEl_HighMET'],
+    parser.add_argument('--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'All'],
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
                         help='output directory path defaulting to "."')
-    parser.add_argument('--quiet', dest='quiet', action='store_true',
-                        help='Disable progress bars')
     parser.add_argument('--bTagger', dest='bTagger', action='store', default='DeepCSV', type=str, choices=['DeepCSV', 'DeepJet'],
                         help='bTagger algorithm to be used')
     parser.add_argument('--noAggregate', dest='noAggregate', action='store_true',
@@ -6662,7 +5405,6 @@ if __name__ == '__main__':
     useAggregate = not args.noAggregate
     useHTOnly = args.useHTOnly
     useNJetOnly = args.useNJetOnly
-    quiet = args.quiet
     
     print("=========================================================")
     print("=               ____   _______      _                   =")
@@ -6689,7 +5431,6 @@ if __name__ == '__main__':
     else:
         print("Using all samples!")
     print("Verbose option: {verb}".format(verb=verb))
-    print("Quiet option: {qt}".format(qt=quiet))
     print("Systematics (This code not yet integrated... testing): {}".format(args.systematics))    
 
 
@@ -6698,9 +5439,6 @@ if __name__ == '__main__':
         print("This function needs reworking... work on it")
         print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
         print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
-        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
-                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
         #      verbose=False)
         # packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, 
@@ -6709,14 +5447,12 @@ if __name__ == '__main__':
 
     elif stage == 'combine-yields':
         print("Combining BTagging yields and calculating ratios, a necessary ingredient for calculating the final btag event weight for filling histograms")
-        yieldDir = "{adir}/BTaggingYields/{chan}".format(adir=analysisDir, chan=channel)
+        yieldDir = "{adir}/BTaggingYields/{chan}_selection".format(adir=analysisDir, chan=channel)
         globKey = "*.root"
         print("Looking for files to combine into yield ratios inside {ydir}".format(ydir=yieldDir))
         if verb:
             f = glob.glob("{}/{}".format(yieldDir, globKey))
-            f = [fiter for fiter in f if fiter.split("/")[-1] != "BTaggingYields.root"]
-            print("\nFound these files: ")
-            for fiter in f: print("\t\t{}".format(fiter))
+            print("\nFound these files: {files}\n\n".format(files=f))
         BTaggingYieldsAnalyzer(yieldDir, outDirectory="{}", globKey=globKey, stripKey=".root", includeSampleNames=includeSampleNames, 
                                excludeSampleNames=excludeSampleNames, mode="RECREATE", doNumpyValidation=False, forceDefaultRebin=False, verbose=verb,
                                internalKeys = {"Numerators":["_sumW_before"],
@@ -6726,32 +5462,23 @@ if __name__ == '__main__':
                                                            "_sumW_before": "",
                                                            "_sumW_after": "",
                                                        },
-                               sampleRebin={"default": {"Y": None,
-                                                        "X": None,
+                               sampleRebin={"default": {"Y": [4, 5, 6, 7, 8, 9, 20],
+                                                        "X": [500.0, 600, 700.0, 900.0, 1100.0, 3200.0],
                                                     },
                                         },
-                               # sampleRebin={"default": {"Y": [4, 5, 6, 7, 8, 9, 20],
-                               #                          "X": [500.0, 600, 700.0, 900.0, 1100.0, 3200.0],
-                               #                      },
-                               #          },
-                               # overrides={"Title": "$NAME BTaggingYield r=#frac{#Sigma#omega_{before}}{#Sigma#omega_{after}}($INTERNALS)",
-                               #            "Xaxis": "H_{T}/Bin (GeV)",
-                               #            "Yaxis": "nJet",
-                               #        },
+                               overrides={"Title": "$NAME BTaggingYield r=#frac{#Sigma#omega_{before}}{#Sigma#omega_{after}}($INTERNALS)",
+                                          "Xaxis": "H_{T}/Bin (GeV)",
+                                          "Yaxis": "nJet",
+                                      },
                            )
     elif stage == 'fill-diagnostics':
-        print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
-                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
-    elif stage == 'bookkeeping':
-        packed = main(analysisDir, source, "BOOKKEEPING", bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = True, 
-                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
+                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, triggers=TriggerList,
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
     elif stage == 'fill-histograms':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
-                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
+                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, triggers=TriggerList,
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb)
     elif stage == 'prepare-for-combine':
         print("This analysis stage is not yet finished. It will call the method histoCombine() which needs to be updated for the new internal key structure from fillHistos")
     else:

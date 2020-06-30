@@ -1,0 +1,481 @@
+{
+    "Canvas_mu_eta": {
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "DoRatio": true, 
+        "doLogY": false, 
+        "Labels": [
+            " "
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "Coordinates": [], 
+        "Title": "mu_eta", 
+        "Plots": [
+            "Plot_diagnostic___mu_eta"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "Legend": "DefaultLegend"
+    }, 
+    "Plot_diagnostic___el_pt": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_el_pt": {
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "DoRatio": true, 
+        "doLogY": false, 
+        "Labels": [
+            " "
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "Coordinates": [], 
+        "Title": "el_pt", 
+        "Plots": [
+            "Plot_diagnostic___el_pt"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "Legend": "DefaultLegend"
+    }, 
+    "Plot_diagnostic___mu_eta": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_diagnostic___jet1_eta": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_mu_pt": {
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "DoRatio": true, 
+        "doLogY": false, 
+        "Labels": [
+            " "
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "Coordinates": [], 
+        "Title": "mu_pt", 
+        "Plots": [
+            "Plot_diagnostic___mu_pt"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "Legend": "DefaultLegend"
+    }, 
+    "Canvas_nGenJet": {
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "DoRatio": true, 
+        "doLogY": false, 
+        "Labels": [
+            " "
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "Coordinates": [], 
+        "Title": "nGenJet", 
+        "Plots": [
+            "Plot_diagnostic___nGenJet"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "Legend": "DefaultLegend"
+    }, 
+    "Plot_diagnostic___nGenLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_diagnostic___nJet": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_diagnostic___jet5_eta": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null,  
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_jet1_pt": {
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "DoRatio": true, 
+        "doLogY": false, 
+        "Labels": [
+            " "
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "Coordinates": [], 
+        "Title": "jet1_pt", 
+        "Plots": [
+            "Plot_diagnostic___jet1_pt"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "Legend": "DefaultLegend"
+    }, 
+    "Plot_diagnostic___nGenJet": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_el_eta": {
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "DoRatio": true, 
+        "doLogY": false, 
+        "Labels": [
+            " "
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "Coordinates": [], 
+        "Title": "el_eta", 
+        "Plots": [
+            "Plot_diagnostic___el_eta"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "Legend": "DefaultLegend"
+    }, 
+    "Canvas_nGenLep": {
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "DoRatio": true, 
+        "doLogY": false, 
+        "Labels": [
+            " "
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "Coordinates": [], 
+        "Title": "nGenLep", 
+        "Plots": [
+            "Plot_diagnostic___nGenLep"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "Legend": "DefaultLegend"
+    }, 
+    "Plot_diagnostic___GenHT": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_diagnostic___el_eta": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_jet5_eta": {
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "DoRatio": true, 
+        "doLogY": false, 
+        "Labels": [
+            " "
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "Coordinates": [], 
+        "Title": "jet5_eta", 
+        "Plots": [
+            "Plot_diagnostic___jet5_eta"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "Legend": "DefaultLegend"
+    }, 
+    "Plot_diagnostic___HT": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "DefaultPlot": {
+        "Files": null, 
+        "Rebin": null, 
+        "RatioYMin": 0.85, 
+        "RatioYMax": 1.15, 
+        "Title": "DefaultPlotTitle", 
+        "Unblind": false, 
+        "Type": "DefaultPlot"
+    }, 
+    "Canvas_jet1_eta": {
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "DoRatio": true, 
+        "doLogY": false, 
+        "Labels": [
+            " "
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "Coordinates": [], 
+        "Title": "jet1_eta", 
+        "Plots": [
+            "Plot_diagnostic___jet1_eta"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "Legend": "DefaultLegend"
+    }, 
+    "Canvas_jet5_pt": {
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "DoRatio": true, 
+        "doLogY": false, 
+        "Labels": [
+            " "
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "Coordinates": [], 
+        "Title": "jet5_pt", 
+        "Plots": [
+            "Plot_diagnostic___jet5_pt"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "Legend": "DefaultLegend"
+    }, 
+    "Canvas_HT": {
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "DoRatio": true, 
+        "doLogY": false, 
+        "Labels": [
+            " "
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "Coordinates": [], 
+        "Title": "HT", 
+        "Plots": [
+            "Plot_diagnostic___HT"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "Legend": "DefaultLegend"
+    }, 
+    "DefaultCanvas": {
+        "XPixels": 800, 
+        "Title": "DefaultCanvasTitle", 
+        "Plots": null, 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "DoRatio": false, 
+        "Type": "DefaultCanvas", 
+        "YPixels": 800, 
+        "DoMountainrange": false
+    }, 
+    "Plot_diagnostic___jet5_pt": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_diagnostic___jet1_pt": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_nJet": {
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "DoRatio": true, 
+        "doLogY": false, 
+        "Labels": [
+            " "
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "Coordinates": [], 
+        "Title": "nJet", 
+        "Plots": [
+            "Plot_diagnostic___nJet"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "Legend": "DefaultLegend"
+    }, 
+    "Plot_diagnostic___mu_pt": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_GenHT": {
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "DoRatio": true, 
+        "doLogY": false, 
+        "Labels": [
+            " "
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "Coordinates": [], 
+        "Title": "GenHT", 
+        "Plots": [
+            "Plot_diagnostic___GenHT"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "Legend": "DefaultLegend"
+    }
+}

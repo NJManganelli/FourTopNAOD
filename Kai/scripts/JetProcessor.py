@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/bin/env python
 import os, time, collections, copy, json, multiprocessing
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import * 
 from PhysicsTools.NanoAODTools.postprocessing.modules.btv.btagSFProducer import * 
@@ -22,11 +22,14 @@ parser.add_argument('--maxEntries', dest='maxEntries', action='store', type=int,
                     help='maxEntries per file for processing')
 parser.add_argument('--runPeriod', dest='runPeriod', action='store', type=str, default=None, choices=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
                     help='Run Period for data, i.e. "B" for 2017B')
-parser.add_argument('--redoJEC', dest='redoJEC', action='store_false', default=True,
-                    help='Data vs MC boolean flag')
+parser.add_argument('--redoJEC', dest='redoJEC', action='store_true', default=False,
+                    help='Do not rerun JECs when calculating jetmet uncertainties and smearing, it was broken as of writing!')
 parser.add_argument('--isData', dest='isData', action='store_true', default=False,
                     help='Data vs MC boolean flag')
-parser.add_argument('--btagAlgo', dest='btagAlgo', action='store', type=str, default='deepcsv', choices=['csvv2', 'deepcsv', 'deepjet'],
+#Not necessary shape factors for both algos can be added with sequential modules
+# parser.add_argument('--btagAlgo', dest='btagAlgo', action='store', type=str, default='deepcsv', choices=['csvv2', 'deepcsv', 'deepjet'],
+#                     help='b tagging SF algorithm')
+parser.add_argument('--btagWPs', dest='btagWPs', action='append', nargs='*', type=str, default=['shape_corr'], choices=['L', 'M', 'T', 'shape_corr'],
                     help='b tagging SF algorithm')
 args = parser.parse_args()
 
@@ -43,10 +46,29 @@ jmeModule = createJMECorrector(isMC=(not args.isData),
                                isFastSim=False)
 moduleCache.append(jmeModule())
 if not args.isData:
+    if args.era == "2017":
+        moduleCache.append(btagSFProducer(args.era, 
+                                          algo="csvv2", 
+                                          # selectedWPs=['M', 'shape_corr'], 
+                                          selectedWPs=['L', 'M', 'T', 'shape_corr'], 
+                                          sfFileName=None, #Automatically deduced
+                                          verbose=0, 
+                                          jesSystsForShape=["jes"]
+                                      )
+                       )
     moduleCache.append(btagSFProducer(args.era, 
-                                      algo=args.btagAlgo, 
+                                      algo="deepcsv", 
                                       # selectedWPs=['M', 'shape_corr'], 
-                                      selectedWPs=['shape_corr'], 
+                                      selectedWPs=['L', 'M', 'T', 'shape_corr'], 
+                                      sfFileName=None, #Automatically deduced
+                                      verbose=0, 
+                                      jesSystsForShape=["jes"]
+                                  )
+                   )
+    moduleCache.append(btagSFProducer(args.era, 
+                                      algo="deepjet", 
+                                      # selectedWPs=['M', 'shape_corr'], 
+                                      selectedWPs=['L', 'M', 'T', 'shape_corr'], 
                                       sfFileName=None, #Automatically deduced
                                       verbose=0, 
                                       jesSystsForShape=["jes"]
@@ -63,7 +85,8 @@ print("Will run over these files: {}".format(files))
 print("Will use this output directory: {} \nWill use this haddName: {}\nWill use this postfix: {}\nWill configure with this year: {}{}"\
       .format(writeLocation, args.haddName, args.postfix, args.era, args.runPeriod if args.isData else ""))
 if not args.isData:
-    print("Will configure the btagSFProducer using {}".format(args.btagAlgo))
+    #print("Will configure the btagSFProducer using {}".format(args.btagAlgo))
+    print("Will configure the btagSFProducer using {}".format("deepcsv, deepjet"))
 
 
 p=PostProcessor(writeLocation, 

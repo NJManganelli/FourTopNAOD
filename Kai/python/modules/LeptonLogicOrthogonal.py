@@ -14,7 +14,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 
 class TriggerAndLeptonLogic(Module):
-    def __init__(self, passLevel, enforceMCCascade=True, era="2013", subera=None, isData=False, TriggerChannel=None, weightMagnitude=1, fillHists=False, debug=False, mode="Flag"):
+    def __init__(self, passLevel, doOrthogonalTrigger=True, enforceMCCascade=True, era="2013", subera=None, isData=False, TriggerChannel=None, weightMagnitude=1, fillHists=False, debug=False, mode="Flag"):
         """ Trigger logic that checks for fired triggers and searches for appropriate objects based on criteria set by fired triggers.
 
         passLevel is the level at which the module should trigger "True" to pass the event along to further modules. Available: 'all', 'veto', 'hlt', 'baseline', 'selection'
@@ -35,6 +35,7 @@ class TriggerAndLeptonLogic(Module):
         dataset, and while it may exist in the double muon dataset, it will only be becasue of a trigger that we have not checked for, and so we must not have picked it up
         in that dataset"""
         self.passLevel = passLevel
+        self.doOrthogonalTrigger = doOrthogonalTrigger
         self.enforceMCCascade = enforceMCCascade #This might not be necessary outside of plotting
         self.era = era
         self.subera = subera
@@ -129,6 +130,17 @@ class TriggerAndLeptonLogic(Module):
                                          leadElThresh=36,
                                          subElThresh=99999,
                                          nontriggerLepThresh=15),
+                            # TriggerTuple(trigger="HLT_Ele35_WPTight_Gsf",
+                            #              era="2017",
+                            #              subera="BCDEF",
+                            #              uniqueEraBit=2,
+                            #              tier=-1,
+                            #              channel="Orthogonal",
+                            #              leadMuThresh=99999,
+                            #              subMuThresh=99999,
+                            #              leadElThresh=36,
+                            #              subElThresh=99999,
+                            #              nontriggerLepThresh=15),
                             TriggerTuple(trigger="HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
                                          era="2018",
                                          subera="ABCD",
@@ -275,12 +287,14 @@ class TriggerAndLeptonLogic(Module):
         #Create list of veto triggers for data, where explicit tiers are expected (calculating the tier first)
         #For 2017, 0 = ElMu dataset, 1 = MuMu, 2 = ElEl, 3 = Mu(Any), 4 = El(Any). Veto any events that fire any higher trigger, to avoid double counting by using this dataset
         #For 2018, 0 = ElMu dataset, Rest to be determined!
-        self.tier = [trigger.tier for trigger in self.Triggers]
+        #Form the list of triggers except tier = -1 (Orthogonal triggers)
+        self.tier = [trigger.tier for trigger in self.Triggers if trigger.tier > -1]
         self.tier.sort(key=lambda i: i, reverse=False)
         if self.debug: 
             print("Sorted trigger tiers selected are: " + str(self.tier))
         self.tier = self.tier[0]
-        self.vetoTriggers = [trigger for trigger in self.eraTriggers if self.isData and self.subera in trigger.subera and trigger.tier < self.tier]
+        #Form the list of triggers to veto for data, but don't include the orthogonal triggers with tier = -1!
+        self.vetoTriggers = [trigger for trigger in self.eraTriggers if self.isData and self.subera in trigger.subera and trigger.tier < self.tier and trigger.tier > -1]
         if self.debug: 
             print("Trigger tier selected is: " + str(self.tier))
             print("Selected {} Triggers for usage".format(len(self.Triggers)))
@@ -434,20 +448,38 @@ class TriggerAndLeptonLogic(Module):
         electron_osv_baseline = [0]*len(electrons)
         electron_osv_selection = [0]*len(electrons)
 
+        #prepare non-isolated lepton selection bits
+        muon_osv_baseline_noiso = [0]*len(muons)
+        muon_osv_selection_noiso = [0]*len(muons)
+        electron_osv_baseline_noiso = [0]*len(electrons)
+        electron_osv_selection_noiso = [0]*len(electrons)
+
         #Create baseline and selection level lists for each trigger, permitting an event to pass at event and selection levels with different triggers
         for trigger in Fired:
             leadMu_baseline[trigger.trigger] = []
+            leadMu_baseline_noiso[trigger.trigger] = []
             leadEl_baseline[trigger.trigger] = []
+            leadEl_baseline_noiso[trigger.trigger] = []
             subMu_baseline[trigger.trigger] = []
+            subMu_baseline_noiso[trigger.trigger] = []
             subEl_baseline[trigger.trigger] = []
+            subEl_baseline_noiso[trigger.trigger] = []
             nontriggerMu_baseline[trigger.trigger] = []
+            nontriggerMu_baseline_noiso[trigger.trigger] = []
             nontriggerEl_baseline[trigger.trigger] = []
+            nontriggerEl_baseline_noiso[trigger.trigger] = []
             leadMu_selection[trigger.trigger] = []
+            leadMu_selection_noiso[trigger.trigger] = []
             leadEl_selection[trigger.trigger] = []
+            leadEl_selection_noiso[trigger.trigger] = []
             subMu_selection[trigger.trigger] = []
+            subMu_selection_noiso[trigger.trigger] = []
             subEl_selection[trigger.trigger] = []
+            subEl_selection_noiso[trigger.trigger] = []
             nontriggerMu_selection[trigger.trigger] = []
+            nontriggerMu_selection_noiso[trigger.trigger] = []
             nontriggerEl_selection[trigger.trigger] = []
+            nontriggerEl_selection_noiso[trigger.trigger] = []
             
             #pass variables
             pass_trigger[trigger.trigger] = True #If it's in fired, it fired
@@ -484,23 +516,42 @@ class TriggerAndLeptonLogic(Module):
             #Remove the ISO requirement from muons for QCD contamination estimates!
             pass_common_baseline = pass_id_loose and pass_eta and pass_dz_baseline and pass_d0_baseline
             pass_common_selection = pass_id_loose and pass_eta and pass_dz_selection and pass_d0_selection
+            mu_non_isolated = (mu.pfIsoId == 0)
             for trigger in Fired:
                 if pass_common_baseline:
                     #Create OVERLAPPING baseline collections
                     if mu.pt > trigger.leadMuThresh:
-                        leadMu_baseline[trigger.trigger].append((idx, mu))
+                        if pass_iso_baseline:
+                            leadMu_baseline[trigger.trigger].append((idx, mu))
+                        elif mu_non_isolated:
+                            leadMu_baseline_noiso[trigger.trigger].append((idx, mu))
                     if mu.pt > trigger.subMuThresh:
-                        subMu_baseline[trigger.trigger].append((idx, mu))
+                        if pass_iso_baseline:
+                            subMu_baseline[trigger.trigger].append((idx, mu))
+                        elif mu_non_isolated:
+                            subMu_baseline_noiso[trigger.trigger].append((idx, mu))
                     if mu.pt > trigger.nontriggerLepThresh:
-                        nontriggerMu_baseline[trigger.trigger].append((idx, mu))
+                        if pass_iso_baseline:
+                            nontriggerMu_baseline[trigger.trigger].append((idx, mu))
+                        elif mu_non_isolated:
+                            nontriggerMu_baseline_noiso[trigger.trigger].append((idx, mu))
                 if pass_common_selection:
                     #Create OVERLAPPING selection collections
                     if mu.pt > trigger.leadMuThresh:
-                        leadMu_selection[trigger.trigger].append((idx, mu))
+                        if pass_iso_selection:
+                            leadMu_selection[trigger.trigger].append((idx, mu))
+                        elif mu_non_isolated:
+                            leadMu_selection_noiso[trigger.trigger].append((idx, mu))
                     if mu.pt > trigger.subMuThresh:
-                        subMu_selection[trigger.trigger].append((idx, mu))
+                        if pass_iso_selection:
+                            subMu_selection[trigger.trigger].append((idx, mu))
+                        elif mu_non_isolated:
+                            subMu_selection_noiso[trigger.trigger].append((idx, mu))
                     if mu.pt > trigger.nontriggerLepThresh:
-                        nontriggerMu_selection[trigger.trigger].append((idx, mu))
+                        if pass_iso_selection:
+                            nontriggerMu_selection[trigger.trigger].append((idx, mu))
+                        elif mu_non_isolated:
+                            nontriggerMu_selection_noiso[trigger.trigger].append((idx, mu))
     
         for idx, el in enumerate(electrons):
             if len(Vetoed) > 0 or len(Fired) < 1: 
@@ -522,31 +573,58 @@ class TriggerAndLeptonLogic(Module):
                 pass_eta = False
             pass_dz_baseline = (abs(el.dz) < 0.06) #selection < 0.02, baseline < 0.06, trigger < 0.2 presumably (verification needed)
             pass_dz_selection = (abs(el.dz) < 0.02) #selection < 0.02, baseline < 0.06, trigger < 0.2 presumably (verification needed)
+            pass_id_veto = (el.cutBased >= 1)
             pass_id_loose = (el.cutBased >= 2)
             pass_id_medium = (el.cutBased >= 3)
-            pass_common_baseline = pass_eta and pass_dz_baseline and pass_d0_baseline and pass_id_loose
-            pass_common_selection = pass_eta and pass_dz_selection and pass_d0_selection and pass_id_loose
+            pass_id_tight = (el.cutBased >= 4)
+            pass_id_veto_noiso = (el.vidNestedWPBitmap & 0b111111000111111111111111111111 >= 0b001001000001001001001001001001)
+            pass_id_loose_noiso = (el.vidNestedWPBitmap & 0b111111000111111111111111111111 >= 0b010010000010010010010010010010)
+            pass_id_medium_noiso = (el.vidNestedWPBitmap & 0b111111000111111111111111111111 >= 0b011011000011011011011011011011)
+            pass_id_tight_noiso = (el.vidNestedWPBitmap & 0b111111000111111111111111111111 >= 0b100100000100100100100100100100)
+            el_non_isolated = (el.vidNestedWPBitmap & 0b000000111000000000000000000000 == 0b000000000000000000000000000000)
+            pass_common_baseline = pass_eta and pass_dz_baseline and pass_d0_baseline and pass_id_loose_noiso
+            pass_common_selection = pass_eta and pass_dz_selection and pass_d0_selection and pass_id_loose_noiso
             for trigger in Fired:
                 if pass_common_baseline:
                     #Create OVERLAPPING baseline collections
                     if el.pt > trigger.leadElThresh:
-                        leadEl_baseline[trigger.trigger].append((idx, el))
+                        if pass_id_loose:
+                            leadEl_baseline[trigger.trigger].append((idx, el))
+                        elif el_non_isolated:
+                            leadEl_baseline_noiso[trigger.trigger].append((idx, el))
                     if el.pt > trigger.subElThresh:
-                        subEl_baseline[trigger.trigger].append((idx, el))
+                        if pass_id_loose:
+                            subEl_baseline[trigger.trigger].append((idx, el))
+                        elif el_non_isolated:
+                            subEl_baseline_noiso[trigger.trigger].append((idx, el))
                     if el.pt > trigger.nontriggerLepThresh:
-                        nontriggerEl_baseline[trigger.trigger].append((idx, el))
+                        if pass_id_loose:
+                            nontriggerEl_baseline[trigger.trigger].append((idx, el))
+                        elif el_non_isolated:
+                            nontriggerEl_baseline_noiso[trigger.trigger].append((idx, el))
                 if pass_common_selection:
                     #Create OVERLAPPING selection collections
                     if el.pt > trigger.leadElThresh:
-                        leadEl_selection[trigger.trigger].append((idx, el))
+                        if pass_id_loose:
+                            leadEl_selection[trigger.trigger].append((idx, el))
+                        elif el_non_isolated:
+                            leadEl_selection_noiso[trigger.trigger].append((idx, el))
                     if el.pt > trigger.subElThresh:
-                        subEl_selection[trigger.trigger].append((idx, el))
+                        if pass_id_loose:
+                            subEl_selection[trigger.trigger].append((idx, el))
+                        elif el_non_isolated:
+                            subEl_selection_noiso[trigger.trigger].append((idx, el))
                     if el.pt > trigger.nontriggerLepThresh:
-                        nontriggerEl_selection[trigger.trigger].append((idx, el))
+                        if pass_id_loose:
+                            nontriggerEl_selection[trigger.trigger].append((idx, el))
+                        elif el_non_isolated:
+                            nontriggerEl_selection_noiso[trigger.trigger].append((idx, el))
 
         #Do Lepton selection logic here
         pass_baseline_bitset = 0
         pass_selection_bitset = 0
+        pass_baseline_noiso_bitset = 0
+        pass_selection_noiso_bitset = 0
         for trigger in Fired:            
             #FIXME: Need the mass, charge, 3-lepton vetos in place. Add a bitset for EVERY trigger, then work on single event-level bitset
             if trigger.channel == "ElMu":
@@ -872,10 +950,17 @@ class TriggerAndLeptonLogic(Module):
                     else:
                         raise RuntimeError("Logical Error!")
                 #maybe L1 Seed additional requirement in 2017 needed?
-            elif self.doUnbiasedTrigger:
-                pass
             else:
-                RuntimeError("Unhandled Trigger.channel class")
+                if self.doOrthogonalTrigger and trigger.channel == "Orthogonal":
+                            #Store whether the lead and sublead leptons were isolated
+                            # if hasattr(leadLep_baseline[0][1], "vidNestedWPBitmap"):
+                            #     #It's an electron, check the bitmap for loose isolation minimum
+                            #     if (leadLep_baseline[0][1].vidNestedWPBitmap & 0b000000111000000000000000000000 >= 0b000000010000000000000000000000):
+                            #         pass_baseline_lep[trigger.trigger] += 2**5
+                            # elif hasattr(leadLep_baseline[0][1], "")
+
+                else:
+                    RuntimeError("Unhandled Trigger.channel class")
 
 #            for lvl in ["T", "B_Lep", "B_Jet", "B_HT", "S_Lep", "S_Jet", "S_HT"]:
         if self.fillHists:
