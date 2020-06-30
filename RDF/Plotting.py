@@ -1345,6 +1345,7 @@ def createRatio(h1, h2, Cache=None, ratioTitle="input 0 vs input 1", ratioColor 
     if h1 is None or h2 is None:
         h3 = ROOT.TH1F("ratio_None__None", "", 1, 0, 1)
     else:
+        print("debug: {} // {}".format((h1.GetName()).replace("h_",""), (h2.GetName()).replace("h_","")))
         h3 = h1.Clone("ratio_{}__{}".format( (h1.GetName()).replace("h_",""), (h2.GetName()).replace("h_","") ))
     if ratioStyle == "Fill":
         if ratioColor != None:
@@ -2310,39 +2311,64 @@ nSplit=generateJSON(modelPlotJSON_SPLITSTITCH, varsForSplitStitching,
                     channel="")
 nSplit.update(defaultNoLegend)
 if False:
-    with open("/eos/user/n/nmangane/analysis/Nominal_Zvtx/Diagnostics/NoChannel/plots.json", "w") as jo:
+    # with open("/eos/user/n/nmangane/analysis/Nominal_Zvtx/Diagnostics/NoChannel/plots.json", "w") as jo:
+    with open("/eos/user/n/nmangane/analysis/SplitProcessTest/Diagnostics/NoChannel/plots.json", "w") as jo:
         jo.write(json.dumps(nSplit, indent=4))
 
 
 replacementLegend1=None
 replacementLegend2=None
 replacementLegend3=None
-resultsS = None
-resultsMS = None
-resultsRS = None
-base="/eos/user/n/nmangane/analysis/Nominal_Zvtx/Diagnostics/NoChannel"
-with open("{}/stitched.json".format(base), "r") as jlegend1:
+replacementLegend4=None
+replacementLegend5=None
+resultsS_DL = None
+resultsMS_DL = None
+resultsRS_DL = None
+resultsS_SL = None
+resultsMS_SL = None
+resultsRS_SL = None
+# base="/eos/user/n/nmangane/analysis/Nominal_Zvtx/Diagnostics/NoChannel"
+base="/eos/user/n/nmangane/analysis/SplitProcessTest/Diagnostics/NoChannel"
+with open("{}/stitchedDL.json".format(base), "r") as jlegend1:
     replacementLegend1 = copy.copy(json_load_byteified(jlegend1))
-with open("{}/multistitched.json".format(base), "r") as jlegend2:
+with open("{}/multistitchedDL.json".format(base), "r") as jlegend2:
     replacementLegend2 = copy.copy(json_load_byteified(jlegend2))
-with open("{}/restitched.json".format(base), "r") as jlegend3:
-    replacementLegend3 = copy.copy(json_load_byteified(jlegend3))
+# with open("{}/restitchedDL.json".format(base), "r") as jlegend3:
+#     replacementLegend3 = copy.copy(json_load_byteified(jlegend3))
+with open("{}/multistitchedSL.json".format(base), "r") as jlegend4:
+    replacementLegend4 = copy.copy(json_load_byteified(jlegend4))
+with open("{}/multistitchedSL.json".format(base), "r") as jlegend5:
+    replacementLegend5 = copy.copy(json_load_byteified(jlegend5))
+# with open("{}/restitchedSL.json".format(base), "r") as jlegend6:
+#     replacementLegend6 = copy.copy(json_load_byteified(jlegend6))
 with open("{}/plots.json".format(base), "r") as j1:
     loadedJSON1 = json_load_byteified(j1)
     loadedJSON2 = copy.copy(loadedJSON1)
     loadedJSON3 = copy.copy(loadedJSON1)
+    loadedJSON4 = copy.copy(loadedJSON1)
+    loadedJSON5 = copy.copy(loadedJSON1)
+    loadedJSON6 = copy.copy(loadedJSON1)
     loadedJSON1.update(replacementLegend1)
     loadedJSON2.update(replacementLegend2)
-    loadedJSON3.update(replacementLegend3)
+    # loadedJSON3.update(replacementLegend3)
+    loadedJSON4.update(replacementLegend4)
+    loadedJSON5.update(replacementLegend5)
+    # loadedJSON3.update(replacementLegend6)
     #Plot results stitching unfiltered + filtered, using filtered sample exclusively in its phase space
-    # resultsS = loopPlottingJSON(loadedJSON1, Cache=None, directory="{}".format(base), batchOutput=True, 
-    #                             pdfOutput="{}/stitched.pdf".format(base), verbose=False, nominalPostfix=None)
+    # resultsS_SL = loopPlottingJSON(loadedJSON1, Cache=None, directory="{}".format(base), batchOutput=True, 
+    #                             pdfOutput="{}/stitchedDL.pdf".format(base), verbose=False, nominalPostfix=None)
     #Plot results stitching unfiltered + filtered, using both nominal and filtered samples weighted proportional to their number of net simulated events (N_+ - N_-)
-    resultsMS= loopPlottingJSON(loadedJSON2, Cache=None, directory="{}".format(base), batchOutput=True,
-                               pdfOutput="{}/multistitched.pdf".format(base), verbose=False, nominalPostfix=None)
+    # resultsMS_SL= loopPlottingJSON(loadedJSON2, Cache=None, directory="{}".format(base), batchOutput=True,
+    #                            pdfOutput="{}/multistitchedDL.pdf".format(base), verbose=False, nominalPostfix=None)
     #Plot results stitching unfiltered only back together, to ensure perfect agreement with the nominal sample when not split
-    # resultsRS = loopPlottingJSON(loadedJSON3, Cache=None, directory="{}".format(base), batchOutput=True, 
-    #                             pdfOutput="{}/restitched.pdf".format(base), verbose=False, nominalPostfix=None)
+    # resultsRS_SL = loopPlottingJSON(loadedJSON3, Cache=None, directory="{}".format(base), batchOutput=True, 
+    #                             pdfOutput="{}/restitchedDL.pdf".format(base), verbose=False, nominalPostfix=None)
+    #Plot results stitching unfiltered + filtered, using filtered sample exclusively in its phase space
+    # resultsS_SL = loopPlottingJSON(loadedJSON4, Cache=None, directory="{}".format(base), batchOutput=True, 
+    #                             pdfOutput="{}/stitchedSL.pdf".format(base), verbose=False, nominalPostfix=None)
+    #Plot results stitching unfiltered + filtered, using both nominal and filtered samples weighted proportional to their number of net simulated events (N_+ - N_-)
+    # resultsMS_SL= loopPlottingJSON(loadedJSON5, Cache=None, directory="{}".format(base), batchOutput=True,
+    #                            pdfOutput="{}/multistitchedSL.pdf".format(base), verbose=False, nominalPostfix=None)
 
 
 
@@ -2373,7 +2399,8 @@ nMu.update(defaultAndLegends)
 nEl.update(defaultAndLegends)
 nMET.update(defaultAndLegends)
 nJet.update(defaultAndLegends)
-folder="/eos/user/n/nmangane/analysis/Apr-22-2020/Histograms/ElMu"
+# folder="/eos/user/n/nmangane/analysis/Apr-22-2020/Histograms/ElMu"
+folder="/eos/user/n/nmangane/analysis/SplitProcessTest/Diagnostics/All"
 if False:
     with open("{}/newMu.json".format(folder), "w") as jo:
         jo.write(json.dumps(nMu, indent=4))
@@ -2384,8 +2411,9 @@ if False:
     with open("{}/newJet.json".format(folder), "w") as jo:
         jo.write(json.dumps(nJet, indent=4))
 
-for channel in ["MuMu_ElMu", "ElEl", "MuMu", "ElMu", "All", "ChannelComparison"]:
-    continue #Don't want to loop these right now
+for channel in ["MuMu_ElMu", "MuMu", "ElMu",]: # "All", "ChannelComparison", "ElEl"]:
+    if channel in ["ElMu", "MuMu"]: continue
+    # continue #Don't want to loop these right now
     #Tag = "SubleadThresh25"; lumi=41.53
     #Tag = "May-3-2020"; lumi=41.53
     #Tag = "BarrelBarrel"; lumi=41.53
@@ -2395,9 +2423,10 @@ for channel in ["MuMu_ElMu", "ElEl", "MuMu", "ElMu", "All", "ChannelComparison"]
     #Tag = "BarrelBarrel_Run301046"; lumi=30.54
     #Tag = "BarrelForward_Run301046"; lumi=30.54
     #Tag = "ForwardForward_Run301046"; lumi=30.54
-    Tag = "SplitRunsZ_vtx"; lumi=30.54; nB="2pB"
+    # Tag = "SplitRunsZ_vtx"; lumi=30.54; nB="2pB"
     #Tag = "SplitRunsZ_vtx"; lumi=30.54; nB="1pB"
     #Tag = "SplitRunsZ_vtx"; lumi=30.54; nB="0pB"
+    Tag = "SplitProcessTest"; lumi=41.53; nB = "2pB"
     folder = "/eos/user/n/nmangane/analysis/{tag}/Histograms/All".format(tag=Tag, chan=channel)
     replacementLegend={}
     with open("{}/{}Legend.json".format(folder, channel), "r") as jlegend:
@@ -2405,7 +2434,7 @@ for channel in ["MuMu_ElMu", "ElEl", "MuMu", "ElMu", "All", "ChannelComparison"]
     with open("{}/Mu_All_{}.json".format(folder, nB), "r") as j1:
         loadedJSON1 = json_load_byteified(j1)
         loadedJSON1.update(replacementLegend)
-        resultsMU = loopPlottingJSON(loadedJSON1, Cache=None, directory=folder, batchOutput=True, pdfOutput="{}/{}.pdf".format(folder.replace("/Histograms/All", ""), Tag + "_Muons_" + channel + "_" + nB), lumi=lumi)
+        # resultsMU = loopPlottingJSON(loadedJSON1, Cache=None, directory=folder, batchOutput=True, pdfOutput="{}/{}.pdf".format(folder.replace("/Histograms/All", ""), Tag + "_Muons_" + channel + "_" + nB), lumi=lumi)
     time.sleep(5)
     with open("{}/El_All_{}.json".format(folder, nB), "r") as j2:
         loadedJSON2 = json_load_byteified(j2)
@@ -2415,12 +2444,12 @@ for channel in ["MuMu_ElMu", "ElEl", "MuMu", "ElMu", "All", "ChannelComparison"]
     with open("{}/MET_All_{}.json".format(folder, nB), "r") as j3:
         loadedJSON3 = json_load_byteified(j3)
         loadedJSON3.update(replacementLegend)
-        resultsMET = loopPlottingJSON(loadedJSON3, Cache=None, directory=folder, batchOutput=True, pdfOutput="{}/{}.pdf".format(folder.replace("/Histograms/All".format(channel), ""), Tag + "_MET_" + channel + "_" + nB), lumi=lumi)
+        # resultsMET = loopPlottingJSON(loadedJSON3, Cache=None, directory=folder, batchOutput=True, pdfOutput="{}/{}.pdf".format(folder.replace("/Histograms/All".format(channel), ""), Tag + "_MET_" + channel + "_" + nB), lumi=lumi)
     time.sleep(5)
     with open("{}/Jet_All_{}.json".format(folder, nB), "r") as j4:
         loadedJSON4 = json_load_byteified(j4)
         loadedJSON4.update(replacementLegend)
-        resultsJET = loopPlottingJSON(loadedJSON4, Cache=None, directory=folder, batchOutput=True, pdfOutput="{}/{}.pdf".format(folder.replace("/Histograms/All".format(channel), ""), Tag + "_Jets_" + channel + "_" + nB), lumi=lumi)
+        # resultsJET = loopPlottingJSON(loadedJSON4, Cache=None, directory=folder, batchOutput=True, pdfOutput="{}/{}.pdf".format(folder.replace("/Histograms/All".format(channel), ""), Tag + "_Jets_" + channel + "_" + nB), lumi=lumi)
     time.sleep(5)
    
 
