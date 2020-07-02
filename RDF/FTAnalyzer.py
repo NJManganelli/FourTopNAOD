@@ -2038,7 +2038,7 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
 # In[ ]:
 
 
-def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useBackupChannel=False, verbose=False,
+def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfLeptonSelection=False, useBackupChannel=False, verbose=False,
                   triggers=[],
                  sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
                                              "lep_postfix": "",
@@ -2108,8 +2108,11 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
             if trgTup.era != era: continue
             trg = trgTup.trigger
             rdf = rdf.Define("typecast___{}".format(trg), "return (int){} == true;".format(trg))
-        rdf = rdf.Define("mu_mask", "(Muon_OSV_{0} & {1}) > 0".format(lvl_type, Chan[input_lvl_filter]))
-        rdf = rdf.Define("e_mask", "(Electron_OSV_{0} & {1}) > 0".format(lvl_type, Chan[input_lvl_filter]))
+        if not rdfLeptonSelection:
+            rdf = rdf.Define("mu_mask", "(Muon_OSV_{0} & {1}) > 0 && Muon_pt > 15 && abs(Muon_eta) < 2.4 && Muon_looseId == true && Muon_pfIsoId >= 4 && abs(Muon_ip3d) < 0.10 && abs(Muon_dz) < 0.02".format(lvl_type, Chan[input_lvl_filter]))
+            rdf = rdf.Define("e_mask", "(Electron_OSV_{0} & {1}) > 0 && Electron_pt > 15 && Electron_cutBased >= 2 && ((abs(Electron_eta) < 1.4442 && abs(Electron_ip3d) < 0.05 && abs(Electron_dz) < 0.1) || (abs(Electron_eta) > 1.5660 && abs(Electron_eta) < 2.5 && abs(Electron_ip3d) < 0.10 && abs(Electron_dz) < 0.2))".format(lvl_type, Chan[input_lvl_filter]))
+        else:
+            pass
     transverseMassCode = '''auto MT2 = {m1}*{m1} + {m2}*{m2} + 2*(sqrt({m1}*{m1} + {pt1}*{pt1})*sqrt({m2}*{m2} + {pt2}*{pt2}) - {pt1}*{pt2}*cos(ROOT::VecOps::DeltaPhi({phi1}, {phi2})));
                          return sqrt(MT2);'''
     transverseMassCodeChannelSafe = '''
@@ -2147,10 +2150,10 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
     z.append(("FTAMuon{lpf}_pfRelIso04_all".format(lpf=leppostfix), "Muon_pfRelIso04_all[mu_mask]"))
     z.append(("FTAMuon{lpf}_jetIdx".format(lpf=leppostfix), "Muon_jetIdx[mu_mask]"))
     #z.append(("METofMETandMu2", ) #FIXME: switch to MET_xycorr_pt{}
-    z.append(("nFTAMuon{lpf}".format(lpf=leppostfix), "Muon{pf}_pt.size()"))
-    z.append(("nLooseFTAMuon{lpf}".format(lpf=leppostfix), "Muon_looseId[mu_mask && Muon_looseId == true].size()"))
-    z.append(("nMediumFTAMuon{lpf}".format(lpf=leppostfix), "Muon_mediumId[mu_mask && Muon_mediumId == true].size()"))
-    z.append(("nTightFTAMuon{lpf}".format(lpf=leppostfix), "Muon_tightId[mu_mask && Muon_tightId == true].size()"))
+    z.append(("nFTAMuon{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Muon{pf}_pt.size())"))
+    z.append(("nLooseFTAMuon{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Muon_looseId[mu_mask && Muon_looseId == true].size())"))
+    z.append(("nMediumFTAMuon{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Muon_mediumId[mu_mask && Muon_mediumId == true].size())"))
+    z.append(("nTightFTAMuon{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Muon_tightId[mu_mask && Muon_tightId == true].size())"))
     z.append(("FTAMuon{lpf}_InvariantMass".format(lpf=leppostfix), "nFTAMuon{lpf} == 2 ? InvariantMass(FTAMuon{lpf}_pt, FTAMuon{lpf}_eta, FTAMuon{lpf}_phi, FTAMuon{lpf}_mass) : -0.1".format(lpf=leppostfix)))    
     if isData == False:
         z.append(("FTAMuon{lpf}_SF_ID_nom".format(lpf=leppostfix), "Muon_SF_ID_nom[mu_mask]"))
@@ -2161,7 +2164,7 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
         z.append(("FTAMuon{lpf}_SF_ISO_syst".format(lpf=leppostfix), "Muon_SF_ISO_syst[mu_mask]"))
     #ELECTRONS
     z.append(("Electron_idx", "FTA::generateIndices(Electron_pt);"))
-    z.append(("nFTAElectron{lpf}".format(lpf=leppostfix), "Electron_pt[e_mask].size()"))
+    z.append(("nFTAElectron{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Electron_pt[e_mask].size())"))
     z.append(("FTAElectron{lpf}_idx".format(lpf=leppostfix), "Electron_idx[e_mask]"))
     z.append(("FTAElectron{lpf}_cutBased".format(lpf=leppostfix), "Electron_cutBased[e_mask]"))
     z.append(("FTAElectron{lpf}_pt".format(lpf=leppostfix), "Electron_pt[e_mask]"))
@@ -2177,9 +2180,9 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
     z.append(("FTAElectron{lpf}_pfRelIso03_chg".format(lpf=leppostfix), "Electron_pfRelIso03_chg[e_mask]"))
     z.append(("FTAElectron{lpf}_jetIdx".format(lpf=leppostfix), "Electron_jetIdx[e_mask]"))
     ##FIXME: This code above is broken for some reason, doesn't like it... why?
-    z.append(("nLooseFTAElectron{lpf}".format(lpf=leppostfix), "Sum(FTAElectron{lpf}_cutBased >= 2)".format(lpf=leppostfix)))
-    z.append(("nMediumFTAElectron{lpf}".format(lpf=leppostfix), "Sum(FTAElectron{lpf}_cutBased >= 3)".format(lpf=leppostfix)))
-    z.append(("nTightFTAElectron{lpf}".format(lpf=leppostfix), "Sum(FTAElectron{lpf}_cutBased >= 4)".format(lpf=leppostfix)))
+    z.append(("nLooseFTAElectron{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Sum(FTAElectron{lpf}_cutBased >= 2))".format(lpf=leppostfix)))
+    z.append(("nMediumFTAElectron{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Sum(FTAElectron{lpf}_cutBased >= 3))".format(lpf=leppostfix)))
+    z.append(("nTightFTAElectron{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Sum(FTAElectron{lpf}_cutBased >= 4))".format(lpf=leppostfix)))
     z.append(("FTAElectron{lpf}_InvariantMass".format(lpf=leppostfix), "nFTAElectron{lpf} == 2 ? InvariantMass(FTAElectron{lpf}_pt, FTAElectron{lpf}_eta, FTAElectron{lpf}_phi, FTAElectron{lpf}_mass) : -0.1".format(lpf=leppostfix)))
     if isData == False:
         z.append(("FTAElectron{lpf}_SF_EFF_nom".format(lpf=leppostfix), "Electron_SF_EFF_nom[e_mask]"))
@@ -2187,10 +2190,10 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
         z.append(("FTAElectron{lpf}_SF_ID_nom".format(lpf=leppostfix), "Electron_SF_ID_nom[e_mask]"))
         z.append(("FTAElectron{lpf}_SF_ID_unc".format(lpf=leppostfix), "Electron_SF_ID_unc[e_mask]"))
     #LEPTONS
-    z.append(("nLooseFTALepton{lpf}".format(lpf=leppostfix), "nLooseFTAMuon{lpf} + nLooseFTAElectron{lpf}".format(lpf=leppostfix)))
-    z.append(("nMediumFTALepton{lpf}".format(lpf=leppostfix), "nMediumFTAMuon{lpf} + nMediumFTAElectron{lpf}".format(lpf=leppostfix)))
-    z.append(("nTightFTALepton{lpf}".format(lpf=leppostfix), "nTightFTAMuon{lpf} + nTightFTAElectron{lpf}".format(lpf=leppostfix)))
-    z.append(("nFTALepton{lpf}".format(lpf=leppostfix), "nFTAMuon{lpf} + nFTAElectron{lpf}".format(lpf=leppostfix)))
+    z.append(("nLooseFTALepton{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(nLooseFTAMuon{lpf} + nLooseFTAElectron{lpf})".format(lpf=leppostfix)))
+    z.append(("nMediumFTALepton{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(nMediumFTAMuon{lpf} + nMediumFTAElectron{lpf})".format(lpf=leppostfix)))
+    z.append(("nTightFTALepton{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(nTightFTAMuon{lpf} + nTightFTAElectron{lpf})".format(lpf=leppostfix)))
+    z.append(("nFTALepton{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(nFTAMuon{lpf} + nFTAElectron{lpf})".format(lpf=leppostfix)))
     z.append(("FTALepton{lpf}_argsort".format(lpf=leppostfix), "Reverse(Argsort(Concatenate(Muon_pt[mu_mask], Electron_pt[e_mask])))"))
     z.append(("FTALepton{lpf}_pt".format(lpf=leppostfix), "Take(Concatenate(Muon_pt[mu_mask], Electron_pt[e_mask]), FTALepton{lpf}_argsort)".format(lpf=leppostfix)))
     z.append(("FTALepton{lpf}_eta".format(lpf=leppostfix), "Take(Concatenate(Muon_eta[mu_mask], Electron_eta[e_mask]), FTALepton{lpf}_argsort)".format(lpf=leppostfix)))
@@ -2200,7 +2203,7 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", useB
     z.append(("FTALepton{lpf}_dRll".format(lpf=leppostfix), "FTALepton{lpf}_pt.size() > 1 ? ROOT::VecOps::DeltaR(FTALepton{lpf}_eta.at(0), FTALepton{lpf}_eta.at(1), FTALepton{lpf}_phi.at(0), FTALepton{lpf}_phi.at(1)) : -0.1".format(lpf=leppostfix)))
     z.append(("FTALepton{lpf}_dPhill".format(lpf=leppostfix), "FTALepton{lpf}_pt.size() > 1 ? ROOT::VecOps::DeltaPhi(FTALepton{lpf}_phi.at(0), FTALepton{lpf}_phi.at(1)) : -999".format(lpf=leppostfix)))
     z.append(("FTALepton{lpf}_dEtall".format(lpf=leppostfix), "FTALepton{lpf}_pt.size() > 1 ? abs(FTALepton{lpf}_eta.at(0) - FTALepton{lpf}_eta.at(1)) : -999".format(lpf=leppostfix)))
-    z.append(("nFTALepton{lpf}".format(lpf=leppostfix), "FTALepton{lpf}_pt.size()".format(lpf=leppostfix)))
+    z.append(("nFTALepton{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(FTALepton{lpf}_pt.size())".format(lpf=leppostfix)))
     z.append(("FTALepton{lpf}_pt_LeadLep".format(lpf=leppostfix), "FTALepton{lpf}_pt.size() > 0 ? FTALepton{lpf}_pt.at(0) : -0.000000000001".format(lpf=leppostfix)))
     z.append(("FTALepton{lpf}_pt_SubleadLep".format(lpf=leppostfix), "FTALepton{lpf}_pt.size() > 1 ? FTALepton{lpf}_pt.at(1) : -0.000000000001".format(lpf=leppostfix)))
     z.append(("FTALepton{lpf}_eta_LeadLep".format(lpf=leppostfix), "FTALepton{lpf}_eta.size() > 0 ? FTALepton{lpf}_eta.at(0) : -9999".format(lpf=leppostfix)))
@@ -2389,8 +2392,11 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
         
         #Fill lists
         z.append(("Jet_idx", "FTA::generateIndices(Jet_pt)"))
-        z.append(("{jm}".format(jm=jetMask), "({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2 && Jet_idx != FTALepton{lpf}_jetIdx_0 && Jet_idx != FTALepton{lpf}_jetIdx_1)".format(lpf=leppostfix, jpt=jetPt)))
-        z.append(("nFTAJet{pf}".format(pf=postfix), "{jm}[{jm}].size()".format(jm=jetMask)))
+        # z.append(("{jm}".format(jm=jetMask), "({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2 && Jet_idx != FTALepton{lpf}_jetIdx_0 && Jet_idx != FTALepton{lpf}_jetIdx_1)".format(lpf=leppostfix, jpt=jetPt)))
+        z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2); "\
+                                              "for(int i=1; i < FTALepton{lpf}_jetIdx.size(); ++i){{jmask = jmask && Jet_idx != FTALepton{lpf}_jetIdx.at(i);}}"\
+                                              "return jmask;".format(lpf=leppostfix, jpt=jetPt)))
+        z.append(("nFTAJet{pf}".format(pf=postfix), "static_cast<Int_t>({jm}[{jm}].size())".format(jm=jetMask)))
         z.append(("FTAJet{pf}_ptsort".format(pf=postfix), "Reverse(Argsort({jpt}[{jm}]))".format(jpt=jetPt, jm=jetMask)))
         z.append(("FTAJet{pf}_deepcsvsort".format(pf=postfix), "Reverse(Argsort(Jet_{btv}[{jm}]))".format(btv=bTagWorkingPointDict[era]["DeepCSV"]["Var"], jm=jetMask)))
         z.append(("FTAJet{pf}_deepjetsort".format(pf=postfix), "Reverse(Argsort(Jet_{btv}[{jm}]))".format(btv=bTagWorkingPointDict[era]["DeepJet"]["Var"], jm=jetMask)))
@@ -2403,9 +2409,9 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
         z.append(("FTAJet{pf}_puId".format(pf=postfix), "Jet_puId[{jm}]".format(jm=jetMask)))
         if isData == False:
             z.append(("FTAJet{pf}_genJetIdx".format(pf=postfix), "Jet_genJetIdx[{jm}]".format(jm=jetMask)))
-            z.append(("nFTAJet{pf}_genMatched".format(pf=postfix), "FTAJet{pf}_genJetIdx[FTAJet{pf}_genJetIdx >= 0].size()".format(pf=postfix)))
-            z.append(("nFTAJet{pf}_puIdLoose".format(pf=postfix), "FTAJet{pf}_genJetIdx[(FTAJet{pf}_puId >= 4 || FTAJet{pf}_pt >= 50)].size()".format(pf=postfix)))
-            z.append(("nFTAJet{pf}_genMatched_puIdLoose".format(pf=postfix), "FTAJet{pf}_genJetIdx[FTAJet{pf}_genJetIdx >= 0 && (FTAJet{pf}_puId >= 4 || FTAJet{pf}_pt >= 50)].size()".format(pf=postfix)))
+            z.append(("nFTAJet{pf}_genMatched".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_genJetIdx[FTAJet{pf}_genJetIdx >= 0].size())".format(pf=postfix)))
+            z.append(("nFTAJet{pf}_puIdLoose".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_genJetIdx[(FTAJet{pf}_puId >= 4 || FTAJet{pf}_pt >= 50)].size())".format(pf=postfix)))
+            z.append(("nFTAJet{pf}_genMatched_puIdLoose".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_genJetIdx[FTAJet{pf}_genJetIdx >= 0 && (FTAJet{pf}_puId >= 4 || FTAJet{pf}_pt >= 50)].size())".format(pf=postfix)))
         z.append(("FTAJet{pf}_DeepCSVB".format(pf=postfix), "Jet_btagDeepB[{jm}]".format(jm=jetMask)))
         z.append(("FTAJet{pf}_DeepCSVB_sorted".format(pf=postfix), "Take(FTAJet{pf}_DeepCSVB, FTAJet{pf}_deepcsvsort)".format(pf=postfix)))
         z.append(("FTAJet{pf}_DeepCSVB_sorted_LeadtagJet".format(pf=postfix), "FTAJet{pf}_DeepCSVB_sorted.size() > 0 ? FTAJet{pf}_DeepCSVB_sorted.at(0) : -9999".format(pf=postfix)))
@@ -2425,9 +2431,9 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
         z.append(("FTAJet{pf}_LooseDeepCSVB".format(pf=postfix), "FTAJet{pf}_DeepCSVB[FTAJet{pf}_DeepCSVB > {wpv}]".format(pf=postfix, wpv=bTagWorkingPointDict[era]["DeepCSV"]["L"])))
         z.append(("FTAJet{pf}_MediumDeepCSVB".format(pf=postfix), "FTAJet{pf}_DeepCSVB[FTAJet{pf}_DeepCSVB > {wpv}]".format(pf=postfix, wpv=bTagWorkingPointDict[era]["DeepCSV"]["M"])))
         z.append(("FTAJet{pf}_TightDeepCSVB".format(pf=postfix), "FTAJet{pf}_DeepCSVB[FTAJet{pf}_DeepCSVB > {wpv}]".format(pf=postfix, wpv=bTagWorkingPointDict[era]["DeepCSV"]["T"])))
-        z.append(("nLooseDeepCSVB{pf}".format(pf=postfix), "FTAJet{pf}_LooseDeepCSVB.size()".format(pf=postfix)))
-        z.append(("nMediumDeepCSVB{pf}".format(pf=postfix), "FTAJet{pf}_MediumDeepCSVB.size()".format(pf=postfix)))
-        z.append(("nTightDeepCSVB{pf}".format(pf=postfix), "FTAJet{pf}_TightDeepCSVB.size()".format(pf=postfix)))
+        z.append(("nLooseDeepCSVB{pf}".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_LooseDeepCSVB.size())".format(pf=postfix)))
+        z.append(("nMediumDeepCSVB{pf}".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_MediumDeepCSVB.size())".format(pf=postfix)))
+        z.append(("nTightDeepCSVB{pf}".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_TightDeepCSVB.size())".format(pf=postfix)))
         z.append(("FTAJet{pf}_LooseDeepJetB".format(pf=postfix), "FTAJet{pf}_DeepJetB[FTAJet{pf}_DeepJetB > {wpv}]".format(pf=postfix, wpv=bTagWorkingPointDict[era]["DeepJet"]["L"])))
         z.append(("FTAJet{pf}_MediumDeepJetB".format(pf=postfix), "FTAJet{pf}_DeepJetB[FTAJet{pf}_DeepJetB > {wpv}]".format(pf=postfix, wpv=bTagWorkingPointDict[era]["DeepJet"]["M"])))
         z.append(("FTAJet{pf}_TightDeepJetB".format(pf=postfix), "FTAJet{pf}_DeepJetB[FTAJet{pf}_DeepJetB > {wpv}]".format(pf=postfix, wpv=bTagWorkingPointDict[era]["DeepJet"]["T"])))
@@ -3474,10 +3480,10 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     # HT calculated from jets with pT>30 and |eta|<2.4 > 500 GeV
                     # Jet multiplicity (jet pT>30) >= 9
                     if "nFTAGenLep" not in listOfColumns:
-                        df_with_IDs = df_with_IDs.Define("nFTAGenLep", "LHEPart_pdgId[abs(LHEPart_pdgId)==11 || abs(LHEPart_pdgId)==13 || abs(LHEPart_pdgId)==15].size()")
+                        df_with_IDs = df_with_IDs.Define("nFTAGenLep", "static_cast<Int_t>(LHEPart_pdgId[abs(LHEPart_pdgId)==11 || abs(LHEPart_pdgId)==13 || abs(LHEPart_pdgId)==15].size())")
                         listOfColumns.push_back("nFTAGenLep")
                     if "nFTAGenJet" not in listOfColumns:
-                        df_with_IDs = df_with_IDs.Define("nFTAGenJet", "GenJet_pt[GenJet_pt > 30].size()")
+                        df_with_IDs = df_with_IDs.Define("nFTAGenJet", "static_cast<Int_t>(GenJet_pt[GenJet_pt > 30].size())")
                         listOfColumns.push_back("nFTAGenJet")
                     if "FTAGenHT" not in listOfColumns:
                         df_with_IDs = df_with_IDs.Define("FTAGenHT", "Sum(GenJet_pt[GenJet_pt > 30 && abs(GenJet_eta) < 2.4])")
@@ -5922,7 +5928,7 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         line = path + "," + ",".join(path_values.values()) + "\n"
                         f.write(line)
             
-def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
+def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=False, doLeptonSelection=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
          BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, printBookkeeping=False, triggers=[], includeSampleNames=None, 
          excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True):
 
@@ -5958,10 +5964,10 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
 
     #Decide on things to do: either calculate yields for ratios or fill histograms
     #Did we not chooose to do incompatible actions at the same time?
-    if doBTaggingYields and (doHistos or doDiagnostics or printBookkeeping):
+    if doBTaggingYields and (doHistos or doDiagnostics or printBookkeeping or doLeptonSelection):
         raise RuntimeError("Cannot calculate BTaggingYields and Fill Histograms simultaneously, choose only one mode")
-    elif not doHistos and not doBTaggingYields and not doDiagnostics and not printBookkeeping:
-        raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics and not printing Bookkeeping, there is no work to be done.")
+    elif not doHistos and not doBTaggingYields and not doDiagnostics and not printBookkeeping and not doLeptonSelection:
+        raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics and not printing Bookkeeping and not checking lepton selection, there is no work to be done.")
 
     #These are deprecated for now!
     doJetEfficiency = False
@@ -6294,7 +6300,8 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                               era=vals["era"],
                                               useBackupChannel=False,
                                               triggers=triggers,
-                                              sysVariations=systematics_2017, 
+                                              sysVariations=systematics_2017,
+                                              rdfLeptonSelection=doLeptonSelection,
                                               verbose=verbose,
                                              )
             #Use the cutPV and METFilters function to do cutflow on these requirements... this should be updated, still uses JetMETLogic bits... FIXME
@@ -6605,7 +6612,7 @@ def otherFuncs():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
-    parser.add_argument('stage', action='store', type=str, choices=['bookkeeping', 'fill-yields', 'combine-yields', 'fill-diagnostics', 
+    parser.add_argument('stage', action='store', type=str, choices=['bookkeeping', 'fill-yields', 'combine-yields', 'lepton-selection', 'fill-diagnostics', 
                                                                     'fill-histograms', 'prepare-for-combine'],
                         help='analysis stage to be produced')
     parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic__{chan}_selection',
@@ -6739,6 +6746,10 @@ if __name__ == '__main__':
                                #            "Yaxis": "nJet",
                                #        },
                            )
+    elif stage == 'lepton-selection':
+        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
+                      BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
+                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
