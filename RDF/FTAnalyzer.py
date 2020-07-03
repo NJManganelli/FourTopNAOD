@@ -4312,15 +4312,21 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     #IMPORTANT: Skip nodes that belong to other systematic variations, since it's a dictionary!
                     if category.split("___")[-1] != branchpostfix.replace("__", ""): continue 
                     isBlinded = False
+                    #need to check that a category is blinded by making sure all orthogonal categories are blinded, i.e.,
+                    #The category of nMediumDeepJetB2 + nJet7 is blinded, but not the same btag category with nJet4
                     for blindList in blindings:
+                        #Check how many of the othrogonal categories in the blindList are contained in this category name
                         matchedElements = [blindElem for blindElem in blindList if blindElem in category]
+                        #If all elements are contained, this is definitely a blinded category
                         if len(matchedElements) == len(blindList): 
                             isBlinded = True
                             continue
                     crossSeparated = "___".join(category.split("___")[:-1]).split("_CROSS_")#Strip the systematic name from the branch by taking all but the last element
                     categoryName = "_".join(crossSeparated) #No extra references to (lep/branch/sys)postfixes...
-                    if isBlinded:
-                        categoryName = "blind_" + categoryName
+                    #This will be easier to deal with in plotting than prepending "blind_"
+                    if isBlinded and isData:
+                        # categoryName = "blind_" + categoryName
+                        categoryName = categoryName + "BLIND"
                     if verbose:
                         print("blind={}\n{}\n{}\n\n".format(isBlinded, crossSeparated, categoryName))
 

@@ -12,7 +12,7 @@ import json
 import copy
 import argparse
 import uuid
-# import pdb
+import pdb
 # from ruamel.yaml import YAML
 from IPython.display import Image, display, SVG
 #import graphviz
@@ -1681,7 +1681,7 @@ def addHists(inputHists, name, scaleArray = None):
     return retHist
 
 def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, rebin=None, projection=None, 
-                      separator="___", nominalPostfix="nom", verbose=False, debug=False):
+                      separator="___", nominalPostfix="nom", verbose=False, debug=False, pn=None):
     """Function tailored to using a legendConfig to create histograms.
     
     The legendConfig contains the sampleNames to prefix for the rest of the histogram name.
@@ -1695,6 +1695,7 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
     if type(legendConfig) != dict or "Categories" not in legendConfig.keys():
         raise ValueError("legendConfig passed to makeCategoryHists contains no 'Categories' key")
     histKeys = set([hist.GetName() for hist in histFile.GetListOfKeys()])
+    unblindedKeys = dict([(histKey.replace("blind_", "").replace("BLIND", ""), histKey) for histKey in histKeys])
     #try:
     #    #histFile = ROOT.TFile.Open(histFileName)
     #    histKeys = set([hist.GetName() for hist in histFile.GetListOfKeys()])
@@ -1726,14 +1727,16 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
             fallbackName = subCatName + separator + fallbackBaseName
             if debug: print("Creating addHistoName {}".format(addHistoName))
             #Skip plots that contain neither the systematic requested nor the nominal histogram
-            if expectedName in histKeys:
+            # if expectedName in histKeys:
+            if expectedName in unblindedKeys:
                 #Append the histo to a list which will be added using a dedicated function
-                histoList.append(histFile.Get(expectedName))
+                histoList.append(histFile.Get(unblindedKeys[expectedName]))
                 if scaleList != None:
                     scaleList.append(scaleArray[nn])
-            elif fallbackName in histKeys:
+            # elif fallbackName in histKeys:
+            elif fallbackName in unblindedKeys:
                 #Append the histo to a list which will be added using a dedicated function
-                histoList.append(histFile.Get(fallbackName))
+                histoList.append(histFile.Get(unblindedKeys[fallbackName]))
                 if scaleList != None:
                     scaleList.append(scaleArray[nn])
             else:
@@ -1838,7 +1841,7 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
 
 def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None, nominalPostfix="nom", 
                         separator="___", orderByIntegral=True, rebin=None, projection=None, 
-                        verbose=False, debug=False):
+                        verbose=False, debug=False, pn=None):
     """histFile is an open ROOT file containing histograms without subdirectories, legendConfig contains 'Categories'
     with key: value pairs of sample categories (like ttbar or Drell-Yan) and corresponding list of histogram sample names
     (like tt_SL, tt_SL-GF, tt_DL, etc.) that are subcomponents of the sample)
@@ -1867,7 +1870,7 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
     retDict["Categories/hists"] = makeCategoryHists(histFile, legendConfig, histNameCommon,
                                                     systematic=systematic, rebin=rebin, projection=projection,
                                                     nominalPostfix=nominalPostfix, separator=separator,
-                                                    verbose=verbose, debug=debug)
+                                                    verbose=verbose, debug=debug, pn=pn)
     #If empty because of a failure in opening some file, early return the dictionary
     #if len(retDict["Categories/hists"]) == 0:
     #    return retDict
@@ -2087,7 +2090,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         
         for pn, subplot_name in enumerate(CanCache["subplots"]):
             subplot_dict = plots["{}".format(subplot_name)]
-            nice_name = subplot_name.replace("Plot_", "").replace("Plot", "")
+            nice_name = subplot_name.replace("Plot_", "").replace("Plot", "").replace("blind_", "").replace("BLIND", "")
             #Append the filename to the list
             plotFileName = "{}/{}".format(histogramDirectory, subplot_dict["Files"])
             if plotFileName in fileDict:
@@ -2100,12 +2103,12 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             CanCache["subplots/supercategories"].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, nice_name, 
                                 systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
                                 projection=CanCache["subplots/projections"][pn], 
-                                nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False))
+                                nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn))
             for sys in systematics:
                 CanCache["subplots/supercategories/systematics"][sys].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, nice_name, 
                                 systematic=sys, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
                                 projection=CanCache["subplots/projections"][pn], 
-                                nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False))
+                                nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn))
             #access the list of upperPads created by createCanvasPads(...)
             #if len(CanCache["subplots/supercategories"][-1]["Categories/hists"]) == 0:
             #    continue
@@ -2119,7 +2122,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             for super_cat_name, drawable in sorted(CanCache["subplots/supercategories"][pn]["Supercategories"].items(), 
                                                    key=lambda x: legendConfig["Supercategories"][x[0]]["Stack"], reverse=True):
                 if "data" in super_cat_name.lower() and "blind" in subplot_name.lower() and subplot_dict.get("Unblind", False) == False:
-                    continue
+                    pass
                 else:
                     thisMax = max(thisMax, drawable.GetMaximum())
                     thisMin = min(thisMin, drawable.GetMinimum())
@@ -2164,7 +2167,10 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
 
                 drawable.Draw(draw_command)
                 #increment our counter
-                dn += 1
+                if "data" in super_cat_name.lower() and "blind" in subplot_name.lower() and subplot_dict.get("Unblind", False) == False:
+                    pass
+                else:
+                    dn += 1
             if pn == 0:
                 #Draw the legend in the first category for now...
                 CanCache["subplots/supercategories"][pn]["Legend"].Draw()
