@@ -2318,7 +2318,7 @@ def defineInitWeights(input_df, crossSection=0, era="2017", sumWeights=-1, lumiO
             rdf = rdf.Define(k, v)
     return rdf
 
-def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
+def defineJets(input_df, era="2017", doAK8Jets=False, useDeltaR=True, isData=True,
                nJetsToHisto=10, bTagger="DeepCSV", verbose=False,
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "lep_postfix": "", 
@@ -2392,18 +2392,20 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
         
         #Fill lists
         z.append(("Jet_idx", "FTA::generateIndices(Jet_pt)"))
-        # z.append(("{jm}".format(jm=jetMask), "({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2 && Jet_idx != FTALepton{lpf}_jetIdx_0 && Jet_idx != FTALepton{lpf}_jetIdx_1)".format(lpf=leppostfix, jpt=jetPt)))
-        # z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2); "\
-        #                                       "for(int i=0; i < FTALepton{lpf}_jetIdx.size(); ++i){{jmask = jmask && Jet_idx != FTALepton{lpf}_jetIdx.at(i);}}"\
-        #                                       "return jmask;".format(lpf=leppostfix, jpt=jetPt)))
-        z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2); "\
-                  "for(int i=0; i < FTALepton{lpf}_jetIdx.size(); ++i){{"\
-                  "ROOT::VecOps::RVec<Float_t> dr;"\
-                  "for(int j=0; j < jmask.size(); ++j){{"\
-                  "dr.push_back(ROOT::VecOps::DeltaR(Jet_eta.at(j), FTALepton{lpf}_eta.at(i), Jet_phi.at(j), FTALepton{lpf}_phi.at(i)));}}"\
-                  "jmask = jmask && dr >= 0.4;"\
-                  "dr.clear();}}"\
-                  "return jmask;".format(lpf=leppostfix, jpt=jetPt)))
+        z.append(("{jm}".format(jm=jetMask), "({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2 && Jet_idx != FTALepton{lpf}_jetIdx_0 && Jet_idx != FTALepton{lpf}_jetIdx_1)".format(lpf=leppostfix, jpt=jetPt)))
+        if useDeltaR is False: #Use PFMatching
+            z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2); "\
+                      "for(int i=0; i < FTALepton{lpf}_jetIdx.size(); ++i){{jmask = jmask && (Jet_idx != FTALepton{lpf}_jetIdx.at(i));}}"\
+                      "return jmask;".format(lpf=leppostfix, jpt=jetPt)))
+        else: #DeltaR matching
+            z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2); "\
+                      "for(int i=0; i < FTALepton{lpf}_jetIdx.size(); ++i){{"\
+                      "ROOT::VecOps::RVec<Float_t> dr;"\
+                      "for(int j=0; j < jmask.size(); ++j){{"\
+                      "dr.push_back(ROOT::VecOps::DeltaR(Jet_eta.at(j), FTALepton{lpf}_eta.at(i), Jet_phi.at(j), FTALepton{lpf}_phi.at(i)));}}"\
+                      "jmask = jmask && dr >= {drt};"\
+                      "dr.clear();}}"\
+                      "return jmask;".format(lpf=leppostfix, jpt=jetPt, drt=useDeltaR)))
         z.append(("nFTAJet{pf}".format(pf=postfix), "static_cast<Int_t>({jm}[{jm}].size())".format(jm=jetMask)))
         z.append(("FTAJet{pf}_ptsort".format(pf=postfix), "Reverse(Argsort({jpt}[{jm}]))".format(jpt=jetPt, jm=jetMask)))
         z.append(("FTAJet{pf}_deepcsvsort".format(pf=postfix), "Reverse(Argsort(Jet_{btv}[{jm}]))".format(btv=bTagWorkingPointDict[era]["DeepCSV"]["Var"], jm=jetMask)))
@@ -5945,7 +5947,7 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
             
 def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=False, doLeptonSelection=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
          BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, printBookkeeping=False, triggers=[], includeSampleNames=None, 
-         excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True):
+         useDeltaR=False, excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True):
 
     ##################################################
     ##################################################
@@ -6343,6 +6345,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                            bTagger=bTagger,
                                            isData=vals["isData"],
                                            sysVariations=systematics_2017, 
+                                           useDeltaR=useDeltaR,
                                            verbose=verbose,
                                           )
             if quiet:
@@ -6639,6 +6642,8 @@ if __name__ == '__main__':
                         help='output directory path defaulting to "."')
     parser.add_argument('--quiet', dest='quiet', action='store_true',
                         help='Disable progress bars')
+    parser.add_argument('--useDeltaR', dest='useDeltaR', action='store', default=False, type=float, nargs='?', const=0.4,
+                        help='Disable usage of PFMatching for Lepton-Jet cross-cleaning, falling back to DeltaR < 0.4')
     parser.add_argument('--bTagger', dest='bTagger', action='store', default='DeepCSV', type=str, choices=['DeepCSV', 'DeepJet'],
                         help='bTagger algorithm to be used')
     parser.add_argument('--noAggregate', dest='noAggregate', action='store_true',
@@ -6677,6 +6682,7 @@ if __name__ == '__main__':
     stage = args.stage
     channel = args.channel
     source = args.source.format(chan=channel)
+    useDeltaR = args.useDeltaR
     bTagger = args.bTagger
     includeSampleNames = args.include
     excludeSampleNames = args.exclude
@@ -6701,6 +6707,7 @@ if __name__ == '__main__':
     print("Analysis stage: {stg}".format(stg=stage))
     print("Analysis directory: {adir}".format(adir=analysisDir))
     print("Channel to be analyzed: {chan}".format(chan=channel))
+    print("Algorithm for Lepton-Jet crosscleaning: {}".format("PFMatching" if not useDeltaR else "DeltaR < {}".format(useDeltaR)))
     print("BTagger algorithm to be used: {tag}".format(tag=bTagger))
     print("BTagging aggregate Yields/Efficiencies will be used ({uAgg}) and depend on HT only ({uHT}) or nJet only ({uNJ})"\
           .format(uAgg=useAggregate, uHT=useHTOnly, uNJ=useNJetOnly))
@@ -6719,9 +6726,9 @@ if __name__ == '__main__':
     if stage == 'fill-yields':
         print("This function needs reworking... work on it")
         print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
-        print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
+        # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
+                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
                       triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
         #      verbose=False)
@@ -6763,20 +6770,20 @@ if __name__ == '__main__':
                            )
     elif stage == 'lepton-selection':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
-                      BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
-                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
+                      BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
+                      printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
+                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
                       triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, source, "BOOKKEEPING", bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = True, 
+                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = True, 
                       triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'fill-histograms':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
+                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
                       triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'prepare-for-combine':
         print("This analysis stage is not yet finished. It will call the method histoCombine() which needs to be updated for the new internal key structure from fillHistos")
