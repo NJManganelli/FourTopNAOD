@@ -2412,7 +2412,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Script for plotting FourTop analysis histograms in mountain-ranges, using configuration (json) cards')
     parser.add_argument('stage', action='store', type=str, choices=['generate-plotCard', 'generate-legendCard', 'plot-histograms', 'plot-diagnostics'],
                         help='plotting stage to be produced')
-    parser.add_argument('-c', '--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 'ElEl_HighMET'],
+    parser.add_argument('-c', '--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 
+                                                                                                              'ElEl_HighMET', 'MuMu_ElMu', 'All'],
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('-d', '--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
                         help='analysis directory where btagging yields, histograms, etc. are stored')

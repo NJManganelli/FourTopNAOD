@@ -2393,9 +2393,17 @@ def defineJets(input_df, era="2017", doAK8Jets=False, isData=True,
         #Fill lists
         z.append(("Jet_idx", "FTA::generateIndices(Jet_pt)"))
         # z.append(("{jm}".format(jm=jetMask), "({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2 && Jet_idx != FTALepton{lpf}_jetIdx_0 && Jet_idx != FTALepton{lpf}_jetIdx_1)".format(lpf=leppostfix, jpt=jetPt)))
+        # z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2); "\
+        #                                       "for(int i=0; i < FTALepton{lpf}_jetIdx.size(); ++i){{jmask = jmask && Jet_idx != FTALepton{lpf}_jetIdx.at(i);}}"\
+        #                                       "return jmask;".format(lpf=leppostfix, jpt=jetPt)))
         z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2); "\
-                                              "for(int i=1; i < FTALepton{lpf}_jetIdx.size(); ++i){{jmask = jmask && Jet_idx != FTALepton{lpf}_jetIdx.at(i);}}"\
-                                              "return jmask;".format(lpf=leppostfix, jpt=jetPt)))
+                  "for(int i=0; i < FTALepton{lpf}_jetIdx.size(); ++i){{"\
+                  "ROOT::VecOps::RVec<Float_t> dr;"\
+                  "for(int j=0; j < jmask.size(); ++j){{"\
+                  "dr.push_back(ROOT::VecOps::DeltaR(Jet_eta.at(j), FTALepton{lpf}_eta.at(i), Jet_phi.at(j), FTALepton{lpf}_phi.at(i)));}}"\
+                  "jmask = jmask && dr >= 0.4;"\
+                  "dr.clear();}}"\
+                  "return jmask;".format(lpf=leppostfix, jpt=jetPt)))
         z.append(("nFTAJet{pf}".format(pf=postfix), "static_cast<Int_t>({jm}[{jm}].size())".format(jm=jetMask)))
         z.append(("FTAJet{pf}_ptsort".format(pf=postfix), "Reverse(Argsort({jpt}[{jm}]))".format(jpt=jetPt, jm=jetMask)))
         z.append(("FTAJet{pf}_deepcsvsort".format(pf=postfix), "Reverse(Argsort(Jet_{btv}[{jm}]))".format(btv=bTagWorkingPointDict[era]["DeepCSV"]["Var"], jm=jetMask)))
@@ -3525,7 +3533,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                         diagnostic_lepjet_idx = "Concatenate(Muon_jetIdx[diagnostic_mu_mask], Electron_jetIdx[diagnostic_e_mask])"
                         diagnostic_jet_idx = "FTA::generateIndices(Jet_pt)"
                         diagnostic_jet_mask = "ROOT::VecOps::RVec<int> jmask = (Jet_pt > 30 && abs(Jet_eta) < 2.5 && Jet_jetId > 2); "\
-                                              "for(int i=1; i < diagnostic_lepjet_idx.size(); ++i){jmask = jmask && diagnostic_jet_idx != diagnostic_lepjet_idx.at(i);}"\
+                                              "for(int i=0; i < diagnostic_lepjet_idx.size(); ++i){jmask = jmask && diagnostic_jet_idx != diagnostic_lepjet_idx.at(i);}"\
                                               "return jmask;"
                 if processName not in nodes:
                     #L-2 filter, should be the packedEventID filter in that case
@@ -4274,7 +4282,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
 
         #Regarding naming conventions:
         #Since category can use __ as a separator between branchpostfix and the rest, extend to ___ to separate further... ugly, but lets
-        #try sticking with valid C++ variable names (alphanumeric + _). Also note that _{spf} will result in 3 underscores as is currently defined
+        #try sticking with valid C++ variable names (alphanumeric + _). Also note that {spf} will result in 3 underscores as is currently defined
         #CYCLE THROUGH CATEGORIES in the nodes that exist now, nodes[processName][decayChannel][CATEGORIES]
         #We are inside the systematics variation, so we cycle through everything else (nominal nodes having been created first!)
         for processName in nodes:
@@ -4310,6 +4318,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         diagnosticNodes[processName][decayChannel][category]["Electron_ip3d"] = categoryNode.Stats("FTAElectron{lpf}_ip3d".format(lpf=leppostfix))
                         
                     #IMPORTANT: Skip nodes that belong to other systematic variations, since it's a dictionary!
+                    print("FIXME: Need to check this logic is properly skipping things correctly (see below this line in the source code)")
                     if category.split("___")[-1] != branchpostfix.replace("__", ""): continue 
                     isBlinded = False
                     #need to check that a category is blinded by making sure all orthogonal categories are blinded, i.e.,
