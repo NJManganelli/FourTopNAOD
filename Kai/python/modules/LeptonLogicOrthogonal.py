@@ -952,6 +952,7 @@ class TriggerAndLeptonLogic(Module):
                 #maybe L1 Seed additional requirement in 2017 needed?
             else:
                 if self.doOrthogonalTrigger and trigger.channel == "Orthogonal":
+                    pass
                             #Store whether the lead and sublead leptons were isolated
                             # if hasattr(leadLep_baseline[0][1], "vidNestedWPBitmap"):
                             #     #It's an electron, check the bitmap for loose isolation minimum
