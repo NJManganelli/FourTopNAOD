@@ -2318,7 +2318,7 @@ def defineInitWeights(input_df, crossSection=0, era="2017", sumWeights=-1, lumiO
             rdf = rdf.Define(k, v)
     return rdf
 
-def defineJets(input_df, era="2017", doAK8Jets=False, useDeltaR=True, isData=True,
+def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, useDeltaR=True, isData=True,
                nJetsToHisto=10, bTagger="DeepCSV", verbose=False,
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "lep_postfix": "", 
@@ -2392,20 +2392,28 @@ def defineJets(input_df, era="2017", doAK8Jets=False, useDeltaR=True, isData=Tru
         
         #Fill lists
         z.append(("Jet_idx", "FTA::generateIndices(Jet_pt)"))
-        z.append(("{jm}".format(jm=jetMask), "({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2 && Jet_idx != FTALepton{lpf}_jetIdx_0 && Jet_idx != FTALepton{lpf}_jetIdx_1)".format(lpf=leppostfix, jpt=jetPt)))
+        z.append(("pre{jm}".format(jm=jetMask), "({jpt} >= {jptMin} && abs(Jet_eta) <= 2.5 && Jet_jetId > 2)".format(lpf=leppostfix, jpt=jetPt, jptMin=jetPtMin)))
         if useDeltaR is False: #Use PFMatching
-            z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2); "\
+            z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= {jptMin} && abs(Jet_eta) <= 2.5 && Jet_jetId > 2); "\
                       "for(int i=0; i < FTALepton{lpf}_jetIdx.size(); ++i){{jmask = jmask && (Jet_idx != FTALepton{lpf}_jetIdx.at(i));}}"\
-                      "return jmask;".format(lpf=leppostfix, jpt=jetPt)))
+                      "return jmask;".format(lpf=leppostfix, jpt=jetPt, jptMin=jetPtMin)))
         else: #DeltaR matching
-            z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= 30 && abs(Jet_eta) <= 2.5 && Jet_jetId > 2); "\
+            z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= {jptMin} && abs(Jet_eta) <= 2.5 && Jet_jetId > 2); "\
                       "for(int i=0; i < FTALepton{lpf}_jetIdx.size(); ++i){{"\
                       "ROOT::VecOps::RVec<Float_t> dr;"\
                       "for(int j=0; j < jmask.size(); ++j){{"\
                       "dr.push_back(ROOT::VecOps::DeltaR(Jet_eta.at(j), FTALepton{lpf}_eta.at(i), Jet_phi.at(j), FTALepton{lpf}_phi.at(i)));}}"\
                       "jmask = jmask && dr >= {drt};"\
                       "dr.clear();}}"\
-                      "return jmask;".format(lpf=leppostfix, jpt=jetPt, drt=useDeltaR)))
+                      "return jmask;".format(lpf=leppostfix, jpt=jetPt, jptMin=jetPtMin, drt=useDeltaR)))
+        #Store the Jet Pt, Jet Raw Pt, Lep Pt
+        z.append(("FTACrossCleanedJet{pf}_pt".format(pf=postfix), "(FTALepton{lpf}_jetIdx.at(0) >= 0 && pre{jm}.at(FTALepton{lpf}_jetIdx.at(0)) == true) ? {jpt}.at(FTALepton{lpf}_jetIdx.at(0)) : 0.0".format(jm=jetMask, lpf=leppostfix, jpt=jetPt)))
+        z.append(("FTACrossCleanedJet{pf}_rawpt".format(pf=postfix), "(FTALepton{lpf}_jetIdx.at(0) >= 0 && pre{jm}.at(FTALepton{lpf}_jetIdx.at(0)) == true) ? (1 - Jet_rawFactor.at(FTALepton{lpf}_jetIdx.at(0))) * {jpt}.at(FTALepton{lpf}_jetIdx.at(0)) : 0.0".format(jm=jetMask, lpf=leppostfix, jpt=jetPt)))
+        z.append(("FTACrossCleanedJet{pf}_leppt".format(pf=postfix), "(FTALepton{lpf}_jetIdx.at(0) >= 0 && pre{jm}.at(FTALepton{lpf}_jetIdx.at(0)) == true) ? FTALepton{lpf}_pt.at(0) : 0.0".format(jm=jetMask, lpf=leppostfix, jpt=jetPt)))
+        # z.append(("FTACrossCleanedJet{pf}_diffpt".format(pf=postfix), "FTALepton{lpf}_jetIdx.at(0) >= 0 ? FTACrossCleanedJet{pf}_pt + FTACrossCleanedJet{pf}_leppt - FTACrossCleanedJet{pf}_rawpt : -9999".format(jm=jetMask, lpf=leppostfix, pf=postfix)))
+        z.append(("FTACrossCleanedJet{pf}_diffpt".format(pf=postfix), "FTALepton{lpf}_jetIdx.at(0) >= 0 ? FTACrossCleanedJet{pf}_leppt - FTACrossCleanedJet{pf}_pt : -9999".format(jm=jetMask, lpf=leppostfix, pf=postfix)))
+        z.append(("FTACrossCleanedJet{pf}_diffptraw".format(pf=postfix), "FTALepton{lpf}_jetIdx.at(0) >= 0 ? (-1.0 * Jet_rawFactor * {jpt}).at(FTALepton{lpf}_jetIdx.at(0)) : -9999".format(jm=jetMask, lpf=leppostfix, pf=postfix, jpt=jetPt)))
+        z.append(("FTACrossCleanedJet{pf}_diffptrawinverted".format(pf=postfix), "FTALepton{lpf}_jetIdx.at(0) < 0 ? ROOT::VecOps::RVec<Float_t>(-1.0 * Jet_rawFactor * {jpt}[pre{jm}]) : ROOT::VecOps::RVec<Float_t> {{-9999.0}}".format(jm=jetMask, lpf=leppostfix, pf=postfix, jpt=jetPt)))
         z.append(("nFTAJet{pf}".format(pf=postfix), "static_cast<Int_t>({jm}[{jm}].size())".format(jm=jetMask)))
         z.append(("FTAJet{pf}_ptsort".format(pf=postfix), "Reverse(Argsort({jpt}[{jm}]))".format(jpt=jetPt, jm=jetMask)))
         z.append(("FTAJet{pf}_deepcsvsort".format(pf=postfix), "Reverse(Argsort(Jet_{btv}[{jm}]))".format(btv=bTagWorkingPointDict[era]["DeepCSV"]["Var"], jm=jetMask)))
@@ -4343,6 +4351,30 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
 
                     #Append histogram tuples for HistoND() methods to the list, the list should overall contain each set grouped by systematic variation
                     Hstart = len(defineNodes[processName][decayChannel])
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___FTACrossCleanedJet_diffptraw{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
+                                                                    "(Jet - Raw) p_{{T}} (CCJet)({spf});(Raw - Jet) p_{{T}}(CC LeadLep); Events".format(spf=syspostfix.replace("__", "")), 
+                                                                    100,-300,300), "FTACrossCleanedJet{bpf}_diffptraw".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___FTACrossCleanedJet_diffptrawinverted{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
+                                                                    "(Raw - Jet) p_{{T}} (non-CCJets)({spf});(Raw - Jet) p_{{T}}(CC LeadLep); Events".format(spf=syspostfix.replace("__", "")), 
+                                                                    100,-300,300), "FTACrossCleanedJet{bpf}_diffptrawinverted".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___FTACrossCleanedJet_diffpt{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
+                                                                    "(Jet - LeadLep) p_{{T}} (CCJet)({spf});(Jet - LeadLep) p_{{T}}(CC LeadLep); Events".format(spf=syspostfix.replace("__", "")), 
+                                                                    100,-300,300), "FTACrossCleanedJet{bpf}_diffpt".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___FTACrossCleanedJet_pt{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
+                                                                    "Jet p_{{T}} (CCJet)({spf});Jet p_{{T}}(CC LeadLep); Events".format(spf=syspostfix.replace("__", "")), 
+                                                                    100,0,300), "FTACrossCleanedJet{bpf}_pt".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___FTACrossCleanedJet_rawpt{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
+                                                                    "Jet Raw p_{{T}} (CCJet)({spf});Jet Raw p_{{T}}(CC LeadLep); Events".format(spf=syspostfix.replace("__", "")), 
+                                                                    100,0,300), "FTACrossCleanedJet{bpf}_rawpt".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___FTACrossCleanedJet_leppt{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
+                                                                    "Lead Lep p_{{T}} (CCJet)({spf});Lead Lep p_{{T}}(CC Jet); Events".format(spf=syspostfix.replace("__", "")), 
+                                                                    100,0,300), "FTACrossCleanedJet{bpf}_leppt".format(bpf=branchpostfix), wgtVar))
                     for x in xrange(nJetsToHisto):
                         defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_pt_jet{n}{spf}"\
                                                                         .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
@@ -5947,7 +5979,7 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
             
 def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=False, doLeptonSelection=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
          BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, printBookkeeping=False, triggers=[], includeSampleNames=None, 
-         useDeltaR=False, excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True):
+         useDeltaR=False, jetPtMin=30.0, excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True):
 
     ##################################################
     ##################################################
@@ -6345,9 +6377,13 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                            bTagger=bTagger,
                                            isData=vals["isData"],
                                            sysVariations=systematics_2017, 
+                                           jetPtMin=jetPtMin,
                                            useDeltaR=useDeltaR,
                                            verbose=verbose,
                                           )
+            print("Filtering out events where a jet is/isn't cross-cleaned against the leading lepton")
+            # the_df[name][lvl] = the_df[name][lvl].Filter("FTALepton_jetIdx.at(0) < 0 || prejet_mask.at(FTALepton_jetIdx.at(0)) == false", "events with no otherwise selected jet cross-cleaned against the lead lepton")
+            the_df[name][lvl] = the_df[name][lvl].Filter("FTALepton_jetIdx.at(0) >= 0 && prejet_mask.at(FTALepton_jetIdx.at(0)) == true", "events with otherwise-selected jet cross-cleaned against the lead lepton")
             if quiet:
                 print("Going Quiet")
                 counts[name][lvl] = the_df[name][lvl].Count()
@@ -6642,6 +6678,8 @@ if __name__ == '__main__':
                         help='output directory path defaulting to "."')
     parser.add_argument('--quiet', dest='quiet', action='store_true',
                         help='Disable progress bars')
+    parser.add_argument('--jetPtMin', dest='jetPtMin', action='store', default=30.0, type=float,
+                        help='Float value for the minimum Jet pt in GeV, defaulting to 30.0')
     parser.add_argument('--useDeltaR', dest='useDeltaR', action='store', default=False, type=float, nargs='?', const=0.4,
                         help='Disable usage of PFMatching for Lepton-Jet cross-cleaning, falling back to DeltaR < 0.4')
     parser.add_argument('--bTagger', dest='bTagger', action='store', default='DeepCSV', type=str, choices=['DeepCSV', 'DeepJet'],
@@ -6682,6 +6720,7 @@ if __name__ == '__main__':
     stage = args.stage
     channel = args.channel
     source = args.source.format(chan=channel)
+    jetPtMin=args.jetPtMin
     useDeltaR = args.useDeltaR
     bTagger = args.bTagger
     includeSampleNames = args.include
@@ -6728,7 +6767,7 @@ if __name__ == '__main__':
         print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
         # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
+                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
                       triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
         #      verbose=False)
@@ -6770,20 +6809,20 @@ if __name__ == '__main__':
                            )
     elif stage == 'lepton-selection':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
-                      BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
+                      BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
                       printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
+                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
                       triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, source, "BOOKKEEPING", bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = True, 
+                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = True, 
                       triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'fill-histograms':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
+                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
                       triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'prepare-for-combine':
         print("This analysis stage is not yet finished. It will call the method histoCombine() which needs to be updated for the new internal key structure from fillHistos")
