@@ -2318,7 +2318,7 @@ def defineInitWeights(input_df, crossSection=0, era="2017", sumWeights=-1, lumiO
             rdf = rdf.Define(k, v)
     return rdf
 
-def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, useDeltaR=True, isData=True,
+def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=None, useDeltaR=True, isData=True,
                nJetsToHisto=10, bTagger="DeepCSV", verbose=False,
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "lep_postfix": "", 
@@ -2391,21 +2391,36 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, useDeltaR=T
         postfix = "__" + sysVar.replace("$NOMINAL", "nom")
         
         #Fill lists
+        if jetPUId:
+            if jetPUId == 'L':
+                jetPUId = " && Jet_puId >= 4" #pass Loose Id, >=6 pass Medium, ==7 pass Tight
+            elif jetPUId == 'M':
+                jetPUId = " && Jet_puId >= 6" #pass Loose Id, >=6 pass Medium, ==7 pass Tight
+            elif jetPUId == 'T':
+                jetPUId = " && Jet_puId == 7" #pass Loose Id, >=6 pass Medium, ==7 pass Tight
+            else:
+                raise ValueError("Invalid Jet PU Id selected")
+        else:
+            jetPUId = ""
         z.append(("Jet_idx", "FTA::generateIndices(Jet_pt)"))
-        z.append(("pre{jm}".format(jm=jetMask), "({jpt} >= {jptMin} && abs(Jet_eta) <= 2.5 && Jet_jetId > 2)".format(lpf=leppostfix, jpt=jetPt, jptMin=jetPtMin)))
+        z.append(("pre{jm}".format(jm=jetMask), "({jpt} >= {jptMin} && abs(Jet_eta) <= 2.5 && Jet_jetId > 2{jpuid})".format(lpf=leppostfix, 
+                                                                                                                            jpt=jetPt, 
+                                                                                                                            jptMin=jetPtMin,
+                                                                                                                            jpuid=jetPUId
+                                                                                                                        )))
         if useDeltaR is False: #Use PFMatching
-            z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= {jptMin} && abs(Jet_eta) <= 2.5 && Jet_jetId > 2); "\
+            z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= {jptMin} && abs(Jet_eta) <= 2.5 && Jet_jetId > 2{jpuid}); "\
                       "for(int i=0; i < FTALepton{lpf}_jetIdx.size(); ++i){{jmask = jmask && (Jet_idx != FTALepton{lpf}_jetIdx.at(i));}}"\
-                      "return jmask;".format(lpf=leppostfix, jpt=jetPt, jptMin=jetPtMin)))
+                      "return jmask;".format(lpf=leppostfix, jpt=jetPt, jptMin=jetPtMin, jpuid=jetPUId)))
         else: #DeltaR matching
-            z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= {jptMin} && abs(Jet_eta) <= 2.5 && Jet_jetId > 2); "\
+            z.append(("{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> jmask = ({jpt} >= {jptMin} && abs(Jet_eta) <= 2.5 && Jet_jetId > 2{jpuid}); "\
                       "for(int i=0; i < FTALepton{lpf}_jetIdx.size(); ++i){{"\
                       "ROOT::VecOps::RVec<Float_t> dr;"\
                       "for(int j=0; j < jmask.size(); ++j){{"\
                       "dr.push_back(ROOT::VecOps::DeltaR(Jet_eta.at(j), FTALepton{lpf}_eta.at(i), Jet_phi.at(j), FTALepton{lpf}_phi.at(i)));}}"\
                       "jmask = jmask && dr >= {drt};"\
                       "dr.clear();}}"\
-                      "return jmask;".format(lpf=leppostfix, jpt=jetPt, jptMin=jetPtMin, drt=useDeltaR)))
+                      "return jmask;".format(lpf=leppostfix, jpt=jetPt, jptMin=jetPtMin, jpuid=jetPUId, drt=useDeltaR)))
         #Store the Jet Pt, Jet Raw Pt, Lep Pt
         z.append(("FTACrossCleanedJet{pf}_pt".format(pf=postfix), "(FTALepton{lpf}_jetIdx.at(0) >= 0 && pre{jm}.at(FTALepton{lpf}_jetIdx.at(0)) == true) ? {jpt}.at(FTALepton{lpf}_jetIdx.at(0)) : 0.0".format(jm=jetMask, lpf=leppostfix, jpt=jetPt)))
         z.append(("FTACrossCleanedJet{pf}_rawpt".format(pf=postfix), "(FTALepton{lpf}_jetIdx.at(0) >= 0 && pre{jm}.at(FTALepton{lpf}_jetIdx.at(0)) == true) ? (1 - Jet_rawFactor.at(FTALepton{lpf}_jetIdx.at(0))) * {jpt}.at(FTALepton{lpf}_jetIdx.at(0)) : 0.0".format(jm=jetMask, lpf=leppostfix, jpt=jetPt)))
@@ -3885,108 +3900,6 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
             countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
             diagnosticNodes[processName] = collections.OrderedDict()
             defineNodes[processName] = collections.OrderedDict()
-        
-        
-    # # filterNodes = collections.OrderedDict() #For storing tuples to debug and be verbose about
-    # # defineNodes = collections.OrderedDict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
-    # # countNodes = collections.OrderedDict() #For storing the counts at each node
-    # # nodes = collections.OrderedDict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
-    # filterNodes = dict() #For storing tuples to debug and be verbose about
-    # defineNodes = dict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
-    # countNodes = dict() #For storing the counts at each node
-    # diagnosticNodes = dict()
-    # nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
-    # #Define the base node in nodes when we split/don't split the process
-
-    # if splitProcess:
-    #     if type(splitProcess) == dict or type(splitProcess) == collections.OrderedDict:
-    #         df_with_IDs = input_df
-    #         IDs = splitProcess.get("ID")
-    #         for IDname, IDbool in IDs.items():
-    #             if IDbool and IDname == "unpackGenTtbarId":
-    #                 if "unpackedGenTtbarId" not in listOfColumns:
-    #                     df_with_IDs = df_with_IDs.Define("unpackedGenTtbarId", "FTA::unpackGenTtbarId(genTtbarId)")
-    #                     df_with_IDs = df_with_IDs.Define("nAdditionalBJets", "unpackedGenTtbarId[0]")
-    #                     # df_with_IDs = df_with_IDs.Define("n2BHadronJets", "unpackedGenTtbarId[1]")
-    #                     # df_with_IDs = df_with_IDs.Define("n1BHadronJets", "unpackedGenTtbarId[2]")
-    #                     df_with_IDs = df_with_IDs.Define("nAdditionalCJets", "unpackedGenTtbarId[3]")
-    #                     # df_with_IDs = df_with_IDs.Define("n2CHadronJets", "unpackedGenTtbarId[4]")
-    #                     # df_with_IDs = df_with_IDs.Define("n1CHadronJets", "unpackedGenTtbarId[5]")
-    #                     # df_with_IDs = df_with_IDs.Define("nBJetsFromTop", "unpackedGenTtbarId[6]")
-    #                     # df_with_IDs = df_with_IDs.Define("nBJetsFromW", "unpackedGenTtbarId[7]")
-    #                     # df_with_IDs = df_with_IDs.Define("nCJetsFromW", "unpackedGenTtbarId[8]")
-    #             if IDbool and IDname == "nFTAGenJet/FTAGenHT":
-    #                 if "nFTAGenLep" not in listOfColumns:
-    #                     df_with_IDs = df_with_IDs.Define("nFTAGenLep", "LHEPart_pdgId[stitch_lep_mask].size()")
-    #                     listOfColumns.push_back("nFTAGenLep")
-    #                 if "nFTAGenJet" not in listOfColumsn:
-    #                     df_with_IDs = df_with_IDs.Define("nFTAGenJet", "GenJet_pt[GenJet_pt > 30].size()")
-    #                     listOfColumns.push_back("nFTAGenJet")
-    #                 if "FTAGenHT" not in listOfColumsn:
-    #                     df_with_IDs = df_with_IDs.Define("FTAGenHT", "Sum(GenJet_pt[GenJet_pt > 30 && abs(GenJet_eta) < 2.4])")
-    #                     listOfColumns.push_back("FTAGenHT")
-    #             if IDbool and IDname == "subera":
-    #                 pass
-    #         nodes["BaseNode"] = df_with_IDs #Always store the base node we'll build upon in the next level
-    #         splitProcs = splitProcess.get("processes")
-    #         for processName, processDict in splitProcs.items():
-    #             filterString = processDict.get("filter")
-    #             filterName = filterString.replace("&&", "and").replace("||", "or")
-    #             effectiveXS = processDict.get("effectiveCrossSection")
-    #             sumWeights = processDict.get("sumWeights")
-    #             # nEffective = processDict.get("nEventsPositive") - processDict.get("nEventsNegative")
-    #             fractionalContribution = processDict.get("fractionalContribution")
-    #             wgtFormula = "{eXS:s} * {lumi:s} * 1000 * genWeight * {frCon:s} / {sWPS:s}".format(eXS=effectiveXS,
-    #                                                                                                lumi=lumi,
-    #                                                                                                frCon=fractionalContribution,
-    #                                                                                                sWPS=sumWeights
-    #                                                                                            )
-    #             nodes[processName] = nodes["BaseNode"].Filter(filterString, filterName).Define("pwgt___LumiXS", wgtFormula)
-            
-    #     else:
-    #         raise RuntimeError("Invalid type passed for splitProcess. Require a dictionary containing keys 'ID' and 'processes' to split the sample.")
-    #     # raise NotImplementedError("splitProcess needs some work. Also, it isn't going to work for combined samples that have different systematic variations,"\
-    #     #                           "unless special precautions are taken (easy to do with weight variations so long as the branch exists, even if length of vector"\
-    #     #                           "s differ. Scale variations okay, there will be useless computations I guess... or don't emplace histo nodes on that processName's"\
-    #     #                           "daughter nodes.")
-    #     #Use a method to get the list of potential samples from the packedEventID -> Probably method that calls a common dictionarymethod.
-    #     #Return std::vector<std::string> to iterate through, will include such things as ttbb_DL-GF, ttbbJets, ttll_DL, ttcc_SL, etc... fully complex-stitchable
-    #     #for processName in packedEventProcessNames:
-    #         #filterNodes[processName] = collections.OrderedDict()
-    #         #filterNodes[processName]["BaseNode"] = ("packedEventID == getPackedEventID('processName');", "{}".format(processName), processName, None, None, None, None)
-    #         #nodes[processName] = collections.OrderedDict()
-    #         #nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(packedEventID code goes here)
-    #         #countNodes[processName] = collections.OrderedDict()
-    #         #countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
-    #         #WE ARE DONE, prepared for systematic variation-dependent code looping through channels, 
-    #     #nodes[processName][chan]["BaseNode"] = input_df.Filter(packedEventID).Filter(chan) #pseudocode for creating these nodes
-    #     #Might need to do continue statements on "BaseNode" when it's the key in future loops
-    #     #Preparateion complete? Now we must create filters later on when we loop through the systematic variations
-    #     #Overall key set will be nodes[processName][decayChannel][scaleVariation-dependent-HTandZWindow==L0Nodes][nBTags==L1Nodes][nJet==L2Nodes]
-    #     #Histograms can be attached to L0 - L2 nodes, with the processName, decayChannel, HT/ZWindow, nBTags, nJets derived from the keys in the 5 nested for loops
-    # else:
-    #     processName = era + "___" + sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
-    #     nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
-    #     #The below references branchpostfix since we only need nodes for these types of scale variations...
-    #     if processName not in nodes:
-    #         #L-2 filter, should be the packedEventID filter in that case
-    #         # filterNodes[processName] = collections.OrderedDict()
-    #         filterNodes[processName] = dict()
-    #         filterNodes[processName]["BaseNode"] = ("return true;", "{}".format(processName), processName, None, None, None, None)
-    #         # nodes[processName] = collections.OrderedDict()
-    #         nodes[processName] = dict()
-    #         nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
-    #         # countNodes[processName] = collections.OrderedDict()
-    #         countNodes[processName] = dict()
-    #         countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
-    #         diagnosticNodes[processName] = dict()
-    #         #defineNodes[processName] = collections.OrderedDict()
-    #         defineNodes[processName] = dict()
-    #     if processName not in histoNodes:
-    #         #histoNodes[processName] = collections.OrderedDict()
-    #         histoNodes[processName] = dict()
-            
-
 
 
     #Make sure the nominal is done first so that categorization is successful
@@ -4189,10 +4102,10 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     #Tuple format: (filter code, filter name, process, channel, L0 key, L1 key, L2 key) where only one of L0, L1, L2 keys are non-None!
                     
                     #These nodes should apply to any/all L0Nodes
-                    filterNodes[processName][decayChannel]["L1Nodes"].append(
-                        ("return true;".format(tag=tagger, bpf=branchpostfix), "0+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),processName, decayChannel, None, "nMediumDeep{tag}B0+".format(tag=tagger, bpf=branchpostfix), None))
-                    filterNodes[processName][decayChannel]["L1Nodes"].append(
-                        ("nMediumDeep{tag}B{bpf} >= 1".format(tag=tagger, bpf=branchpostfix), "1+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix), processName, decayChannel, None, "nMediumDeep{tag}B1+".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
+                    #     ("return true;".format(tag=tagger, bpf=branchpostfix), "0+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),processName, decayChannel, None, "nMediumDeep{tag}B0+".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
+                    #     ("nMediumDeep{tag}B{bpf} >= 1".format(tag=tagger, bpf=branchpostfix), "1+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix), processName, decayChannel, None, "nMediumDeep{tag}B1+".format(tag=tagger, bpf=branchpostfix), None))
                     filterNodes[processName][decayChannel]["L1Nodes"].append(
                         ("nMediumDeep{tag}B{bpf} >= 2".format(tag=tagger, bpf=branchpostfix), "2+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix), processName, decayChannel, None, "nMediumDeep{tag}B2+".format(tag=tagger, bpf=branchpostfix), None))
                     # filterNodes[processName][decayChannel]["L1Nodes"].append(
@@ -4202,14 +4115,14 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     #     ("nMediumDeep{tag}B{bpf} == 1".format(tag=tagger, bpf=branchpostfix), "1 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
                     #      processName, decayChannel, None, "nMediumDeep{tag}B1".format(tag=tagger, bpf=branchpostfix), None))
                     # filterNodes[processName][decayChannel]["L1Nodes"].append(
-                    #     ("nMediumDeep{tag}B{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                    #      processName, decayChannel, None, "nMediumDeep{tag}B2".format(tag=tagger, bpf=branchpostfix), None))
-                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
-                    #     ("nMediumDeep{tag}B{bpf} == 3".format(tag=tagger, bpf=branchpostfix), "3 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                    #      processName, decayChannel, None, "nMediumDeep{tag}B3".format(tag=tagger, bpf=branchpostfix), None))
-                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
-                    #     ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                    #      processName, decayChannel, None, "nMediumDeep{tag}B4+".format(tag=tagger, bpf=branchpostfix), None))
+                        ("nMediumDeep{tag}B{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                         processName, decayChannel, None, "nMediumDeep{tag}B2".format(tag=tagger, bpf=branchpostfix), None))
+                    filterNodes[processName][decayChannel]["L1Nodes"].append(
+                        ("nMediumDeep{tag}B{bpf} == 3".format(tag=tagger, bpf=branchpostfix), "3 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                         processName, decayChannel, None, "nMediumDeep{tag}B3".format(tag=tagger, bpf=branchpostfix), None))
+                    filterNodes[processName][decayChannel]["L1Nodes"].append(
+                        ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                         processName, decayChannel, None, "nMediumDeep{tag}B4+".format(tag=tagger, bpf=branchpostfix), None))
                     
                     #These filters should apply to all L1Nodes
                     filterNodes[processName][decayChannel]["L2Nodes"].append(
@@ -6003,7 +5916,7 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
             
 def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=False, doLeptonSelection=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
          BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, printBookkeeping=False, triggers=[], includeSampleNames=None, 
-         useDeltaR=False, jetPtMin=30.0, excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True):
+         useDeltaR=False, jetPtMin=30.0, jetPUId=None, excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True):
 
     ##################################################
     ##################################################
@@ -6402,6 +6315,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
                                            isData=vals["isData"],
                                            sysVariations=systematics_2017, 
                                            jetPtMin=jetPtMin,
+                                           jetPUId=jetPUId,
                                            useDeltaR=useDeltaR,
                                            verbose=verbose,
                                           )
@@ -6704,6 +6618,8 @@ if __name__ == '__main__':
                         help='Disable progress bars')
     parser.add_argument('--jetPtMin', dest='jetPtMin', action='store', default=30.0, type=float,
                         help='Float value for the minimum Jet pt in GeV, defaulting to 30.0')
+    parser.add_argument('--jetPUId', dest='jetPUId', action='store', default=None, nargs='?', const='L', type=str, choices=['L', 'M', 'T'],
+                        help='Optionally apply Jet PU Id to the selected jets, with options for Loose ("L"), Medium ("M"), or Tight ("T") using the 80X training.')
     parser.add_argument('--useDeltaR', dest='useDeltaR', action='store', default=False, type=float, nargs='?', const=0.4,
                         help='Disable usage of PFMatching for Lepton-Jet cross-cleaning, falling back to DeltaR < 0.4')
     parser.add_argument('--bTagger', dest='bTagger', action='store', default='DeepCSV', type=str, choices=['DeepCSV', 'DeepJet'],
@@ -6745,6 +6661,7 @@ if __name__ == '__main__':
     channel = args.channel
     source = args.source.format(chan=channel)
     jetPtMin=args.jetPtMin
+    jetPUId=args.jetPUId
     useDeltaR = args.useDeltaR
     bTagger = args.bTagger
     includeSampleNames = args.include
@@ -6771,6 +6688,7 @@ if __name__ == '__main__':
     print("Analysis directory: {adir}".format(adir=analysisDir))
     print("Channel to be analyzed: {chan}".format(chan=channel))
     print("Algorithm for Lepton-Jet crosscleaning: {}".format("PFMatching" if not useDeltaR else "DeltaR < {}".format(useDeltaR)))
+    print("Jet selection is using these parameters: Minimum Pt: {} PU Id: {}".format(jetPtMin, jetPUId))
     print("BTagger algorithm to be used: {tag}".format(tag=bTagger))
     print("BTagging aggregate Yields/Efficiencies will be used ({uAgg}) and depend on HT only ({uHT}) or nJet only ({uNJ})"\
           .format(uAgg=useAggregate, uHT=useHTOnly, uNJ=useNJetOnly))
@@ -6791,8 +6709,8 @@ if __name__ == '__main__':
         print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
         # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
-                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
+                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
+                      printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
         #      verbose=False)
         # packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, 
@@ -6833,21 +6751,25 @@ if __name__ == '__main__':
                            )
     elif stage == 'lepton-selection':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
-                      BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
-                      printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
+                      BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, 
+                      useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
-                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
+                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, source, "BOOKKEEPING", bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = True, 
-                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
+                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList, 
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'fill-histograms':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, useDeltaR=useDeltaR, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False,
-                      triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
+                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'prepare-for-combine':
         print("This analysis stage is not yet finished. It will call the method histoCombine() which needs to be updated for the new internal key structure from fillHistos")
     else:
