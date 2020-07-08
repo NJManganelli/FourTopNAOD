@@ -2369,7 +2369,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
     if bTagger.lower() == "deepcsv":
         useDeepCSV=True
     elif bTagger.lower() == "deepjet":
-        usDeepCSV=False
+        useDeepCSV=False
     elif bTagger.lower() == "csvv2":
         raise RuntimeError("CSVv2 is not a supported bTagger option in defineJets() right now")
     else:
@@ -4114,7 +4114,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     # filterNodes[processName][decayChannel]["L1Nodes"].append(
                     #     ("nMediumDeep{tag}B{bpf} == 1".format(tag=tagger, bpf=branchpostfix), "1 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
                     #      processName, decayChannel, None, "nMediumDeep{tag}B1".format(tag=tagger, bpf=branchpostfix), None))
-                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
+                    filterNodes[processName][decayChannel]["L1Nodes"].append(
                         ("nMediumDeep{tag}B{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
                          processName, decayChannel, None, "nMediumDeep{tag}B2".format(tag=tagger, bpf=branchpostfix), None))
                     filterNodes[processName][decayChannel]["L1Nodes"].append(
