@@ -1715,8 +1715,11 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
     else:
         expectedBaseName = histNameCommon + separator + systematic
         fallbackBaseName = histNameCommon + separator + nominalPostfix if nominalPostfix != None else histNameCommon
+    #Create list of histograms not found, to potentially be reported up the chain
+    theUnfound = collections.OrderedDict()    
     #Cycle through the config's categories
     for sampleCat, config in legendConfig["Categories"].items():
+        theUnfound[sampleCat] = collections.OrderedDict()    
         histoList = []
         addHistoName = sampleCat + separator + expectedBaseName
         #print(addHistoName)
@@ -1725,6 +1728,8 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
         for nn, subCatName in enumerate(config["Names"]):
             expectedName = subCatName + separator + expectedBaseName
             fallbackName = subCatName + separator + fallbackBaseName
+            fallbackName2 = subCatName + separator + fallbackBaseName
+            if fallbackName2[-6:] == "___nom": fallbackName2 = fallbackName2[:-6]
             if debug: print("Creating addHistoName {}".format(addHistoName))
             #Skip plots that contain neither the systematic requested nor the nominal histogram
             # if expectedName in histKeys:
@@ -1739,7 +1744,13 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
                 histoList.append(histFile.Get(unblindedKeys[fallbackName]))
                 if scaleList != None:
                     scaleList.append(scaleArray[nn])
+            elif fallbackName2 in unblindedKeys:
+                #Append the histo to a list which will be added using a dedicated function
+                histoList.append(histFile.Get(unblindedKeys[fallbackName2]))
+                if scaleList != None:
+                    scaleList.append(scaleArray[nn])
             else:
+                theUnfound[sampleCat][subCatName] = expectedName
                 if verbose:
                     print("for {} and histNameCommon {}, makeCombinationHists failed to find a histogram (systematic or nominal) corresponding to {}\n\t{}\n\t{}"\
                           .format(histFile.GetName(), histNameCommon, subCatName, expectedName, fallbackName))
@@ -1837,7 +1848,8 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
                 pass
     #for hn, hh in retHists.items():
     #    ROOT.SetOwnership(hh,0)
-    return retHists
+    return retHists, theUnfound
+
 
 def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None, nominalPostfix="nom", 
                         separator="___", orderByIntegral=True, rebin=None, projection=None, 
@@ -1867,7 +1879,7 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
     
     #Create dictionary to return one level up, calling makeCategoryHists to combine subsamples together 
     #and do color, style configuration for them. Pass through the rebin parameter
-    retDict["Categories/hists"] = makeCategoryHists(histFile, legendConfig, histNameCommon,
+    retDict["Categories/hists"], retDict["Categories/theUnfound"] = makeCategoryHists(histFile, legendConfig, histNameCommon,
                                                     systematic=systematic, rebin=rebin, projection=projection,
                                                     nominalPostfix=nominalPostfix, separator=separator,
                                                     verbose=verbose, debug=debug, pn=pn)
@@ -2113,6 +2125,10 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             #if len(CanCache["subplots/supercategories"][-1]["Categories/hists"]) == 0:
             #    continue
             CanCache["canvas/upperPads"][pn].cd()
+            
+            if verbose:
+                print("Unfound histograms(including fallbacks):")
+                pprint.pprint(CanCache["subplots/supercategories"][pn]["Categories/theUnfound"])
             
             dn = 0
             rdn = 0
@@ -2463,7 +2479,7 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics':
         if stage == 'plot-histograms':
             histogramDir = "$ADIR/Histograms/All".replace("$ADIR", analysisDir).replace("//", "/")
         elif stage == 'plot-diagnostics':
-            histogramDir = "$ADIR/Diagnostics/All".replace("$ADIR", analysisDir).replace("//", "/")
+            histogramDir = "$ADIR/Diagnostics/NoChannel".replace("$ADIR", analysisDir).replace("//", "/")
         else:
             raise NotImplementedError("Unrecognized plotting sub-stage: need to define the histogramDir for this case")
         if not os.path.isdir(jsonDir):
@@ -2508,7 +2524,7 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics':
             pdfOut = "$ADIR/Plots/$TAG_$PLOTCARD_$CHAN.pdf".replace("$ADIR", analysisDir).replace("$TAG", tag).replace("$PLOTCARD", plotcard).replace("$CHAN", channel).replace("//", "/")
             if verb:
                 print("pdfOutput = {}".format(pdfOut))
-        resultsDict = loopPlottingJSON(loadedPlotConfig, Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, pdfOutput=pdfOut, lumi=lumi);
+        resultsDict = loopPlottingJSON(loadedPlotConfig, Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, pdfOutput=pdfOut, lumi=lumi, verbose=verb);
     else:
         raise RuntimeError("The loading of the plot or legend cards failed. They are of type {} and {}, respectively".format(type(loadedPlotConfig),type(loadedLegendConfig)))
         

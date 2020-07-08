@@ -5932,6 +5932,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
     #levelsOfInterest = set(["baseline", "MuMu_baseline", "ElEl_baseline", "selection", "MuMu_selection", "ElMu_selection"])
     #levelsOfInterest = set(["baseline", "MuMu_selection", "ElMu_selection"])    
     
+    print("FIXME: The default list of samples has been defined internally and not deduced from the analysis directory...")
     all_samples = ["ElMu", "MuMu", "ElEl", "tttt", "ST_tW", "ST_tbarW", "tt_DL", "tt_DL-GF", 
                      "tt_SL", "tt_SL-GF", "ttH", "ttWJets", "ttZJets", "ttWH", "ttWW", "ttWZ", 
                      "ttZZ", "ttZH", "ttHH", "tttW", "tttJ", "DYJets_DL"]
