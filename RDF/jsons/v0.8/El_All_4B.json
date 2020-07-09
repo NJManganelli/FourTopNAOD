@@ -1,0 +1,1490 @@
+{
+    "Plot_HT500_nMediumDeepCSVB4_nJet6___nLooseFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nLooseFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_pt": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_nJet_nBtag2_nMediumFTAElectron": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "nMediumFTAElectron", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{ll}  nJet4", 
+            "#it{ll}  nJet5", 
+            "#it{ll}  nJet6", 
+            "#it{ll}  nJet7", 
+            "#it{ll}  nJet8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "nMediumFTAElectron", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_HT500_nMediumDeepCSVB4_nJet4___nMediumFTAElectron", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet5___nMediumFTAElectron", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet6___nMediumFTAElectron", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nMediumFTAElectron", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nMediumFTAElectron"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "Canvas_nJet_nBtag2_nTightFTAElectron": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "nTightFTAElectron", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{ll}  nJet4", 
+            "#it{ll}  nJet5", 
+            "#it{ll}  nJet6", 
+            "#it{ll}  nJet7", 
+            "#it{ll}  nJet8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "nTightFTAElectron", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_HT500_nMediumDeepCSVB4_nJet4___nTightFTAElectron", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet5___nTightFTAElectron", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet6___nTightFTAElectron", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nTightFTAElectron", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nTightFTAElectron"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet4___nMediumFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_InvMass": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet5___nTightFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_InvMass": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet5___nMediumFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_eta_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_pt_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_pt_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_pt_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nTightFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_pfRelIso03_chg": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_nJet_nBtag2_Electron_pfRelIso03_chg": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "Electron_pfRelIso03_chg", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{ll}  nJet4", 
+            "#it{ll}  nJet5", 
+            "#it{ll}  nJet6", 
+            "#it{ll}  nJet7", 
+            "#it{ll}  nJet8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "Electron_pfRelIso03_chg", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_pfRelIso03_chg", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_pfRelIso03_chg", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_pfRelIso03_chg", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_pfRelIso03_chg", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_pfRelIso03_chg"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "Canvas_nJet_nBtag2_Electron_phi_SubleadLep": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "Electron_phi_SubleadLep", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{ll}  nJet4", 
+            "#it{ll}  nJet5", 
+            "#it{ll}  nJet6", 
+            "#it{ll}  nJet7", 
+            "#it{ll}  nJet8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "Electron_phi_SubleadLep", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_phi_SubleadLep", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_phi_SubleadLep", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_phi_SubleadLep", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_phi_SubleadLep", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_phi_SubleadLep"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_eta_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "SinglePlotLegend": {
+        "nColumns": 3, 
+        "Coordinates": [
+            0.75, 
+            0.8, 
+            0.95, 
+            0.9
+        ], 
+        "Supercategories": {
+            "Data": {
+                "Draw": "PE1", 
+                "Names": [
+                    "Data"
+                ], 
+                "Stack": false
+            }, 
+            "Signal+Background": {
+                "Draw": "HIST", 
+                "Names": [
+                    "tttt", 
+                    "ttbar", 
+                    "singletop", 
+                    "ttH", 
+                    "ttVJets", 
+                    "ttultrarare", 
+                    "DY", 
+                    "QCD"
+                ], 
+                "Stack": true
+            }
+        }, 
+        "Ratios": {
+            "Data/MC": {
+                "Color": 1, 
+                "Style": "Marker", 
+                "Denominator": "Signal+Background", 
+                "Numerator": "Data"
+            }
+        }, 
+        "Type": "DefaultLegend", 
+        "Categories": {
+            "ttH": {
+                "Color": 616, 
+                "Style": "Fill", 
+                "Names": [
+                    "ttH"
+                ]
+            }, 
+            "tttt": {
+                "Color": 858, 
+                "Style": "Fill", 
+                "Names": [
+                    "tttt"
+                ]
+            }, 
+            "ttVJets": {
+                "Color": 880, 
+                "Style": "Fill", 
+                "Names": [
+                    "ttWJets", 
+                    "ttZJets"
+                ]
+            }, 
+            "DY": {
+                "Color": 432, 
+                "Style": "Fill", 
+                "Names": [
+                    "DYJets_DL"
+                ]
+            }, 
+            "Data": {
+                "Color": 1, 
+                "Style": "Marker", 
+                "Names": [
+                    "MuMu_A", 
+                    "MuMu_B", 
+                    "MuMu_C", 
+                    "MuMu_D", 
+                    "MuMu_E", 
+                    "MuMu_F", 
+                    "MuMu_G", 
+                    "MuMu_H", 
+                    "ElMu_A", 
+                    "ElMu_B", 
+                    "ElMu_C", 
+                    "ElMu_D", 
+                    "ElMu_E", 
+                    "ElMu_F", 
+                    "ElMu_G", 
+                    "ElMu_H", 
+                    "ElEl_A", 
+                    "ElEl_B", 
+                    "ElEl_C", 
+                    "ElEl_D", 
+                    "ElEl_E", 
+                    "ElEl_F", 
+                    "ElEl_G", 
+                    "ElEl_H", 
+                    "El_A", 
+                    "El_B", 
+                    "El_C", 
+                    "El_D", 
+                    "El_E", 
+                    "El_F", 
+                    "Mu_A", 
+                    "Mu_B", 
+                    "Mu_C", 
+                    "Mu_D", 
+                    "Mu_E", 
+                    "Mu_F", 
+                    "ElMu", 
+                    "ElEl", 
+                    "El", 
+                    "Mu"
+                ]
+            }, 
+            "ttbar": {
+                "Color": 632, 
+                "Style": "Fill", 
+                "Names": [
+                    "tt_DL", 
+                    "tt_SL", 
+                    "tt_DL-GF", 
+                    "tt_SL-GF"
+                ]
+            }, 
+            "QCD": {
+                "Color": 900, 
+                "Style": "Fill", 
+                "Names": [
+                    "QCD_HT200", 
+                    "QCD_HT300", 
+                    "QCD_HT500", 
+                    "QCD_HT700", 
+                    "QCD_HT1000", 
+                    "QCD_HT1500", 
+                    "QCD_HT2000"
+                ]
+            }, 
+            "singletop": {
+                "Color": 400, 
+                "Style": "Fill", 
+                "Names": [
+                    "ST_tW", 
+                    "ST_tbarW"
+                ]
+            }, 
+            "ttultrarare": {
+                "Color": 416, 
+                "Style": "Fill", 
+                "Names": [
+                    "ttWW", 
+                    "ttWH", 
+                    "ttWZ", 
+                    "ttZZ", 
+                    "ttZH", 
+                    "ttHH", 
+                    "tttJ"
+                ]
+            }
+        }
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nMediumFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_nJet_nBtag2_Electron_eta_SubleadLep": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "Electron_eta_SubleadLep", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{ll}  nJet4", 
+            "#it{ll}  nJet5", 
+            "#it{ll}  nJet6", 
+            "#it{ll}  nJet7", 
+            "#it{ll}  nJet8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "Electron_eta_SubleadLep", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_eta_SubleadLep", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_eta_SubleadLep", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_eta_SubleadLep", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_eta_SubleadLep", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_eta_SubleadLep"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_eta_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "DefaultCanvas": {
+        "XPixels": 800, 
+        "Title": "DefaultCanvasTitle", 
+        "Plots": null, 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "DoRatio": false, 
+        "Type": "DefaultCanvas", 
+        "YPixels": 800, 
+        "DoMountainrange": false
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_phi_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_phi_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nLooseFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_phi_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_pt_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet4___nLooseFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_pt_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_InvMass": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_nJet_nBtag2_Electron_InvMass": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "Electron_InvMass", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{ll}  nJet4", 
+            "#it{ll}  nJet5", 
+            "#it{ll}  nJet6", 
+            "#it{ll}  nJet7", 
+            "#it{ll}  nJet8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "Electron_InvMass", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_InvMass", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_InvMass", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_InvMass", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_InvMass", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_InvMass"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_pfRelIso03_all": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_pt_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_pt_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_eta_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_pfRelIso03_all": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_phi_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_nJet_nBtag2_Electron_pt_LeadLep": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "Electron_pt_LeadLep", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{ll}  nJet4", 
+            "#it{ll}  nJet5", 
+            "#it{ll}  nJet6", 
+            "#it{ll}  nJet7", 
+            "#it{ll}  nJet8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "Electron_pt_LeadLep", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_pt_LeadLep", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_pt_LeadLep", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_pt_LeadLep", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_pt_LeadLep", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_pt_LeadLep"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "DefaultPlot": {
+        "Files": null, 
+        "Rebin": null, 
+        "RatioYMin": 0.1, 
+        "RatioYMax": 1.9, 
+        "Title": "DefaultPlotTitle", 
+        "Unblind": false, 
+        "Type": "DefaultPlot"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_eta_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet4___nTightFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_pfRelIso03_chg": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_eta_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_phi_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_pfRelIso03_chg": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_pt": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_pt": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nMediumFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_nJet_nBtag2_Electron_eta_LeadLep": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "Electron_eta_LeadLep", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{ll}  nJet4", 
+            "#it{ll}  nJet5", 
+            "#it{ll}  nJet6", 
+            "#it{ll}  nJet7", 
+            "#it{ll}  nJet8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "Electron_eta_LeadLep", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_eta_LeadLep", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_eta_LeadLep", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_eta_LeadLep", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_eta_LeadLep", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_eta_LeadLep"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_pfRelIso03_all": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_pfRelIso03_chg": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_pfRelIso03_all": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_InvMass": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_eta_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_eta_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_pfRelIso03_all": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_pt_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_pt": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet6___nTightFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet6___nMediumFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_phi_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nTightFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_nJet_nBtag2_Electron_phi_LeadLep": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "Electron_phi_LeadLep", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{ll}  nJet4", 
+            "#it{ll}  nJet5", 
+            "#it{ll}  nJet6", 
+            "#it{ll}  nJet7", 
+            "#it{ll}  nJet8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "Electron_phi_LeadLep", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_phi_LeadLep", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_phi_LeadLep", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_phi_LeadLep", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_phi_LeadLep", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_phi_LeadLep"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "Canvas_nJet_nBtag2_nLooseFTAElectron": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "nLooseFTAElectron", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{ll}  nJet4", 
+            "#it{ll}  nJet5", 
+            "#it{ll}  nJet6", 
+            "#it{ll}  nJet7", 
+            "#it{ll}  nJet8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "nLooseFTAElectron", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_HT500_nMediumDeepCSVB4_nJet4___nLooseFTAElectron", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet5___nLooseFTAElectron", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet6___nLooseFTAElectron", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nLooseFTAElectron", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nLooseFTAElectron"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "Canvas_nJet_nBtag2_Electron_pt": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "Electron_pt", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{ll}  nJet4", 
+            "#it{ll}  nJet5", 
+            "#it{ll}  nJet6", 
+            "#it{ll}  nJet7", 
+            "#it{ll}  nJet8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "Electron_pt", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_pt", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_pt", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_pt", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_pt", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_pt"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_InvMass": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_pt_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_nJet_nBtag2_Electron_pt_SubleadLep": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "Electron_pt_SubleadLep", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{ll}  nJet4", 
+            "#it{ll}  nJet5", 
+            "#it{ll}  nJet6", 
+            "#it{ll}  nJet7", 
+            "#it{ll}  nJet8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "Electron_pt_SubleadLep", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_pt_SubleadLep", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_pt_SubleadLep", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_pt_SubleadLep", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_pt_SubleadLep", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_pt_SubleadLep"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_pt_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet5___nLooseFTAElectron": {
+        "Files": "2017___Combined.root", 
+        "Rebin": null, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_pfRelIso03_chg": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_phi_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_phi_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "DefaultLegend": {
+        "Supercategories": {
+            "Signal": {
+                "Draw": "L", 
+                "Names": [
+                    "tttt"
+                ], 
+                "Stack": false
+            },
+            "Data-Post301046": {
+                "Draw": "PE1", 
+                "Names": [
+                    "Data-Post301046"
+                ], 
+                "Stack": false
+            }, 
+            "Data-B": {
+                "Draw": "P", 
+                "Names": [
+                    "Data-B"
+                ], 
+                "Stack": false
+            }, 
+            "Data-EarlyC": {
+                "Draw": "P", 
+                "Names": [
+                    "Data-EarlyC"
+                ], 
+                "Stack": false
+            },  
+            "Background": {
+                "Draw": "HIST", 
+                "Names": [
+                    "ttbar", 
+                    "singletop", 
+                    "ttH", 
+                    "ttVJets", 
+                    "ttultrarare", 
+                    "DY", 
+                    "QCD"
+                ], 
+                "Stack": true
+            }
+        }, 
+        "nColumns": 1, 
+        "OLDY-Coordinates": [
+            0.35, 
+            0.75, 
+            0.95, 
+            0.9
+        ], 
+        "Ratios": {
+            "Data/MC": {
+                "Style": "Marker", 
+		"MarkerStyle": 20,
+		"Draw": "PXE1",
+                "Denominator": "Background", 
+                "Numerator": "Data-Post301046"
+            },
+            "Data-B/MC": { 
+                "Style": "Marker", 
+		"MarkerStyle": 23, 
+		"Draw": "P HIST",
+                "Denominator": "Background", 
+                "Numerator": "Data-B"
+            },
+            "Data-EarlyC/MC": {
+                "Style": "Marker",  
+		"MarkerStyle": 21,
+		"Draw": "P HIST",
+                "Denominator": "Background", 
+                "Numerator": "Data-EarlyC"
+            }
+        }, 
+        "Systematics": [], 
+        "OLDY-nColumns": 3, 
+        "Type": "DefaultLegend", 
+        "Coordinates": [
+            0.0, 
+            0.1, 
+            0.3, 
+            0.65
+        ], 
+        "Categories": {
+            "ttH": {
+                "Color": 616, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttH___ElMu___ZWindowMET0Width0"
+                ]
+            }, 
+            "tttt": {
+                "Color": 864, 
+                "Style": "Line", 
+                "Names": [
+                    "2017___tttt___ElMu___ZWindowMET0Width0"
+                ]
+            }, 
+            "ttVJets": {
+                "Color": 880, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttWJets___ElMu___ZWindowMET0Width0", 
+                    "2017___ttZJets___ElMu___ZWindowMET0Width0"
+                ]
+            }, 
+            "DY": {
+                "Color": 416, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___DYJets_DL___ElMu___ZWindowMET0Width0"
+                ]
+            }, 
+            "Data-B": {
+                "Color": 416, 
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+                "Names": [
+		    "2017___ElMu_BOnly___ElMu___ZWindowMET0Width0", 
+		    "2017___MuMu_BOnly___ElMu___ZWindowMET0Width0", 
+		    "2017___ElEl_BOnly___ElMu___ZWindowMET0Width0", 
+		    "2017___El_BOnly___ElMu___ZWindowMET0Width0", 
+		    "2017___Mu_BOnly___ElMu___ZWindowMET0Width0"
+                ],
+		"ScaleArray": [6.82067, 6.82067, 6.82067, 6.82067, 6.82067]
+            }, 
+            "Data-EarlyC": {
+                "Color": 600, 
+                "Style": "Marker",
+		"MarkerStyle": 21,
+                "Names": [
+		    "2017___ElMu_CPre301046___ElMu___ZWindowMET0Width0", 
+		    "2017___MuMu_CPre301046___ElMu___ZWindowMET0Width0", 
+		    "2017___ElEl_CPre301046___ElMu___ZWindowMET0Width0", 
+		    "2017___El_CPre301046___ElMu___ZWindowMET0Width0", 
+		    "2017___Mu_CPre301046___ElMu___ZWindowMET0Width0"
+                ],
+		"ScaleArray": [4.9908, 4.9908, 4.9908, 4.9908, 4.9908]
+            }, 
+            "Data-Post301046": {
+                "Color": 1, 
+                "Style": "Marker",
+		"MarkerStyle": 20, 
+                "Names": [
+                    "2017___ElMu___ElMu___ZWindowMET0Width0", 
+                    "2017___MuMu___ElMu___ZWindowMET0Width0", 
+                    "2017___ElEl___ElMu___ZWindowMET0Width0", 
+                    "2017___El___ElMu___ZWindowMET0Width0", 
+                    "2017___Mu___ElMu___ZWindowMET0Width0"
+                ]
+            }, 
+            "ttbar": {
+                "Color": 632, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___tt_DL___ElMu___ZWindowMET0Width0", 
+                    "2017___tt_SL___ElMu___ZWindowMET0Width0", 
+                    "2017___tt_DL-GF___ElMu___ZWindowMET0Width0", 
+                    "2017___tt_SL-GF___ElMu___ZWindowMET0Width0"
+                ]
+            }, 
+            "QCD": {
+                "Color": 900, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___QCD_HT200___ElMu___ZWindowMET0Width0", 
+                    "2017___QCD_HT300___ElMu___ZWindowMET0Width0", 
+                    "2017___QCD_HT500___ElMu___ZWindowMET0Width0", 
+                    "2017___QCD_HT700___ElMu___ZWindowMET0Width0", 
+                    "2017___QCD_HT1000___ElMu___ZWindowMET0Width0", 
+                    "2017___QCD_HT1500___ElMu___ZWindowMET0Width0", 
+                    "2017___QCD_HT2000___ElMu___ZWindowMET0Width0"
+                ]
+            }, 
+            "singletop": {
+                "Color": 400, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ST_tW___ElMu___ZWindowMET0Width0", 
+                    "2017___ST_tbarW___ElMu___ZWindowMET0Width0"
+                ]
+            }, 
+            "ttultrarare": {
+                "Color": 432, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttWW___ElMu___ZWindowMET0Width0", 
+                    "2017___ttWH___ElMu___ZWindowMET0Width0", 
+                    "2017___ttWZ___ElMu___ZWindowMET0Width0", 
+                    "2017___ttZZ___ElMu___ZWindowMET0Width0", 
+                    "2017___ttZH___ElMu___ZWindowMET0Width0", 
+                    "2017___ttHH___ElMu___ZWindowMET0Width0", 
+                    "2017___tttJ___ElMu___ZWindowMET0Width0"
+                ]
+            }
+        }
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_phi_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_eta_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_nJet_nBtag2_Electron_pfRelIso03_all": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "Electron_pfRelIso03_all", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{ll} nJet4", 
+            "#it{ll} nJet5", 
+            "#it{ll} nJet6", 
+            "#it{ll} nJet7", 
+            "#it{ll} nJet8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "Electron_pfRelIso03_all", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_HT500_nMediumDeepCSVB4_nJet4___Electron_pfRelIso03_all", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_pfRelIso03_all", 
+            "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_pfRelIso03_all", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_pfRelIso03_all", 
+            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Electron_pfRelIso03_all"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet5___Electron_phi_LeadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_HT500_nMediumDeepCSVB4_nJet6___Electron_eta_SubleadLep": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 10, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Electron_pt": {
+        "Files": "2017___Combined.root", 
+        "Rebin": 5, 
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }
+}
