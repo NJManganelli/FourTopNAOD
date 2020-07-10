@@ -1666,11 +1666,15 @@ def getLabelAndHeader(Cache=None, label="#bf{CMS Internal}",
     Cache["cms_header"] = cms_header
     return Cache
 
-def addHists(inputHists, name, scaleArray = None):
+def addHists(inputHists, name, scaleArray = None, blind=False):
+    """Add a list of histograms together, with the name passed, and with scaling done according to a matching length array containing the floats for each histogram.
+
+    blinding, when set to true, only prepends "BLIND" to the beginning of thehistogram name, rather than zeroing out bin values or any other method."""
     retHist = None
+    blindTag = "BLIND" if blind else ""
     for hn, hist in enumerate(inputHists):
         if hn == 0:
-            retHist = hist.Clone("{}".format(name))
+            retHist = hist.Clone("{}{}".format(blindTag, name))
             if scaleArray != None and len(scaleArray) == len(inputHists):
                 retHist.Scale(scaleArray[hn])
         else:
@@ -1766,7 +1770,8 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
                 print("for category '{}' and config '{}', the histoList is empty".format(sampleCat, config["Names"]))
             continue
         else:
-            retHists[sampleCat] = addHists(histoList, addHistoName, scaleArray = scaleList)
+            retHists[sampleCat] = addHists(histoList, addHistoName, scaleArray = scaleList, 
+                                           blind=True if len([bb.GetName() for bb in histoList if "BLIND" in bb.GetName()]) > 0 else False)
             #do projection of the histogram if it's 2D or 3D, based on either the axis
             # or a list containing the axis and projection bins
             if projection == None:
@@ -1947,10 +1952,11 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
         #Treat it as a super addition of histograms instead
         else:
             retDict["Supercategories"][super_cat_name] = addHists([tup[2] for tup in tmpList], 
-                                                                  "s_{cat}{sep}{com}{sep}{sys}".format(cat=super_cat_name, 
+                                                                  "s_{blind}{cat}{sep}{com}{sep}{sys}".format(cat=super_cat_name, 
                                                                                                        sep=separator,
                                                                                                        com=histNameCommon,
-                                                                                                       sys="" if systematic == None else systematic), 
+                                                                                                              sys="" if systematic == None else systematic,
+                                                                                                              blind="BLIND" if len([tup[2].GetName() for tup in tmpList if "BLIND" in tup[2].GetName()]) > 0 else ""), 
                                                                   scaleArray = None)
             legendCode = legendConfig["Categories"][tup[1]]["Style"]
             if legendCode == "Fill" or legendCode == "FillAlpha":
@@ -2137,6 +2143,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             thisMin = 10000 #inverted start
             for super_cat_name, drawable in sorted(CanCache["subplots/supercategories"][pn]["Supercategories"].items(), 
                                                    key=lambda x: legendConfig["Supercategories"][x[0]]["Stack"], reverse=True):
+                #Blinding is done via the keyword "BLIND" insterted into the supercategory histogram name, propragated up from the addHists method, etc. 
+                if "data" in super_cat_name.lower(): print(drawable.GetName())
                 if "data" in super_cat_name.lower() and "blind" in subplot_name.lower() and subplot_dict.get("Unblind", False) == False:
                     pass
                 else:
@@ -2181,11 +2189,11 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                     else:
                         drawable.SetTitle(";;{}".format(""))
 
-                drawable.Draw(draw_command)
                 #increment our counter
                 if "data" in super_cat_name.lower() and "blind" in subplot_name.lower() and subplot_dict.get("Unblind", False) == False:
                     pass
                 else:
+                    drawable.Draw(draw_command)
                     dn += 1
             if pn == 0:
                 #Draw the legend in the first category for now...
