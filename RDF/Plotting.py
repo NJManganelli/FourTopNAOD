@@ -2000,7 +2000,7 @@ def makeStack_Prototype(histFile, histList=None, legendConfig=None, rootName=Non
     print(hists_nominal)
     
     
-def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutput=False, closeFiles=True, pdfOutput=None, 
+def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutput=False, closeFiles=True, pdfOutput=None, useCanvasMax=False,
                      macroOutput=None, pngOutput=None, nominalPostfix="nom", separator="___", verbose=False, debug=False, nDivisions=105, lumi="N/A"):
     """Loop through a JSON encoded plotcard to draw plots based on root files containing histograms.
     Must pass a cache (python dictionary) to the function to prevent python from garbage collecting everything.
@@ -2124,6 +2124,9 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                 systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
                                 projection=CanCache["subplots/projections"][pn], 
                                 nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn))
+
+            # if combineOutput != None:
+                
             for sys in systematics:
                 CanCache["subplots/supercategories/systematics"][sys].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, nice_name, 
                                 systematic=sys, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
@@ -2289,7 +2292,10 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             canvasMin = min(CanCache["subplots/minima"] + [10e-3])
         else:
             canvasMin = min(CanCache["subplots/minima"])
-        canvasMax = max(CanCache["subplots/maxima"])
+        if useCanvasMax:
+            canvasMax = can_dict.get("canvasMax", 1.1 * max(CanCache["subplots/maxima"]))
+        else:
+            canvasMax = 1.1 * max(CanCache["subplots/maxima"])
         for pn, drawable in enumerate(CanCache["subplots/firstdrawn"]):
             drawable.SetMinimum(canvasMin)
             drawable.SetMaximum(canvasMax)
@@ -2471,6 +2477,9 @@ if __name__ == '__main__':
                         help='Disable batch output and attempt to draw histograms to display')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
+    parser.add_argument('--useCanvasMax', dest='useCanvasMax', action='store_true',
+                        help='use the Canvas card\' maximum rather than 110% of the subplots\' maxima')
+    
 
     #Parse the arguments
     args = parser.parse_args()
@@ -2483,6 +2492,7 @@ if __name__ == '__main__':
     era = args.era
     doBatch = not args.noBatch
     verb = args.verbose
+    useCanvasMax = args.useCanvasMax
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel)
 
     lumiDict = {"2017": 41.53,
@@ -2548,7 +2558,8 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics':
             pdfOut = "$ADIR/Plots/$TAG_$PLOTCARD_$CHAN.pdf".replace("$ADIR", analysisDir).replace("$TAG", tag).replace("$PLOTCARD", plotcard).replace("$CHAN", channel).replace("//", "/")
             if verb:
                 print("pdfOutput = {}".format(pdfOut))
-        resultsDict = loopPlottingJSON(loadedPlotConfig, Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, pdfOutput=pdfOut, lumi=lumi, verbose=verb);
+        resultsDict = loopPlottingJSON(loadedPlotConfig, Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, pdfOutput=pdfOut, 
+                                       lumi=lumi, useCanvasMax=useCanvasMax, verbose=verb);
     else:
         raise RuntimeError("The loading of the plot or legend cards failed. They are of type {} and {}, respectively".format(type(loadedPlotConfig),type(loadedLegendConfig)))
         
