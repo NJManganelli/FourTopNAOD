@@ -1,0 +1,130 @@
+ {   
+     "DefaultLegend": {
+	"Header": "#sqrt{{s}} = 13 TeV, L_{{int}} = None",
+	"HeaderPosition": 0.25,
+        "Supercategories": {
+            "tt_DL-multistitched": {
+                "Draw": "HIST", 
+                "Names": [
+                    "ttbb_DL-BOTH_FR",
+		    "ttbb_DL-BOTH_UR",
+		    "ttother_DL-BOTH_FR",
+		    "ttother_DL-BOTH_UR"
+                ], 
+                "Stack": true
+            },
+            "tt_DL-stitchedMarker": {
+                "Draw": "PE1", 
+                "Names": [
+		    "tt_DL-stitched"
+                ], 
+                "Stack": false
+            },
+            "tt_DL-verification": {
+                "Draw": "PE1", 
+                "Names": [
+		    "tt_DL"
+                ], 
+                "Stack": false
+            }
+        }, 
+        "nColumns": 1, 
+        "Ratios": {
+            "Stitched/Multistitched": {
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+		"Draw": "PXE1",
+                "Denominator": "tt_DL-multistitched", 
+                "Numerator": "tt_DL-stitchedMarker"
+            },
+            "Unstitched/Multistitched": {
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+		"Draw": "PXE1",
+                "Denominator": "tt_DL-multistitched", 
+                "Numerator": "tt_DL-verification"
+            }
+        }, 
+        "Systematics": [], 
+        "OLDY-nColumns": 3, 
+        "Type": "DefaultLegend", 
+        "Coordinates": [
+            0.80, 
+            0.35, 
+            0.98, 
+            0.60
+        ], 
+        "Categories": { 
+            "ttbb_DL-BOTH_FR": {
+                "Color": 864, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttbb_DL-GF_fr___effectiveXS",
+		    "2017___ttbb_DL_fr___effectiveXS"
+                ]
+            }, 
+            "ttbb_DL-BOTH_UR": {
+                "Color": 400, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttbb_DL_nr___effectiveXS"
+                ]
+            }, 
+            "ttother_DL-BOTH_FR": {
+                "Color": 880, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttother_DL-GF_fr___effectiveXS",
+		    "2017___ttother_DL_fr___effectiveXS"
+                ]
+            }, 
+            "ttother_DL-BOTH_UR": {
+                "Color": 900, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttother_DL_nr___effectiveXS"
+                ]
+            },
+            "ttbb_DL_FR": {
+                "Color": 616, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttbb_DL_fr___effectiveXS"
+                ]
+            }, 
+            "ttbb_DL_UR": {
+                "Color": 400, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttbb_DL_nr___effectiveXS"
+                ]
+            }, 
+            "ttother_DL_UR": {
+                "Color": 900, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttother_DL_nr___effectiveXS"
+                ]
+            }, 
+            "tt_DL-stitched": {
+                "Color": 416, 
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+                "Names": [
+                    "2017___ttbb_DL-GF_fr___nominalXS",
+                    "2017___ttbb_DL_nr___nominalXS",
+                    "2017___ttother_DL-GF_fr___nominalXS",
+                    "2017___ttother_DL_nr___nominalXS"
+                ]
+            }, 
+            "tt_DL": {
+                "Color": 1, 
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+                "Names": [
+                    "2017___tt_DL___effectiveXS"
+                ]
+            }
+        }
+    }
+}

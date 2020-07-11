@@ -1,5 +1,5 @@
 {
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -9,7 +9,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nJet_LooseDeepCSV": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___nJet_LooseDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -19,7 +19,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -29,7 +29,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -39,7 +39,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -49,7 +49,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -59,7 +59,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nJet_TightDeepCSV": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___nJet_TightDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -89,11 +89,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_jet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_jet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_jet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_jet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_jet1"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet1"
         ], 
         "Margins": [
             0.1, 
@@ -104,7 +104,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_sortedjet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -114,7 +114,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_sortedjet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -124,7 +124,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_sortedjet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -134,7 +134,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_sortedjet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -144,7 +144,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_sortedjet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -154,7 +154,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nJet_LooseDeepCSV": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___nJet_LooseDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -164,7 +164,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_eta_jet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_eta_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -174,7 +174,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_sortedjet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -184,7 +184,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_sortedjet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -194,7 +194,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_sortedjet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -204,7 +204,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_sortedjet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -214,7 +214,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_eta_jet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_eta_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -224,7 +224,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_eta_jet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_eta_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -254,11 +254,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_pt_jet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_pt_jet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_pt_jet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_pt_jet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_pt_jet2"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_pt_jet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_pt_jet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_pt_jet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_pt_jet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_pt_jet2"
         ], 
         "Margins": [
             0.1, 
@@ -289,11 +289,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_pt_jet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_pt_jet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_pt_jet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_pt_jet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_pt_jet3"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_pt_jet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_pt_jet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_pt_jet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_pt_jet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_pt_jet3"
         ], 
         "Margins": [
             0.1, 
@@ -304,7 +304,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_sortedjet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -314,7 +314,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_sortedjet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -324,7 +324,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_sortedjet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -334,7 +334,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_sortedjet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -364,11 +364,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_pt_jet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_pt_jet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_pt_jet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_pt_jet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_pt_jet4"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_pt_jet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_pt_jet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_pt_jet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_pt_jet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_pt_jet4"
         ], 
         "Margins": [
             0.1, 
@@ -379,7 +379,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_sortedjet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -389,7 +389,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_jet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -399,12 +399,12 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Canvas_nJet_nBtag2_Jet_DeepCSVB_jet1": {
+    "Canvas_nJet_nBtag2_Jet_DeepJetB_jet1": {
         "Legend": "DefaultLegend", 
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet_DeepCSVB_jet1", 
+        "Title": "Jet_DeepJetB_jet1", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
             "#it{ll}  nJet4", 
@@ -415,15 +415,15 @@
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
-        "XAxisTitle": "Jet_DeepCSVB_jet1", 
+        "XAxisTitle": "Jet_DeepJetB_jet1", 
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_jet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_jet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_jet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_jet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_jet1"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet1"
         ], 
         "Margins": [
             0.1, 
@@ -434,12 +434,12 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Canvas_nJet_nBtag2_Jet_DeepCSVB_jet2": {
+    "Canvas_nJet_nBtag2_Jet_DeepJetB_jet2": {
         "Legend": "DefaultLegend", 
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet_DeepCSVB_jet2", 
+        "Title": "Jet_DeepJetB_jet2", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
             "#it{ll}  nJet4", 
@@ -450,15 +450,15 @@
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
-        "XAxisTitle": "Jet_DeepCSVB_jet2", 
+        "XAxisTitle": "Jet_DeepJetB_jet2", 
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_jet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_jet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_jet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_jet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_jet2"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet2"
         ], 
         "Margins": [
             0.1, 
@@ -469,12 +469,12 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Canvas_nJet_nBtag2_Jet_DeepCSVB_jet3": {
+    "Canvas_nJet_nBtag2_Jet_DeepJetB_jet3": {
         "Legend": "DefaultLegend", 
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet_DeepCSVB_jet3", 
+        "Title": "Jet_DeepJetB_jet3", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
             "#it{ll}  nJet4", 
@@ -485,15 +485,15 @@
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
-        "XAxisTitle": "Jet_DeepCSVB_jet3", 
+        "XAxisTitle": "Jet_DeepJetB_jet3", 
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_jet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_jet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_jet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_jet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_jet3"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet3"
         ], 
         "Margins": [
             0.1, 
@@ -504,12 +504,12 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Canvas_nJet_nBtag2_Jet_DeepCSVB_jet4": {
+    "Canvas_nJet_nBtag2_Jet_DeepJetB_jet4": {
         "Legend": "DefaultLegend", 
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet_DeepCSVB_jet4", 
+        "Title": "Jet_DeepJetB_jet4", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
             "#it{ll}  nJet4", 
@@ -520,15 +520,15 @@
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
-        "XAxisTitle": "Jet_DeepCSVB_jet4", 
+        "XAxisTitle": "Jet_DeepJetB_jet4", 
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_jet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_jet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_jet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_jet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_jet4"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet4"
         ], 
         "Margins": [
             0.1, 
@@ -539,12 +539,12 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Canvas_nJet_nBtag2_Jet_DeepCSVB_jet5": {
+    "Canvas_nJet_nBtag2_Jet_DeepJetB_jet5": {
         "Legend": "DefaultLegend", 
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet_DeepCSVB_jet5", 
+        "Title": "Jet_DeepJetB_jet5", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
             "#it{ll}  nJet4", 
@@ -555,15 +555,15 @@
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
-        "XAxisTitle": "Jet_DeepCSVB_jet5", 
+        "XAxisTitle": "Jet_DeepJetB_jet5", 
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_jet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_jet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_jet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_jet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_jet5"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet5"
         ], 
         "Margins": [
             0.1, 
@@ -574,7 +574,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___nJet": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___nJet": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -584,7 +584,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_jet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -594,7 +594,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -604,7 +604,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_pt_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_pt_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -614,7 +614,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -624,7 +624,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_jet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -634,7 +634,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -644,7 +644,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -654,7 +654,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_pt_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_pt_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -664,7 +664,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_eta_jet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_eta_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -674,7 +674,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___nJet_TightDeepCSV": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___nJet_TightDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -704,11 +704,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_sortedjet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_sortedjet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_sortedjet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_sortedjet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_sortedjet1"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet1"
         ], 
         "Margins": [
             0.1, 
@@ -739,11 +739,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_sortedjet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_sortedjet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_sortedjet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_sortedjet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_sortedjet2"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet2"
         ], 
         "Margins": [
             0.1, 
@@ -774,11 +774,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_sortedjet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_sortedjet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_sortedjet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_sortedjet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_sortedjet3"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet3"
         ], 
         "Margins": [
             0.1, 
@@ -809,11 +809,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_sortedjet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_sortedjet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_sortedjet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_sortedjet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_sortedjet4"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet4"
         ], 
         "Margins": [
             0.1, 
@@ -824,7 +824,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nJet_TightDeepCSV": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___nJet_TightDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -834,7 +834,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_phi_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_phi_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -844,7 +844,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_sortedjet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -854,7 +854,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_jet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -864,7 +864,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -874,7 +874,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -884,7 +884,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_phi_jet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_phi_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -894,7 +894,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_phi_jet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_phi_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -904,7 +904,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_phi_jet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_phi_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -914,7 +914,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_phi_jet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_phi_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -924,7 +924,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -934,7 +934,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_phi_jet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_phi_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -944,7 +944,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_pt_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_pt_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -954,7 +954,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_pt_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_pt_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -964,7 +964,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_pt_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_pt_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -974,7 +974,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_pt_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_pt_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -984,7 +984,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_pt_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_pt_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -994,7 +994,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_pt_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_pt_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1004,7 +1004,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_pt_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_pt_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1014,7 +1014,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_pt_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_pt_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1024,7 +1024,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_phi_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_phi_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1034,7 +1034,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_sortedjet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1044,7 +1044,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_phi_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_phi_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1054,7 +1054,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_phi_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_phi_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1064,7 +1064,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_phi_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_phi_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1074,7 +1074,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nJet_MediumDeepCSV": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___nJet_MediumDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -1084,7 +1084,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_sortedjet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1094,7 +1094,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nJet": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___nJet": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -1104,7 +1104,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_eta_jet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_eta_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1114,7 +1114,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_sortedjet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1124,7 +1124,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_jet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1134,7 +1134,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_sortedjet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1144,7 +1144,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_eta_jet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_eta_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1154,7 +1154,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_phi_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_phi_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1164,7 +1164,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_phi_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_phi_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1174,7 +1174,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_phi_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_phi_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1184,7 +1184,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_phi_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_phi_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1194,7 +1194,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_phi_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_phi_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1204,7 +1204,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_sortedjet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1214,7 +1214,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_sortedjet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1224,7 +1224,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_phi_jet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_phi_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1234,7 +1234,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_phi_jet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_phi_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1244,7 +1244,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_phi_jet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_phi_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1254,7 +1254,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_phi_jet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_phi_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1264,7 +1264,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_sortedjet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1274,7 +1274,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_sortedjet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1304,11 +1304,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_phi_jet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_phi_jet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_phi_jet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_phi_jet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_phi_jet1"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_phi_jet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_phi_jet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_phi_jet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_phi_jet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_phi_jet1"
         ], 
         "Margins": [
             0.1, 
@@ -1339,11 +1339,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_phi_jet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_phi_jet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_phi_jet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_phi_jet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_phi_jet2"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_phi_jet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_phi_jet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_phi_jet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_phi_jet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_phi_jet2"
         ], 
         "Margins": [
             0.1, 
@@ -1374,11 +1374,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_phi_jet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_phi_jet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_phi_jet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_phi_jet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_phi_jet3"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_phi_jet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_phi_jet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_phi_jet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_phi_jet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_phi_jet3"
         ], 
         "Margins": [
             0.1, 
@@ -1409,11 +1409,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_phi_jet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_phi_jet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_phi_jet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_phi_jet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_phi_jet4"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_phi_jet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_phi_jet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_phi_jet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_phi_jet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_phi_jet4"
         ], 
         "Margins": [
             0.1, 
@@ -1444,11 +1444,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_phi_jet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_phi_jet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_phi_jet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_phi_jet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_phi_jet5"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_phi_jet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_phi_jet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_phi_jet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_phi_jet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_phi_jet5"
         ], 
         "Margins": [
             0.1, 
@@ -1459,7 +1459,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_jet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1469,7 +1469,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_jet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1479,7 +1479,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_jet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1489,7 +1489,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_jet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1499,7 +1499,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_jet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1509,7 +1509,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_jet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1519,7 +1519,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_jet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1549,11 +1549,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_pt_jet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_pt_jet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_pt_jet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_pt_jet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_pt_jet5"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_pt_jet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_pt_jet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_pt_jet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_pt_jet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_pt_jet5"
         ], 
         "Margins": [
             0.1, 
@@ -1564,7 +1564,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___nJet_LooseDeepCSV": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___nJet_LooseDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -1574,12 +1574,12 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Canvas_nJet_nBtag2_Jet_DeepCSVB_sortedjet4": {
+    "Canvas_nJet_nBtag2_Jet_DeepJetB_sortedjet4": {
         "Legend": "DefaultLegend", 
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet_DeepCSVB_sortedjet4", 
+        "Title": "Jet_DeepJetB_sortedjet4", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
             "#it{ll}  nJet4", 
@@ -1590,15 +1590,15 @@
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
-        "XAxisTitle": "Jet_DeepCSVB_sortedjet4", 
+        "XAxisTitle": "Jet_DeepJetB_sortedjet4", 
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_sortedjet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_sortedjet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_sortedjet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_sortedjet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_sortedjet4"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet4"
         ], 
         "Margins": [
             0.1, 
@@ -1609,7 +1609,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_eta_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_eta_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1619,7 +1619,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___nJet_TightDeepCSV": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___nJet_TightDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -1629,7 +1629,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_eta_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_eta_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1639,7 +1639,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_eta_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_eta_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1649,7 +1649,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_eta_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_eta_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1659,7 +1659,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_eta_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_eta_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1669,7 +1669,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_eta_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_eta_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1679,7 +1679,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_eta_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_eta_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1689,7 +1689,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___nJet": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___nJet": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -1699,7 +1699,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___nJet_LooseDeepCSV": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___nJet_LooseDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -1709,7 +1709,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1719,7 +1719,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1729,7 +1729,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1739,7 +1739,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1749,7 +1749,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_sortedjet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1759,7 +1759,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_eta_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_eta_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1789,11 +1789,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___nJet_TightDeepCSV", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___nJet_TightDeepCSV", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___nJet_TightDeepCSV", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nJet_TightDeepCSV", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nJet_TightDeepCSV"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___nJet_TightDeepCSV", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___nJet_TightDeepCSV", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___nJet_TightDeepCSV", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___nJet_TightDeepCSV", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___nJet_TightDeepCSV"
         ], 
         "Margins": [
             0.1, 
@@ -1804,7 +1804,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_sortedjet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1814,7 +1814,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_eta_jet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_eta_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1824,7 +1824,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_sortedjet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1834,7 +1834,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1844,7 +1844,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_jet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1854,7 +1854,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1864,7 +1864,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_sortedjet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2036,7 +2036,7 @@
             }
         }
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_sortedjet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2066,11 +2066,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___nJet_MediumDeepCSV", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___nJet_MediumDeepCSV", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___nJet_MediumDeepCSV", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nJet_MediumDeepCSV", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nJet_MediumDeepCSV"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___nJet_MediumDeepCSV", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___nJet_MediumDeepCSV", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___nJet_MediumDeepCSV", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___nJet_MediumDeepCSV", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___nJet_MediumDeepCSV"
         ], 
         "Margins": [
             0.1, 
@@ -2081,7 +2081,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_sortedjet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2111,11 +2111,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___nJet", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___nJet", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___nJet", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nJet", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nJet"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___nJet", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___nJet", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___nJet", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___nJet", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___nJet"
         ], 
         "Margins": [
             0.1, 
@@ -2126,7 +2126,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2136,7 +2136,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2146,7 +2146,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2156,7 +2156,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2166,7 +2166,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2176,7 +2176,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_sortedjet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2186,7 +2186,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_sortedjet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2196,7 +2196,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_sortedjet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2206,7 +2206,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_sortedjet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2216,7 +2216,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_sortedjet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2226,7 +2226,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_sortedjet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2236,7 +2236,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_sortedjet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2246,7 +2246,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_sortedjet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2256,7 +2256,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_eta_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_eta_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2266,7 +2266,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_sortedjet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2276,7 +2276,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2286,7 +2286,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___nJet_MediumDeepCSV": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___nJet_MediumDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -2296,7 +2296,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_eta_jet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_eta_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2306,12 +2306,12 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Canvas_nJet_nBtag2_Jet_DeepCSVB_sortedjet5": {
+    "Canvas_nJet_nBtag2_Jet_DeepJetB_sortedjet5": {
         "Legend": "DefaultLegend", 
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet_DeepCSVB_sortedjet5", 
+        "Title": "Jet_DeepJetB_sortedjet5", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
             "#it{ll}  nJet4", 
@@ -2322,15 +2322,15 @@
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
-        "XAxisTitle": "Jet_DeepCSVB_sortedjet5", 
+        "XAxisTitle": "Jet_DeepJetB_sortedjet5", 
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_sortedjet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_sortedjet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_sortedjet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_sortedjet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_sortedjet5"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet5"
         ], 
         "Margins": [
             0.1, 
@@ -2361,11 +2361,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_eta_jet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_eta_jet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_eta_jet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_eta_jet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_eta_jet3"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_eta_jet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_eta_jet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_eta_jet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_eta_jet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_eta_jet3"
         ], 
         "Margins": [
             0.1, 
@@ -2376,12 +2376,12 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Canvas_nJet_nBtag2_Jet_DeepCSVB_sortedjet1": {
+    "Canvas_nJet_nBtag2_Jet_DeepJetB_sortedjet1": {
         "Legend": "DefaultLegend", 
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet_DeepCSVB_sortedjet1", 
+        "Title": "Jet_DeepJetB_sortedjet1", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
             "#it{ll}  nJet4", 
@@ -2392,15 +2392,15 @@
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
-        "XAxisTitle": "Jet_DeepCSVB_sortedjet1", 
+        "XAxisTitle": "Jet_DeepJetB_sortedjet1", 
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_sortedjet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_sortedjet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_sortedjet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_sortedjet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_sortedjet1"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet1"
         ], 
         "Margins": [
             0.1, 
@@ -2411,12 +2411,12 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Canvas_nJet_nBtag2_Jet_DeepCSVB_sortedjet3": {
+    "Canvas_nJet_nBtag2_Jet_DeepJetB_sortedjet3": {
         "Legend": "DefaultLegend", 
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet_DeepCSVB_sortedjet3", 
+        "Title": "Jet_DeepJetB_sortedjet3", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
             "#it{ll}  nJet4", 
@@ -2427,15 +2427,15 @@
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
-        "XAxisTitle": "Jet_DeepCSVB_sortedjet3", 
+        "XAxisTitle": "Jet_DeepJetB_sortedjet3", 
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_sortedjet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_sortedjet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_sortedjet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_sortedjet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_sortedjet3"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet3"
         ], 
         "Margins": [
             0.1, 
@@ -2446,12 +2446,12 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Canvas_nJet_nBtag2_Jet_DeepCSVB_sortedjet2": {
+    "Canvas_nJet_nBtag2_Jet_DeepJetB_sortedjet2": {
         "Legend": "DefaultLegend", 
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet_DeepCSVB_sortedjet2", 
+        "Title": "Jet_DeepJetB_sortedjet2", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
             "#it{ll}  nJet4", 
@@ -2462,15 +2462,15 @@
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
-        "XAxisTitle": "Jet_DeepCSVB_sortedjet2", 
+        "XAxisTitle": "Jet_DeepJetB_sortedjet2", 
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepCSVB_sortedjet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_sortedjet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepCSVB_sortedjet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_sortedjet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_sortedjet2"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet2"
         ], 
         "Margins": [
             0.1, 
@@ -2501,11 +2501,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_eta_jet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_eta_jet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_eta_jet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_eta_jet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_eta_jet1"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_eta_jet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_eta_jet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_eta_jet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_eta_jet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_eta_jet1"
         ], 
         "Margins": [
             0.1, 
@@ -2516,7 +2516,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_jet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2526,7 +2526,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nJet_MediumDeepCSV": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___nJet_MediumDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -2536,7 +2536,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_sortedjet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2546,7 +2546,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_sortedjet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2556,7 +2556,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_sortedjet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2566,7 +2566,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_sortedjet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2576,7 +2576,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_sortedjet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2815,7 +2815,7 @@
             }
         }
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_eta_jet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_eta_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2825,7 +2825,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_pt_jet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_pt_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2835,7 +2835,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_pt_jet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_pt_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2865,11 +2865,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_eta_jet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_eta_jet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_eta_jet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_eta_jet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_eta_jet5"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_eta_jet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_eta_jet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_eta_jet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_eta_jet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_eta_jet5"
         ], 
         "Margins": [
             0.1, 
@@ -2900,11 +2900,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_eta_jet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_eta_jet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_eta_jet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_eta_jet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_eta_jet4"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_eta_jet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_eta_jet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_eta_jet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_eta_jet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_eta_jet4"
         ], 
         "Margins": [
             0.1, 
@@ -2915,7 +2915,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_pt_jet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_pt_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2945,11 +2945,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_eta_jet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_eta_jet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_eta_jet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_eta_jet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_eta_jet2"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_eta_jet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_eta_jet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_eta_jet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_eta_jet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_eta_jet2"
         ], 
         "Margins": [
             0.1, 
@@ -2960,7 +2960,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_pt_jet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_pt_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2970,7 +2970,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_pt_jet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_pt_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3000,11 +3000,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_pt_jet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_pt_jet1", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_pt_jet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_pt_jet1", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_pt_jet1"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_pt_jet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_pt_jet1", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_pt_jet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_pt_jet1", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_pt_jet1"
         ], 
         "Margins": [
             0.1, 
@@ -3015,7 +3015,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_phi_jet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_phi_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3025,7 +3025,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepCSVB_jet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3035,7 +3035,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___nJet_MediumDeepCSV": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___nJet_MediumDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -3045,7 +3045,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepCSVB_sortedjet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3075,11 +3075,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_sortedjet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_sortedjet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_sortedjet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_sortedjet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_sortedjet5"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_sortedjet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_sortedjet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_sortedjet5"
         ], 
         "Margins": [
             0.1, 
@@ -3090,7 +3090,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3100,7 +3100,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3110,7 +3110,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3120,7 +3120,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3130,7 +3130,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3140,7 +3140,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___nJet_TightDeepCSV": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___nJet_TightDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -3170,11 +3170,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_jet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_jet5", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_jet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_jet5", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_jet5"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet5", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet5", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet5"
         ], 
         "Margins": [
             0.1, 
@@ -3205,11 +3205,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_jet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_jet4", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_jet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_jet4", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_jet4"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet4", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet4", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet4"
         ], 
         "Margins": [
             0.1, 
@@ -3220,7 +3220,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_eta_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_eta_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3230,7 +3230,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_eta_jet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_eta_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3260,11 +3260,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_jet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_jet3", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_jet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_jet3", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_jet3"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet3", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet3", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet3"
         ], 
         "Margins": [
             0.1, 
@@ -3295,11 +3295,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_jet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepJetB_jet2", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_DeepJetB_jet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_DeepJetB_jet2", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_jet2"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_jet2", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_DeepJetB_jet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_DeepJetB_jet2", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet2"
         ], 
         "Margins": [
             0.1, 
@@ -3310,7 +3310,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_phi_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_phi_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3320,7 +3320,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_phi_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_phi_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3330,7 +3330,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_phi_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_phi_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3340,7 +3340,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_phi_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_phi_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3350,7 +3350,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Jet_phi_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___Jet_phi_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3360,7 +3360,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_sortedjet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3370,7 +3370,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_sortedjet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3380,7 +3380,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_sortedjet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3390,7 +3390,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_sortedjet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3400,7 +3400,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_sortedjet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_sortedjet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3410,7 +3410,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_jet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3420,7 +3420,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_jet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3430,7 +3430,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_jet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3440,7 +3440,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_DeepCSVB_sortedjet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_DeepJetB_sortedjet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3459,7 +3459,7 @@
         "Unblind": false, 
         "Type": "DefaultPlot"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_jet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3469,7 +3469,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Jet_DeepJetB_jet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet_DeepJetB_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3494,7 +3494,7 @@
         "YPixels": 800, 
         "DoMountainrange": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_pt_jet4": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_pt_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3504,7 +3504,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_pt_jet5": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_pt_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3514,7 +3514,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_pt_jet1": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_pt_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3524,7 +3524,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_pt_jet2": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_pt_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3534,7 +3534,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Jet_pt_jet3": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet_pt_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3544,7 +3544,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___nJet": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___nJet": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -3554,7 +3554,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___nJet_MediumDeepCSV": {
+    "Plot_HT500_nMediumDeepJetB3_nJet6___nJet_MediumDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -3564,7 +3564,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_pt_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_pt_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3574,7 +3574,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_pt_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_pt_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3584,7 +3584,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_pt_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_pt_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3594,7 +3594,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_pt_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_pt_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3604,7 +3604,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_pt_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_pt_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3614,7 +3614,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nJet": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___nJet": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -3624,7 +3624,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Jet_DeepJetB_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___Jet_DeepJetB_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3654,11 +3654,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___nJet_LooseDeepCSV", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___nJet_LooseDeepCSV", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___nJet_LooseDeepCSV", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nJet_LooseDeepCSV", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nJet_LooseDeepCSV"
+            "Plot_HT500_nMediumDeepJetB3_nJet4___nJet_LooseDeepCSV", 
+            "Plot_HT500_nMediumDeepJetB3_nJet5___nJet_LooseDeepCSV", 
+            "Plot_HT500_nMediumDeepJetB3_nJet6___nJet_LooseDeepCSV", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___nJet_LooseDeepCSV", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___nJet_LooseDeepCSV"
         ], 
         "Margins": [
             0.1, 
@@ -3669,7 +3669,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_eta_jet1": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_eta_jet1": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3679,7 +3679,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___nJet_LooseDeepCSV": {
+    "Plot_HT500_nMediumDeepJetB3_nJet4___nJet_LooseDeepCSV": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -3689,7 +3689,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_eta_jet3": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_eta_jet3": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3699,7 +3699,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_eta_jet2": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_eta_jet2": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3709,7 +3709,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_eta_jet5": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_eta_jet5": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3719,7 +3719,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Jet_eta_jet4": {
+    "Plot_HT500_nMediumDeepJetB3_nJet5___Jet_eta_jet4": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 

@@ -1,5 +1,5 @@
 {
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_pt": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_pt": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -9,7 +9,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_eta_LeadLep": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_eta_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -19,7 +19,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___nLooseFTAMuon": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___nLooseFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -29,7 +29,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_pt_SubleadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_pt_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -39,7 +39,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_pfRelIso03_chg": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_pfRelIso03_chg": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -69,11 +69,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_InvMass", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_InvMass", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_InvMass", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_InvMass", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_InvMass"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_InvMass", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_InvMass", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_InvMass", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_InvMass", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_InvMass"
         ], 
         "Margins": [
             0.1, 
@@ -84,7 +84,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_InvMass": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_InvMass": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -94,7 +94,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_pfRelIso03_all": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_pfRelIso03_all": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -104,7 +104,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_phi_LeadLep": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_phi_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -114,7 +114,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___nLooseFTAMuon": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___nLooseFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -124,7 +124,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_phi_SubleadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_phi_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -134,7 +134,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_eta_SubleadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_eta_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -164,11 +164,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_pfRelIso03_chg", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_pfRelIso03_chg", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_pfRelIso03_chg", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_pfRelIso03_chg", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_pfRelIso03_chg"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_pfRelIso03_chg", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_pfRelIso03_chg", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_pfRelIso03_chg", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_pfRelIso03_chg", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_pfRelIso03_chg"
         ], 
         "Margins": [
             0.1, 
@@ -179,7 +179,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nTightFTAMuon": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___nTightFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -189,7 +189,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_pt": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_pt": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -199,7 +199,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___nTightFTAMuon": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___nTightFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -209,7 +209,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_pfRelIso03_all": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_pfRelIso03_all": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -219,7 +219,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nMediumFTAMuon": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___nMediumFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -229,7 +229,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_pt_LeadLep": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_pt_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -239,7 +239,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_phi_LeadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_phi_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -249,7 +249,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_InvMass": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_InvMass": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -259,7 +259,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_eta_SubleadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_eta_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -289,11 +289,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_pfRelIso03_all", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_pfRelIso03_all", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_pfRelIso03_all", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_pfRelIso03_all", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_pfRelIso03_all"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_pfRelIso03_all", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_pfRelIso03_all", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_pfRelIso03_all", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_pfRelIso03_all", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_pfRelIso03_all"
         ], 
         "Margins": [
             0.1, 
@@ -304,7 +304,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_pfRelIso03_chg": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_pfRelIso03_chg": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -314,7 +314,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_pfRelIso03_all": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_pfRelIso03_all": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -324,7 +324,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_phi_LeadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_phi_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -354,11 +354,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_eta_LeadLep", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_eta_LeadLep", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_eta_LeadLep", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_eta_LeadLep", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_eta_LeadLep"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_eta_LeadLep", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_eta_LeadLep", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_eta_LeadLep", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_eta_LeadLep", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_eta_LeadLep"
         ], 
         "Margins": [
             0.1, 
@@ -384,7 +384,7 @@
         "YPixels": 800, 
         "DoMountainrange": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_phi_LeadLep": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_phi_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -414,11 +414,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_eta_SubleadLep", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_eta_SubleadLep", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_eta_SubleadLep", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_eta_SubleadLep", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_eta_SubleadLep"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_eta_SubleadLep", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_eta_SubleadLep", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_eta_SubleadLep", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_eta_SubleadLep", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_eta_SubleadLep"
         ], 
         "Margins": [
             0.1, 
@@ -429,7 +429,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_phi_SubleadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_phi_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -439,7 +439,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_phi_SubleadLep": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_phi_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -469,11 +469,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___nMediumFTAMuon", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___nMediumFTAMuon", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___nMediumFTAMuon", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nMediumFTAMuon", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nMediumFTAMuon"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___nMediumFTAMuon", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___nMediumFTAMuon", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___nMediumFTAMuon", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___nMediumFTAMuon", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___nMediumFTAMuon"
         ], 
         "Margins": [
             0.1, 
@@ -484,7 +484,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_pt": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_pt": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -494,7 +494,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_phi_LeadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_phi_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -504,7 +504,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_pt_LeadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_pt_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -514,7 +514,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_pfRelIso04_all": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_pfRelIso04_all": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -524,7 +524,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_eta_LeadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_eta_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -534,7 +534,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_pt_SubleadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_pt_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -544,7 +544,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_pfRelIso04_all": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_pfRelIso04_all": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -554,7 +554,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_eta_LeadLep": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_eta_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -813,11 +813,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_phi_LeadLep", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_phi_LeadLep", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_phi_LeadLep", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_phi_LeadLep", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_phi_LeadLep"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_phi_LeadLep", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_phi_LeadLep", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_phi_LeadLep", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_phi_LeadLep", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_phi_LeadLep"
         ], 
         "Margins": [
             0.1, 
@@ -828,7 +828,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_InvMass": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_InvMass": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -838,7 +838,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_pfRelIso03_chg": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_pfRelIso03_chg": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -848,7 +848,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___nMediumFTAMuon": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___nMediumFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -878,11 +878,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___nTightFTAMuon", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___nTightFTAMuon", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___nTightFTAMuon", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nTightFTAMuon", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nTightFTAMuon"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___nTightFTAMuon", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___nTightFTAMuon", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___nTightFTAMuon", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___nTightFTAMuon", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___nTightFTAMuon"
         ], 
         "Margins": [
             0.1, 
@@ -913,11 +913,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___nLooseFTAMuon", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___nLooseFTAMuon", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___nLooseFTAMuon", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nLooseFTAMuon", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nLooseFTAMuon"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___nLooseFTAMuon", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___nLooseFTAMuon", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___nLooseFTAMuon", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___nLooseFTAMuon", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___nLooseFTAMuon"
         ], 
         "Margins": [
             0.1, 
@@ -928,7 +928,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_pfRelIso04_all": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_pfRelIso04_all": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -938,7 +938,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_eta_SubleadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_eta_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -948,7 +948,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_pfRelIso03_chg": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_pfRelIso03_chg": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -958,7 +958,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___nTightFTAMuon": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___nTightFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -968,7 +968,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_pt_LeadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_pt_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -978,7 +978,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_pfRelIso03_all": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_pfRelIso03_all": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -988,7 +988,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nTightFTAMuon": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___nTightFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -998,7 +998,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_eta_LeadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_eta_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1028,11 +1028,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_pt_SubleadLep", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_pt_SubleadLep", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_pt_SubleadLep", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_pt_SubleadLep", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_pt_SubleadLep"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_pt_SubleadLep", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_pt_SubleadLep", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_pt_SubleadLep", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_pt_SubleadLep", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_pt_SubleadLep"
         ], 
         "Margins": [
             0.1, 
@@ -1052,7 +1052,7 @@
         "Unblind": false, 
         "Type": "DefaultPlot"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_pt_SubleadLep": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_pt_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -1062,7 +1062,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_eta_LeadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_eta_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1072,7 +1072,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_pt_LeadLep": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_pt_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -1082,7 +1082,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_pfRelIso04_all": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_pfRelIso04_all": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1092,7 +1092,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___nMediumFTAMuon": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___nMediumFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -1102,7 +1102,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_pfRelIso03_chg": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_pfRelIso03_chg": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1112,7 +1112,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_pt_SubleadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_pt_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -1122,7 +1122,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nLooseFTAMuon": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___nLooseFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -1152,11 +1152,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_pt_LeadLep", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_pt_LeadLep", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_pt_LeadLep", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_pt_LeadLep", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_pt_LeadLep"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_pt_LeadLep", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_pt_LeadLep", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_pt_LeadLep", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_pt_LeadLep", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_pt_LeadLep"
         ], 
         "Margins": [
             0.1, 
@@ -1349,11 +1349,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_pfRelIso04_all", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_pfRelIso04_all", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_pfRelIso04_all", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_pfRelIso04_all", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_pfRelIso04_all"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_pfRelIso04_all", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_pfRelIso04_all", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_pfRelIso04_all", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_pfRelIso04_all", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_pfRelIso04_all"
         ], 
         "Margins": [
             0.1, 
@@ -1384,11 +1384,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_pt", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_pt", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_pt", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_pt", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_pt"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_pt", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_pt", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_pt", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_pt", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_pt"
         ], 
         "Margins": [
             0.1, 
@@ -1399,7 +1399,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___nMediumFTAMuon": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___nMediumFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -1409,7 +1409,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___nTightFTAMuon": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___nTightFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -1419,7 +1419,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_pt": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_pt": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -1429,7 +1429,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___nLooseFTAMuon": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___nLooseFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -1439,7 +1439,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_eta_SubleadLep": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_eta_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1469,11 +1469,11 @@
         "DoRatio": true, 
         "Coordinates": [], 
         "Plots": [
-            "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_phi_SubleadLep", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_phi_SubleadLep", 
-            "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_phi_SubleadLep", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_phi_SubleadLep", 
-            "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_phi_SubleadLep"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_phi_SubleadLep", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_phi_SubleadLep", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_phi_SubleadLep", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_phi_SubleadLep", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_phi_SubleadLep"
         ], 
         "Margins": [
             0.1, 
@@ -1484,7 +1484,7 @@
         "Type": "CanvasConfig", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_phi_SubleadLep": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_phi_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1494,7 +1494,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_InvMass": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_InvMass": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1504,7 +1504,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet7___Muon_pfRelIso04_all": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_pfRelIso04_all": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1514,7 +1514,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_eta_SubleadLep": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_eta_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1524,7 +1524,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___nLooseFTAMuon": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___nLooseFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -1534,7 +1534,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_phi_SubleadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_phi_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1544,7 +1544,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepCSVB4_nJet8+___Muon_pt_SubleadLep": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_pt_SubleadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -1554,7 +1554,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_pt_LeadLep": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_pt_LeadLep": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -1564,7 +1564,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___nMediumFTAMuon": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___nMediumFTAMuon": {
         "Files": "2017___Combined.root", 
         "Rebin": null, 
         "Projection": null, 
@@ -1574,7 +1574,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet5___Muon_pfRelIso03_all": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_pfRelIso03_all": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1584,7 +1584,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet4___Muon_pt": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_pt": {
         "Files": "2017___Combined.root", 
         "Rebin": 5, 
         "Projection": null, 
@@ -1594,7 +1594,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepCSVB4_nJet6___Muon_InvMass": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_InvMass": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
