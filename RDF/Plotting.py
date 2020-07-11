@@ -1942,7 +1942,7 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
                     #Assume Marker style
                     legendCode = "P"
                 #Add the legend entry
-                leg.AddEntry(tup[2], tup[1], legendCode)
+                leg.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
                 #Add the category histogram to the stack
                 retDict["Supercategories"][super_cat_name].Add(tup[2])
             #Acquire the stats for the finished stack and store it in the dictionary, but we only half-prepare this, since the histogram must be 'drawn' before a stats object is created
@@ -1967,7 +1967,8 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
                 #Assume Marker style
                 legendCode = "P"
             #Add the legend entry, but instead of the tup[2] histogram, the overall added hist.
-            leg.AddEntry(retDict["Supercategories"][super_cat_name], tup[1], legendCode)
+            legendLabel = tup[1] + " (blind)" if "blind" in tup[2].GetName().lower() else tup[1] #This only works if the first category is blinded
+            leg.AddEntry(retDict["Supercategories"][super_cat_name], legendLabel, legendCode)
             retDict["Supercategories/hists"][super_cat_name] = retDict["Supercategories"][super_cat_name]#.GetListOfFunctions().FindObject("stats")
             #retDict["Supercategories/xAxis"][super_cat_name] = retDict["Supercategories"][super_cat_name].GetXaxis()
             #retDict["Supercategories/yAxis"][super_cat_name] = retDict["Supercategories"][super_cat_name].GetYaxis()
@@ -2079,6 +2080,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                              xPixels=xPixels, yPixels=yPixels)
         CanCache["subplots/files"] = []
         CanCache["subplots/supercategories"] = []
+        CanCache["subplots/firstdrawn"] = []
         CanCache["subplots/supercategories/systematics"] = {}
         for sys in systematics:
             CanCache["subplots/supercategories/systematics"][sys] = []
@@ -2144,8 +2146,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             for super_cat_name, drawable in sorted(CanCache["subplots/supercategories"][pn]["Supercategories"].items(), 
                                                    key=lambda x: legendConfig["Supercategories"][x[0]]["Stack"], reverse=True):
                 #Blinding is done via the keyword "BLIND" insterted into the supercategory histogram name, propragated up from the addHists method, etc. 
-                if "data" in super_cat_name.lower(): print(drawable.GetName())
-                if "data" in super_cat_name.lower() and "blind" in subplot_name.lower() and subplot_dict.get("Unblind", False) == False:
+                if "data" in super_cat_name.lower() and "blind" in drawable.GetName().lower() and subplot_dict.get("Unblind", False) == False:
                     pass
                 else:
                     thisMax = max(thisMax, drawable.GetMaximum())
@@ -2159,7 +2160,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             for super_cat_name, drawable in sorted(CanCache["subplots/supercategories"][pn]["Supercategories"].items(), 
                                                    key=lambda x: legendConfig["Supercategories"][x[0]]["Stack"], reverse=True):
                 #Don't draw blinded data...
-                if "data" in super_cat_name.lower() and "blind" in subplot_name.lower() and subplot_dict.get("Unblind", False) == False:
+                if "data" in super_cat_name.lower() and "blind" in drawable.GetName().lower() and subplot_dict.get("Unblind", False) == False:
                     if isinstance(drawable, ROOT.TH1):
                         for binnumber in xrange(drawable.GetNbinsX()+2):
                             drawable.SetBinContent(binnumber, 0); drawable.SetBinError(binnumber, 0)
@@ -2169,6 +2170,9 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 draw_command = legendConfig["Supercategories"][super_cat_name]["Draw"]
                 if dn > 0:
                     draw_command += " SAME"
+                #Append the drawable to a list for later modification of the maxima/minima... messy for deletion if that has to be done, though!
+                else:
+                    CanCache["subplots/firstdrawn"].append(drawable)
                 if debug:
                     print("supercategory: {}    type: {}    command: {}".format(super_cat_name, type(drawable), draw_command))
                 
@@ -2190,7 +2194,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                         drawable.SetTitle(";;{}".format(""))
 
                 #increment our counter
-                if "data" in super_cat_name.lower() and "blind" in subplot_name.lower() and subplot_dict.get("Unblind", False) == False:
+                if "data" in super_cat_name.lower() and "blind" in drawable.GetName().lower() and subplot_dict.get("Unblind", False) == False:
                     pass
                 else:
                     drawable.Draw(draw_command)
@@ -2277,8 +2281,20 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 #FIXME: better would be to make the Supercategory "blindable" instead of assuming 'data' is in the name
             #Draw the pad regardless, for consistency
             CanCache["canvas/lowerPads"][pn].Draw() 
-        CanCache["canvas"].cd()    
+        #Return to the main canvas
+        CanCache["canvas"].cd()
         
+        #Modify the vertical axes now that we have the first drawn object, and each maximum and minima.
+        if doLogY:
+            canvasMin = min(CanCache["subplots/minima"] + [10e-3])
+        else:
+            canvasMin = min(CanCache["subplots/minima"])
+        canvasMax = max(CanCache["subplots/maxima"])
+        for pn, drawable in enumerate(CanCache["subplots/firstdrawn"]):
+            drawable.SetMinimum(canvasMin)
+            drawable.SetMaximum(canvasMax)
+            CanCache["canvas/upperPads"][pn].Draw()
+
         #Disable default title and make our own
         ROOT.gStyle.SetOptTitle(1);
         #CanCache["canvas_title"] = ROOT.TPaveLabel(.25,.95,.6,.99, canTitle,"trndc");
