@@ -1548,6 +1548,10 @@ def createCanvasPads(canvasTitle, Cache=None, doRatio=False, doMountainrange=Fal
     Cache["canvas/xEdgesHigh"] = xEdgesHigh
     Cache["canvas/yEdgesLow"] = yEdgesLow
     Cache["canvas/yEdgesHigh"] = yEdgesHigh
+    Cache["canvas/bordersL"] = bordersL
+    Cache["canvas/bordersR"] = bordersR
+    Cache["canvas/bordersT"] = bordersT
+    Cache["canvas/bordersB"] = bordersB
     Cache["canvas/marginL"] = marginL
     Cache["canvas/marginR"] = marginR
     Cache["canvas/marginT"] = marginT
@@ -2093,6 +2097,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         CanCache["subplots/labels"] = []
         CanCache["subplots/maxima"] = []
         CanCache["subplots/minima"] = []
+        CanCache["subplots/integrals"] = []
+        CanCache["subplots/integraltables"] = []
         
         
         #generate the header and label for the canvas, adding them in the cache as 'cms_label' and 'cms_header'
@@ -2119,6 +2125,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 raise RuntimeError("File not available, was it stored in a list or something?")
             CanCache["subplots/rebins"].append(subplot_dict.get("Rebin"))
             CanCache["subplots/projections"].append(subplot_dict.get("Projection"))
+            CanCache["subplots/integrals"].append(collections.OrderedDict())
             #Call makeSuperCategories with the very same file [pn] referenced, plus the legendConfig
             CanCache["subplots/supercategories"].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, nice_name, 
                                 systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
@@ -2150,10 +2157,17 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                                    key=lambda x: legendConfig["Supercategories"][x[0]]["Stack"], reverse=True):
                 #Blinding is done via the keyword "BLIND" insterted into the supercategory histogram name, propragated up from the addHists method, etc. 
                 if "data" in super_cat_name.lower() and "blind" in drawable.GetName().lower() and subplot_dict.get("Unblind", False) == False:
+                    thisIntegral = "(blind)"
                     pass
                 else:
                     thisMax = max(thisMax, drawable.GetMaximum())
                     thisMin = min(thisMin, drawable.GetMinimum())
+                    if isinstance(drawable, (ROOT.TH1)):
+                        thisIntegral = str("{:4.3f}".format(drawable.Integral()))
+                    elif isinstance(drawable, (ROOT.THStack)):
+                        thisIntegral = str("{:4.3f}".format(drawable.GetStack().Last().Integral()))
+                CanCache["subplots/integrals"][pn][super_cat_name] = thisIntegral
+
                 #Find and store the maxima/minima for each histogram
             CanCache["subplots/maxima"].append(thisMax)
             CanCache["subplots/minima"].append(thisMin)
@@ -2286,7 +2300,18 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             CanCache["canvas/lowerPads"][pn].Draw() 
         #Return to the main canvas
         CanCache["canvas"].cd()
-        
+        #Fill in integrals for super categories, and set the minima/maxima per pad
+        padWidth = (1.0 - CanCache["canvas/bordersL"] - CanCache["canvas/bordersR"])/nXPads
+        drawPoint = CanCache["canvas/marginL"]*0.33
+        for pn in xrange(len(CanCache["subplots/integrals"])):
+            tmp = ROOT.TLatex()
+            tmp.SetTextSize(0.016)
+            tmpString = "#splitline"
+            for super_cat_name, str_integral in CanCache["subplots/integrals"][pn].items():
+                if "data" in super_cat_name.lower(): continue
+                tmpString += "{" + "{} : {}".format(super_cat_name, str_integral) + "}"
+            tmp.DrawLatexNDC(drawPoint, 0.02, tmpString)
+            drawPoint += padWidth
         #Modify the vertical axes now that we have the first drawn object, and each maximum and minima.
         if doLogY:
             canvasMin = min(CanCache["subplots/minima"] + [10e-3])
@@ -2296,6 +2321,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             canvasMax = can_dict.get("canvasMax", 1.1 * max(CanCache["subplots/maxima"]))
         else:
             canvasMax = 1.1 * max(CanCache["subplots/maxima"])
+
         for pn, drawable in enumerate(CanCache["subplots/firstdrawn"]):
             drawable.SetMinimum(canvasMin)
             drawable.SetMaximum(canvasMax)
