@@ -4108,7 +4108,6 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     filterNodes[processName][decayChannel]["L1Nodes"].append(
                         ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
                          processName, decayChannel, None, "nMediumDeep{tag}B4+".format(tag=tagger, bpf=branchpostfix), None))
-                    
                     #These filters should apply to all L1Nodes
                     filterNodes[processName][decayChannel]["L2Nodes"].append(
                         ("nFTAJet{bpf} == 4".format(bpf=branchpostfix), "4 Jets ({bpf})".format(bpf=branchpostfix),
@@ -5899,9 +5898,12 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         line = path + "," + ",".join(path_values.values()) + "\n"
                         f.write(line)
             
-def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=False, doLeptonSelection=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-         BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, printBookkeeping=False, triggers=[], includeSampleNames=None, 
-         useDeltaR=False, jetPtMin=30.0, jetPUId=None, excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True):
+def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=False, doHistos=False, 
+         doLeptonSelection=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
+         BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, 
+         printBookkeeping=False, triggers=[], includeSampleNames=None, 
+         useDeltaR=False, jetPtMin=30.0, jetPUId=None, 
+         excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True):
 
     ##################################################
     ##################################################
@@ -6394,6 +6396,15 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doHistos=Fa
             #     fillHLTMeans(the_df[name][lvl], wgtVar="wgt_SUMW_PU_L1PF", stats_dict=stats[name][lvl])
 
             #Hold the categorization nodes if doing histograms
+            if doNtuples:
+                ntupleDir = analysisDir + "/Ntuples"
+                if not os.path.isdir(ntupleDir):
+                    os.makedirs(ntupleDir)
+                treeName = "Events"
+                pdb.set_trace()
+                filename = ntupleDir + "/{}".format("bleh")
+                print("I made a name: {}".format(filename))
+                # ROOT.FTA.bookLazySnapshot(ROOT.RDF.AsRNode(), "Events",  
             if doHistos:
                 packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], era = vals["era"], triggers = triggers,
                                                     sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
@@ -6592,7 +6603,7 @@ def otherFuncs():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
     parser.add_argument('stage', action='store', type=str, choices=['bookkeeping', 'fill-yields', 'combine-yields', 'lepton-selection', 'fill-diagnostics', 
-                                                                    'fill-histograms', 'prepare-for-combine'],
+                                                                    'fill-histograms', 'fill-ntuples', 'prepare-for-combine'],
                         help='analysis stage to be produced')
     parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic__{chan}_selection',
                         help='Stage of data storage to pull from, as referenced in Sample dictionaries as subkeys of the "source" key.'\
@@ -6607,10 +6618,14 @@ if __name__ == '__main__':
                         help='Float value for the minimum Jet pt in GeV, defaulting to 30.0')
     parser.add_argument('--jetPUId', dest='jetPUId', action='store', default=None, nargs='?', const='L', type=str, choices=['L', 'M', 'T'],
                         help='Optionally apply Jet PU Id to the selected jets, with options for Loose ("L"), Medium ("M"), or Tight ("T") using the 80X training.')
-    parser.add_argument('--useDeltaR', dest='useDeltaR', action='store', default=False, type=float, nargs='?', const=0.4,
-                        help='Disable usage of PFMatching for Lepton-Jet cross-cleaning, falling back to DeltaR < 0.4')
+    parser.add_argument('--useDeltaR', dest='useDeltaR', action='store', type=float, default=0.4, #nargs='?', const=0.4,
+                        help='Default distance parameter 0.4, set alternative float value for Lepton-Jet cross-cleaning')
+    parser.add_argument('--usePFMatching', dest='usePFMatching', action='store_true', 
+                        help='Enable usage of PFMatching for Lepton-Jet cross-cleaning')
     parser.add_argument('--bTagger', dest='bTagger', action='store', default='DeepCSV', type=str, choices=['DeepCSV', 'DeepJet'],
                         help='bTagger algorithm to be used')
+    parser.add_argument('--doNtuples', dest='doNtuples', action='store_true',
+                        help='Add ntuple output during other mode, such as fill-histograms')
     parser.add_argument('--noAggregate', dest='noAggregate', action='store_true',
                         help='Disable usage of aggregate BTagging Yields/Efficiencies in favor of individual per-sample maps')
     parser.add_argument('--useHTOnly', dest='useHTOnly', action='store_true',
@@ -6647,6 +6662,9 @@ if __name__ == '__main__':
     stage = args.stage
     channel = args.channel
     source = args.source.format(chan=channel)
+    doNtuples = args.doNtuples
+    if stage == 'fill-ntuples':
+        doNtuples = True
     jetPtMin=args.jetPtMin
     jetPUId=args.jetPUId
     useDeltaR = args.useDeltaR
@@ -6753,8 +6771,16 @@ if __name__ == '__main__':
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'fill-histograms':
-        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=True, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+        #filling ntuples is also possible with the option --doNtuples
+        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doNtuples=doNtuples, doHistos=True, 
+                      doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
+                      jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
+    elif stage == 'fill-ntuples':
+        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doNtuples=doNtuples, doHistos=False, 
+                      doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
+                      jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
     elif stage == 'prepare-for-combine':
