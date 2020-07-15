@@ -217,6 +217,16 @@ namespace FTA{
   //   }
   //   return retCode;
   // }
+  // void bookLazySnapshot(ROOT::RDF::RNode df, std::string_view treename, std::string_view filename, const ColumnNames_t columnList, std::string_view mode = "RECREATE"){
+  //   //ROOT::kLZMA //highest ratio, very slow decompression
+  //   //ROOT::kLZ4 //fastest read speed for decent compression ratio
+  //   //ROOT::kZSTD //unknown performance
+  //   //ROOT::kZLIB //faster read speed, but less compression than LZMA. 
+  //   //ROOT::RDF::RSnapshotOptions(std::string_view mode, ECAlgo comprAlgo, int comprLevel, int autoFlush, int splitLevel, bool lazy, bool overwriteIfExists=false);
+  //   auto sopt = ROOT::RDF::RSnapshotOptions(mode, ROOT::kLZ4, 6, 0, 99, true, true);
+  //   //ROOT::RDF::RInterface::Snapshot ( std::string_view  treename, std::string_view  filename, const ColumnNames_t &  columnList, const RSnapshotOptions &  options = RSnapshotOptions()) 
+  //   df.Snapshot(treename, filename, columnList, sopt);
+  // }
   int packEventId(int datasetId, int campaignId, int genTtbarId = -1, int ttbarNGenJet = -1, double ttbarGenHT = -1, int otherPhaseSpaceID = -1){
     //Store integer key packing info about dataset (TTTo2L2Nu...), campaign (RunIIFall17NanoAODv6...), ttbar categorization, phase space, etc.
     // Reserve 1000 codes for dataset, 100 for campaign, 
