@@ -2372,11 +2372,11 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
         #Fill lists
         if jetPUId:
             if jetPUId == 'L':
-                jetPUId = " && Jet_puId >= 4" #pass Loose Id, >=6 pass Medium, ==7 pass Tight
+                jetPUId = " && ({jpt} >= 50 || Jet_puId >= 4)".format(jpt=jetPt) #pass Loose Id, >=6 pass Medium, ==7 pass Tight
             elif jetPUId == 'M':
-                jetPUId = " && Jet_puId >= 6" #pass Loose Id, >=6 pass Medium, ==7 pass Tight
+                jetPUId = " && ({jpt} >= 50 || Jet_puId >= 6)".format(jpt=jetPt) #pass Loose Id, >=6 pass Medium, ==7 pass Tight
             elif jetPUId == 'T':
-                jetPUId = " && Jet_puId == 7" #pass Loose Id, >=6 pass Medium, ==7 pass Tight
+                jetPUId = " && ({jpt} >= 50 || Jet_puId == 7)".format(jpt=jetPt) #pass Loose Id, >=6 pass Medium, ==7 pass Tight
             else:
                 raise ValueError("Invalid Jet PU Id selected")
         else:
