@@ -2111,7 +2111,7 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfL
     
     #MUONS
     z.append(("Muon_idx", "FTA::generateIndices(Muon_pt);"))
-    z.append(("nFTAMuon{lpf}".format(lpf=leppostfix), "Muon_pt[mu_mask].size()"))
+    z.append(("nFTAMuon{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Muon_pt[mu_mask].size())"))
     z.append(("FTAMuon{lpf}_idx".format(lpf=leppostfix), "Muon_idx[mu_mask]"))
     z.append(("FTAMuon{lpf}_pfIsoId".format(lpf=leppostfix), "Muon_pfIsoId[mu_mask]"))
     z.append(("FTAMuon{lpf}_looseId".format(lpf=leppostfix), "Muon_looseId[mu_mask]"))
@@ -2129,7 +2129,7 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfL
     z.append(("FTAMuon{lpf}_pfRelIso04_all".format(lpf=leppostfix), "Muon_pfRelIso04_all[mu_mask]"))
     z.append(("FTAMuon{lpf}_jetIdx".format(lpf=leppostfix), "Muon_jetIdx[mu_mask]"))
     #z.append(("METofMETandMu2", ) #FIXME: switch to MET_xycorr_pt{}
-    z.append(("nFTAMuon{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Muon{pf}_pt.size())"))
+    # z.append(("nFTAMuon{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Muon{pf}_pt.size())"))
     z.append(("nLooseFTAMuon{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Muon_looseId[mu_mask && Muon_looseId == true].size())"))
     z.append(("nMediumFTAMuon{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Muon_mediumId[mu_mask && Muon_mediumId == true].size())"))
     z.append(("nTightFTAMuon{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Muon_tightId[mu_mask && Muon_tightId == true].size())"))
@@ -4393,6 +4393,9 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_HT{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
+                                                                    ";npvsGood;HT", 100, 400, 2000, 20, 0, 100), "PV_npvsGood", "HT{bpf}".format(bpf=branchpostfix), wgtVar))
                     defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___ST{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,400,2000), "ST{bpf}".format(bpf=branchpostfix), wgtVar))
@@ -5897,6 +5900,7 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                             wroteKey = True
                         line = path + "," + ",".join(path_values.values()) + "\n"
                         f.write(line)
+
             
 def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=False, doHistos=False, 
          doLeptonSelection=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
@@ -6603,7 +6607,7 @@ def otherFuncs():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
     parser.add_argument('stage', action='store', type=str, choices=['bookkeeping', 'fill-yields', 'combine-yields', 'lepton-selection', 'fill-diagnostics', 
-                                                                    'fill-histograms', 'fill-ntuples', 'prepare-for-combine'],
+                                                                    'fill-histograms', 'combine-histograms', 'fill-ntuples', 'prepare-for-combine'],
                         help='analysis stage to be produced')
     parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic__{chan}_selection',
                         help='Stage of data storage to pull from, as referenced in Sample dictionaries as subkeys of the "source" key.'\
@@ -6646,8 +6650,8 @@ if __name__ == '__main__':
     #                     help='string to filter samples while checking events or generating configurations')
     # parser.add_argument('--redir', dest='redir', action='append', type=str, default='root://cms-xrd-global.cern.ch/',
     #                     help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
-    # parser.add_argument('--era', dest='era', action='store', type=str, default="2017", choices=['2016', '2017', '2018'],
-    #                     help='simulation/run year')
+    parser.add_argument('--era', dest='era', action='store', type=str, default="2017", choices=['2016', '2017', '2018'],
+                        help='simulation/run year')
     #nargs='+' #this option requires a minimum of arguments, and all arguments are added to a list. '*' but minimum of 1 argument instead of none
 
     #Parse the arguments
@@ -6661,6 +6665,7 @@ if __name__ == '__main__':
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday)
     stage = args.stage
     channel = args.channel
+    era = args.era
     source = args.source.format(chan=channel)
     doNtuples = args.doNtuples
     if stage == 'fill-ntuples':
@@ -6691,6 +6696,7 @@ if __name__ == '__main__':
 
     print("Analysis stage: {stg}".format(stg=stage))
     print("Analysis directory: {adir}".format(adir=analysisDir))
+    print("Era to be analyzed: {era}".format(era=era))
     print("Channel to be analyzed: {chan}".format(chan=channel))
     print("Algorithm for Lepton-Jet crosscleaning: {}".format("PFMatching" if not useDeltaR else "DeltaR < {}".format(useDeltaR)))
     print("Jet selection is using these parameters: Minimum Pt: {} PU Id: {}".format(jetPtMin, jetPUId))
@@ -6777,6 +6783,21 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet)
+    elif stage == 'combine-histograms':
+        print("Combining root files for plotting")
+        histDir = "{adir}/Histograms".format(adir=analysisDir, chan=channel)
+        writeDir = "{adir}/Histograms/All".format(adir=analysisDir)
+        if not os.path.isdir(writeDir):
+            os.makedirs(writeDir)
+        globKey = "**/*.root"
+        print("Looking for histogram files to combine inside {hdir}".format(hdir=histDir))
+        f = glob.glob("{}/{}".format(histDir, globKey))
+        cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
+        # print(cmd)
+        subprocess.Popen(args="{}".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))
+        if verb:
+            print("\nFound these files: ")
+            for fiter in f: print("\t\t{}".format(fiter))
     elif stage == 'fill-ntuples':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doNtuples=doNtuples, doHistos=False, 
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 

@@ -9,10 +9,10 @@
 #include <TFile.h>
 #include "ROOT/RVec.hxx"
 
-typedef ROOT::VecOps::RVec<float>                        RVec_f;
-typedef ROOT::VecOps::RVec<float>::const_iterator        RVec_f_iter;
-typedef ROOT::VecOps::RVec<int>                          RVec_i;
-typedef ROOT::VecOps::RVec<int>::const_iterator          RVec_i_iter;
+typedef ROOT::VecOps::RVec<Float_t>                        RVec_f;
+typedef ROOT::VecOps::RVec<Float_t>::const_iterator        RVec_f_iter;
+typedef ROOT::VecOps::RVec<Int_t>                          RVec_i;
+typedef ROOT::VecOps::RVec<Int_t>::const_iterator          RVec_i_iter;
 typedef ROOT::VecOps::RVec<std::string>                  RVec_str;
 typedef ROOT::VecOps::RVec<std::string>::const_iterator  RVec_str_iter;
 
@@ -217,16 +217,33 @@ namespace FTA{
   //   }
   //   return retCode;
   // }
-  // void bookLazySnapshot(ROOT::RDF::RNode df, std::string_view treename, std::string_view filename, const ColumnNames_t columnList, std::string_view mode = "RECREATE"){
-  //   //ROOT::kLZMA //highest ratio, very slow decompression
-  //   //ROOT::kLZ4 //fastest read speed for decent compression ratio
-  //   //ROOT::kZSTD //unknown performance
-  //   //ROOT::kZLIB //faster read speed, but less compression than LZMA. 
-  //   //ROOT::RDF::RSnapshotOptions(std::string_view mode, ECAlgo comprAlgo, int comprLevel, int autoFlush, int splitLevel, bool lazy, bool overwriteIfExists=false);
-  //   auto sopt = ROOT::RDF::RSnapshotOptions(mode, ROOT::kLZ4, 6, 0, 99, true, true);
-  //   //ROOT::RDF::RInterface::Snapshot ( std::string_view  treename, std::string_view  filename, const ColumnNames_t &  columnList, const RSnapshotOptions &  options = RSnapshotOptions()) 
-  //   df.Snapshot(treename, filename, columnList, sopt);
-  // }
+  //Can't get what I want from this, so work from the python end. FFS, another day's effort wasted on buggy shit. Need to know the compression enumeration is ROOT.ROOT.(algo)
+  template <typename T>
+  ROOT::RDF::RResultPtr<T> bookLazySnapshot(ROOT::RDF::RNode df, std::string_view treename, std::string_view filename, 
+			const ROOT::Detail::RDF::ColumnNames_t columnList, std::string_view mode = "RECREATE"){
+    //ROOT::kZLIB //faster read speed, but less compression than LZMA. //==1L
+    //ROOT::kLZMA //highest ratio, very slow decompression //==2L
+    //ROOT::kLZ4 //fastest read speed for decent compression ratio //==4L
+    //ROOT::kZSTD //unknown performance //==5L
+    //ROOT::RDF::RSnapshotOptions(std::string_view mode, ECAlgo comprAlgo, int comprLevel, int autoFlush, int splitLevel, bool lazy, bool overwriteIfExists=false); 
+    auto sopt = ROOT::RDF::RSnapshotOptions(mode, ROOT::kLZ4, 6, 0, 99, true); //, true); // but overwrite is exclusive to 6.22 + version
+    //ROOT::RDF::RInterface::Snapshot ( std::string_view  treename, std::string_view  filename, const ColumnNames_t &  columnList, const RSnapshotOptions &  options = RSnapshotOptions())
+    // sopt.fLazy = false;
+    std::cout << "filename = " << filename << " mode = " << sopt.fMode << " lazy = " << sopt.fLazy << std::endl;
+    // auto ret = df.Snapshot(treename, filename, columnList, sopt);
+    // return ret;
+    return sopt;
+  }
+  ROOT::RDF::RSnapshotOptions getOption(std::string_view mode = "RECREATE"){
+    std::cout << ROOT::kLZMA
+	      << ROOT::kLZ4 
+	      << ROOT::kZSTD
+	      << ROOT::kZLIB
+	      << std::endl;
+
+    auto sopt = ROOT::RDF::RSnapshotOptions(mode, ROOT::kLZ4, 6, 0, 99, true); //, true); // but overwrite is exclusive to 6.22 + version
+    return sopt;
+  }
   int packEventId(int datasetId, int campaignId, int genTtbarId = -1, int ttbarNGenJet = -1, double ttbarGenHT = -1, int otherPhaseSpaceID = -1){
     //Store integer key packing info about dataset (TTTo2L2Nu...), campaign (RunIIFall17NanoAODv6...), ttbar categorization, phase space, etc.
     // Reserve 1000 codes for dataset, 100 for campaign, 
