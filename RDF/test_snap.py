@@ -363,10 +363,11 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
             listOfColumns.push_back(defName)
     return rdf
 
-def bookLazySnapshot(input_df, filename, columnList=None, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=6, splitLevel=99, debug=False):
+def bookLazySnapshot(input_df, filename, columnList=None, treename="Events", mode="RECREATE", compressionAlgo="LZ4", compressionLevel=6, splitLevel=99, debug=False):
     finalVars = ROOT.std.vector(str)(0)
     desiredOriginalColumns = ["run", "luminosityBlock", "event", "genWeight",]
-    undesiredDefinedColumns = ["MET_xycorr_doublet__nom", "MET_xycorr_doublet__jesTotalDown", "MET_xycorr_doublet__jesTotalUp", "mu_mask", "e_mask", "jet_mask"]
+    undesiredDefinedColumns = ["MET_xycorr_doublet__nom", "MET_xycorr_doublet__jesTotalDown", "MET_xycorr_doublet__jesTotalUp", "mu_mask", "e_mask", "jet_mask",
+                               "Electron_idx", "Muon_idx", "Jet_idx"]
     allColumns = input_df.GetColumnNames()
     definedColumns = input_df.GetDefinedColumnNames()
     rdf = input_df
@@ -406,6 +407,18 @@ def bookLazySnapshot(input_df, filename, columnList=None, treename="Events", mod
         
     for c in finalVars:
         print("{:45s} | {}".format(c, rdf.GetColumnType(c)))
+    
+    Algos = {"ZLIB": 1,
+             "LZMA": 2,
+             "LZ4": 4,
+             "ZSTD": 5
+         }
+    sopt = ROOT.RDF.RSnapshotOptions(mode, Algos[compressionAlgo], compressionLevel, 0, splitLevel, True) #lazy is last option
+    handle = rdf.Snapshot(treename, filename, finalVars, sopt)
+    print(type(handle))
+    handle.GetValue()
+    # print("mode: {}\nalgo: {}\nlevel: {}\nsplit: {}\nlazy: {}".format(sopt.fMode, sopt.fCompressionAlgorithm, sopt.fCompressionLevel, splitLevel, sopt.fLazy))
+
 
 def flattenVariable(input_df, var, depth, static_cast=None, fallback=None, debug=False):
     """Take an RVec or std::vector of variables and define new columns for the first n (depth) elements, falling back to a default value if less than n elements are in an event."""
