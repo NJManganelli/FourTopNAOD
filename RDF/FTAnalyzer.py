@@ -2449,9 +2449,9 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
         z.append(("FTAJet{pf}_LooseDeepJetB".format(pf=postfix), "FTAJet{pf}_DeepJetB[FTAJet{pf}_DeepJetB > {wpv}]".format(pf=postfix, wpv=bTagWorkingPointDict[era]["DeepJet"]["L"])))
         z.append(("FTAJet{pf}_MediumDeepJetB".format(pf=postfix), "FTAJet{pf}_DeepJetB[FTAJet{pf}_DeepJetB > {wpv}]".format(pf=postfix, wpv=bTagWorkingPointDict[era]["DeepJet"]["M"])))
         z.append(("FTAJet{pf}_TightDeepJetB".format(pf=postfix), "FTAJet{pf}_DeepJetB[FTAJet{pf}_DeepJetB > {wpv}]".format(pf=postfix, wpv=bTagWorkingPointDict[era]["DeepJet"]["T"])))
-        z.append(("nLooseDeepJetB{pf}".format(pf=postfix), "FTAJet{pf}_LooseDeepJetB.size()".format(pf=postfix)))
-        z.append(("nMediumDeepJetB{pf}".format(pf=postfix), "FTAJet{pf}_MediumDeepJetB.size()".format(pf=postfix)))
-        z.append(("nTightDeepJetB{pf}".format(pf=postfix), "FTAJet{pf}_TightDeepJetB.size()".format(pf=postfix)))
+        z.append(("nLooseDeepJetB{pf}".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_LooseDeepJetB.size())".format(pf=postfix)))
+        z.append(("nMediumDeepJetB{pf}".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_MediumDeepJetB.size())".format(pf=postfix)))
+        z.append(("nTightDeepJetB{pf}".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_TightDeepJetB.size())".format(pf=postfix)))
         #These might be more efficiently calculated with my own custom code, instead of this... well, lets try for the sake of experimentation
         #HT is just the sum of good jet pts
         # HT2M is the sum of jet pt's for all but the two highest-b-tagged jets (2016 analysis requires 4+ jets to define this quantity), so here Take() is used twice.
