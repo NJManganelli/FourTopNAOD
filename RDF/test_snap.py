@@ -1,7 +1,7 @@
 import ROOT
 import pdb
 import time, collections, array
-# ROOT.ROOT.EnableImplicitMT(6)
+ROOT.ROOT.EnableImplicitMT(8)
 
 systematics_2017 = {"$NOMINAL": {"jet_mask": "jet_mask",
                                  "lep_postfix": "",
@@ -584,54 +584,63 @@ def bookLazySnapshot(input_df, filename, columnList=None, treename="Events", mod
     # handle.GetValue()
     # print("mode: {}\nalgo: {}\nlevel: {}\nsplit: {}\nlazy: {}".format(sopt.fMode, sopt.fCompressionAlgorithm, sopt.fCompressionLevel, splitLevel, sopt.fLazy))
 
-def delegateFlattening(input_df, debug=False):
+def delegateFlattening(inputDF, varsToFlatten, channel=None, debug=False):
     """Function that contains info about which variables to flatten and delegates this to functions, returning the RDataFrame after flattened variables have been defined."""
-    finalVars = ROOT.std.vector(str)(0)
-    desiredOriginalColumns = ["run", "luminosityBlock", "event", "genWeight",]
-    undesiredDefinedColumns = ["MET_xycorr_doublet__nom", "MET_xycorr_doublet__jesTotalDown", "MET_xycorr_doublet__jesTotalUp", "mu_mask", "e_mask", "jet_mask",
-                               "Electron_idx", "Muon_idx", "Jet_idx"]
-    allColumns = input_df.GetColumnNames()
-    definedColumns = input_df.GetDefinedColumnNames()
-    rdf = input_df
 
+    finalVars = ROOT.std.vector(str)(0) #Final variables that have been flattened and need to be returned to caller
+    allColumns = inputDF.GetColumnNames()
+    definedColumns = inputDF.GetDefinedColumnNames()
+    rdf = inputDF
+    skippedVars = [] #Skipped due to not being in the list
+    flattenedVars = [] #Need to be flattened (parent variable, not post-flattening children)
+    flatVars = [] #Already flat
 
     for var in allColumns:
-        #Check if column in superset is also in defined columns
-        if var in definedColumns:
-            if var in undesiredDefinedColumns:
-                if debug:
-                    print("Skip {}".format(var))
-                continue
-        #Column is in original column list, not in defined columns
-        elif var not in desiredOriginalColumns:
-            if debug:
-                print("Skip {}".format(var))
+        if var not in varsToFlatten:
+            skippedVars.append(var)
             continue
         if "ROOT::VecOps::RVec" in rdf.GetColumnType(var):
             if debug:
                 print("Flatten {}".format(var))
-            if "FTAMuon" in var or "FTALepton" in var or "FTAElectron" in var:
+            if "FTAMuon" in var:
+                if "mumu" in channel.lower():
+                    depth = 2
+                elif "elmu" in channel.lower():
+                    depth = 1
+                elif "elel" in channel.lower():
+                    depth = 0
+                else:
+                    depth = 2
+            if "FTALepton" in var:
                 depth = 2
+            if "FTAElectron" in var:
+                if "mumu" in channel.lower():
+                    depth = 0
+                elif "elmu" in channel.lower():
+                    depth = 1
+                elif "elel" in channel.lower():
+                    depth = 2
+                else:
+                    depth = 2
             elif "FTAJet" in var:
                 depth = 10
             else:
                 depth = 2
-            rdf, flattenedVars = flattenVariable(rdf, var, depth, static_cast=True, fallback=None, debug=debug)
-            for dvar in flattenedVars:
-                if dvar not in rdf.GetDefinedColumnNames():
-                    print("What in the god damned flying fuck")
-            for fvar in flattenedVars:
+            flattenedVars.append(var)
+            rdf, iterFlattenedVars = flattenVariable(rdf, var, depth, static_cast=True, fallback=None, debug=debug)
+            for fvar in iterFlattenedVars:
                 finalVars.push_back(fvar)
         else:
-            if debug:
-                print("Retain {}".format(var))
+            # if debug:
+            #     print("Retain {}".format(var))
+            flatVars.append(var)
             finalVars.push_back(var)
         
     for c in finalVars:
         if debug:
             print("{:45s} | {}".format(c, rdf.GetColumnType(c)))
     
-    return rdf, finalVars
+    return rdf, {"finalVars": finalVars, "flattenedVars": flattenedVars, "flatVars": flatVars, "skippedVars": skippedVars}
 
 
 def flattenVariable(input_df, var, depth, static_cast=None, fallback=None, debug=False):
@@ -644,8 +653,10 @@ def flattenVariable(input_df, var, depth, static_cast=None, fallback=None, debug
         sce = ")"
         if "<double>" in t.lower() or "<double_t>" in t.lower():
             sci = "static_cast<Double_t>("
+            # sci = "static_cast<Float_t>("
         if "<float>" in t.lower() or "<float_t>" in t.lower():
-            sci = "static_cast<Double_t>("
+            # sci = "static_cast<Double_t>("
+            sci = "static_cast<Float_t>("
         elif "<uint>" in t.lower() or "<uint_t>" in t.lower() or "<unsigned char>" in t.lower() or "<uchar_t>" in t.lower():
             # sci = "static_cast<Uint_t>("
             sci = "static_cast<unsigned int>("
@@ -1305,7 +1316,7 @@ r2 = defineJets(r2,
                 useDeltaR=0.4,
                 verbose=verbose,
 )
-r2 = r2.Filter("HT__nom >= 500 && nMediumDeepJetB__nom >= 2 && nFTAJet__nom >= 4")
+r2 = r2.Filter("nFTALepton == 2 && HT__nom >= 500 && nMediumDeepJetB__nom >= 2 && nFTAJet__nom >= 4")
 prePackedNodes = splitProcess(r2, 
                               splitProcess = splitProcessConfig, 
                               inclusiveProcess = inclusiveProcessConfig,
@@ -1323,24 +1334,88 @@ prePackedNodes = defineWeights(prePackedNodes,
                                verbose=verbose,
                            )
 newnodes = {}
+flatteningDict = {}
 columns = {}
+skipped = {}
+flattened = {}
 counts = {}
 handles = {}
 progressbars = {}
+varsToSave = []
+for leppostfix in [""]:
+    varsToSave += [
+        "FTALepton{lpf}_pt".format(lpf=leppostfix), 
+        "FTALepton{lpf}_eta".format(lpf=leppostfix),
+        "FTALepton{lpf}_phi".format(lpf=leppostfix),
+        "FTALepton{lpf}_jetIdx".format(lpf=leppostfix),
+        "FTALepton{lpf}_pdgId".format(lpf=leppostfix),
+        "FTALepton{lpf}_dRll".format(lpf=leppostfix),
+        "FTALepton{lpf}_dPhill".format(lpf=leppostfix),
+        "FTALepton{lpf}_dEtall".format(lpf=leppostfix)
+    ]
+for branchpostfix in ["__nom","__jesTotalUp", "__jesTotalDown"]:
+    varsToSave += [
+        "nFTAJet{bpf}".format(bpf=branchpostfix),
+        "FTAJet{bpf}_ptsort".format(bpf=branchpostfix),
+        "FTAJet{bpf}_deepcsvsort".format(bpf=branchpostfix),
+        "FTAJet{bpf}_deepjetsort".format(bpf=branchpostfix),
+        "FTAJet{bpf}_idx".format(bpf=branchpostfix),
+        "FTAJet{bpf}_pt".format(bpf=branchpostfix),
+        "FTAJet{bpf}_eta".format(bpf=branchpostfix),
+        "FTAJet{bpf}_phi".format(bpf=branchpostfix),
+        "FTAJet{bpf}_mass".format(bpf=branchpostfix),
+        "FTAJet{bpf}_jetId".format(bpf=branchpostfix),
+        "FTAJet{bpf}_DeepCSVB".format(bpf=branchpostfix),
+        "FTAJet{bpf}_DeepCSVB_sorted".format(bpf=branchpostfix),
+        "FTAJet{bpf}_DeepJetB".format(bpf=branchpostfix),
+        "FTAJet{bpf}_DeepJetB_sorted".format(bpf=branchpostfix),
+        "FTAJet{bpf}_LooseDeepCSVB".format(bpf=branchpostfix),
+        "FTAJet{bpf}_MediumDeepCSVB".format(bpf=branchpostfix),
+        "FTAJet{bpf}_TightDeepCSVB".format(bpf=branchpostfix),
+        "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix),
+        "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix),
+        "nTightDeepCSVB{bpf}".format(bpf=branchpostfix),
+        "FTAJet{bpf}_MediumDeepJetB".format(bpf=branchpostfix),
+        "nLooseDeepJetB{bpf}".format(bpf=branchpostfix),
+        "nMediumDeepJetB{bpf}".format(bpf=branchpostfix),
+        "nTightDeepJetB{bpf}".format(bpf=branchpostfix),
+        "ST{bpf}".format(bpf=branchpostfix),
+        "HT{bpf}".format(bpf=branchpostfix),
+        "HT2M{bpf}".format(bpf=branchpostfix),
+        "HTNum{bpf}".format(bpf=branchpostfix),
+        "HTRat{bpf}".format(bpf=branchpostfix),
+        "dRbb{bpf}".format(bpf=branchpostfix),
+        "dPhibb{bpf}".format(bpf=branchpostfix),
+        "dEtabb{bpf}".format(bpf=branchpostfix),
+        "H{bpf}".format(bpf=branchpostfix),
+        "H2M{bpf}".format(bpf=branchpostfix),
+        "HTH{bpf}".format(bpf=branchpostfix),
+        "HTb{bpf}".format(bpf=branchpostfix),
+    ]
 for sname, sval in prePackedNodes["nodes"].items():
     if sname == "BaseNode": continue#Skip the pre-split node
+    if "tt_DL-GF" in sname: continue #skip the inclusive sample...
+    if "ttother_DL-GF" in sname: continue 
+    # if "ttbb_DL-GF" in sname: continue 
     print(sname)
-    newnodes[sname], columns[sname] = delegateFlattening(sval["BaseNode"], debug=False)
+    newnodes[sname], flatteningDict[sname]= delegateFlattening(sval["BaseNode"], varsToSave, debug=False)
     counts[sname] = newnodes[sname].Count()
     progressbars[sname] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(r), 2000, long(1000000))
 
     if "tt_DL-GF" in sname: continue #skip the inclusive sample...
-    handles[sname] = bookLazySnapshot(newnodes[sname], "ntuple_{}.root".format(sname), columnList=columns[sname], 
-                                     treename="Events", mode="RECREATE", compressionAlgo="LZ4", compressionLevel=6, splitLevel=99)
-# map(lambda x: x.GetValue(), handles.values())
-map(lambda x: x[1].GetValue(), counts.items())
-for xn, x in newnodes.items():
-    print("{} - {}".format(xn, x))
+    handles[sname] = bookLazySnapshot(newnodes[sname], "ntuple_{}.root".format(sname), columnList=flatteningDict[sname]["finalVars"], 
+                                     treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
+    if "ttother_DL-GF" not in sname: continue
+    # print("Flattened variables")
+    # print(flatteningDict[sname]["flattenedVars"])
+    # print("Already flat variables")
+    # print(flatteningDict[sname]["flatVars"])
+    # print("Prepared columns")
+    # print(flatteningDict[sname]["finalVars"])
+map(lambda x: x.GetValue(), handles.values())
+# map(lambda x: x[1].GetValue(), counts.items())
+# for xn, x in newnodes.items():
+#     print("{} - {}".format(xn, x))
 # for xn, x in handles.items():
 #     if "tt_DL-GF" in xn: continue #skip the inclusive sample...
 #     x.GetValue()
