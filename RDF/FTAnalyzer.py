@@ -437,6 +437,7 @@ bookerV2_MC = {
                                                       "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                       "fractionalContribution": 0.11972537248,
                                                       "effectiveCrossSection": 0.0486771857914 * 0.040/0.032,
+                                                      "snapshotPriority": 3,
                                                   },
                                        "ttbb_DL_nr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)",
                                                       "sumWeights": 15117576.3357,
@@ -457,6 +458,7 @@ bookerV2_MC = {
                                                       "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                       "fractionalContribution": 1,
                                                       "effectiveCrossSection": 0.265077636755 * 0.040/0.032,
+                                                      "snapshotPriority": 4,
                                                   },
                                        "ttother_DL_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500",
                                                          "sumWeights": 80302570.8316,
@@ -477,6 +479,7 @@ bookerV2_MC = {
                                                          "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                          "fractionalContribution": 0.11949870629,
                                                          "effectiveCrossSection": 1.40805743121 - 0.0486771857914 * (0.040 - 0.032)/0.032,
+                                                         "snapshotPriority": 1,
                                                   },
                                        "ttother_DL_nr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)",
                                                          "sumWeights": 4882573073.47,
@@ -497,6 +500,7 @@ bookerV2_MC = {
                                                          "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                          "fractionalContribution": 1,
                                                          "effectiveCrossSection": 85.6129913168 - 0.265077636755 * (0.040 - 0.032)/0.032,
+                                                         "snapshotPriority": 2,
                                                      },
                                    },
                          "inclusiveProcess": {"tt_DL_inclusive": {"filter": "return true;",
@@ -576,6 +580,7 @@ bookerV2_MC = {
                                                          "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                          "fractionalContribution": 1 - 0.11972537248,
                                                          "effectiveCrossSection": 0.0486771857914 * 0.040/0.032,
+                                                         "snapshotPriority": 4,
                                                      },
                                        "ttother_DL-GF_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500",
                                                             "sumWeights": 591691409.848,
@@ -596,6 +601,7 @@ bookerV2_MC = {
                                                             "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                             "fractionalContribution": 1 - 0.11949870629,
                                                             "effectiveCrossSection": 1.40805743121 - 0.0486771857914 * (0.040 - 0.032)/0.032,
+                                                            "snapshotPriority": 2,
                                                         },
                                    },
                          "inclusiveProcess": {"tt_DL-GF_inclusive": {"sumWeights": 612101860.267,
@@ -666,6 +672,7 @@ bookerV2_MC = {
                                                       "nLep1nJet9pGenHT500p-effectiveXS": 0.00164567288,
                                                       "fractionalContribution": 0.01384021714,
                                                       "effectiveCrossSection": 0.0997284505393 * 0.062/0.052, 
+                                                      "snapshotPriority": 3,
                                                   },
                                        "ttbb_SL_nr": {"filter": "nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)",
                                                       "sumWeights": 22135434.4955,
@@ -686,6 +693,7 @@ bookerV2_MC = {
                                                       "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                       "fractionalContribution": 1,
                                                       "effectiveCrossSection": 1.33237608423 * 0.062/0.052,
+                                                      "snapshotPriority": 4,
                                                   },
                                        "ttother_SL_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500",
                                                          "sumWeights": 36038396.785,
@@ -706,6 +714,7 @@ bookerV2_MC = {
                                                          "nLep1nJet9pGenHT500p-effectiveXS": 0.030132880675,
                                                          "fractionalContribution": 0.01401549826,
                                                          "effectiveCrossSection": 2.16922319732 - 0.0997284505393 * (0.062 - 0.052)/0.052,
+                                                         "snapshotPriority": 1,
                                                   },
                                        "ttother_SL_nr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)",
                                                          "sumWeights": 5992649717.25,
@@ -726,6 +735,7 @@ bookerV2_MC = {
                                                          "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                          "fractionalContribution": 1,
                                                          "effectiveCrossSection": 360.709574761 - 1.33237608423 * (0.062 - 0.052)/0.052,
+                                                         "snapshotPriority": 2,
                                                   },
                                    },
                          "inclusiveProcess": {"tt_SL_inclusive": {"filter": "return true;",
@@ -800,6 +810,7 @@ bookerV2_MC = {
                                                          "nLep1nJet9pGenHT500p-effectiveXS": 0.11726132712,
                                                          "fractionalContribution": 1-0.01384021714,
                                                          "effectiveCrossSection": 0.0997284505393 * 0.062/0.052,
+                                                         "snapshotPriority": 4,
                                                      },
                                        "ttother_SL-GF_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500",
                                                             "sumWeights": 2535249552.17,
@@ -820,6 +831,7 @@ bookerV2_MC = {
                                                             "nLep1nJet9pGenHT500p-effectiveXS": 2.11991211931,
                                                             "fractionalContribution": 1 - 0.01401549826,
                                                             "effectiveCrossSection": 2.16922319732 - 0.0997284505393 * (0.062 - 0.052)/0.052,
+                                                            "snapshotPriority": 2,
                                                         },
                                    },
                          "inclusiveProcess": {"tt_SL-GF_inclusive": {"sumWeights": 2653328518.69,
@@ -2412,6 +2424,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
         z.append(("FTAJet{pf}_ptsort".format(pf=postfix), "Reverse(Argsort({jpt}[{jm}]))".format(jpt=jetPt, jm=jetMask)))
         z.append(("FTAJet{pf}_deepcsvsort".format(pf=postfix), "Reverse(Argsort(Jet_{btv}[{jm}]))".format(btv=bTagWorkingPointDict[era]["DeepCSV"]["Var"], jm=jetMask)))
         z.append(("FTAJet{pf}_deepjetsort".format(pf=postfix), "Reverse(Argsort(Jet_{btv}[{jm}]))".format(btv=bTagWorkingPointDict[era]["DeepJet"]["Var"], jm=jetMask)))
+        print("FIXME: To be pt-sorted, all corresponding values should be converted from Variable[mask] to Take(Variable, FTAJet{pf}_ptsort)...\".format(pf=postfix)")
         z.append(("FTAJet{pf}_idx".format(pf=postfix), "Jet_idx[{jm}]".format(jm=jetMask)))
         z.append(("FTAJet{pf}_pt".format(pf=postfix), "{jpt}[{jm}]".format(jpt=jetPt, jm=jetMask)))
         z.append(("FTAJet{pf}_eta".format(pf=postfix), "Jet_eta[{jm}]".format(jm=jetMask)))
@@ -3456,6 +3469,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
     filterNodes = dict() #For storing tuples to debug and be verbose about
     defineNodes = collections.OrderedDict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
     countNodes = dict() #For storing the counts at each node
+    snapshotPriority = dict()
     diagnosticNodes = dict()
     diagnosticHistos = dict()
     nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
@@ -3513,6 +3527,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
             for preProcessName, processDict in splitProcs.items():
                 processName = era + "___" + preProcessName
                 filterString = processDict.get("filter")
+                snapshotPriority[processName] = processDict.get("snapshotPriority", 0)
                 filterName = "{} :: {}".format(processName, filterString.replace(" && ", " and ").replace(" || ", " or ")\
                                                .replace("&&", " and ").replace("||", " or "))
                 if not isData:
@@ -3761,6 +3776,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
         #                 print(dString)
             
     prePackedNodes = dict()
+    prePackedNodes["snapshotPriority"] = snapshotPriority
     prePackedNodes["filterNodes"] = filterNodes
     prePackedNodes["nodes"] = nodes
     prePackedNodes["countNodes"] = countNodes
@@ -6192,12 +6208,14 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
         #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
         for lvl in levelsOfInterest:
             splitProcessConfig = vals.get("splitProcess", None)
+            #Note the snapshotPriority value of -1, which means this dataset does not get cached or written to disk with Snapshot
             inclusiveProcessConfig = {"processes": {"{}".format(name): {"filter": "return true;",
-                                                                  "nEventsPositive": vals.get("nEventsPositive", -1),
-                                                                  "nEventsNegative": vals.get("nEventsNegative", -1),
-                                                                  "fractionalContribution": 1,
-                                                                  "sumWeights": vals.get("sumWeights", -1.0),
-                                                                  "effectiveCrossSection": vals.get("crossSection", 0),
+                                                                        "nEventsPositive": vals.get("nEventsPositive", -1),
+                                                                        "nEventsNegative": vals.get("nEventsNegative", -1),
+                                                                        "fractionalContribution": 1,
+                                                                        "sumWeights": vals.get("sumWeights", -1.0),
+                                                                        "effectiveCrossSection": vals.get("crossSection", 0),
+                                                                        "snapshotPriority": -1,
                                                               }}}
             pprint.pprint(inclusiveProcessConfig)
             
@@ -6407,8 +6425,6 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                 treeName = "Events"
                 pdb.set_trace()
                 filename = ntupleDir + "/{}".format("bleh")
-                print("I made a name: {}".format(filename))
-                # ROOT.FTA.bookLazySnapshot(ROOT.RDF.AsRNode(), "Events",  
             if doHistos:
                 packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], era = vals["era"], triggers = triggers,
                                                     sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 

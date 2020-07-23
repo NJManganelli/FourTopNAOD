@@ -569,14 +569,27 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
             listOfColumns.push_back(defName)
     return rdf
 
-def bookLazySnapshot(input_df, filename, columnList=None, treename="Events", mode="RECREATE", compressionAlgo="LZ4", compressionLevel=6, splitLevel=99, debug=False):    
+def bookSnapshot(input_df, filename, columnList, lazy=True, treename="Events", mode="RECREATE", compressionAlgo="LZ4", compressionLevel=6, splitLevel=99, debug=False):
+    if columnList is None:
+        raise RuntimeError("Cannot take empty columnList in bookSnapshot")
+    elif isinstance(columnList, str) or 'vector<string>' in str(type(columnList)):
+        columns = columnList #regexp case or vector of strings
+    elif isinstance(columnList, list):
+        columns = ROOT.std.vector(str)(len(columnList))
+        for col in columnList:
+            columns.push_back(col)
+    else:
+        raise RuntimeError("Cannot handle columnList of type {} in bookSnapshot".format(type(columnList)))
+        
     Algos = {"ZLIB": 1,
              "LZMA": 2,
              "LZ4": 4,
              "ZSTD": 5
          }
     sopt = ROOT.RDF.RSnapshotOptions(mode, Algos[compressionAlgo], compressionLevel, 0, splitLevel, True) #lazy is last option
-    handle = input_df.Snapshot(treename, filename, columnList, sopt)
+    if lazy is False:
+        sopt.fLazy = False
+    handle = input_df.Snapshot(treename, filename, columns, sopt)
 
     return handle
     # print(type(handle))
@@ -780,6 +793,7 @@ bookerV2 = {
                                                          "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                          "fractionalContribution": 1 - 0.11972537248,
                                                          "effectiveCrossSection": 0.0486771857914 * 0.040/0.032,
+                                                         "snapshotPriority": 4,
                                                      },
                                        "ttother_DL-GF_fr": {"filter": "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500",
                                                             "sumWeights": 591691409.848,
@@ -800,6 +814,7 @@ bookerV2 = {
                                                             "nLep1nJet9pGenHT500p-effectiveXS": 0.0,
                                                             "fractionalContribution": 1 - 0.11949870629,
                                                             "effectiveCrossSection": 1.40805743121 - 0.0486771857914 * (0.040 - 0.032)/0.032,
+                                                            "snapshotPriority": 2,
                                                         },
                                    },
                          "inclusiveProcess": {"tt_DL-GF_inclusive": {"sumWeights": 612101860.267,
@@ -830,6 +845,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
     filterNodes = dict() #For storing tuples to debug and be verbose about
     defineNodes = collections.OrderedDict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
     countNodes = dict() #For storing the counts at each node
+    snapshotPriority = dict()
     diagnosticNodes = dict()
     diagnosticHistos = dict()
     nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
@@ -887,6 +903,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
             for preProcessName, processDict in splitProcs.items():
                 processName = era + "___" + preProcessName
                 filterString = processDict.get("filter")
+                snapshotPriority[processName] = processDict.get("snapshotPriority", 0)
                 filterName = "{} :: {}".format(processName, filterString.replace(" && ", " and ").replace(" || ", " or ")\
                                                .replace("&&", " and ").replace("||", " or "))
                 if not isData:
@@ -1099,6 +1116,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
         raise RuntimeError("Deprecated, form an inclusive process and configure splitProcess with it.")
             
     prePackedNodes = dict()
+    prePackedNodes["snapshotPriority"] = snapshotPriority
     prePackedNodes["filterNodes"] = filterNodes
     prePackedNodes["nodes"] = nodes
     prePackedNodes["countNodes"] = countNodes
@@ -1261,15 +1279,20 @@ vals = bookerV2[name]
 path_name = vals["source"]["LJMLogic__ElMu_selection"]
 splitProcessConfig = vals.get("splitProcess", None)
 verbose=False
+#snapshotPriority -1 means this is neither snapshotted nor cached! Memory management...
 inclusiveProcessConfig = {"processes": {"{}".format(name): {"filter": "return true;",
                                                             "nEventsPositive": vals.get("nEventsPositive", -1),
                                                             "nEventsNegative": vals.get("nEventsNegative", -1),
                                                             "fractionalContribution": 1,
                                                             "sumWeights": vals.get("sumWeights", -1.0),
                                                             "effectiveCrossSection": vals.get("crossSection", 0),
+                                                            "snapshotPriority": -1,
                                                         }}}
 
 input_df = ROOT.ROOT.RDataFrame("Events", path_name)
+inputCount = input_df.Count()
+inputCount = inputCount.GetValue()
+progressbar = ROOT.AddProgressBar(ROOT.RDF.AsRNode(input_df), 2000, long(inputCount))
 # r2 = METXYCorr(r, 
 #                run_branch = "run", 
 #                era = "2017", 
@@ -1340,7 +1363,8 @@ skipped = {}
 flattened = {}
 counts = {}
 handles = {}
-progressbars = {}
+cacheNode = {} #Cache results for saving with snapshots, potentially...
+test = {}
 varsToSave = []
 for leppostfix in [""]:
     varsToSave += [
@@ -1350,31 +1374,31 @@ for leppostfix in [""]:
         "FTALepton{lpf}_jetIdx".format(lpf=leppostfix),
         "FTALepton{lpf}_pdgId".format(lpf=leppostfix),
         "FTALepton{lpf}_dRll".format(lpf=leppostfix),
-        "FTALepton{lpf}_dPhill".format(lpf=leppostfix),
-        "FTALepton{lpf}_dEtall".format(lpf=leppostfix)
+        # "FTALepton{lpf}_dPhill".format(lpf=leppostfix),
+        # "FTALepton{lpf}_dEtall".format(lpf=leppostfix)
     ]
 for branchpostfix in ["__nom","__jesTotalUp", "__jesTotalDown"]:
     varsToSave += [
         "nFTAJet{bpf}".format(bpf=branchpostfix),
-        "FTAJet{bpf}_ptsort".format(bpf=branchpostfix),
-        "FTAJet{bpf}_deepcsvsort".format(bpf=branchpostfix),
-        "FTAJet{bpf}_deepjetsort".format(bpf=branchpostfix),
-        "FTAJet{bpf}_idx".format(bpf=branchpostfix),
+        # "FTAJet{bpf}_ptsort".format(bpf=branchpostfix), #sorting index...
+        # "FTAJet{bpf}_deepcsvsort".format(bpf=branchpostfix),
+        # "FTAJet{bpf}_deepjetsort".format(bpf=branchpostfix), #This is the sorting index...
+        # "FTAJet{bpf}_idx".format(bpf=branchpostfix),
         "FTAJet{bpf}_pt".format(bpf=branchpostfix),
         "FTAJet{bpf}_eta".format(bpf=branchpostfix),
         "FTAJet{bpf}_phi".format(bpf=branchpostfix),
         "FTAJet{bpf}_mass".format(bpf=branchpostfix),
-        "FTAJet{bpf}_jetId".format(bpf=branchpostfix),
-        "FTAJet{bpf}_DeepCSVB".format(bpf=branchpostfix),
-        "FTAJet{bpf}_DeepCSVB_sorted".format(bpf=branchpostfix),
+        # "FTAJet{bpf}_jetId".format(bpf=branchpostfix),
+        # "FTAJet{bpf}_DeepCSVB".format(bpf=branchpostfix),
+        # "FTAJet{bpf}_DeepCSVB_sorted".format(bpf=branchpostfix),
         "FTAJet{bpf}_DeepJetB".format(bpf=branchpostfix),
         "FTAJet{bpf}_DeepJetB_sorted".format(bpf=branchpostfix),
-        "FTAJet{bpf}_LooseDeepCSVB".format(bpf=branchpostfix),
-        "FTAJet{bpf}_MediumDeepCSVB".format(bpf=branchpostfix),
-        "FTAJet{bpf}_TightDeepCSVB".format(bpf=branchpostfix),
-        "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix),
-        "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix),
-        "nTightDeepCSVB{bpf}".format(bpf=branchpostfix),
+        # "FTAJet{bpf}_LooseDeepCSVB".format(bpf=branchpostfix),
+        # "FTAJet{bpf}_MediumDeepCSVB".format(bpf=branchpostfix),
+        # "FTAJet{bpf}_TightDeepCSVB".format(bpf=branchpostfix),
+        # "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix),
+        # "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix),
+        # "nTightDeepCSVB{bpf}".format(bpf=branchpostfix),
         "FTAJet{bpf}_MediumDeepJetB".format(bpf=branchpostfix),
         "nLooseDeepJetB{bpf}".format(bpf=branchpostfix),
         "nMediumDeepJetB{bpf}".format(bpf=branchpostfix),
@@ -1382,38 +1406,69 @@ for branchpostfix in ["__nom","__jesTotalUp", "__jesTotalDown"]:
         "ST{bpf}".format(bpf=branchpostfix),
         "HT{bpf}".format(bpf=branchpostfix),
         "HT2M{bpf}".format(bpf=branchpostfix),
-        "HTNum{bpf}".format(bpf=branchpostfix),
+        # "HTNum{bpf}".format(bpf=branchpostfix),
         "HTRat{bpf}".format(bpf=branchpostfix),
         "dRbb{bpf}".format(bpf=branchpostfix),
-        "dPhibb{bpf}".format(bpf=branchpostfix),
-        "dEtabb{bpf}".format(bpf=branchpostfix),
+        # "dPhibb{bpf}".format(bpf=branchpostfix),
+        # "dEtabb{bpf}".format(bpf=branchpostfix),
         "H{bpf}".format(bpf=branchpostfix),
         "H2M{bpf}".format(bpf=branchpostfix),
         "HTH{bpf}".format(bpf=branchpostfix),
         "HTb{bpf}".format(bpf=branchpostfix),
     ]
-for sname, sval in prePackedNodes["nodes"].items():
+# for sname, sval in prePackedNodes["nodes"].items():
+
+#Use reversed order to cycle from highest priority level to lowest, finally calling snapshot on lowest priority level greater than 0
+snapshotTrigger = sorted([p for p in prePackedNodes["snapshotPriority"].values() if p > 0])[0]
+print(snapshotTrigger)
+for sname, spriority in sorted(prePackedNodes["snapshotPriority"].items(), key=lambda x: x[1], reverse=True):
+    sval = prePackedNodes["nodes"][sname]
     if sname == "BaseNode": continue#Skip the pre-split node
-    if "tt_DL-GF" in sname: continue #skip the inclusive sample...
-    if "ttother_DL-GF" in sname: continue 
-    # if "ttbb_DL-GF" in sname: continue 
+    snapshotPriority = prePackedNodes["snapshotPriority"][sname]
+    if snapshotPriority < 0:
+        print("Skipping snapshotPriority < 0 node")
+        continue
+    if snapshotPriority == 0:
+        print("Warning, snapshotPriority 0 node! This points to a splitProcess config without (properly) defined priority value")
+        continue
+    print(snapshotPriority)
     print(sname)
+
     newnodes[sname], flatteningDict[sname]= delegateFlattening(sval["BaseNode"], varsToSave, debug=False)
     counts[sname] = newnodes[sname].Count()
-    progressbars[sname] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(r), 2000, long(1000000))
-
-    if "tt_DL-GF" in sname: continue #skip the inclusive sample...
-    handles[sname] = bookLazySnapshot(newnodes[sname], "ntuple_{}.root".format(sname), columnList=flatteningDict[sname]["finalVars"], 
+    if snapshotPriority > snapshotTrigger:
+        #cache and book snapshot (assuming it will not be written due to the RDF bugs)
+        cacheNode[sname] = newnodes[sname].Cache(flatteningDict[sname]["finalVars"])
+        handles[sname] = bookSnapshot(cacheNode[sname], "ntuple_{}.root".format(sname), lazy=True, columnList=flatteningDict[sname]["finalVars"], 
                                      treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
-    if "ttother_DL-GF" not in sname: continue
+        
+    else:
+        # handles[sname] = bookSnapshot(newnodes[sname], "ntuple_{}.root".format(sname), lazy=False, columnList=flatteningDict[sname]["finalVars"], 
+        #                              treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
+        # don't make handle for uncached snapshots
+        _ = bookSnapshot(newnodes[sname], "ntuple_{}.root".format(sname), lazy=False, columnList=flatteningDict[sname]["finalVars"], 
+                                     treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
+        
+    # small = ROOT.std.vector(str)(0)
+    # small.push_back("run"); small.push_back("event"); small.push_back("FTAJet5__jesTotalUp_MediumDeepCSVB")
+    # cacheNode[sname] = newnodes[sname].Cache(small)
+    # test[sname] = cacheNode[sname].Max("FTAJet5__jesTotalUp_MediumDeepCSVB")
+    # handles[sname] = bookSnapshot(newnodes[sname], "ntuple_{}.root".format(sname), columnList=flatteningDict[sname]["finalVars"], 
+    #                                  treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
     # print("Flattened variables")
     # print(flatteningDict[sname]["flattenedVars"])
     # print("Already flat variables")
     # print(flatteningDict[sname]["flatVars"])
     # print("Prepared columns")
     # print(flatteningDict[sname]["finalVars"])
-map(lambda x: x.GetValue(), handles.values())
-# map(lambda x: x[1].GetValue(), counts.items())
+# trigger the overall loop
+# progressbar.GetValue()
+
+#Make non-lazy snapshots of each from the Cache
+# for sname in cacheNode:
+#     handles[sname] = bookSnapshot(newnodes[sname], "ntuple_{}.root".format(sname), lazy=False, columnList=flatteningDict[sname]["finalVars"], 
+#                                      treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
+
 # for xn, x in newnodes.items():
 #     print("{} - {}".format(xn, x))
 # for xn, x in handles.items():
@@ -1422,7 +1477,7 @@ map(lambda x: x.GetValue(), handles.values())
 
 # pdb.set_trace()
 
-# r3, handle = bookLazySnapshot(r2, "test_snap2.root", columnList=None, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=6, splitLevel=99)
+# r3, handle = bookSnapshot(r2, "test_snap2.root", columnList=None, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=6, splitLevel=99)
 # h = {}
 # # for x in ["FTAMuon1_pt", "FTAElectron1_pt", "FTAElectron2_pt"]:
 # #     h[x] = r3.Histo1D(("h_{}".format(x), "{};{};Events".format(x, x), 100, 15, 315), x, "genWeight")
@@ -1457,7 +1512,7 @@ map(lambda x: x.GetValue(), handles.values())
 # v2.push_back("genWeight")
 # zz = ROOT.FTA.getOption("RECREATE")
 # help(zz)
-# ROOT.FTA.bookLazySnapshot(ROOT.RDF.AsRNode(r), "Events", "lazy_snap.root", v2)
+# ROOT.FTA.bookSnapshot(ROOT.RDF.AsRNode(r), "Events", "lazy_snap.root", v2)
 # c = r.Count()
 
 # v = ROOT.std.vector(str)(4); v[0]="nGoodMuon";v[1]="GoodMuon_pt";v[2]="GoodMuon_eta";v[3]="GoodMuon_phi"
