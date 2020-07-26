@@ -2174,7 +2174,7 @@ def writeNtuples(packedNodes, ntupledir, nJetMin=4, HTMin=450, bTagger="DeepCSV"
         else:
             # don't make handle for uncached snapshot, execute immediately
             _ = bookSnapshot(packedNodes["nodes"][processName]["BaseNode"]\
-                             .Filter("HT__nom > 450 && nFTAJet__nom > 3 && nFTALepton == 2 && && nMediumDeepJetB__nom >= 2"), 
+                             .Filter("HT__nom > 450 && nFTAJet__nom > 3 && nFTALepton == 2 && nMediumDeepJetB__nom >= 2"), 
                              "{}/{}.root".format(ntupledir, processName), lazy=False, 
                              columnList=packedNodes["ntupleVariables"][processName], 
                              treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
