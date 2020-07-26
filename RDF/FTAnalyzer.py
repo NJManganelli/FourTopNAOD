@@ -1936,6 +1936,251 @@ bookerV2UNSTITCHED = {
     },
 }
 
+def bookSnapshot(input_df, filename, columnList, lazy=True, treename="Events", mode="RECREATE", compressionAlgo="LZ4", compressionLevel=6, splitLevel=99, debug=False):
+    if columnList is None:
+        raise RuntimeError("Cannot take empty columnList in bookSnapshot")
+    elif isinstance(columnList, str) or 'vector<string>' in str(type(columnList)):
+        columns = columnList #regexp case or vector of strings
+    elif isinstance(columnList, list):
+        columns = ROOT.std.vector(str)(len(columnList))
+        for col in columnList:
+            columns.push_back(col)
+    else:
+        raise RuntimeError("Cannot handle columnList of type {} in bookSnapshot".format(type(columnList)))
+        
+    Algos = {"ZLIB": 1,
+             "LZMA": 2,
+             "LZ4": 4,
+             "ZSTD": 5
+         }
+    sopt = ROOT.RDF.RSnapshotOptions(mode, Algos[compressionAlgo], compressionLevel, 0, splitLevel, True) #lazy is last option
+    if lazy is False:
+        sopt.fLazy = False
+    handle = input_df.Snapshot(treename, filename, columns, sopt)
+
+    return handle
+
+def getNtupleVariables(vals, isData=True, sysVariations=None):
+    varsToFlattenOrSave = []
+    varsToFlattenOrSave += ["run", 
+                            "luminosityBlock", 
+                            "event", 
+                            "genWeight"
+    ]
+    for leppostfix in [""]:
+        varsToFlattenOrSave += [
+            "FTALepton{lpf}_pt".format(lpf=leppostfix), 
+            "FTALepton{lpf}_eta".format(lpf=leppostfix),
+            "FTALepton{lpf}_phi".format(lpf=leppostfix),
+            "FTALepton{lpf}_jetIdx".format(lpf=leppostfix),
+            "FTALepton{lpf}_pdgId".format(lpf=leppostfix),
+            "FTALepton{lpf}_dRll".format(lpf=leppostfix),
+            # "FTALepton{lpf}_dPhill".format(lpf=leppostfix),
+            # "FTALepton{lpf}_dEtall".format(lpf=leppostfix)
+        ]
+    if isData:
+        branchPostFixes = ["__nom"]
+    else:
+        branchPostFixes = ["__" + sysV[0].replace("$NOMINAL", "nom") for sysV in sysVariations.items() if sysV[1].get("weightVariation", True) is False]
+    for branchpostfix in branchPostFixes:
+        varsToFlattenOrSave += [
+            "nFTAJet{bpf}".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_ptsort".format(bpf=branchpostfix), #sorting index...
+            # "FTAJet{bpf}_deepcsvsort".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_deepjetsort".format(bpf=branchpostfix), #This is the sorting index...
+            # "FTAJet{bpf}_idx".format(bpf=branchpostfix),
+            "FTAJet{bpf}_pt".format(bpf=branchpostfix),
+            "FTAJet{bpf}_eta".format(bpf=branchpostfix),
+            "FTAJet{bpf}_phi".format(bpf=branchpostfix),
+            "FTAJet{bpf}_mass".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_jetId".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_DeepCSVB".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_DeepCSVB_sorted".format(bpf=branchpostfix),
+            "FTAJet{bpf}_DeepJetB".format(bpf=branchpostfix),
+            "FTAJet{bpf}_DeepJetB_sorted".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_LooseDeepCSVB".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_MediumDeepCSVB".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_TightDeepCSVB".format(bpf=branchpostfix),
+            # "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix),
+            # "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix),
+            # "nTightDeepCSVB{bpf}".format(bpf=branchpostfix),
+            "FTAJet{bpf}_MediumDeepJetB".format(bpf=branchpostfix),
+            "nLooseDeepJetB{bpf}".format(bpf=branchpostfix),
+            "nMediumDeepJetB{bpf}".format(bpf=branchpostfix),
+            "nTightDeepJetB{bpf}".format(bpf=branchpostfix),
+            "ST{bpf}".format(bpf=branchpostfix),
+            "HT{bpf}".format(bpf=branchpostfix),
+            "HT2M{bpf}".format(bpf=branchpostfix),
+            # "HTNum{bpf}".format(bpf=branchpostfix),
+            "HTRat{bpf}".format(bpf=branchpostfix),
+            "dRbb{bpf}".format(bpf=branchpostfix),
+            # "dPhibb{bpf}".format(bpf=branchpostfix),
+            # "dEtabb{bpf}".format(bpf=branchpostfix),
+            "H{bpf}".format(bpf=branchpostfix),
+            "H2M{bpf}".format(bpf=branchpostfix),
+            "HTH{bpf}".format(bpf=branchpostfix),
+            "HTb{bpf}".format(bpf=branchpostfix),
+        ]
+    return varsToFlattenOrSave
+
+
+def delegateFlattening(inputDF, varsToFlatten, channel=None, debug=False):
+    """Function that contains info about which variables to flatten and delegates this to functions, returning the RDataFrame after flattened variables have been defined."""
+
+    ntupleVariables = ROOT.std.vector(str)(0) #Final variables that have been flattened and need to be returned to caller
+    allColumns = inputDF.GetColumnNames()
+    definedColumns = inputDF.GetDefinedColumnNames()
+    rdf = inputDF
+    skippedVars = [] #Skipped due to not being in the list
+    flattenedVars = [] #Need to be flattened (parent variable, not post-flattening children)
+    flatVars = [] #Already flat
+
+    for var in allColumns:
+        if var not in varsToFlatten:
+            skippedVars.append(var)
+            continue
+        if "ROOT::VecOps::RVec" in rdf.GetColumnType(var):
+            if debug:
+                print("Flatten {}".format(var))
+            if "FTAMuon" in var:
+                if "mumu" in channel.lower():
+                    depth = 2
+                elif "elmu" in channel.lower():
+                    depth = 1
+                elif "elel" in channel.lower():
+                    depth = 0
+                else:
+                    depth = 2
+            if "FTALepton" in var:
+                depth = 2
+            if "FTAElectron" in var:
+                if "mumu" in channel.lower():
+                    depth = 0
+                elif "elmu" in channel.lower():
+                    depth = 1
+                elif "elel" in channel.lower():
+                    depth = 2
+                else:
+                    depth = 2
+            elif "FTAJet" in var:
+                depth = 10
+            else:
+                depth = 2
+            flattenedVars.append(var)
+            rdf, iterFlattenedVars = flattenVariable(rdf, var, depth, static_cast=True, fallback=None, debug=debug)
+            for fvar in iterFlattenedVars:
+                ntupleVariables.push_back(fvar)
+        else:
+            # if debug:
+            #     print("Retain {}".format(var))
+            flatVars.append(var)
+            ntupleVariables.push_back(var)
+        
+    for c in ntupleVariables:
+        if debug:
+            print("{:45s} | {}".format(c, rdf.GetColumnType(c)))
+    
+    return rdf, {"ntupleVariables": ntupleVariables, "flattenedVars": flattenedVars, "flatVars": flatVars, "skippedVars": skippedVars}
+
+def flattenVariable(input_df, var, depth, static_cast=None, fallback=None, debug=False):
+    """Take an RVec or std::vector of variables and define new columns for the first n (depth) elements, falling back to a default value if less than n elements are in an event."""
+
+    rdf = input_df
+    t = rdf.GetColumnType(var) #Get the type for deduction of casting rule and fallback value
+    flats = [] #Store the defined variables so they may be added to a list for writing
+    if static_cast is True: #deduce the static_cast and store the beginning and end of the wrapper in 'sci' and 'sce'
+        sce = ")"
+        if "<double>" in t.lower() or "<double_t>" in t.lower():
+            sci = "static_cast<Double_t>("
+            # sci = "static_cast<Float_t>("
+        if "<float>" in t.lower() or "<float_t>" in t.lower():
+            # sci = "static_cast<Double_t>("
+            sci = "static_cast<Float_t>("
+        elif "<uint>" in t.lower() or "<uint_t>" in t.lower() or "<unsigned char>" in t.lower() or "<uchar_t>" in t.lower():
+            # sci = "static_cast<Uint_t>("
+            sci = "static_cast<unsigned int>("
+        elif "<int>" in t.lower() or "<int_t>" in t.lower():
+            sci = "static_cast<Int_t>("
+        elif "<bool" in t.lower():
+            sci = "static_cast<Bool_t>("
+        elif "<unsigned long>" in t.lower():
+            sci = "static_cast<unsigned long>(" 
+        else:
+            raise NotImplementedError("No known casting rule for variable {} of type {}".format(var, t))
+    elif isinstance(static_cast, str):
+        sce = ")"
+        sci = static_cast
+    else:
+        sce = ""
+        sci = ""
+
+    if isinstance(fallback, (float, int)):
+        fb = fallback
+    else:
+        if "<double>" or "<float>" in t:
+            fb = -9876.54321
+        elif "<uint>" in t:
+            fb = 0
+        elif "<int>" in t:
+            fb = -9876
+        else:
+            raise NotImplementedError("No known fallback rule")        
+
+    for x in xrange(depth):
+        split_name = var.split("_")
+        to_replace = split_name[0]
+        name = var.replace(to_replace, "{tr}{n}".format(tr=to_replace, n=x+1))
+        # name = "{var}{n}".format(var=var, n=x+1)
+        flats.append(name)
+        defn = "{var}.size() > {x} ? {sci}{var}.at({x}){sce} : {fb}".format(sci=sci, var=var, x=x, sce=sce, fb=fb)
+        if debug:
+            print("{} : {}".format(name, defn))
+        rdf = rdf.Define(name, defn)
+
+    return rdf, flats
+
+def writeNtuples(packedNodes, ntupledir, nJetMin=4, HTMin=450, bTagger="DeepCSV"):
+    # Use reversed order to cycle from highest priority level to lowest, finally calling snapshot on lowest priority level greater than 0
+    snapshotTrigger = sorted([p for p in packedNodes["snapshotPriority"].values() if p > 0])
+    if len(snapshotTrigger) > 0:
+        snapshotTrigger = snapshotTrigger[0]
+    else:
+        #There is only the inclusive process...
+        snapshotTrigger = -1
+    #Prepare cacheNodes
+    if "cacheNodes" not in packedNodes:
+        packedNodes["cacheNodes"] = dict()
+    handles = dict()
+    for processName, spriority in sorted(packedNodes["snapshotPriority"].items(), key=lambda x: x[1], reverse=True):
+        sval = packedNodes["nodes"][processName]
+        if processName == "BaseNode": continue #Skip the pre-split node
+        snapshotPriority = packedNodes["snapshotPriority"][processName]
+        if snapshotTrigger > 0 and snapshotPriority < 0:
+            print("Skipping snapshotPriority < 0 node")
+            continue
+        if snapshotPriority == 0:
+            print("Warning, snapshotPriority 0 node! This points to a splitProcess config without (properly) defined priority value")
+            continue
+        if snapshotPriority > snapshotTrigger:
+            print("NEED TO FILTER NODES BY THIS POINT TO MAINTAIN SMALL SNAPSHOT AND CACHE SIZES! Temp in place")
+            #cache and book snapshot (assuming it will not be written due to the RDF bugs) #FILTER HERE
+            packedNodes["cacheNodes"][processName] = packedNodes["nodes"][processName]["BaseNode"]\
+                .Filter("HT__nom > {htmin} && nFTAJet__nom > {njetmin} && nFTALepton == 2 && nMediumDeepJetB__nom >= 2".format(htmin=HTMin, njetmin=nJetMin))\
+                .Cache(packedNodes["ntupleVariables"][processName])
+            handles[processName] = bookSnapshot(packedNodes["cacheNodes"][processName], "{}/{}.root".format(ntupledir, processName), lazy=True, 
+                                                columnList=packedNodes["ntupleVariables"][processName], treename="Events", 
+                                                mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
+            
+        else:
+            # don't make handle for uncached snapshot, execute immediately
+            _ = bookSnapshot(packedNodes["nodes"][processName]["BaseNode"]\
+                             .Filter("HT__nom > 450 && nFTAJet__nom > 3 && nFTALepton == 2 && && nMediumDeepJetB__nom >= 2"), 
+                             "{}/{}.root".format(ntupledir, processName), lazy=False, 
+                             columnList=packedNodes["ntupleVariables"][processName], 
+                             treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
+    #Process remaining snapshots one-by-one
+    for processName, handle in handles.items():
+        _ = handle.GetValue()
 
 def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_branch = "PV_npvs",
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
@@ -2530,6 +2775,7 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
         defineNodes = input_df_or_nodes.get("defineNodes")
         diagnosticNodes = input_df_or_nodes.get("diagnosticNodes")
         countNodes = input_df_or_nodes.get("countNodes")
+        ntupleVariables = input_df_or_nodes.get("ntupleVariables", ROOT.std.vector(str)())
     else:
         raise NotImplementedError("Non-split process has been deprecated in defineWeights, wrap the RDF nodes in nodes['<process-name>'] dictionary")
         # rdf = input_df_or_nodes
@@ -2650,7 +2896,6 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     nodes = input_df_or_nodes.get("nodes")
     for processName in nodes:
         if processName.lower() == "basenode": continue
-        # pdb.set_trace()
         listOfColumns = nodes[processName]["BaseNode"].GetColumnNames()
         if isData:
             defName = "wgt___nom"
@@ -2671,6 +2916,8 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                     if verbose:
                         print("nodes[processName][\"BaseNode\"] = nodes[processName][\"BaseNode\"].Define(\"{}\", \"{}\")".format(defName, defFunc))
                     nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
+                    if final:
+                        ntupleVariables[processName].push_back(defName)
                     listOfColumns.push_back(defName) 
 
                     # if allPreReqs:
@@ -2878,7 +3125,6 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                           .format(testKeyA, testNJ, testHT, testVal))
                 else:
                     testVal = iLUM[processName][0].getEventYieldRatio(testKeyA, testNJ, testHT)
-                # pdb.set_trace()
                 assert type(testVal) == float, "LookupMap did not provide a valid return type, something is wrong"
                 assert testVal >= 0.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... ({} is considered unrealistic...)".format(testVal)
                 assert testVal <= 5.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... ({} is considered unrealistic...)".format(testVal)
@@ -3463,7 +3709,7 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 #    rdf = rdf.Define("JML_selection_pass", "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00000000001111111111))#Only PV and MET filters required to pass
 #    return rdf
 
-def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017", printInfo=False, inclusiveProcess=None, fillDiagnosticHistos=False):
+def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017", inputNtupleVariables=None, printInfo=False, inclusiveProcess=None, fillDiagnosticHistos=False):
     lumiDict = {"2017": 41.53,
                 "2018": 59.97}
     filterNodes = dict() #For storing tuples to debug and be verbose about
@@ -3472,6 +3718,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
     snapshotPriority = dict()
     diagnosticNodes = dict()
     diagnosticHistos = dict()
+    ntupleVariables = dict()
     nodes = dict()#For storing nested dataframe nodes, THIS has filters, defines applied to it, not 'filterNodes' despite the name
     #Define the base node in nodes when we split/don't split the process
 
@@ -3562,6 +3809,11 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                                               "for(int i=0; i < diagnostic_lepjet_idx.size(); ++i){jmask = jmask && diagnostic_jet_idx != diagnostic_lepjet_idx.at(i);}"\
                                               "return jmask;"
                 if processName not in nodes:
+                    #add in any ntuple variables already defined, plus subprocess-specific ones from the dict
+                    ntupleVariables[processName] = ROOT.std.vector(str)()
+                    if inputNtupleVariables is not None:
+                        for var in inputNtupleVariables:
+                            ntupleVariables[processName].push_back(var)
                     #L-2 filter, should be the packedEventID filter in that case
                     filterNodes[processName] = dict()
                     filterNodes[processName]["BaseNode"] = (filterString, filterName, processName, None, None, None, None)
@@ -3611,7 +3863,6 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
                         diagnosticNodes[processName]["nominalXS::Sum"] = nodes[processName]["BaseNode"].Sum("nominalXS")
                         diagnosticNodes[processName]["nominalXS2::Sum"] = nodes[processName]["BaseNode"].Sum("nominalXS2")
-                    # pdb.set_trace()
                     diagnosticNodes[processName]["effectiveXS::Sum"] = nodes[processName]["BaseNode"].Sum("effectiveXS")
                     diagnosticNodes[processName]["effectiveXS2::Sum"] = nodes[processName]["BaseNode"].Sum("effectiveXS2")
                     diagnosticNodes[processName]["nEventsPositive::Count"] = nodes[processName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
@@ -3777,6 +4028,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
             
     prePackedNodes = dict()
     prePackedNodes["snapshotPriority"] = snapshotPriority
+    prePackedNodes["ntupleVariables"] = ntupleVariables
     prePackedNodes["filterNodes"] = filterNodes
     prePackedNodes["nodes"] = nodes
     prePackedNodes["countNodes"] = countNodes
@@ -5960,7 +6212,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
     #Did we not chooose to do incompatible actions at the same time?
     if doBTaggingYields and (doHistos or doDiagnostics or printBookkeeping or doLeptonSelection):
         raise RuntimeError("Cannot calculate BTaggingYields and Fill Histograms simultaneously, choose only one mode")
-    elif not doHistos and not doBTaggingYields and not doDiagnostics and not printBookkeeping and not doLeptonSelection:
+    elif not doHistos and not doBTaggingYields and not doDiagnostics and not printBookkeeping and not doLeptonSelection and not doNtuples:
         raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics and not printing Bookkeeping and not checking lepton selection, there is no work to be done.")
 
     #These are deprecated for now!
@@ -6113,6 +6365,8 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
     counts = {}
     histos = {}
     packedNodes = {}
+    varsToFlattenOrSave = {} #Variables that will be saved to ntuples (completely flat)
+    flatteningDict = {} #Dict breaking down variables that have been flattened, were already flat, were skipped due to function rules, etc.
     the_df = {}
     stats = {} #Stats for HLT branches
     effic = {} #Stats for jet matching efficiencies
@@ -6200,6 +6454,8 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
         the_df[name] = {}
         stats[name] = {}
         effic[name] = {}
+        varsToFlattenOrSave[name] = {}
+        flatteningDict[name] = {}
         # btagging[name] = {}
         cat_df[name] = {}
         substart[name] = {}
@@ -6369,8 +6625,21 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
             #Define the final weights/variations so long as we have btagging yields inserted...
             # splitProcessConfig=None
             # print("Forcing splitProcess to False for now, check this line!")
+
+            #Get the variables to save using a function that takes the processDict as input (for special sample-specific variables to add)
+            #Variable which are NOT flat will be subsequently flattened by delegateFlattening(which calls flattenVariable with some hints)
+            varsToFlattenOrSave[name][lvl] = getNtupleVariables(vals, 
+                                                                isData = vals["isData"], 
+                                                                sysVariations = systematics_2017
+            )
+            the_df[name][lvl], flatteningDict[name][lvl] = delegateFlattening(the_df[name][lvl], 
+                                                                              varsToFlattenOrSave[name][lvl], 
+                                                                              channel=lvl, 
+                                                                              debug=False
+            )
             prePackedNodes = splitProcess(the_df[name][lvl], 
-                                          splitProcess = splitProcessConfig, 
+                                          splitProcess = splitProcessConfig,
+                                          inputNtupleVariables=flatteningDict[name][lvl]["ntupleVariables"],
                                           inclusiveProcess = inclusiveProcessConfig,
                                           sampleName = name, 
                                           isData = vals["isData"], 
@@ -6418,13 +6687,6 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
             #     fillHLTMeans(the_df[name][lvl], wgtVar="wgt_SUMW_PU_L1PF", stats_dict=stats[name][lvl])
 
             #Hold the categorization nodes if doing histograms
-            if doNtuples:
-                ntupleDir = analysisDir + "/Ntuples"
-                if not os.path.isdir(ntupleDir):
-                    os.makedirs(ntupleDir)
-                treeName = "Events"
-                pdb.set_trace()
-                filename = ntupleDir + "/{}".format("bleh")
             if doHistos:
                 packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], era = vals["era"], triggers = triggers,
                                                     sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
@@ -6440,10 +6702,17 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                 # assert False, "Exiting early here, brah"
             #print(cat_df)
                 
-            #Trigger the loop
+            #Trigger the loop either by hitting the count/progressbar node or calling for a (Non-lazy) snapshot
             print("\nSTARTING THE EVENT LOOP")
             substart[name][lvl] = time.clock()
             Benchmark.Start("{}/{}".format(name, lvl))
+            if doNtuples:
+                ntupleDir = analysisDir + "/Ntuples"
+                subNtupleDir = ntupleDir + "/" + lvl
+                if not os.path.isdir(subNtupleDir):
+                    os.makedirs(subNtupleDir)
+                writeNtuples(prePackedNodes, subNtupleDir)
+            #The ntuple writing will trigger the loop first, if that path is taken, but this is still safe to do always
             processed[name][lvl] = counts[name][lvl].GetValue()
             print("\nFINISHING THE EVENT LOOP")
             print("ROOT Benchmark stats...")
