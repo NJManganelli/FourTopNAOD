@@ -156,6 +156,8 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                                                  "DeepJet": "Jet_btagSF_deepjet_shape_down_lf",
                                                              },
                                                       "weightVariation": True},
+}
+systematics_2017_TEST = { #for testing the removal of certain SFs, weights...
                     "no_btag_shape_reweight": {"jet_mask": "jet_mask",
                                                 "lep_postfix": "", 
                                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
@@ -189,9 +191,8 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                        },
                                 "weightVariation": True},
 }
-print("Only using the nominal variations right now, see L142")
-systematics_2017 = systematics_2017_NOMINAL
-# systematics_2017 = systematics_2017_ALL
+# systematics_2017 = systematics_2017_NOMINAL
+systematics_2017 = systematics_2017_ALL
 
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier lumi channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
@@ -2821,32 +2822,32 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
         zFin.append(("wgt___jesTotalUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jesTotalUp"))
     
     #Pileup variations 
-    print("FIXME: Using temporary definition of weights for PU variations (change pwgt_btag__VARIATION)")
+    # print("FIXME: Using temporary definition of weights for PU variations (change pwgt_btag__VARIATION)")
     if "puWeightDown" in sysVariations.keys():
-        zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
-        #zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightDown * pwgt_Z_vtx___nom"))
+        # zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
+        zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightDown * pwgt_Z_vtx___nom"))
+        # zPre.append(("prewgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
         zPre.append(("prewgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        #zPre.append(("prewgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     if "puWeightUp" in sysVariations.keys():
-        zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
-        #zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightUp * pwgt_Z_vtx___nom"))
+        # zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
+        zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightUp * pwgt_Z_vtx___nom"))
+        # zPre.append(("prewgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
         zPre.append(("prewgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        #zPre.append(("prewgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     
     
     #L1 PreFiring variations
     print("FIXME: Using temporary definition of weights for L1PreFire variations (change pwgt_btag__VARIATION)")
     if "L1PreFireDown" in sysVariations.keys():
-        zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
-        #zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag__L1PreFireDown * pwgt_Z_vtx___nom"))
+        # zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
+        zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag__L1PreFireDown * pwgt_Z_vtx___nom"))
+        # zPre.append(("prewgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
         zPre.append(("prewgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        #zPre.append(("prewgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     
     if "L1PreFireUp" in sysVariations.keys():
-        zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
-        #zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag__L1PreFireUp * pwgt_Z_vtx___nom"))
+        # zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
+        zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag__L1PreFireUp * pwgt_Z_vtx___nom"))
+        # zPre.append(("prewgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
         zPre.append(("prewgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        #zPre.append(("prewgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     
     #Lepton ScaleFactor variations
     #To be done, still...
@@ -2874,16 +2875,18 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
         zPre.append(("prewgt___btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_Z_vtx___nom"))
 
     #Special variations for testing central components
-    zFin.append(("wgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-    zFin.append(("wgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_Z_vtx___nom"))
-    zFin.append(("wgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-    zFin.append(("wgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-
-    zPre.append(("prewgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-    zPre.append(("prewgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_Z_vtx___nom"))
-    zPre.append(("prewgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-    zPre.append(("prewgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-
+    if "no_btag_shape_reweight" in sysVariations.keys():
+        zFin.append(("wgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    if "no_LSF" in sysVariations.keys():
+        zFin.append(("wgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_Z_vtx___nom"))
+    if "no_puWeight" in sysVariations.keys():
+        zFin.append(("wgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    if "no_L1PreFiringWeight" in sysVariations.keys():
+        zFin.append(("wgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
 
     #Factorization/Renormalization weights... depend on dividing genWeight back out?
     #TBD x4 for top samples, MAYBE NOT FOR OTHERS! (Until "Run II Legacy" samples are being used)
@@ -2904,6 +2907,24 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                 nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
         else:
             for defName, defFunc in z:
+                #Apply era-specific rules to the weights, such as whether L1PreFire applies
+                if era == "2016":
+                    if defName in ["NONE"]:
+                        continue
+                    defFuncModulated = defFunc
+                elif era == "2017":
+                    if defName in ["NONE"]:
+                        continue
+                    defFuncModulated = defFunc
+                elif era == "2018":
+                    if defName in ["L1PreFireUp", "L1PreFireDown"]:
+                        continue
+                    #We don't want the L1 Prefiring weight in 2018, it doesn't apply
+                    defFuncModulated = defFunc.replace("L1PreFiringWeight_Nom", "1.0")\
+                                              .replace("L1PreFiringWeight_Dn", "1.0")\
+                                              .replace("L1PreFiringWeight_Up", "1.0")
+                else:
+                    raise RuntimeError("Unhandled era '{}' in method defineWeights()".format(era))
                 if defName in listOfColumns:
                     if verbose:
                         print("{} already defined, skipping".format(defName))
@@ -2913,9 +2934,10 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                     # allPreReqs = True
                     # for prereq in prereqs:
                     #     if prereq not in listOfColumns: allPreReqs = False
+                    
                     if verbose:
-                        print("nodes[processName][\"BaseNode\"] = nodes[processName][\"BaseNode\"].Define(\"{}\", \"{}\")".format(defName, defFunc))
-                    nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
+                        print("nodes[processName][\"BaseNode\"] = nodes[processName][\"BaseNode\"].Define(\"{}\", \"{}\")".format(defName, defFuncModulated))
+                    nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFuncModulated)
                     if final:
                         ntupleVariables[processName].push_back(defName)
                     listOfColumns.push_back(defName) 
@@ -3795,7 +3817,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                                                                                     sW=inclusiveDict.get("sumWeights")
                         )
                         print("{} - nominalXS - {}".format(processName, formulaForNominalXS))
-                        formulaForEffectiveXS = "{nXS:f} * genWeight * {frCon:f} / {sW:f}".format(nXS=effectiveXS,
+                        formulaForEffectiveXS = "{eXS:f} * genWeight * {frCon:f} / {sW:f}".format(eXS=effectiveXS,
                                                                                       frCon=fractionalContribution,
                                                                                       sW=sumWeights
                         )
@@ -6182,15 +6204,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
     ### CHOOSE SAMPLE DICT AND CHANNEL TO ANALYZE ####
     ##################################################
     ##################################################
-    
-    #Focus on limited set of events at a time
-    #levelsOfInterest = set(["ElMu_selection"])
-    #levelsOfInterest = set(["MuMu_selection",])
-    #levelsOfInterest = set(["ElEl_selection",])
-    #levelsOfInterest = set(["selection", "ElMu_selection", "ElEl_selection", "MuMu_selection", "Mu_selection", "El_selection"])
-    #levelsOfInterest = set(["baseline", "MuMu_baseline", "ElEl_baseline", "selection", "MuMu_selection", "ElMu_selection"])
-    #levelsOfInterest = set(["baseline", "MuMu_selection", "ElMu_selection"])    
-    
+        
     print("FIXME: The default list of samples has been defined internally and not deduced from the analysis directory...")
     all_samples = ["ElMu", "MuMu", "ElEl", "tttt", "ST_tW", "ST_tbarW", "tt_DL", "tt_DL-GF", 
                      "tt_SL", "tt_SL-GF", "ttH", "ttWJets", "ttZJets", "ttWH", "ttWW", "ttWZ", 
@@ -6595,48 +6609,25 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                 print("Booking progress bar")
                 counts[name][lvl] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(the_df[name][lvl]), 
                                                         min(5000, max(1000, int(metainfo[name]["totalEvents"]/5000))), long(metainfo[name]["totalEvents"]))
-            # histos[name][lvl] = {} #new style, populated inside fillHistos... differs from BTaggingYields right now! Future work
             packedNodes[name][lvl] = None
             stats[name][lvl] = {}
             effic[name][lvl] = {}
             # btagging[name][lvl] = {}
             cat_df[name][lvl] = {'fillHistos(...)':'NotRunOrFailed'} #will be a dictionary returned by fillHistos, so empty histo if fillHistos not run or fails
-            #Define all the btag event weights or calculate yields based on defining the btag pre-event weight
-            #as well as nJet_variation, HT_variation if necessary (move to defineJets function later)
-            ##yb = the_df[name][lvl].GetDefinedColumnNames()
-            ##nb = the_df[name][lvl].GetColumnNames()
-            ##print(len(yb), len(nb))
-            ##bc = 0
-            ##print(the_df[name][lvl])
-            ##for branch in yb:
-            ##    if "FTAMuon" in branch or "FTAElectron" in branch or "FTALepton" in branch:
-            ##        continue
-            ##    btype = the_df[name][lvl].GetColumnType(branch)
-            ##    if "bool" in str(btype):
-            ##        continue
-            ##    if "_doublet" in branch:
-            ##        continue
-            ##    print("Testing branch {} of type {}".format(branch, btype))
-            ##    h = the_df[name][lvl].Histo1D(branch)
-            ##    hv = h.GetValue()
-            ##    n = hv.GetBinContent(1)
-            ##    print(n)
-            #Insert the yields or calculate them
-            #Define the final weights/variations so long as we have btagging yields inserted...
-            # splitProcessConfig=None
-            # print("Forcing splitProcess to False for now, check this line!")
-
             #Get the variables to save using a function that takes the processDict as input (for special sample-specific variables to add)
             #Variable which are NOT flat will be subsequently flattened by delegateFlattening(which calls flattenVariable with some hints)
             varsToFlattenOrSave[name][lvl] = getNtupleVariables(vals, 
                                                                 isData = vals["isData"], 
                                                                 sysVariations = systematics_2017
             )
+            #Actually flatten variables, and store in a dict various info for those variables flattened, already flat, final ntuple vars, etc.
             the_df[name][lvl], flatteningDict[name][lvl] = delegateFlattening(the_df[name][lvl], 
                                                                               varsToFlattenOrSave[name][lvl], 
                                                                               channel=lvl, 
                                                                               debug=False
             )
+            #Inject the flat and flattened variables for saving in ntuples through the 'inputNtupleVariables'
+            #Split the process based on sample-specific flags in its vals dictionary, some of which was parsed above i.e. splitProcessConfig, inclusive...
             prePackedNodes = splitProcess(the_df[name][lvl], 
                                           splitProcess = splitProcessConfig,
                                           inputNtupleVariables=flatteningDict[name][lvl]["ntupleVariables"],
@@ -6646,6 +6637,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                                           era = vals["era"],
                                           printInfo = printBookkeeping,
             )
+            #Do initial round of weights, preparation for btagging yields to be calculated
             prePackedNodes = defineWeights(prePackedNodes,
                                            splitProcess = splitProcessConfig,
                                            era=vals["era"],
@@ -6654,6 +6646,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                                            sysVariations=systematics_2017, 
                                            verbose=verbose,
             )
+            #Get the yields, the ultimate goal of which is to determin in a parameterized way the renormalization factors for btag shape reweighting procedure
             prePackedNodes = BTaggingYields(prePackedNodes, sampleName=name, isData=vals["isData"], channel=lvl,
                                             histosDict=btagging, loadYields=BTaggingYieldsFile,
                                             useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
@@ -6664,6 +6657,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                                             nJetArray=[4,5,6,7,8,20],
                                             verbose=verbose,
             )
+            #Use the fact we have a yields file as the flag for being in the "final" mode for weights, so do final=True variant
             if BTaggingYieldsFile:
                 print("What is happening in defineWeights here? Need to modify the prePackedNodes, then... pass on to the fillHistos method")
                 prePackedNodes = defineWeights(prePackedNodes,
@@ -6755,9 +6749,6 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                             mode="RECREATE"
                         )
                 print("Wrote Histograms for {} to this directory:\n{}".format(name, writeDir))
-            if doBTaggingYields:
-                print("To calculate the yield ratios, run 'BTaggingYieldsAnalyzer()' once all samples that are to be aggregated are in the directory")
-            #Add sample name to the list of processed samples and print it, in case things ****ing break in Jupyter Kernel
             processedSampleList.append(name)
             print("Processed Samples:")
             processedSamples = ""
