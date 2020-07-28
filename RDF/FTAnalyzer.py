@@ -4304,15 +4304,15 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     # filterNodes[processName][decayChannel]["L1Nodes"].append(
                     #     ("nMediumDeep{tag}B{bpf} == 1".format(tag=tagger, bpf=branchpostfix), "1 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
                     #      processName, decayChannel, None, "nMediumDeep{tag}B1".format(tag=tagger, bpf=branchpostfix), None))
-                    filterNodes[processName][decayChannel]["L1Nodes"].append(
-                        ("nMediumDeep{tag}B{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                         processName, decayChannel, None, "nMediumDeep{tag}B2".format(tag=tagger, bpf=branchpostfix), None))
-                    filterNodes[processName][decayChannel]["L1Nodes"].append(
-                        ("nMediumDeep{tag}B{bpf} == 3".format(tag=tagger, bpf=branchpostfix), "3 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                         processName, decayChannel, None, "nMediumDeep{tag}B3".format(tag=tagger, bpf=branchpostfix), None))
-                    filterNodes[processName][decayChannel]["L1Nodes"].append(
-                        ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                         processName, decayChannel, None, "nMediumDeep{tag}B4+".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
+                    #     ("nMediumDeep{tag}B{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                    #      processName, decayChannel, None, "nMediumDeep{tag}B2".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
+                    #     ("nMediumDeep{tag}B{bpf} == 3".format(tag=tagger, bpf=branchpostfix), "3 nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                    #      processName, decayChannel, None, "nMediumDeep{tag}B3".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[processName][decayChannel]["L1Nodes"].append(
+                    #     ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
+                    #      processName, decayChannel, None, "nMediumDeep{tag}B4+".format(tag=tagger, bpf=branchpostfix), None))
                     #These filters should apply to all L1Nodes
                     filterNodes[processName][decayChannel]["L2Nodes"].append(
                         ("nFTAJet{bpf} == 4".format(bpf=branchpostfix), "4 Jets ({bpf})".format(bpf=branchpostfix),
@@ -6494,22 +6494,22 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
             #Use the cutPV and METFilters function to do cutflow on these requirements... this should be updated, still uses JetMETLogic bits... FIXME
             the_df[name][lvl] = cutPVandMETFilters(the_df[name][lvl], lvl, isData=vals["isData"])
             #Init weights necessary for now, should be combined with defineWeights to do everything after the other defines are finished (Jets...)
-            if vals["isData"] == False:
-                the_df[name][lvl] = defineInitWeights(the_df[name][lvl],
-                                                      crossSection=vals["crossSection"], 
-                                                      sumWeights=vals["sumWeights"], 
-                                                      era=vals["era"],
-                                                      nEvents=vals["nEvents"], 
-                                                      nEventsPositive=vals["nEventsPositive"], 
-                                                      nEventsNegative=vals["nEventsNegative"], 
-                                                      isData=vals["isData"], 
-                                                      verbose=verbose,
-                                                     )
-            else:
-                the_df[name][lvl] = defineInitWeights(the_df[name][lvl],
-                                                      isData=True,
-                                                      verbose=verbose,
-                                                     )
+            # if vals["isData"] == False:
+            #     the_df[name][lvl] = defineInitWeights(the_df[name][lvl],
+            #                                           crossSection=vals["crossSection"], 
+            #                                           sumWeights=vals["sumWeights"], 
+            #                                           era=vals["era"],
+            #                                           nEvents=vals["nEvents"], 
+            #                                           nEventsPositive=vals["nEventsPositive"], 
+            #                                           nEventsNegative=vals["nEventsNegative"], 
+            #                                           isData=vals["isData"], 
+            #                                           verbose=verbose,
+            #                                          )
+            # else:
+            #     the_df[name][lvl] = defineInitWeights(the_df[name][lvl],
+            #                                           isData=True,
+            #                                           verbose=verbose,
+            #                                          )
             the_df[name][lvl] = defineJets(the_df[name][lvl],
                                            era=vals["era"],
                                            bTagger=bTagger,
