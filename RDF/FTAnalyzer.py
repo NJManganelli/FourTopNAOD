@@ -78,7 +78,6 @@ leg_dict = {"tttt": ROOT.kAzure-2,
 systematics_2017_NOMINAL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                  "lep_postfix": "",
                                  "wgt_final": "wgt__nom",
-                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                  "jet_pt_var": "Jet_pt",
                                  "jet_mass_var": "Jet_mass",
                                  "met_pt_var": "METFixEE2017_pt",
@@ -89,78 +88,98 @@ systematics_2017_NOMINAL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                  "weightVariation": False},
 }
 systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
-                                 "lep_postfix": "",
-                                 "wgt_final": "wgt__nom",
-                                 "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                 "jet_pt_var": "Jet_pt",
-                                 "jet_mass_var": "Jet_mass",
-                                 "met_pt_var": "METFixEE2017_pt",
-                                 "met_phi_var": "METFixEE2017_phi",
-                                 "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape",
-                                            "DeepJet": "Jet_btagSF_deepjet_shape",
-                                        },
-                                 "weightVariation": False},
-                    "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
-                                   "lep_postfix": "",
-                                   "wgt_final": "wgt__jesTotalUp",
-                                   "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                   "jet_pt_var": "Jet_pt_jesTotalUp",
-                                   "jet_mass_var": "Jet_mass_jesTotalUp",
-                                   "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                   "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                   "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape",
-                                              "DeepJet": "Jet_btagSF_deepjet_shape",
-                                          },
-                                    "weightVariation": False},
-                    "jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown",
-                                      "lep_postfix": "",
-                                      "wgt_final": "wgt__jesTotalDown", 
-                                      "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                      "jet_pt_var": "Jet_pt_jesTotalDown",
-                                      "jet_mass_var": "Jet_mass_jesTotalDown",
-                                      "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                      "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                      "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape",
-                                                 "DeepJet": "Jet_btagSF_deepjet_shape",
-                                             },
-                                      "weightVariation": False},
-                    "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
+                                     "lep_postfix": "",
+                                     "wgt_final": "wgt__nom",
+                                     "jet_pt_var": "Jet_pt",
+                                     "jet_mass_var": "Jet_mass",
+                                     "met_pt_var": "METFixEE2017_pt",
+                                     "met_phi_var": "METFixEE2017_phi",
+                                     "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape",
+                                                "DeepJet": "Jet_btagSF_deepjet_shape",
+                                            },
+                                     "weightVariation": False},
+                        "jes_13TeV_R2017Up": {"jet_mask": "jet_mask_jes_13TeV_R2017Up",
+                                              "lep_postfix": "",
+                                              "wgt_final": "wgt__jesTotalUp",
+                                              "jet_pt_var": "Jet_pt_jesTotalUp",
+                                              "jet_mass_var": "Jet_mass_jesTotalUp",
+                                              "met_pt_var": "METFixEE2017_pt_jesTotalUp",
+                                              "met_phi_var": "METFixEE2017_phi_jesTotalUp",
+                                              "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape",
+                                                         "DeepJet": "Jet_btagSF_deepjet_shape",
+                                                     },
+                                              "weightVariation": False},
+                        "jes_13TeV_R2017Down": {"jet_mask": "jet_mask_jes_13TeV_R2017Down",
+                                                "lep_postfix": "",
+                                                "wgt_final": "wgt__jesTotalDown", 
+                                                "jet_pt_var": "Jet_pt_jesTotalDown",
+                                                "jet_mass_var": "Jet_mass_jesTotalDown",
+                                                "met_pt_var": "METFixEE2017_pt_jesTotalDown",
+                                                "met_phi_var": "METFixEE2017_phi_jesTotalDown",
+                                                "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape",
+                                                       },
+                                                "weightVariation": False},
+                        "pileup_13TeV_R2017Up": {"jet_mask": "jet_mask",
+                                                 "lep_postfix": "", 
+                                                 "jet_pt_var": "Jet_pt",
+                                                 "btagSF":{"DeepCSV": "Jet_btagSF_deepcsv_shape",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape",
+                                                       },
+                                                 "weightVariation": True},
+                        "pileup_13TeV_R2017Down": {"jet_mask": "jet_mask",
+                                                   "lep_postfix": "", 
+                                                   "jet_pt_var": "Jet_pt",
+                                                   "btagSF":{"DeepCSV": "Jet_btagSF_deepcsv_shape",
+                                                             "DeepJet": "Jet_btagSF_deepjet_shape",
+                                                         },
+                                                   "weightVariation": True},
+                        "prefire_13TeV_R2017Up": {"jet_mask": "jet_mask",
+                                                  "lep_postfix": "", 
+                                                  "jet_pt_var": "Jet_pt",
+                                                  "btagSF":{"DeepCSV": "Jet_btagSF_deepcsv_shape",
+                                                            "DeepJet": "Jet_btagSF_deepjet_shape",
+                                                        },
+                                                  "weightVariation": True},
+                        "prefire_13TeV_R2017Down": {"jet_mask": "jet_mask",
                                                     "lep_postfix": "", 
-                                                    "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                     "jet_pt_var": "Jet_pt",
-                                                    "btagSF":{"DeepCSV": "Jet_btagSF_deepcsv_shape_up_hf",
-                                                              "DeepJet": "Jet_btagSF_deepjet_shape_up_hf",
+                                                    "btagSF":{"DeepCSV": "Jet_btagSF_deepcsv_shape",
+                                                              "DeepJet": "Jet_btagSF_deepjet_shape",
                                                           },
                                                     "weightVariation": True},
-                    "btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
-                                                      "lep_postfix": "", 
-                                                      "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                      "jet_pt_var": "Jet_pt",
-                                                      "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape_down_hf",
-                                                                 "DeepJet": "Jet_btagSF_deepjet_shape_down_hf",
+                        "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
+                                                       "lep_postfix": "", 
+                                                       "jet_pt_var": "Jet_pt",
+                                                       "btagSF":{"DeepCSV": "Jet_btagSF_deepcsv_shape_up_hf",
+                                                                 "DeepJet": "Jet_btagSF_deepjet_shape_up_hf",
                                                              },
-                                                      "weightVariation": True},
-                    "btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
-                                                    "lep_postfix": "", 
-                                                    "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                    "jet_pt_var": "Jet_pt",
-                                                    "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape_up_lf",
-                                                               "DeepJet": "Jet_btagSF_deepjet_shape_up_lf",
-                                                           },
-                                                    "weightVariation": True},
-                    "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
-                                                      "lep_postfix": "", 
-                                                      "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                      "jet_pt_var": "Jet_pt",
-                                                      "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape_down_lf",
-                                                                 "DeepJet": "Jet_btagSF_deepjet_shape_down_lf",
-                                                             },
-                                                      "weightVariation": True},
+                                                       "weightVariation": True},
+                        "btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
+                                                         "lep_postfix": "", 
+                                                         "jet_pt_var": "Jet_pt",
+                                                         "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape_down_hf",
+                                                                    "DeepJet": "Jet_btagSF_deepjet_shape_down_hf",
+                                                                },
+                                                         "weightVariation": True},
+                        "btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
+                                                       "lep_postfix": "", 
+                                                       "jet_pt_var": "Jet_pt",
+                                                       "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape_up_lf",
+                                                                  "DeepJet": "Jet_btagSF_deepjet_shape_up_lf",
+                                                              },
+                                                       "weightVariation": True},
+                        "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
+                                                         "lep_postfix": "", 
+                                                         "jet_pt_var": "Jet_pt",
+                                                         "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape_down_lf",
+                                                                    "DeepJet": "Jet_btagSF_deepjet_shape_down_lf",
+                                                                },
+                                                         "weightVariation": True},
 }
 systematics_2017_TEST = { #for testing the removal of certain SFs, weights...
                     "no_btag_shape_reweight": {"jet_mask": "jet_mask",
                                                 "lep_postfix": "", 
-                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                                 "jet_pt_var": "Jet_pt",
                                                 "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape",
                                                            "DeepJet": "Jet_btagSF_deepjet_shape",
@@ -168,7 +187,6 @@ systematics_2017_TEST = { #for testing the removal of certain SFs, weights...
                                                 "weightVariation": True},
                     "no_puWeight": {"jet_mask": "jet_mask",
                                      "lep_postfix": "", 
-                                     "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                      "jet_pt_var": "Jet_pt",
                                      "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape",
                                                 "DeepJet": "Jet_btagSF_deepjet_shape",
@@ -176,7 +194,6 @@ systematics_2017_TEST = { #for testing the removal of certain SFs, weights...
                                      "weightVariation": True},
                     "no_L1PreFiringWeight": {"jet_mask": "jet_mask",
                                               "lep_postfix": "", 
-                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                               "jet_pt_var": "Jet_pt",
                                               "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape",
                                                          "DeepJet": "Jet_btagSF_deepjet_shape",
@@ -184,7 +201,6 @@ systematics_2017_TEST = { #for testing the removal of certain SFs, weights...
                                               "weightVariation": True},
                     "no_LSF": {"jet_mask": "jet_mask",
                                 "lep_postfix": "", 
-                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
                                 "jet_pt_var": "Jet_pt",
                                 "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape",
                                            "DeepJet": "Jet_btagSF_deepjet_shape",
@@ -197,8 +213,11 @@ systematics_2017 = systematics_2017_ALL
 # systematics_2017.pop("btagSF_deepcsv_shape_down_hf")
 # systematics_2017.pop("btagSF_deepcsv_shape_up_lf")
 # systematics_2017.pop("btagSF_deepcsv_shape_down_lf")
-# systematics_2017.pop("jesTotalUp")
-# systematics_2017.pop("jesTotalDown")
+# systematics_2017.pop("jes_13TeV_R2017Up")
+# systematics_2017.pop("jes_13TeV_R2017Down")
+# systematics_2017.pop("pileup_13TeV_R2017Up")
+# systematics_2017.pop("pileup_13TeV_R2017Down")
+
 
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier lumi channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
@@ -2192,31 +2211,12 @@ def writeNtuples(packedNodes, ntupledir, nJetMin=4, HTMin=450, bTagger="DeepCSV"
 def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_branch = "PV_npvs",
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
                                            "lep_postfix": "",
-                                           "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                            "jet_pt_var": "Jet_pt",
                                            "jet_mass_var": "Jet_mass",
                                            "met_pt_var": "METFixEE2017_pt",
                                            "met_phi_var": "METFixEE2017_phi",
                                            "btagSF": "Jet_btagSF_deepcsv_shape",
                                            "weightVariation": False},
-                              "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
-                                              "lep_postfix": "",
-                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                              "jet_pt_var": "Jet_pt_jesTotalUp",
-                                              "jet_mass_var": "Jet_mass_jesTotalUp",
-                                              "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                              "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                              "btagSF": "Jet_btagSF_deepcsv_shape",
-                                              "weightVariation": False},
-                              "jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
-                                                "lep_postfix": "",
-                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                                "jet_pt_var": "Jet_pt_jesTotalDown",
-                                                "jet_mass_var": "Jet_mass_jesTotalDown",
-                                                "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                                "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                                "btagSF": "Jet_btagSF_deepcsv_shape",
-                                                "weightVariation": False},
                                      },
                        verbose=False):
     rdf = input_df
@@ -2285,7 +2285,6 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfL
                   triggers=[],
                  sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
                                              "lep_postfix": "",
-                                             "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                              "jet_pt_var": "Jet_pt",
                                              "jet_mass_var": "Jet_mass",
                                              "met_pt_var": "METFixEE2017_pt",
@@ -2565,31 +2564,12 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
                nJetsToHisto=10, bTagger="DeepCSV", verbose=False,
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "lep_postfix": "", 
-                                           "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                            "jet_pt_var": "Jet_pt",
                                            "jet_mass_var": "Jet_mass",
                                            "met_pt_var": "METFixEE2017_pt",
                                            "met_phi_var": "METFixEE2017_phi",
                                            "btagSF": "Jet_btagSF_deepcsv_shape",
                                            "weightVariation": False},
-                              "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp", 
-                                              "lep_postfix": "",
-                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                              "jet_pt_var": "Jet_pt_jesTotalUp",
-                                              "jet_mass_var": "Jet_mass_jesTotalUp",
-                                              "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                              "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                              "btagSF": "Jet_btagSF_deepcsv_shape",
-                                              "weightVariation": False},
-                              "jesTotalDown": {"jet_mask": "jet_mask_jesTotalDown", 
-                                                "lep_postfix": "",
-                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                                "jet_pt_var": "Jet_pt_jesTotalDown",
-                                                "jet_mass_var": "Jet_mass_jesTotalDown",
-                                                "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                                "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                                "btagSF": "Jet_btagSF_deepcsv_shape",
-                                                "weightVariation": False},
                           },
               ):
     """Function to take in a dataframe and return one with new columns defined,
@@ -2772,7 +2752,7 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     if final=False, do the pre-final weights for BTaggingYields calculations.
     
     pwgt = partial weight, component for final weight
-    wgt_$SYSTEMATIC is form of final event weights, i.e. wgt_nom or wgt_puWeightDown
+    wgt_$SYSTEMATIC is form of final event weights, i.e. wgt_nom or wgt_pileup_13TeV_R2017Down
     prewgt_$SYSTEMATIC is form of weight for BTaggingYields calculation, should include everything but pwgt_btag__$SYSTEMATIC"""
     # if splitProcess != None:
     if isinstance(input_df_or_nodes, (dict, collections.OrderedDict)):
@@ -2805,47 +2785,37 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #the correct jet collection, btag SFs, and yields is used. Always match! This duplicates some calculations uselessly
     #in the BTaggingYields function, but it should help avoid mistakes at the level of final calculations
     
-    print("\nFIXME: Need to propagate pwgt_Z_vtx___nom to all non-nominal event weights properly.\n")
     #Nominal weight
     zFin.append(("wgt___nom", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_btag___nom"))
     #pre-btagging yield weight. Careful modifying, it is 'inherited' for many other weights below!
     zPre.append(("prewgt___nom", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     
     #JES Up and Down - effectively the nominal weight, but with the CORRECT btag weight for those jets!
-    if "jesTotalDown" in sysVariations.keys():
-        zFin.append(("wgt___jesTotalDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jesTotalDown * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___jesTotalDown", "prewgt___nom * pwgt_Z_vtx___nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
-    if "jesTotalUp" in sysVariations.keys():
-        zPre.append(("prewgt___jesTotalUp", "prewgt___nom"))
-        zFin.append(("wgt___jesTotalUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jesTotalUp"))
+    if "jes_13TeV_R2017Down" in sysVariations.keys():
+        zFin.append(("wgt___jes_13TeV_R2017Down", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jes_13TeV_R2017Down * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___jes_13TeV_R2017Down", "prewgt___nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
+    if "jes_13TeV_R2017Up" in sysVariations.keys():
+        zFin.append(("wgt___jes_13TeV_R2017Up", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jes_13TeV_R2017Up * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___jes_13TeV_R2017Up", "prewgt___nom"))
     
     #Pileup variations 
     # print("FIXME: Using temporary definition of weights for PU variations (change pwgt_btag__VARIATION)")
-    if "puWeightDown" in sysVariations.keys():
-        # zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
-        zFin.append(("wgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightDown * pwgt_Z_vtx___nom"))
-        # zPre.append(("prewgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___puWeightDown", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-    if "puWeightUp" in sysVariations.keys():
-        # zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
-        zFin.append(("wgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag__puWeightUp * pwgt_Z_vtx___nom"))
-        # zPre.append(("prewgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___puWeightUp", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    if "pileup_13TeV_R2017Down" in sysVariations.keys():
+        zFin.append(("wgt___pileup_13TeV_R2017Down", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___pileup_13TeV_R2017Down * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___pileup_13TeV_R2017Down", "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    if "pileup_13TeV_R2017Up" in sysVariations.keys():
+        zFin.append(("wgt___pileup_13TeV_R2017Up", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___pileup_13TeV_R2017Up * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___pileup_13TeV_R2017Up", "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     
     
     #L1 PreFiring variations
-    print("FIXME: Using temporary definition of weights for L1PreFire variations (change pwgt_btag__VARIATION)")
-    if "L1PreFireDown" in sysVariations.keys():
-        # zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
-        zFin.append(("wgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag__L1PreFireDown * pwgt_Z_vtx___nom"))
-        # zPre.append(("prewgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___L1PreFireDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    if "prefire_13TeV_R2017Down" in sysVariations.keys():
+        zFin.append(("wgt___prefire_13TeV_R2017Down", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag___prefire_13TeV_R2017Down * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___prefire_13TeV_R2017Down", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     
-    if "L1PreFireUp" in sysVariations.keys():
-        # zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag___nom * pwgt_Z_vtx___nom"))
-        zFin.append(("wgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag__L1PreFireUp * pwgt_Z_vtx___nom"))
-        # zPre.append(("prewgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___L1PreFireUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+    if "prefire_13TeV_R2017Up" in sysVariations.keys():
+        zFin.append(("wgt___prefire_13TeV_R2017Up", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag___prefire_13TeV_R2017Up * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___prefire_13TeV_R2017Up", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     
     #Lepton ScaleFactor variations
     #To be done, still...
@@ -2855,22 +2825,22 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     
     #Pure BTagging variations, no other variations necessary. 
     #Since there may be many, use a common base factor for fewer multiplies... for pre-btagging, they're identical!
-    print("\n\nWARNING! WARNING! L1PreFiringWeight Only applies to 2017 and perhaps 2016, drop it from calculations in 2018!")
+    #Do not include the pwgt_Z_vtx___nom twice!
     zFin.append(("pwgt_btagSF_common", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     zPre.append(("pwgt_btagSF_common", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
     
     if "btagSF_deepcsv_shape_down_hf" in sysVariations.keys():
-        zFin.append(("wgt___btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_down_hf * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_Z_vtx___nom"))#Really just aliases w/o btagging part
+        zFin.append(("wgt___btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_down_hf"))
+        zPre.append(("prewgt___btagSF_deepcsv_shape_down_hf", "pwgt_btagSF_common"))#Really just aliases w/o btagging part
     if "btagSF_deepcsv_shape_up_hf" in sysVariations.keys():
-        zFin.append(("wgt___btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_up_hf * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_Z_vtx___nom"))
+        zFin.append(("wgt___btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_up_hf"))
+        zPre.append(("prewgt___btagSF_deepcsv_shape_up_hf", "pwgt_btagSF_common"))
     if "btagSF_deepcsv_shape_down_lf" in sysVariations.keys():
-        zFin.append(("wgt___btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_down_lf * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_Z_vtx___nom"))
+        zFin.append(("wgt___btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_down_lf"))
+        zPre.append(("prewgt___btagSF_deepcsv_shape_down_lf", "pwgt_btagSF_common"))
     if "btagSF_deepcsv_shape_up_lf" in sysVariations.keys():
-        zFin.append(("wgt___btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_up_lf * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_Z_vtx___nom"))
+        zFin.append(("wgt___btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common * pwgt_btag___btagSF_deepcsv_shape_up_lf"))
+        zPre.append(("prewgt___btagSF_deepcsv_shape_up_lf", "pwgt_btagSF_common"))
 
     #Special variations for testing central components
     if "no_btag_shape_reweight" in sysVariations.keys():
@@ -2915,7 +2885,7 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                         continue
                     defFuncModulated = defFunc
                 elif era == "2018":
-                    if defName in ["L1PreFireUp", "L1PreFireDown"]:
+                    if defName in ["prefire_13TeV_R2017Up", "prefire_13TeV_R2017Down"]:
                         continue
                     #We don't want the L1 Prefiring weight in 2018, it doesn't apply
                     defFuncModulated = defFunc.replace("L1PreFiringWeight_Nom", "1.0")\
@@ -2977,7 +2947,6 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                    calculateYields=True, HTArray=[500, 650, 800, 1000, 1200, 10000], nJetArray=[4,5,6,7,8,20],
                    sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                                "lep_postfix": "", 
-                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                                "jet_pt_var": "Jet_pt",
                                                "jet_mass_var": "Jet_mass",
                                                "met_pt_var": "METFixEE2017_pt",
@@ -2986,22 +2955,6 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                                                           "DeepJet": "Jet_btagSF_deepjet_shape",
                                                       },
                                                "weightVariation": False},
-                                  "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
-                                                                  "lep_postfix": "", 
-                                                                  "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                  "jet_pt_var": "Jet_pt",
-                                                                  "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape_up_hf",
-                                                                             "DeepJet": "Jet_btagSF_deepjet_shape_up_hf",
-                                                                         },
-                                                                  "weightVariation": True},
-                                  "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
-                                                                    "lep_postfix": "", 
-                                                                    "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                    "jet_pt_var": "Jet_pt",
-                                                                    "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape_down_lf",
-                                                                               "DeepJet": "Jet_btagSF_deepjet_shape_down_lf",
-                                                                           },
-                                                                    "weightVariation": True},
                                               },
                ):
     """Calculate or load the event yields in various categories for the purpose of renormalizing btagging shape correction weights.
@@ -3032,7 +2985,7 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
     Group - Yield Computation
     <calculateYields> as indicated, fill histograms for the yields, making an assumption that there is a weight named
     "prewgt<SYSTEMATIC_POSTFIX>" where the postfix is the key inside sysVariations. i.e. "$NOMINAL" -> "prewgt_nom" due to 
-    special replacement for nominal, and "jesTotalUp" -> "prewgt_jesTotalUp" is expected
+    special replacement for nominal, and "jes_13TeV_R2017Up" -> "prewgt_jes_13TeV_R2017Up" is expected
     <HTBinWidth>, <HTMin>, <HTMax> are as expected. Don't screw up the math on your end, (max-min) should be evenly divisible.
     <nJetBinWidth>, <nJetMin>, <nJetMax> are similar
 
@@ -3290,25 +3243,12 @@ def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosD
                    calculateYields=True, HTBinWidth=10, HTMin=200, HTMax=3200, nJetBinWidth=1, nJetMin=4, nJetMax=20,
                    sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                                "lep_postfix": "", 
-                                               "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                                "jet_pt_var": "Jet_pt",
                                                "jet_mass_var": "Jet_mass",
                                                "met_pt_var": "METFixEE2017_pt",
                                                "met_phi_var": "METFixEE2017_phi",
                                                "btagSF": "Jet_btagSF_deepcsv_shape",
                                                "weightVariation": False},
-                                  "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
-                                                                  "lep_postfix": "", 
-                                                                  "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                  "jet_pt_var": "Jet_pt",
-                                                                  "btagSF": "Jet_btagSF_deepcsv_shape_up_hf",
-                                                                  "weightVariation": True},
-                                  "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
-                                                                    "lep_postfix": "", 
-                                                                    "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                    "jet_pt_var": "Jet_pt",
-                                                                    "btagSF": "Jet_btagSF_deepcsv_shape_down_lf",
-                                                                    "weightVariation": True},
                                               },
                ):
     """Calculate or load the event yields in various categories for the purpose of renormalizing btagging shape correction weights.
@@ -3339,7 +3279,7 @@ def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosD
     Group - Yield Computation
     <calculateYields> as indicated, fill histograms for the yields, making an assumption that there is a weight named
     "prewgt<SYSTEMATIC_POSTFIX>" where the postfix is the key inside sysVariations. i.e. "$NOMINAL" -> "prewgt_nom" due to 
-    special replacement for nominal, and "jesTotalUp" -> "prewgt_jesTotalUp" is expected
+    special replacement for nominal, and "jes_13TeV_R2017Up" -> "prewgt_jes_13TeV_R2017Up" is expected
     <HTBinWidth>, <HTMin>, <HTMax> are as expected. Don't screw up the math on your end, (max-min) should be evenly divisible.
     <nJetBinWidth>, <nJetMin>, <nJetMax> are similar
 
@@ -4065,35 +4005,12 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "lep_postfix": "",
                                            "wgt_final": "wgt__nom",
-                                           "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
                                            "jet_pt_var": "Jet_pt",
                                            "jet_mass_var": "Jet_mass",
                                            "met_pt_var": "METFixEE2017_pt",
                                            "met_phi_var": "METFixEE2017_phi",
                                            "btagSF": "Jet_btagSF_deepcsv_shape",
                                            "weightVariation": False},
-                              "jesTotalUp": {"jet_mask": "jet_mask_jesTotalUp",
-                                              "lep_postfix": "",
-                                              "wgt_final": "wgt__jesTotalUp",
-                                              "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF",
-                                              "jet_pt_var": "Jet_pt_jesTotalUp",
-                                              "jet_mass_var": "Jet_mass_jesTotalUp",
-                                              "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                              "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                              "btagSF": "Jet_btagSF_deepcsv_shape",
-                                              "weightVariation": False},
-                              "btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
-                                                                "lep_postfix": "", 
-                                                                "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                                                "jet_pt_var": "Jet_pt",
-                                                                "btagSF": "Jet_btagSF_deepcsv_shape_down_hf",
-                                                                "weightVariation": True},
-                              "no_LSF": {"jet_mask": "jet_mask",
-                                          "lep_postfix": "", 
-                                          "wgt_prebTag": "wgt_SUMW_PU_LSF_L1PF", 
-                                          "jet_pt_var": "Jet_pt",
-                                          "btagSF": "Jet_btagSF_deepcsv_shape",
-                                          "weightVariation": True},
                                      },
 ):
     """Method to fill histograms given an input RDataFrame, input sample/dataset name, input histogram dictionaries.
@@ -4395,7 +4312,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                          processName, decayChannel, None, "nMediumDeep{tag}B3".format(tag=tagger, bpf=branchpostfix), None))
                     filterNodes[processName][decayChannel]["L1Nodes"].append(
                         ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                    #      processName, decayChannel, None, "nMediumDeep{tag}B4+".format(tag=tagger, bpf=branchpostfix), None))
+                         processName, decayChannel, None, "nMediumDeep{tag}B4+".format(tag=tagger, bpf=branchpostfix), None))
                     #These filters should apply to all L1Nodes
                     filterNodes[processName][decayChannel]["L2Nodes"].append(
                         ("nFTAJet{bpf} == 4".format(bpf=branchpostfix), "4 Jets ({bpf})".format(bpf=branchpostfix),
@@ -4509,10 +4426,10 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     if category.lower() == "basenode": continue
 
                     #IMPORTANT: Skip nodes that belong to other systematic variations, since it's a dictionary!
-                    print("FIXME: Need to check this logic is properly skipping things correctly (see below this line in the source code)")
-                    print("for category {} and branchpostifx {} we are skipping {}".format(category.split("___")[-1], 
-                                                                                           branchpostfix.replace("__", ""), 
-                                                                                           category.split("___")[-1] != branchpostfix.replace("__", "")))
+                    if verbose:
+                        print("for category {} and branchpostifx {} we are skipping {}".format(category.split("___")[-1], 
+                                                                                               branchpostfix.replace("__", ""), 
+                                                                                               category.split("___")[-1] != branchpostfix.replace("__", "")))
                     if category.split("___")[-1] != branchpostfix.replace("__", ""): 
                         continue 
 
