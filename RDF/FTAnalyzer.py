@@ -193,6 +193,12 @@ systematics_2017_TEST = { #for testing the removal of certain SFs, weights...
 }
 # systematics_2017 = systematics_2017_NOMINAL
 systematics_2017 = systematics_2017_ALL
+# systematics_2017.pop("btagSF_deepcsv_shape_up_hf")
+# systematics_2017.pop("btagSF_deepcsv_shape_down_hf")
+# systematics_2017.pop("btagSF_deepcsv_shape_up_lf")
+# systematics_2017.pop("btagSF_deepcsv_shape_down_lf")
+# systematics_2017.pop("jesTotalUp")
+# systematics_2017.pop("jesTotalDown")
 
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier lumi channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
@@ -2770,7 +2776,6 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     prewgt_$SYSTEMATIC is form of weight for BTaggingYields calculation, should include everything but pwgt_btag__$SYSTEMATIC"""
     # if splitProcess != None:
     if isinstance(input_df_or_nodes, (dict, collections.OrderedDict)):
-        print("Splitting process in defineWeights()")
         filterNodes = input_df_or_nodes.get("filterNodes")
         nodes = input_df_or_nodes.get("nodes")
         defineNodes = input_df_or_nodes.get("defineNodes")
@@ -2786,16 +2791,10 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     lumiDict = {"2017": 41.53,
                 "2018": 59.97}
 
-
-    #era = "2017"
-    # mc_def["wgt_SUMW"] = "({xs:s} * {lumi:s} * 1000 * genWeight) / {sumw:s}".format(xs=str(crossSection), lumi=str(lumi), sumw=str(sumWeights))
-
     #Two lists of weight definitions, one or the other is chosen at the end via 'final' optional parameter
     zFin = []
     zPre = []
-    # zFin.append(("pwgt___LumiXS", "wgt_SUMW")) #Now defined in the splitProcess function
     zFin.append(("pwgt_LSF___nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
-    # zPre.append(("pwgt___LumiXS", "wgt_SUMW")) #alias this until it's better defined here or elsewhere
     zPre.append(("pwgt_LSF___nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
     if era == "2017": #This only applies to 2017
         zPre.append(("pwgt_Z_vtx___nom", "((FTALepton{lpf}_pdgId.size() > 1 && (abs(FTALepton{lpf}_pdgId.at(0)) == 11 || abs(FTALepton{lpf}_pdgId.at(1)) == 11)) || (FTALepton{lpf}_pdgId.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 11)) ? EGamma_HLT_ZVtx_SF_nom : 1.00000000000000".format(lpf=leppostfix)))
@@ -2816,8 +2815,7 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     if "jesTotalDown" in sysVariations.keys():
         zFin.append(("wgt___jesTotalDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jesTotalDown * pwgt_Z_vtx___nom"))
         zPre.append(("prewgt___jesTotalDown", "prewgt___nom * pwgt_Z_vtx___nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
-        
-    if "jesTotalDown" in sysVariations.keys():
+    if "jesTotalUp" in sysVariations.keys():
         zPre.append(("prewgt___jesTotalUp", "prewgt___nom"))
         zFin.append(("wgt___jesTotalUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jesTotalUp"))
     
@@ -4397,7 +4395,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                          processName, decayChannel, None, "nMediumDeep{tag}B3".format(tag=tagger, bpf=branchpostfix), None))
                     filterNodes[processName][decayChannel]["L1Nodes"].append(
                         ("nMediumDeep{tag}B{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMediumDeep{tag}B({bpf})".format(tag=tagger, bpf=branchpostfix),
-                         processName, decayChannel, None, "nMediumDeep{tag}B4+".format(tag=tagger, bpf=branchpostfix), None))
+                    #      processName, decayChannel, None, "nMediumDeep{tag}B4+".format(tag=tagger, bpf=branchpostfix), None))
                     #These filters should apply to all L1Nodes
                     filterNodes[processName][decayChannel]["L2Nodes"].append(
                         ("nFTAJet{bpf} == 4".format(bpf=branchpostfix), "4 Jets ({bpf})".format(bpf=branchpostfix),
@@ -4509,6 +4507,15 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                 if decayChannel.lower() == "basenode": continue
                 for category, categoryNode in nodes[processName][decayChannel].items():
                     if category.lower() == "basenode": continue
+
+                    #IMPORTANT: Skip nodes that belong to other systematic variations, since it's a dictionary!
+                    print("FIXME: Need to check this logic is properly skipping things correctly (see below this line in the source code)")
+                    print("for category {} and branchpostifx {} we are skipping {}".format(category.split("___")[-1], 
+                                                                                           branchpostfix.replace("__", ""), 
+                                                                                           category.split("___")[-1] != branchpostfix.replace("__", "")))
+                    if category.split("___")[-1] != branchpostfix.replace("__", ""): 
+                        continue 
+
                     diagnosticNodes[processName][decayChannel][category] = dict()
                     if doDiagnostics:
                         for trgTup in triggers:
@@ -4535,9 +4542,6 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         diagnosticNodes[processName][decayChannel][category]["Electron_d0"] = categoryNode.Stats("FTAElectron{lpf}_d0".format(lpf=leppostfix))
                         diagnosticNodes[processName][decayChannel][category]["Electron_ip3d"] = categoryNode.Stats("FTAElectron{lpf}_ip3d".format(lpf=leppostfix))
                         
-                    #IMPORTANT: Skip nodes that belong to other systematic variations, since it's a dictionary!
-                    print("FIXME: Need to check this logic is properly skipping things correctly (see below this line in the source code)")
-                    if category.split("___")[-1] != branchpostfix.replace("__", ""): continue 
                     isBlinded = False
                     #need to check that a category is blinded by making sure all orthogonal categories are blinded, i.e.,
                     #The category of nMediumDeepJetB2 + nJet7 is blinded, but not the same btag category with nJet4
