@@ -54,3 +54,12 @@ python Plotting.py plot-histograms -d /eos/user/n/nmangane/analysis/TEST --era 2
 for d in Event MET El Mu Jet; for b in 0pB 1pB 2pB; for c in MuMu_ElMu MuMu; do python Plotting.py plot-histograms -d /eos/user/n/nmangane/analysis/TEST --era 2017 -f pdf -c ${c} -p 'jsons/v0.8/'${d}'_All_'${b}'.json' -l 'jsons/v0.8/$CHANLegend.json';done
 
 ```
+
+Using the compareEvents.py script to write events and variables to json files (for overlap comparisons with other channels; original version of script by Melissa Q of UCSB)
+```
+# Example usage for mu-mu channel tttt sample (channel here is only decided by name/input file; to make cut inside the tree use pandas expression inside -b '<exp>')
+python compareEvents.py -v event run luminosityBlock -t Events -e event -l luminosityBlock -f /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___tttt.root -b 'event > 0' -o MuMu.json -s TTTT
+
+#Example usage with ttbar dl sample split into four subfiles
+python compareEvents.py -v event run luminosityBlock -t Events -e event -l luminosityBlock -f /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___ttbb_DL-nr.root /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___ttbb_DL-fr.root /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___ttother_DL-nr.root /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___ttother_DL-fr.root -b 'event > 0' -o MuMu.json -s TTTo2L2Nu
+```
