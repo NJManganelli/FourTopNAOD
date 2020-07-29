@@ -58,8 +58,15 @@ for d in Event MET El Mu Jet; for b in 0pB 1pB 2pB; for c in MuMu_ElMu MuMu; do 
 Using the compareEvents.py script to write events and variables to json files (for overlap comparisons with other channels; original version of script by Melissa Q of UCSB)
 ```
 # Example usage for mu-mu channel tttt sample (channel here is only decided by name/input file; to make cut inside the tree use pandas expression inside -b '<exp>')
-python compareEvents.py -v event run luminosityBlock -t Events -e event -l luminosityBlock -f /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___tttt.root -b 'event > 0' -o MuMu.json -s TTTT
+python RDF/scripts/compareEvents.py -v event run luminosityBlock -t Events -e event -l luminosityBlock -f /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___tttt.root -b 'event > 0' -o 2017MuMu.json -s TTTT
+python RDF/scripts/compareEvents.py -v event run luminosityBlock -t Events -e event -l luminosityBlock -f /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/ElMu/2017___tttt.root -b 'event > 0' -o 2017ElMu.json -s TTTT
 
 #Example usage with ttbar dl sample split into four subfiles
-python compareEvents.py -v event run luminosityBlock -t Events -e event -l luminosityBlock -f /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___ttbb_DL-nr.root /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___ttbb_DL-fr.root /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___ttother_DL-nr.root /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___ttother_DL-fr.root -b 'event > 0' -o MuMu.json -s TTTo2L2Nu
+python RDF/scripts/scripts/compareEvents.py -v event run luminosityBlock -t Events -e event -l luminosityBlock -f /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/ElMu/2017___ttbb_DL_nr.root /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/ElMu/2017___ttbb_DL_fr.root /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/ElMu/2017___ttother_DL_nr.root /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/ElMu/2017___ttother_DL_fr.root -b 'event > 0' -o 2017ElMu.json -s TTTo2L2Nu
+
+python RDF/scripts/scripts/compareEvents.py -v event run luminosityBlock -t Events -e event -l luminosityBlock -f /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___ttbb_DL_nr.root /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___ttbb_DL_fr.root /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___ttother_DL_nr.root /eos/user/n/nmangane/analysis/Ntupletest/Ntuples/MuMu/2017___ttother_DL_fr.root -b 'event > 0' -o 2017MuMu.json -s TTTo2L2Nu
+
+# Check overlap between the two samples, saving to text file
+# Note the first file is still 'composed' of the sample tag and output file name, (-s, -o), $(sample)_$(output) format
+python RDF/scripts/compareEvents.py -b 'event > 0' -s TTTT -o 2017ElMu.json -c TTTT_2017MuMu.json > MuMu_ElMu.txt
 ```

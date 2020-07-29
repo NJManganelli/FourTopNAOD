@@ -8,7 +8,6 @@ import sys
 # import RootStuff as rs
 import ROOT as r
 r.PyConfig.IgnoreCommandLineOptions = True
-print("We can work this out!")
 parser = argparse.ArgumentParser(description='adds eventBDT discriminants to premade trees.')
 parser.add_argument("-f", "--filenames", dest="filenames", nargs="*", default=[])
 parser.add_argument("-c", "--compfile", dest="compfile", default='')
