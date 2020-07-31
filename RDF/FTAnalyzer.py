@@ -30,7 +30,7 @@ if useSpark:
     RDF = PyRDF.RDataFrame
 else:
     #print("DISABLING IMT for bebugging branches")
-    ROOT.ROOT.EnableImplicitMT()
+    # ROOT.ROOT.EnableImplicitMT()
     RS = ROOT.ROOT
     RDF = RS.RDataFrame
 
@@ -2348,8 +2348,8 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfL
         rdf = rdf_input
         for trgTup in triggers:
             if trgTup.era != era: continue
-            trg = trgTup.trigger
-            rdf = rdf.Define("typecast___{}".format(trg), "return (int){} == true;".format(trg))
+            # trg = trgTup.trigger
+            # rdf = rdf.Define("typecast___{}".format(trg), "return (int){} == true;".format(trg))
         if not rdfLeptonSelection:
             rdf = rdf.Define("mu_mask", "(Muon_OSV_{0} & {1}) > 0 && Muon_pt > 15 && abs(Muon_eta) < 2.4 && Muon_looseId == true && Muon_pfIsoId >= 4 && abs(Muon_ip3d) < 0.10 && abs(Muon_dz) < 0.02".format(lvl_type, Chan[input_lvl_filter]))
             rdf = rdf.Define("e_mask", "(Electron_OSV_{0} & {1}) > 0 && Electron_pt > 15 && Electron_cutBased >= 2 && ((abs(Electron_eta) < 1.4442 && abs(Electron_ip3d) < 0.05 && abs(Electron_dz) < 0.1) || (abs(Electron_eta) > 1.5660 && abs(Electron_eta) < 2.5 && abs(Electron_ip3d) < 0.10 && abs(Electron_dz) < 0.2))".format(lvl_type, Chan[input_lvl_filter]))
@@ -2377,7 +2377,8 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfL
     z.append(("nFTAMuon{lpf}".format(lpf=leppostfix), "static_cast<Int_t>(Muon_pt[mu_mask].size())"))
     z.append(("FTAMuon{lpf}_idx".format(lpf=leppostfix), "Muon_idx[mu_mask]"))
     z.append(("FTAMuon{lpf}_pfIsoId".format(lpf=leppostfix), "Muon_pfIsoId[mu_mask]"))
-    z.append(("FTAMuon{lpf}_looseId".format(lpf=leppostfix), "Muon_looseId[mu_mask]"))
+    # z.append(("FTAMuon{lpf}_looseId".format(lpf=leppostfix), "static_cast<int>(Muon_looseId[mu_mask])")) #This causes problems if of length 0 as in ElEl channel!
+    z.append(("FTAMuon{lpf}_looseId".format(lpf=leppostfix), "ROOT::VecOps::RVec<bool> v {}; return Muon_looseId[mu_mask].size() > 0 ? Muon_looseId[mu_mask] : v;"))
     z.append(("FTAMuon{lpf}_pt".format(lpf=leppostfix), "Muon_pt[mu_mask]"))
     z.append(("FTAMuon{lpf}_eta".format(lpf=leppostfix), "Muon_eta[mu_mask]"))
     z.append(("FTAMuon{lpf}_phi".format(lpf=leppostfix), "Muon_phi[mu_mask]"))
@@ -2560,6 +2561,44 @@ def defineInitWeights(input_df, crossSection=0, era="2017", sumWeights=-1, lumiO
             rdf = rdf.Define(k, v)
     return rdf
 
+def testVariableProcessing(inputDForNodes, nodes=False, searchMode=True, skipColumns=[],
+                           allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool']):
+    """Pass in a dataframe or head dictionary containing nodes (as returned by splitProcess function), walking through each variable and defining a mean and getting it's value to test if it causes issue. type as retuned by dataframe's GetColumnType should be in the list of 'allowedTypes'"""
+    if nodes is True:
+        testnodes = {}
+        testvalues = {}
+        for testProcess in inputDForNodes["nodes"].keys():
+            if testProcess == 'BaseNode': continue
+            testnodes[testProcess] = inputDForNodes["nodes"][testProcess]['BaseNode']
+            safes = [branch for branch in testnodes[testProcess].GetDefinedColumnNames() if testnodes[testProcess].GetColumnType(branch) in allowedTypes and branch not in skipColumns]
+            if searchMode is True:
+                print("{}".format(testProcess))
+                for branch in safes:
+                    print("\t{}: ".format(branch), end="")
+                    print("{}".format(testnodes[testProcess].Mean(branch).GetValue()))
+            else:
+                testvalues[testProcess] = [(branch, testnodes[testProcess].Mean(branch)) for branch in safes]
+        if searchMode is False:
+            for testProcess in inputDForNodes["nodes"].keys():
+                if testProcess == 'BaseNode': continue
+                for SV in testvalues[testProcess]:
+                    print(SV[0], end=' ')
+                    print(SV[1].GetValue(), end='\n')
+    else:
+        safes = [branch for branch in inputDForNodes.GetDefinedColumnNames() if inputDForNodes.GetColumnType(branch) in allowedTypes and branch not in skipColumns]
+        if searchMode is True:
+            print("{}".format("Unsplit process"))
+            for branch in safes:
+                print("\t{}: ".format(branch), end="")
+                print("{}".format(inputDForNodes.Mean(branch).GetValue()))
+        else:
+            testvalues = [(branch, inputDForNodes.Mean(branch)) for branch in safes]
+        if searchMode is False:
+            for SV in testvalues:
+                print(SV[0], end=' ')
+                print(SV[1].GetValue(), end='\n')
+    return safes
+
 def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=None, useDeltaR=True, isData=True,
                nJetsToHisto=10, bTagger="DeepCSV", verbose=False,
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
@@ -2626,7 +2665,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
         else:
             jetPUId = ""
         z.append(("Jet_idx", "FTA::generateIndices(Jet_pt)"))
-        z.append(("pre{jm}".format(jm=jetMask), "({jpt} >= {jptMin} && abs(Jet_eta) <= 2.5 && Jet_jetId > 2{jpuid})".format(lpf=leppostfix, 
+        z.append(("pre{jm}".format(jm=jetMask), "ROOT::VecOps::RVec<Int_t> prejm = ({jpt} >= {jptMin} && abs(Jet_eta) <= 2.5 && Jet_jetId > 2{jpuid}); return prejm".format(lpf=leppostfix, 
                                                                                                                             jpt=jetPt, 
                                                                                                                             jptMin=jetPtMin,
                                                                                                                             jpuid=jetPUId
@@ -2645,6 +2684,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
                       "dr.clear();}}"\
                       "return jmask;".format(lpf=leppostfix, jpt=jetPt, jptMin=jetPtMin, jpuid=jetPUId, drt=useDeltaR)))
         #Store the Jet Pt, Jet Raw Pt, Lep Pt
+        # z.append(("FTACrossCleanedJet{pf}_pt".format(pf=postfix), "std::cout << \"event: \" << event << \" entry: \" << rdfentry_ << \" nMu nEl nLep nLep_jetIdx  \" ; std::cout << nFTAMuon{lpf} << \" \" << nFTAElectron{lpf} << \" \" << nFTALepton{lpf} << \" \" << FTALepton{lpf}_jetIdx.size() << \"   \"; std::cout << FTALepton{lpf}_jetIdx.at(0) << \"  \" ; std::cout << pre{jm} << std::endl; double ret = (FTALepton{lpf}_jetIdx.at(0) >= 0 && pre{jm}.at(FTALepton{lpf}_jetIdx.at(0)) == true) ? {jpt}.at(FTALepton{lpf}_jetIdx.at(0)) : 0.0; return ret;".format(jm=jetMask, lpf=leppostfix, jpt=jetPt)))
         z.append(("FTACrossCleanedJet{pf}_pt".format(pf=postfix), "(FTALepton{lpf}_jetIdx.at(0) >= 0 && pre{jm}.at(FTALepton{lpf}_jetIdx.at(0)) == true) ? {jpt}.at(FTALepton{lpf}_jetIdx.at(0)) : 0.0".format(jm=jetMask, lpf=leppostfix, jpt=jetPt)))
         z.append(("FTACrossCleanedJet{pf}_rawpt".format(pf=postfix), "(FTALepton{lpf}_jetIdx.at(0) >= 0 && pre{jm}.at(FTALepton{lpf}_jetIdx.at(0)) == true) ? (1 - Jet_rawFactor.at(FTALepton{lpf}_jetIdx.at(0))) * {jpt}.at(FTALepton{lpf}_jetIdx.at(0)) : 0.0".format(jm=jetMask, lpf=leppostfix, jpt=jetPt)))
         z.append(("FTACrossCleanedJet{pf}_leppt".format(pf=postfix), "(FTALepton{lpf}_jetIdx.at(0) >= 0 && pre{jm}.at(FTALepton{lpf}_jetIdx.at(0)) == true) ? FTALepton{lpf}_pt.at(0) : 0.0".format(jm=jetMask, lpf=leppostfix, jpt=jetPt)))
@@ -3554,17 +3594,17 @@ def BTaggingEfficiencies(input_df, sampleName=None, era="2017", wgtVar="wgt_SUMW
                             
 
 def cutPVandMETFilters(input_df, level, isData=False):
-    if "selection" in level: 
-        lvl = "selection"
-    else:
+    if "baseline" in level: 
         lvl = "baseline"
+    else:
+        lvl = "selection"
     PVbits = 0b00000000000000000111
     METbits_MC = 0b00000000001111110000
     METbits_Data = 0b00000000000000001000
     if isData:
-        METbits = METbits_MC + METbits_Data 
+        METbits = METbits_MC + METbits_Data + PVbits
     else:
-        METbits = METbits_MC
+        METbits = METbits_MC + PVbits
     rdf = input_df.Filter("(ESV_JetMETLogic_{lvl} & {bits}) >= {bits}".format(lvl=lvl, bits=METbits), "PV, MET Filters")
     return rdf
 
@@ -6118,7 +6158,9 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
          BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, 
          printBookkeeping=False, triggers=[], includeSampleNames=None, 
          useDeltaR=False, jetPtMin=30.0, jetPUId=None, 
-         excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True):
+         excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True,
+         testVariables=False
+     ):
 
     ##################################################
     ##################################################
@@ -6491,25 +6533,14 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                                               rdfLeptonSelection=doLeptonSelection,
                                               verbose=verbose,
                                              )
+            print("Introducing early cut on lepton number: 2 required")
+            the_df[name][lvl] = the_df[name][lvl].Filter("nFTALepton > 1")
+            if testVariables:
+                skipTestVariables = testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=[],
+                                                           allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
+            #ElEl fails by this point #It turns out that a minimal culprit is the branch FTAMuon_looseId
             #Use the cutPV and METFilters function to do cutflow on these requirements... this should be updated, still uses JetMETLogic bits... FIXME
             the_df[name][lvl] = cutPVandMETFilters(the_df[name][lvl], lvl, isData=vals["isData"])
-            #Init weights necessary for now, should be combined with defineWeights to do everything after the other defines are finished (Jets...)
-            # if vals["isData"] == False:
-            #     the_df[name][lvl] = defineInitWeights(the_df[name][lvl],
-            #                                           crossSection=vals["crossSection"], 
-            #                                           sumWeights=vals["sumWeights"], 
-            #                                           era=vals["era"],
-            #                                           nEvents=vals["nEvents"], 
-            #                                           nEventsPositive=vals["nEventsPositive"], 
-            #                                           nEventsNegative=vals["nEventsNegative"], 
-            #                                           isData=vals["isData"], 
-            #                                           verbose=verbose,
-            #                                          )
-            # else:
-            #     the_df[name][lvl] = defineInitWeights(the_df[name][lvl],
-            #                                           isData=True,
-            #                                           verbose=verbose,
-            #                                          )
             the_df[name][lvl] = defineJets(the_df[name][lvl],
                                            era=vals["era"],
                                            bTagger=bTagger,
@@ -6520,6 +6551,9 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                                            useDeltaR=useDeltaR,
                                            verbose=verbose,
                                           )
+            if testVariables:
+                skipTestVariables += testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=skipTestVariables,
+                                                            allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
             # print("Filtering out events where a jet is/isn't cross-cleaned against the leading lepton")
             # the_df[name][lvl] = the_df[name][lvl].Filter("FTALepton_jetIdx.at(0) < 0 || prejet_mask.at(FTALepton_jetIdx.at(0)) == false", "events with no otherwise selected jet cross-cleaned against the lead lepton")
             # the_df[name][lvl] = the_df[name][lvl].Filter("FTALepton_jetIdx.at(0) >= 0 && prejet_mask.at(FTALepton_jetIdx.at(0)) == true", "events with otherwise-selected jet cross-cleaned against the lead lepton")
@@ -6547,6 +6581,9 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                                                                               channel=lvl, 
                                                                               debug=False
             )
+            if testVariables:
+                skipTestVariables += testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=skipTestVariables,
+                                                            allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
             #Inject the flat and flattened variables for saving in ntuples through the 'inputNtupleVariables'
             #Split the process based on sample-specific flags in its vals dictionary, some of which was parsed above i.e. splitProcessConfig, inclusive...
             prePackedNodes = splitProcess(the_df[name][lvl], 
@@ -6558,6 +6595,9 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                                           era = vals["era"],
                                           printInfo = printBookkeeping,
             )
+            if testVariables:
+                testVariableProcessing(prePackedNodes, nodes=True, searchMode=True, skipColumns=skipTestVariables,
+                                       allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
             #Do initial round of weights, preparation for btagging yields to be calculated
             prePackedNodes = defineWeights(prePackedNodes,
                                            splitProcess = splitProcessConfig,
@@ -6578,6 +6618,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                                             nJetArray=[4,5,6,7,8,20],
                                             verbose=verbose,
             )
+            # testnode = prePackedNodes["nodes"]['2017___ttbb_SL_nr']['BaseNode']
             #Use the fact we have a yields file as the flag for being in the "final" mode for weights, so do final=True variant
             if BTaggingYieldsFile:
                 print("What is happening in defineWeights here? Need to modify the prePackedNodes, then... pass on to the fillHistos method")
