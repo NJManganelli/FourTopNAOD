@@ -1,0 +1,238 @@
+ {   
+     "DefaultLegend": {
+	"Header": "#sqrt{{s}} = 13 TeV, L_{{int}} = {lumi} fb^{{-1}}",
+	"HeaderPosition": 0.25,
+        "Supercategories": {
+            "Signal": {
+                "Draw": "L", 
+                "Names": [
+                    "tttt"
+                ], 
+                "Stack": false
+            },
+            "Data": {
+                "Draw": "PE1", 
+                "Names": [
+                    "Data"
+                ], 
+                "Stack": false
+            }, 
+            "Background": {
+                "Draw": "HIST", 
+                "Names": [
+                    "ttbb", 
+		    "ttother",
+                    "singletop", 
+                    "ttH", 
+                    "ttVJets", 
+                    "ttultrarare", 
+                    "DY", 
+                    "QCD"
+                ], 
+                "Stack": true
+            }
+        }, 
+        "nColumns": 1, 
+        "OLDY-Coordinates": [
+            0.35, 
+            0.75, 
+            0.95, 
+            0.9
+        ], 
+        "Ratios": {
+            "Data/MC": {
+                "Style": "Marker", 
+		"MarkerStyle": 20,
+		"Draw": "PXE1",
+                "Denominator": "Background", 
+                "Numerator": "Data"
+            }
+        }, 
+        "Systematics": [], 
+        "OLDY-nColumns": 3, 
+        "Type": "DefaultLegend", 
+        "Coordinates": [
+            0.0, 
+            0.1, 
+            0.25, 
+            0.60
+        ], 
+        "Categories": {
+            "ttH": {
+                "Color": 616, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttH___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ttH___ElMu___ZWindowMET0Width0",
+                    "2017___ttH___MuMu___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "tttt": {
+                "Color": 864, 
+                "Style": "Line", 
+                "Names": [
+                    "2017___tttt___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___tttt___ElMu___ZWindowMET0Width0",
+                    "2017___tttt___MuMu___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "ttVJets": {
+                "Color": 880, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttWJets___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ttWJets___ElMu___ZWindowMET0Width0", 
+                    "2017___ttWJets___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttZJets___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ttZJets___ElMu___ZWindowMET0Width0",
+                    "2017___ttZJets___MuMu___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "DY": {
+                "Color": 416, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___DYJets_DL___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL___ElMu___ZWindowMET0Width0",
+                    "2017___DYJets_DL___MuMu___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "Data": {
+                "Color": 1, 
+                "Style": "Marker",
+		"MarkerStyle": 20, 
+                "Names": [
+                    "2017___ElMu___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ElMu___ElMu___ZWindowMET0Width0", 
+                    "2017___ElMu___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu___ElMu___ZWindowMET0Width0", 
+                    "2017___MuMu___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl___ElMu___ZWindowMET0Width0", 
+                    "2017___ElEl___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___El___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___El___ElMu___ZWindowMET0Width0", 
+                    "2017___El___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___Mu___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___Mu___ElMu___ZWindowMET0Width0",
+                    "2017___Mu___MuMu___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "ttbb": {
+                "Color": 38, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttbb_DL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_DL_fr___ElMu___ZWindowMET0Width0", 
+                    "2017___ttbb_DL_fr___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_SL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_SL_fr___ElMu___ZWindowMET0Width0", 
+                    "2017___ttbb_SL_fr___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_DL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_DL_nr___ElMu___ZWindowMET0Width0", 
+                    "2017___ttbb_DL_nr___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_SL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_SL_nr___ElMu___ZWindowMET0Width0", 
+                    "2017___ttbb_SL_nr___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_DL-GF_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_DL-GF_fr___ElMu___ZWindowMET0Width0", 
+                    "2017___ttbb_DL-GF_fr___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ttbb_SL-GF_fr___ElMu___ZWindowMET0Width0",
+                    "2017___ttbb_SL-GF_fr___MuMu___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "ttother": {
+                "Color": 632, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttother_DL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_DL_fr___ElMu___ZWindowMET0Width0", 
+                    "2017___ttother_DL_fr___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_SL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_SL_fr___ElMu___ZWindowMET0Width0", 
+                    "2017___ttother_SL_fr___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_DL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_DL_nr___ElMu___ZWindowMET0Width0", 
+                    "2017___ttother_DL_nr___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_SL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_SL_nr___ElMu___ZWindowMET0Width0", 
+                    "2017___ttother_SL_nr___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_DL-GF_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_DL-GF_fr___ElMu___ZWindowMET0Width0", 
+                    "2017___ttother_DL-GF_fr___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ttother_SL-GF_fr___ElMu___ZWindowMET0Width0",
+                    "2017___ttother_SL-GF_fr___MuMu___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "QCD": {
+                "Color": 950, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___QCD_HT200___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT200___ElMu___ZWindowMET0Width0", 
+                    "2017___QCD_HT200___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT300___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT300___ElMu___ZWindowMET0Width0", 
+                    "2017___QCD_HT300___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT500___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT500___ElMu___ZWindowMET0Width0", 
+                    "2017___QCD_HT500___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT700___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT700___ElMu___ZWindowMET0Width0", 
+                    "2017___QCD_HT700___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT1000___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT1000___ElMu___ZWindowMET0Width0", 
+                    "2017___QCD_HT1000___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT1500___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT1500___ElMu___ZWindowMET0Width0", 
+                    "2017___QCD_HT1500___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT2000___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___QCD_HT2000___ElMu___ZWindowMET0Width0",
+                    "2017___QCD_HT2000___MuMu___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "singletop": {
+                "Color": 400, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ST_tW___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ST_tW___ElMu___ZWindowMET0Width0", 
+                    "2017___ST_tW___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ST_tbarW___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ST_tbarW___ElMu___ZWindowMET0Width0",
+                    "2017___ST_tbarW___MuMu___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "ttultrarare": {
+                "Color": 432, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttWW___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttWW___ElMu___ZWindowMET0Width0", 
+                    "2017___ttWW___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttWH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttWH___ElMu___ZWindowMET0Width0", 
+                    "2017___ttWH___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttWZ___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttWZ___ElMu___ZWindowMET0Width0", 
+                    "2017___ttWZ___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttZZ___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttZZ___ElMu___ZWindowMET0Width0", 
+                    "2017___ttZZ___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttZH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttZH___ElMu___ZWindowMET0Width0", 
+                    "2017___ttZH___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ttHH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttHH___ElMu___ZWindowMET0Width0", 
+                    "2017___ttHH___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___tttJ___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___tttJ___ElMu___ZWindowMET0Width0",
+                    "2017___tttJ___MuMu___ZWindowMET0p0Width15p0"
+                ]
+            }
+        }
+    }
+}
