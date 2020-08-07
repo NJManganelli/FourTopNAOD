@@ -87,6 +87,7 @@ systematics_2017_NOMINAL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                         },
                                  "weightVariation": False},
 }
+print("\n\nFIXME: Change the systematics names to be compatible with Combine and be agnostic to the tagger\n\n\n\n\n")
 systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                      "lep_postfix": "",
                                      "wgt_final": "wgt__nom",
@@ -94,7 +95,8 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                      "jet_mass_var": "Jet_mass",
                                      "met_pt_var": "METFixEE2017_pt",
                                      "met_phi_var": "METFixEE2017_phi",
-                                     "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape",
+                                     "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape",
+                                                "DeepCSV": "Jet_btagSF_deepcsv_shape",
                                                 "DeepJet": "Jet_btagSF_deepjet_shape",
                                             },
                                      "weightVariation": False},
@@ -105,8 +107,9 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                               "jet_mass_var": "Jet_mass_jesTotalUp",
                                               "met_pt_var": "METFixEE2017_pt_jesTotalUp",
                                               "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                              "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape",
-                                                         "DeepJet": "Jet_btagSF_deepjet_shape",
+                                              "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_jes",
+                                                         "DeepCSV": "Jet_btagSF_deepcsv_shape_up_jes",
+                                                         "DeepJet": "Jet_btagSF_deepjet_shape_up_jes",
                                                      },
                                               "weightVariation": False},
                         "jes_13TeV_R2017Down": {"jet_mask": "jet_mask_jes_13TeV_R2017Down",
@@ -116,66 +119,298 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                                 "jet_mass_var": "Jet_mass_jesTotalDown",
                                                 "met_pt_var": "METFixEE2017_pt_jesTotalDown",
                                                 "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                                "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape",
-                                                           "DeepJet": "Jet_btagSF_deepjet_shape",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_jes",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_down_jes",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_down_jes",
                                                        },
                                                 "weightVariation": False},
                         "pileup_13TeV_R2017Up": {"jet_mask": "jet_mask",
                                                  "lep_postfix": "", 
                                                  "jet_pt_var": "Jet_pt",
-                                                 "btagSF":{"DeepCSV": "Jet_btagSF_deepcsv_shape",
+                                                 "btagSF":{"CSVv2": "Jet_btagSF_csvv2_shape",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape",
                                                            "DeepJet": "Jet_btagSF_deepjet_shape",
                                                        },
                                                  "weightVariation": True},
                         "pileup_13TeV_R2017Down": {"jet_mask": "jet_mask",
                                                    "lep_postfix": "", 
                                                    "jet_pt_var": "Jet_pt",
-                                                   "btagSF":{"DeepCSV": "Jet_btagSF_deepcsv_shape",
+                                                   "btagSF":{"CSVv2": "Jet_btagSF_csvv2_shape",
+                                                             "DeepCSV": "Jet_btagSF_deepcsv_shape",
                                                              "DeepJet": "Jet_btagSF_deepjet_shape",
                                                          },
                                                    "weightVariation": True},
                         "prefire_13TeV_R2017Up": {"jet_mask": "jet_mask",
                                                   "lep_postfix": "", 
                                                   "jet_pt_var": "Jet_pt",
-                                                  "btagSF":{"DeepCSV": "Jet_btagSF_deepcsv_shape",
+                                                  "btagSF":{"CSVv2": "Jet_btagSF_csvv2_shape",
+                                                            "DeepCSV": "Jet_btagSF_deepcsv_shape",
                                                             "DeepJet": "Jet_btagSF_deepjet_shape",
                                                         },
                                                   "weightVariation": True},
                         "prefire_13TeV_R2017Down": {"jet_mask": "jet_mask",
                                                     "lep_postfix": "", 
                                                     "jet_pt_var": "Jet_pt",
-                                                    "btagSF":{"DeepCSV": "Jet_btagSF_deepcsv_shape",
+                                                    "btagSF":{"CSVv2": "Jet_btagSF_csvv2_shape",
+                                                              "DeepCSV": "Jet_btagSF_deepcsv_shape",
                                                               "DeepJet": "Jet_btagSF_deepjet_shape",
                                                           },
                                                     "weightVariation": True},
                         "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
                                                        "lep_postfix": "", 
                                                        "jet_pt_var": "Jet_pt",
-                                                       "btagSF":{"DeepCSV": "Jet_btagSF_deepcsv_shape_up_hf",
+                                                       "btagSF":{"CSVv2": "Jet_btagSF_csvv2_shape_up_hf",
+                                                                 "DeepCSV": "Jet_btagSF_deepcsv_shape_up_hf",
                                                                  "DeepJet": "Jet_btagSF_deepjet_shape_up_hf",
                                                              },
                                                        "weightVariation": True},
                         "btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
                                                          "lep_postfix": "", 
                                                          "jet_pt_var": "Jet_pt",
-                                                         "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape_down_hf",
+                                                         "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_hf",
+                                                                    "DeepCSV": "Jet_btagSF_deepcsv_shape_down_hf",
                                                                     "DeepJet": "Jet_btagSF_deepjet_shape_down_hf",
                                                                 },
                                                          "weightVariation": True},
                         "btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
                                                        "lep_postfix": "", 
                                                        "jet_pt_var": "Jet_pt",
-                                                       "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape_up_lf",
+                                                       "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_lf",
+                                                                  "DeepCSV": "Jet_btagSF_deepcsv_shape_up_lf",
                                                                   "DeepJet": "Jet_btagSF_deepjet_shape_up_lf",
                                                               },
                                                        "weightVariation": True},
                         "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
                                                          "lep_postfix": "", 
                                                          "jet_pt_var": "Jet_pt",
-                                                         "btagSF": {"DeepCSV": "Jet_btagSF_deepcsv_shape_down_lf",
+                                                         "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_lf",
+                                                                    "DeepCSV": "Jet_btagSF_deepcsv_shape_down_lf",
                                                                     "DeepJet": "Jet_btagSF_deepjet_shape_down_lf",
                                                                 },
                                                          "weightVariation": True},
+}
+systematics_to_be_integrated = {
+                       "btagSF_shape_hfUp": {"jet_mask": "jet_mask",
+                                             "lep_postfix": "", 
+                                             "jet_pt_var": "Jet_pt",
+                                             "btagSF":{"CSVv2": "Jet_btagSF_csvv2_shape_up_hf",
+                                                       "DeepCSV": "Jet_btagSF_deepcsv_shape_up_hf",
+                                                       "DeepJet": "Jet_btagSF_deepjet_shape_up_hf",
+                                                   },
+                                             "weightVariation": True},
+                        "btagSF_shape_hfDown": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_hf",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_down_hf",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_down_hf",
+                                                       },
+                                                "weightVariation": True},
+                        "btagSF_shape_hfstats1Up": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_hfstats1",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_up_hfstats1",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_up_hfstats1",
+                                                       },
+                                                "weightVariation": True},
+                        "btagSF_shape_hfstats1Down": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_hfstats1",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_down_hfstats1",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_down_hfstats1",
+                                                       },
+                                                "weightVariation": True},
+                        "btagSF_shape_hfstats2Up": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_hfstats2",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_up_hfstats2",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_up_hfstats2",
+                                                       },
+                                                "weightVariation": True},
+                        "btagSF_shape_hfstats2Down": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_hfstats2",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_down_hfstats2",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_down_hfstats2",
+                                                       },
+                                                "weightVariation": True},
+                        "btagSF_shape_cferr1Up": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_cferr1",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_up_cferr1",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_up_cferr1",
+                                                       },
+                                                "weightVariation": True},
+                        "btagSF_shape_cferr1Down": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_cferr1",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_down_cferr1",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_down_cferr1",
+                                                       },
+                                                "weightVariation": True},
+                        "btagSF_shape_cferr2Up": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_cferr2",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_up_cferr2",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_up_cferr2",
+                                                       },
+                                                "weightVariation": True},
+                        "btagSF_shape_cferr2Down": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_cferr2",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_down_cferr2",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_down_cferr2",
+                                                       },
+                                                "weightVariation": True},
+                        "btagSF_shape_lfUp": {"jet_mask": "jet_mask",
+                                              "lep_postfix": "", 
+                                              "jet_pt_var": "Jet_pt",
+                                              "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_lf",
+                                                         "DeepCSV": "Jet_btagSF_deepcsv_shape_up_lf",
+                                                         "DeepJet": "Jet_btagSF_deepjet_shape_up_lf",
+                                                     },
+                                              "weightVariation": True},
+                        "btagSF_shape_lfDown": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_lf",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_down_lf",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_down_lf",
+                                                       },
+                                                "weightVariation": True},
+                        "btagSF_shape_lfstats1Up": {"jet_mask": "jet_mask",
+                                              "lep_postfix": "", 
+                                              "jet_pt_var": "Jet_pt",
+                                              "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_lfstats1",
+                                                         "DeepCSV": "Jet_btagSF_deepcsv_shape_up_lfstats1",
+                                                         "DeepJet": "Jet_btagSF_deepjet_shape_up_lfstats1",
+                                                     },
+                                              "weightVariation": True},
+                        "btagSF_shape_lfstats1Down": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_lfstats1",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_down_lfstats1",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_down_lfstats1",
+                                                       },
+                                                "weightVariation": True},
+                        "btagSF_shape_lfstats2Up": {"jet_mask": "jet_mask",
+                                              "lep_postfix": "", 
+                                              "jet_pt_var": "Jet_pt",
+                                              "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_lfstats2",
+                                                         "DeepCSV": "Jet_btagSF_deepcsv_shape_up_lfstats2",
+                                                         "DeepJet": "Jet_btagSF_deepjet_shape_up_lfstats2",
+                                                     },
+                                              "weightVariation": True},
+                        "btagSF_shape_lfstats2Down": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_lfstats2",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_down_lfstats2",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_down_lfstats2",
+                                                       },
+                                                "weightVariation": True},
+}
+systematics_not_independent_for_jes_maybe = {
+                        "btagSF_shape_jesUp": {"jet_mask": "jet_mask",
+                                              "lep_postfix": "", 
+                                              "jet_pt_var": "Jet_pt",
+                                              "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_jes",
+                                                         "DeepCSV": "Jet_btagSF_deepcsv_shape_up_jes",
+                                                         "DeepJet": "Jet_btagSF_deepjet_shape_up_jes",
+                                                     },
+                                              "weightVariation": True},
+                        "btagSF_shape_jesDown": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_jes",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_shape_down_jes",
+                                                           "DeepJet": "Jet_btagSF_deepjet_shape_down_jes",
+                                                       },
+                                                "weightVariation": True},
+}
+print("Heyo loudmouth, dis JES btagSF supposed ta go wit da JES systematic o whut?")
+btagWPsystematics = {
+                        "btagSF_L": {"jet_mask": "jet_mask",
+                                     "lep_postfix": "", 
+                                     "jet_pt_var": "Jet_pt",
+                                     "btagSF": {"CSVv2": "Jet_btagSF_csvv2_L",
+                                                "DeepCSV": "Jet_btagSF_deepcsv_L",
+                                                "DeepJet": "Jet_btagSF_deepjet_L",
+                                            },
+                                     "weightVariation": True},
+                        "btagSF_LUp": {"jet_mask": "jet_mask",
+                                       "lep_postfix": "", 
+                                       "jet_pt_var": "Jet_pt",
+                                       "btagSF": {"CSVv2": "Jet_btagSF_csvv2_L_up",
+                                                  "DeepCSV": "Jet_btagSF_deepcsv_L_up",
+                                                  "DeepJet": "Jet_btagSF_deepjet_L_up",
+                                              },
+                                       "weightVariation": True},
+                        "btagSF_LDown": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_L_down",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_L_down",
+                                                           "DeepJet": "Jet_btagSF_deepjet_L_down",
+                                                       },
+                                                "weightVariation": True},
+                        "btagSF_M": {"jet_mask": "jet_mask",
+                                     "lep_postfix": "", 
+                                     "jet_pt_var": "Jet_pt",
+                                     "btagSF": {"CSVv2": "Jet_btagSF_csvv2_M",
+                                                "DeepCSV": "Jet_btagSF_deepcsv_M",
+                                                "DeepJet": "Jet_btagSF_deepjet_M",
+                                            },
+                                     "weightVariation": True},
+                        "btagSF_MUp": {"jet_mask": "jet_mask",
+                                       "lep_postfix": "", 
+                                       "jet_pt_var": "Jet_pt",
+                                       "btagSF": {"CSVv2": "Jet_btagSF_csvv2_M_up",
+                                                  "DeepCSV": "Jet_btagSF_deepcsv_M_up",
+                                                  "DeepJet": "Jet_btagSF_deepjet_M_up",
+                                              },
+                                       "weightVariation": True},
+                        "btagSF_MDown": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_M_down",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_M_down",
+                                                           "DeepJet": "Jet_btagSF_deepjet_M_down",
+                                                       },
+                                                "weightVariation": True},
+                        "btagSF_T": {"jet_mask": "jet_mask",
+                                     "lep_postfix": "", 
+                                     "jet_pt_var": "Jet_pt",
+                                     "btagSF": {"CSVv2": "Jet_btagSF_csvv2_T",
+                                                "DeepCSV": "Jet_btagSF_deepcsv_T",
+                                                "DeepJet": "Jet_btagSF_deepjet_T",
+                                            },
+                                     "weightVariation": True},
+                        "btagSF_TUp": {"jet_mask": "jet_mask",
+                                       "lep_postfix": "", 
+                                       "jet_pt_var": "Jet_pt",
+                                       "btagSF": {"CSVv2": "Jet_btagSF_csvv2_T_up",
+                                                  "DeepCSV": "Jet_btagSF_deepcsv_T_up",
+                                                  "DeepJet": "Jet_btagSF_deepjet_T_up",
+                                              },
+                                       "weightVariation": True},
+                        "btagSF_TDown": {"jet_mask": "jet_mask",
+                                                "lep_postfix": "", 
+                                                "jet_pt_var": "Jet_pt",
+                                                "btagSF": {"CSVv2": "Jet_btagSF_csvv2_T_down",
+                                                           "DeepCSV": "Jet_btagSF_deepcsv_T_down",
+                                                           "DeepJet": "Jet_btagSF_deepjet_T_down",
+                                                       },
+                                                "weightVariation": True},
 }
 systematics_2017_TEST = { #for testing the removal of certain SFs, weights...
                     "no_btag_shape_reweight": {"jet_mask": "jet_mask",
@@ -207,9 +442,9 @@ systematics_2017_TEST = { #for testing the removal of certain SFs, weights...
                                        },
                                 "weightVariation": True},
 }
-print("\n\nWARNING: SYSTEMATICS SWAPPED TO NOMINAL ONLY")
-systematics_2017 = systematics_2017_NOMINAL
-# systematics_2017 = systematics_2017_ALL
+# print("\n\nWARNING: SYSTEMATICS SWAPPED TO NOMINAL ONLY")
+# systematics_2017 = systematics_2017_NOMINAL
+systematics_2017 = systematics_2017_ALL
 # systematics_2017.pop("btagSF_deepcsv_shape_up_hf")
 # systematics_2017.pop("btagSF_deepcsv_shape_down_hf")
 # systematics_2017.pop("btagSF_deepcsv_shape_up_lf")
@@ -4016,7 +4251,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
 
 
 def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="All", isData=True, era="2017", histosDict=None,
-               doCategorized=False, doDiagnostics=True, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
+               doCategorized=False, doDiagnostics=True, doCombineHistosOnly=False, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
                HTCut=500, ZMassMETWindow=[15.0, 0.0], verbose=False,
                triggers=[],
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
@@ -4078,7 +4313,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                  ["nMediumDeep{tag}B3".format(tag=tagger)],
                  ["nMediumDeep{tag}B4+".format(tag=tagger)],
              ]
-
+    #Variables to save for Combine when doCombineHistosOnly=True
+    combineHistoVariables = ["HT"]
     pi = ROOT.TMath.Pi()
     #Get the list of defined columns for checks
     histoNodes = histosDict #Inherit this from initiliazation, this is where the histograms will actually be stored
@@ -4632,6 +4868,9 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HT{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,400,2000), "HT{bpf}".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___HTUnweighted{spf}"\
+                                                                    .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
+                                                                    "", 100,400,2000), "HT{bpf}".format(bpf=branchpostfix)))
                     defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___H{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "", 100,400,2000), "H{bpf}".format(bpf=branchpostfix), wgtVar))
@@ -4847,12 +5086,15 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                             guessDim = 0
                             if len(dnode) == 3:
                                 guessDim = 1
+                                if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables: continue
                                 histoNodes[processName][decayChannel][defHName] = categoryNode.Histo1D(dnode[0], dnode[1], dnode[2])
                             elif len(dnode) == 4:
                                 guessDim = 2
+                                if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables and dnode[2].split("__")[0] not in combineHistoVariables: continue
                                 histoNodes[processName][decayChannel][defHName] = categoryNode.Histo2D(dnode[0], dnode[1], dnode[2], dnode[3])
                             elif len(dnode) == 4:
                                 guessDim = 3
+                                if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables and dnode[2].split("__")[0] not in combineHistoVariables and dnode[3].split("__")[0] not in combineHistoVariables: continue
                                 histoNodes[processName][decayChannel][defHName] = categoryNode.Histo3D(dnode[0], dnode[1], dnode[2], dnode[3], dnode[4])
 
     packedNodes = {}
@@ -6132,7 +6374,7 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         f.write(line)
 
             
-def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=False, doHistos=False, 
+def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=False, doHistos=False, doCombineHistosOnly=False,
          doLeptonSelection=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
          BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, 
          printBookkeeping=False, triggers=[], includeSampleNames=None, 
@@ -6626,7 +6868,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                 packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], era = vals["era"], triggers = triggers,
                                                     sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
                                                     histosDict=histos, sysVariations=systematics_2017, doCategorized=True, 
-                                                    doDiagnostics=True, bTagger=bTagger, verbose=verb)
+                                                    doDiagnostics=False, doCombineHistosOnly=doCombineHistosOnly, bTagger=bTagger, verbose=verb)
             if doDiagnostics:
                 packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], era = vals["era"], triggers = triggers,
                                                     sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
@@ -6666,7 +6908,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
             #                 dict_keys="All",
             #                 mode="RECREATE"
             #                )
-            if doHistos or doBTaggingYields:
+            if doCombineHistosOnly or doHistos or doBTaggingYields:
                 print("Writing outputs...")
                 processesOfInterest = []
                 if splitProcessConfig != None:
@@ -6676,7 +6918,10 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                     processesOfInterest.append(vals.get("era") + "___" + name)
                 print("Writing historams for...{}".format(processesOfInterest))
 
-                if doHistos:
+                if doCombineHistosOnly:
+                    writeDir = analysisDir + "/Combine"
+                    writeDict = histos
+                elif doHistos:
                     writeDir = analysisDir + "/Histograms"
                     writeDict = histos
                 if doBTaggingYields:
@@ -6824,7 +7069,8 @@ def otherFuncs():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
     parser.add_argument('stage', action='store', type=str, choices=['bookkeeping', 'fill-yields', 'combine-yields', 'lepton-selection', 'fill-diagnostics', 
-                                                                    'fill-histograms', 'combine-histograms', 'fill-ntuples', 'prepare-for-combine'],
+                                                                    'fill-histograms', 'hadd-histograms', 'fill-ntuples', 'fill-combine',
+                                                                    'hadd-combine'],
                         help='analysis stage to be produced')
     parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic__{chan}_selection',
                         help='Stage of data storage to pull from, as referenced in Sample dictionaries as subkeys of the "source" key.'\
@@ -7008,29 +7254,40 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test)
-    elif stage == 'combine-histograms':
+    elif stage == 'hadd-histograms'or 'hadd-combine':
         print("Combining root files for plotting")
-        histDir = "{adir}/Histograms".format(adir=analysisDir, chan=channel)
-        writeDir = "{adir}/Histograms/All".format(adir=analysisDir)
+        if stage == 'hadd-histograms':
+            histDir = "{adir}/Histograms".format(adir=analysisDir, chan=channel)
+            writeDir = "{adir}/Histograms/All".format(adir=analysisDir)
+        elif stage == 'hadd-combine':
+            histDir = "{adir}/Combine".format(adir=analysisDir, chan=channel)
+            writeDir = "{adir}/Combine/All".format(adir=analysisDir)
+        else:
+            raise RuntimeError("hadd stage not properly configured with histDir and writeDir")
         if not os.path.isdir(writeDir):
             os.makedirs(writeDir)
         globKey = "**/*.root"
         print("Looking for histogram files to combine inside {hdir}".format(hdir=histDir))
         f = glob.glob("{}/{}".format(histDir, globKey))
+        if verb:
+            print("\nFound these files: ")
+            for fiter in f: print("\t\t{}".format(fiter))
         cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
         # print(cmd)
         spo = subprocess.Popen(args="{}".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))
         spo.communicate()
-        if verb:
-            print("\nFound these files: ")
-            for fiter in f: print("\t\t{}".format(fiter))
     elif stage == 'fill-ntuples':
         packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doNtuples=doNtuples, doHistos=False, 
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test)
-    elif stage == 'prepare-for-combine':
-        print("This analysis stage is not yet finished. It will call the method histoCombine() which needs to be updated for the new internal key structure from fillHistos")
+    elif stage == 'fill-combine':
+        #filling ntuples is also possible with the option --doNtuples
+        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=True,
+                      doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
+                      jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test)
     else:
         print("stage {stag} is not yet prepared, please update the FTAnalyzer".format(stag))
