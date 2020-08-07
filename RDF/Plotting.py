@@ -2036,6 +2036,12 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         fileDict["{}/{}".format(histogramDirectory, fn)] = ROOT.TFile.Open("{}/{}".format(histogramDirectory, fn), "read")
     defaults = dict([(i, j) for i, j in inputJSON.items() if j.get("Type") in ["DefaultPlot", "DefaultCanvas", "DefaultLegend"]])
 
+    #Save histograms for Combine
+    combSystematics = {}
+    combVariables = {}
+    combCategories = {}
+    combHistograms = {}
+
     #Cache everything, we don't want python garbage collecting our objects before we're done using them. 
     if Cache == None:
         Cache = {}
@@ -2073,7 +2079,12 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         #The legend, a name understating its importance, determines groupings of MC/data to merge, stack, draw,
         #create ratios of, and draw systematics for. Each 'Supercategory' defined here gets a legend entry,
         legendConfig = legends.get(can_dict.get("Legend", "FallbackToDefault"), defaults["DefaultLegend"])
-        systematics = legendConfig["Systematics"]
+        # systematics = legendConfig["Systematics"]
+        print("Making systematics list by hand here, FIXME FIXME")
+        systematics = ["jes_13TeV_R2017Up", "jes_13TeV_R2017Down", "pileup_13TeV_R2017Up", "pileup_13TeV_R2017Down", 
+                       "prefire_13TeV_R2017Up", "prefire_13TeV_R2017Down", "btagSF_deepcsv_shape_up_hf", "btagSF_deepcsv_shape_down_hf",
+                       "btagSF_deepcsv_shape_up_lf", "btagSF_deepcsv_shape_down_lf"]
+        #Deduce systematics automatically...
         
         #Load the LegendConfig which denotes which samples to use, colors to assign, etc.
         
@@ -2355,6 +2366,80 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 CanCache["canvas"].SaveAs("{}".format(macroOutput))
         if pngOutput != None:
             CanCache["canvas"].SaveAs("{}".format(pngOutput))
+        #Save histograms for Combine, this is a hacked first attempt, might be cleaner to create a dictionary of histograms with keys from the histogram name to avoid duplicates/cycle numbers in the root files.
+        if True and "HT" in can_name:
+            if "signalSensitive_HT" in can_name: continue
+            if "nBtag2p" in can_name: continue
+            for i in xrange(len(CanCache["subplots/supercategories"])):
+                for preProcessName, hist in CanCache["subplots/supercategories"][i]['Categories/hists'].items():
+                    processName = preProcessName.replace("BLIND", "").replace("Data", "data_obs")
+                    if processName not in combSystematics:
+                        combSystematics[processName] = []
+                    if processName not in combVariables:
+                        combVariables[processName] = []
+                    if processName not in combCategories:
+                        combCategories[processName] = []
+                    if processName not in combHistograms:
+                        combHistograms[processName] = []
+                    #BLINDData___HT500_nMediumDeepJetB4+_nJet8+___HT___nom
+                    combProcess, combCategory, combVariable, combSystematic = hist.GetName().split(separator)
+                    combSystematics[processName].append(combSystematic)
+                    #combProcess.replace("BLIND", "").replace("Data", "data_obs")
+                    combVariables[processName].append(combVariable)
+                    combCategories[processName].append(combCategory.replace("+", "p"))
+                    histName = "___".join([combProcess.replace("BLIND", "").replace("Data", "data_obs"), 
+                                           combCategory.replace("+", "p"), 
+                                           combVariable, 
+                                           combSystematic])
+                    combHist = hist.Clone(histName)
+                    if "BLIND" in combProcess:
+                        print("Blinding histogram for Combine")
+                        combHist = hist.Clone(hist.GetName().replace("Data", "data_obs").replace("+", "p").replace("BLIND", ""))
+                        combHist.SetDirectory(0)
+                        for combBin in xrange(combHist.GetNbinsX() + 2):
+                            combHist.SetBinContent(combBin, 0); combHist.SetBinError(combBin, 0)
+                    combHistograms[processName].append(combHist)
+            for sys in CanCache["subplots/supercategories/systematics"].keys():
+                for i in xrange(len(CanCache["subplots/supercategories/systematics"][sys])):
+                    for preProcessName, hist in CanCache["subplots/supercategories/systematics"][sys][i]['Categories/hists'].items():
+                        processName = preProcessName.replace("BLIND", "").replace("Data", "data_obs")
+                        if processName not in combSystematics:
+                            combSystematics[processName] = []
+                        if processName not in combVariables:
+                            combVariables[processName] = []
+                        if processName not in combCategories:
+                            combCategories[processName] = []
+                        if processName not in combHistograms:
+                            combHistograms[processName] = []
+                        #BLINDData___HT500_nMediumDeepJetB4+_nJet8+___HT___nom
+                        combProcess, combCategory, combVariable, combSystematic = hist.GetName().split(separator)
+                        combSystematics[processName].append(combSystematic)
+                        combVariables[processName].append(combVariable)
+                        combCategories[processName].append(combCategory.replace("+", "p"))
+                        histName = "___".join([combProcess.replace("BLIND", "").replace("Data", "data_obs"), 
+                                               combCategory.replace("+", "p"), 
+                                               combVariable, 
+                                               combSystematic])
+                        combHist = hist.Clone(histName)
+                        # if "BLIND" in combProcess:
+                        #     print("Blinding histogram for Combine")
+                        #     combHist = hist.Clone(hist.GetName().replace("Data", "data_obs").replace("+", "p").replace("BLIND", ""))
+                        #     combHist.SetDirectory(0)
+                        #     for combBin in xrange(combHist.GetNbinsX() + 2):
+                        #         combHist.SetBinContent(combBin, 0); combHist.SetBinError(combBin, 0)
+                        if "Data" in combProcess: continue
+                        combHistograms[processName].append(combHist)
+    combHistogramsFinal = {}
+    for processName in combSystematics.keys():
+        combSystematics[processName] = list(set(combSystematics[processName]))
+        combVariables[processName] = list(set(combVariables[processName]))
+        combCategories[processName] = list(set(combCategories[processName]))
+        combHistogramsFinal[processName] = dict([(h.GetName(), h) for h in combHistograms[processName]])
+    combFile = ROOT.TFile.Open("combTest.root", "recreate")
+    for processName, processDict in combHistogramsFinal.items():
+        for histName, hist in processDict.items():
+            hist.Write()
+    combFile.Close()
     if closeFiles == True:
         for fo in fileDict.values():
             fo.Close()
@@ -2482,10 +2567,11 @@ if False:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Script for plotting FourTop analysis histograms in mountain-ranges, using configuration (json) cards')
-    parser.add_argument('stage', action='store', type=str, choices=['generate-plotCard', 'generate-legendCard', 'plot-histograms', 'plot-diagnostics'],
+    parser.add_argument('stage', action='store', type=str, choices=['generate-plotCard', 'generate-legendCard', 'plot-histograms', 'plot-diagnostics',
+                                                                    'prepare-combine'],
                         help='plotting stage to be produced')
     parser.add_argument('-c', '--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 
-                                                                                                              'ElEl_HighMET', 'MuMu_ElMu', 'All'],
+                                                                                                              'ElEl_HighMET', 'MuMu_ElMu','MuMu_ElMu_ElEl', 'All'],
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('-d', '--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
                         help='analysis directory where btagging yields, histograms, etc. are stored')
@@ -2524,7 +2610,7 @@ if __name__ == '__main__':
     lumiDict = {"2017": 41.53,
                 "2018": 59.97}
     lumi = lumiDict.get(era, "N/A")
-if stage == 'plot-histograms' or stage == 'plot-diagnostics':    
+if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepare-combine':    
     plotConfig = args.plotCard.replace("$ADIR", analysisDir).replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel).replace("//", "/")
     legendConfig = args.legendCard.replace("$ADIR", analysisDir).replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel).replace("//", "/")
     tag = analysisDir.split("/")[-1]
@@ -2540,6 +2626,8 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics':
             histogramDir = "$ADIR/Histograms/All".replace("$ADIR", analysisDir).replace("//", "/")
         elif stage == 'plot-diagnostics':
             histogramDir = "$ADIR/Diagnostics/NoChannel".replace("$ADIR", analysisDir).replace("//", "/")
+        elif stage == 'prepare-combine':
+            histogramDir = "$ADIR/Combine/All".replace("$ADIR", analysisDir).replace("//", "/")
         else:
             raise NotImplementedError("Unrecognized plotting sub-stage: need to define the histogramDir for this case")
         if not os.path.isdir(jsonDir):
