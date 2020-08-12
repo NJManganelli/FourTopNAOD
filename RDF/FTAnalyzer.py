@@ -343,8 +343,6 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                                            "DeepJet": "Jet_btagSF_deepjet_shape_down_jes",
                                                        },
                                                 "weightVariation": True},
-}
-systematics_to_be_integrated = {
                         "ISRDown": {"jet_mask": "jet_mask",
                                      "lep_postfix": "",
                                      "jet_pt_var": "Jet_pt",
@@ -389,6 +387,8 @@ systematics_to_be_integrated = {
                                                 "DeepJet": "Jet_btagSF_deepjet_shape",
                                             },
                                      "weightVariation": True},
+}
+systematics_to_be_integrated = {
                         "muFNomRDown": {"jet_mask": "jet_mask",
                                      "lep_postfix": "",
                                      "jet_pt_var": "Jet_pt",
@@ -3301,12 +3301,12 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     
     if "FSRDown" in sysVariations.keys():
         zPre.append(("pwgt_FSRDown", "nPSWeight == 4 ? PSWeight.at(1) : 0"))
-        zFin.append(("wgt___FSRDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_FSRDown* pwgt_btag___FSRDown * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___FSRDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_FSRDown* pwgt_Z_vtx___nom"))    
+        zFin.append(("wgt___FSRDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_FSRDown * pwgt_btag___FSRDown * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___FSRDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_FSRDown * pwgt_Z_vtx___nom"))    
     if "FSRUp" in sysVariations.keys():
         zPre.append(("pwgt_FSRUp", "nPSWeight == 4 ? PSWeight.at(3) : 0"))
-        zFin.append(("wgt___FSRUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_FSRUp* pwgt_btag___FSRUp * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___FSRUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_muRenormalizationUp* pwgt_Z_vtx___nom"))
+        zFin.append(("wgt___FSRUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_FSRUp * pwgt_btag___FSRUp * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___FSRUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_FSRUp * pwgt_Z_vtx___nom"))
 
     #Factorization/Renormalization weights... depend on dividing genWeight back out?
     if "muFNomRDown" in sysVariations.keys():
