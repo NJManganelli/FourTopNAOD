@@ -155,40 +155,6 @@ systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                                               "DeepJet": "Jet_btagSF_deepjet_shape",
                                                           },
                                                     "weightVariation": True},
-                        "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
-                                                       "lep_postfix": "", 
-                                                       "jet_pt_var": "Jet_pt",
-                                                       "btagSF":{"CSVv2": "Jet_btagSF_csvv2_shape_up_hf",
-                                                                 "DeepCSV": "Jet_btagSF_deepcsv_shape_up_hf",
-                                                                 "DeepJet": "Jet_btagSF_deepjet_shape_up_hf",
-                                                             },
-                                                       "weightVariation": True},
-                        "btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
-                                                         "lep_postfix": "", 
-                                                         "jet_pt_var": "Jet_pt",
-                                                         "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_hf",
-                                                                    "DeepCSV": "Jet_btagSF_deepcsv_shape_down_hf",
-                                                                    "DeepJet": "Jet_btagSF_deepjet_shape_down_hf",
-                                                                },
-                                                         "weightVariation": True},
-                        "btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
-                                                       "lep_postfix": "", 
-                                                       "jet_pt_var": "Jet_pt",
-                                                       "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_lf",
-                                                                  "DeepCSV": "Jet_btagSF_deepcsv_shape_up_lf",
-                                                                  "DeepJet": "Jet_btagSF_deepjet_shape_up_lf",
-                                                              },
-                                                       "weightVariation": True},
-                        "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
-                                                         "lep_postfix": "", 
-                                                         "jet_pt_var": "Jet_pt",
-                                                         "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_lf",
-                                                                    "DeepCSV": "Jet_btagSF_deepcsv_shape_down_lf",
-                                                                    "DeepJet": "Jet_btagSF_deepjet_shape_down_lf",
-                                                                },
-                                                         "weightVariation": True},
-}
-systematics_to_be_integrated = {
                         "jer_13TeV_R2017Up": {"jet_mask": "jet_mask_jer_13TeV_R2017Up",
                                               "lep_postfix": "",
                                               "jet_pt_var": "Jet_pt_jerUp",
@@ -233,7 +199,6 @@ systematics_to_be_integrated = {
                                                            "DeepJet": "Jet_btagSF_deepjet_shape_down_jes",
                                                        },
                                                 "weightVariation": False},
-
                        "btagSF_shape_hfUp": {"jet_mask": "jet_mask",
                                              "lep_postfix": "", 
                                              "jet_pt_var": "Jet_pt",
@@ -378,6 +343,8 @@ systematics_to_be_integrated = {
                                                            "DeepJet": "Jet_btagSF_deepjet_shape_down_jes",
                                                        },
                                                 "weightVariation": True},
+}
+systematics_to_be_integrated = {
                         "ISRDown": {"jet_mask": "jet_mask",
                                      "lep_postfix": "",
                                      "jet_pt_var": "Jet_pt",
@@ -511,6 +478,40 @@ systematics_to_be_integrated = {
                                             },
                                      "weightVariation": True},
 
+}
+deprecatedSystematpics = {
+                        "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
+                                                       "lep_postfix": "", 
+                                                       "jet_pt_var": "Jet_pt",
+                                                       "btagSF":{"CSVv2": "Jet_btagSF_csvv2_shape_up_hf",
+                                                                 "DeepCSV": "Jet_btagSF_deepcsv_shape_up_hf",
+                                                                 "DeepJet": "Jet_btagSF_deepjet_shape_up_hf",
+                                                             },
+                                                       "weightVariation": True},
+                        "btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
+                                                         "lep_postfix": "", 
+                                                         "jet_pt_var": "Jet_pt",
+                                                         "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_hf",
+                                                                    "DeepCSV": "Jet_btagSF_deepcsv_shape_down_hf",
+                                                                    "DeepJet": "Jet_btagSF_deepjet_shape_down_hf",
+                                                                },
+                                                         "weightVariation": True},
+                        "btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
+                                                       "lep_postfix": "", 
+                                                       "jet_pt_var": "Jet_pt",
+                                                       "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_lf",
+                                                                  "DeepCSV": "Jet_btagSF_deepcsv_shape_up_lf",
+                                                                  "DeepJet": "Jet_btagSF_deepjet_shape_up_lf",
+                                                              },
+                                                       "weightVariation": True},
+                        "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
+                                                         "lep_postfix": "", 
+                                                         "jet_pt_var": "Jet_pt",
+                                                         "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_lf",
+                                                                    "DeepCSV": "Jet_btagSF_deepcsv_shape_down_lf",
+                                                                    "DeepJet": "Jet_btagSF_deepjet_shape_down_lf",
+                                                                },
+                                                         "weightVariation": True},
 }
 btagWPsystematics = {
                         "btagSF_L": {"jet_mask": "jet_mask",
@@ -3352,13 +3353,13 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
 
     for btagVar in ["btagSF_shape_hfUp", "btagSF_shape_hfDown", 
                     "btagSF_shape_hfstats1Up", "btagSF_shape_hfstats1Down", "btagSF_shape_hfstats2Up", "btagSF_shape_hfstats2Down", 
-                    "btagSF_shape_cferr1Up", "btagSF_shape_cferr1Down", "btagSF_shape_cferr2Up", "btagSF_shape_cferr2Down"
+                    "btagSF_shape_cferr1Up", "btagSF_shape_cferr1Down", "btagSF_shape_cferr2Up", "btagSF_shape_cferr2Down",
                     "btagSF_shape_lfUp", "btagSF_shape_lfDown",
-                    "btagSF_shape_lfstats1Up", "btagSF_shape_lfstats1Down", "btagSF_shape_lfstats2Up", "btagSF_shape_lfstats2Down"
+                    "btagSF_shape_lfstats1Up", "btagSF_shape_lfstats1Down", "btagSF_shape_lfstats2Up", "btagSF_shape_lfstats2Down",
                     "btagSF_shape_jesUp", "btagSF_shape_jesDown"]:
         if btagVar in sysVariations.keys():
             zFin.append(("wgt___{}".format(btagVar), "pwgt_btagSF_common * pwgt_btag___{}".format(btagVar)))
-            zPre.append(("wgt___{}".format(btagVar), "pwgt_btagSF_common"))
+            zPre.append(("prewgt___{}".format(btagVar), "pwgt_btagSF_common"))
             
     #These should be deprecated soon, let the loop absorb the proper ones up above.
     if "btagSF_deepcsv_shape_down_hf" in sysVariations.keys():
