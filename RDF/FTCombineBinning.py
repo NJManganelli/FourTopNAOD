@@ -42,7 +42,6 @@ def main(stage, analysisDirectory, channel, era, relUncertainty):
     print(variables)
     systematics = list(set([k.split("___")[6] for k in keys]))
     print(systematics)
-    thisHist = None
     for era in eras:
         print(era)
         for channelWindow in channelWindows:
@@ -51,28 +50,76 @@ def main(stage, analysisDirectory, channel, era, relUncertainty):
                 print(category)
                 for variable in variables:
                     print(variable)
+                    hists = {}
+                    rebinnedHists = {}
+                    nBinsX = 0
+                    print("Skipping...")
+                    if variable != "HTUnweighted" and category != "HT500_nMediumDeepJetB4+_nJet8+": continue
                     for systematic in systematics:
                         print(systematic)
-                        # if thisHist is not None:
-                        #     del thisHist
-                        #     thisHist = None
                         for nSample, sample in enumerate(samples):
-                            print(sample)
                             thisKey = "___".join([era, sample, channelWindow, category, variable, systematic])
-                            if nSample == 0:
-                                
+                            if nSample == 0:                                
                                 if thisKey in keys:
-                                    thisHist = f.Get(thisKey).Clone()
-                                    thisHist.SetDirectory(0)
+                                    hists[systematic] = f.Get(thisKey).Clone()
+                                    hists[systematic].SetDirectory(0)
+                                    nBinsX = hists[systematic].GetNbinsX()
                                 else:
                                     raise RuntimeError("Key not found: {}".format(thisKey))
                             else:
-                                thisHist.Add(f.Get(thisKey))
-                            print(thisHist.Integral())
-        
-    
-
-
+                                hists[systematic].Add(f.Get(thisKey))
+                    #Have all the systematic variations that are relevant
+                    #Finished hadding the histograms
+                    entryArray = np.zeros((len(systematics), nBinsX+2), dtype=np.int32)
+                    # binningArray.append(0) #Can't rebin the overflow anyway... thanks ROOT
+                    for nsyst, systematic in enumerate(systematics):
+                        for nbin in xrange(0, hists[systematic].GetNbinsX()+2): #Include underflow and overflow for bin numbering clarity                            
+                            entryArray[nsyst, nbin] = hists[systematic].GetBinContent(nbin)
+                    start = 1 #Don't include underflow
+                    stop = start + 1 #Initialize so that we start with checking the singular bin
+                    end = nBinsX + 1 #Don't include overflow
+                    lastbin = end - 1
+                    binningArray = []
+                    binningArray.append(start)
+                    with np.errstate(divide='ignore'):
+                        while(stop < end - 1):
+                            while(np.all(1/np.sqrt(entryArray[:, start:stop].sum(axis=1)) > relUncertainty)):
+                                # theArray = entryArray[:, start:stop]
+                                # theSum = theArray.sum(axis=1)
+                                # theError = 1/min(np.sqrt(theSum), 0.0000000000001)
+                                # theComparison = theError < relUncertainty
+                                # theSolution = np.all(theComparison)
+                                # print("array: {}".format(theArray))
+                                # print("sum: {}".format(theSum))
+                                # print("relative error: {}".format(theError))
+                                # print("relative error < threshold: {}".format(theComparison))
+                                # print(theSolution)
+                                # print("solution found: {}:{} --> {}".format(start, stop, theSolution))
+                                stop += 1
+                            #After the while loop, we should have a good start:stop range for rebinning
+                            binningArray.append(stop)
+                            #Now increment the start and stop
+                            start = copy.copy(stop)
+                            stop += 1
+                            print("start: {}    stop: {}     end: {}".format(start, stop, end))
+                        #If we did not find a solution to the last rebinning, then merge it with the previous rebin
+                        if binningArray[-1] < lastbin:
+                            binningArray[-1] = lastbin
+                        print(binningArray)
+                        print(entryArray)
+                    rebinningEdges = []
+                    for binNumber in binningArray:
+                        rebinningEdges.append(hists.values()[0].GetBinLowEdge(binNumber))
+                    edgesArray = array.array('d', rebinningEdges)
+                    for systematic in systematics:
+                        rebinnedHists[systematic] = hists[systematic].Rebin(len(edgesArray)-1, hists[systematic].GetName() + "_rebin", edgesArray)
+                        testError = []
+                        for binNumber in xrange(1, hists[systematic].GetNbinsX()+1):
+                            testError.append(rebinnedHists[systematic].GetBinError(binNumber)/rebinnedHists[systematic].GetBinContent(binNumber))
+                        print("testError[{}]: {}".format(systematic, testError))
+                        print("testErrorBelowThresh[{}]: {}".format(systematic, [t < relUncertainty for t in testError]))                        
+                    pdb.set_trace()
+                    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Determine binning automatically for categorized histograms using a particular subset of processes')
     parser.add_argument('stage', action='store', type=str, choices=['determine-binning'],
