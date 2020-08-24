@@ -16,7 +16,7 @@ import numpy as np
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
-def main(stage, analysisDirectory, channel, era, relUncertainty):
+def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
     varsOfInterest = ["HTUnweighted"]
     erasOfInterest = [era]
     channelsOfInterest = [channel]
@@ -29,34 +29,35 @@ def main(stage, analysisDirectory, channel, era, relUncertainty):
     keys = [k for k in keys if k.split("___")[0] in erasOfInterest and k.split("___")[1] in samplesOfInterest]
     keys = [k for k in keys if k.split("___")[2] in channelsOfInterest and  k.split("___")[5] in varsOfInterest]
     eras = list(set([k.split("___")[0] for k in keys]))
-    print(eras)
     samples = list(set([k.split("___")[1] for k in keys]))
-    print(samples)
     channels = list(set([k.split("___")[2] for k in keys]))
-    print(channels)
     channelWindows = list(set(["___".join(k.split("___")[2:4]) for k in keys]))
-    print(channelWindows)
     categories = list(set([k.split("___")[4] for k in keys]))
-    print(categories)
     variables = list(set([k.split("___")[5] for k in keys]))
-    print(variables)
     systematics = list(set([k.split("___")[6] for k in keys]))
-    print(systematics)
+    if verbose:
+        print("Eras: {}".format(eras))
+        print("Samples: {}".format(samples))
+        print("Channels: {}".format(channels))
+        print("Channel + Z Windows: {}".format(channelWindows))
+        print("Categories: {}".format(categories))
+        print("Variables: {}".format(variables))
+        print("Systematics: {}".format(systematics))
+    print("Looping...")
     for era in eras:
-        print(era)
+        print("\t{}".format(era))
         for channelWindow in channelWindows:
-            print(channelWindow)
+            print("\t\t{}".format(channelWindow))
             for category in categories:
-                print(category)
+                print("\t\t\t{}".format(category))
                 for variable in variables:
-                    print(variable)
+                    print("\t\t\t\t{}".format(variable))
                     hists = {}
                     rebinnedHists = {}
                     nBinsX = 0
-                    print("Skipping...")
                     if variable != "HTUnweighted" and category != "HT500_nMediumDeepJetB4+_nJet8+": continue
                     for systematic in systematics:
-                        print(systematic)
+                        if verbose: print(systematic)
                         for nSample, sample in enumerate(samples):
                             thisKey = "___".join([era, sample, channelWindow, category, variable, systematic])
                             if nSample == 0:                                
@@ -68,8 +69,7 @@ def main(stage, analysisDirectory, channel, era, relUncertainty):
                                     raise RuntimeError("Key not found: {}".format(thisKey))
                             else:
                                 hists[systematic].Add(f.Get(thisKey))
-                    #Have all the systematic variations that are relevant
-                    #Finished hadding the histograms
+                    #Have all the systematic variations that are relevant and adding the histograms together; create empty numpy array
                     entryArray = np.zeros((len(systematics), nBinsX+2), dtype=np.int32)
                     # binningArray.append(0) #Can't rebin the overflow anyway... thanks ROOT
                     for nsyst, systematic in enumerate(systematics):
@@ -77,49 +77,41 @@ def main(stage, analysisDirectory, channel, era, relUncertainty):
                             entryArray[nsyst, nbin] = hists[systematic].GetBinContent(nbin)
                     start = 1 #Don't include underflow
                     stop = start + 1 #Initialize so that we start with checking the singular bin
-                    end = nBinsX + 1 #Don't include overflow
-                    lastbin = end - 1
+                    end = nBinsX + 1 #Include the overflow bin so we still attain its low edge without special logic
                     binningArray = []
                     binningArray.append(start)
                     with np.errstate(divide='ignore'):
-                        while(stop < end - 1):
+                        while(stop <= end): #Need quality to end to append the end as a stop in the array
                             while(np.all(1/np.sqrt(entryArray[:, start:stop].sum(axis=1)) > relUncertainty)):
-                                # theArray = entryArray[:, start:stop]
-                                # theSum = theArray.sum(axis=1)
-                                # theError = 1/min(np.sqrt(theSum), 0.0000000000001)
-                                # theComparison = theError < relUncertainty
-                                # theSolution = np.all(theComparison)
-                                # print("array: {}".format(theArray))
-                                # print("sum: {}".format(theSum))
-                                # print("relative error: {}".format(theError))
-                                # print("relative error < threshold: {}".format(theComparison))
-                                # print(theSolution)
-                                # print("solution found: {}:{} --> {}".format(start, stop, theSolution))
                                 stop += 1
-                            #After the while loop, we should have a good start:stop range for rebinning
+                                #After the while loop, we should have a good start:stop range for rebinning, unless it failed for the last bin, so merge (start:end)! range
+                                if stop > end:
+                                    if np.all(1/np.sqrt(entryArray[:, start:end].sum(axis=1)) > relUncertainty):
+                                        binningArray[-1] = end
+                                        break
+                                    else:
+                                        raise RuntimeError("Unhandled logical path")
+                            if verbose:
+                                print("start: {}    stop: {}     end: {}".format(start, stop, end))
+                            #Continue handling the stop > end break from the inner while loop
+                            if stop > end:
+                                break
+                            #Append the stop and increment the start and stop
                             binningArray.append(stop)
-                            #Now increment the start and stop
                             start = copy.copy(stop)
-                            stop += 1
-                            print("start: {}    stop: {}     end: {}".format(start, stop, end))
-                        #If we did not find a solution to the last rebinning, then merge it with the previous rebin
-                        if binningArray[-1] < lastbin:
-                            binningArray[-1] = lastbin
-                        print(binningArray)
-                        print(entryArray)
+                            stop = copy.copy(start) + 1
+                        if verbose: 
+                            print("Binning Array: {}".format(binningArray))
+                            print("Numpy Entry Array: {}".format(entryArray))
                     rebinningEdges = []
                     for binNumber in binningArray:
                         rebinningEdges.append(hists.values()[0].GetBinLowEdge(binNumber))
                     edgesArray = array.array('d', rebinningEdges)
                     for systematic in systematics:
                         rebinnedHists[systematic] = hists[systematic].Rebin(len(edgesArray)-1, hists[systematic].GetName() + "_rebin", edgesArray)
-                        testError = []
-                        for binNumber in xrange(1, hists[systematic].GetNbinsX()+1):
-                            testError.append(rebinnedHists[systematic].GetBinError(binNumber)/rebinnedHists[systematic].GetBinContent(binNumber))
-                        print("testError[{}]: {}".format(systematic, testError))
-                        print("testErrorBelowThresh[{}]: {}".format(systematic, [t < relUncertainty for t in testError]))                        
-                    pdb.set_trace()
-                    
+                        # for binNumber in xrange(1, rebinnedHists[systematic].GetNbinsX()+1):
+                        #     assert rebinnedHists[systematic].GetBinError(binNumber)/rebinnedHists[systematic].GetBinContent(binNumber) <= relUncertainty, "Rebinning not below threshold in the rebinned hist for '{}' systematic, bin {}, range {} - {}".format(systematic, binNumber, rebinnedHists[systematic].GetBinLowEdge(binNumber), rebinnedHists[systematic].GetBinLowEdge(binNumber) + rebinnedHists[systematic].GetBinWidth(binNumber))
+                print(rebinningEdges)
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Determine binning automatically for categorized histograms using a particular subset of processes')
     parser.add_argument('stage', action='store', type=str, choices=['determine-binning'],
@@ -152,4 +144,5 @@ if __name__ == '__main__':
     stage = args.stage
     channel = args.channel
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel)
-    main(stage, analysisDir, channel, args.era, args.relUncertainty)
+    verbose = args.verbose
+    main(stage, analysisDir, channel, args.era, args.relUncertainty, verbose=verbose)
