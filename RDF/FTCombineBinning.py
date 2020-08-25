@@ -22,12 +22,20 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
     channelsOfInterest = [channel]
     samplesOfInterest = ['ttbb_SL_nr', 'ttbb_SL_fr', 'ttbb_SL-GF_fr', 'ttbb_DL_nr', 'ttbb_DL_fr', 'ttbb_DL-GF_fr', 
                          'ttother_SL_nr', 'ttother_SL_fr', 'ttother_SL-GF_fr', 'ttother_DL_nr', 'ttother_DL_fr', 'ttother_DL-GF_fr',]
+    categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4', 'HT500_nMediumDeepJetB2_nJet5', 'HT500_nMediumDeepJetB2_nJet6',
+                            'HT500_nMediumDeepJetB2_nJet7', 'HT500_nMediumDeepJetB2_nJet8+',
+                            'HT500_nMediumDeepJetB3_nJet4', 'HT500_nMediumDeepJetB3_nJet5', 'HT500_nMediumDeepJetB3_nJet6',
+                            'HT500_nMediumDeepJetB3_nJet7', 'HT500_nMediumDeepJetB3_nJet8+',
+                            'HT500_nMediumDeepJetB4+_nJet4', 'HT500_nMediumDeepJetB4+_nJet5', 'HT500_nMediumDeepJetB4+_nJet6',
+                            'HT500_nMediumDeepJetB4+_nJet7', 'HT500_nMediumDeepJetB4+_nJet8+',
+    ]
     # systematicsOfInterest = [''] #Not needed, only scale systematics get the unweighted histogram in FTAnalyzer.py as of writing
     histogramFile = "$ADIR/Combine/All/$ERA___Combined.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("//", "/") # 
     f = ROOT.TFile.Open(histogramFile)
     keys = [k.GetName() for k in f.GetListOfKeys()]
     keys = [k for k in keys if k.split("___")[0] in erasOfInterest and k.split("___")[1] in samplesOfInterest]
-    keys = [k for k in keys if k.split("___")[2] in channelsOfInterest and  k.split("___")[5] in varsOfInterest]
+    keys = [k for k in keys if k.split("___")[2] in channelsOfInterest and k.split("___")[5] in varsOfInterest]
+    keys = [k for k in keys if k.split("___")[4] in categoriesOfInterest]
     eras = list(set([k.split("___")[0] for k in keys]))
     samples = list(set([k.split("___")[1] for k in keys]))
     channels = list(set([k.split("___")[2] for k in keys]))

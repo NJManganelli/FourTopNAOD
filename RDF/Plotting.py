@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-from __future__ import print_function
-import os, time, pwd, datetime
+from __future__ import print_function, division
+import os
+import time
+import pwd
+import datetime
 import ROOT
 import collections
 import pprint
@@ -2081,9 +2083,16 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         legendConfig = legends.get(can_dict.get("Legend", "FallbackToDefault"), defaults["DefaultLegend"])
         # systematics = legendConfig["Systematics"]
         print("Making systematics list by hand here, FIXME FIXME")
-        systematics = ["jes_13TeV_R2017Up", "jes_13TeV_R2017Down", "pileup_13TeV_R2017Up", "pileup_13TeV_R2017Down", 
-                       "prefire_13TeV_R2017Up", "prefire_13TeV_R2017Down", "btagSF_deepcsv_shape_up_hf", "btagSF_deepcsv_shape_down_hf",
-                       "btagSF_deepcsv_shape_up_lf", "btagSF_deepcsv_shape_down_lf"]
+        systematics = ['prefireDown', 'prefireUp', 'pileupDown', 'pileupUp', 
+                       'jec_13TeV_R2017Down', 'jec_13TeV_R2017Up', 'jer_13TeV_R2017Down', 'jer_13TeV_R2017Up', 
+                       'btagSF_shape_lfDown', 'btagSF_shape_lfUp', 'btagSF_shape_hfDown', 'btagSF_shape_hfUp', 
+                       'btagSF_shape_jesDown', 'btagSF_shape_jesUp', 
+                       'btagSF_shape_lfstats1Down', 'btagSF_shape_lfstats1Up', 'btagSF_shape_lfstats2Up', 'btagSF_shape_lfstats2Down', 
+                       'btagSF_shape_hfstats1Down', 'btagSF_shape_hfstats1Up', 'btagSF_shape_hfstats2Down', 'btagSF_shape_hfstats2Up', 
+                       'btagSF_shape_cferr1Down', 'btagSF_shape_cferr1Up', 'btagSF_shape_cferr2Down', 'btagSF_shape_cferr2Up', 
+                       'FSRDown', 'FSRUp', 'ISRDown', 'ISRUp', 
+                       'muRNomFDown', 'muRNomFUp', 'muFNomRDown', 'muFNomRUp', 'muRFcorrelatedDown', 'muRFcorrelatedUp', 
+        ]
         #Deduce systematics automatically...
         
         #Load the LegendConfig which denotes which samples to use, colors to assign, etc.
@@ -2366,6 +2375,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 CanCache["canvas"].SaveAs("{}".format(macroOutput))
         if pngOutput != None:
             CanCache["canvas"].SaveAs("{}".format(pngOutput))
+
         #Save histograms for Combine, this is a hacked first attempt, might be cleaner to create a dictionary of histograms with keys from the histogram name to avoid duplicates/cycle numbers in the root files.
         if True and "HT" in can_name:
             if "signalSensitive_HT" in can_name: continue
@@ -2413,6 +2423,25 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                             combHistograms[processName] = []
                         #BLINDData___HT500_nMediumDeepJetB4+_nJet8+___HT___nom
                         combProcess, combCategory, combVariable, combSystematic = hist.GetName().split(separator)
+                        #Remap systematic names for decorrelation in Higgs Combine
+                        #Decorrelated systematics: mu(Factorization/Renormalization) scale and ISR, FSR usually correlated (qcd vs ewk like ttbar vs singletop) unless
+                        # " the analysis is too sensitive to off-shell effects" https://twiki.cern.ch/twiki/bin/viewauth/CMS/TopSystematics#Factorization_and_renormalizatio
+                        if processName in ["ttother", "ttbb"]:
+                            if combSystematic in ["muRNomFDown", "muRNomFUp", "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp",]: 
+                                combSystematic = "tt" + combSystematic
+                            elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
+                                combSystematic = "tt" + "muRFcorrdNew"
+                        elif processName in ["singletop"]:
+                            if combSystematic in ["muRNomFDown", "muRNomFUp", "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp",]: 
+                                combSystematic = "top" + combSystematic
+                            elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
+                                combSystematic = "top" + "muRFcorrdNew"
+                        elif processName in ["DY"]:
+                            if combSystematic in ["muRNomFDown", "muRNomFUp", "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp",]: 
+                                combSystematic = "ewk" + combSystematic
+                            elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
+                                combSystematic = "ewk" + "muRFcorrdNew"
+                            
                         combSystematics[processName].append(combSystematic)
                         combVariables[processName].append(combVariable)
                         combCategories[processName].append(combCategory.replace("+", "p"))
@@ -2435,7 +2464,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         combVariables[processName] = list(set(combVariables[processName]))
         combCategories[processName] = list(set(combCategories[processName]))
         combHistogramsFinal[processName] = dict([(h.GetName(), h) for h in combHistograms[processName]])
-    combFile = ROOT.TFile.Open("combTest.root", "recreate")
+    combFile = ROOT.TFile.Open("combTestNew.root", "recreate")
     for processName, processDict in combHistogramsFinal.items():
         for histName, hist in processDict.items():
             hist.Write()
@@ -2570,6 +2599,8 @@ if __name__ == '__main__':
     parser.add_argument('stage', action='store', type=str, choices=['generate-plotCard', 'generate-legendCard', 'plot-histograms', 'plot-diagnostics',
                                                                     'prepare-combine'],
                         help='plotting stage to be produced')
+    parser.add_argument('--relUncertainty', dest='relUncertainty', action='store', type=float, default=0.3,
+                        help='maximum relative uncertainty (sqrt(N)/N) per bin used as the criteria for merging, should be on unweighted histograms')
     parser.add_argument('-c', '--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 
                                                                                                               'ElEl_HighMET', 'MuMu_ElMu','MuMu_ElMu_ElEl', 'All'],
                         help='Decay channel for opposite-sign dilepton analysis')

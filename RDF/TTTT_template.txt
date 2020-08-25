@@ -1,0 +1,50 @@
+# Datacard template for pre-automated tests
+imax    1 number of bins
+jmax    7 number of processes minus 1
+kmax    * number of nuisance parameters
+--------------------------------------------------------------------------------
+shapes * $CHANNEL_$CATEGORY combTest_$CHANNEL.root $PROCESS___HT500_$CATEGORY___HT___nom $PROCESS___HT500_$CATEGORY___HT___$SYSTEMATIC
+shapes data_obs $CHANNEL_$CATEGORY combTest_$CHANNEL.root data_obs___HT500_$CATEGORY___HT___nom
+--------------------------------------------------------------------------------
+bin          $CHANNEL_$CATEGORY
+observation  -1          
+--------------------------------------------------------------------------------
+bin                                  $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY
+process                              ttother         ttbb            singletop       ttH             ttVJets        ttultrarare    DY               tttt 
+process                              1               2               3               4               5              6              7                0
+rate                                 -1              -1              -1              -1              -1             -1             -1               -1
+--------------------------------------------------------------------------------
+# leptonSFEl_13TeV_R2017       lnN     1.03            1.03            1.03            1.03            1.03           1.03           1.03           1.03
+# leptonSFMu_13TeV_R2017       lnN     1.03            1.03            1.03            1.03            1.03           1.03           1.03           1.03
+# lumi_13TeV_R2017             lnN     1.023           1.023           1.023           1.023           1.023          1.023          1.023          1.023
+# jec_13TeV_R2017              shape   1               1               1               1               1              1              1              1
+# jer_13TeV_R2017              shape   1               1               1               1               1              1              1              1
+# pileup                       shape   1               1               1               1               1              1              1              1
+# prefire                      shape   1               1               1               1               1              1              1              1
+# ttHF_13TeV_R2017             lnN     -               1.13            -               -               -              -              -              -
+# ttPSwgtNew_13TeV_R2017       shape   1               1               -               1               1              1              -              -
+# ttmuRNomF                    shape   1               1               -               1               1              1              -              -
+# ttmuFNomR                    shape   1               1               -               1               1              1              -              -
+# ttmuRFcorrdNew               shape   1               1               -               1               1              1              -              -
+# ttISR                        shape   1               1               -               1               1              1              -              -
+# topPSwgtNew_13TeV_R2017      shape   -               -               1               -               -              -              -              -
+# topmuRNomF                   shape   -               -               1               -               -              -              -              -
+# topmuFNomR                   shape   -               -               1               -               -              -              -              -
+# topmuRFcorrdNew              shape   -               -               1               -               -              -              -              -
+# topISR                       shape   -               -               1               -               -              -              -              -
+# ewkPSwgtNew_13TeV_R2017      shape   -               -               -               -               -              -              1              -
+# ewkmuRNomF                   shape   -               -               -               -               -              -              1              -
+# ewkmuFNomR                   shape   -               -               -               -               -              -              1              -
+# ewkmuRFcorrdNew              shape   -               -               -               -               -              -              1              -
+# ewkISR                       shape   -               -               -               -               -              -              1              -
+# FSR                          shape   1               1               1               1               1              1              1              1
+# btagSF_shape_hf    	       shape   1               1               1               1               1              1              1              1
+# btagSF_shape_hfstats1        shape   1               1               1               1               1              1              1              1
+# btagSF_shape_hfstats2        shape   1               1               1               1               1              1              1              1
+# btagSF_shape_lf    	       shape   1               1               1               1               1              1              1              1
+# btagSF_shape_lfstats1        shape   1               1               1               1               1              1              1              1
+# btagSF_shape_lfstats2        shape   1               1               1               1               1              1              1              1
+# btagSF_shape_cferr1          shape   1               1               1               1               1              1              1              1
+# btagSF_shape_cferr2          shape   1               1               1               1               1              1              1              1  
+# btagSF_shape_jes    	       shape   1               1               1               1               1              1              1              1
+# * autoMCStats 1.
