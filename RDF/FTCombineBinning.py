@@ -40,7 +40,7 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
     samples = list(set([k.split("___")[1] for k in keys]))
     channels = list(set([k.split("___")[2] for k in keys]))
     channelWindows = list(set(["___".join(k.split("___")[2:4]) for k in keys]))
-    categories = list(set([k.split("___")[4] for k in keys]))
+    categories = sorted(sorted(list(set([k.split("___")[4] for k in keys])), key=lambda j : j.split("nJet")[-1]), key=lambda j: j.split("nMediumDeep")[-1])
     variables = list(set([k.split("___")[5] for k in keys]))
     systematics = list(set([k.split("___")[6] for k in keys]))
     if verbose:
