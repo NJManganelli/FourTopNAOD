@@ -2426,21 +2426,21 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                         #Remap systematic names for decorrelation in Higgs Combine
                         #Decorrelated systematics: mu(Factorization/Renormalization) scale and ISR, FSR usually correlated (qcd vs ewk like ttbar vs singletop) unless
                         # " the analysis is too sensitive to off-shell effects" https://twiki.cern.ch/twiki/bin/viewauth/CMS/TopSystematics#Factorization_and_renormalizatio
-                        if processName in ["ttother", "ttbb"]:
-                            if combSystematic in ["muRNomFDown", "muRNomFUp", "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp",]: 
+                        if processName[0:2] == "tt":
+                            if combSystematic in ["muRNomFDown", "muRNomFUp", "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp",]:
                                 combSystematic = "tt" + combSystematic
                             elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
-                                combSystematic = "tt" + "muRFcorrdNew"
+                                combSystematic = combSystematic.replace("muRFcorrelated", "ttmuRFcorrdNew")
                         elif processName in ["singletop"]:
                             if combSystematic in ["muRNomFDown", "muRNomFUp", "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp",]: 
                                 combSystematic = "top" + combSystematic
                             elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
-                                combSystematic = "top" + "muRFcorrdNew"
+                                combSystematic = combSystematic.replace("muRFcorrelated", "topmuRFcorrdNew")
                         elif processName in ["DY"]:
                             if combSystematic in ["muRNomFDown", "muRNomFUp", "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp",]: 
                                 combSystematic = "ewk" + combSystematic
                             elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
-                                combSystematic = "ewk" + "muRFcorrdNew"
+                                combSystematic = combSystematic.replace("muRFcorrelated", "ewkmuRFcorrdNew")
                             
                         combSystematics[processName].append(combSystematic)
                         combVariables[processName].append(combVariable)
@@ -2464,7 +2464,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         combVariables[processName] = list(set(combVariables[processName]))
         combCategories[processName] = list(set(combCategories[processName]))
         combHistogramsFinal[processName] = dict([(h.GetName(), h) for h in combHistograms[processName]])
-    combFile = ROOT.TFile.Open("combTestNew.root", "recreate")
+    combFile = ROOT.TFile.Open("combTest_{chan}.root".format(chan=channel), "recreate")
     for processName, processDict in combHistogramsFinal.items():
         for histName, hist in processDict.items():
             hist.Write()
