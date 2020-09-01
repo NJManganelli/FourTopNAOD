@@ -19,7 +19,37 @@ import pdb
 from IPython.display import Image, display, SVG
 #import graphviz
 ROOT.PyConfig.IgnoreCommandLineOptions = True
-
+models = {}
+models["v0.8"] = {
+    "Plot_$CAT___$VAR": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle", 
+        "Xaxis": None, 
+        "Yaxis": None, 
+        "Rebin": 10, 
+        "Files": "2017___Combined.root", 
+        "Projection": None, 
+        "Unblind": False, 
+    },
+    "Canvas_$CATEGORIZATION_$VAR": {
+        "Type": "CanvasConfig", 
+        "Title": "$VAR ($CATEGORIZATION)", 
+        "Margins": [0.1, 0.1, 0.1, 0.1], 
+        "Coordinates": [], 
+        "Plots": [],
+        "Labels": [], 
+        "Legend": "DefaultLegend", 
+        "Rebin": None, 
+        "XPixels": 1200, 
+        "YPixels": 1000, 
+        "XAxisTitle": "$VAR", 
+        "YAxisTitle": "Events/bin", 
+        "Projection": None, 
+        "DoRatio": True, 
+        "doLogY": False,
+        "DoMountainrange": True, 
+    }, 
+}
 modelPlotJSON_CAT = {
     "Plot_ElMu___$CAT___$VAR":{
         "Type": "PlotConfig",
@@ -2361,10 +2391,10 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             print("Opening {}".format(pdfOutput))
         print("\tDrew {}".format(can_name))
         if pdfOutput != None:
-            if can_num == 1: #count from 1 since we increment at the beginning of the loop on this one
+            if can_num == 1 and can_num != can_max: #count from 1 since we increment at the beginning of the loop on this one
                 #print(CanCache["canvas"])
                 CanCache["canvas"].SaveAs("{}(".format(pdfOutput))
-            elif can_num == can_max:
+            elif can_num == can_max and can_num != 1:
                 print("Closing {}".format(pdfOutput))
                 CanCache["canvas"].SaveAs("{})".format(pdfOutput))
             else:
@@ -2450,12 +2480,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                                combVariable, 
                                                combSystematic])
                         combHist = hist.Clone(histName)
-                        # if "BLIND" in combProcess:
-                        #     print("Blinding histogram for Combine")
-                        #     combHist = hist.Clone(hist.GetName().replace("Data", "data_obs").replace("+", "p").replace("BLIND", ""))
-                        #     combHist.SetDirectory(0)
-                        #     for combBin in xrange(combHist.GetNbinsX() + 2):
-                        #         combHist.SetBinContent(combBin, 0); combHist.SetBinError(combBin, 0)
+                        #No data histograms for systematic variations... 
                         if "Data" in combProcess: continue
                         combHistograms[processName].append(combHist)
     combHistogramsFinal = {}
@@ -2614,8 +2639,12 @@ if __name__ == '__main__':
                         help='input legend configuration, defaulting to "$ADIR/Histograms/All/legend.json". This card controls the grouping of histograms into categories and supercategories, colors, stacking, sample-scaling, etc.')
     parser.add_argument('--era', dest='era', type=str, default="2017",
                         help='era for plotting, which deduces the lumi only for now')
-    # parser.add_argument('-s', '--systematics', dest='systematics', action='store', default=None, type=str, nargs='*',
-    #                     help='List of systematic variations to compute (if not called, defaults to None and only nominal is run. Call with list of systematic names or "All"')
+    parser.add_argument('--vars', '--variables', dest='variables', action='store', default=None, type=str, nargs='*',
+                        help='List of variables for generating a plotcard')
+    parser.add_argument('--nJets', '--nJetCategories', dest='nJetCategories', action='store', default=None, type=str, nargs='*',
+                        help='List of nJet categories for generating a plotcard, i.e. "nJet4 nJet5 nJet6p"')
+    parser.add_argument('--nBTags', '--nBTagCategories', dest='nBTagCategories', action='store', default=None, type=str, nargs='*',
+                        help='List of nBTag categories for generating a plotcard, i.e. "nMediumDeepJetB2 nMediumDeepJetB3 nMediumDeepJetB4p"')
     parser.add_argument('--noBatch', dest='noBatch', action='store_true',
                         help='Disable batch output and attempt to draw histograms to display')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
@@ -2633,6 +2662,9 @@ if __name__ == '__main__':
     stage = args.stage
     channel = args.channel
     era = args.era
+    variables = args.variables
+    nJets = args.nJetCategories
+    nBTags = args.nBTagCategories
     doBatch = not args.noBatch
     verb = args.verbose
     useCanvasMax = args.useCanvasMax
@@ -2707,7 +2739,28 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                                        lumi=lumi, useCanvasMax=useCanvasMax, verbose=verb);
     else:
         raise RuntimeError("The loading of the plot or legend cards failed. They are of type {} and {}, respectively".format(type(loadedPlotConfig),type(loadedLegendConfig)))
-        
+
+elif stage == 'generate-plotCard':
+    if verb:
+        print("stage = {}".format(stage))
+        print("analysis directory = {}".format(analysisDir))
+        print("channel = {}".format(channel))
+        print("variables = {}".format(variables))
+        print("nJet categories = {}".format(nJets))
+        print("nBTagCategories = {}".format(nBTags))
+    categories_dict = {}
+    for b in nBTags:
+        categories_dict[b] = []
+        for j in nJets:
+            categories_dict[b].append("{blind}HT500_{nB}_{nJ}".format(blind="" if "B2" in b and ("4" in j or "5" in j or "6" in j) else "blind_", nB=b, nJ=j))
+    
+    thePlotCard = generateJSON(models["v0.8"], variables, categories_dict=categories_dict,channel=channel, 
+                               name_format="Plot_{cat}___{var}", rebin=None, projection=None, force=False)
+    thePlotCard.update(defaultNoLegend)
+    with open("testPlotCard.json", "w") as jo:
+        jo.write(json.dumps(thePlotCard, indent=4))
+elif stage == 'generate-legendCard':
+    print("No method for generating legendCard yet")
     
 
 
