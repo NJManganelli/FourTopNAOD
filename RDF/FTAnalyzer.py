@@ -696,9 +696,11 @@ systematics_2017_TEST = { #for testing the removal of certain SFs, weights...
                                        },
                                 "weightVariation": True},
 }
-print("\n\nWARNING: SYSTEMATICS SWAPPED TO NOMINAL ONLY")
-systematics_2017 = systematics_2017_NOMINAL
-# systematics_2017 = systematics_2017_ALL
+# print("\n\nWARNING: SYSTEMATICS SWAPPED TO NOMINAL ONLY")
+# systematics_2017 = systematics_2017_NOMINAL
+systematics_2017 = systematics_2017_ALL
+# print("\n\nWARNING: SYSTEMATICS REDUCED TO SCALE VARIATING ONES")
+# systematics_2017 = dict([(k[0], k[1]) for k in systematics_2017_ALL.items() if k[1].get("weightVariation", True) == False])
 # systematics_2017.pop("btagSF_deepcsv_shape_up_hf")
 # systematics_2017.pop("btagSF_deepcsv_shape_down_hf")
 # systematics_2017.pop("btagSF_deepcsv_shape_up_lf")
@@ -2509,17 +2511,17 @@ def getNtupleVariables(vals, isData=True, sysVariations=None):
             "FTAJet{bpf}_eta".format(bpf=branchpostfix),
             "FTAJet{bpf}_phi".format(bpf=branchpostfix),
             "FTAJet{bpf}_mass".format(bpf=branchpostfix),
-            # "FTAJet{bpf}_jetId".format(bpf=branchpostfix),
-            # "FTAJet{bpf}_DeepCSVB".format(bpf=branchpostfix),
-            # "FTAJet{bpf}_DeepCSVB_sorted".format(bpf=branchpostfix),
+            "FTAJet{bpf}_jetId".format(bpf=branchpostfix),
+            "FTAJet{bpf}_DeepCSVB".format(bpf=branchpostfix),
+            "FTAJet{bpf}_DeepCSVB_sorted".format(bpf=branchpostfix),
             "FTAJet{bpf}_DeepJetB".format(bpf=branchpostfix),
             "FTAJet{bpf}_DeepJetB_sorted".format(bpf=branchpostfix),
             # "FTAJet{bpf}_LooseDeepCSVB".format(bpf=branchpostfix),
             # "FTAJet{bpf}_MediumDeepCSVB".format(bpf=branchpostfix),
             # "FTAJet{bpf}_TightDeepCSVB".format(bpf=branchpostfix),
-            # "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix),
-            # "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix),
-            # "nTightDeepCSVB{bpf}".format(bpf=branchpostfix),
+            "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix),
+            "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix),
+            "nTightDeepCSVB{bpf}".format(bpf=branchpostfix),
             "FTAJet{bpf}_MediumDeepJetB".format(bpf=branchpostfix),
             "nLooseDeepJetB{bpf}".format(bpf=branchpostfix),
             "nMediumDeepJetB{bpf}".format(bpf=branchpostfix),
@@ -3206,14 +3208,15 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
         z.append(("FTAJet{pf}_DeepJetB_sorted".format(pf=postfix), "Take(FTAJet{pf}_DeepJetB, FTAJet{pf}_deepjetsort)".format(pf=postfix)))
         z.append(("FTAJet{pf}_DeepJetB_sorted_LeadtagJet".format(pf=postfix), "FTAJet{pf}_DeepJetB_sorted.size() > 0 ? FTAJet{pf}_DeepJetB_sorted.at(0) : -9999".format(pf=postfix)))
         z.append(("FTAJet{pf}_DeepJetB_sorted_SubleadtagJet".format(pf=postfix), "FTAJet{pf}_DeepJetB_sorted.size() > 1 ? FTAJet{pf}_DeepJetB_sorted.at(1) : -9999".format(pf=postfix)))
-        for x in xrange(nJetsToHisto):
-            z.append(("FTAJet{pf}_pt_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_pt.size() > {n} ? FTAJet{pf}_pt.at({n}) : -9999".format(pf=postfix, n=x)))
-            z.append(("FTAJet{pf}_eta_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_eta.size() > {n} ? FTAJet{pf}_phi.at({n}) : -9999".format(pf=postfix, n=x)))
-            z.append(("FTAJet{pf}_phi_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_phi.size() > {n} ? FTAJet{pf}_phi.at({n}) : -9999".format(pf=postfix, n=x)))
-            z.append(("FTAJet{pf}_DeepCSVB_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_DeepCSVB.size() > {n} ? FTAJet{pf}_DeepCSVB.at({n}) : -9999".format(pf=postfix, n=x)))
-            z.append(("FTAJet{pf}_DeepJetB_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_DeepJetB.size() > {n} ? FTAJet{pf}_DeepJetB.at({n}) : -9999".format(pf=postfix, n=x)))
-            z.append(("FTAJet{pf}_DeepCSVB_sortedjet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_DeepCSVB_sorted.size() > {n} ? FTAJet{pf}_DeepCSVB_sorted.at({n}) : -9999".format(pf=postfix, n=x)))
-            z.append(("FTAJet{pf}_DeepJetB_sortedjet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_DeepJetB_sorted.size() > {n} ? FTAJet{pf}_DeepJetB_sorted.at({n}) : -9999".format(pf=postfix, n=x)))
+        #Deprecating these, taken care of within the delegateFlattening method if the variables are added in the getNtuple...() functions
+        # for x in xrange(nJetsToHisto):
+        #     z.append(("FTAJet{pf}_pt_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_pt.size() > {n} ? FTAJet{pf}_pt.at({n}) : -9999".format(pf=postfix, n=x)))
+        #     z.append(("FTAJet{pf}_eta_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_eta.size() > {n} ? FTAJet{pf}_phi.at({n}) : -9999".format(pf=postfix, n=x)))
+        #     z.append(("FTAJet{pf}_phi_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_phi.size() > {n} ? FTAJet{pf}_phi.at({n}) : -9999".format(pf=postfix, n=x)))
+        #     z.append(("FTAJet{pf}_DeepCSVB_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_DeepCSVB.size() > {n} ? FTAJet{pf}_DeepCSVB.at({n}) : -9999".format(pf=postfix, n=x)))
+        #     z.append(("FTAJet{pf}_DeepJetB_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_DeepJetB.size() > {n} ? FTAJet{pf}_DeepJetB.at({n}) : -9999".format(pf=postfix, n=x)))
+        #     z.append(("FTAJet{pf}_DeepCSVB_sortedjet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_DeepCSVB_sorted.size() > {n} ? FTAJet{pf}_DeepCSVB_sorted.at({n}) : -9999".format(pf=postfix, n=x)))
+        #     z.append(("FTAJet{pf}_DeepJetB_sortedjet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_DeepJetB_sorted.size() > {n} ? FTAJet{pf}_DeepJetB_sorted.at({n}) : -9999".format(pf=postfix, n=x)))
         z.append(("FTAJet{pf}_LooseDeepCSVB".format(pf=postfix), "FTAJet{pf}_DeepCSVB[FTAJet{pf}_DeepCSVB > {wpv}]".format(pf=postfix, wpv=bTagWorkingPointDict[era]["DeepCSV"]["L"])))
         z.append(("FTAJet{pf}_MediumDeepCSVB".format(pf=postfix), "FTAJet{pf}_DeepCSVB[FTAJet{pf}_DeepCSVB > {wpv}]".format(pf=postfix, wpv=bTagWorkingPointDict[era]["DeepCSV"]["M"])))
         z.append(("FTAJet{pf}_TightDeepCSVB".format(pf=postfix), "FTAJet{pf}_DeepCSVB[FTAJet{pf}_DeepCSVB > {wpv}]".format(pf=postfix, wpv=bTagWorkingPointDict[era]["DeepCSV"]["T"])))
@@ -4654,16 +4657,27 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
              ]
     print("FIXME: Need to switch to ntuple-ized values for jet histograms, instead of having duplicate definitions...")
     #Variables to save for Combine when doCombineHistosOnly=True
-    combineHistoVariables = ["HT"]
-    # combineHistoVariables = ["HT", "ST", "HTH", "HTRat", "HTb", "HT2M", "H", "H2M", "dRbb", 
+    combineHistoTemplate = ["HT{bpf}"]
+    # print("\n\nWARNING: histogramming all input variables... how many systematics?")
+    # combineHistoTemplate = ["HT{bpf}", "ST{bpf}", "HTH{bpf}", "HTRat{bpf}", "HTb{bpf}", "HT2M{bpf}", "H{bpf}", "H2M{bpf}", "dRbb{bpf}", 
     #                          "FTALepton_dRll", 
     #                          "FTALepton1_pt", "FTALepton1_eta",
     #                          "FTALepton2_pt", "FTALepton2_eta", 
-    #                          "FTAJet1___nom_pt", "FTAJet1___nom_eta", "FTAJet1___nom_DeepJetB", 
-    #                          "FTAJet2___nom_pt", "FTAJet2___nom_eta", "FTAJet2___nom_DeepJetB", 
-    #                          "FTAJet3___nom_pt", "FTAJet3___nom_eta", "FTAJet3___nom_DeepJetB", 
-    #                          "FTAJet4___nom_pt", "FTAJet4___nom_eta", "FTAJet4___nom_DeepJetB",
+    #                          "nFTAJet{bpf}", 
+    #                          "FTAJet1{bpf}_pt", "FTAJet1{bpf}_eta", "FTAJet1{bpf}_DeepJetB", 
+    #                          "FTAJet2{bpf}_pt", "FTAJet2{bpf}_eta", "FTAJet2{bpf}_DeepJetB", 
+    #                          "FTAJet3{bpf}_pt", "FTAJet3{bpf}_eta", "FTAJet3{bpf}_DeepJetB", 
+    #                          "FTAJet4{bpf}_pt", "FTAJet4{bpf}_eta", "FTAJet4{bpf}_DeepJetB",
+    #                          "MTofMETandEl{bpf}", "MTofMETandMu{bpf}", "MTofElandMu{bpf}"
+    #                          "nLooseDeepCSVB{bpf}", "nMediumDeepCSVB{bpf}", "nTightDeepCSVB{bpf}", 
+    #                          "nLooseDeepJetB{bpf}", "nMediumDeepJetB{bpf}", "nTightDeepJetB{bpf}",
     #                      ]
+                             # "nLooseFTAMuon", "nMediumFTAMuon", "nTightFTAMuon",
+                             # "nLooseFTAElectron", "nMediumFTAElectron", "nTightFTAElectron",
+                             # "nLooseFTALepton", "nMediumFTALepton", "nTightFTALepton",
+                             # "FTAMuon_InvariantMass", "FTAElectron_InvariantMass"
+    #Fill this list with variables for each branchpostfix
+    combineHistoVariables = [] 
     pi = ROOT.TMath.Pi()
     #Get the list of defined columns for checks
     histoNodes = histosDict #Inherit this from initiliazation, this is where the histograms will actually be stored
@@ -4714,8 +4728,11 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         else:
             branchpostfix = "__" + sysVar.replace("$NOMINAL", "nom")
         leppostfix = sysDict.get("lep_postfix", "") #No variation on this yet, but just in case
+        combineHistoVariables += [templateVar.format(bpf=branchpostfix) for templateVar in combineHistoTemplate]
+
         
         fillJet = "FTAJet{bpf}".format(bpf=branchpostfix)
+        fillJetEnumerated = "FTAJet{{n}}{bpf}".format(bpf=branchpostfix)
         fillJet_pt = "FTAJet{bpf}_pt".format(bpf=branchpostfix)
         fillJet_phi = "FTAJet{bpf}_phi".format(bpf=branchpostfix)
         fillJet_eta = "FTAJet{bpf}_eta".format(bpf=branchpostfix)
@@ -5113,40 +5130,41 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                                                     "Lead Lep p_{{T}} (CCJet)({spf});Lead Lep p_{{T}}(CC Jet); Events".format(spf=syspostfix.replace("__", "")), 
                                                                     100,0,300), "FTACrossCleanedJet{bpf}_leppt".format(bpf=branchpostfix), wgtVar))
                     for x in xrange(nJetsToHisto):
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_pt_jet{n}{spf}"\
+                        thisFillJet = fillJetEnumerated.format(n=x+1)
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet{n}_pt{spf}"\
                                                                         .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                         "Jet_{n} p_{{T}} ({spf}); p_{{T}}; Events"\
                                                                         .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0, 500),
-                                                                       "{fj}_pt_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_eta_jet{n}{spf}"\
+                                                                       "{tfj}_pt".format(tfj=thisFillJet, n=x+1), wgtVar))
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet{n}_eta{spf}"\
                                                                         .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                         "Jet_{n} #eta ({spf}); #eta; Events"\
                                                                         .format(n=x+1, spf=syspostfix.replace("__", "")), 100, -2.6, 2.6),
-                                                                       "{fj}_eta_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet_phi_jet{n}{spf}"\
+                                                                       "{tfj}_eta".format(tfj=thisFillJet, n=x+1), wgtVar))
+                        defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet{n}_phi{spf}"\
                                                                         .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                         "Jet_{n} #phi ({spf}); #phi; Events".format(n=x+1, spf=syspostfix.replace("__", "")), 100, -pi, pi),
-                                                                       "{fj}_phi_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepCSVB_jet{n}{spf}"\
+                                                                       "{tfj}_phi".format(tfj=thisFillJet, n=x+1), wgtVar))
+                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet{n}_DeepCSVB{spf}"\
                                                                          .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                          "Jet_{n} (p_{{T}} sorted) DeepCSV B Discriminant ({spf}); Discriminant; Events"\
                                                                          .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0.0, 1.0),
-                                                                        "{fj}_DeepCSVB_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepJetB_jet{n}{spf}"\
+                                                                        "{tfj}_DeepCSVB".format(tfj=thisFillJet, n=x+1), wgtVar))
+                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet{n}_DeepJetB{spf}"\
                                                                          .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                          "Jet_{n} (p_{{T}} sorted) DeepJet B Discriminant ({spf}); Discriminant; Events"\
                                                                          .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0.0, 1.0),
-                                                                        "{fj}_DeepJetB_jet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepCSVB_sortedjet{n}{spf}"\
+                                                                        "{tfj}_DeepJetB".format(tfj=thisFillJet, n=x+1), wgtVar))
+                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet{n}_DeepCSVB_sorted{spf}"\
                                                                          .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix),
                                                                          "Jet_{n} (DeepCSVB sorted) DeepCSV B Discriminant ({spf}); Discriminant; Events"\
                                                                          .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0.0, 1.0),
-                                                                        "{fj}_DeepCSVB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar))
-                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet_DeepJetB_sortedjet{n}{spf}"\
+                                                                        "{tfj}_DeepCSVB_sorted".format(tfj=thisFillJet, n=x+1), wgtVar))
+                        defineNodes[processName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet{n}_DeepJetB_sortedjet{spf}"\
                                                                          .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                          "Jet_{n} (DeepJetB sorted) DeepCSV B Discriminant ({spf}); Discriminant; Events"\
                                                                          .format(n=x+1, spf=syspostfix.replace("__", "")), 100, 0.0, 1.0),
-                                                                        "{fj}_DeepJetB_sortedjet{n}".format(fj=fillJet, n=x+1), wgtVar))
+                                                                        "{tfj}_DeepJetB_sorted".format(tfj=thisFillJet, n=x+1), wgtVar))
                     defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___MET_pt{spf}"\
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  spf=syspostfix), 
                                                                     "MET ({spf}); Magnitude (GeV); Events".format(spf=syspostfix.replace("__", "")), 
@@ -5440,19 +5458,31 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                             guessDim = 0
                             if len(dnode) == 2:
                                 guessDim = 1
-                                if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables: continue
+                                # if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables: 
+                                if doCombineHistosOnly and dnode[1] not in combineHistoVariables: 
+                                    # print("Skipping histogram filling with {}".format(dnode[1]))
+                                    continue
                                 histoNodes[processName][decayChannel][defHName] = categoryNode.Histo1D(dnode[0], dnode[1])
                             elif len(dnode) == 3:
                                 guessDim = 1
-                                if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables: continue
+                                # if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables: 
+                                if doCombineHistosOnly and dnode[1] not in combineHistoVariables: 
+                                    # print("Skipping histogram filling with {}".format(dnode[1]))
+                                    continue
                                 histoNodes[processName][decayChannel][defHName] = categoryNode.Histo1D(dnode[0], dnode[1], dnode[2])
                             elif len(dnode) == 4:
                                 guessDim = 2
-                                if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables and dnode[2].split("__")[0] not in combineHistoVariables: continue
+                                # if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables and dnode[2].split("__")[0] not in combineHistoVariables: 
+                                if doCombineHistosOnly and dnode[1] not in combineHistoVariables and dnode[2] not in combineHistoVariables: 
+                                    # print("Skipping histogram filling with {} and {}".format(dnode[1], dnode[2]))
+                                    continue
                                 histoNodes[processName][decayChannel][defHName] = categoryNode.Histo2D(dnode[0], dnode[1], dnode[2], dnode[3])
                             elif len(dnode) == 4:
                                 guessDim = 3
-                                if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables and dnode[2].split("__")[0] not in combineHistoVariables and dnode[3].split("__")[0] not in combineHistoVariables: continue
+                                # if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables and dnode[2].split("__")[0] not in combineHistoVariables and dnode[3].split("__")[0] not in combineHistoVariables: 
+                                if doCombineHistosOnly and dnode[1] not in combineHistoVariables and dnode[2] not in combineHistoVariables and dnode[3] not in combineHistoVariables: 
+                                    # print("Skipping histogram filling with {}, {} and {}".format(dnode[1], dnode[2], dnode[3]))
+                                    continue
                                 histoNodes[processName][decayChannel][defHName] = categoryNode.Histo3D(dnode[0], dnode[1], dnode[2], dnode[3], dnode[4])
 
     packedNodes = {}
@@ -7450,13 +7480,13 @@ if __name__ == '__main__':
     parser.add_argument('--jetPtMin', dest='jetPtMin', action='store', default=30.0, type=float,
                         help='Float value for the minimum Jet pt in GeV, defaulting to 30.0')
     parser.add_argument('--jetPUId', dest='jetPUId', action='store', default=None, nargs='?', const='L', type=str, choices=['L', 'M', 'T'],
-                        help='Optionally apply Jet PU Id to the selected jets, with options for Loose ("L"), Medium ("M"), or Tight ("T") using the 80X training.')
+                        help='Optionally apply Jet PU Id to the selected jets, with choices of Loose ("L"), Medium ("M"), or Tight ("T") using the 80X training.')
     parser.add_argument('--useDeltaR', dest='useDeltaR', action='store', type=float, default=0.4, #nargs='?', const=0.4,
-                        help='Default distance parameter 0.4, set alternative float value for Lepton-Jet cross-cleaning')
+                        help='Default distance parameter 0.4, use to set alternative float value for Lepton-Jet cross-cleaning')
     parser.add_argument('--usePFMatching', dest='usePFMatching', action='store_true', 
                         help='Enable usage of PFMatching for Lepton-Jet cross-cleaning')
-    parser.add_argument('--bTagger', dest='bTagger', action='store', default='DeepCSV', type=str, choices=['DeepCSV', 'DeepJet'],
-                        help='bTagger algorithm to be used')
+    parser.add_argument('--bTagger', dest='bTagger', action='store', default='DeepJet', type=str, choices=['DeepCSV', 'DeepJet'],
+                        help='bTagger algorithm to be used, default DeepJet')
     parser.add_argument('--doNtuples', dest='doNtuples', action='store_true',
                         help='Add ntuple output during other mode, such as fill-histograms')
     parser.add_argument('--noAggregate', dest='noAggregate', action='store_true',
