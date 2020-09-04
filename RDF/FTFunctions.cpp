@@ -20,14 +20,14 @@ class TH2Lookup {
 public:
 
   TH2Lookup() {lookupMap_.clear();}
-  TH2Lookup(std::string file, bool debug=false);
-  TH2Lookup(std::string file, std::vector<std::string> histos);
+  TH2Lookup(std::string file, std::string slot="0", bool debug=false);
+  TH2Lookup(std::string file, std::vector<std::string> histos, std::string slot);
   ~TH2Lookup() {}
 
   //void setJets(int nJet, int *jetHadronFlavour, float *jetPt, float *jetEta);
 
-  float getLookup(std::string key, float x_val, float y_val);
-  float getLookupErr(std::string key, float x_val, float y_val);
+  float getLookup(std::string key, float x_val, float y_val, bool debug=false);
+  float getLookupErr(std::string key, float x_val, float y_val, bool debug=false);
   RVec_f getJetEfficiencySimple(ROOT::VecOps::RVec<int>* jets_flav, ROOT::VecOps::RVec<float>* jets_pt, ROOT::VecOps::RVec<float>* jets_eta);
   RVec_f getJetEfficiency(std::string category, std::string tagger_WP, RVec_i* jets_flav, RVec_f* jets_pt, RVec_f* jets_eta);
   double getEventYieldRatio(std::string sample, std::string variation, int nJet, double HT, bool debug=false);
@@ -44,7 +44,7 @@ private:
   // int *Jet_flav_;
 };
 
-TH2Lookup::TH2Lookup(std::string file, bool debug=false) {
+TH2Lookup::TH2Lookup(std::string file, std::string slot="0", bool debug=false) {
   lookupMap_.clear();
   validKeys_.clear();
   TFile *f = TFile::Open(file.c_str(),"read");
@@ -54,17 +54,16 @@ TH2Lookup::TH2Lookup(std::string file, bool debug=false) {
   }
   for(const auto&& obj: *(f->GetListOfKeys())){
     std::string key = obj->GetName();
-    std::string clone_key = "TH2LU_" + key;
+    std::string clone_key = "TH2LU_" + slot + "_" + key;
     //for(int i=0; i<(int)histos.size();++i) {
     lookupMap_[obj->GetName()] = (TH2*)(f->Get(key.c_str())->Clone(clone_key.c_str()));
-    //lookupMap_[obj->GetName()] = (TH2*)(f->Get((obj->GetName()).c_str()))->Clone(("TH2LU_"+obj->GetName()).c_str());
     lookupMap_[obj->GetName()]->SetDirectory(0);
     if(debug){std::cout << obj->GetName() << "     ";}
   }
   f->Close();
 }
 
-TH2Lookup::TH2Lookup(std::string file, std::vector<std::string> histos) {
+TH2Lookup::TH2Lookup(std::string file, std::vector<std::string> histos, std::string slot = "0") {
   lookupMap_.clear();
   validKeys_.clear();
   TFile *f = TFile::Open(file.c_str(),"read");
@@ -73,7 +72,7 @@ TH2Lookup::TH2Lookup(std::string file, std::vector<std::string> histos) {
   }
 
   for(int i=0; i<(int)histos.size();++i) {
-    lookupMap_[histos[i]] = (TH2*)(f->Get(histos[i].c_str()))->Clone(("TH2LU_"+histos[i]).c_str());
+    lookupMap_[histos[i]] = (TH2*)(f->Get(histos[i].c_str()))->Clone(("TH2LU_"+slot+"_"+histos[i]).c_str());
     lookupMap_[histos[i]]->SetDirectory(0);
     if(!lookupMap_[histos[i]]) {
       std::cout << "ERROR! Histogram " << histos[i] << " not in file " << file << ". Not considering this lookup. " << std::endl;
@@ -89,20 +88,23 @@ TH2Lookup::TH2Lookup(std::string file, std::vector<std::string> histos) {
   nJet_ = nJet; Jet_flav_ = jetFlav; Jet_pt_ = lepPt; Jet_eta_ = lepEta;
   }*/
 
-float TH2Lookup::getLookup(std::string key, float x_val, float y_val) {
+float TH2Lookup::getLookup(std::string key, float x_val, float y_val, bool debug=false) {
+  if(debug){std::cout << "TH2Lookup::getLookup invoked " << std::endl;}
   if ( lookupMap_.find(key) == lookupMap_.end() ) {
     // not found ... not sure how intensive this lookup is, but we need to guard against bad keys
+    if(debug){std::cout << "Failed to find key" << std::endl;}
     double fail = -9999.9;
     return fail;
   } else {
     //found
+    if(debug){std::cout << "Found key " << key << std::endl;}
     int binx = std::max(1, std::min(lookupMap_[key]->GetNbinsX(), lookupMap_[key]->GetXaxis()->FindBin(x_val)));
     int biny = std::max(1, std::min(lookupMap_[key]->GetNbinsY(), lookupMap_[key]->GetYaxis()->FindBin(y_val)));
     return lookupMap_[key]->GetBinContent(binx,biny);
   }
 }
 
-float TH2Lookup::getLookupErr(std::string key, float x_val, float y_val) {
+float TH2Lookup::getLookupErr(std::string key, float x_val, float y_val, bool debug=false) {
   int binx = std::max(1, std::min(lookupMap_[key]->GetNbinsX(), lookupMap_[key]->GetXaxis()->FindBin(x_val)));
   int biny = std::max(1, std::min(lookupMap_[key]->GetNbinsY(), lookupMap_[key]->GetYaxis()->FindBin(y_val)));
   return lookupMap_[key]->GetBinError(binx,biny);
@@ -137,7 +139,7 @@ double TH2Lookup::getEventYieldRatio(std::string sample, std::string variation, 
   std::string key = "";
   key = sample + variation;
   if(debug){std::cout << "getEventYield key: " << key << std::endl;}
-  yield = getLookup(key, HT, nJet);
+  yield = getLookup(key, HT, nJet, debug);
   return yield;
 }
 
@@ -146,7 +148,7 @@ double TH2Lookup::getEventYieldRatio(std::string key, int nJet, double HT, bool 
   //For pseudo-1D lookups, this uses "<name>_1D<DIM>" such as "tttt_1DX" -> key = "tttt_1DY_nom" for example
   double yield = 1.0;
   if(debug){std::cout << "getEventYield key: " << key << std::endl;}
-  yield = getLookup(key, HT, nJet);
+  yield = getLookup(key, HT, nJet, debug);
   return yield;
 }
 
