@@ -20,9 +20,11 @@ if __name__ == '__main__':
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('--categories', dest='categories', action='store', nargs='*', type=str, default="nMediumDeepJetB2_nJet4",
                         help='categories for the combine cards, i.e. nMediumDeepJetB2_nJet8p')
+    parser.add_argument('--template', dest='template', action='store', type=str, default="TTTT_template.txt",
+                        help='directory for analysis inputs and outputs')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
 
     args = parser.parse_args()
 
-    main(args.analysisDirectory, args.era, args.channel, args.categories)
+    main(args.analysisDirectory, args.era, args.channel, args.categories, template=args.template)
