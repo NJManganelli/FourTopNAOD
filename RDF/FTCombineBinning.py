@@ -16,6 +16,8 @@ import numpy as np
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
+ROOT.gROOT.SetBatch(True)
+
 def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
     varsOfInterest = ["HTUnweighted"]
     erasOfInterest = [era]
@@ -31,7 +33,7 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
     ]
     # systematicsOfInterest = [''] #Not needed, only scale systematics get the unweighted histogram in FTAnalyzer.py as of writing
     histogramFile = "$ADIR/Combine/All/$ERA___Combined.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("//", "/") # 
-    f = ROOT.TFile.Open(histogramFile)
+    f = ROOT.TFile.Open(histogramFile, "read")
     keys = [k.GetName() for k in f.GetListOfKeys()]
     keys = [k for k in keys if k.split("___")[0] in erasOfInterest and k.split("___")[1] in samplesOfInterest]
     keys = [k for k in keys if k.split("___")[2] in channelsOfInterest and k.split("___")[5] in varsOfInterest]
@@ -63,7 +65,8 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
                     hists = {}
                     rebinnedHists = {}
                     nBinsX = 0
-                    if variable != "HTUnweighted" and category != "HT500_nMediumDeepJetB4+_nJet8+": continue
+                    if variable != "HTUnweighted":
+                        continue
                     for systematic in systematics:
                         if verbose: print(systematic)
                         for nSample, sample in enumerate(samples):
