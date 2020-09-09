@@ -1,0 +1,76 @@
+# Datacard template for pre-automated tests
+imax    1 number of bins
+jmax    7 number of processes minus 1
+kmax    * number of nuisance parameters
+--------------------------------------------------------------------------------
+shapes * $CHANNEL_$CATEGORY combTest_$CHANNEL.root $PROCESS___HT500_$CATEGORY___HT___nom $PROCESS___HT500_$CATEGORY___HT___$SYSTEMATIC
+shapes data_obs $CHANNEL_$CATEGORY combTest_$CHANNEL.root data_obs___HT500_$CATEGORY___HT___nom
+--------------------------------------------------------------------------------
+bin          $CHANNEL_$CATEGORY
+observation  -1          
+--------------------------------------------------------------------------------
+bin                                  $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY $CHANNEL_$CATEGORY
+process                              ttother         ttbb            singletop       ttH             ttVJets        ttultrarare    DY               tttt 
+process                              1               2               3               4               5              6              7                0
+rate                                 -1              -1              -1              -1              -1             -1             -1               -1
+--------------------------------------------------------------------------------
+# leptonSFEl_13TeV_R2017           lnN     1.03            1.03            1.03            1.03            1.03           1.03           1.03           1.03
+# leptonSFMu_13TeV_R2017           lnN     1.03            1.03            1.03            1.03            1.03           1.03           1.03           1.03
+lumi_13TeV_R2017                 lnN     1.023           1.023           1.023           1.023           1.023          1.023          1.023          1.023
+jec_13TeV_R2017                  shape   1               1               1               1               1              1              1              1
+jer_13TeV_R2017                  shape   1               1               1               1               1              1              1              1
+pileup                           shape   1               1               1               1               1              1              1              1
+prefire                          shape   1               1               1               1               1              1              1              1
+ttHF_13TeV_R2017                 lnN     -               1.13            -               -               -              -              -              -
+# ttPSwgtNew_13TeV_R2017           shape   1               1               -               -               -              -              -              -
+ttmuRNomF                        shape   1               1               -               -               -              -              -              -
+ttmuFNomR                        shape   1               1               -               -               -              -              -              -
+ttmuRFcorrdNew                   shape   1               1               -               -               -              -              -              -
+ttISR                            shape   1               1               -               -               -              -              -              -
+ttFSR                            shape   1               1               -               -               -              -              -              -
+# singletopPSwgtNew_13TeV_R2017    shape   -               -               1               -               -              -              -              -
+singletopmuRNomF                 shape   -               -               1               -               -              -              -              -
+singletopmuFNomR                 shape   -               -               1               -               -              -              -              -
+singletopmuRFcorrdNew            shape   -               -               1               -               -              -              -              -
+singletopISR                     shape   -               -               1               -               -              -              -              -
+singletopFSR                     shape   -               -               1               -               -              -              -              -
+# ttHPSwgtNew_13TeV_R2017          shape   -               -               -               1               -              -              -              -
+ttHmuRNomF                       shape   -               -               -               1               -              -              -              -
+ttHmuFNomR                       shape   -               -               -               1               -              -              -              -
+ttHmuRFcorrdNew                  shape   -               -               -               1               -              -              -              -
+# ttHISR                           shape   -               -               -               1               -              -              -              - #No PSWeights
+# ttHFSR                           shape   -               -               -               1               -              -              -              -
+# ttVJetsPSwgtNew_13TeV_R2017      shape   -               -               -               -               1              -              -              - #No RF
+ttVJetsmuRNomF                   shape   -               -               -               -               1              -              -              -
+ttVJetsmuFNomR                   shape   -               -               -               -               1              -              -              -
+ttVJetsmuRFcorrdNew              shape   -               -               -               -               1              -              -              -
+# ttVJetsISR                       shape   -               -               -               -               1              -              -              - #No PSWeights
+# ttVJetsFSR                       shape   -               -               -               -               1              -              -              -
+# ttultrararePSwgtNew_13TeV_R2017  shape   -               -               -               -               -              1              -              -
+ttultrararemuRNomF               shape   -               -               -               -               -              1              -              -
+ttultrararemuFNomR               shape   -               -               -               -               -              1              -              -
+ttultrararemuRFcorrdNew          shape   -               -               -               -               -              1              -              -
+# ttultrarareISR                   shape   -               -               -               -               -              1              -              - #PSWeights bugged in NanoAODv5
+# ttultrarareFSR                   shape   -               -               -               -               -              1              -              -
+# ewkPSwgtNew_13TeV_R2017          shape   -               -               -               -               -              -              1              -
+ewkmuRNomF                       shape   -               -               -               -               -              -              1              - #No entries, but probably nothing
+ewkmuFNomR                       shape   -               -               -               -               -              -              1              -
+ewkmuRFcorrdNew                  shape   -               -               -               -               -              -              1              -
+# ewkISR                           shape   -               -               -               -               -              -              1              - #No PSWeights
+# ewkFSR                           shape   -               -               -               -               -              -              1              -
+# ttttPSwgtNew_13TeV_R2017         shape   -               -               -               -               -              -              -              1
+ttttmuRNomF                      shape   -               -               -               -               -              -              -              1
+ttttmuFNomR                      shape   -               -               -               -               -              -              -              1
+ttttmuRFcorrdNew                 shape   -               -               -               -               -              -              -              1
+ttttISR                          shape   -               -               -               -               -              -              -              1
+ttttFSR                          shape   -               -               -               -               -              -              -              1
+btagSF_shape_hf    	           shape   1               1               1               1               1              1              1              1
+btagSF_shape_hfstats1            shape   1               1               1               1               1              1              1              1
+btagSF_shape_hfstats2            shape   1               1               1               1               1              1              1              1
+btagSF_shape_lf    	           shape   1               1               1               1               1              1              1              1
+btagSF_shape_lfstats1            shape   1               1               1               1               1              1              1              1
+btagSF_shape_lfstats2            shape   1               1               1               1               1              1              1              1
+btagSF_shape_cferr1              shape   1               1               1               1               1              1              1              1
+btagSF_shape_cferr2              shape   1               1               1               1               1              1              1              1  
+btagSF_shape_jes    	           shape   1               1               1               1               1              1              1              1
+* autoMCStats 1.
