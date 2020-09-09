@@ -16,6 +16,8 @@ import numpy as np
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
+ROOT.gROOT.SetBatch(True)
+
 def main(stage, analysisDirectory, channel, era, verbose=False):
     varsOfInterest = ["HT"]
     erasOfInterest = [era]
@@ -29,8 +31,8 @@ def main(stage, analysisDirectory, channel, era, verbose=False):
     ]
     categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4', 'HT500_nMediumDeepJetB3_nJet6', 'HT500_nMediumDeepJetB4+_nJet8+',
     ]
-    categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4',
-    ]
+    # categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4',
+    # ]
 
     # systematicsOfInterest = [''] #Not needed, only scale systematics get the unweighted histogram in FTAnalyzer.py as of writing
     histogramFile = "$ADIR/Combine/combTest_$CHANNEL.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$CHANNEL", channel).replace("//", "/") # 
@@ -160,7 +162,7 @@ def main(stage, analysisDirectory, channel, era, verbose=False):
                                 hist[category][variable][sample] = hist[category][variable][sample].Clone()
                                 hist[category][variable][sample].SetDirectory(0)
                                 hist[category][variable][sample].SetFillColor(0)
-                                hist[category][variable][sample].SetLineColor(0)
+                                hist[category][variable][sample].SetLineColor(ROOT.kBlack)
                                 maxes.append(hist[category][variable][sample].GetMaximum())
                                 mins.append(hist[category][variable][sample].GetMinimum())
                             else:
@@ -169,21 +171,38 @@ def main(stage, analysisDirectory, channel, era, verbose=False):
                     thisMax = max(maxes)
                     # thisSampleSystematics = sorted(list(set(thisSampleSystematics)))
                     for syst in histUp[category][variable][sample].keys():
-                        hist[category][variable][sample].SetName("{} {}({})[{}]".format(sample, variable, category, syst))
-                        print("{} - up: {} down: {}".format(hist[category][variable][sample].Integral(),
-                                                            histUp[category][variable][sample][syst].Integral(),
-                                                            histDown[category][variable][sample][syst].Integral()
+                        oldtitle = hist[category][variable][sample].GetTitle()
+                        hist[category][variable][sample].SetTitle("{} {}({})[{}];{};Events/bin(variable)".format(sample, variable, category, syst, variable))
+                        print("{}: {} - up: {} down: {}".format(hist[category][variable][sample].GetTitle(),
+                            hist[category][variable][sample].Integral(),
+                            histUp[category][variable][sample][syst].Integral(),
+                            histDown[category][variable][sample][syst].Integral()
                                                         ))
                         hist[category][variable][sample].SetMinimum(0.9 * thisMin)
                         hist[category][variable][sample].SetMaximum(1.1 * thisMax)
                         hist[category][variable][sample].Draw("HIST S")
-                        histUp[category][variable][sample][syst].Draw("HIST SAME")
-                        histDown[category][variable][sample][syst].Draw("HIST SAME")
-                        pdfOut = "systematicTest2.pdf"
+                        histUp[category][variable][sample][syst].Draw("HIST SAMES")
+                        histDown[category][variable][sample][syst].Draw("HIST SAMES")
+                        can.Draw()
+                        up_stats = histUp[category][variable][sample][syst].GetListOfFunctions().FindObject("stats")
+                        up_stats.SetX1NDC(.7)
+                        up_stats.SetX2NDC(.9)
+                        # histUp[category][variable][sample][syst].GetListOfFunctions().FindObject("stats").SetX2NDC(.9)
+                        nom_stats = hist[category][variable][sample].GetListOfFunctions().FindObject("stats")
+                        nom_stats.SetX1NDC(.5)
+                        nom_stats.SetX2NDC(.7)
+                        # hist[category][variable][sample].GetListOfFunctions().FindObject("stats").SetX2NDC(.7)
+                        dn_stats = histDown[category][variable][sample][syst].GetListOfFunctions().FindObject("stats")
+                        dn_stats.SetX1NDC(.3)
+                        dn_stats.SetX2NDC(.5)
+                        # histDown[category][variable][sample][syst].GetListOfFunctions().FindObject("stats").SetX1NDC(.5)
+                        can.Update()
+                        pdfOut = "{era}_{chan}_Systematics.pdf".format(era=era, chan=channel)
                         if drawCounter == 0:
                             pdfOut += "("
                         can.SaveAs(pdfOut)
                         drawCounter += 1
+                        hist[category][variable][sample].SetTitle(oldtitle)
         can2 = ROOT.TCanvas()
         can2.SaveAs(pdfOut + ")")
 
