@@ -3375,12 +3375,12 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     # ISR/FSR Up and Down variations
     if "ISRDown" in sysVariations.keys():
         zPre.append(("pwgt_ISRDown", "nPSWeight == 4 ? PSWeight.at(0) : 0"))
-        zFin.append(("wgt___ISRDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___ISRDown * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___ISRDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+        zFin.append(("wgt___ISRDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_ISRDown * pwgt_btag___ISRDown * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___ISRDown", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_ISRDown * pwgt_Z_vtx___nom"))
     if "ISRUp" in sysVariations.keys():
         zPre.append(("pwgt_ISRUp", "nPSWeight == 4 ? PSWeight.at(2) : 0"))
-        zFin.append(("wgt___ISRUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___ISRUp * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___ISRUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+        zFin.append(("wgt___ISRUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___ISRUp * pwgt_ISRUp * pwgt_Z_vtx___nom"))
+        zPre.append(("prewgt___ISRUp", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_ISRUp * pwgt_Z_vtx___nom"))
     
     if "FSRDown" in sysVariations.keys():
         zPre.append(("pwgt_FSRDown", "nPSWeight == 4 ? PSWeight.at(1) : 0"))
