@@ -75,6 +75,7 @@ leg_dict = {"tttt": ROOT.kAzure-2,
             "Data": ROOT.kBlack,
             "QCD": ROOT.kPink,
            }
+print("\n\nFIXME: Need to swap to the nominal jet pt for consistency? Time to get it done, reprocess, etc.\n")
 systematics_2017_NOMINAL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                  "lep_postfix": "",
                                  "wgt_final": "wgt__nom",
