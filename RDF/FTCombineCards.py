@@ -4,10 +4,12 @@ import argparse
 def main(analysisDirectory, era, channel, categories, template="TTTT_template.txt"):
     outputLines = []
     with open(template, "r") as inFile:
-        for category in categories:
-            with open("{}/TTTT_{}_{}_{}.txt".format(analysisDirectory, era, channel, category).replace("//", "/"), "w") as outFile:
-                for line in inFile:
-                    outFile.write(line.replace("$ERA", era).replace("$CHANNEL", channel).replace("$CATEGORY", category))
+        for line in inFile:
+            outputLines.append(line)
+    for category in categories:
+        with open("{}/TTTT_{}_{}_{}.txt".format(analysisDirectory, era, channel, category).replace("//", "/"), "w") as outFile:
+            for line in outputLines:
+                outFile.write(line.replace("$ERA", era).replace("$CHANNEL", channel).replace("$CATEGORY", category))
             print("Finished writing output for category {}".format(category))
 
 if __name__ == '__main__':

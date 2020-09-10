@@ -64,13 +64,13 @@ ttttmuFNomR                      shape   -               -               -      
 ttttmuRFcorrdNew                 shape   -               -               -               -               -              -              -              1
 ttttISR                          shape   -               -               -               -               -              -              -              1
 ttttFSR                          shape   -               -               -               -               -              -              -              1
-btagSF_shape_hf    	           shape   1               1               1               1               1              1              1              1
+btagSF_shape_hf    	         shape   1               1               1               1               1              1              1              1
 btagSF_shape_hfstats1            shape   1               1               1               1               1              1              1              1
 btagSF_shape_hfstats2            shape   1               1               1               1               1              1              1              1
-btagSF_shape_lf    	           shape   1               1               1               1               1              1              1              1
+btagSF_shape_lf    	         shape   1               1               1               1               1              1              1              1
 btagSF_shape_lfstats1            shape   1               1               1               1               1              1              1              1
 btagSF_shape_lfstats2            shape   1               1               1               1               1              1              1              1
 btagSF_shape_cferr1              shape   1               1               1               1               1              1              1              1
 btagSF_shape_cferr2              shape   1               1               1               1               1              1              1              1  
-btagSF_shape_jes    	           shape   1               1               1               1               1              1              1              1
+btagSF_shape_jes    	         shape   1               1               1               1               1              1              1              1
 * autoMCStats 1.
