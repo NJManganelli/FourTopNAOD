@@ -17,7 +17,7 @@ import pprint
 import re
 import pdb
 import ROOT
-from ruamel.yaml import YAML
+# from ruamel.yaml import YAML
 from FourTopNAOD.RDF.tools.toolbox import getFiles
 #from IPython.display import Image, display, SVG
 #import graphviz
@@ -2491,11 +2491,14 @@ def getNtupleVariables(vals, isData=True, sysVariations=None):
             "FTALepton{lpf}_pt".format(lpf=leppostfix), 
             "FTALepton{lpf}_eta".format(lpf=leppostfix),
             "FTALepton{lpf}_phi".format(lpf=leppostfix),
-            "FTALepton{lpf}_jetIdx".format(lpf=leppostfix),
+            # "FTALepton{lpf}_jetIdx".format(lpf=leppostfix),
             "FTALepton{lpf}_pdgId".format(lpf=leppostfix),
             "FTALepton{lpf}_dRll".format(lpf=leppostfix),
             # "FTALepton{lpf}_dPhill".format(lpf=leppostfix),
-            # "FTALepton{lpf}_dEtall".format(lpf=leppostfix)
+            # "FTALepton{lpf}_dEtall".format(lpf=leppostfix),
+            "FTAMuon{lpf}_InvariantMass",
+            "FTAElectron{lpf}_InvariantMass",
+            
         ]
     if isData:
         branchPostFixes = ["__nom"]
@@ -2511,34 +2514,33 @@ def getNtupleVariables(vals, isData=True, sysVariations=None):
             "FTAJet{bpf}_pt".format(bpf=branchpostfix),
             "FTAJet{bpf}_eta".format(bpf=branchpostfix),
             "FTAJet{bpf}_phi".format(bpf=branchpostfix),
-            "FTAJet{bpf}_mass".format(bpf=branchpostfix),
-            "FTAJet{bpf}_jetId".format(bpf=branchpostfix),
-            "FTAJet{bpf}_DeepCSVB".format(bpf=branchpostfix),
-            "FTAJet{bpf}_DeepCSVB_sorted".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_mass".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_jetId".format(bpf=branchpostfix),
             "FTAJet{bpf}_DeepJetB".format(bpf=branchpostfix),
-            "FTAJet{bpf}_DeepJetB_sorted".format(bpf=branchpostfix),
-            # "FTAJet{bpf}_LooseDeepCSVB".format(bpf=branchpostfix),
-            # "FTAJet{bpf}_MediumDeepCSVB".format(bpf=branchpostfix),
-            # "FTAJet{bpf}_TightDeepCSVB".format(bpf=branchpostfix),
-            "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix),
-            "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix),
-            "nTightDeepCSVB{bpf}".format(bpf=branchpostfix),
-            "FTAJet{bpf}_MediumDeepJetB".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_DeepJetB_sorted".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_MediumDeepJetB".format(bpf=branchpostfix),
             "nLooseDeepJetB{bpf}".format(bpf=branchpostfix),
             "nMediumDeepJetB{bpf}".format(bpf=branchpostfix),
             "nTightDeepJetB{bpf}".format(bpf=branchpostfix),
             "ST{bpf}".format(bpf=branchpostfix),
             "HT{bpf}".format(bpf=branchpostfix),
             "HT2M{bpf}".format(bpf=branchpostfix),
-            # "HTNum{bpf}".format(bpf=branchpostfix),
             "HTRat{bpf}".format(bpf=branchpostfix),
             "dRbb{bpf}".format(bpf=branchpostfix),
-            # "dPhibb{bpf}".format(bpf=branchpostfix),
-            # "dEtabb{bpf}".format(bpf=branchpostfix),
             "H{bpf}".format(bpf=branchpostfix),
             "H2M{bpf}".format(bpf=branchpostfix),
             "HTH{bpf}".format(bpf=branchpostfix),
             "HTb{bpf}".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_LooseDeepCSVB".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_MediumDeepCSVB".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_TightDeepCSVB".format(bpf=branchpostfix),
+            # "nLooseDeepCSVB{bpf}".format(bpf=branchpostfix),
+            # "nMediumDeepCSVB{bpf}".format(bpf=branchpostfix),
+            # "nTightDeepCSVB{bpf}".format(bpf=branchpostfix),
+            # "dPhibb{bpf}".format(bpf=branchpostfix),
+            # "dEtabb{bpf}".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_DeepCSVB".format(bpf=branchpostfix),
+            # "FTAJet{bpf}_DeepCSVB_sorted".format(bpf=branchpostfix),
         ]
     return varsToFlattenOrSave
 
@@ -2658,7 +2660,7 @@ def flattenVariable(input_df, var, depth, static_cast=None, fallback=None, debug
 
     return rdf, flats
 
-def writeNtuples(packedNodes, ntupledir, nJetMin=4, HTMin=450, bTagger="DeepCSV"):
+def writeNtuples(packedNodes, ntupledir, nJetMin=4, HTMin=450, bTagger="DeepJet"):
     # Use reversed order to cycle from highest priority level to lowest, finally calling snapshot on lowest priority level greater than 0
     snapshotTrigger = sorted([p for p in packedNodes["snapshotPriority"].values() if p > 0])
     if len(snapshotTrigger) > 0:
@@ -2698,8 +2700,10 @@ def writeNtuples(packedNodes, ntupledir, nJetMin=4, HTMin=450, bTagger="DeepCSV"
                              columnList=packedNodes["ntupleVariables"][processName], 
                              treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
     #Process remaining snapshots one-by-one
+    print("Executing event loop for writeNtuples()")
     for processName, handle in handles.items():
         _ = handle.GetValue()
+    print("Finished executing event loop for writeNtuples()")
 
 def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_branch = "PV_npvs",
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
@@ -7279,7 +7283,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                 if not os.path.isdir(subNtupleDir):
                     os.makedirs(subNtupleDir)
                 writeNtuples(prePackedNodes, subNtupleDir)
-                print("Wrote Ntuples for {} to this directory:\n{}".format(name, writeDir))
+                print("Wrote Ntuples for {} to this directory:\n{}".format(name, subNtupleDir))
 
             #The ntuple writing will trigger the loop first, if that path is taken, but this is still safe to do always
             processed[name][lvl] = counts[name][lvl].GetValue()
