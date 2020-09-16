@@ -18,19 +18,19 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 ROOT.gROOT.SetBatch(True)
 
-def main(stage, analysisDirectory, channel, era, verbose=False):
+def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSamples=None, verbose=False):
     varsOfInterest = ["HT"]
     erasOfInterest = [era]
     channelsOfInterest = [channel]
     categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4', 'HT500_nMediumDeepJetB2_nJet5', 'HT500_nMediumDeepJetB2_nJet6',
-                            'HT500_nMediumDeepJetB2_nJet7', 'HT500_nMediumDeepJetB2_nJet8+',
+                            'HT500_nMediumDeepJetB2_nJet7', 'HT500_nMediumDeepJetB2_nJet8p',
                             'HT500_nMediumDeepJetB3_nJet4', 'HT500_nMediumDeepJetB3_nJet5', 'HT500_nMediumDeepJetB3_nJet6',
-                            'HT500_nMediumDeepJetB3_nJet7', 'HT500_nMediumDeepJetB3_nJet8+',
-                            'HT500_nMediumDeepJetB4+_nJet4', 'HT500_nMediumDeepJetB4+_nJet5', 'HT500_nMediumDeepJetB4+_nJet6',
-                            'HT500_nMediumDeepJetB4+_nJet7', 'HT500_nMediumDeepJetB4+_nJet8+',
+                            'HT500_nMediumDeepJetB3_nJet7', 'HT500_nMediumDeepJetB3_nJet8p',
+                            'HT500_nMediumDeepJetB4p_nJet4', 'HT500_nMediumDeepJetB4p_nJet5', 'HT500_nMediumDeepJetB4p_nJet6',
+                            'HT500_nMediumDeepJetB4p_nJet7', 'HT500_nMediumDeepJetB4p_nJet8p',
     ]
-    categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4', 'HT500_nMediumDeepJetB3_nJet6', 'HT500_nMediumDeepJetB4+_nJet8+',
-    ]
+    # categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4', 'HT500_nMediumDeepJetB3_nJet6', 'HT500_nMediumDeepJetB4+_nJet8+',
+    # ]
     # categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4',
     # ]
 
@@ -114,6 +114,9 @@ def main(stage, analysisDirectory, channel, era, verbose=False):
                 histUp[category][variable] = {}
                 histDown[category][variable] = {}
                 for nSample, sample in enumerate(samples):
+                    if skipSamples and sample in skipSamples:
+                        print("Skipping sample {}".format(sample))
+                        continue
                     print("\t\t\t\t\t{}".format(sample))
                     hist[category][variable][sample] = {}
                     histUp[category][variable][sample] = {}
@@ -134,6 +137,9 @@ def main(stage, analysisDirectory, channel, era, verbose=False):
                         else:
                             thisSyst = "nom"
                         thisKey = "___".join([sample, category, variable, systematic])
+                        if skipSystematics and thisSyst in skipSystematics:
+                            print("Skipping systematic {}".format(thisSyst))
+                            continue
                         if "Up" == systematic[-2:]:
                             histUp[category][variable][sample][thisSyst] = f.Get(thisKey)
                             if isinstance(histUp[category][variable][sample][thisSyst], supportedTypes):
@@ -216,6 +222,10 @@ if __name__ == '__main__':
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('--era', dest='era', type=str, default="2017",
                         help='era for plotting, which deduces the lumi only for now')
+    parser.add_argument('--skipSystematics', dest='skipSystematics', action='store', default=None, type=str, nargs='*',
+                        help='List of systematic names to be ignored when setting common miminma/maxima and plotting')
+    parser.add_argument('--skipSamples', dest='skipSamples', action='store', default=None, type=str, nargs='*',
+                        help='List of sample names to be ignored when setting common miminma/maxima and plotting')
     parser.add_argument('--include', dest='include', action='store', default=None, type=str, nargs='*',
                         help='List of sample names to be used in the stage (if not called, defaults to all; takes precedene over exclude)')
     parser.add_argument('--exclude', dest='exclude', action='store', default=None, type=str, nargs='*',
@@ -237,4 +247,4 @@ if __name__ == '__main__':
     channel = args.channel
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel)
     verbose = args.verbose
-    main(stage, analysisDir, channel, args.era, verbose=verbose)
+    main(stage, analysisDir, channel, args.era, skipSystematics = args.skipSystematics, skipSamples = args.skipSamples, verbose=verbose)
