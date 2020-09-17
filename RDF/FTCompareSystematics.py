@@ -100,6 +100,8 @@ def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSampl
         hist = {}
         histUp = {}
         histDown = {}
+        histRU = {}
+        histRD = {} #Down ratio histograms
         for category in categories:
             if category not in categoriesOfInterest:
                 print("Skipping category {}".format(category))
@@ -108,11 +110,15 @@ def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSampl
             hist[category] = {}
             histUp[category] = {}
             histDown[category] = {}
+            histRU[category] = {}
+            histRD[category] = {}
             for variable in variables:
                 print("\t\t\t\t{}".format(variable))
                 hist[category][variable] = {}
                 histUp[category][variable] = {}
                 histDown[category][variable] = {}
+                histRU[category][variable] = {}
+                histRD[category][variable] = {}
                 for nSample, sample in enumerate(samples):
                     if skipSamples and sample in skipSamples:
                         print("Skipping sample {}".format(sample))
@@ -121,6 +127,8 @@ def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSampl
                     hist[category][variable][sample] = {}
                     histUp[category][variable][sample] = {}
                     histDown[category][variable][sample] = {}
+                    histRU[category][variable][sample] = {}
+                    histRD[category][variable][sample] = {}
                     # thisSampleSystematics = []
                     thisSampleSystematics = list(set([k.split("___")[3] for k in keys if k.split("___")[0] == sample]))
                     maxes = []
@@ -147,6 +155,9 @@ def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSampl
                                 histUp[category][variable][sample][thisSyst].SetDirectory(0)
                                 histUp[category][variable][sample][thisSyst].SetFillColor(0)
                                 histUp[category][variable][sample][thisSyst].SetLineColor(ROOT.kRed)
+                                histRU[category][variable][sample][thisSyst] = histUp[category][variable][sample][thisSyst].Clone(
+                                    histUp[category][variable][sample][thisSyst].GetName() + "_ratio"
+                                )
                                 maxes.append(histUp[category][variable][sample][thisSyst].GetMaximum())
                                 mins.append(histUp[category][variable][sample][thisSyst].GetMinimum())
                             else:
@@ -158,6 +169,9 @@ def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSampl
                                 histDown[category][variable][sample][thisSyst].SetDirectory(0)
                                 histDown[category][variable][sample][thisSyst].SetFillColor(0)
                                 histDown[category][variable][sample][thisSyst].SetLineColor(ROOT.kBlue)
+                                histRD[category][variable][sample][thisSyst] = histDown[category][variable][sample][thisSyst].Clone(
+                                    histDown[category][variable][sample][thisSyst].GetName() + "_ratio"
+                                )
                                 maxes.append(histDown[category][variable][sample][thisSyst].GetMaximum())
                                 mins.append(histDown[category][variable][sample][thisSyst].GetMinimum())
                             else:
@@ -206,6 +220,14 @@ def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSampl
                         pdfOut = "{era}_{chan}_Systematics.pdf".format(era=era, chan=channel)
                         if drawCounter == 0:
                             pdfOut += "("
+                        can.SaveAs(pdfOut)
+                        histRU[category][variable][sample][syst].Divide(hist[category][variable][sample])
+                        histRD[category][variable][sample][syst].Divide(hist[category][variable][sample])
+                        histRU[category][variable][sample][syst].SetMinimum(0.5)
+                        histRU[category][variable][sample][syst].SetMaximum(1.5)
+                        histRU[category][variable][sample][syst].Draw("HIST")
+                        histRD[category][variable][sample][syst].Draw("HIST SAME")
+                        can.Draw()
                         can.SaveAs(pdfOut)
                         drawCounter += 1
                         hist[category][variable][sample].SetTitle(oldtitle)
