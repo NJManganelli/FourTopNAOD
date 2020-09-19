@@ -102,6 +102,7 @@ def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSampl
         histDown = {}
         histRU = {}
         histRD = {} #Down ratio histograms
+        pdfOut = "{era}_{chan}_Systematics.pdf".format(era=era, chan=channel)
         for category in categories:
             if category not in categoriesOfInterest:
                 print("Skipping category {}".format(category))
@@ -201,8 +202,8 @@ def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSampl
                         hist[category][variable][sample].SetMinimum(0.9 * thisMin)
                         hist[category][variable][sample].SetMaximum(1.1 * thisMax)
                         hist[category][variable][sample].Draw("HIST S")
-                        histUp[category][variable][sample][syst].Draw("HIST SAMES")
-                        histDown[category][variable][sample][syst].Draw("HIST SAMES")
+                        histUp[category][variable][sample][syst].Draw("HIST SAMES E")
+                        histDown[category][variable][sample][syst].Draw("HIST SAMES E")
                         can.Draw()
                         up_stats = histUp[category][variable][sample][syst].GetListOfFunctions().FindObject("stats")
                         up_stats.SetX1NDC(.7)
@@ -217,10 +218,10 @@ def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSampl
                         dn_stats.SetX2NDC(.5)
                         # histDown[category][variable][sample][syst].GetListOfFunctions().FindObject("stats").SetX1NDC(.5)
                         can.Update()
-                        pdfOut = "{era}_{chan}_Systematics.pdf".format(era=era, chan=channel)
                         if drawCounter == 0:
-                            pdfOut += "("
-                        can.SaveAs(pdfOut)
+                            can.SaveAs(pdfOut + "(")
+                        else:
+                            can.SaveAs(pdfOut)
                         histRU[category][variable][sample][syst].Divide(hist[category][variable][sample])
                         histRD[category][variable][sample][syst].Divide(hist[category][variable][sample])
                         histRU[category][variable][sample][syst].SetMinimum(0.5)
