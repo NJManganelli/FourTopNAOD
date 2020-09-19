@@ -14,51 +14,58 @@ process                              ttother         ttbb            singletop  
 process                              1               2               3               4               5              6              7                0
 rate                                 -1              -1              -1              -1              -1             -1             -1               -1
 --------------------------------------------------------------------------------
-# leptonSFEl_13TeV_R2017           lnN     1.03            1.03            1.03            1.03            1.03           1.03           1.03           1.03
-# leptonSFMu_13TeV_R2017           lnN     1.03            1.03            1.03            1.03            1.03           1.03           1.03           1.03
+leptonSFEl_13TeV_R2017           lnN     1.03            1.03            1.03            1.03            1.03           1.03           1.03           1.03
+leptonSFMu_13TeV_R2017           lnN     1.03            1.03            1.03            1.03            1.03           1.03           1.03           1.03
 lumi_13TeV_R2017                 lnN     1.023           1.023           1.023           1.023           1.023          1.023          1.023          1.023
 jec_13TeV_R2017                  shape   1               1               1               1               1              1              1              1
 jer_13TeV_R2017                  shape   1               1               1               1               1              1              1              1
 pileup                           shape   1               1               1               1               1              1              1              1
 prefire                          shape   1               1               1               1               1              1              1              1
-ttHF_13TeV_R2017                 lnN     -               1.13            -               -               -              -              -              -
+ttHF_13TeV_R2017                 lnN     -               1.175           -               -               -              -              -              -
 # ttPSwgtNew_13TeV_R2017           shape   1               1               -               -               -              -              -              -
+tt_norm                          lnN     0.95/1.05       0.95/1.05       -               -               -              -              -              -
 ttmuRNomF                        shape   1               1               -               -               -              -              -              -
 ttmuFNomR                        shape   1               1               -               -               -              -              -              -
 ttmuRFcorrdNew                   shape   1               1               -               -               -              -              -              -
 ttISR                            shape   1               1               -               -               -              -              -              -
 ttFSR                            shape   1               1               -               -               -              -              -              -
 # singletopPSwgtNew_13TeV_R2017    shape   -               -               1               -               -              -              -              -
+singletop_norm                   lnN     -               -               1.04            -               -              -              -              -
 singletopmuRNomF                 shape   -               -               1               -               -              -              -              -
 singletopmuFNomR                 shape   -               -               1               -               -              -              -              -
 singletopmuRFcorrdNew            shape   -               -               1               -               -              -              -              -
 singletopISR                     shape   -               -               1               -               -              -              -              -
 singletopFSR                     shape   -               -               1               -               -              -              -              -
 # ttHPSwgtNew_13TeV_R2017          shape   -               -               -               1               -              -              -              -
+ttH_norm                         lnN     -               -               -               1.50            -              -              -              -
 ttHmuRNomF                       shape   -               -               -               1               -              -              -              -
 ttHmuFNomR                       shape   -               -               -               1               -              -              -              -
 ttHmuRFcorrdNew                  shape   -               -               -               1               -              -              -              -
 # ttHISR                           shape   -               -               -               1               -              -              -              - #No PSWeights
 # ttHFSR                           shape   -               -               -               1               -              -              -              -
 # ttVJetsPSwgtNew_13TeV_R2017      shape   -               -               -               -               1              -              -              - #No RF
+ttVJets_norm                     lnN     -               -               -               -               1.50           -              -              -
 ttVJetsmuRNomF                   shape   -               -               -               -               1              -              -              -
 ttVJetsmuFNomR                   shape   -               -               -               -               1              -              -              -
 ttVJetsmuRFcorrdNew              shape   -               -               -               -               1              -              -              -
 # ttVJetsISR                       shape   -               -               -               -               1              -              -              - #No PSWeights
 # ttVJetsFSR                       shape   -               -               -               -               1              -              -              -
 # ttultrararePSwgtNew_13TeV_R2017  shape   -               -               -               -               -              1              -              -
+ttultrarare_norm                 lnN     -               -               -               -               -              1.50           -              -
 ttultrararemuRNomF               shape   -               -               -               -               -              1              -              -
 ttultrararemuFNomR               shape   -               -               -               -               -              1              -              -
 ttultrararemuRFcorrdNew          shape   -               -               -               -               -              1              -              -
 # ttultrarareISR                   shape   -               -               -               -               -              1              -              - #PSWeights bugged in NanoAODv5
 # ttultrarareFSR                   shape   -               -               -               -               -              1              -              -
 # ewkPSwgtNew_13TeV_R2017          shape   -               -               -               -               -              -              1              -
+ewk_norm                         lnN     -               -               -               -               -              -              1.04           -
 ewkmuRNomF                       shape   -               -               -               -               -              -              1              - #No entries, but probably nothing
 ewkmuFNomR                       shape   -               -               -               -               -              -              1              -
 ewkmuRFcorrdNew                  shape   -               -               -               -               -              -              1              -
 # ewkISR                           shape   -               -               -               -               -              -              1              - #No PSWeights
 # ewkFSR                           shape   -               -               -               -               -              -              1              -
 # ttttPSwgtNew_13TeV_R2017         shape   -               -               -               -               -              -              -              1
+tttt_norm                        lnN     -               -               -               -               -              -              -              0.94/1.05
 ttttmuRNomF                      shape   -               -               -               -               -              -              -              1
 ttttmuFNomR                      shape   -               -               -               -               -              -              -              1
 ttttmuRFcorrdNew                 shape   -               -               -               -               -              -              -              1
