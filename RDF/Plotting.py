@@ -9,6 +9,7 @@ import ROOT
 import collections
 import pprint
 import math
+import numpy as np
 import array
 import json
 import copy
@@ -2138,8 +2139,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         CanCache["subplots/supercategories"] = []
         CanCache["subplots/firstdrawn"] = []
         CanCache["subplots/supercategories/systematics"] = {}
-        for sys in systematics:
-            CanCache["subplots/supercategories/systematics"][sys] = []
+        for syst in systematics:
+            CanCache["subplots/supercategories/systematics"][syst] = []
         CanCache["subplots/ratios"] = []
         CanCache["subplots/channels"] = []
         CanCache["subplots/histograms"] = []
@@ -2165,7 +2166,16 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                               label_position=label_position,
                               marginTop=CanCache["canvas/marginT"])
         
-        
+        npValues = [] #npValues[padNumber][Supercategory][systematic, bin] stores the contents of each histogram of systematics, with a reverse lookup sD dictionary for mapping systematic name to number in the last array lookup
+        npDifferences = []
+        npNominal = [] # n-vector
+        npBinCenters = [] # n-vector
+        npXErrorsUp = []
+        npXErrorsDown = []
+        npStatErrorsUp = [] # n-vector
+        npStatErrorsDown = [] # n-vector
+        npStatSystematicErrorsUp = [] # n-vector
+        npStatSystematicErrorsDown = [] # n-vector
         for pn, subplot_name in enumerate(CanCache["subplots"]):
             subplot_dict = plots["{}".format(subplot_name)]
             nice_name = subplot_name.replace("Plot_", "").replace("Plot", "").replace("blind_", "").replace("BLIND", "")
@@ -2183,13 +2193,84 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                 systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
                                 projection=CanCache["subplots/projections"][pn], 
                                 nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn))
-            if combineOutput != None:                
-                for sys in systematics:
-                    CanCache["subplots/supercategories/systematics"][sys].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, 
+            if combineOutput is not None or pdfOutput is not None:
+                # pdb.set_trace()
+                nSysts = len(systematics)
+                nBins = CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values()[0].GetNbinsX()
+                sD = dict() #systematic dictionary for lookup into numpy array
+                sD['statisticsUp'] = nSysts + 0
+                sD['statisticsDown'] = nSysts + 1
+                npValues.append(dict())
+                npDifferences.append(dict())
+                npNominal.append(dict())
+                npBinCenters.append(dict())
+                npXErrorsUp.append(dict())
+                npXErrorsDown.append(dict())
+                npStatErrorsUp.append(dict())
+                npStatErrorsDown.append(dict())
+                npStatSystematicErrorsUp.append(dict())
+                npStatSystematicErrorsDown.append(dict())
+                for supercategory, scHisto in CanCache["subplots/supercategories"][pn]['Supercategories/hists'].items():
+                    # multiprocessing.Pool.map() may be faster... but it didn't work in my first test. list comprehension better if tupled up?
+                    if "data" in supercategory.lower(): continue
+                    histoArrays = [(scHisto.GetBinContent(x), scHisto.GetBinErrorLow(x), scHisto.GetBinErrorUp(x),
+                                    scHisto.GetBinLowEdge(x), scHisto.GetBinCenter(x), scHisto.GetBinWidth(x)) for x in xrange(nBins + 2)]
+                    npValues[pn][supercategory] = np.zeros((nSysts + 2, nBins + 2), dtype=float)
+                    npNominal[pn][supercategory] = np.asarray([bt[0] for bt in histoArrays], dtype=float)
+                    #Stat errors up and down Assumes positive return value, untrue for esoteric stat options?
+                    npStatErrorsDown[pn][supercategory] = np.asarray([-bt[1] for bt in histoArrays], dtype=float)
+                    npStatErrorsUp[pn][supercategory] = np.asarray([bt[2] for bt in histoArrays], dtype=float) 
+                    npBinCenters[pn][supercategory] = np.asarray([bt[4] for bt in histoArrays], dtype=float)
+                    npXErrorsUp[pn][supercategory] = np.asarray([bt[3] + bt[5]for bt in histoArrays], dtype=float) - npBinCenters[pn][supercategory]
+                    npXErrorsDown[pn][supercategory] = npBinCenters[pn][supercategory] - np.asarray([bt[3] for bt in histoArrays], dtype=float)
+                    npValues[pn][supercategory][nSysts + 0, :] = npNominal[pn][supercategory] + npStatErrorsUp[pn][supercategory]
+                    npValues[pn][supercategory][nSysts + 1, :] = npNominal[pn][supercategory] + npStatErrorsDown[pn][supercategory]
+                for nSyst, syst in enumerate(sorted(sorted(systematics, key = lambda l: l[-2:] == "Up", reverse=True), 
+                                                    key = lambda l: l.replace("Down", "").replace("Up", "")
+                                                )):
+                    sD[syst] = nSyst
+                    CanCache["subplots/supercategories/systematics"][syst].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, 
                                 nice_name,
-                                systematic=sys, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
+                                systematic=syst, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
                                 projection=CanCache["subplots/projections"][pn], 
                                 nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn))
+                    for supercategory, scHisto in CanCache["subplots/supercategories/systematics"][syst][pn]['Supercategories/hists'].items():
+                        if "data" in supercategory.lower(): continue                        
+                        npValues[pn][supercategory][nSyst, :] = np.asarray(map(lambda l: l[0].GetBinContent(l[1]), [(scHisto, x) for x in xrange(nBins + 2)]))
+                        npDifferences[pn][supercategory] = npValues[pn][supercategory] - npNominal[pn][supercategory]
+                        npStatSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                                                              2, 
+                                                                                              out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                                                                              where=npDifferences[pn][supercategory] > 0), axis=0))
+                        npStatSystematicErrorsDown[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                                                                2, 
+                                                                                                out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                                                                                where=npDifferences[pn][supercategory] < 0), axis=0))
+            CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'] = dict()
+            CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'] = dict()
+            for supercategory in CanCache["subplots/supercategories"][pn]['Supercategories/hists']:
+                if "data" in supercategory.lower(): continue
+                handle = CanCache["subplots/supercategories"][pn]
+                handle['Supercategories/statErrors'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
+                                                                                             npBinCenters[pn][supercategory],
+                                                                                             npNominal[pn][supercategory],
+                                                                                             npXErrorsDown[pn][supercategory],
+                                                                                             npXErrorsUp[pn][supercategory],
+                                                                                             npStatErrorsDown[pn][supercategory],
+                                                                                             npStatErrorsUp[pn][supercategory]
+                                                                                         )
+                handle['Supercategories/statErrors'][supercategory].SetFillStyle(3004)
+                handle['Supercategories/statErrors'][supercategory].SetFillColor(ROOT.kGray)
+                handle['Supercategories/statSystematicErrors'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
+                                                                                             npBinCenters[pn][supercategory],
+                                                                                             npNominal[pn][supercategory],
+                                                                                             npXErrorsDown[pn][supercategory],
+                                                                                             npXErrorsUp[pn][supercategory],
+                                                                                             npStatSystematicErrorsDown[pn][supercategory],
+                                                                                             npStatSystematicErrorsUp[pn][supercategory]
+                                                                                         )
+                handle['Supercategories/statSystematicErrors'][supercategory].SetFillStyle(3001)
+                handle['Supercategories/statSystematicErrors'][supercategory].SetFillColor(ROOT.kGreen)
             #access the list of upperPads created by createCanvasPads(...)
             #if len(CanCache["subplots/supercategories"][-1]["Categories/hists"]) == 0:
             #    continue
