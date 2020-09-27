@@ -1238,6 +1238,7 @@ TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_I
 bookerV2_MC = {
     "tttt":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 2273928,
         "nEventsPositive": 1561946,
@@ -1258,6 +1259,7 @@ bookerV2_MC = {
     },
     "tt_DL":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 69098644,
         "nEventsPositive": 68818780,
@@ -1412,6 +1414,7 @@ bookerV2_MC = {
     },
     "tt_DL-GF":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 8510388,
         "nEventsPositive": 8467543,
@@ -1508,6 +1511,7 @@ bookerV2_MC = {
     },
     "tt_SL":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 20122010,
         "nEventsPositive": 20040607,
@@ -1645,6 +1649,7 @@ bookerV2_MC = {
     },
     "tt_SL-GF":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 8836856,
         "nEventsPositive": 8794464,
@@ -1738,6 +1743,7 @@ bookerV2_MC = {
     },
     "ST_tW":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 7945242,
         "nEventsPositive": 7914815,
@@ -1758,6 +1764,7 @@ bookerV2_MC = {
     },
     "ST_tbarW":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 7745276,
         "nEventsPositive": 7715654,
@@ -1778,6 +1785,7 @@ bookerV2_MC = {
     },
     "DYJets_DL":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 49125561,
         "nEventsPositive": 49103859,
@@ -1803,6 +1811,7 @@ bookerV2_MC = {
     },
     "ttH":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 8000000,
         "nEventsPositive": 7916867,
@@ -1822,6 +1831,7 @@ bookerV2_MC = {
     },
     "ttWJets":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 9425384,
         "nEventsPositive": 9404856,
@@ -1841,6 +1851,7 @@ bookerV2_MC = {
     },
     "ttZJets":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 8536618,
         "nEventsPositive": 8527846,
@@ -1860,6 +1871,7 @@ bookerV2_MC = {
     },
     "ttWH":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 200000,
         "nEventsPositive": 199491,
@@ -1879,6 +1891,7 @@ bookerV2_MC = {
     },
     "ttWW":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 962000,
         "nEventsPositive": 962000,
@@ -1898,6 +1911,7 @@ bookerV2_MC = {
     },
     "ttWZ":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 200000,
         "nEventsPositive": 199379,
@@ -1917,6 +1931,7 @@ bookerV2_MC = {
     },
     "ttZZ":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 200000,
         "nEventsPositive": 199686,
@@ -1936,6 +1951,7 @@ bookerV2_MC = {
     },
     "ttZH":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 200000,
         "nEventsPositive": 199643,
@@ -1955,6 +1971,7 @@ bookerV2_MC = {
     },
     "ttHH":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 194817,
         "nEventsPositive": 194516,
@@ -1974,6 +1991,7 @@ bookerV2_MC = {
     },    
     "tttW":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 200000,
         "nEventsPositive": 199852,
@@ -1993,6 +2011,7 @@ bookerV2_MC = {
     },
     "tttJ":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 200000,
         "nEventsPositive": 199273,
@@ -2014,6 +2033,7 @@ bookerV2_MC = {
 bookerV2_ElMu = {
     "ElMu":{
         "era": "2017",
+        "channels": ["ElMu"],
         "subera": "BCDEF",
         "channel": "ElMu",
         "isData": True,
@@ -2034,6 +2054,7 @@ bookerV2_ElMu = {
 bookerV2_MuMu = {
     "MuMu":{
         "era": "2017",
+        "channels": ["MuMu"],
         "subera": "BCDEF",
         "channel": "MuMu",
         "isData": True,
@@ -2054,6 +2075,7 @@ bookerV2_MuMu = {
 bookerV2_ElEl = {
     "ElEl":{
         "era": "2017",
+        "channels": ["ElEl"],
         "subera": "B",
         "channel": "ElEl",
         "isData": True,
@@ -2071,9 +2093,14 @@ bookerV2_ElEl = {
         "destination": "/$HIST_CLASS/$HIST/ElEl/NOMINAL",
         },
 }
+bookerV2_CURRENT = copy.deepcopy(bookerV2_MC)
+bookerV2_CURRENT.update(bookerV2_ElMu)
+bookerV2_CURRENT.update(bookerV2_MuMu)
+bookerV2_CURRENT.update(bookerV2_ElEl)
 bookerV2_Mu = {
     "Mu":{
         "era": "2017",
+        "channels": ["ElMu", "MuMu"],
         "subera": "BCDEF",
         "channel": "Mu",
         "isData": True,
@@ -2088,6 +2115,7 @@ bookerV2_Mu = {
 bookerV2_El = {
     "El":{
         "era": "2017",
+        "channels": ["ElMu", "ElEl"],
         "subera": "BCDEF",
         "channel": "El",
         "isData": True,
@@ -2102,6 +2130,7 @@ bookerV2_El = {
 bookerV2_SplitData = {
     "ElMu_B":{
         "era": "2017",
+        "channels": ["ElMu"],
         "subera": "B",
         "channel": "ElMu",
         "isData": True,
@@ -2112,6 +2141,7 @@ bookerV2_SplitData = {
         },
     "ElMu_C":{
         "era": "2017",
+        "channels": ["ElMu"],
         "subera": "C",
         "channel": "ElMu",
         "isData": True,
@@ -2122,6 +2152,7 @@ bookerV2_SplitData = {
         },
     "ElMu_D":{
         "era": "2017",
+        "channels": ["ElMu"],
         "subera": "D",
         "channel": "ElMu",
         "isData": True,
@@ -2132,6 +2163,7 @@ bookerV2_SplitData = {
         },
     "ElMu_E":{
         "era": "2017",
+        "channels": ["ElMu"],
         "subera": "E",
         "channel": "ElMu",
         "isData": True,
@@ -2142,6 +2174,7 @@ bookerV2_SplitData = {
         },
     "ElMu_F":{
         "era": "2017",
+        "channels": ["ElMu"],
         "subera": "F",
         "channel": "ElMu",
         "isData": True,
@@ -2152,6 +2185,7 @@ bookerV2_SplitData = {
         },
     "MuMu_B":{
         "era": "2017",
+        "channels": ["MuMu"],
         "subera": "B",
         "channel": "MuMu",
         "isData": True,
@@ -2161,6 +2195,7 @@ bookerV2_SplitData = {
         },
     "MuMu_C":{
         "era": "2017",
+        "channels": ["MuMu"],
         "subera": "C",
         "channel": "MuMu",
         "isData": True,
@@ -2170,6 +2205,7 @@ bookerV2_SplitData = {
         },
     "MuMu_D":{
         "era": "2017",
+        "channels": ["MuMu"],
         "subera": "D",
         "channel": "MuMu",
         "isData": True,
@@ -2179,6 +2215,7 @@ bookerV2_SplitData = {
         },
     "MuMu_E":{
         "era": "2017",
+        "channels": ["MuMu"],
         "subera": "E",
         "channel": "MuMu",
         "isData": True,
@@ -2188,6 +2225,7 @@ bookerV2_SplitData = {
         },
     "MuMu_F":{
         "era": "2017",
+        "channels": ["MuMu"],
         "subera": "F",
         "channel": "MuMu",
         "isData": True,
@@ -2197,6 +2235,7 @@ bookerV2_SplitData = {
         },
     "ElEl_B":{
         "era": "2017",
+        "channels": ["ElEl"],
         "subera": "B",
         "channel": "ElEl",
         "isData": True,
@@ -2206,6 +2245,7 @@ bookerV2_SplitData = {
         },
     "ElEl_C":{
         "era": "2017",
+        "channels": ["ElEl"],
         "subera": "C",
         "channel": "ElEl",
         "isData": True,
@@ -2215,6 +2255,7 @@ bookerV2_SplitData = {
         },
     "ElEl_D":{
         "era": "2017",
+        "channels": ["ElEl"],
         "subera": "D",
         "channel": "ElEl",
         "isData": True,
@@ -2224,6 +2265,7 @@ bookerV2_SplitData = {
         },
     "ElEl_E":{
         "era": "2017",
+        "channels": ["ElEl"],
         "subera": "E",
         "channel": "ElEl",
         "isData": True,
@@ -2233,6 +2275,7 @@ bookerV2_SplitData = {
         },
     "ElEl_F":{
         "era": "2017",
+        "channels": ["ElEl"],
         "subera": "F",
         "channel": "ElEl",
         "isData": True,
@@ -2242,6 +2285,7 @@ bookerV2_SplitData = {
         },
     "Mu_B":{
         "era": "2017",
+        "channels": ["ElMu", "MuMu"],
         "subera": "B",
         "channel": "Mu",
         "isData": True,
@@ -2251,6 +2295,7 @@ bookerV2_SplitData = {
         },
     "Mu_C":{
         "era": "2017",
+        "channels": ["ElMu", "MuMu"],
         "subera": "C",
         "channel": "Mu",
         "isData": True,
@@ -2260,6 +2305,7 @@ bookerV2_SplitData = {
         },
     "Mu_D":{
         "era": "2017",
+        "channels": ["ElMu", "MuMu"],
         "subera": "D",
         "channel": "Mu",
         "isData": True,
@@ -2269,6 +2315,7 @@ bookerV2_SplitData = {
         },
     "Mu_E":{
         "era": "2017",
+        "channels": ["ElMu", "MuMu"],
         "subera": "E",
         "channel": "Mu",
         "isData": True,
@@ -2278,6 +2325,7 @@ bookerV2_SplitData = {
         },
     "Mu_F":{
         "era": "2017",
+        "channels": ["ElMu", "MuMu"],
         "subera": "F",
         "channel": "Mu",
         "isData": True,
@@ -2287,6 +2335,7 @@ bookerV2_SplitData = {
         },
     "El_B":{
         "era": "2017",
+        "channels": ["ElMu", "ElEl"],
         "subera": "B",
         "channel": "El",
         "isData": True,
@@ -2296,6 +2345,7 @@ bookerV2_SplitData = {
         },
     "El_C":{
         "era": "2017",
+        "channels": ["ElMu", "ElEl"],
         "subera": "C",
         "channel": "El",
         "isData": True,
@@ -2305,6 +2355,7 @@ bookerV2_SplitData = {
         },
     "El_D":{
         "era": "2017",
+        "channels": ["ElMu", "ElEl"],
         "subera": "D",
         "channel": "El",
         "isData": True,
@@ -2314,6 +2365,7 @@ bookerV2_SplitData = {
         },
     "El_E":{
         "era": "2017",
+        "channels": ["ElMu", "ElEl"],
         "subera": "E",
         "channel": "El",
         "isData": True,
@@ -2323,6 +2375,7 @@ bookerV2_SplitData = {
         },
     "El_F":{
         "era": "2017",
+        "channels": ["ElMu", "ElEl"],
         "subera": "F",
         "channel": "El",
         "isData": True,
@@ -2334,6 +2387,7 @@ bookerV2_SplitData = {
 cutoutV2_ToBeFixed = {
     "QCD_HT200":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 59200263,
         "nEventsPositive": 59166789,
@@ -2352,6 +2406,7 @@ cutoutV2_ToBeFixed = {
     },
     "QCD_HT300":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 59569132,
         "nEventsPositive": 59514373,
@@ -2370,6 +2425,7 @@ cutoutV2_ToBeFixed = {
     },   
     "QCD_HT500":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 56207744,
         "nEventsPositive": 56124381,
@@ -2388,6 +2444,7 @@ cutoutV2_ToBeFixed = {
     },
     "QCD_HT700":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 46840955,
         "nEventsPositive": 46739970,
@@ -2406,6 +2463,7 @@ cutoutV2_ToBeFixed = {
     },
     "QCD_HT1000":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 16882838,
         "nEventsPositive": 16826800,
@@ -2424,6 +2482,7 @@ cutoutV2_ToBeFixed = {
     },
     "QCD_HT1500":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 11634434,
         "nEventsPositive": 11571519,
@@ -2442,6 +2501,7 @@ cutoutV2_ToBeFixed = {
     },
     "QCD_HT2000":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 5941306,
         "nEventsPositive": 5883436,
@@ -2462,6 +2522,7 @@ cutoutV2_ToBeFixed = {
 bookerV2_UNPROCESSED = {
     "ST_tbar_t-channel":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2476,6 +2537,7 @@ bookerV2_UNPROCESSED = {
     },
     "ST_t_t-channel":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2490,6 +2552,7 @@ bookerV2_UNPROCESSED = {
     },
     "ST_s-channel":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2504,6 +2567,7 @@ bookerV2_UNPROCESSED = {
     },
     "DYJets_DL-HT100":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2517,6 +2581,7 @@ bookerV2_UNPROCESSED = {
     },
     "DYJets_DL-HT200":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2530,6 +2595,7 @@ bookerV2_UNPROCESSED = {
     },
     "DYJets_DL-HT400":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2543,6 +2609,7 @@ bookerV2_UNPROCESSED = {
     },
     "DYJets_DL-HT600":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2556,6 +2623,7 @@ bookerV2_UNPROCESSED = {
     },
     "DYJets_DL-HT800":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2569,6 +2637,7 @@ bookerV2_UNPROCESSED = {
     },
     "DYJets_DL-HT1200":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2582,6 +2651,7 @@ bookerV2_UNPROCESSED = {
     },
     "DYJets_DL-HT2500":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2595,6 +2665,7 @@ bookerV2_UNPROCESSED = {
     },
     "tt_DL-TuneCP5down":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2608,6 +2679,7 @@ bookerV2_UNPROCESSED = {
     },
     "tt_DL-TuneCP5up":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2621,6 +2693,7 @@ bookerV2_UNPROCESSED = {
     },
     "tt_DL-HDAMPdown":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2634,6 +2707,7 @@ bookerV2_UNPROCESSED = {
     },
     "tt_DL-HDAMPup":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2647,6 +2721,7 @@ bookerV2_UNPROCESSED = {
     },
     "tt_DL-CR2-GluonMove":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2660,6 +2735,7 @@ bookerV2_UNPROCESSED = {
     },
     "tt_DL-CR1-QCD":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 1,
         "nEventsPositive": 1,
@@ -2699,6 +2775,7 @@ bookerV2_UNPROCESSED = {
 bookerV2UNSTITCHED = {
     "tt_SL-UNSTITCHED":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 20122010,
         "nEventsPositive": 20040607,
@@ -2718,6 +2795,7 @@ bookerV2UNSTITCHED = {
     },  
     "tt_DL-UNSTITCHED":{
         "era": "2017",
+        "channels": ["All"],
         "isData": False,
         "nEvents": 69098644,
         "nEventsPositive": 68818780,
@@ -7124,7 +7202,7 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         f.write(line)
 
             
-def main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
+def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
          doNtuples=False, doHistos=False, doCombineHistosOnly=False,
          doLeptonSelection=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
          BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, 
@@ -7139,11 +7217,9 @@ def main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=
     ### CHOOSE SAMPLE DICT AND CHANNEL TO ANALYZE ####
     ##################################################
     ##################################################
-        
-    print("FIXME: The default list of samples has been defined internally and not deduced from the analysis directory...")
-    all_samples = ["ElMu", "MuMu", "ElEl", "tttt", "ST_tW", "ST_tbarW", "tt_DL", "tt_DL-GF", 
-                     "tt_SL", "tt_SL-GF", "ttH", "ttWJets", "ttZJets", "ttWH", "ttWW", "ttWZ", 
-                     "ttZZ", "ttZH", "ttHH", "tttW", "tttJ", "DYJets_DL"]
+    
+    all_samples = [s[0] for s in inputSamples.items() if channel in s[1].get("channels",[""]) or "All" in s[1].get("channels",[""])]
+    print("All samples: {}".format(" ".join(sorted(all_samples))))
     if includeSampleNames:
         if (type(includeSampleNames) == list or type(includeSampleNames) == dict):
             valid_samples = [s for s in all_samples if s in includeSampleNames]
@@ -7331,7 +7407,7 @@ def main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=
         os.makedirs(analysisDir)
 
     Benchmark = ROOT.TBenchmark()
-    for name, vals in theSampleDict.items():
+    for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
         if name not in valid_samples: 
             print("Skipping sample {}".format(name))
             continue
@@ -7542,6 +7618,7 @@ def main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=
                 testVariableProcessing(prePackedNodes, nodes=True, searchMode=True, skipColumns=skipTestVariables,
                                        allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
             #Do initial round of weights, preparation for btagging yields to be calculated
+            print("\n\nFIXME: defineWeights needs input normalization for PS and potentially other systematic variations\n")
             prePackedNodes = defineWeights(prePackedNodes,
                                            splitProcess = splitProcessConfig,
                                            era=vals["era"],
@@ -7909,7 +7986,7 @@ if __name__ == '__main__':
         print("This function needs reworking... work on it")
         print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
         # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
-        packed = main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
+        packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
                       printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
@@ -7951,27 +8028,28 @@ if __name__ == '__main__':
                                #        },
                            )
     elif stage == 'lepton-selection':
-        packed = main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
+        packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
                       BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, 
                       useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
-        packed = main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+        packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet)
     elif stage == 'bookkeeping':
-        packed = main(analysisDir, source, "BOOKKEEPING", bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+        packed = main(analysisDir, bookerV2_CURRENT, source, "BOOKKEEPING", bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet)
     elif stage == 'fill-histograms':
         #filling ntuples is also possible with the option --doNtuples
-        packed = main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doNtuples=doNtuples, doHistos=True, 
+        packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
+                      doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=False,
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
@@ -7979,7 +8057,8 @@ if __name__ == '__main__':
                       systematicSet=systematicSet)
     elif stage == 'fill-combine':
         #filling ntuples is also possible with the option --doNtuples
-        packed = main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=True,
+        packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
+                      doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=True,
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
@@ -8008,11 +8087,12 @@ if __name__ == '__main__':
         spo = subprocess.Popen(args="{}".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))
         spo.communicate()
     elif stage == 'fill-ntuples':
-        packed = main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doNtuples=doNtuples, 
+        packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
+                      doNtuples=doNtuples, 
                       doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
-                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet)
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, 
+                      quiet=quiet, testVariables=test, systematicSet=systematicSet)
     else:
         print("stage {stag} is not yet prepared, please update the FTAnalyzer".format(stag))
