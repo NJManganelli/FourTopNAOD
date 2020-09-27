@@ -75,7 +75,6 @@ systematics_2017_NOMINAL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                         },
                                  "weightVariation": False},
 }
-print("\n\nFIXME: Change the systematics names to be compatible with Combine and be agnostic to the tagger\n\n\n\n\n")
 systematics_2017_ALL = {"$NOMINAL": {"jet_mask": "jet_mask",
                                      "lep_postfix": "",
                                      "jet_pt_var": "Jet_pt",
@@ -7461,32 +7460,6 @@ def main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=
                 continue
             else:
                 filtered[name][lvl] = base[name].Filter(b[lvl], lvl)
-            #Cache() seemingly has an issue with the depth/breadth of full NanoAOD file. Perhaps one with fewer branches would work
-            #filtered[name][lvl] = filtered[name][lvl].Cache()
-            # if vals.get("stitch") != None:
-            #     stitch_def = collections.OrderedDict()
-            #     stitch_def["stitch_jet_mask"] = "GenJet_pt > 30"
-            #     stitch_def["stitch_HT_mask"] = "GenJet_pt > 30 && abs(GenJet_eta) < 2.4"
-            #     stitch_def["stitch_lep_mask"] = "abs(LHEPart_pdgId) == 15 || abs(LHEPart_pdgId) == 13 || abs(LHEPart_pdgId) == 11"
-            #     stitch_def["stitch_nGenLep"] = "LHEPart_pdgId[stitch_lep_mask].size()"
-            #     stitch_def["stitch_nGenJet"] = "GenJet_pt[stitch_jet_mask].size()"
-            #     stitch_def["stitch_GenHT"] = "Sum(GenJet_pt[stitch_HT_mask])"
-                
-            #     stdict = stitchDict[vals.get("era")][vals.get("stitch").get("channel")]
-            #     stitch_cut = "stitch_nGenLep == {} && stitch_nGenJet >= {} && stitch_GenHT >= {}"\
-            #         .format(stdict.get("nGenLeps"), stdict.get("nGenJets"), stdict.get("GenHT"))
-            #     if vals.get("stitch").get("source") == "Nominal":
-            #         stitch_cut = "!({})".format(stitch_cut)
-            #     elif vals.get("stitch").get("source") == "Filtered":
-            #         print("Filtered sample, not producing a filter (no events expected to fail filtering. If otherwise, alter code")
-            #     else:
-            #         print("Invalid stitching source type")
-            #         sys.exit(1)
-            #     if verbose:
-            #         print(stitch_cut)
-            #     for k, v in stitch_def.items():
-            #         filtered[name][lvl] = filtered[name][lvl].Define("{}".format(k), "{}".format(v))
-            #     filtered[name][lvl] = filtered[name][lvl].Filter(stitch_cut, "nJet_GenHT_Filter")
             #Add the MET corrections, creating a consistently named branch incorporating the systematics loaded
             the_df[name][lvl] = METXYCorr(filtered[name][lvl],
                                           run_branch="run",
@@ -7511,7 +7484,6 @@ def main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=
             if testVariables:
                 skipTestVariables = testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=[],
                                                            allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
-            #ElEl fails by this point #It turns out that a minimal culprit is the branch FTAMuon_looseId
             #Use the cutPV and METFilters function to do cutflow on these requirements... this should be updated, still uses JetMETLogic bits... FIXME
             the_df[name][lvl] = cutPVandMETFilters(the_df[name][lvl], lvl, isData=vals["isData"])
             the_df[name][lvl] = defineJets(the_df[name][lvl],
@@ -7527,9 +7499,6 @@ def main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=
             if testVariables:
                 skipTestVariables += testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=skipTestVariables,
                                                             allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
-            # print("Filtering out events where a jet is/isn't cross-cleaned against the leading lepton")
-            # the_df[name][lvl] = the_df[name][lvl].Filter("FTALepton_jetIdx.at(0) < 0 || prejet_mask.at(FTALepton_jetIdx.at(0)) == false", "events with no otherwise selected jet cross-cleaned against the lead lepton")
-            # the_df[name][lvl] = the_df[name][lvl].Filter("FTALepton_jetIdx.at(0) >= 0 && prejet_mask.at(FTALepton_jetIdx.at(0)) == true", "events with otherwise-selected jet cross-cleaned against the lead lepton")
             if quiet:
                 print("Going Quiet")
                 counts[name][lvl] = the_df[name][lvl].Count()
@@ -7595,7 +7564,6 @@ def main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=
             # testnode = prePackedNodes["nodes"]['2017___ttbb_SL_nr']['BaseNode']
             #Use the fact we have a yields file as the flag for being in the "final" mode for weights, so do final=True variant
             if BTaggingYieldsFile:
-                print("What is happening in defineWeights here? Need to modify the prePackedNodes, then... pass on to the fillHistos method")
                 prePackedNodes = defineWeights(prePackedNodes,
                                                splitProcess = splitProcessConfig,
                                                # inclusiveProcess = inclusiveProcessConfig,
@@ -7605,27 +7573,16 @@ def main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=
                                                sysVariations=sysVariationsAll, 
                                                verbose=verbose,
                 )
-            #All of these are deprecated as-is
-            # if doBTaggingEfficiencies == True:
-            #     BTaggingEfficiencies(the_df[name][lvl], sampleName=None, era = vals["era"], wgtVar="wgt_SUMW_PU_LSF_L1PF", 
-            #                    isData = vals["isData"], histosDict=btagging[name][lvl], 
-            #                    doDeepCSV=True, doDeepJet=True)
-            # if doJetEfficiency:
-            #     jetMatchingEfficiency(the_df[name][lvl], wgtVar="wgt_SUMW_PU_LSF_L1PF", stats_dict=effic[name][lvl],
-            #                           isData = vals["isData"])
-            # if doHLTMeans:
-            #     fillHLTMeans(the_df[name][lvl], wgtVar="wgt_SUMW_PU_L1PF", stats_dict=stats[name][lvl])
-
             #Hold the categorization nodes if doing histograms
             if isinstance(systematicSet, list) and "All" not in systematicSet:
                 print("Filtering systematics according to specified sets: {}".format(systematicSet))
-                
                 sysVariationsForHistos = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"]])
                 if "nominal" not in systematicSet:
                     skipNominalHistos = True
                 else:
                     skipNominalHistos = False
-                print(sysVariationsForHistos.keys())
+                if verbose:
+                    print(sysVariationsForHistos.keys())
             else:
                 sysVariationsForHistos = sysVariationsAll
                 skipNominalHistos = False
@@ -7665,17 +7622,6 @@ def main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=
             subfinish[name][lvl] = time.clock()
             theTime = subfinish[name][lvl] - substart[name][lvl]
 
-            #Write the output!
-            # if doBTaggingYields:
-            #     print("Writing outputs...")
-            #     writeDir = analysisDir + "/BTaggingYields"
-            #     writeHistosV1(btagging,
-            #                 writeDir,
-            #                 levelsOfInterest=[lvl],
-            #                 samplesOfInterest=[name],
-            #                 dict_keys="All",
-            #                 mode="RECREATE"
-            #                )
             if doCombineHistosOnly or doHistos or doBTaggingYields:
                 print("Writing outputs...")
                 processesOfInterest = []
@@ -7891,7 +7837,6 @@ if __name__ == '__main__':
                         help='simulation/run year')
     parser.add_argument('--nThreads', dest='nThreads', action='store', type=int, default=8, #nargs='?', const=0.4,
                         help='number of threads for implicit multithreading (0 or 1 to disable)')
-    #nargs='+' #this option requires a minimum of arguments, and all arguments are added to a list. '*' but minimum of 1 argument instead of none
 
     #Parse the arguments
     args = parser.parse_args()
