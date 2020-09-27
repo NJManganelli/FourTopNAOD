@@ -4925,6 +4925,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                            "btagSF": "Jet_btagSF_deepcsv_shape",
                                            "weightVariation": False},
                                      },
+               skipNominalHistos=False
 ):
     """Method to fill histograms given an input RDataFrame, input sample/dataset name, input histogram dictionaries.
     Has several options of which histograms to fill, such as Leptons, Jets, Weights, EventVars, etc.
@@ -5076,17 +5077,18 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         fillMET_uncorr_phi = sysDict.get("met_phi_var", "MET_phi")
 
         if verbose:
-            print("Systematic: {spf} \n\t - Branch: {bpf}\n\t - Jets: {fj}=({fjp}, {fji}, {fje}, {fjm})\n\t - MET: ({mpt}, {mph})".format(spf=syspostfix,
-                                                                                                                                          bpf=branchpostfix,
-                                                                                                                                          fj=fillJet,
-                                                                                                                                          fjp=fillJet_pt,
-                                                                                                                                          fji=fillJet_phi,
-                                                                                                                                          fje=fillJet_eta,
-                                                                                                                                          fjm=fillJet_mass,
-                                                                                                                                          mpt=fillMET_pt,
-                                                                                                                                          mph=fillMET_phi)
+            print("Systematic: {spf} \n\t - Branch: {bpf}\n\t - Jets: {fj}=({fjp}, {fji}, {fje}"\
+                  ", {fjm})\n\t - MET: ({mpt}, {mph})".format(spf=syspostfix,
+                                                              bpf=branchpostfix,
+                                                              fj=fillJet,
+                                                              fjp=fillJet_pt,
+                                                              fji=fillJet_phi,
+                                                              fje=fillJet_eta,
+                                                              fjm=fillJet_mass,
+                                                              mpt=fillMET_pt,
+                                                              mph=fillMET_phi)
               )
-        
+            
 
         #Get the appropriate weight defined in defineFinalWeights function
         # wgtVar = sysDict.get("wgt_final", "wgt__nom")
@@ -5376,6 +5378,9 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         #try sticking with valid C++ variable names (alphanumeric + _). Also note that {spf} will result in 3 underscores as is currently defined
         #CYCLE THROUGH CATEGORIES in the nodes that exist now, nodes[processName][decayChannel][CATEGORIES]
         #We are inside the systematics variation, so we cycle through everything else (nominal nodes having been created first!)
+        if skipNominalHistos and sysVar.lower() in ["nom", "nominal", "$nominal"]:
+            print("Skipping histograms and diagnostics for the nominal due to skipNominalHistos=True flag")
+            continue
         for processName in nodes:
             if processName.lower() == "basenode": continue
             histopostfix = None
@@ -6044,7 +6049,8 @@ def writeHistosV1(histDict, directory, levelsOfInterest="All", samplesOfInterest
     for f in rootDict.values():
         f.Close()
 
-def writeHistos(histDict, directory, samplesOfInterest="All", channelsOfInterest="All", dict_keys="All", mode="RECREATE"):
+def writeHistos(histDict, directory, samplesOfInterest="All", systematicsOfInterest="All",
+                channelsOfInterest="All", dict_keys="All", mode="RECREATE"):
     rootDict = {}
     if not os.path.isdir(directory):
         os.makedirs(directory)
@@ -6056,23 +6062,29 @@ def writeHistos(histDict, directory, samplesOfInterest="All", channelsOfInterest
     channelCounterSkipped = 0
     for name, channelsDict in histDict.items():
         nameCounter += 1
-        if samplesOfInterest == "All": pass
+        if isinstance(samplesOfInterest, str) and samplesOfInterest.lower() == "all": pass
         elif name not in samplesOfInterest: 
             nameCounterSkipped += 1
             continue
         for channel, objDict in channelsDict.items():
             channelCounter += 1
             counter = 0
-            if channelsOfInterest == "All": pass
+            if isinstance(channelsOfInterest, str) and channelsOfInterest.lower() == "all": pass
             elif channel  not in channelsOfInterest: 
                 channelCounterSkipped += 1
                 continue
             elif len(objDict.values()) < 1:
                 print("No objects to write, not creating directory or writing root file for {} {}".format(name, channel))
                 continue
+            #Cute way to format the name as 'blah.root' or 'blah.nominal.ps.rf.root'
+            if isinstance(systematicsOfInterest, str) and systematicsOfInterest.lower() == "all":
+                systematicsAndRoot = ["", "root"]
+            else:
+               systematicsAndRoot = [""] + systematicsOfInterest + ["root"]
             if not os.path.isdir(directory + "/" + channel):
                 os.makedirs(directory + "/" + channel)
-            rootDict[name] = ROOT.TFile.Open("{}.root".format(directory + "/" + channel + "/"+ name), mode)
+            rootFileName = "{}{}".format(directory + "/" + channel + "/"+ name, ".".join(systematicsAndRoot))
+            rootDict[name] = ROOT.TFile.Open("{}".format(rootFileName), mode)
             # for dict_key in objDict.keys():
             #     if dict_keys == "All": pass
             #     elif dict_key not in dict_keys: continue
@@ -6092,7 +6104,7 @@ def writeHistos(histDict, directory, samplesOfInterest="All", channelsOfInterest
                     hptr = obj
                 hptr.Write()
                 counter += 1
-            print("Wrote {} histograms into file for {}::{} - {}.root".format(counter, name, channel, directory + "/" + channel + "/"+ name))
+            print("Wrote {} histograms into file for {}::{} - {}".format(counter, name, channel, rootFileName))
             rootDict[name].Close()
     print("samples skipped/cycled: {}/{}\tchannels skipped/cycled: {}/{}\tobjects cycled: {}".format(nameCounterSkipped,
                                                                                                      nameCounter, 
@@ -7113,7 +7125,8 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         f.write(line)
 
             
-def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=False, doHistos=False, doCombineHistosOnly=False,
+def main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
+         doNtuples=False, doHistos=False, doCombineHistosOnly=False,
          doLeptonSelection=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
          BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, 
          printBookkeeping=False, triggers=[], includeSampleNames=None, 
@@ -7479,7 +7492,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                                           run_branch="run",
                                           era=vals["era"],
                                           isData=vals["isData"],
-                                          sysVariations=systematics_2017, 
+                                          sysVariations=sysVariationsAll, 
                                           verbose=verbose,
                                           )
             #Define the leptons based on LeptonLogic bits, to be updated and replaced with code based on triggers/thresholds/leptons present (on-the-fly cuts)
@@ -7489,7 +7502,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                                               era=vals["era"],
                                               useBackupChannel=False,
                                               triggers=triggers,
-                                              sysVariations=systematics_2017,
+                                              sysVariations=sysVariationsAll,
                                               rdfLeptonSelection=doLeptonSelection,
                                               verbose=verbose,
                                              )
@@ -7505,7 +7518,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                                            era=vals["era"],
                                            bTagger=bTagger,
                                            isData=vals["isData"],
-                                           sysVariations=systematics_2017, 
+                                           sysVariations=sysVariationsAll, 
                                            jetPtMin=jetPtMin,
                                            jetPUId=jetPUId,
                                            useDeltaR=useDeltaR,
@@ -7532,8 +7545,8 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
             #Get the variables to save using a function that takes the processDict as input (for special sample-specific variables to add)
             #Variable which are NOT flat will be subsequently flattened by delegateFlattening(which calls flattenVariable with some hints)
             varsToFlattenOrSave[name][lvl] = getNtupleVariables(vals, 
-                                                                isData = vals["isData"], 
-                                                                sysVariations = systematics_2017,
+                                                                isData=vals["isData"], 
+                                                                sysVariations=sysVariationsAll,
                                                                 bTagger=bTagger
             )
             #Actually flatten variables, and store in a dict various info for those variables flattened, already flat, final ntuple vars, etc.
@@ -7565,14 +7578,14 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                                            era=vals["era"],
                                            isData=vals["isData"],
                                            final=False,
-                                           sysVariations=systematics_2017, 
+                                           sysVariations=sysVariationsAll, 
                                            verbose=verbose,
             )
             #Get the yields, the ultimate goal of which is to determin in a parameterized way the renormalization factors for btag shape reweighting procedure
             prePackedNodes = BTaggingYields(prePackedNodes, sampleName=name, isData=vals["isData"], channel=lvl,
                                             histosDict=btagging, loadYields=BTaggingYieldsFile,
                                             useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
-                                            sysVariations=systematics_2017, 
+                                            sysVariations=sysVariationsAll, 
                                             bTagger=bTagger,
                                             calculateYields=calculateTheYields,
                                             HTArray=[500, 650, 800, 1000, 1200, 10000], 
@@ -7589,7 +7602,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                                                era = vals["era"],
                                                isData = vals["isData"],
                                                final=True,
-                                               sysVariations=systematics_2017, 
+                                               sysVariations=sysVariationsAll, 
                                                verbose=verbose,
                 )
             #All of these are deprecated as-is
@@ -7604,21 +7617,33 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
             #     fillHLTMeans(the_df[name][lvl], wgtVar="wgt_SUMW_PU_L1PF", stats_dict=stats[name][lvl])
 
             #Hold the categorization nodes if doing histograms
-            if doHistos:
-                packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], era = vals["era"], triggers = triggers,
-                                                    sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
-                                                    histosDict=histos, sysVariations=systematics_2017, doCategorized=True, 
-                                                    doDiagnostics=False, doCombineHistosOnly=doCombineHistosOnly, bTagger=bTagger, verbose=verb)
-            if doDiagnostics:
-                packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], era = vals["era"], triggers = triggers,
-                                                    sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
-                                                    histosDict=histos, sysVariations=systematics_2017, doCategorized=False, 
-                                                    doDiagnostics=True, bTagger=bTagger, verbose=verb)
-                # print(packedNodes[name][lvl].keys())
-                # print(packedNodes[name][lvl].keys())
-                # assert False, "Exiting early here, brah"
-            #print(cat_df)
+            if isinstance(systematicSet, list) and "All" not in systematicSet:
+                print("Filtering systematics according to specified sets: {}".format(systematicSet))
                 
+                sysVariationsForHistos = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"]])
+                if "nominal" not in systematicSet:
+                    skipNominalHistos = True
+                else:
+                    skipNominalHistos = False
+                print(sysVariationsForHistos.keys())
+            else:
+                sysVariationsForHistos = sysVariationsAll
+                skipNominalHistos = False
+            if doHistos:
+                packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
+                                                    era = vals["era"], triggers = triggers,
+                                                    sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
+                                                    histosDict=histos, sysVariations=sysVariationsForHistos, doCategorized=True, 
+                                                    doDiagnostics=False, doCombineHistosOnly=doCombineHistosOnly, bTagger=bTagger, 
+                                                    skipNominalHistos=skipNominalHistos, verbose=verb)
+            if doDiagnostics:
+                packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
+                                                    era = vals["era"], triggers = triggers,
+                                                    sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
+                                                    histosDict=histos, sysVariations=sysVariationsForHistos, doCategorized=False, 
+                                                    doDiagnostics=True, bTagger=bTagger, 
+                                                    skipNominalHistos=skipNominalHistos, verbose=verb)
+
             #Trigger the loop either by hitting the count/progressbar node or calling for a (Non-lazy) snapshot
             print("\nSTARTING THE EVENT LOOP")
             substart[name][lvl] = time.clock()
@@ -7674,6 +7699,7 @@ def main(analysisDir, source, channel, bTagger, doDiagnostics=False, doNtuples=F
                             writeDir,
                             channelsOfInterest="All",
                             samplesOfInterest=processesOfInterest,
+                            systematicsOfInterest=systematicSet,
                             dict_keys="All",
                             mode="RECREATE"
                         )
@@ -7816,7 +7842,7 @@ if __name__ == '__main__':
                                                                     'hadd-combine'],
                         help='analysis stage to be produced')
     parser.add_argument('--systematicSet', dest='systematicSet', action='store', nargs='*',
-                        type=str, choices=['ALL', 'nominal', 'btag', 'jerc', 'ps', 'rf', 'test'], default='All',
+                        type=str, choices=['ALL', 'nominal', 'pu', 'pf', 'btag', 'jerc', 'ps', 'rf', 'test'], default='All',
                         help='Systematic set to include in running, defaulting to "All"')
     # parser.add_argument('--systematics', dest='systematics', action='store', default=None, type=str, nargs='*',
     #                     help='List of systematic variations to compute (if not called, defaults to None and only nominal is run. Call with list of systematic names or "All"')
@@ -7877,6 +7903,7 @@ if __name__ == '__main__':
     #Grab and format required and optional arguments
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday)
     stage = args.stage
+    sysVariationsAll=systematics_2017
     systematicSet = args.systematicSet
     channel = args.channel
     era = args.era
@@ -7937,7 +7964,7 @@ if __name__ == '__main__':
         print("This function needs reworking... work on it")
         print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
         # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
-        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
+        packed = main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
                       printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
@@ -7979,27 +8006,27 @@ if __name__ == '__main__':
                                #        },
                            )
     elif stage == 'lepton-selection':
-        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
+        packed = main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
                       BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, 
                       useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
-        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+        packed = main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet)
     elif stage == 'bookkeeping':
-        packed = main(analysisDir, source, "BOOKKEEPING", bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+        packed = main(analysisDir, source, "BOOKKEEPING", bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet)
     elif stage == 'fill-histograms':
         #filling ntuples is also possible with the option --doNtuples
-        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doNtuples=doNtuples, doHistos=True, 
+        packed = main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doNtuples=doNtuples, doHistos=True, 
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
@@ -8007,7 +8034,7 @@ if __name__ == '__main__':
                       systematicSet=systematicSet)
     elif stage == 'fill-combine':
         #filling ntuples is also possible with the option --doNtuples
-        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=True,
+        packed = main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=True,
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
@@ -8036,8 +8063,8 @@ if __name__ == '__main__':
         spo = subprocess.Popen(args="{}".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))
         spo.communicate()
     elif stage == 'fill-ntuples':
-        packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doNtuples=doNtuples, doHistos=False, 
-                      doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
+        packed = main(analysisDir, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doNtuples=doNtuples, 
+                      doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
