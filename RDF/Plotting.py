@@ -1507,13 +1507,16 @@ def createCanvasPads(canvasTitle, Cache=None, doRatio=False, doMountainrange=Fal
     #Here's where we correct the 1st and last pads to make space for the border/pad margin
     xEdgesLow[0] -= bordersL
     # xEdgesHigh[-1] += bordersR
+    if not doRatio:
+        print("Overriding topFraction for pad sizing")
+        topFraction = 1
     yEdgesLow = [0, bordersB + usableTB*(1-topFraction)]
     yEdgesHigh = [bordersB + usableTB*(1-topFraction), 1]
     #yEdgesLow[0] -= bordersB
     #yEdgesHigh[-1] += bordersT
-    yDivision = 1-bordersT
-    if doRatio:
-        yDivision = 1-topFraction
+    # yDivision = 1-bordersT #Deprecated... not used anywhere?
+    # if doRatio:
+    #     yDivision = 1-topFraction
         
     #Calculate the pad margins, which will be converted from the desired border size as fraction of the total canvas size
     #to equivalent fraction of the pad size itself, using the edges arrays.
@@ -1597,95 +1600,6 @@ def createCanvasPads(canvasTitle, Cache=None, doRatio=False, doMountainrange=Fal
     Cache["canvas/marginB"] = marginB
     Cache["canvas/upperPads"] = upperPads
     Cache["canvas/lowerPads"] = lowerPads
-    return Cache
-
-def createCanvasPads_OldVersion(canvasTitle, Cache=None, doRatio=False, doMountainrange=False, setXGrid=False, setYGrid=False,
-                     nXPads=1, topFraction=0.7, marginsLRTB=[0.1, 0.1, 0.1, 0.1], xPixels=800, yPixels=800):
-    """Create canvas with two pads vertically for each of doLin and doLog if they are true"""
-    #Divide implicitely creates subpads. This function uses more explicit methods to do the same with varying pad sizes
-    c = ROOT.TCanvas(canvasTitle, canvasTitle, xPixels, yPixels)
-    # Upper histogram plot is pad1
-    upperPads = []
-    lowerPads = []
-    marginL = marginsLRTB[0]
-    marginR = marginsLRTB[1]
-    marginT = marginsLRTB[2]
-    marginB = marginsLRTB[3]
-    #FIXME: Add in space for margins on the left, which will require an additional offset when calculating the edges
-    usableLR = 1.0 - marginL - marginR
-    usableTB = 1.0 - marginT - marginB
-    xEdgesLow = [marginL + usableLR*z/float(nXPads) for z in xrange(nXPads)]
-    xEdgesHigh = [marginL + usableLR*(z+1)/float(nXPads) for z in xrange(nXPads)]
-    #Margins aren't wholly correct for first and last pads, so hardcode a correction here:
-    xEdgesLow[0] -= marginL/5.0
-    xEdgesHigh[-1] += marginR/5.0
-    yDivision = 1-marginT
-    if doRatio:
-        yDivision = 1-topFraction
-        
-    
-
-
-    for z in xrange(nXPads):
-        c.cd()  # returns to main canvas before defining another pad, to not create sub-subpad
-        padU = ROOT.TPad("{}_{}".format(canvasTitle,z), "{}_{}".format(canvasTitle,z), 
-                        xEdgesLow[z], yDivision, xEdgesHigh[z], 1.0 - marginT) #xmin ymin xmax ymax as fraction
-        #Set margins for pads depending on passed configuration option, whether ratio and mountainranging are enabled
-        padU.SetTopMargin(marginT)
-        if doRatio:
-            padU.SetBottomMargin(0)  # joins upper and lower plot
-        else:
-            padU.SetBottomMargin(marginB)
-        if doMountainrange:
-            #Only set the margin to 0 if there is at least one pad to the right, which is equal to zlast = nXPads - 1. Don't do the last right margin...
-            if 0 <= z < nXPads - 1:
-                padU.SetRightMargin(0)
-            else:
-                padU.SetRightMargin(marginR)
-            #Now do the left margins, only starting with the second pad, should it exist (hence the equality switching versus the right margins)
-            if 0 < z <= nXPads - 1:
-                padU.SetLeftMargin(0)
-            else:
-                padU.SetLeftMargin(marginL)
-        if setXGrid:
-            padU.SetGridx()
-        if setYGrid:
-            padU.SetGridy()
-        padU.Draw()
-        if doRatio:
-            # Lower ratio plot is pad2
-            padL = ROOT.TPad("ratio_{}_{}".format(canvasTitle,z), "ratio_{}_{}".format(canvasTitle,z), 
-                             xEdgesLow[z], marginB, xEdgesHigh[z], yDivision) #xmin ymin xmax ymax as fraction
-            padL.SetTopMargin(0)  # joins upper and lower plot
-            padL.SetBottomMargin(marginB)
-            if doMountainrange:
-                #Only set the margin to 0 if there is at least one pad to the right, which is equal to zlast = nXPads - 1. Don't do the last right margin...
-                if 0 <= z < nXPads - 1:
-                    padL.SetRightMargin(0)
-                else:
-                    padL.SetRightMargin(marginR)
-                #Now do the left margins, only starting with the second pad, should it exist (hence the equality switching versus the right margins)
-                if 0 < z <= nXPads - 1:
-                    padL.SetLeftMargin(0)
-                else:
-                    padL.SetLeftMargin(marginL)
-            if setXGrid:
-                padL.SetGridx()
-            if setYGrid:
-                padL.SetGridy()
-            padL.Draw()
-            lowerPads.append(padL)
-        upperPads.append(padU)
-    if Cache == None:
-        Cache = {}
-    #Store the edges in the Cache, along with the canvas, upper and lower pads
-    Cache["canvas"] = c
-    Cache["canvas/upperPads"] = upperPads
-    Cache["canvas/lowerPads"] = lowerPads
-    Cache["canvas/xEdgesLow"] = xEdgesLow
-    Cache["canvas/xEdgesHigh"] = xEdgesHigh
-    Cache["canvas/yEdgesLow"] = yEdgesLow
-    Cache["canvas/yEdgesHigh"] = yEdgesHigh
     return Cache
 
 def getLabelAndHeader(Cache=None, label="#bf{CMS Internal}", 
@@ -2157,8 +2071,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                        'ttmuRFcorrelatedDown', 'ttmuRFcorrelatedUp', 
                        'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp', 
         ]
-        systematics = ['jec_13TeV_R2017Down', 'jec_13TeV_R2017Up', 
-                       'btagSF_shape_hfDown', 'btagSF_shape_hfUp', ]
+        systematics = ['btagSF_shape_hfDown', 'btagSF_shape_hfUp', ]
         # print("Removing systematics")
         # systematics = []
 
@@ -2526,11 +2439,9 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             #Draw the pad
             CanCache["canvas/upperPads"][pn].Draw()
             #Now do the ratio plots, if requested
-            CanCache["canvas/lowerPads"][pn].cd()
-            CanCache["canvas/lowerPads"][pn].SetGridy()
             if doRatio:
-                # CanCache["canvas/lowerPads"][pn].cd()
-                # CanCache["canvas/lowerPads"][pn].SetGridy()
+                CanCache["canvas/lowerPads"][pn].cd()
+                CanCache["canvas/lowerPads"][pn].SetGridy()
                 CanCache["subplots/ratios"].append({})
                 #Get the ratio min/max from the subplot dictionary, falling back to the default plot if there is none
                 ratioYMin = subplot_dict.get("RatioYMin", defaults["DefaultPlot"].get("RatioYMin"))
@@ -2601,13 +2512,9 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                     rdn += 1
                 #FIXME: better would be to make the Supercategory "blindable" instead of assuming 'data' is in the name
 
-            #Draw the pad regardless, for consistency
-            CanCache["canvas/lowerPads"][pn].Draw()
-            # if doRatio: #Why does this break shit... fucking ROOT
-            #     #Draw the pad regardless, for consistency
-            #     CanCache["canvas/lowerPads"][pn].Draw()
-            # else:
-            #     print("doRatio false?")
+            if doRatio:
+                #Draw the pad regardless, for consistency
+                CanCache["canvas/lowerPads"][pn].Draw()
         #Return to the main canvas
         CanCache["canvas"].cd()
         #Fill in integrals for super categories, and set the minima/maxima per pad
