@@ -1376,7 +1376,7 @@ def setGStyle(nDivisions=105):
 
 ###########SAME UP TO THIS POINT##############
 def createRatio(h1, h2, Cache=None, ratioTitle="input 0 vs input 1", ratioColor = None, ratioStyle = None,
-                ratioMarkerStyle = 20, ratioAlpha = 0.5, yMin = 0.5, yMax = 1.5, isBlinded=False, scaleText=2.0, nDivisions=105,):
+                ratioMarkerStyle = 20, ratioAlpha = 0.5, yMin = 0.1, yMax = 1.9, isBlinded=False, scaleText=2.0, nDivisions=105,):
     #h3 = h1.Clone("rat_{}_{}".format(h1.GetName(), ratioTitle.replace(" ", "_")))
     #h3 = h1.Clone("rat_{}".format(h1.GetName()))
     if h1 is None or h2 is None:
@@ -1531,7 +1531,7 @@ def createCanvasPads(canvasTitle, Cache=None, doRatio=False, doMountainrange=Fal
         #Set margins for pads depending on passed configuration option, whether ratio and mountainranging are enabled
         padU.SetTopMargin(marginT)
         if doRatio:
-            padU.SetBottomMargin(0)  # joins upper and lower plot
+            padU.SetBottomMargin(0.02)  # joins upper and lower plot
         else:
             padU.SetBottomMargin(marginB)
         if doMountainrange:
@@ -1554,7 +1554,7 @@ def createCanvasPads(canvasTitle, Cache=None, doRatio=False, doMountainrange=Fal
             # Lower ratio plot is pad2
             padL = ROOT.TPad("ratio_{}_{}".format(canvasTitle,z), "ratio_{}_{}".format(canvasTitle,z), 
                              xEdgesLow[z], yEdgesLow[0], xEdgesHigh[z], yEdgesHigh[0]) #xmin ymin xmax ymax as fraction
-            padL.SetTopMargin(0)  # joins upper and lower plot
+            padL.SetTopMargin(0.02)  # joins upper and lower plot
             padL.SetBottomMargin(marginB)
             if doMountainrange:
                 #Only set the margin to 0 if there is at least one pad to the right, which is equal to zlast = nXPads - 1. Don't do the last right margin...
@@ -2039,7 +2039,8 @@ def makeStack_Prototype(histFile, histList=None, legendConfig=None, rootName=Non
     
 def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutput=False, closeFiles=True, 
                      pdfOutput=None, combineOutput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
-                     nominalPostfix="nom", separator="___", verbose=False, debug=False, nDivisions=105, lumi="N/A"):
+                     nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
+                     debug=False, nDivisions=105, lumi="N/A"):
     """Loop through a JSON encoded plotcard to draw plots based on root files containing histograms.
     Must pass a cache (python dictionary) to the function to prevent python from garbage collecting everything.
     
@@ -2088,7 +2089,6 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
     print("Looping through canvases")
     can_num = 0
     can_max = len(canvases.keys())
-    print("FIXME: systematics disabled unless combineOutput!=None right now! Temporary patch for faster plotting")
     for can_name, can_dict in sorted(canvases.items(), key=lambda x: x[0].split("_")[-1], reverse=False):
         can_num += 1
         CanCache = {} #shorter access to this canvas dictionary
@@ -2123,15 +2123,36 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                        'btagSF_shape_lfstats1Down', 'btagSF_shape_lfstats1Up', 'btagSF_shape_lfstats2Up', 'btagSF_shape_lfstats2Down', 
                        'btagSF_shape_hfstats1Down', 'btagSF_shape_hfstats1Up', 'btagSF_shape_hfstats2Down', 'btagSF_shape_hfstats2Up', 
                        'btagSF_shape_cferr1Down', 'btagSF_shape_cferr1Up', 'btagSF_shape_cferr2Down', 'btagSF_shape_cferr2Up', 
-                       'FSRDown', 'FSRUp', 'ISRDown', 'ISRUp', 
-                       'muRNomFDown', 'muRNomFUp', 'muFNomRDown', 'muFNomRUp', 'muRFcorrelatedDown', 'muRFcorrelatedUp', 
+                       'ewkFSRDown', 'ewkFSRUp', 'ewkISRDown', 'ewkISRUp', 
+                       'ttFSRDown', 'ttFSRUp', 'ttISRDown', 'ttISRUp', 
+                       'ttVJetsFSRDown', 'ttVJetsFSRUp', 'ttVJetsISRDown', 'ttVJetsISRUp', 
+                       'singletopFSRDown', 'singletopFSRUp', 'singletopISRDown', 'singletopISRUp', 
+                       'ttultrarareFSRDown', 'ttultrarareFSRUp', 'ttultrarareISRDown', 'ttultrarareISRUp', 
+                       'ttHFSRDown', 'ttHFSRUp', 'ttHISRDown', 'ttHISRUp', 
+                       'ttttFSRDown', 'ttttFSRUp', 'ttttISRDown', 'ttttISRUp', 
+                       'ewkmuRNomFDown', 'ewkmuRNomFUp', 'ewkmuFNomRDown', 'ewkmuFNomRUp', 
+                       'ewkmuRFcorrelatedDown', 'ewkmuRFcorrelatedUp', 
+                       'ttmuRNomFDown', 'ttmuRNomFUp', 'ttmuFNomRDown', 'ttmuFNomRUp', 
+                       'ttmuRFcorrelatedDown', 'ttmuRFcorrelatedUp', 
+                       'ttVJetsmuRNomFDown', 'ttVJetsmuRNomFUp', 'ttVJetsmuFNomRDown', 'ttVJetsmuFNomRUp', 
+                       'ttVJetsmuRFcorrelatedDown', 'ttVJetsmuRFcorrelatedUp', 
+                       'singletopmuRNomFDown', 'singletopmuRNomFUp', 'singletopmuFNomRDown', 'singletopmuFNomRUp', 
+                       'singletopmuRFcorrelatedDown', 'singletopmuRFcorrelatedUp', 
+                       'ttultrararemuRNomFDown', 'ttultrararemuRNomFUp', 'ttultrararemuFNomRDown', 'ttultrararemuFNomRUp', 
+                       'ttultrararemuRFcorrelatedDown', 'ttultrararemuRFcorrelatedUp', 
+                       'ttHmuRNomFDown', 'ttHmuRNomFUp', 'ttHmuFNomRDown', 'ttHmuFNomRUp', 
+                       'ttHmuRFcorrelatedDown', 'ttHmuRFcorrelatedUp', 
+                       'ttttmuRNomFDown', 'ttttmuRNomFUp', 'ttttmuFNomRDown', 'ttttmuFNomRUp', 
+                       'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp', 
         ]
+
         #Deduce systematics automatically...
         
         #Load the LegendConfig which denotes which samples to use, colors to assign, etc.
         
         #Call createCanvasPads with our Can(vas)Cache passed to it, which will be subsequently filled,
         #allowing us to toss the returned dictionary into a throwaway variable '_'
+        print("Creating canvas pads")
         _ = createCanvasPads(can_name, CanCache, doRatio=doRatio, doMountainrange=doMountainrange, setXGrid=False, 
                              setYGrid=False, nXPads=nXPads, topFraction=0.7, bordersLRTB = canCoordinates, 
                              xPixels=xPixels, yPixels=yPixels)
@@ -2159,6 +2180,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         header_position = can_dict.get("HeaderPosition", legendConfig.get("HeaderPosition", 0.063))
         label = can_dict.get("Label", legendConfig.get("Label", "#bf{CMS Internal}"))
         label_position = can_dict.get("LabelPosition", legendConfig.get("LabelPosition", 0.05))
+        print("Generate header and label :: {} {} :: {} {}".format(header, header_position, label, label_position))
         _ = getLabelAndHeader(Cache=CanCache, 
                               label=label, 
                               header=header.format(lumi=lumi),
@@ -2179,23 +2201,27 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         for pn, subplot_name in enumerate(CanCache["subplots"]):
             subplot_dict = plots["{}".format(subplot_name)]
             nice_name = subplot_name.replace("Plot_", "").replace("Plot", "").replace("blind_", "").replace("BLIND", "")
+            print("Creating subplot {}".format(nice_name))
             #Append the filename to the list
             plotFileName = "{}/{}".format(histogramDirectory, subplot_dict["Files"])
             if plotFileName in fileDict:
                 CanCache["subplots/files"].append(fileDict[plotFileName])
             else:
                 raise RuntimeError("File not available, was it stored in a list or something?")
+            print("Appended file pointer")
             CanCache["subplots/rebins"].append(subplot_dict.get("Rebin"))
             CanCache["subplots/projections"].append(subplot_dict.get("Projection"))
             CanCache["subplots/integrals"].append(collections.OrderedDict())
             #Call makeSuperCategories with the very same file [pn] referenced, plus the legendConfig
+            print("Load histograms", end="")
             CanCache["subplots/supercategories"].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, nice_name, 
                                 systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
                                 projection=CanCache["subplots/projections"][pn], 
                                 nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn))
+            print(" Done", end="")
             if combineOutput is not None or pdfOutput is not None:
-                # pdb.set_trace()
                 nSysts = len(systematics)
+                print("{} systematics: ".format(nSysts), end="")
                 nBins = CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values()[0].GetNbinsX()
                 sD = dict() #systematic dictionary for lookup into numpy array
                 sD['statisticsUp'] = nSysts + 0
@@ -2218,7 +2244,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                     npValues[pn][supercategory] = np.zeros((nSysts + 2, nBins + 2), dtype=float)
                     npNominal[pn][supercategory] = np.asarray([bt[0] for bt in histoArrays], dtype=float)
                     #Stat errors up and down Assumes positive return value, untrue for esoteric stat options?
-                    npStatErrorsDown[pn][supercategory] = np.asarray([-bt[1] for bt in histoArrays], dtype=float)
+                    #TGraphAsymmErrors constructor requires the number of points and ALL POSITIVE arrays for the x, y, xdown, xup, ydown, yup (latter 4 RELATIVE)
+                    npStatErrorsDown[pn][supercategory] = np.asarray([bt[1] for bt in histoArrays], dtype=float)
                     npStatErrorsUp[pn][supercategory] = np.asarray([bt[2] for bt in histoArrays], dtype=float) 
                     npBinCenters[pn][supercategory] = np.asarray([bt[4] for bt in histoArrays], dtype=float)
                     npXErrorsUp[pn][supercategory] = np.asarray([bt[3] + bt[5]for bt in histoArrays], dtype=float) - npBinCenters[pn][supercategory]
@@ -2228,6 +2255,12 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 for nSyst, syst in enumerate(sorted(sorted(systematics, key = lambda l: l[-2:] == "Up", reverse=True), 
                                                     key = lambda l: l.replace("Down", "").replace("Up", "")
                                                 )):
+                    if nSyst < nSysts - 1:
+                        print("*", end="")
+                    else:
+                        print("* Done")
+                    if skipSystematics is not None and syst in skipSystematics: 
+                        continue
                     sD[syst] = nSyst
                     CanCache["subplots/supercategories/systematics"][syst].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, 
                                 nice_name,
@@ -2239,15 +2272,25 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                         npValues[pn][supercategory][nSyst, :] = np.asarray(map(lambda l: l[0].GetBinContent(l[1]), [(scHisto, x) for x in xrange(nBins + 2)]))
                         npDifferences[pn][supercategory] = npValues[pn][supercategory] - npNominal[pn][supercategory]
                         npStatSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
-                                                                                              2, 
-                                                                                              out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                                                                              where=npDifferences[pn][supercategory] > 0), axis=0))
+                                                                                                2, 
+                                                                                                out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                                                                                where=npDifferences[pn][supercategory] > 0), axis=0))
                         npStatSystematicErrorsDown[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
                                                                                                 2, 
                                                                                                 out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
                                                                                                 where=npDifferences[pn][supercategory] < 0), axis=0))
+                        # npStatSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                        #                                                                         2, 
+                        #                                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                        #                                                                         where=npDifferences[pn][supercategory] > 0 & (np.divide(np.abs(npDifferences[pn][supercategory], np.broadcast_to(npNominal[pn][supercategory], (nSysts+2, nBins+2)))) < 3)), axis=0))
+                        # npStatSystematicErrorsDown[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                        #                                                                         2, 
+                        #                                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                        #                                                                         where=npDifferences[pn][supercategory] < 0 & (np.divide(np.abs(npDifferences[pn][supercategory], np.broadcast_to(npNominal[pn][supercategory], (nSysts+2, nBins+2)))) < 3)), axis=0))
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'] = dict()
+            CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'] = dict()
+            CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'] = dict()
             for supercategory in CanCache["subplots/supercategories"][pn]['Supercategories/hists']:
                 if "data" in supercategory.lower(): continue
                 handle = CanCache["subplots/supercategories"][pn]
@@ -2259,8 +2302,30 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                                                                              npStatErrorsDown[pn][supercategory],
                                                                                              npStatErrorsUp[pn][supercategory]
                                                                                          )
-                handle['Supercategories/statErrors'][supercategory].SetFillStyle(3004)
+                handle['Supercategories/statErrors/ratio'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
+                                                                                                   npBinCenters[pn][supercategory],
+                                                                                                   np.divide(npNominal[pn][supercategory],
+                                                                                                             npNominal[pn][supercategory],
+                                                                                                             out=np.zeros(nBins + 2),
+                                                                                                             where=npNominal[pn][supercategory] != 0),
+                                                                                                   npXErrorsDown[pn][supercategory],
+                                                                                                   npXErrorsUp[pn][supercategory],
+                                                                                                   np.divide(npStatErrorsDown[pn][supercategory],
+                                                                                                             npNominal[pn][supercategory],
+                                                                                                             out=np.zeros(nBins + 2),
+                                                                                                             where=npNominal[pn][supercategory] != 0),
+                                                                                                   np.divide(npStatErrorsUp[pn][supercategory],
+                                                                                                             npNominal[pn][supercategory],
+                                                                                                             out=np.zeros(nBins + 2),
+                                                                                                             where=npNominal[pn][supercategory] != 0)
+                                                                                         )
+                handle['Supercategories/statErrors'][supercategory].SetName(handle['Supercategories'][supercategory].GetName().replace("s_", "statError_"))
+                handle['Supercategories/statErrors'][supercategory].SetFillStyle(3001)
                 handle['Supercategories/statErrors'][supercategory].SetFillColor(ROOT.kGray)
+                handle['Supercategories/statErrors/ratio'][supercategory].SetName(
+                    handle['Supercategories'][supercategory].GetName().replace("s_", "statErrorRatio_"))
+                handle['Supercategories/statErrors/ratio'][supercategory].SetFillStyle(3001)
+                handle['Supercategories/statErrors/ratio'][supercategory].SetFillColor(ROOT.kGray)
                 handle['Supercategories/statSystematicErrors'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                              npBinCenters[pn][supercategory],
                                                                                              npNominal[pn][supercategory],
@@ -2269,8 +2334,32 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                                                                              npStatSystematicErrorsDown[pn][supercategory],
                                                                                              npStatSystematicErrorsUp[pn][supercategory]
                                                                                          )
+                handle['Supercategories/statSystematicErrors/ratio'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
+                                                                                                             npBinCenters[pn][supercategory],
+                                                                                                             np.divide(npNominal[pn][supercategory],
+                                                                                                                       npNominal[pn][supercategory],
+                                                                                                                       out=np.zeros(nBins + 2),
+                                                                                                                       where=npNominal[pn][supercategory] != 0
+                                                                                                                   ),
+                                                                                                             npXErrorsDown[pn][supercategory],
+                                                                                                             npXErrorsUp[pn][supercategory],
+                                                                                                             np.divide(npStatSystematicErrorsDown[pn][supercategory],
+                                                                                                                       npNominal[pn][supercategory],
+                                                                                                                       out=np.zeros(nBins + 2),
+                                                                                                                       where=npNominal[pn][supercategory] != 0),
+                                                                                                             np.divide(npStatSystematicErrorsUp[pn][supercategory],
+                                                                                                                       npNominal[pn][supercategory],
+                                                                                                                       out=np.zeros(nBins + 2),
+                                                                                                                       where=npNominal[pn][supercategory] != 0)
+                                                                                         )
+                handle['Supercategories/statErrors'][supercategory].SetName(
+                    handle['Supercategories'][supercategory].GetName().replace("s_", "statSystematicError_"))
+                handle['Supercategories/statErrors/ratio'][supercategory].SetName(
+                    handle['Supercategories'][supercategory].GetName().replace("s_", "statSystematicErrorRatio_"))
                 handle['Supercategories/statSystematicErrors'][supercategory].SetFillStyle(3001)
                 handle['Supercategories/statSystematicErrors'][supercategory].SetFillColor(ROOT.kGreen)
+                handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillStyle(3001)
+                handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillColor(ROOT.kGreen)
             #access the list of upperPads created by createCanvasPads(...)
             #if len(CanCache["subplots/supercategories"][-1]["Categories/hists"]) == 0:
             #    continue
@@ -2348,6 +2437,12 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 else:
                     drawable.Draw(draw_command)
                     dn += 1
+            for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'].items():
+                if supercategory not in ["Background"]: continue
+                scGraph.Draw("2")
+            for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'].items():
+                if supercategory not in ["Background"]: continue
+                scGraph.Draw("2")
             if pn == 0:
                 #Draw the legend in the first category for now...
                 CanCache["subplots/supercategories"][pn]["Legend"].Draw()
@@ -2428,6 +2523,12 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                     #increment our counter for ratios
                     rdn += 1
                 #FIXME: better would be to make the Supercategory "blindable" instead of assuming 'data' is in the name
+            for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'].items():
+                if supercategory not in ["Background"]: continue
+                scGraph.Draw("F2")
+            for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'].items():
+                if supercategory not in ["Background"]: continue
+                scGraph.Draw("F2")
             #Draw the pad regardless, for consistency
             CanCache["canvas/lowerPads"][pn].Draw() 
         #Return to the main canvas
@@ -2521,9 +2622,9 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                         for combBin in xrange(combHist.GetNbinsX() + 2):
                             combHist.SetBinContent(combBin, 0); combHist.SetBinError(combBin, 0)
                     combHistograms[processName].append(combHist)
-            for sys in CanCache["subplots/supercategories/systematics"].keys():
-                for i in xrange(len(CanCache["subplots/supercategories/systematics"][sys])):
-                    for preProcessName, hist in CanCache["subplots/supercategories/systematics"][sys][i]['Categories/hists'].items():
+            for syst in CanCache["subplots/supercategories/systematics"].keys():
+                for i in xrange(len(CanCache["subplots/supercategories/systematics"][syst])):
+                    for preProcessName, hist in CanCache["subplots/supercategories/systematics"][syst][i]['Categories/hists'].items():
                         processName = preProcessName.replace("BLIND", "").replace("Data", "data_obs")
                         if processName not in combSystematics:
                             combSystematics[processName] = []
@@ -2538,6 +2639,14 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                         #Remap systematic names for decorrelation in Higgs Combine
                         #Decorrelated systematics: mu(Factorization/Renormalization) scale and ISR, FSR usually correlated (qcd vs ewk like ttbar vs singletop) unless
                         # " the analysis is too sensitive to off-shell effects" https://twiki.cern.ch/twiki/bin/viewauth/CMS/TopSystematics#Factorization_and_renormalizatio
+                        if combSystematic in ['ewkmuRFcorrelatedDown', 'ewkmuRFcorrelatedUp', 
+                                              'ttmuRFcorrelatedDown', 'ttmuRFcorrelatedUp', 
+                                              'ttVJetsmuRFcorrelatedDown', 'ttVJetsmuRFcorrelatedUp', 
+                                              'singletopmuRFcorrelatedDown', 'singletopmuRFcorrelatedUp', 
+                                              'ttultrararemuRFcorrelatedDown', 'ttultrararemuRFcorrelatedUp', 
+                                              'ttHmuRFcorrelatedDown', 'ttHmuRFcorrelatedUp', 
+                                              'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp',]:
+                            combSystematic = combSystematic.replace("muRFcorrelated", "muRFcorrdNew")
                         if processName in  ["ttbb", "ttother", "ttnobb"]:
                             if combSystematic in ["muRNomFDown", "muRNomFUp", "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp", "FSRDown", "FSRUp"]:
                                 combSystematic = "tt" + combSystematic
@@ -2734,6 +2843,9 @@ if __name__ == '__main__':
                         help='Enable more verbose output during actions')
     parser.add_argument('--useCanvasMax', dest='useCanvasMax', action='store_true',
                         help='use the Canvas card\' maximum rather than 110% of the subplots\' maxima')
+    parser.add_argument('--skipSystematics', '--skipSystematics', dest='skipSystematics', action='store', 
+                        default=None, type=str, nargs='*',
+                        help='List of systematics to skip')
     
 
     #Parse the arguments
@@ -2752,6 +2864,7 @@ if __name__ == '__main__':
     verb = args.verbose
     useCanvasMax = args.useCanvasMax
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel)
+    skipSystematics = args.skipSystematics
 
     lumiDict = {"2017": 41.53,
                 "2018": 59.97}
@@ -2824,8 +2937,9 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                 print("pdfOutput = {}".format(pdfOut))
         else:
             combineOut = None
-        resultsDict = loopPlottingJSON(loadedPlotConfig, Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, pdfOutput=pdfOut, 
-                                       combineOutput=combineOut, lumi=lumi, useCanvasMax=useCanvasMax, verbose=verb);
+        resultsDict = loopPlottingJSON(loadedPlotConfig, Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, 
+                                       pdfOutput=pdfOut, combineOutput=combineOut, lumi=lumi, useCanvasMax=useCanvasMax, 
+                                       skipSystematics=skipSystematics, verbose=verb);
     else:
         raise RuntimeError("The loading of the plot or legend cards failed. They are of type {} and {}, respectively".format(type(loadedPlotConfig),type(loadedLegendConfig)))
 
