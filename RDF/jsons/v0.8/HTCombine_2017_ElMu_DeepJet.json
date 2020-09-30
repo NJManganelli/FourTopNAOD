@@ -54,14 +54,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HT (2 Medium DeepJet)", 
+        "Title": "HT (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ll} nJet4", 
-            "#it{ll} nJet5", 
-            "#it{ll} nJet6", 
-            "#it{ll} nJet7", 
-            "#it{ll} nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
@@ -154,14 +154,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HT (3 Medium DeepJet)", 
+        "Title": "HT (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ll} nJet4", 
-            "#it{ll} nJet5", 
-            "#it{ll} nJet6", 
-            "#it{ll} nJet7", 
-            "#it{ll} nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
@@ -239,14 +239,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HT (4+ Medium DeepJet)", 
+        "Title": "HT (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ll} nJet4", 
-            "#it{ll} nJet5", 
-            "#it{ll} nJet6", 
-            "#it{ll} nJet7", 
-            "#it{ll} nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
