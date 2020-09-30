@@ -10,6 +10,7 @@ import collections
 import pprint
 import math
 import numpy as np
+import root_numpy
 import array
 import json
 import copy
@@ -1505,7 +1506,7 @@ def createCanvasPads(canvasTitle, Cache=None, doRatio=False, doMountainrange=Fal
     nYPads = 2
     #Here's where we correct the 1st and last pads to make space for the border/pad margin
     xEdgesLow[0] -= bordersL
-    xEdgesHigh[-1] += bordersR
+    # xEdgesHigh[-1] += bordersR
     yEdgesLow = [0, bordersB + usableTB*(1-topFraction)]
     yEdgesHigh = [bordersB + usableTB*(1-topFraction), 1]
     #yEdgesLow[0] -= bordersB
@@ -1536,10 +1537,13 @@ def createCanvasPads(canvasTitle, Cache=None, doRatio=False, doMountainrange=Fal
             padU.SetBottomMargin(marginB)
         if doMountainrange:
             #Only set the margin to 0 if there is at least one pad to the right, which is equal to zlast = nXPads - 1. Don't do the last right margin...
-            if 0 <= z < nXPads - 1:
+            # if 0 <= z < nXPads - 1:
+            #     padU.SetRightMargin(0)
+            # else:
+            #     padU.SetRightMargin(marginR)
+            #Set all right margins to 0, so that size is consistented between n-1 pads (the first still being oddly sized by the left margin...)
+            if 0 <= z < nXPads:
                 padU.SetRightMargin(0)
-            else:
-                padU.SetRightMargin(marginR)
             #Now do the left margins, only starting with the second pad, should it exist (hence the equality switching versus the right margins)
             if 0 < z <= nXPads - 1:
                 padU.SetLeftMargin(0)
@@ -1558,10 +1562,12 @@ def createCanvasPads(canvasTitle, Cache=None, doRatio=False, doMountainrange=Fal
             padL.SetBottomMargin(marginB)
             if doMountainrange:
                 #Only set the margin to 0 if there is at least one pad to the right, which is equal to zlast = nXPads - 1. Don't do the last right margin...
-                if 0 <= z < nXPads - 1:
+                # if 0 <= z < nXPads - 1:
+                #     padL.SetRightMargin(0)
+                # else:
+                #     padL.SetRightMargin(marginR)
+                if 0 <= z < nXPads:
                     padL.SetRightMargin(0)
-                else:
-                    padL.SetRightMargin(marginR)
                 #Now do the left margins, only starting with the second pad, should it exist (hence the equality switching versus the right margins)
                 if 0 < z <= nXPads - 1:
                     padL.SetLeftMargin(0)
@@ -2040,7 +2046,7 @@ def makeStack_Prototype(histFile, histList=None, legendConfig=None, rootName=Non
 def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutput=False, closeFiles=True, 
                      pdfOutput=None, combineOutput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
-                     debug=False, nDivisions=105, lumi="N/A"):
+                     debug=False, nDivisions=105, lumi="N/A", drawYields=False):
     """Loop through a JSON encoded plotcard to draw plots based on root files containing histograms.
     Must pass a cache (python dictionary) to the function to prevent python from garbage collecting everything.
     
@@ -2145,6 +2151,14 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                        'ttttmuRNomFDown', 'ttttmuRNomFUp', 'ttttmuFNomRDown', 'ttttmuFNomRUp', 
                        'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp', 
         ]
+        print("Making reduced systematic set for testing!")
+        systematics = []
+        # systematics = ['jec_13TeV_R2017Down', 'jec_13TeV_R2017Up', 
+        #                'btagSF_shape_hfDown', 'btagSF_shape_hfUp', 
+        #                'ttFSRDown', 'ttFSRUp', 'ttISRDown', 'ttISRUp', 
+        #                'ttmuRFcorrelatedDown', 'ttmuRFcorrelatedUp', 
+        #                'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp', 
+        # ]
 
         #Deduce systematics automatically...
         
@@ -2208,20 +2222,20 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 CanCache["subplots/files"].append(fileDict[plotFileName])
             else:
                 raise RuntimeError("File not available, was it stored in a list or something?")
-            print("Appended file pointer")
             CanCache["subplots/rebins"].append(subplot_dict.get("Rebin"))
             CanCache["subplots/projections"].append(subplot_dict.get("Projection"))
             CanCache["subplots/integrals"].append(collections.OrderedDict())
             #Call makeSuperCategories with the very same file [pn] referenced, plus the legendConfig
-            print("Load histograms", end="")
             CanCache["subplots/supercategories"].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, nice_name, 
                                 systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
                                 projection=CanCache["subplots/projections"][pn], 
                                 nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn))
-            print(" Done", end="")
-            if combineOutput is not None or pdfOutput is not None:
+            print(" Done :: ", end="")
+            blindSupercategories = [k for k in CanCache["subplots/supercategories"][pn]['Supercategories'] if "BLIND" in k]
+            if len(blindSupercategories) > 0: print("Blinded - skipping systematics")
+            if combineOutput is not None or (pdfOutput is not None and len(blindSupercategories) < 1):
                 nSysts = len(systematics)
-                print("{} systematics: ".format(nSysts), end="")
+                print(" {} systematics: ".format(nSysts), end="")
                 nBins = CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values()[0].GetNbinsX()
                 sD = dict() #systematic dictionary for lookup into numpy array
                 sD['statisticsUp'] = nSysts + 0
@@ -2239,19 +2253,29 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 for supercategory, scHisto in CanCache["subplots/supercategories"][pn]['Supercategories/hists'].items():
                     # multiprocessing.Pool.map() may be faster... but it didn't work in my first test. list comprehension better if tupled up?
                     if "data" in supercategory.lower(): continue
-                    histoArrays = [(scHisto.GetBinContent(x), scHisto.GetBinErrorLow(x), scHisto.GetBinErrorUp(x),
-                                    scHisto.GetBinLowEdge(x), scHisto.GetBinCenter(x), scHisto.GetBinWidth(x)) for x in xrange(nBins + 2)]
+                    # histoArrays = [(scHisto.GetBinContent(x), scHisto.GetBinErrorLow(x), scHisto.GetBinErrorUp(x),
+                    #                 scHisto.GetBinLowEdge(x), scHisto.GetBinCenter(x), scHisto.GetBinWidth(x)) for x in xrange(nBins + 2)]
+                    histoArrays = [(scHisto.GetBinErrorLow(x), scHisto.GetBinErrorUp(x)) for x in xrange(nBins + 2)]
+                    # npNominal[pn][supercategory] = np.asarray([bt[0] for bt in histoArrays], dtype=float)
+                    npNominal[pn][supercategory], edgesTuple = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=True)
                     npValues[pn][supercategory] = np.zeros((nSysts + 2, nBins + 2), dtype=float)
-                    npNominal[pn][supercategory] = np.asarray([bt[0] for bt in histoArrays], dtype=float)
                     #Stat errors up and down Assumes positive return value, untrue for esoteric stat options?
                     #TGraphAsymmErrors constructor requires the number of points and ALL POSITIVE arrays for the x, y, xdown, xup, ydown, yup (latter 4 RELATIVE)
-                    npStatErrorsDown[pn][supercategory] = np.asarray([bt[1] for bt in histoArrays], dtype=float)
-                    npStatErrorsUp[pn][supercategory] = np.asarray([bt[2] for bt in histoArrays], dtype=float) 
-                    npBinCenters[pn][supercategory] = np.asarray([bt[4] for bt in histoArrays], dtype=float)
-                    npXErrorsUp[pn][supercategory] = np.asarray([bt[3] + bt[5]for bt in histoArrays], dtype=float) - npBinCenters[pn][supercategory]
-                    npXErrorsDown[pn][supercategory] = npBinCenters[pn][supercategory] - np.asarray([bt[3] for bt in histoArrays], dtype=float)
+                    # npStatErrorsDown[pn][supercategory] = np.asarray([bt[1] for bt in histoArrays], dtype=float)
+                    # npStatErrorsUp[pn][supercategory] = np.asarray([bt[2] for bt in histoArrays], dtype=float) 
+                    npStatErrorsDown[pn][supercategory] = np.asarray([bt[0] for bt in histoArrays], dtype=float)
+                    npStatErrorsUp[pn][supercategory] = np.asarray([bt[1] for bt in histoArrays], dtype=float) 
+                    # npBinCenters[pn][supercategory] = np.asarray([bt[4] for bt in histoArrays], dtype=float)
+                    # npXErrorsUp[pn][supercategory] = np.asarray([bt[3] + bt[5]for bt in histoArrays], dtype=float) - npBinCenters[pn][supercategory]
+                    # npXErrorsDown[pn][supercategory] = npBinCenters[pn][supercategory] - np.asarray([bt[3] for bt in histoArrays], dtype=float)
+                    binWidths = (edgesTuple[0][1:] - edgesTuple[0][:-1])
+                    halfBinMin = np.min(binWidths)/2
+                    npBinCenters[pn][supercategory] = np.append(np.insert(edgesTuple[0][:-1] + binWidths/2, 0, 
+                                                                          edgesTuple[0][0] - halfBinMin), edgesTuple[0][-1] + halfBinMin)
+                    npXErrorsUp[pn][supercategory] = np.append(np.insert(binWidths/2, 0, halfBinMin), halfBinMin)
+                    npXErrorsDown[pn][supercategory] = np.append(np.insert(binWidths/2, 0, halfBinMin), halfBinMin)
                     npValues[pn][supercategory][nSysts + 0, :] = npNominal[pn][supercategory] + npStatErrorsUp[pn][supercategory]
-                    npValues[pn][supercategory][nSysts + 1, :] = npNominal[pn][supercategory] + npStatErrorsDown[pn][supercategory]
+                    npValues[pn][supercategory][nSysts + 1, :] = npNominal[pn][supercategory] - npStatErrorsDown[pn][supercategory]
                 for nSyst, syst in enumerate(sorted(sorted(systematics, key = lambda l: l[-2:] == "Up", reverse=True), 
                                                     key = lambda l: l.replace("Down", "").replace("Up", "")
                                                 )):
@@ -2269,7 +2293,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                 nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn))
                     for supercategory, scHisto in CanCache["subplots/supercategories/systematics"][syst][pn]['Supercategories/hists'].items():
                         if "data" in supercategory.lower(): continue                        
-                        npValues[pn][supercategory][nSyst, :] = np.asarray(map(lambda l: l[0].GetBinContent(l[1]), [(scHisto, x) for x in xrange(nBins + 2)]))
+                        # npValues[pn][supercategory][nSyst, :] = np.asarray(map(lambda l: l[0].GetBinContent(l[1]), [(scHisto, x) for x in xrange(nBins + 2)]))
+                        npValues[pn][supercategory][nSyst, :] = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=False)
                         npDifferences[pn][supercategory] = npValues[pn][supercategory] - npNominal[pn][supercategory]
                         npStatSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
                                                                                                 2, 
@@ -2287,12 +2312,14 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                         #                                                                         2, 
                         #                                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
                         #                                                                         where=npDifferences[pn][supercategory] < 0 & (np.divide(np.abs(npDifferences[pn][supercategory], np.broadcast_to(npNominal[pn][supercategory], (nSysts+2, nBins+2)))) < 3)), axis=0))
+                # pdb.set_trace()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'] = dict()
             for supercategory in CanCache["subplots/supercategories"][pn]['Supercategories/hists']:
                 if "data" in supercategory.lower(): continue
+                if supercategory not in npDifferences[pn].keys(): continue #More hacks, because my time has been stolen...
                 handle = CanCache["subplots/supercategories"][pn]
                 handle['Supercategories/statErrors'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                              npBinCenters[pn][supercategory],
@@ -2302,6 +2329,9 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                                                                              npStatErrorsDown[pn][supercategory],
                                                                                              npStatErrorsUp[pn][supercategory]
                                                                                          )
+                handle['Supercategories/statErrors'][supercategory].SetName(handle['Supercategories'][supercategory].GetName().replace("s_", "statError_"))
+                handle['Supercategories/statErrors'][supercategory].SetFillStyle(3004)
+                handle['Supercategories/statErrors'][supercategory].SetFillColor(ROOT.kBlue)
                 handle['Supercategories/statErrors/ratio'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                                    npBinCenters[pn][supercategory],
                                                                                                    np.divide(npNominal[pn][supercategory],
@@ -2319,13 +2349,10 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                                                                                              out=np.zeros(nBins + 2),
                                                                                                              where=npNominal[pn][supercategory] != 0)
                                                                                          )
-                handle['Supercategories/statErrors'][supercategory].SetName(handle['Supercategories'][supercategory].GetName().replace("s_", "statError_"))
-                handle['Supercategories/statErrors'][supercategory].SetFillStyle(3001)
-                handle['Supercategories/statErrors'][supercategory].SetFillColor(ROOT.kGray)
                 handle['Supercategories/statErrors/ratio'][supercategory].SetName(
                     handle['Supercategories'][supercategory].GetName().replace("s_", "statErrorRatio_"))
-                handle['Supercategories/statErrors/ratio'][supercategory].SetFillStyle(3001)
-                handle['Supercategories/statErrors/ratio'][supercategory].SetFillColor(ROOT.kGray)
+                handle['Supercategories/statErrors/ratio'][supercategory].SetFillStyle(3004)
+                handle['Supercategories/statErrors/ratio'][supercategory].SetFillColor(ROOT.kBlue)
                 handle['Supercategories/statSystematicErrors'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                              npBinCenters[pn][supercategory],
                                                                                              npNominal[pn][supercategory],
@@ -2334,6 +2361,10 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                                                                              npStatSystematicErrorsDown[pn][supercategory],
                                                                                              npStatSystematicErrorsUp[pn][supercategory]
                                                                                          )
+                handle['Supercategories/statErrors'][supercategory].SetName(
+                    handle['Supercategories'][supercategory].GetName().replace("s_", "statSystematicError_"))
+                handle['Supercategories/statSystematicErrors'][supercategory].SetFillStyle(3001)
+                handle['Supercategories/statSystematicErrors'][supercategory].SetFillColor(ROOT.kGreen)
                 handle['Supercategories/statSystematicErrors/ratio'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                                              npBinCenters[pn][supercategory],
                                                                                                              np.divide(npNominal[pn][supercategory],
@@ -2352,12 +2383,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                                                                                                        out=np.zeros(nBins + 2),
                                                                                                                        where=npNominal[pn][supercategory] != 0)
                                                                                          )
-                handle['Supercategories/statErrors'][supercategory].SetName(
-                    handle['Supercategories'][supercategory].GetName().replace("s_", "statSystematicError_"))
                 handle['Supercategories/statErrors/ratio'][supercategory].SetName(
                     handle['Supercategories'][supercategory].GetName().replace("s_", "statSystematicErrorRatio_"))
-                handle['Supercategories/statSystematicErrors'][supercategory].SetFillStyle(3001)
-                handle['Supercategories/statSystematicErrors'][supercategory].SetFillColor(ROOT.kGreen)
                 handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillStyle(3001)
                 handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillColor(ROOT.kGreen)
             #access the list of upperPads created by createCanvasPads(...)
@@ -2437,12 +2464,15 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 else:
                     drawable.Draw(draw_command)
                     dn += 1
-            for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'].items():
-                if supercategory not in ["Background"]: continue
-                scGraph.Draw("2")
-            for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'].items():
-                if supercategory not in ["Background"]: continue
-                scGraph.Draw("2")
+            #Turn off the uncertainties in the main plot for now...
+            # for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'].items():
+            #     if supercategory not in ["Background"]: continue
+            #     if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
+            #         scGraph.Draw("2")
+            # for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'].items():
+            #     if supercategory not in ["Background"]: continue
+            #     if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
+            #         scGraph.Draw("2")
             if pn == 0:
                 #Draw the legend in the first category for now...
                 CanCache["subplots/supercategories"][pn]["Legend"].Draw()
@@ -2455,7 +2485,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 #####drawable.SetTitle(yAxisTitle)
                 pass
             elif pn == len(CanCache["subplots"]):
-                scaleText = 0.6
+                scaleText = 2.0
                 #scaleText = (1-CanCache["canvas/marginR"])
                 offsetText = 0
                 CanCache["cms_header"].Draw()
@@ -2469,12 +2499,25 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 
             #Create the subpad label, to be drawn. Text stored in CanCache["sublabels"] which should be a list, possibly a list of tuples in the future
             CanCache["subplots/labels"].append(ROOT.TLatex())
+            CanCache["subplots/labels"][-1].SetTextSize(scaleText*0.05)
+            print(CanCache["subplots/labels"][-1].GetTextSize())
+
+            # CanCache["subplots/labels"].append(ROOT.TLatex(0.25 + offsetText, 0.9, "{}".format(CanCache["sublabels"][pn])))
             #padArea = (CanCache["canvas/xEdgesHigh"][pn] - CanCache["canvas/xEdgesLow"][pn])*(CanCache["canvas/yEdgesHigh"][-1] - CanCache["canvas/yEdgesLow"][-1])
             #padWidth = (CanCache["canvas/xEdgesHigh"][pn] - CanCache["canvas/xEdgesLow"][pn])
             #CanCache["subplots/labels"][-1].SetTextSize(0.5*scaleText) #.04?
-            CanCache["subplots/labels"][-1].SetTextSizePixels(int(0.05*xPixels)) #.04?
+            # CanCache["subplots/labels"][-1].SetTextSizePixels(int(0.12*xPixels)) #.04?
+            # CanCache["subplots/labels"][-1].DrawLatexNDC(0.10 + offsetText, 0.78, "{}".format(CanCache["sublabels"][pn]))
+            #Remove labels...
+            # CanCache["subplots/labels"][-1].SetText(0.25 + offsetText, 0.9, "{}".format(CanCache["sublabels"][pn]))
+            # CanCache["subplots/labels"][-1].SetTextSize(20) #.04? #LOVELY SEGMENTATION VIOLATIONS WTF ROOT
+            # CanCache["canvas/upperPads"][pn].SetTextSize(20) #.04? #DOESN'T WORK
+            #SetAttTextPS (Int_t align, Float_t angle, Color_t color, Style_t font, Float_t tsize)
+            # CanCache["canvas/upperPads"][pn].SetAttTextPS (13, 0, ROOT.kBlack, 42, 80) #DOESN"T WORK, WHY THE FUCK NOT!?
+            # CanCache["subplots/labels"][-1].SetX(0.5) #.04?
+            # CanCache["subplots/labels"][-1].SetY(0.7) #.04?
             CanCache["subplots/labels"][-1].DrawLatexNDC(0.10 + offsetText, 0.78, "{}".format(CanCache["sublabels"][pn]))
-            CanCache["subplots/labels"][-1].Draw()
+            # CanCache["subplots/labels"][-1].Draw()
             
             #Draw the pad
             CanCache["canvas/upperPads"][pn].Draw()
@@ -2525,27 +2568,30 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 #FIXME: better would be to make the Supercategory "blindable" instead of assuming 'data' is in the name
             for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'].items():
                 if supercategory not in ["Background"]: continue
-                scGraph.Draw("F2")
+                if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
+                    scGraph.Draw("2")
             for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'].items():
                 if supercategory not in ["Background"]: continue
-                scGraph.Draw("F2")
+                if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
+                    scGraph.Draw("2")
             #Draw the pad regardless, for consistency
             CanCache["canvas/lowerPads"][pn].Draw() 
         #Return to the main canvas
         CanCache["canvas"].cd()
         #Fill in integrals for super categories, and set the minima/maxima per pad
-        padWidth = (1.0 - CanCache["canvas/bordersL"] - CanCache["canvas/bordersR"])/nXPads
-        drawPoint = CanCache["canvas/marginL"]*0.33
-        for pn in xrange(len(CanCache["subplots/integrals"])):
-            tmp = ROOT.TLatex()
-            tmp.SetTextSize(0.016)
-            tmpString = "#splitline"
-            for super_cat_name, str_integral in CanCache["subplots/integrals"][pn].items():
-                if "data" in super_cat_name.lower(): continue
-                tmpString += "{" + "{} : {}".format(super_cat_name, str_integral) + "}"
-            tmp.DrawLatexNDC(drawPoint, 0.02, tmpString)
-            drawPoint += padWidth
-        #Modify the vertical axes now that we have the first drawn object, and each maximum and minima.
+        if drawYields:
+            padWidth = (1.0 - CanCache["canvas/bordersL"] - CanCache["canvas/bordersR"])/nXPads
+            drawPoint = CanCache["canvas/marginL"]*0.33
+            for pn in xrange(len(CanCache["subplots/integrals"])):
+                tmp = ROOT.TLatex()
+                tmp.SetTextSize(0.016)
+                tmpString = "#splitline"
+                for super_cat_name, str_integral in CanCache["subplots/integrals"][pn].items():
+                    if "data" in super_cat_name.lower(): continue
+                    tmpString += "{" + "{} : {}".format(super_cat_name, str_integral) + "}"
+                tmp.DrawLatexNDC(drawPoint, 0.02, tmpString)
+                drawPoint += padWidth
+            #Modify the vertical axes now that we have the first drawn object, and each maximum and minima.
         if doLogY:
             canvasMin = min(CanCache["subplots/minima"] + [10e-3])
         else:
