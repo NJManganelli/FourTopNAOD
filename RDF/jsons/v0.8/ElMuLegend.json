@@ -43,7 +43,6 @@
             }
         }, 
         "Systematics": [], 
-        "OLDY-nColumns": 3, 
         "Type": "DefaultLegend", 
         "Coordinates": [
             0.0, 
@@ -197,8 +196,7 @@
             }
         }, 
         "Systematics": [], 
-        "OLDY-nColumns": 3, 
-        "Type": "DefaultLegend", 
+        "Type": "LegendConfig", 
         "Coordinates": [
             0.0, 
             0.1, 

@@ -2042,7 +2042,6 @@ def makeStack_Prototype(histFile, histList=None, legendConfig=None, rootName=Non
     print(hists_systematic)
     print(hists_nominal)
     
-    
 def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutput=False, closeFiles=True, 
                      pdfOutput=None, combineOutput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
@@ -2152,13 +2151,16 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                        'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp', 
         ]
         print("Making reduced systematic set for testing!")
-        systematics = []
-        # systematics = ['jec_13TeV_R2017Down', 'jec_13TeV_R2017Up', 
-        #                'btagSF_shape_hfDown', 'btagSF_shape_hfUp', 
-        #                'ttFSRDown', 'ttFSRUp', 'ttISRDown', 'ttISRUp', 
-        #                'ttmuRFcorrelatedDown', 'ttmuRFcorrelatedUp', 
-        #                'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp', 
-        # ]
+        systematics = ['jec_13TeV_R2017Down', 'jec_13TeV_R2017Up', 
+                       'btagSF_shape_hfDown', 'btagSF_shape_hfUp', 
+                       'ttFSRDown', 'ttFSRUp', 'ttISRDown', 'ttISRUp', 
+                       'ttmuRFcorrelatedDown', 'ttmuRFcorrelatedUp', 
+                       'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp', 
+        ]
+        systematics = ['jec_13TeV_R2017Down', 'jec_13TeV_R2017Up', 
+                       'btagSF_shape_hfDown', 'btagSF_shape_hfUp', ]
+        # print("Removing systematics")
+        # systematics = []
 
         #Deduce systematics automatically...
         
@@ -2312,7 +2314,6 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                         #                                                                         2, 
                         #                                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
                         #                                                                         where=npDifferences[pn][supercategory] < 0 & (np.divide(np.abs(npDifferences[pn][supercategory], np.broadcast_to(npNominal[pn][supercategory], (nSysts+2, nBins+2)))) < 3)), axis=0))
-                # pdb.set_trace()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'] = dict()
@@ -2464,15 +2465,19 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 else:
                     drawable.Draw(draw_command)
                     dn += 1
-            #Turn off the uncertainties in the main plot for now...
-            # for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'].items():
-            #     if supercategory not in ["Background"]: continue
-            #     if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
-            #         scGraph.Draw("2")
-            # for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'].items():
-            #     if supercategory not in ["Background"]: continue
-            #     if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
-            #         scGraph.Draw("2")
+                #Turn off the uncertainties in the main plot for now...
+                # if "Supercategories/statErrors" in CanCache["subplots/supercategories"][pn].keys():
+                #     if super_cat_name not in ["Background"]: 
+                #         pass
+                #     else:
+                #         if isinstance(CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'][super_cat_name], (ROOT.TGraphAsymmErrors)):
+                #             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'][super_cat_name].Draw("2")
+                # if "Supercategories/statSystematicErrors" in CanCache["subplots/supercategories"][pn].keys():
+                #     if super_cat_name not in ["Background"]: 
+                #         pass
+                #     else:
+                #         if isinstance(CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name], (ROOT.TGraphAsymmErrors)):
+                #             CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name].Draw("2")
             if pn == 0:
                 #Draw the legend in the first category for now...
                 CanCache["subplots/supercategories"][pn]["Legend"].Draw()
@@ -2500,7 +2505,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             #Create the subpad label, to be drawn. Text stored in CanCache["sublabels"] which should be a list, possibly a list of tuples in the future
             CanCache["subplots/labels"].append(ROOT.TLatex())
             CanCache["subplots/labels"][-1].SetTextSize(scaleText*0.05)
-            print(CanCache["subplots/labels"][-1].GetTextSize())
+            CanCache["subplots/labels"][-1].DrawLatexNDC(0.10 + offsetText, 0.78, "{}".format(CanCache["sublabels"][pn]))
 
             # CanCache["subplots/labels"].append(ROOT.TLatex(0.25 + offsetText, 0.9, "{}".format(CanCache["sublabels"][pn])))
             #padArea = (CanCache["canvas/xEdgesHigh"][pn] - CanCache["canvas/xEdgesLow"][pn])*(CanCache["canvas/yEdgesHigh"][-1] - CanCache["canvas/yEdgesLow"][-1])
@@ -2516,7 +2521,6 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             # CanCache["canvas/upperPads"][pn].SetAttTextPS (13, 0, ROOT.kBlack, 42, 80) #DOESN"T WORK, WHY THE FUCK NOT!?
             # CanCache["subplots/labels"][-1].SetX(0.5) #.04?
             # CanCache["subplots/labels"][-1].SetY(0.7) #.04?
-            CanCache["subplots/labels"][-1].DrawLatexNDC(0.10 + offsetText, 0.78, "{}".format(CanCache["sublabels"][pn]))
             # CanCache["subplots/labels"][-1].Draw()
             
             #Draw the pad
@@ -2525,10 +2529,26 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             CanCache["canvas/lowerPads"][pn].cd()
             CanCache["canvas/lowerPads"][pn].SetGridy()
             if doRatio:
+                # CanCache["canvas/lowerPads"][pn].cd()
+                # CanCache["canvas/lowerPads"][pn].SetGridy()
                 CanCache["subplots/ratios"].append({})
                 #Get the ratio min/max from the subplot dictionary, falling back to the default plot if there is none
                 ratioYMin = subplot_dict.get("RatioYMin", defaults["DefaultPlot"].get("RatioYMin"))
                 ratioYMax = subplot_dict.get("RatioYMax", defaults["DefaultPlot"].get("RatioYMax"))
+                # if "Supercategories/statErrors" in CanCache["subplots/supercategories"][pn].keys():
+                #     if super_cat_name not in ["Background"]: 
+                #         pass
+                #     else:
+                #         if isinstance(CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'][super_cat_name], (ROOT.TGraphAsymmErrors)):
+                #             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'][super_cat_name].Draw("2")
+                #             scGraph.Draw("2")
+                # if "Supercategories/statSystematicErrors" in CanCache["subplots/supercategories"][pn].keys():
+                #     if super_cat_name not in ["Background"]: 
+                #         pass
+                #     else:
+                #         if isinstance(CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name], (ROOT.TGraphAsymmErrors)):
+                #             CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name].Draw("2")
+                #             scGraph.Draw("2")
                 for aRatioName, aRatio in legendConfig.get("Ratios", defaults["DefaultLegend"].get("Ratios")).items():
                     #Create a key for each ratio that will get drawn in this pad, the information for which is contained in
                     #CanCache["subplots/ratios"][-1] <- -1 being last list element, i.e. for last pad created
@@ -2555,10 +2575,24 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                     yMin = ratioYMin, yMax = ratioYMax, isBlinded=isBlinded, scaleText=scaleText, nDivisions=nDivisions)
                     #ratio_draw_command = legendConfig["Supercategories"][num]["Draw"]
                     ratio_draw_command = aRatio.get("Draw", "PXE1")
-                    ratio_draw_command
                     if rdn > 0:
                         ratio_draw_command += " SAME"
                     CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].Draw(ratio_draw_command)
+                    #Draw ratio graph errors...
+                    redraw = False
+                    if den in CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'].keys():
+                        scGraph = CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'][den]
+                        if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
+                            scGraph.Draw("2")
+                            redraw = True
+                    if den in CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'].keys():
+                        scGraph = CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'][den]
+                        if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
+                            scGraph.Draw("2")
+                            redraw = True
+                    if redraw:
+                        CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].Draw(ratio_draw_command + "SAME")
+                        
                     #Set the x axis title if it's the last drawable item
                     if pn == (len(CanCache["subplots"]) - 1):
                         if xAxisTitle != None:
@@ -2566,16 +2600,14 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                     #increment our counter for ratios
                     rdn += 1
                 #FIXME: better would be to make the Supercategory "blindable" instead of assuming 'data' is in the name
-            for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'].items():
-                if supercategory not in ["Background"]: continue
-                if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
-                    scGraph.Draw("2")
-            for supercategory, scGraph in CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'].items():
-                if supercategory not in ["Background"]: continue
-                if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
-                    scGraph.Draw("2")
+
             #Draw the pad regardless, for consistency
-            CanCache["canvas/lowerPads"][pn].Draw() 
+            CanCache["canvas/lowerPads"][pn].Draw()
+            # if doRatio: #Why does this break shit... fucking ROOT
+            #     #Draw the pad regardless, for consistency
+            #     CanCache["canvas/lowerPads"][pn].Draw()
+            # else:
+            #     print("doRatio false?")
         #Return to the main canvas
         CanCache["canvas"].cd()
         #Fill in integrals for super categories, and set the minima/maxima per pad

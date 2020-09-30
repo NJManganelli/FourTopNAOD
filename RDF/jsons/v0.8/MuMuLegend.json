@@ -33,12 +33,6 @@
             }
         }, 
         "nColumns": 1, 
-        "OLDY-Coordinates": [
-            0.35, 
-            0.75, 
-            0.95, 
-            0.9
-        ], 
         "Ratios": {
             "Data/MC": {
                 "Style": "Marker", 
@@ -49,7 +43,6 @@
             }
         }, 
         "Systematics": [], 
-        "OLDY-nColumns": 3, 
         "Type": "DefaultLegend", 
         "Coordinates": [
             0.0, 
@@ -193,12 +186,6 @@
             }
         }, 
         "nColumns": 1, 
-        "OLDY-Coordinates": [
-            0.35, 
-            0.75, 
-            0.95, 
-            0.9
-        ], 
         "Ratios": {
             "Data/MC": {
                 "Style": "Marker", 
@@ -209,8 +196,7 @@
             }
         }, 
         "Systematics": [], 
-        "OLDY-nColumns": 3, 
-        "Type": "DefaultLegend", 
+        "Type": "LegendConfig", 
         "Coordinates": [
             0.0, 
             0.1, 
