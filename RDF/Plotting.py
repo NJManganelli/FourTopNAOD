@@ -2123,7 +2123,6 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         header_position = can_dict.get("HeaderPosition", legendConfig.get("HeaderPosition", 0.063))
         label = can_dict.get("Label", legendConfig.get("Label", "#bf{CMS Internal}"))
         label_position = can_dict.get("LabelPosition", legendConfig.get("LabelPosition", 0.05))
-        print("Generate header and label :: {} {} :: {} {}".format(header, header_position, label, label_position))
         _ = getLabelAndHeader(Cache=CanCache, 
                               label=label, 
                               header=header.format(lumi=lumi),
