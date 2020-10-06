@@ -1957,9 +1957,22 @@ def makeStack_Prototype(histFile, histList=None, legendConfig=None, rootName=Non
     print(hists_nominal)
     
 def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutput=False, closeFiles=True, 
-                     pdfOutput=None, combineOutput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
+                     pdfOutput=None, combineOutput=None, combineInput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
-                     debug=False, nDivisions=105, lumi="N/A", drawYields=False):
+                     debug=False, nDivisions=105, lumi="N/A", drawYields=False,
+                     removeNegativeBins=True, normalizeHistograms=['ttmuRNomFDown', 'ttmuRNomFUp', 'ttmuFNomRDown', 'ttmuFNomRUp', 
+                                                                   'ttmuRFcorrdNewDown', 'ttmuRFcorrdNewUp', 
+                                                                   'ttVJetsmuRNomFDown', 'ttVJetsmuRNomFUp', 'ttVJetsmuFNomRDown', 'ttVJetsmuFNomRUp', 
+                                                                   'ttVJetsmuRFcorrdNewDown', 'ttVJetsmuRFcorrdNewUp', 
+                                                                   'singletopmuRNomFDown', 'singletopmuRNomFUp', 'singletopmuFNomRDown', 'singletopmuFNomRUp', 
+                                                                   'singletopmuRFcorrdNewDown', 'singletopmuRFcorrdNewUp', 
+                                                                   'ttultrararemuRNomFDown', 'ttultrararemuRNomFUp', 'ttultrararemuFNomRDown', 'ttultrararemuFNomRUp', 
+                                                                   'ttultrararemuRFcorrdNewDown', 'ttultrararemuRFcorrdNewUp', 
+                                                                   'ttHmuRNomFDown', 'ttHmuRNomFUp', 'ttHmuFNomRDown', 'ttHmuFNomRUp', 
+                                                                   'ttHmuRFcorrdNewDown', 'ttHmuRFcorrdNewUp', 
+                                                                   'ttttmuRNomFDown', 'ttttmuRNomFUp', 'ttttmuFNomRDown', 'ttttmuFNomRUp', 
+                                                                   'ttttmuRFcorrdNewDown', 'ttttmuRFcorrdNewUp', ],
+):
     """Loop through a JSON encoded plotcard to draw plots based on root files containing histograms.
     Must pass a cache (python dictionary) to the function to prevent python from garbage collecting everything.
     
@@ -2064,14 +2077,15 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                        'ttttmuRNomFDown', 'ttttmuRNomFUp', 'ttttmuFNomRDown', 'ttttmuFNomRUp', 
                        'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp', 
         ]
-        print("Making reduced systematic set for testing!")
-        systematics = ['jec_13TeV_R2017Down', 'jec_13TeV_R2017Up', 
-                       'btagSF_shape_hfDown', 'btagSF_shape_hfUp', 
-                       'ttFSRDown', 'ttFSRUp', 'ttISRDown', 'ttISRUp', 
-                       'ttmuRFcorrelatedDown', 'ttmuRFcorrelatedUp', 
-                       'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp', 
-        ]
-        systematics = ['btagSF_shape_hfDown', 'btagSF_shape_hfUp', ]
+        # print("Making reduced systematic set for testing!")
+        # systematics = ['jec_13TeV_R2017Down', 'jec_13TeV_R2017Up', 
+        #                'btagSF_shape_hfDown', 'btagSF_shape_hfUp', 
+        #                'ttFSRDown', 'ttFSRUp', 'ttISRDown', 'ttISRUp', 
+        #                'ttmuRFcorrelatedDown', 'ttmuRFcorrelatedUp', 
+        #                'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp', 
+        # ]
+        # systematics = ['btagSF_shape_hfDown', 'btagSF_shape_hfUp',
+        # ]
         # print("Removing systematics")
         # systematics = []
 
@@ -2575,9 +2589,10 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             CanCache["canvas"].SaveAs("{}".format(pngOutput))
 
         #Save histograms for Combine, this is a hacked first attempt, might be cleaner to create a dictionary of histograms with keys from the histogram name to avoid duplicates/cycle numbers in the root files.
-        if combineOutput!= None and ("HT" in can_name):
+        if combineOutput is not None and (combineInput in can_name):
             if "signalSensitive_HT" in can_name: continue
-            if "nBtag2p" in can_name: continue
+            # if "nBtag2p" in can_name: continue
+            normalizationDict = {}
             for i in xrange(len(CanCache["subplots/supercategories"])):
                 for preProcessName, hist in CanCache["subplots/supercategories"][i]['Categories/hists'].items():
                     processName = preProcessName.replace("BLIND", "").replace("Data", "data_obs")
@@ -2591,6 +2606,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                         combHistograms[processName] = []
                     #BLINDData___HT500_nMediumDeepJetB4+_nJet8+___HT___nom
                     combProcess, combCategory, combVariable, combSystematic = hist.GetName().split(separator)
+                    for iName, oName in [("ttother", "ttnobb")]:
+                        combProcess = combProcess.replace(iName, oName)
                     combSystematics[processName].append(combSystematic)
                     #combProcess.replace("BLIND", "").replace("Data", "data_obs")
                     combVariables[processName].append(combVariable)
@@ -2599,13 +2616,25 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                            combCategory.replace("+", "p"), 
                                            combVariable, 
                                            combSystematic])
-                    combHist = hist.Clone(histName)
                     if "BLIND" in combProcess:
                         print("Blinding histogram for Combine")
                         combHist = hist.Clone(hist.GetName().replace("Data", "data_obs").replace("+", "p").replace("BLIND", ""))
                         combHist.SetDirectory(0)
                         for combBin in xrange(combHist.GetNbinsX() + 2):
                             combHist.SetBinContent(combBin, 0); combHist.SetBinError(combBin, 0)
+                    else:
+                        combHist = hist.Clone(histName)
+                    #Remove negative weight bins if the option is selected
+                    normalizationDict[combHist.GetName()] = combHist.Integral()
+                    if removeNegativeBins:
+                        negativeBins = np.nonzero(root_numpy.hist2array(hist, include_overflow=True, copy=True, return_edges=False) < 0)[0]
+                        for bin in negativeBins:
+                            combHist.SetBinContent(bin, 0)
+                            combHist.SetBinError(bin, 0)
+                        if abs(combHist.Integral()) > 0.00001:
+                            combHist.Scale(normalizationDict[combHist.GetName()]/combHist.Integral())
+                        #Reset normalization so that systematics that are shape-only will match.
+                        normalizationDict[combHist.GetName()] = combHist.Integral()
                     combHistograms[processName].append(combHist)
             for syst in CanCache["subplots/supercategories/systematics"].keys():
                 for i in xrange(len(CanCache["subplots/supercategories/systematics"][syst])):
@@ -2624,6 +2653,24 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                         #Remap systematic names for decorrelation in Higgs Combine
                         #Decorrelated systematics: mu(Factorization/Renormalization) scale and ISR, FSR usually correlated (qcd vs ewk like ttbar vs singletop) unless
                         # " the analysis is too sensitive to off-shell effects" https://twiki.cern.ch/twiki/bin/viewauth/CMS/TopSystematics#Factorization_and_renormalizatio
+                        if processName in  ["ttbb", "ttother", "ttnobb"]:
+                            if combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp", "muRNomFDown", "muRNomFUp", 
+                                                  "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp", "FSRDown", "FSRUp"]:
+                                combSystematic = "tt" + combSystematic
+                            # elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
+                            #     combSystematic = combSystematic.replace("muRFcorrelated", "ttmuRFcorrdNew")
+                        elif processName in ["DY"]:
+                            if combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp", "muRNomFDown", "muRNomFUp", 
+                                                  "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp", "FSRDown", "FSRUp"]: 
+                                combSystematic = "ewk" + combSystematic
+                            # elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
+                            #     combSystematic = combSystematic.replace("muRFcorrelated", "ewkmuRFcorrdNew")
+                        else:
+                            if combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp", "muRNomFDown", "muRNomFUp", 
+                                                  "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp", "FSRDown", "FSRUp"]: 
+                                combSystematic = processName + combSystematic
+                            # elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
+                            #     combSystematic = combSystematic.replace("muRFcorrelated", processName + "muRFcorrdNew")
                         if combSystematic in ['ewkmuRFcorrelatedDown', 'ewkmuRFcorrelatedUp', 
                                               'ttmuRFcorrelatedDown', 'ttmuRFcorrelatedUp', 
                                               'ttVJetsmuRFcorrelatedDown', 'ttVJetsmuRFcorrelatedUp', 
@@ -2632,22 +2679,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                               'ttHmuRFcorrelatedDown', 'ttHmuRFcorrelatedUp', 
                                               'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp',]:
                             combSystematic = combSystematic.replace("muRFcorrelated", "muRFcorrdNew")
-                        if processName in  ["ttbb", "ttother", "ttnobb"]:
-                            if combSystematic in ["muRNomFDown", "muRNomFUp", "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp", "FSRDown", "FSRUp"]:
-                                combSystematic = "tt" + combSystematic
-                            elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
-                                combSystematic = combSystematic.replace("muRFcorrelated", "ttmuRFcorrdNew")
-                        elif processName in ["DY"]:
-                            if combSystematic in ["muRNomFDown", "muRNomFUp", "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp", "FSRDown", "FSRUp"]: 
-                                combSystematic = "ewk" + combSystematic
-                            elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
-                                combSystematic = combSystematic.replace("muRFcorrelated", "ewkmuRFcorrdNew")
-                        else:
-                            if combSystematic in ["muRNomFDown", "muRNomFUp", "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp", "FSRDown", "FSRUp"]: 
-                                combSystematic = processName + combSystematic
-                            elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
-                                combSystematic = combSystematic.replace("muRFcorrelated", processName + "muRFcorrdNew")
-                            
+                        for iName, oName in [("ttother", "ttnobb")]:
+                            combProcess = combProcess.replace(iName, oName)                            
                         combSystematics[processName].append(combSystematic)
                         combVariables[processName].append(combVariable)
                         combCategories[processName].append(combCategory.replace("+", "p"))
@@ -2656,6 +2689,27 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                                combVariable, 
                                                combSystematic])
                         combHist = hist.Clone(histName)
+                        #Remove negative weight bins if the option is selected
+                        systIntegral = combHist.Integral()
+                        if removeNegativeBins:
+                            negativeBins = np.nonzero(root_numpy.hist2array(combHist, include_overflow=True, copy=True, return_edges=False) < 0)[0]
+                            for bin in negativeBins:
+                                combHist.SetBinContent(bin, 0)
+                                combHist.SetBinError(bin, 0)
+                        #Regardless if negative weight bins are removed, check if there is a normalization to do
+                        if systIntegral > 0.00001:
+                            if normalizeHistograms is not None:
+                                if combSystematic in normalizeHistograms:
+                                    normValue = normalizationDict.get(combHist.GetName().replace(combSystematic, "nom"), 
+                                                                      combHist.GetName().replace(combSystematic, ""))
+                                    combHist.Scale(normValue/combHist.Integral())
+                                #If we're not normalizing to the non-systematic, check if we still need to normalize to itself
+                                elif removeNegativeBins:
+                                    combHist.Scale(systIntegral/combHist.Integral())
+                            #Check separately if we need to normalize to the version prior to negative bin removal, separate from the alternative path just above,
+                            #to avoid double scaling calculations
+                            elif removeNegativeBins:
+                                combHist.Scale(systIntegral()/combHist.Integral())
                         #No data histograms for systematic variations... 
                         if "Data" in combProcess: continue
                         combHistograms[processName].append(combHist)
@@ -2665,7 +2719,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         combVariables[processName] = list(set(combVariables[processName]))
         combCategories[processName] = list(set(combCategories[processName]))
         combHistogramsFinal[processName] = dict([(h.GetName(), h) for h in combHistograms[processName]])
-    if combineOutput != None:
+    if combineOutput is not None:
         combFile = ROOT.TFile.Open(combineOutput, "recreate")
         for processName, processDict in combHistogramsFinal.items():
             for histName, hist in processDict.items():
@@ -2806,9 +2860,11 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 
                                                                                                               'ElEl_HighMET', 'MuMu_ElMu','MuMu_ElMu_ElEl', 'All'],
                         help='Decay channel for opposite-sign dilepton analysis')
+    parser.add_argument('-ci', '--combineInput', dest='combineInput', action='store', type=str, default=None, choices=['HT',],
+                        help='Variable to be used as input to Higgs Combine. If None, output histograms will not be produced')
     parser.add_argument('-d', '--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
                         help='analysis directory where btagging yields, histograms, etc. are stored')
-    parser.add_argument('-f', '--formats', dest='formats', action='append', choices=['pdf', 'C', 'png', 'combine'],
+    parser.add_argument('-f', '--formats', dest='formats', action='append', choices=['pdf', 'C', 'png'],
                         help='Formats to save plots as, supporting subset of ROOT SaveAs() formats: pdf, C macro, png')
     parser.add_argument('-p', '--plotCard', dest='plotCard', action='store', type=str, default="$ADIR/Histograms/All/plots.json",
                         help='input plotting configuration, defaulting to "$ADIR/Histograms/All/plots.json"')
@@ -2841,6 +2897,7 @@ if __name__ == '__main__':
     dateToday = datetime.date.today().strftime("%b-%d-%Y")
     stage = args.stage
     channel = args.channel
+    combineInput = args.combineInput
     era = args.era
     variables = args.variables
     nJets = args.nJetCategories
@@ -2916,14 +2973,14 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
             pdfOut = "$ADIR/Plots/$TAG_$PLOTCARD_$CHAN.pdf".replace("$ADIR", analysisDir).replace("$TAG", tag).replace("$PLOTCARD", plotcard).replace("$CHAN", channel).replace("//", "/")
             if verb:
                 print("pdfOutput = {}".format(pdfOut))
-        if 'combine' in args.formats:
-            combineOut = "$ADIR/Combine/combTest_$CHAN.root".replace("$ADIR", analysisDir).replace("$TAG", tag).replace("$PLOTCARD", plotcard).replace("$CHAN", channel).replace("//", "/")
+        if combineInput is not None:
+            combineOut = "$ADIR/Combine/CI_$CHAN_$VAR.root".replace("$ADIR", analysisDir).replace("$VAR", combineInput).replace("$TAG", tag).replace("$PLOTCARD", plotcard).replace("$CHAN", channel).replace("//", "/")
             if verb:
                 print("pdfOutput = {}".format(pdfOut))
         else:
             combineOut = None
         resultsDict = loopPlottingJSON(loadedPlotConfig, Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, 
-                                       pdfOutput=pdfOut, combineOutput=combineOut, lumi=lumi, useCanvasMax=useCanvasMax, 
+                                       pdfOutput=pdfOut, combineOutput=combineOut, combineInput=combineInput, lumi=lumi, useCanvasMax=useCanvasMax, 
                                        skipSystematics=skipSystematics, verbose=verb);
     else:
         raise RuntimeError("The loading of the plot or legend cards failed. They are of type {} and {}, respectively".format(type(loadedPlotConfig),type(loadedLegendConfig)))
