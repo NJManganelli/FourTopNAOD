@@ -17,6 +17,104 @@
       LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/DYJets_DL-*_2017_v2*.root"
       LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/DYJets_DL-*_2017_v2*.root"
       LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/DYJets_DL-*_2017_v2*.root"
+- DYJets_DL-HT100:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 181.302
+    sumWeights: 1
+    sumWeights2: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    nEvents: 1
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- DYJets_DL-HT200:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 50.4177
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- DYJets_DL-HT400:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 6.98394
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- DYJets_DL-HT600:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 1.68141
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- DYJets_DL-HT800:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.775392
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsNegative: 0
+    nEventsPositive: 1
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- DYJets_DL-HT1200:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.186222
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- DYJets_DL-HT2500:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.00438495
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
 - ST_tW:
     era: "2017"
     isData: false
@@ -55,6 +153,51 @@
       LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tbarW_2017_v2*.root"
       LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tbarW_2017_v2*.root"
       LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tbarW_2017_v2*.root"
+- ST_s-channel:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 3.7866666666666666
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5p1: "dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
+- ST_t_t-channel:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 80.95
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5p1: "dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
+- ST_tbar_t-channel:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 136.02
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    sumWeights: 1
+    sumWeights2: 1
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5p1: "dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
 - ttH:
     era: "2017"
     isData: false
@@ -396,6 +539,90 @@
           effectiveXS2: 0.00670396137791
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.26895164785
+- tt_AH-CR1-QCD:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 380.1143
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToHadronic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_AH-CR2-GluonMove:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 380.1143
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToHadronic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_AH-HDAMPdown:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 380.1143
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToHadronic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_AH-HDAMPup:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 380.1143
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToHadronic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_AH-TuneCP5down:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 380.1143
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToHadronic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_AH-TuneCP5up:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 380.1143
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToHadronic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
 - tt_DL:
     era: "2017"
     isData: false
@@ -634,6 +861,90 @@
           effectiveXS2: 2.54452504445e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.181779039379
           nLep1nJet9pGenHT500p-nominalXS: 0.0
+- tt_DL-CR1-QCD:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 87.3348
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_DL-CR2-GluonMove:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 87.3348
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_DL-HDAMPdown:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 87.3348
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_DL-HDAMPup:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 87.3348
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_DL-TuneCP5down:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 87.3348
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_DL-TuneCP5up:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 87.3348
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
 - tt_SL:
     era: "2017"
     isData: false
@@ -861,6 +1172,90 @@
           effectiveXS2: 5.93926322975e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.26895046344
+- tt_SL-CR1-QCD:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 364.3109
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_SL-CR2-GluonMove:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 364.3109
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_SL-HDAMPdown:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 364.3109
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLeptonic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_SL-HDAMPup:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 364.3109
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLeptonic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_SL-TuneCP5down:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 364.3109
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_SL-TuneCP5up:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 364.3109
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
 - tttJ:
     era: "2017"
     isData: false
@@ -1200,398 +1595,3 @@
     source:
       NANOv5: "dbs:/SingleMuon/Run2017F-Nano1June2019-v1/NANOAOD"
       LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_F*_2017_v2.root"
-- DYJets_DL-HT100:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 181.302
-    sumWeights: 1
-    sumWeights2: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    nEvents: 1
-    source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- DYJets_DL-HT200:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 50.4177
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- DYJets_DL-HT400:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 6.98394
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- DYJets_DL-HT600:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 1.68141
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- DYJets_DL-HT800:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 0.775392
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsNegative: 0
-    nEventsPositive: 1
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- DYJets_DL-HT1200:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 0.186222
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- DYJets_DL-HT2500:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 0.00438495
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- ST_s-channel:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 3.7866666666666666
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv5p1: "dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
-- ST_t_t-channel:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 80.95
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv5p1: "dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
-- ST_tbar_t-channel:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 136.02
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    sumWeights: 1
-    sumWeights2: 1
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv5p1: "dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
-- tt_AH-CR1-QCD:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 380.1143
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTToHadronic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_AH-CR2-GluonMove:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 380.1143
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTToHadronic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_AH-HDAMPdown:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 380.1143
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTToHadronic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_AH-HDAMPup:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 380.1143
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTToHadronic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_AH-TuneCP5down:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 380.1143
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTToHadronic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_AH-TuneCP5up:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 380.1143
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTToHadronic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_DL-CR1-QCD:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 87.3348
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_DL-CR2-GluonMove:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 87.3348
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_DL-HDAMPdown:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 87.3348
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_DL-HDAMPup:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 87.3348
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTTo2L2Nu_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_DL-TuneCP5down:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 87.3348
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_DL-TuneCP5up:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 87.3348
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_SL-CR1-QCD:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 364.3109
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_SL-CR2-GluonMove:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 364.3109
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_SL-HDAMPdown:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 364.3109
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTToSemiLeptonic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_SL-HDAMPup:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 364.3109
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTToSemiLeptonic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_SL-TuneCP5down:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 364.3109
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-- tt_SL-TuneCP5up:
-    era: "2017"
-    isData: false
-    isSignal: false
-    crossSection: 364.3109
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
-    channels:
-    - All
-    source:
-      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
