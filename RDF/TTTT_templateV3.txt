@@ -3,8 +3,8 @@ imax    1 number of bins
 jmax    7 number of processes minus 1
 kmax    * number of nuisance parameters
 --------------------------------------------------------------------------------
-shapes * $CHANNEL_$CATEGORY combTest_$CHANNEL.root $PROCESS___HT500_$CATEGORY___HT___nom $PROCESS___HT500_$CATEGORY___HT___$SYSTEMATIC
-shapes data_obs $CHANNEL_$CATEGORY combTest_$CHANNEL.root data_obs___HT500_$CATEGORY___HT___nom
+shapes * $CHANNEL_$CATEGORY CI_$CHANNEL_$VAR.root $PROCESS___HT500_$CATEGORY___HT___nom $PROCESS___HT500_$CATEGORY___HT___$SYSTEMATIC
+shapes data_obs $CHANNEL_$CATEGORY CI_$CHANNEL_$VAR.root data_obs___HT500_$CATEGORY___HT___nom
 --------------------------------------------------------------------------------
 bin          $CHANNEL_$CATEGORY
 observation  -1          
