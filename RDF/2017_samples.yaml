@@ -1,0 +1,1569 @@
+!!omap
+- DYJets_DL:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 6077.22
+    sumWeights: 49082157.0
+    sumWeights2: 49125561.0
+    nEvents: 49125561
+    nEventsPositive: 49103859
+    nEventsNegative: 21702
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017RECOSIMstep_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-*_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/DYJets_DL-*_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/DYJets_DL-*_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/DYJets_DL-*_2017_v2*.root"
+- ST_tW:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 35.83
+    sumWeights2: 9823995766.508368
+    sumWeights: 277241050.840222
+    nEvents: 7945242
+    nEventsPositive: 7914815
+    nEventsNegative: 30427
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5p1: "dbs:/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tW_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tW_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tW_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tW_2017_v2*.root"
+- ST_tbarW:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 35.83
+    sumWeights: 270762750.172525
+    sumWeights2: 9611964941.797768
+    nEvents: 7745276
+    nEventsPositive: 7715654
+    nEventsNegative: 30427
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5p1: "dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tbarW_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tbarW_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tbarW_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tbarW_2017_v2*.root"
+- ttH:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.2934
+    sumWeights2: 2317497.816608
+    sumWeights: 4216319.315884
+    nEvents: 8000000
+    nEventsPositive: 7916867
+    nEventsNegative: 83133
+    channels:
+    - All
+    notes: "Missing PS weights, but contained in the split ttHTobb dilepton/single lepton samples..."
+    source:
+      NANOv5: "dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttH_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttH_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttH_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttH_2017_v2*.root"
+- ttH_DL-bb:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.030806999999999998
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- ttH_SL-bb:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.1285092
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- ttHH:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.0007408
+    sumWeights: 194116.909912
+    sumWeights2: 194611.090542
+    nEvents: 194817
+    nEventsPositive: 194516
+    nEventsNegative: 301
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTHH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttHH_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttHH_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttHH_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttHH_2017_v2*.root"
+- ttWH:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.001572
+    sumWeights: 198839.680865
+    sumWeights2: 199704.039588
+    nEvents: 200000
+    nEventsPositive: 199491
+    nEventsNegative: 509
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTWH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWH_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWH_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWH_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWH_2017_v2*.root"
+- ttWJets:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.6105
+    sumWeights: 9384328.0
+    sumWeights2: 9425384.0
+    nEvents: 9425384
+    nEventsPositive: 9404856
+    nEventsNegative: 20528
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWJets_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWJets_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWJets_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWJets_2017_v2*.root"
+- ttWW:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.007882
+    sumWeights: 962000.0
+    sumWeights2: 962000.0
+    nEvents: 962000
+    nEventsPositive: 962000
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWW_2017_v2*.root"
+      NANOv5: "dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWW_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWW_2017_v2*.root"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWW_2017_v2.root"
+- ttWZ:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.002974
+    sumWeights: 198625.183551
+    sumWeights2: 199708.972601
+    nEvents: 200000
+    nEventsPositive: 199379
+    nEventsNegative: 621
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWZ_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWZ_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWZ_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWZ_2017_v2*.root"
+- ttZH:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.01253
+    sumWeights: 199192.23499
+    sumWeights2: 199794.753976
+    nEvents: 200000
+    nEventsPositive: 199643
+    nEventsNegative: 357
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZH_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZH_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZH_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZH_2017_v2*.root"
+- ttZJets:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.7826
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
+- ttZZ:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.001572
+    sumWeights: 199286.628891
+    sumWeights2: 199816.306332
+    nEvents: 200000
+    nEventsPositive: 199686
+    nEventsNegative: 314
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZZ_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZZ_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZZ_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZZ_2017_v2*.root"
+- ttZ_DL-M10:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.2529
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTZToLLNuNu_M-10_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- ttZ_DL-M1to10:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.2529
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- ttZ_QQ:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.5297
+    sumWeights: 8519074.0
+    sumWeights2: 8536618.0
+    nEvents: 8536618
+    nEventsPositive: 8527846
+    nEventsNegative: 8772
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
+- tt_AH:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 380.1143
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+    doFilter: true
+    splitProcess:
+      processes:
+        ttbb_AH:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0
+          nLep1nJet9GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-effectiveXS: 0.0
+          effectiveCrossSection: 1.5886022542742309
+          nominalXS2: 2.45198785962e-05
+          effectiveXS: 1.588602
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0
+          nEventsNegative: 302
+          sumWeights: 22135434.4955
+          nEventsPositive: 73301
+          filter: "nAdditionalBJets >= 2"
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0
+          snapshotPriority: 4
+          sumWeights2: 6767694727.14
+          nominalXS: 1.33237608423
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0
+          fractionalContribution: 1
+          effectiveXS2: 3.48573902185e-05
+          nLep2nJet7GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-nominalXS: 0.0
+        ttother_AH:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0
+          nLep1nJet9GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-effectiveXS: 0.0
+          effectiveCrossSection: 360.4533485909558
+          nominalXS2: 0.00663764742005
+          effectiveXS: 360.453348999
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0
+          nEventsNegative: 80517
+          sumWeights: 5992649717.25
+          nEventsPositive: 19842384
+          filter: "nAdditionalBJets < 2"
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0
+          snapshotPriority: 2
+          sumWeights2: 1832047058040.0
+          nominalXS: 360.709574761
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0
+          fractionalContribution: 1
+          effectiveXS2: 0.0066282208208
+          nLep2nJet7GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-nominalXS: 0.0
+      ID:
+        nFTAGenJet/FTAGenHT: false
+        subera: false
+        unpackGenTtbarId: true
+      inclusiveProcess:
+        tt_AH_inclusive:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0
+          nLep1nJet9GenHT500-550-nominalXS: 0.193983337319
+          nLep1nJet9pGenHT500p-effectiveXS: 2.26895164785
+          effectiveCrossSection: 364.3109
+          nominalXS2: 0.00670396137791
+          effectiveXS: 364.310902493
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0
+          nEventsNegative: 81403
+          sumWeights: 6052480387.47
+          nEventsPositive: 20040607
+          filter: "return true;"
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0
+          sumWeights2: 1850350273590.0
+          nominalXS: 364.310902493
+          nLep1nJet9GenHT500-550-effectiveXS: 0.193983337319
+          fractionalContribution: 1
+          effectiveXS2: 0.00670396137791
+          nLep2nJet7GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-nominalXS: 2.26895164785
+- tt_DL:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 87.3348
+    sumWeights: 4980769113.241218
+    sumWeights2: 364913493679.9551
+    nEvents: 69098644
+    nEventsPositive: 68818780
+    nEventsNegative: 279864
+    Notes: "crossSection folds in the branching ratio to DL. when splitting the process,
+      need to know both the effective crossSection in each phase space and the effective
+      number of events to combine multiple samples in that phase space proportional
+      to the effective number of simulated events (N_eff = N_positive - N_negative)
+      over the nEffectivePhaseSpace (sum of N_eff from all contributing samples)The
+      old XS form 2018 PDG BRs was 89.0482, synchronized with Brown's value 87.3348... Need to update
+      SL technically as well"
+    stitch:
+      source: Nominal
+      mode: Flag
+      channel: DL
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5p1: "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-*_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-NOM-*_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-NOM-*_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-NOM-*_2017_v2*.root"
+    doFilter: true
+    splitProcess:
+      processes:
+        ttbb_DL_nr:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0
+          nLep1nJet9GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-effectiveXS: 0.0
+          effectiveCrossSection: 0.33134704594375003
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          nEventsPositive: 208932
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
+            < 500)
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0
+          snapshotPriority: 4
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0
+          fractionalContribution: 1
+          effectiveXS2: 5.32282326868e-07
+          nLep2nJet7GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-nominalXS: 0.0
+        ttbb_DL_fr:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0486771857914
+          nLep1nJet9GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-effectiveXS: 0.0
+          effectiveCrossSection: 0.060846482239249995
+          nominalXS2: 6.25820222319e-08
+          effectiveXS: 0.00728478735001
+          nLep2nJet7GenHT500-550-effectiveXS: 0.000678853569398
+          nEventsNegative: 174
+          sumWeights: 2776096.39581
+          nEventsPositive: 38381
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
+          nLep2nJet7pGenHT500p-effectiveXS: 0.00728478735001
+          snapshotPriority: 3
+          sumWeights2: 203548428.082
+          nominalXS: 0.0486771857914
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0
+          fractionalContribution: 0.11972537248
+          effectiveXS2: 1.40162690665e-09
+          nLep2nJet7GenHT500-550-nominalXS: 0.00453612161001
+          nLep1nJet9pGenHT500p-nominalXS: 0.0
+        ttother_DL_fr:
+          nLep2nJet7pGenHT500p-nominalXS: 1.40805743121
+          nLep1nJet9GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-effectiveXS: 0.0
+          effectiveCrossSection: 1.3958881347621501
+          nominalXS2: 1.81253364662e-06
+          effectiveXS: 0.166807220112
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0209434011092
+          nEventsNegative: 5757
+          sumWeights: 80302570.8316
+          nEventsPositive: 1111004
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
+          nLep2nJet7pGenHT500p-effectiveXS: 0.166807220112
+          snapshotPriority: 1
+          sumWeights2: 5895277293.01
+          nominalXS: 1.40805743121
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0
+          fractionalContribution: 0.11949870629
+          effectiveXS2: 2.54375352784e-08
+          nLep2nJet7GenHT500-550-nominalXS: 0.176787980442
+          nLep1nJet9pGenHT500p-nominalXS: 0.0
+        ttother_DL_nr:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0
+          nLep1nJet9GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-effectiveXS: 0.0
+          effectiveCrossSection: 85.54672190761126
+          nominalXS2: 0.000109978783148
+          effectiveXS: 85.5467219936
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0
+          nEventsNegative: 273039
+          sumWeights: 4882573073.47
+          nEventsPositive: 67460463
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
+            < 500)
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0
+          snapshotPriority: 2
+          sumWeights2: 357706696495.0
+          nominalXS: 85.6129913169
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0
+          fractionalContribution: 1
+          effectiveXS2: 0.000109808589394
+          nLep2nJet7GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-nominalXS: 0.0
+      ID:
+        nFTAGenJet/FTAGenHT: true
+        subera: false
+        unpackGenTtbarId: true
+      inclusiveProcess:
+        tt_DL_inclusive:
+          nLep2nJet7pGenHT500p-nominalXS: 1.456734617
+          nLep1nJet9GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-effectiveXS: 0.0
+          effectiveCrossSection: 87.3348
+          nominalXS2: 0.000112194559601
+          effectiveXS: 87.3348035714
+          nLep2nJet7GenHT500-550-effectiveXS: 0.181324102052
+          nEventsNegative: 279864
+          sumWeights: 4980769317.03
+          nEventsPositive: 68818780
+          filter: return true;
+          nLep2nJet7pGenHT500p-effectiveXS: 1.456734617
+          sumWeights2: 364913523596.0
+          nominalXS: 87.3348035714
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0
+          fractionalContribution: 1
+          effectiveXS2: 0.000112194559601
+          nLep2nJet7GenHT500-550-nominalXS: 0.181324102052
+          nLep1nJet9pGenHT500p-nominalXS: 0.0
+- tt_DL-GF:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 1.4567346170014
+    crossSectionGenHT500-550nJet7Matching: 1.4529
+    sumWeights: 612101836.284397
+    sumWeights2: 44925503249.097206
+    nEvents: 8510388
+    nEventsPositive: 8467543
+    nEventsNegative: 42845
+    stitch:
+      source: Filtered
+      mode: Flag
+      channel: DL
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5p1: "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-*_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-GF-*_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-GF-*_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-GF-*_2017_v2*.root"
+    Notes: "1.4815 was the old XS * BR * stitching factor, now scaled down so that the XS matches Brown's lower BR calculation"
+    doFilter: true
+    splitProcess:
+      processes:
+        ttother_DL-GF_fr:
+          nLep2nJet7pGenHT500p-nominalXS: 1.40816043153
+          nLep1nJet9GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-effectiveXS: 0.0
+          effectiveCrossSection: 1.3958881347621501
+          nominalXS2: 2.45980434304e-07
+          effectiveXS: 1.2290807799
+          nLep2nJet7GenHT500-550-effectiveXS: 0.154762190574
+          nEventsNegative: 41630
+          sumWeights: 591691409.848
+          nEventsPositive: 8185412
+          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          nLep2nJet7pGenHT500p-effectiveXS: 1.2290807799
+          snapshotPriority: 2
+          sumWeights2: 43429698960.3
+          nominalXS: 1.40816043153
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0
+          fractionalContribution: 0.88050129371
+          effectiveXS2: 1.87394631545e-07
+          nLep2nJet7GenHT500-550-nominalXS: 0.17731136686
+          nLep1nJet9pGenHT500p-nominalXS: 0.0
+        ttbb_DL-GF_fr:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0485744525276
+          nLep1nJet9GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-effectiveXS: 0.0
+          effectiveCrossSection: 0.060846482239249995
+          nominalXS2: 8.47204020682e-09
+          effectiveXS: 0.0535612126499
+          nLep2nJet7GenHT500-550-effectiveXS: 0.00492633360499
+          nEventsNegative: 1215
+          sumWeights: 20410377.7205
+          nEventsPositive: 282130
+          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0535612126499
+          snapshotPriority: 4
+          sumWeights2: 1495802529.19
+          nominalXS: 0.0485744525276
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0
+          fractionalContribution: 0.88027462752
+          effectiveXS2: 1.03008480636e-08
+          nLep2nJet7GenHT500-550-nominalXS: 0.00446767251882
+          nLep1nJet9pGenHT500p-nominalXS: 0.0
+      ID:
+        nFTAGenJet/FTAGenHT: true
+        subera: false
+        unpackGenTtbarId: true
+      inclusiveProcess:
+        tt_DL-GF_inclusive:
+          nLep2nJet7pGenHT500p-nominalXS: 1.45673488406
+          nLep2nJet7pGenHT500p-effectiveXS: 1.45673488406
+          nLep1nJet9pGenHT500p-effectiveXS: 0.0
+          nominalXS2: 2.54452504445e-07
+          effectiveXS: 1.45673505707
+          nLep2nJet7GenHT500-550-effectiveXS: 0.181779039379
+          nEventsNegative: 42845
+          sumWeights: 612101860.267
+          nEventsPositive: 8467543
+          nLep1nJet9GenHT500-550-nominalXS: 0.0
+          sumWeights2: 44925506774.5
+          nominalXS: 1.45673505707
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0
+          effectiveXS2: 2.54452504445e-07
+          nLep2nJet7GenHT500-550-nominalXS: 0.181779039379
+          nLep1nJet9pGenHT500p-nominalXS: 0.0
+- tt_SL:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 364.3109
+    sumWeights: 6052480345.748356
+    sumWeights2: 1850350248120.3762
+    nEvents: 20122010
+    nEventsPositive: 20040607
+    nEventsNegative: 81403
+    stitch:
+      source: Nominal
+      mode: Flag
+      channel: SL
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5p1: "dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-NOM_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-NOM_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-NOM_2017_v2*.root"
+    doFilter: true
+    splitProcess:
+      processes:
+        ttbb_SL_nr:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0
+          nLep1nJet9GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-effectiveXS: 0.0
+          effectiveCrossSection: 1.5886022542742309
+          nominalXS2: 2.45198785962e-05
+          effectiveXS: 1.588602
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0
+          nEventsNegative: 302
+          sumWeights: 22135434.4955
+          nEventsPositive: 73301
+          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)"
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0
+          snapshotPriority: 4
+          sumWeights2: 6767694727.14
+          nominalXS: 1.33237608423
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0
+          fractionalContribution: 1
+          effectiveXS2: 3.48573902185e-05
+          nLep2nJet7GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-nominalXS: 0.0
+        ttother_SL_nr:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0
+          nLep1nJet9GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-effectiveXS: 0.0
+          effectiveCrossSection: 360.4533485909558
+          nominalXS2: 0.00663764742005
+          effectiveXS: 360.453348999
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0
+          nEventsNegative: 80517
+          sumWeights: 5992649717.25
+          nEventsPositive: 19842384
+          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)"
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0
+          snapshotPriority: 2
+          sumWeights2: 1832047058040.0
+          nominalXS: 360.709574761
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0
+          fractionalContribution: 1
+          effectiveXS2: 0.0066282208208
+          nLep2nJet7GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-nominalXS: 0.0
+        ttother_SL_fr:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0
+          nLep1nJet9GenHT500-550-nominalXS: 0.187760421205
+          nLep1nJet9pGenHT500p-effectiveXS: 0.030132880675
+          effectiveCrossSection: 2.150044649139365
+          nominalXS2: 3.99582159982e-05
+          effectiveXS: 0.030132880675
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0
+          nEventsNegative: 560
+          sumWeights: 36038396.785
+          nEventsPositive: 119432
+          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0
+          snapshotPriority: 1
+          sumWeights2: 11028806959.9
+          nominalXS: 2.16922319732
+          nLep1nJet9GenHT500-550-effectiveXS: 0.00260819742969
+          fractionalContribution: 0.01401549826
+          effectiveXS2: 7.71043559122e-09
+          nLep2nJet7GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-nominalXS: 2.16922319732
+        ttbb_SL_fr:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0
+          nLep1nJet9GenHT500-550-nominalXS: 0.00622291611373
+          nLep1nJet9pGenHT500p-effectiveXS: 0.00164567288
+          effectiveCrossSection: 0.11890699871993463
+          nominalXS2: 1.83586327709e-06
+          effectiveXS: 0.00164567288
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0
+          nEventsNegative: 24
+          sumWeights: 1656838.94388
+          nEventsPositive: 5490
+          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0
+          snapshotPriority: 3
+          sumWeights2: 506713855.51
+          nominalXS: 0.0997284505393
+          nLep1nJet9GenHT500-550-effectiveXS: 0.000102687690699
+          fractionalContribution: 0.01384021714
+          effectiveXS2: 4.99906997665e-10
+          nLep2nJet7GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-nominalXS: 0.0997284505393
+      ID:
+        nFTAGenJet/FTAGenHT: true
+        subera: false
+        unpackGenTtbarId: true
+      inclusiveProcess:
+        tt_SL_inclusive:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0
+          nLep1nJet9GenHT500-550-nominalXS: 0.193983337319
+          nLep1nJet9pGenHT500p-effectiveXS: 2.26895164785
+          effectiveCrossSection: 364.3109
+          nominalXS2: 0.00670396137791
+          effectiveXS: 364.310902493
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0
+          nEventsNegative: 81403
+          sumWeights: 6052480387.47
+          nEventsPositive: 20040607
+          filter: return true;
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0
+          sumWeights2: 1850350273590.0
+          nominalXS: 364.310902493
+          nLep1nJet9GenHT500-550-effectiveXS: 0.193983337319
+          fractionalContribution: 1
+          effectiveXS2: 0.00670396137791
+          nLep2nJet7GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-nominalXS: 2.26895164785
+- tt_SL-GF:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 2.2689516478593
+    sumWeights: 2653328498.476976
+    sumWeights2: 812201885978.2092
+    nEvents: 8836856
+    nEventsPositive: 8794464
+    nEventsNegative: 42392
+    stitch:
+      source: Filtered
+      mode: Flag
+      channel: SL
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5p1: "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-GF_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-GF_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-GF_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-GF_2017_v2*.root"
+    doFilter: true
+    splitProcess:
+      processes:
+        ttother_SL-GF_fr:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0
+          nLep1nJet9GenHT500-550-nominalXS: 0.185403834447
+          nLep1nJet9pGenHT500p-effectiveXS: 2.11991211931
+          effectiveCrossSection: 2.150044649139365
+          nominalXS2: 5.67508959725e-07
+          effectiveXS: 2.11991211931
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0
+          nEventsNegative: 40612
+          sumWeights: 2535249552.17
+          nEventsPositive: 8403208
+          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0
+          snapshotPriority: 2
+          sumWeights2: 776075813737.0
+          nominalXS: 2.1679786522
+          nLep1nJet9GenHT500-550-effectiveXS: 0.181293222246
+          fractionalContribution: 0.98598450174
+          effectiveXS2: 5.42623295899e-07
+          nLep2nJet7GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-nominalXS: 2.1679786522
+        ttbb_SL-GF_fr:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0
+          nLep1nJet9GenHT500-550-nominalXS: 0.00636695757789
+          nLep1nJet9pGenHT500p-effectiveXS: 0.11726132712
+          effectiveCrossSection: 0.11890699871993463
+          nominalXS2: 2.64169608221e-08
+          effectiveXS: 0.11726132712
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0
+          nEventsNegative: 1780
+          sumWeights: 118077149.406
+          nEventsPositive: 391250
+          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0
+          snapshotPriority: 4
+          sumWeights2: 36125534258.9
+          nominalXS: 0.100971811238
+          nLep1nJet9GenHT500-550-effectiveXS: 0.00739412204407
+          fractionalContribution: 0.98615978286
+          effectiveXS2: 3.56280594874e-08
+          nLep2nJet7GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-nominalXS: 0.100971811238
+      ID:
+        nFTAGenJet/FTAGenHT: true
+        subera: false
+        unpackGenTtbarId: true
+      inclusiveProcess:
+        tt_SL-GF_inclusive:
+          nLep2nJet7pGenHT500p-nominalXS: 0.0
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0
+          nLep1nJet9pGenHT500p-effectiveXS: 2.26895046344
+          effectiveCrossSection: 2.2689516478593
+          nominalXS2: 5.93926322975e-07
+          effectiveXS: 2.26895201732
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0
+          nEventsNegative: 42392
+          sumWeights: 2653328518.69
+          nEventsPositive: 8794464
+          nLep1nJet9GenHT500-550-nominalXS: 0.191770792025
+          sumWeights2: 812201898319.0
+          nominalXS: 2.26895201732
+          nLep1nJet9GenHT500-550-effectiveXS: 0.191770792025
+          fractionalContribution: 1
+          effectiveXS2: 5.93926322975e-07
+          nLep2nJet7GenHT500-550-nominalXS: 0.0
+          nLep1nJet9pGenHT500p-nominalXS: 2.26895046344
+- tttJ:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.0004741
+    sumWeights: 198394.878491
+    sumWeights2: 199663.384954
+    nEvents: 200000
+    nEventsNegative: 727
+    nEventsPositive: 199273
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttJ_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttJ_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttJ_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttJ_2017_v2*.root"
+- tttW:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.007882
+    sumWeights: 199552.187377
+    sumWeights2: 199697.648421
+    nEvents: 200000
+    nEventsPositive: 199852
+    nEventsNegative: 148
+    channels:
+    - All
+    source:
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttW_2017_v2*.root"
+      NANOv5: "dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttW_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttW_2017_v2*.root"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttW_2017_v2.root"
+- tttt:
+    era: "2017"
+    isData: false
+    isSignal: true
+    crossSection: 0.012
+    sumWeights: 18645.487772
+    sumWeights2: 1094.209551
+    nEvents: 2273928
+    nEventsPositive: 1561946
+    nEventsNegative: 711982
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttt-*_2017_v2.root"
+      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttt-*_2017_v2*.root"
+      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttt-*_2017_v2*.root"
+      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttt-*_2017_v2*.root"
+- ElEl_B:
+    era: "2017"
+    subera: "B"
+    isData: true
+    nEvents: 58088760
+    channel: "ElEl"
+    channels:
+    - ElEl
+    source:
+      NANOv5: "dbs:/DoubleEG/Run2017B-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_B*_2017_v2.root"
+- ElEl_C:
+    era: "2017"
+    subera: "C"
+    isData: true
+    nEvents: 65181125
+    channel: "ElEl"
+    channels:
+    - ElEl
+    source:
+      NANOv5: "dbs:/DoubleEG/Run2017C-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_C*_2017_v2.root"
+- ElEl_D:
+    era: "2017"
+    subera: "D"
+    isData: true
+    nEvents: 25911432
+    channel: "ElEl"
+    channels:
+    - ElEl
+    source:
+      NANOv5: "dbs:/DoubleEG/Run2017D-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_D*_2017_v2.root"
+- ElEl_E:
+    era: "2017"
+    subera: "E"
+    isData: true
+    nEvents: 56233597
+    channel: "ElEl"
+    channels:
+    - ElEl
+    source:
+      NANOv5: "dbs:/DoubleEG/Run2017E-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_E*_2017_v2.root"
+- ElEl_F:
+    era: "2017"
+    subera: "F"
+    isData: true
+    nEvents: 74307066
+    channel: "ElEl"
+    channels:
+    - ElEl
+    source:
+      NANOv5: "dbs:/DoubleEG/Run2017F-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_F*_2017_v2.root"
+- ElMu_B:
+    era: "2017"
+    subera: "B"
+    isData: true
+    nEvents: 4453465
+    channel: "ElMu"
+    channels:
+    - ElMu
+    source:
+      NANOv5: "dbs:/MuonEG/Run2017B-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_B*_2017_v2.root"
+- ElMu_C:
+    era: "2017"
+    subera: "C"
+    isData: true
+    nEvents: 15595214
+    channel: "ElMu"
+    channels:
+    - ElMu
+    source:
+      NANOv5: "dbs:/MuonEG/Run2017C-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_C*_2017_v2.root"
+- ElMu_D:
+    era: "2017"
+    subera: "D"
+    isData: true
+    nEvents: 9164365
+    channel: "ElMu"
+    channels:
+    - ElMu
+    source:
+      NANOv5: "dbs:/MuonEG/Run2017D-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_D*_2017_v2.root"
+- ElMu_E:
+    era: "2017"
+    subera: "E"
+    isData: true
+    nEvents: 19043421
+    channel: "ElMu"
+    channels:
+    - ElMu
+    source:
+      NANOv5: "dbs:/MuonEG/Run2017E-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_E*_2017_v2.root"
+- ElMu_F:
+    era: "2017"
+    subera: "F"
+    isData: true
+    nEvents: 25776363
+    channel: "ElMu"
+    channels:
+    - ElMu
+    source:
+      NANOv5: "dbs:/MuonEG/Run2017F-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_F*_2017_v2.root"
+- El_B:
+    era: "2017"
+    subera: "B"
+    isData: true
+    nEvents: 60537490
+    channel: "El"
+    channels:
+    - ElMu
+    - ElEl
+    source:
+      NANOv5: "dbs:/SingleElectron/Run2017B-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_B*_2017_v2.root"
+- El_C:
+    era: "2017"
+    subera: "C"
+    isData: true
+    nEvents: 136637888
+    channel: "El"
+    channels:
+    - ElMu
+    - ElEl
+    source:
+      NANOv5: "dbs:/SingleElectron/Run2017C-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_C*_2017_v2.root"
+- El_D:
+    era: "2017"
+    subera: "D"
+    isData: true
+    nEvents: 51526710
+    channel: "El"
+    channels:
+    - ElMu
+    - ElEl
+    source:
+      NANOv5: "dbs:/SingleElectron/Run2017D-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_D*_2017_v2.root"
+- El_E:
+    era: "2017"
+    subera: "E"
+    isData: true
+    nEvents: 102121689
+    channel: "El"
+    channels:
+    - ElMu
+    - ElEl
+    source:
+      NANOv5: "dbs:/SingleElectron/Run2017E-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_E*_2017_v2.root"
+- El_F:
+    era: "2017"
+    subera: "F"
+    isData: true
+    nEvents: 128467223
+    channel: "El"
+    channels:
+    - ElMu
+    - ElEl
+    source:
+      NANOv5: "dbs:/SingleElectron/Run2017F-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_F*_2017_v2.root"
+- MuMu_B:
+    era: "2017"
+    subera: "B"
+    isData: true
+    nEvents: 14501767
+    channel: "MuMu"
+    channels:
+    - MuMu
+    source:
+      NANOv5: "dbs:/DoubleMuon/Run2017B-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_B*_2017_v2.root"
+- MuMu_C:
+    era: "2017"
+    subera: "C"
+    isData: true
+    nEvents: 49636525
+    channel: "MuMu"
+    channels:
+    - MuMu
+    source:
+      NANOv5: "dbs:/DoubleMuon/Run2017C-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_C*_2017_v2.root"
+- MuMu_D:
+    era: "2017"
+    subera: "D"
+    isData: true
+    nEvents: 23075733
+    channel: "MuMu"
+    channels:
+    - MuMu
+    source:
+      NANOv5: "dbs:/DoubleMuon/Run2017D-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_D*_2017_v2.root"
+- MuMu_E:
+    era: "2017"
+    subera: "E"
+    isData: true
+    nEvents: 51589091
+    channel: "MuMu"
+    channels:
+    - MuMu
+    source:
+      NANOv5: "dbs:/DoubleMuon/Run2017E-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_E*_2017_v2.root"
+- MuMu_F:
+    era: "2017"
+    subera: "F"
+    isData: true
+    nEvents: 79756560
+    channel: "MuMu"
+    channels:
+    - MuMu
+    source:
+      NANOv5: "dbs:/DoubleMuon/Run2017F-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_F*_2017_v2.root"
+- Mu_B:
+    era: "2017"
+    subera: "B"
+    isData: true
+    nEvents: 136300266
+    channel: "Mu"
+    channels:
+    - ElMu
+    - MuMu
+    source:
+      NANOv5: "dbs:/SingleMuon/Run2017B-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_B*_2017_v2.root"
+- Mu_C:
+    era: "2017"
+    subera: "C"
+    isData: true
+    nEvents: 165652756
+    channel: "Mu"
+    channels:
+    - ElMu
+    - MuMu
+    source:
+      NANOv5: "dbs:/SingleMuon/Run2017C-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_C*_2017_v2.root"
+- Mu_D:
+    era: "2017"
+    subera: "D"
+    isData: true
+    nEvents: 70361660
+    channel: "Mu"
+    channels:
+    - ElMu
+    - MuMu
+    source:
+      NANOv5: "dbs:/SingleMuon/Run2017D-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_D*_2017_v2.root"
+- Mu_E:
+    era: "2017"
+    subera: "E"
+    isData: true
+    nEvents: 154630534
+    channel: "Mu"
+    channels:
+    - ElMu
+    - MuMu
+    source:
+      NANOv5: "dbs:/SingleMuon/Run2017E-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_E*_2017_v2.root"
+- Mu_F:
+    era: "2017"
+    subera: "F"
+    isData: true
+    nEvents: 242135500
+    channel: "Mu"
+    channels:
+    - ElMu
+    - MuMu
+    source:
+      NANOv5: "dbs:/SingleMuon/Run2017F-Nano1June2019-v1/NANOAOD"
+      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_F*_2017_v2.root"
+- DYJets_DL-HT100:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 181.302
+    sumWeights: 1
+    sumWeights2: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    nEvents: 1
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- DYJets_DL-HT200:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 50.4177
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- DYJets_DL-HT400:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 6.98394
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- DYJets_DL-HT600:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 1.68141
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- DYJets_DL-HT800:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.775392
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsNegative: 0
+    nEventsPositive: 1
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- DYJets_DL-HT1200:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.186222
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- DYJets_DL-HT2500:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 0.00438495
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- ST_s-channel:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 3.7866666666666666
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5p1: "dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+- ST_t_t-channel:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 80.95
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5p1: "dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+- ST_tbar_t-channel:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 136.02
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    sumWeights: 1
+    sumWeights2: 1
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5p1: "dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+- tt_AH-CR1-QCD:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 380.1143
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToHadronic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_AH-CR2-GluonMove:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 380.1143
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToHadronic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_AH-HDAMPdown:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 380.1143
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToHadronic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_AH-HDAMPup:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 380.1143
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToHadronic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_AH-TuneCP5down:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 380.1143
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToHadronic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_AH-TuneCP5up:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 380.1143
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToHadronic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_DL-CR1-QCD:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 87.3348
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_DL-CR2-GluonMove:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 87.3348
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_DL-HDAMPdown:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 87.3348
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_DL-HDAMPup:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 87.3348
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_DL-TuneCP5down:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 87.3348
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_DL-TuneCP5up:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 87.3348
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_SL-CR1-QCD:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 364.3109
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_SL-CR2-GluonMove:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 364.3109
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_SL-HDAMPdown:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 364.3109
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLeptonic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_SL-HDAMPup:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 364.3109
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLeptonic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_SL-TuneCP5down:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 364.3109
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+- tt_SL-TuneCP5up:
+    era: "2017"
+    isData: false
+    isSignal: false
+    crossSection: 364.3109
+    sumWeights: 1
+    sumWeights2: 1
+    nEvents: 1
+    nEventsPositive: 1
+    nEventsNegative: 0
+    channels:
+    - All
+    source:
+      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
