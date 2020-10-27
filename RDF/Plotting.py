@@ -1960,7 +1960,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                      pdfOutput=None, combineOutput=None, combineInput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
                      debug=False, nDivisions=105, lumi="N/A", drawYields=False,
-                     removeNegativeBins=True, normalizeHistograms=['ttmuRNomFDown', 'ttmuRNomFUp', 'ttmuFNomRDown', 'ttmuFNomRUp', 
+                     removeNegativeBins=True, normalizeUncertainties=['ttmuRNomFDown', 'ttmuRNomFUp', 'ttmuFNomRDown', 'ttmuFNomRUp', 
                                                                    'ttmuRFcorrdNewDown', 'ttmuRFcorrdNewUp', 
                                                                    'ttVJetsmuRNomFDown', 'ttVJetsmuRNomFUp', 'ttVJetsmuFNomRDown', 'ttVJetsmuFNomRUp', 
                                                                    'ttVJetsmuRFcorrdNewDown', 'ttVJetsmuRFcorrdNewUp', 
@@ -1972,6 +1972,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                                                    'ttHmuRFcorrdNewDown', 'ttHmuRFcorrdNewUp', 
                                                                    'ttttmuRNomFDown', 'ttttmuRNomFUp', 'ttttmuFNomRDown', 'ttttmuFNomRUp', 
                                                                    'ttttmuRFcorrdNewDown', 'ttttmuRFcorrdNewUp', ],
+                     normalizeProcess=['tttt'],
 ):
     """Loop through a JSON encoded plotcard to draw plots based on root files containing histograms.
     Must pass a cache (python dictionary) to the function to prevent python from garbage collecting everything.
@@ -2697,8 +2698,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                 combHist.SetBinError(bin, 0)
                         #Regardless if negative weight bins are removed, check if there is a normalization to do
                         if systIntegral > 0.00001:
-                            if normalizeHistograms is not None:
-                                if combSystematic in normalizeHistograms:
+                            if normalizeUncertainties is not None:
+                                if combSystematic in normalizeUncertainties:
                                     normValue = normalizationDict.get(combHist.GetName().replace(combSystematic, "nom"), 
                                                                       combHist.GetName().replace(combSystematic, ""))
                                     combHist.Scale(normValue/combHist.Integral())
@@ -2709,6 +2710,12 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                             #to avoid double scaling calculations
                             elif removeNegativeBins:
                                 combHist.Scale(systIntegral()/combHist.Integral())
+                            if normalizeProcess is not None:
+                                # print("Process in normalizeProcess: ({}, {}): {}".format(processName, normalizeProcess, processName in normalizeProcess))
+                                if processName in normalizeProcess:
+                                    normValue = normalizationDict.get(combHist.GetName().replace(combSystematic, "nom"), 
+                                                                      combHist.GetName().replace(combSystematic, ""))
+                                    combHist.Scale(normValue/combHist.Integral())
                         #No data histograms for systematic variations... 
                         if "Data" in combProcess: continue
                         combHistograms[processName].append(combHist)
@@ -2719,11 +2726,13 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         combCategories[processName] = list(set(combCategories[processName]))
         combHistogramsFinal[processName] = dict([(h.GetName(), h) for h in combHistograms[processName]])
     if combineOutput is not None:
+        print("Opening file for combine input templates: {}".format(combineOutput))
         combFile = ROOT.TFile.Open(combineOutput, "recreate")
         for processName, processDict in combHistogramsFinal.items():
             for histName, hist in processDict.items():
                 hist.Write()
         combFile.Close()
+        print("Wrote file for combine input templates")
     if closeFiles == True:
         for fo in fileDict.values():
             fo.Close()
