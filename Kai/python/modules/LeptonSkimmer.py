@@ -13,7 +13,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 
-class TriggerAndLeptonLogic(Module):
+class TriggerAndLeptonSkimmer(Module):
     def __init__(self, passLevel, enforceMCCascade=True, era="2013", subera=None, isData=False, TriggerChannel=None, weightMagnitude=1, fillHists=False, debug=False, mode="Flag"):
         """ Trigger logic that checks for fired triggers and searches for appropriate objects based on criteria set by fired triggers.
 
