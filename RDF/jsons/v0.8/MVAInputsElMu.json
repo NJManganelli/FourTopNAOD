@@ -9,30 +9,30 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Canvas_nMediumDeepJetB2_Jet3_DeepJetB": {
+    "Canvas_nMediumDeepJetB2_Jet3_DeepJetB_sorted": {
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet3_DeepJetB (nMediumDeepJetB2)", 
+        "Title": "3rd highest b-tag discriminator (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
-        "XAxisTitle": "Jet3_DeepJetB", 
+        "XAxisTitle": "Discriminator", 
         "DoRatio": true, 
         "DoMountainrange": true, 
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet3_DeepJetB", 
-            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet3_DeepJetB", 
-            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet3_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet3_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet3_DeepJetB"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet3_DeepJetB_sorted", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet3_DeepJetB_sorted", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet3_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet3_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet3_DeepJetB_sorted"
         ], 
         "Margins": [
             0.1, 
@@ -74,7 +74,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet1_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -124,18 +124,18 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Canvas_nMediumDeepJetB4+_Jet1_DeepJetB": {
+    "Canvas_nMediumDeepJetB4+_Jet1_DeepJetB_sorted": {
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet1_DeepJetB (nMediumDeepJetB4+)", 
+        "Title": "Jet1_DeepJetB (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -143,11 +143,11 @@
         "DoRatio": true, 
         "DoMountainrange": true, 
         "Plots": [
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet1_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet1_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet1_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet1_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet1_DeepJetB"
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet1_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet1_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet1_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet1_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet1_DeepJetB_sorted"
         ], 
         "Margins": [
             0.1, 
@@ -163,14 +163,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_TightDeepJet (nMediumDeepJetB2)", 
+        "Title": "nJet_TightDeepJet (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -224,7 +224,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet4_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -334,7 +334,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet1_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -358,14 +358,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "dRbb (nMediumDeepJetB4+)", 
+        "Title": "dRbb (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -393,14 +393,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_MediumDeepCSV (nMediumDeepJetB4+)", 
+        "Title": "nJet_MediumDeepCSV (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -458,14 +458,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_TightDeepCSV (nMediumDeepJetB2)", 
+        "Title": "nJet_TightDeepCSV (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -509,7 +509,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet2_DeepJetB": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -529,7 +529,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet3_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -559,7 +559,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet3_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -593,14 +593,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet (nMediumDeepJetB2)", 
+        "Title": "nJet (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -624,7 +624,7 @@
         "Legend": "DefaultLegend", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet3_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -644,7 +644,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet2_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -674,7 +674,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet2_DeepJetB": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -694,7 +694,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet4_DeepJetB": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -708,14 +708,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet2_eta (nMediumDeepJetB3)", 
+        "Title": "Jet2_eta (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -763,14 +763,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HTb (nMediumDeepJetB2)", 
+        "Title": "HTb (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -814,7 +814,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet2_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -838,14 +838,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HTH (nMediumDeepJetB2)", 
+        "Title": "HTH (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -889,18 +889,18 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Canvas_nMediumDeepJetB3_Jet4_DeepJetB": {
+    "Canvas_nMediumDeepJetB3_Jet4_DeepJetB_sorted": {
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet4_DeepJetB (nMediumDeepJetB3)", 
+        "Title": "Jet4_DeepJetB (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -908,11 +908,11 @@
         "DoRatio": true, 
         "DoMountainrange": true, 
         "Plots": [
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet4_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet4_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet4_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet4_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet4_DeepJetB"
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet4_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet4_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet4_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet4_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet4_DeepJetB_sorted"
         ], 
         "Margins": [
             0.1, 
@@ -978,14 +978,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet (nMediumDeepJetB3)", 
+        "Title": "nJet (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1083,14 +1083,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet4_pt (nMediumDeepJetB4+)", 
+        "Title": "Jet4_pt (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1138,14 +1138,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet (nMediumDeepJetB4+)", 
+        "Title": "nJet (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1173,14 +1173,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet3_pt (nMediumDeepJetB4+)", 
+        "Title": "Jet3_pt (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1278,14 +1278,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "MTofMETandEl (nMediumDeepJetB3)", 
+        "Title": "MTofMETandEl (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1319,7 +1319,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet2_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1358,14 +1358,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet3_eta (nMediumDeepJetB4+)", 
+        "Title": "Jet3_eta (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1403,14 +1403,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "MTofMETandEl (nMediumDeepJetB2)", 
+        "Title": "MTofMETandEl (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1474,7 +1474,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet1_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1484,7 +1484,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet3_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1494,7 +1494,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet1_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1518,14 +1518,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_MediumDeepJet (nMediumDeepJetB2)", 
+        "Title": "nJet_MediumDeepJet (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1573,14 +1573,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet1_pt (nMediumDeepJetB4+)", 
+        "Title": "Jet1_pt (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1688,14 +1688,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HT (nMediumDeepJetB2)", 
+        "Title": "HT (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1719,30 +1719,30 @@
         "Legend": "DefaultLegend", 
         "doLogY": false
     }, 
-    "Canvas_nMediumDeepJetB2_Jet2_DeepJetB": {
+    "Canvas_nMediumDeepJetB2_Jet2_DeepJetB_sorted": {
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet2_DeepJetB (nMediumDeepJetB2)", 
+        "Title": "2nd highest b-tag discriminator (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
-        "XAxisTitle": "Jet2_DeepJetB", 
+        "XAxisTitle": "Discriminator", 
         "DoRatio": true, 
         "DoMountainrange": true, 
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet2_DeepJetB", 
-            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet2_DeepJetB", 
-            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet2_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet2_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet2_DeepJetB"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet2_DeepJetB_sorted", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet2_DeepJetB_sorted", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet2_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet2_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet2_DeepJetB_sorted"
         ], 
         "Margins": [
             0.1, 
@@ -1784,7 +1784,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet4_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1858,14 +1858,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet2_eta (nMediumDeepJetB4+)", 
+        "Title": "Jet2_eta (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1903,14 +1903,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "H2M (nMediumDeepJetB4+)", 
+        "Title": "H2M (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1944,7 +1944,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet4_DeepJetB": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -1954,30 +1954,30 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Canvas_nMediumDeepJetB2_Jet4_DeepJetB": {
+    "Canvas_nMediumDeepJetB2_Jet4_DeepJetB_sorted": {
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet4_DeepJetB (nMediumDeepJetB2)", 
+        "Title": "4th highest b-tag discriminator (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
-        "XAxisTitle": "Jet4_DeepJetB", 
+        "XAxisTitle": "Discriminator", 
         "DoRatio": true, 
         "DoMountainrange": true, 
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet4_DeepJetB", 
-            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet4_DeepJetB", 
-            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet4_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet4_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet4_DeepJetB"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet4_DeepJetB_sorted", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet4_DeepJetB_sorted", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet4_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet4_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet4_DeepJetB_sorted"
         ], 
         "Margins": [
             0.1, 
@@ -1989,18 +1989,18 @@
         "Legend": "DefaultLegend", 
         "doLogY": false
     }, 
-    "Canvas_nMediumDeepJetB4+_Jet4_DeepJetB": {
+    "Canvas_nMediumDeepJetB4+_Jet4_DeepJetB_sorted": {
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet4_DeepJetB (nMediumDeepJetB4+)", 
+        "Title": "Jet4_DeepJetB (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2008,11 +2008,11 @@
         "DoRatio": true, 
         "DoMountainrange": true, 
         "Plots": [
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet4_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet4_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet4_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet4_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet4_DeepJetB"
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet4_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet4_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet4_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet4_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet4_DeepJetB_sorted"
         ], 
         "Margins": [
             0.1, 
@@ -2034,7 +2034,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet4_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2044,7 +2044,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet2_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2218,14 +2218,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_TightDeepJet (nMediumDeepJetB3)", 
+        "Title": "nJet_TightDeepJet (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2259,18 +2259,18 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Canvas_nMediumDeepJetB3_Jet3_DeepJetB": {
+    "Canvas_nMediumDeepJetB3_Jet3_DeepJetB_sorted": {
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet3_DeepJetB (nMediumDeepJetB3)", 
+        "Title": "Jet3_DeepJetB (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2278,11 +2278,11 @@
         "DoRatio": true, 
         "DoMountainrange": true, 
         "Plots": [
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet3_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet3_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet3_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet3_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet3_DeepJetB"
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet3_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet3_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet3_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet3_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet3_DeepJetB_sorted"
         ], 
         "Margins": [
             0.1, 
@@ -2308,14 +2308,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_TightDeepCSV (nMediumDeepJetB3)", 
+        "Title": "nJet_TightDeepCSV (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2349,7 +2349,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet2_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2399,7 +2399,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet4_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2473,14 +2473,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_MediumDeepCSV (nMediumDeepJetB3)", 
+        "Title": "nJet_MediumDeepCSV (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2524,7 +2524,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet4_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2574,7 +2574,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet2_DeepJetB": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2694,7 +2694,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet3_DeepJetB": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2724,18 +2724,18 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Canvas_nMediumDeepJetB3_Jet2_DeepJetB": {
+    "Canvas_nMediumDeepJetB3_Jet2_DeepJetB_sorted": {
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet2_DeepJetB (nMediumDeepJetB3)", 
+        "Title": "Jet2_DeepJetB (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2743,11 +2743,11 @@
         "DoRatio": true, 
         "DoMountainrange": true, 
         "Plots": [
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet2_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet2_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet2_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet2_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet2_DeepJetB"
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet2_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet2_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet2_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet2_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet2_DeepJetB_sorted"
         ], 
         "Margins": [
             0.1, 
@@ -2813,14 +2813,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "ST (nMediumDeepJetB2)", 
+        "Title": "ST (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2854,7 +2854,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet2_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2864,7 +2864,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet3_DeepJetB": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -2888,14 +2888,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "dRll (nMediumDeepJetB4+)", 
+        "Title": "dRll (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2963,14 +2963,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_TightDeepJet (nMediumDeepJetB4+)", 
+        "Title": "nJet_TightDeepJet (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2994,7 +2994,7 @@
         "Legend": "DefaultLegend", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet4_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3008,14 +3008,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet4_eta (nMediumDeepJetB3)", 
+        "Title": "Jet4_eta (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3103,14 +3103,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_MediumDeepJet (nMediumDeepJetB3)", 
+        "Title": "nJet_MediumDeepJet (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3144,7 +3144,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet4_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3158,14 +3158,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HTUnweighted (nMediumDeepJetB2)", 
+        "Title": "HTUnweighted (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3193,14 +3193,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "dRll (nMediumDeepJetB3)", 
+        "Title": "dRll (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3234,7 +3234,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet1_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3338,14 +3338,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "dRll (nMediumDeepJetB2)", 
+        "Title": "dRll (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3373,14 +3373,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_TightDeepCSV (nMediumDeepJetB4+)", 
+        "Title": "nJet_TightDeepCSV (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3458,14 +3458,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_MediumDeepJet (nMediumDeepJetB4+)", 
+        "Title": "nJet_MediumDeepJet (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3509,7 +3509,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet4_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3519,7 +3519,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet1_DeepJetB": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3589,7 +3589,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet4_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3629,7 +3629,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet3_DeepJetB": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3649,7 +3649,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet1_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -3743,14 +3743,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet3_eta (nMediumDeepJetB3)", 
+        "Title": "Jet3_eta (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3808,14 +3808,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "H2M (nMediumDeepJetB3)", 
+        "Title": "H2M (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3853,14 +3853,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet4_pt (nMediumDeepJetB2)", 
+        "Title": "Jet4_pt (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3928,14 +3928,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet1_eta (nMediumDeepJetB4+)", 
+        "Title": "Jet1_eta (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3969,30 +3969,30 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Canvas_nMediumDeepJetB2_Jet1_DeepJetB": {
+    "Canvas_nMediumDeepJetB2_Jet1_DeepJetB_sorted": {
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet1_DeepJetB (nMediumDeepJetB2)", 
+        "Title": "Highest b-tag discriminator (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
-        "XAxisTitle": "Jet1_DeepJetB", 
+        "XAxisTitle": "Discriminator", 
         "DoRatio": true, 
         "DoMountainrange": true, 
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet1_DeepJetB", 
-            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet1_DeepJetB", 
-            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet1_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet1_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet1_DeepJetB"
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet1_DeepJetB_sorted", 
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet1_DeepJetB_sorted", 
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet1_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet1_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet1_DeepJetB_sorted"
         ], 
         "Margins": [
             0.1, 
@@ -4018,14 +4018,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet1_eta (nMediumDeepJetB2)", 
+        "Title": "Jet1_eta (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4069,7 +4069,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet3_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -4079,7 +4079,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet1_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -4099,7 +4099,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet2_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -4163,14 +4163,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "MTofMETandEl (nMediumDeepJetB4+)", 
+        "Title": "MTofMETandEl (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4194,7 +4194,7 @@
         "Legend": "DefaultLegend", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet2_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -4274,7 +4274,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet3_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -4288,14 +4288,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "MTofMETandMu (nMediumDeepJetB4+)", 
+        "Title": "MTofMETandMu (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4319,7 +4319,7 @@
         "Legend": "DefaultLegend", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet2_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -4383,14 +4383,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HTUnweighted (nMediumDeepJetB4+)", 
+        "Title": "HTUnweighted (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4424,7 +4424,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet2_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -4478,14 +4478,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HT (nMediumDeepJetB4+)", 
+        "Title": "HT (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4563,14 +4563,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HTb (nMediumDeepJetB4+)", 
+        "Title": "HTb (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4604,7 +4604,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet3_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -4638,14 +4638,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet4_eta (nMediumDeepJetB2)", 
+        "Title": "Jet4_eta (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4683,14 +4683,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HT2M (nMediumDeepJetB3)", 
+        "Title": "HT2M (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4778,14 +4778,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "H (nMediumDeepJetB2)", 
+        "Title": "H (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4853,14 +4853,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "dRbb (nMediumDeepJetB2)", 
+        "Title": "dRbb (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4898,14 +4898,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet2_pt (nMediumDeepJetB2)", 
+        "Title": "Jet2_pt (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4929,18 +4929,18 @@
         "Legend": "DefaultLegend", 
         "doLogY": false
     }, 
-    "Canvas_nMediumDeepJetB3_Jet1_DeepJetB": {
+    "Canvas_nMediumDeepJetB3_Jet1_DeepJetB_sorted": {
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet1_DeepJetB (nMediumDeepJetB3)", 
+        "Title": "Jet1_DeepJetB (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4948,11 +4948,11 @@
         "DoRatio": true, 
         "DoMountainrange": true, 
         "Plots": [
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet1_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet1_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet1_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet1_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet1_DeepJetB"
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet4___Jet1_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet1_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet1_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet1_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet1_DeepJetB_sorted"
         ], 
         "Margins": [
             0.1, 
@@ -5044,7 +5044,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet4_DeepJetB": {
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -5054,7 +5054,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet4_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -5074,7 +5074,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet1_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -5084,7 +5084,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet2_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -5138,14 +5138,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HTH (nMediumDeepJetB4+)", 
+        "Title": "HTH (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5243,14 +5243,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "H (nMediumDeepJetB4+)", 
+        "Title": "H (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5368,14 +5368,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_LooseDeepJet (nMediumDeepJetB2)", 
+        "Title": "nJet_LooseDeepJet (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5433,14 +5433,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet3_pt (nMediumDeepJetB2)", 
+        "Title": "Jet3_pt (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5468,14 +5468,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet2_pt (nMediumDeepJetB3)", 
+        "Title": "Jet2_pt (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5513,14 +5513,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet2_eta (nMediumDeepJetB2)", 
+        "Title": "Jet2_eta (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5638,14 +5638,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet1_pt (nMediumDeepJetB2)", 
+        "Title": "Jet1_pt (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5679,7 +5679,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet1_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -5689,7 +5689,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet4_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -5723,14 +5723,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HTRat (nMediumDeepJetB2)", 
+        "Title": "HTRat (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5814,7 +5814,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet3_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet5___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -5824,18 +5824,18 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Canvas_nMediumDeepJetB4+_Jet2_DeepJetB": {
+    "Canvas_nMediumDeepJetB4+_Jet2_DeepJetB_sorted": {
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet2_DeepJetB (nMediumDeepJetB4+)", 
+        "Title": "Jet2_DeepJetB (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5843,11 +5843,11 @@
         "DoRatio": true, 
         "DoMountainrange": true, 
         "Plots": [
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet2_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet2_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet2_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet2_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet2_DeepJetB"
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet2_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet2_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet2_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet2_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet2_DeepJetB_sorted"
         ], 
         "Margins": [
             0.1, 
@@ -5873,14 +5873,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet4_pt (nMediumDeepJetB3)", 
+        "Title": "Jet4_pt (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5938,14 +5938,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HT (nMediumDeepJetB3)", 
+        "Title": "HT (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5973,14 +5973,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_LooseDeepJet (nMediumDeepJetB4+)", 
+        "Title": "nJet_LooseDeepJet (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6034,7 +6034,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet3_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -6044,7 +6044,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet3_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -6058,14 +6058,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet1_pt (nMediumDeepJetB3)", 
+        "Title": "Jet1_pt (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6143,14 +6143,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet2_pt (nMediumDeepJetB4+)", 
+        "Title": "Jet2_pt (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6178,14 +6178,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HT2M (nMediumDeepJetB2)", 
+        "Title": "HT2M (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6243,14 +6243,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet4_eta (nMediumDeepJetB4+)", 
+        "Title": "Jet4_eta (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6288,14 +6288,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet3_pt (nMediumDeepJetB3)", 
+        "Title": "Jet3_pt (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6323,14 +6323,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HTRat (nMediumDeepJetB4+)", 
+        "Title": "HTRat (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6388,14 +6388,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "H (nMediumDeepJetB3)", 
+        "Title": "H (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6489,7 +6489,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet1_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet6___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -6503,14 +6503,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "MTofMETandMu (nMediumDeepJetB3)", 
+        "Title": "MTofMETandMu (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6578,14 +6578,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HTRat (nMediumDeepJetB3)", 
+        "Title": "HTRat (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6609,7 +6609,7 @@
         "Legend": "DefaultLegend", 
         "doLogY": false
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet4_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet4_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -6623,14 +6623,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "ST (nMediumDeepJetB3)", 
+        "Title": "ST (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6674,7 +6674,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet3_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet7___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -6684,7 +6684,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet1_DeepJetB": {
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -6704,7 +6704,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet3_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet3_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -6744,7 +6744,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet1_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -6764,7 +6764,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet1_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB3_nJet8+___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -6858,14 +6858,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HTb (nMediumDeepJetB3)", 
+        "Title": "HTb (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6963,14 +6963,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HTH (nMediumDeepJetB3)", 
+        "Title": "HTH (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7038,14 +7038,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "H2M (nMediumDeepJetB2)", 
+        "Title": "H2M (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7099,7 +7099,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet1_DeepJetB": {
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet1_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -7173,14 +7173,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_MediumDeepCSV (nMediumDeepJetB2)", 
+        "Title": "nJet_MediumDeepCSV (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7208,14 +7208,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "MTofMETandMu (nMediumDeepJetB2)", 
+        "Title": "MTofMETandMu (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7263,14 +7263,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "nJet_LooseDeepJet (nMediumDeepJetB3)", 
+        "Title": "nJet_LooseDeepJet (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7328,14 +7328,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet3_eta (nMediumDeepJetB2)", 
+        "Title": "Jet3_eta (2 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB2 nJet8+"
+            "#it{e}#mu nB=2 nJ=4", 
+            "#it{e}#mu nB=2 nJ=5", 
+            "#it{e}#mu nB=2 nJ=6", 
+            "#it{e}#mu nB=2 nJ=7", 
+            "#it{e}#mu nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7383,14 +7383,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HTUnweighted (nMediumDeepJetB3)", 
+        "Title": "HTUnweighted (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7418,14 +7418,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "ST (nMediumDeepJetB4+)", 
+        "Title": "ST (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7493,14 +7493,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "HT2M (nMediumDeepJetB4+)", 
+        "Title": "HT2M (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7534,7 +7534,7 @@
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
-    "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet2_DeepJetB": {
+    "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet2_DeepJetB_sorted": {
         "Files": "2017___Combined.root", 
         "Rebin": 10, 
         "Projection": null, 
@@ -7717,14 +7717,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "dRbb (nMediumDeepJetB3)", 
+        "Title": "dRbb (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7832,14 +7832,14 @@
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet1_eta (nMediumDeepJetB3)", 
+        "Title": "Jet1_eta (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB3 nJet8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7863,18 +7863,18 @@
         "Legend": "DefaultLegend", 
         "doLogY": false
     }, 
-    "Canvas_nMediumDeepJetB4+_Jet3_DeepJetB": {
+    "Canvas_nMediumDeepJetB4+_Jet3_DeepJetB_sorted": {
         "Rebin": null, 
         "XPixels": 1200, 
         "Projection": null, 
-        "Title": "Jet3_DeepJetB (nMediumDeepJetB4+)", 
+        "Title": "Jet3_DeepJetB (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{e}#mu HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7882,11 +7882,11 @@
         "DoRatio": true, 
         "DoMountainrange": true, 
         "Plots": [
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet3_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet3_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet3_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet3_DeepJetB", 
-            "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet3_DeepJetB"
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet4___Jet3_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet5___Jet3_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet6___Jet3_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet7___Jet3_DeepJetB_sorted", 
+            "Plot_blind_HT500_nMediumDeepJetB4+_nJet8+___Jet3_DeepJetB_sorted"
         ], 
         "Margins": [
             0.1, 

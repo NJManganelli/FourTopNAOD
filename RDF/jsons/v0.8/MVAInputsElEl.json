@@ -16,11 +16,11 @@
         "Title": "Jet3_DeepJetB (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -131,11 +131,11 @@
         "Title": "Jet1_DeepJetB (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -166,11 +166,11 @@
         "Title": "nJet_TightDeepJet (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -361,11 +361,11 @@
         "Title": "dRbb (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -396,11 +396,11 @@
         "Title": "nJet_MediumDeepCSV (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -461,11 +461,11 @@
         "Title": "nJet_TightDeepCSV (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -596,11 +596,11 @@
         "Title": "nJet (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -711,11 +711,11 @@
         "Title": "Jet2_eta (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -766,11 +766,11 @@
         "Title": "HTb (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -841,11 +841,11 @@
         "Title": "HTH (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -896,11 +896,11 @@
         "Title": "Jet4_DeepJetB (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -981,11 +981,11 @@
         "Title": "nJet (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1086,11 +1086,11 @@
         "Title": "Jet4_pt (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1141,11 +1141,11 @@
         "Title": "nJet (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1176,11 +1176,11 @@
         "Title": "Jet3_pt (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1281,11 +1281,11 @@
         "Title": "MTofMETandEl (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1361,11 +1361,11 @@
         "Title": "Jet3_eta (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1406,11 +1406,11 @@
         "Title": "MTofMETandEl (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1521,11 +1521,11 @@
         "Title": "nJet_MediumDeepJet (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1576,11 +1576,11 @@
         "Title": "Jet1_pt (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1691,11 +1691,11 @@
         "Title": "HT (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1726,11 +1726,11 @@
         "Title": "Jet2_DeepJetB (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1861,11 +1861,11 @@
         "Title": "Jet2_eta (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1906,11 +1906,11 @@
         "Title": "H2M (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1961,11 +1961,11 @@
         "Title": "Jet4_DeepJetB (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -1996,11 +1996,11 @@
         "Title": "Jet4_DeepJetB (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2221,11 +2221,11 @@
         "Title": "nJet_TightDeepJet (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2266,11 +2266,11 @@
         "Title": "Jet3_DeepJetB (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2311,11 +2311,11 @@
         "Title": "nJet_TightDeepCSV (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2476,11 +2476,11 @@
         "Title": "nJet_MediumDeepCSV (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2731,11 +2731,11 @@
         "Title": "Jet2_DeepJetB (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2816,11 +2816,11 @@
         "Title": "ST (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2891,11 +2891,11 @@
         "Title": "dRll (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -2966,11 +2966,11 @@
         "Title": "nJet_TightDeepJet (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3011,11 +3011,11 @@
         "Title": "Jet4_eta (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3106,11 +3106,11 @@
         "Title": "nJet_MediumDeepJet (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3161,11 +3161,11 @@
         "Title": "HTUnweighted (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3196,11 +3196,11 @@
         "Title": "dRll (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3341,11 +3341,11 @@
         "Title": "dRll (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3376,11 +3376,11 @@
         "Title": "nJet_TightDeepCSV (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3461,11 +3461,11 @@
         "Title": "nJet_MediumDeepJet (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3746,11 +3746,11 @@
         "Title": "Jet3_eta (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3811,11 +3811,11 @@
         "Title": "H2M (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3856,11 +3856,11 @@
         "Title": "Jet4_pt (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3931,11 +3931,11 @@
         "Title": "Jet1_eta (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -3976,11 +3976,11 @@
         "Title": "Jet1_DeepJetB (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4021,11 +4021,11 @@
         "Title": "Jet1_eta (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4166,11 +4166,11 @@
         "Title": "MTofMETandEl (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4291,11 +4291,11 @@
         "Title": "MTofMETandMu (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4386,11 +4386,11 @@
         "Title": "HTUnweighted (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4481,11 +4481,11 @@
         "Title": "HT (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4566,11 +4566,11 @@
         "Title": "HTb (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4641,11 +4641,11 @@
         "Title": "Jet4_eta (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4686,11 +4686,11 @@
         "Title": "HT2M (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4781,11 +4781,11 @@
         "Title": "H (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4856,11 +4856,11 @@
         "Title": "dRbb (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4901,11 +4901,11 @@
         "Title": "Jet2_pt (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -4936,11 +4936,11 @@
         "Title": "Jet1_DeepJetB (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5141,11 +5141,11 @@
         "Title": "HTH (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5246,11 +5246,11 @@
         "Title": "H (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5371,11 +5371,11 @@
         "Title": "nJet_LooseDeepJet (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5436,11 +5436,11 @@
         "Title": "Jet3_pt (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5471,11 +5471,11 @@
         "Title": "Jet2_pt (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5516,11 +5516,11 @@
         "Title": "Jet2_eta (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5641,11 +5641,11 @@
         "Title": "Jet1_pt (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5726,11 +5726,11 @@
         "Title": "HTRat (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5831,11 +5831,11 @@
         "Title": "Jet2_DeepJetB (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5876,11 +5876,11 @@
         "Title": "Jet4_pt (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5941,11 +5941,11 @@
         "Title": "HT (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -5976,11 +5976,11 @@
         "Title": "nJet_LooseDeepJet (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6061,11 +6061,11 @@
         "Title": "Jet1_pt (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6146,11 +6146,11 @@
         "Title": "Jet2_pt (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6181,11 +6181,11 @@
         "Title": "HT2M (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6246,11 +6246,11 @@
         "Title": "Jet4_eta (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6291,11 +6291,11 @@
         "Title": "Jet3_pt (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6326,11 +6326,11 @@
         "Title": "HTRat (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6391,11 +6391,11 @@
         "Title": "H (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6506,11 +6506,11 @@
         "Title": "MTofMETandMu (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6581,11 +6581,11 @@
         "Title": "HTRat (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6626,11 +6626,11 @@
         "Title": "ST (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6861,11 +6861,11 @@
         "Title": "HTb (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -6966,11 +6966,11 @@
         "Title": "HTH (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7041,11 +7041,11 @@
         "Title": "H2M (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7176,11 +7176,11 @@
         "Title": "nJet_MediumDeepCSV (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7211,11 +7211,11 @@
         "Title": "MTofMETandMu (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7266,11 +7266,11 @@
         "Title": "nJet_LooseDeepJet (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7331,11 +7331,11 @@
         "Title": "Jet3_eta (nMediumDeepJetB2)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB2 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB2 nJet8+"
+            "#it{ee} nB=2 nJ=4", 
+            "#it{ee} nB=2 nJ=5", 
+            "#it{ee} nB=2 nJ=6", 
+            "#it{ee} nB=2 nJ=7", 
+            "#it{ee} nB=2 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7386,11 +7386,11 @@
         "Title": "HTUnweighted (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7421,11 +7421,11 @@
         "Title": "ST (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7496,11 +7496,11 @@
         "Title": "HT2M (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7720,11 +7720,11 @@
         "Title": "dRbb (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7835,11 +7835,11 @@
         "Title": "Jet1_eta (nMediumDeepJetB3)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB3 nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB3 nJet8+"
+            "#it{ee} nB=3 nJ=4", 
+            "#it{ee} nB=3 nJ=5", 
+            "#it{ee} nB=3 nJ=6", 
+            "#it{ee} nB=3 nJ=7", 
+            "#it{ee} nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
@@ -7870,11 +7870,11 @@
         "Title": "Jet3_DeepJetB (nMediumDeepJetB4+)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet4", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet5", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet6", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet7", 
-            "#it{ee} HT500 nMediumDeepJetB4+ nJet8+"
+            "#it{ee} nB=4+ nJ=4", 
+            "#it{ee} nB=4+ nJ=5", 
+            "#it{ee} nB=4+ nJ=6", 
+            "#it{ee} nB=4+ nJ=7", 
+            "#it{ee} nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "Coordinates": [], 
