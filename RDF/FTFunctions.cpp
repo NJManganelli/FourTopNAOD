@@ -3,18 +3,100 @@
 
 //#include <boost>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
+#include <TObject.h>
+// #include <TH.h>
+#include <TH1.h>
 #include <TH2.h>
+#include <TH3.h>
 #include <TFile.h>
+#include <TUUID.h>
 #include "ROOT/RVec.hxx"
 
 typedef ROOT::VecOps::RVec<Float_t>                        RVec_f;
 typedef ROOT::VecOps::RVec<Float_t>::const_iterator        RVec_f_iter;
 typedef ROOT::VecOps::RVec<Int_t>                          RVec_i;
 typedef ROOT::VecOps::RVec<Int_t>::const_iterator          RVec_i_iter;
-typedef ROOT::VecOps::RVec<std::string>                  RVec_str;
-typedef ROOT::VecOps::RVec<std::string>::const_iterator  RVec_str_iter;
+typedef ROOT::VecOps::RVec<std::string>                    RVec_str;
+typedef ROOT::VecOps::RVec<std::string>::const_iterator    RVec_str_iter;
+
+//aim for a std::vector<std::map<std::string, ROOT::TH>> format where the vector index corresponds to the slot # for multithreaded lookups
+// class LUT: public TObject {
+class LUT {
+  //LookUp Table
+public:
+  LUT() { _LUT_MAP_TH1.clear(); _LUT_MAP_TH2.clear(); _LUT_MAP_TH3.clear(); }
+  LUT(std::string file, std::string path);
+  ~LUT() {}
+  void Add(std::string file, std::string path, std::string handle = "");
+  double TH2Lookup(std::string key, double xval, double yval);
+  double TH2LookupErr(std::string key, double xval, double yval);
+
+private:
+  std::map<std::string, TH1*> _LUT_MAP_TH1;
+  std::map<std::string, TH2*> _LUT_MAP_TH2;
+  std::map<std::string, TH3*> _LUT_MAP_TH3;
+  
+};
+void LUT::Add(std::string file, std::string path, std::string handle = "") {
+  TUUID uuid = TUUID();
+  TFile *f = TFile::Open(file.c_str(), "read");
+  if(f) {
+    if(f->IsOpen()){
+      auto temp = f->Get(path.c_str());
+      if(temp){
+	std::string key;
+	Bool_t isTH1 = (std::strncmp(temp->ClassName(), "TH1", 3) == 0);
+	Bool_t isTH2 = (std::strncmp(temp->ClassName(), "TH2", 3) == 0);
+	Bool_t isTH3 = (std::strncmp(temp->ClassName(), "TH3", 3) == 0);
+	std::string name = static_cast<std::string>(temp->GetName()) + "___" + uuid.AsString();
+	if(handle.length() == 0) {
+	  key = path;
+	}
+	else {
+	  key = handle;
+	}
+	if( isTH1 ) { 
+	  _LUT_MAP_TH1[key] = static_cast<TH1*>(temp->Clone(name.c_str()));
+	  _LUT_MAP_TH1[key]->SetDirectory(0);
+	}
+	else if( isTH2 ) { 
+	  _LUT_MAP_TH2[key] = static_cast<TH2*>(temp->Clone(name.c_str())); 
+	  _LUT_MAP_TH2[key]->SetDirectory(0);
+	    }
+	else if( isTH3 ) { 
+	  _LUT_MAP_TH3[key] = static_cast<TH3*>(temp->Clone(name.c_str())); 
+	  _LUT_MAP_TH3[key]->SetDirectory(0);
+	}
+	else { throw std::runtime_error( "Unhandled LookUpTable class " + static_cast<std::string>(temp->ClassName())); }
+	f->Close();
+      }
+      else {
+	f->Close();
+	throw std::runtime_error( "Failed to instantiate valid LUT for path " + path + " in file " + file );
+      }
+    }
+    else {
+      throw std::runtime_error( "Failed to open file: " + file );
+    }
+  }
+  else {
+      throw std::runtime_error( "LookUpTable got a null pointer opening up the file: " + file );
+  }
+      
+}
+double LUT::TH2Lookup(std::string key, double xval, double yval){
+  int binx = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsX(), _LUT_MAP_TH2[key]->GetXaxis()->FindBin(xval)));
+  int biny = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsY(), _LUT_MAP_TH2[key]->GetYaxis()->FindBin(yval)));
+  return _LUT_MAP_TH2[key]->GetBinContent(binx, biny);
+}
+double LUT::TH2LookupErr(std::string key, double xval, double yval){
+  int binx = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsX(), _LUT_MAP_TH2[key]->GetXaxis()->FindBin(xval)));
+  int biny = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsY(), _LUT_MAP_TH2[key]->GetYaxis()->FindBin(yval)));
+  return _LUT_MAP_TH2[key]->GetBinError(binx, biny);
+}
 
 class TH2Lookup {
 public:
