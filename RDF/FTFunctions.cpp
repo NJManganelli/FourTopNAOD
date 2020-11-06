@@ -31,8 +31,21 @@ public:
   LUT(std::string file, std::string path);
   ~LUT() {}
   void Add(std::string file, std::string path, std::string handle = "");
-  double TH2Lookup(std::string key, double xval, double yval);
-  double TH2LookupErr(std::string key, double xval, double yval);
+
+  template <typename X>
+  double TH1Lookup(std::string key, X xval);
+  template <typename X>
+  double TH1LookupErr(std::string key, X xval);
+
+  template <typename X, typename Y>
+  double TH2Lookup(std::string key, X xval, Y yval);
+  template <typename X, typename Y>
+  double TH2LookupErr(std::string key, X xval, Y yval);
+
+  template <typename X, typename Y, typename Z>
+  double TH3Lookup(std::string key, X xval, Y yval, Z zval);
+  template <typename X, typename Y, typename Z>
+  double TH3LookupErr(std::string key, X xval, Y yval, Z zval);
 
 private:
   std::map<std::string, TH1*> _LUT_MAP_TH1;
@@ -87,16 +100,172 @@ void LUT::Add(std::string file, std::string path, std::string handle = "") {
   }
       
 }
-double LUT::TH2Lookup(std::string key, double xval, double yval){
-  int binx = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsX(), _LUT_MAP_TH2[key]->GetXaxis()->FindBin(xval)));
-  int biny = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsY(), _LUT_MAP_TH2[key]->GetYaxis()->FindBin(yval)));
-  return _LUT_MAP_TH2[key]->GetBinContent(binx, biny);
+template<typename X>
+double LUT::TH1Lookup(std::string key, X xval){
+  try {
+    int binx = std::max(1, std::min(_LUT_MAP_TH1[key]->GetNbinsX(), _LUT_MAP_TH1[key]->GetXaxis()->FindBin(xval)));
+    return _LUT_MAP_TH1[key]->GetBinContent(binx);
+  }
+  catch (const std::exception& e) {
+    std::cout << "Caught exception in LUT::TH1Lookup" << std::endl;
+    if( _LUT_MAP_TH1.find( key ) != _LUT_MAP_TH1.end() ){ 
+      std::cout << "Key \"" << key << "\" not found in the TH1 LUT" << std::endl;
+    }
+    std::cout << "\nCaught exception: " << e.what() << std::endl;
+    throw;
+  }
 }
-double LUT::TH2LookupErr(std::string key, double xval, double yval){
-  int binx = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsX(), _LUT_MAP_TH2[key]->GetXaxis()->FindBin(xval)));
-  int biny = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsY(), _LUT_MAP_TH2[key]->GetYaxis()->FindBin(yval)));
-  return _LUT_MAP_TH2[key]->GetBinError(binx, biny);
+template<typename X>
+double LUT::TH1LookupErr(std::string key, X xval){
+  try {
+    int binx = std::max(1, std::min(_LUT_MAP_TH1[key]->GetNbinsX(), _LUT_MAP_TH1[key]->GetXaxis()->FindBin(xval)));
+    return _LUT_MAP_TH1[key]->GetBinError(binx);
+  }
+  catch (const std::exception& e) {
+    std::cout << "Caught exception in LUT::TH1LookupErr" << std::endl;
+    if( _LUT_MAP_TH1.find( key ) != _LUT_MAP_TH1.end() ){ 
+      std::cout << "Key \"" << key << "\" not found in the TH1 LUT" << std::endl;
+    }
+    std::cout << "\nCaught exception: " << e.what() << std::endl;
+    throw;
+  }
 }
+template<typename X, typename Y>
+double LUT::TH2Lookup(std::string key, X xval, Y yval){
+  try {
+    int binx = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsX(), _LUT_MAP_TH2[key]->GetXaxis()->FindBin(xval)));
+    int biny = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsY(), _LUT_MAP_TH2[key]->GetYaxis()->FindBin(yval)));
+    return _LUT_MAP_TH2[key]->GetBinContent(binx, biny);
+  }
+  catch (const std::exception& e) {
+    std::cout << "Caught exception in LUT::TH2Lookup" << std::endl;
+    if( _LUT_MAP_TH2.find( key ) != _LUT_MAP_TH2.end() ){ 
+      std::cout << "Key \"" << key << "\" not found in the TH2 LUT" << std::endl;
+    }
+    std::cout << "\nCaught exception: " << e.what() << std::endl;
+    throw;
+  }
+}
+template<typename X, typename Y>
+double LUT::TH2LookupErr(std::string key, X xval, Y yval){
+  try {
+    int binx = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsX(), _LUT_MAP_TH2[key]->GetXaxis()->FindBin(xval)));
+    int biny = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsY(), _LUT_MAP_TH2[key]->GetYaxis()->FindBin(yval)));
+    return _LUT_MAP_TH2[key]->GetBinError(binx, biny);
+  }
+  catch (const std::exception& e) {
+    std::cout << "Caught exception in LUT::TH2LookupErr" << std::endl;
+    if( _LUT_MAP_TH2.find( key ) != _LUT_MAP_TH2.end() ){ 
+      std::cout << "Key \"" << key << "\" not found in the TH2 LUT" << std::endl;
+    }
+    std::cout << "\nCaught exception: " << e.what() << std::endl;
+    throw;
+  }
+}
+template<typename X, typename Y, typename Z>
+double LUT::TH3Lookup(std::string key, X xval, Y yval, Z zval){
+  try {
+      int binx = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsX(), _LUT_MAP_TH3[key]->GetXaxis()->FindBin(xval)));
+      int biny = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsY(), _LUT_MAP_TH3[key]->GetYaxis()->FindBin(yval)));
+      int binz = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsZ(), _LUT_MAP_TH3[key]->GetZaxis()->FindBin(zval)));
+      return _LUT_MAP_TH3[key]->GetBinContent(binx, biny);
+  }
+  catch (const std::exception& e) {
+    std::cout << "Caught exception in LUT::TH3Lookup" << std::endl;
+    if( _LUT_MAP_TH3.find( key ) != _LUT_MAP_TH3.end() ){ 
+      std::cout << "Key \"" << key << "\" not found in the TH3 LUT" << std::endl;
+    }
+    std::cout << "\nCaught exception: " << e.what() << std::endl;
+    throw;
+  }
+}
+template<typename X, typename Y, typename Z>
+double LUT::TH3LookupErr(std::string key, X xval, Y yval, Z zval){
+  try {
+    int binx = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsX(), _LUT_MAP_TH3[key]->GetXaxis()->FindBin(xval)));
+    int biny = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsY(), _LUT_MAP_TH3[key]->GetYaxis()->FindBin(yval)));
+    int binz = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsZ(), _LUT_MAP_TH3[key]->GetZaxis()->FindBin(zval)));
+    return _LUT_MAP_TH3[key]->GetBinError(binx, biny);
+  }
+  catch (const std::exception& e) {
+    std::cout << "Caught exception in LUT::TH3LookupErr" << std::endl;
+    if( _LUT_MAP_TH3.find( key ) != _LUT_MAP_TH3.end() ){ 
+      std::cout << "Key \"" << key << "\" not found in the TH3 LUT" << std::endl;
+    }
+    std::cout << "\nCaught exception: " << e.what() << std::endl;
+    throw;
+  }
+}
+
+class baseLUT {
+  //LookUp Table
+public:
+  baseLUT() { _LUT_TH1 = 0; _LUT_TH2 = 0; _LUT_TH3 = 0; }
+  baseLUT(std::string file, std::string path);
+  ~baseLUT() {}
+  double TH2Lookup(double xval, double yval);
+  double TH2LookupErr(double xval, double yval);
+
+private:
+  //unique uuid for multiple instances to be created in multithreading, will be prepended to histogram memory names to avoid name-clashes, i.e. may be _rdfslot
+  int uuid = 0; 
+  TH1 *_LUT_TH1;
+  TH2 *_LUT_TH2;
+  TH3 *_LUT_TH3;
+  // std::map<std::string, TH*> _LUT_MAP;
+  
+};
+baseLUT::baseLUT(std::string file, std::string path) {
+  TUUID uuid = TUUID();
+  TFile *f = TFile::Open(file.c_str(), "read");
+  if(f) {
+    if(f->IsOpen()){
+      auto temp = f->Get(path.c_str());
+      if(temp){
+	Bool_t isTH1 = (std::strncmp(temp->ClassName(), "TH1", 3) == 0);
+	Bool_t isTH2 = (std::strncmp(temp->ClassName(), "TH2", 3) == 0);
+	Bool_t isTH3 = (std::strncmp(temp->ClassName(), "TH3", 3) == 0);
+	std::string name = static_cast<std::string>(temp->GetName()) + "___" + uuid.AsString();
+	if( isTH1 ) { 
+	  _LUT_TH1 = static_cast<TH1*>(temp->Clone(name.c_str()));
+	  _LUT_TH1->SetDirectory(0);
+	}
+	else if( isTH2 ) { 
+	  _LUT_TH2 = static_cast<TH2*>(temp->Clone(name.c_str())); 
+	  _LUT_TH2->SetDirectory(0);
+	    }
+	else if( isTH3 ) { 
+	  _LUT_TH3 = static_cast<TH3*>(temp->Clone(name.c_str())); 
+	  _LUT_TH3->SetDirectory(0);
+	}
+	else { throw std::runtime_error( "Unhandled LookUpTable class " + static_cast<std::string>(temp->ClassName())); }
+	f->Close();
+      }
+      else {
+	f->Close();
+	throw std::runtime_error( "Failed to instantiate valid LUT for path " + path + " in file " + file );
+      }
+    }
+    else {
+      throw std::runtime_error( "Failed to open file: " + file );
+    }
+  }
+  else {
+      throw std::runtime_error( "LookUpTable got a null pointer opening up the file: " + file );
+  }
+      
+}
+double baseLUT::TH2Lookup(double xval, double yval){
+  int binx = std::max(1, std::min(_LUT_TH2->GetNbinsX(), _LUT_TH2->GetXaxis()->FindBin(xval)));
+  int biny = std::max(1, std::min(_LUT_TH2->GetNbinsY(), _LUT_TH2->GetYaxis()->FindBin(yval)));
+  return _LUT_TH2->GetBinContent(binx, biny);
+}
+double baseLUT::TH2LookupErr(double xval, double yval){
+  int binx = std::max(1, std::min(_LUT_TH2->GetNbinsX(), _LUT_TH2->GetXaxis()->FindBin(xval)));
+  int biny = std::max(1, std::min(_LUT_TH2->GetNbinsY(), _LUT_TH2->GetYaxis()->FindBin(yval)));
+  return _LUT_TH2->GetBinError(binx, biny);
+}
+  
 
 class TH2Lookup {
 public:
