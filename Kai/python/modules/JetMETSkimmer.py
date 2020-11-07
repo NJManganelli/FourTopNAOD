@@ -1,7 +1,5 @@
 from __future__ import division, print_function
 import ROOT
-import math
-import pdb
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 from PhysicsTools.NanoAODTools.postprocessing.tools import * #DeltaR, match collection methods
@@ -61,7 +59,6 @@ class JetMETSkimmer(Module):
             if len(self.systematics) > 0:
                 self._need_systematics = False
             else:
-                pdb.set_trace()
                 raise RuntimeError("No Jet pt systematics deduced in {}".format(self.__name__))
 
         ###############################################
