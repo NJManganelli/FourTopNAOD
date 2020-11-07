@@ -57,9 +57,11 @@ class JetMETSkimmer(Module):
 
         if self._need_systematics:
             self.systematics = self.getSystematics(event)
+            print("Jet pt systematic variations: {}".format(self.systematics))
             if len(self.systematics) > 0:
                 self._need_systematics = False
             else:
+                pdb.set_trace()
                 raise RuntimeError("No Jet pt systematics deduced in {}".format(self.__name__))
 
         ###############################################
@@ -83,8 +85,6 @@ class JetMETSkimmer(Module):
         partial_jets = [j for j in enumerate(jets) if abs(j[1].eta) <= self.jet_max_eta and (j[1].jetId & self.jet_min_id) > 0]
         #Look at all systematic variations for jet pt, preferentially looking at the "Up" variations first
         for syst in sorted(self.systematics, key=lambda k: k.endswith("Up")):
-            if event._entry == 0:
-                print(syst)
             #append the idx and jet to tuples
             for idx, jet in partial_jets:
                 if getattr(jet, "pt_{syst}".format(syst=syst)) >= self.jet_min_pt:
@@ -95,4 +95,5 @@ class JetMETSkimmer(Module):
         return False
                 
     def getSystematics(self, event, exclude_raw=True):
-        return [x.GetName().split("_")[-1] for x in event._tree.GetListOfBranches() if x.GetName().startswith("Jet_") and "_pt_" in x.GetName() and (not x.GetName().endswith("_raw") if exclude_raw else True)]
+        branches = event._tree._ttrvs.keys() + event._tree._ttras.keys() + event._tree._extrabranches.keys() + [bb.GetName() for bb in event._tree.GetListOfBranches()]
+        return [x.split("_")[-1] for x in branches if x.startswith("Jet_") and "_pt_" in x and (not x.endswith("_raw") if exclude_raw else True)]
