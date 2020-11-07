@@ -20,14 +20,13 @@ class JetMETSkimmer(Module):
         self.jet_min_id = jetMinID
         self.jet_min_count = jetMinCount
 
-        self.passLevel = passLevel
         self.writeHistFile = False
         self.fillHists = False
         if self.fillHists and not self.writeHistFile:
             self.writeHistFile=True
 
     def beginJob(self, histFile=None,histDirName=None):
-        if self.fillHists == False and self.writehistFile == False:
+        if self.fillHists == False and self.writeHistFile == False:
             Module.beginJob(self, None, None)
         else:
             if histFile == None or histDirName == None:
@@ -57,16 +56,12 @@ class JetMETSkimmer(Module):
         """process event, return True (go to next module) or False (fail, go to next event)"""
 
         if self._need_systematics:
-            self.systematics = getSystematics(event)
+            self.systematics = self.getSystematics(event)
             if len(self.systematics) > 0:
                 self._need_systematics = False
             else:
                 raise RuntimeError("No Jet pt systematics deduced in {}".format(self.__name__))
 
-        for syst in self.systematics:
-            pass
-        pdb.set_trace()
-        
         ###############################################
         ### Collections and Objects and isData check###
         ###############################################        
@@ -93,7 +88,7 @@ class JetMETSkimmer(Module):
             #append the idx and jet to tuples
             for idx, jet in partial_jets:
                 if getattr(jet, "pt_{syst}".format(syst=syst)) >= self.jet_min_pt:
-                    selected_jets.append((idx, jet))
+                    selected_jets[syst].append((idx, jet))
             #If at least one systematic variation has two selected jets, the event is kept via potentially-early return
             if len(selected_jets[syst]) >= self.jet_min_count:
                 return True

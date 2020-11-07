@@ -139,7 +139,7 @@ class TriggerAndLeptonSkimmer(Module):
                                          subMuThresh=99999,
                                          leadElThresh=99999,
                                          subElThresh=99999,
-                                         nontriggerLepThresh=12)
+                                         nontriggerLepThresh=12),
                             TriggerTuple(trigger="HLT_PFMET200_HBHECleaned",
                                          era="2017",
                                          subera="BCDEF",
@@ -150,7 +150,7 @@ class TriggerAndLeptonSkimmer(Module):
                                          subMuThresh=99999,
                                          leadElThresh=99999,
                                          subElThresh=99999,
-                                         nontriggerLepThresh=12)
+                                         nontriggerLepThresh=12),
                             TriggerTuple(trigger="HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned",
                                          era="2017",
                                          subera="BCDEF",
@@ -161,7 +161,7 @@ class TriggerAndLeptonSkimmer(Module):
                                          subMuThresh=99999,
                                          leadElThresh=99999,
                                          subElThresh=99999,
-                                         nontriggerLepThresh=12)
+                                         nontriggerLepThresh=12),
                             TriggerTuple(trigger="HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
                                          era="2018",
                                          subera="ABCD",
@@ -238,7 +238,7 @@ class TriggerAndLeptonSkimmer(Module):
                                          subMuThresh=99999,
                                          leadElThresh=99999,
                                          subElThresh=99999,
-                                         nontriggerLepThresh=12)
+                                         nontriggerLepThresh=12),
                             TriggerTuple(trigger="HLT_PFMET200_HBHECleaned",
                                          era="2018",
                                          subera="ABCD",
@@ -249,7 +249,7 @@ class TriggerAndLeptonSkimmer(Module):
                                          subMuThresh=99999,
                                          leadElThresh=99999,
                                          subElThresh=99999,
-                                         nontriggerLepThresh=12)
+                                         nontriggerLepThresh=12),
                             TriggerTuple(trigger="HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned",
                                          era="2018",
                                          subera="ABCD",
@@ -260,7 +260,7 @@ class TriggerAndLeptonSkimmer(Module):
                                          subMuThresh=99999,
                                          leadElThresh=99999,
                                          subElThresh=99999,
-                                         nontriggerLepThresh=12)
+                                         nontriggerLepThresh=12),
         ]
         #Store triggers that are (temporarily) abandoned due to overlap or extra restrictions
         self.lostTrigger = [TriggerTuple(trigger="HLT_IsoMu24_eta2p1",
@@ -643,14 +643,14 @@ class TriggerAndLeptonSkimmer(Module):
                     #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
                     #Need to know the pdgId of each one to access the right index and set bit high
                     #Technically, we know that if one is an electron, the other must be a muon, so we only need one if-else block
-                    if leadLep_baseline[0][1].pdgId in [-11, 11]: #electron-muon
-                        electron_osv_baseline[leadLep_baseline[0][0]] += 2**trigger.uniqueEraBit
-                        muon_osv_baseline[subLep_baseline[0][0]] += 2**trigger.uniqueEraBit
-                    elif leadLep_baseline[0][1].pdgId in [-13, 13]: #muon-electron
-                        muon_osv_baseline[leadLep_baseline[0][0]] += 2**trigger.uniqueEraBit
-                        electron_osv_baseline[subLep_baseline[0][0]] += 2**trigger.uniqueEraBit
-                    else:
-                        raise RuntimeError("Logical Error!")
+                    # if leadLep_baseline[0][1].pdgId in [-11, 11]: #electron-muon
+                    #     electron_osv_baseline[leadLep_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    #     muon_osv_baseline[subLep_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    # elif leadLep_baseline[0][1].pdgId in [-13, 13]: #muon-electron
+                    #     muon_osv_baseline[leadLep_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    #     electron_osv_baseline[subLep_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    # else:
+                    #     raise RuntimeError("Logical Error!")
                     # if subLep_baseline[0][1].pdgId in [-11, 11]: #electron
                     #     electron_osv_baseline[subLep_baseline[0][0]] += 2**trigger.uniqueEraBit
                     # else: #muon
@@ -713,8 +713,8 @@ class TriggerAndLeptonSkimmer(Module):
                 if pass_baseline_lep[trigger.trigger] >= 1: #Change to reflect proper number of bits used
                     pass_baseline_bitset += 2**trigger.uniqueEraBit
                     #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
-                    muon_osv_baseline[subMu_baseline[trigger.trigger][0][0]] += 2**trigger.uniqueEraBit
-                    muon_osv_baseline[subMu_baseline[trigger.trigger][1][0]] += 2**trigger.uniqueEraBit
+                    # muon_osv_baseline[subMu_baseline[trigger.trigger][0][0]] += 2**trigger.uniqueEraBit
+                    # muon_osv_baseline[subMu_baseline[trigger.trigger][1][0]] += 2**trigger.uniqueEraBit
 
 #FIXME: Simplify access to the collections so that trigger.trigger no longer needs to be referenced for the charge or accessing the indices, like ElMu or El channels
 
@@ -762,8 +762,8 @@ class TriggerAndLeptonSkimmer(Module):
                 if pass_baseline_lep[trigger.trigger] >= 1: #Change to reflect proper number of bits used
                     pass_baseline_bitset += 2**trigger.uniqueEraBit
                     #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
-                    electron_osv_baseline[subEl_baseline[trigger.trigger][0][0]] += 2**trigger.uniqueEraBit
-                    electron_osv_baseline[subEl_baseline[trigger.trigger][1][0]] += 2**trigger.uniqueEraBit
+                    # electron_osv_baseline[subEl_baseline[trigger.trigger][0][0]] += 2**trigger.uniqueEraBit
+                    # electron_osv_baseline[subEl_baseline[trigger.trigger][1][0]] += 2**trigger.uniqueEraBit
 
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
                 if len(leadEl_selection[trigger.trigger]) > 0 and len(subEl_selection[trigger.trigger]) > 1:
@@ -794,12 +794,12 @@ class TriggerAndLeptonSkimmer(Module):
                 if len(leadMu_baseline[trigger.trigger]) > 0 and (len(nontriggerEl_baseline[trigger.trigger]) + len(nontriggerMu_baseline[trigger.trigger])) > 1:
                     #2+ leptons, 1 triggering muon, and at least 2 electrons/muons passing the common selection requirements
                     pass_baseline_lep[trigger.trigger] += 2**0
+                    leptons_baseline = nontriggerMu_baseline[trigger.trigger] + nontriggerEl_baseline[trigger.trigger]
                     if len(nontriggerEl_baseline[trigger.trigger]) + len(nontriggerMu_baseline[trigger.trigger]) < 3:
                         #Superset containing the leading and subleading leptons, plus any additional leptons of any flavor at the nontriggering threshold
                         #Only 2 leptons here
                         pass_baseline_lep[trigger.trigger] += 2**1              
                         #Now unknown which collection contains the 2nd lepton, so go to the non-triggering collections
-                        leptons_baseline = nontriggerMu_baseline[trigger.trigger] + nontriggerEl_baseline[trigger.trigger]
                         if leptons_baseline[0][1].charge * leptons_baseline[1][1].charge < 0:
                             #Opposite sign leptons
                             pass_baseline_lep[trigger.trigger] += 2**2
@@ -812,18 +812,18 @@ class TriggerAndLeptonSkimmer(Module):
                     pass_baseline_bitset += 2**trigger.uniqueEraBit
                     #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
                     #Obviously, now that we no longer know for certain what the 2nd lepton is, we must check
-                    if leptons_baseline[0][1].pdgId in [-11, 11]: #electron
-                        electron_osv_baseline[leptons_baseline[0][0]] += 2**trigger.uniqueEraBit
-                    elif leptons_baseline[0][1].pdgId in [-13, 13]: #muon
-                        muon_osv_baseline[leptons_baseline[0][0]] += 2**trigger.uniqueEraBit
-                    else:
-                        raise RuntimeError("Logical Error!")
-                    if leptons_baseline[1][1].pdgId in [-11, 11]: #electron
-                        electron_osv_baseline[leptons_baseline[1][0]] += 2**trigger.uniqueEraBit
-                    elif leptons_baseline[1][1].pdgId in [-13, 13]: #muon
-                        muon_osv_baseline[leptons_baseline[1][0]] += 2**trigger.uniqueEraBit
-                    else:
-                        raise RuntimeError("Logical Error!")
+                    # if leptons_baseline[0][1].pdgId:
+                    #     electron_osv_baseline[leptons_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    # elif leptons_baseline[0][1].pdgId in [-13, 13]: #muon
+                    #     muon_osv_baseline[leptons_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    # else:
+                    #     raise RuntimeError("Logical Error!")
+                    # if leptons_baseline[1][1].pdgId in [-11, 11]: #electron
+                    #     electron_osv_baseline[leptons_baseline[1][0]] += 2**trigger.uniqueEraBit
+                    # elif leptons_baseline[1][1].pdgId in [-13, 13]: #muon
+                    #     muon_osv_baseline[leptons_baseline[1][0]] += 2**trigger.uniqueEraBit
+                    # else:
+                    #     raise RuntimeError("Logical Error!")
 
 
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
@@ -867,13 +867,13 @@ class TriggerAndLeptonSkimmer(Module):
                 if len(leadEl_baseline[trigger.trigger]) > 0 and (len(nontriggerEl_baseline[trigger.trigger]) + len(nontriggerMu_baseline[trigger.trigger])) > 1:
                     #2+ leptons, 1 triggering electron, and at least 2 electrons/muons passing the common selection requirements
                     pass_baseline_lep[trigger.trigger] += 2**0
+                    leptons_baseline = nontriggerMu_baseline[trigger.trigger] + nontriggerEl_baseline[trigger.trigger]
                     if len(nontriggerEl_baseline[trigger.trigger]) + len(nontriggerMu_baseline[trigger.trigger]) < 3:
                         #Superset containing the leading and subleading leptons, plus any additional leptons of any flavor at the nontriggering threshold
                         #Only 2 leptons here
                         pass_baseline_lep[trigger.trigger] += 2**1              
                         #Now unknown which collection contains the 2nd lepton, so go to the non-triggering collections
                         #FIXME: have to check for any kind of combination of leptons...
-                        leptons_baseline = nontriggerMu_baseline[trigger.trigger] + nontriggerEl_baseline[trigger.trigger]
                         if leptons_baseline[0][1].charge * leptons_baseline[1][1].charge < 0:
                             #Opposite sign leptons
                             pass_baseline_lep[trigger.trigger] += 2**2
@@ -887,18 +887,18 @@ class TriggerAndLeptonSkimmer(Module):
                     pass_baseline_bitset += 2**trigger.uniqueEraBit
                     #access the index of the selected leptons, and add the trigger ID to its bitset, indicated it passed on this trigger path
                     #Obviously, now that we no longer know for certain what the 2nd lepton is, we must check
-                    if leptons_baseline[0][1].pdgId in [-11, 11]: #electron
-                        electron_osv_baseline[leptons_baseline[0][0]] += 2**trigger.uniqueEraBit
-                    elif leptons_baseline[0][1].pdgId in [-13, 13]: #muon
-                        muon_osv_baseline[leptons_baseline[0][0]] += 2**trigger.uniqueEraBit
-                    else:
-                        raise RuntimeError("Logical Error!")
-                    if leptons_baseline[1][1].pdgId in [-11, 11]: #electron
-                        electron_osv_baseline[leptons_baseline[1][0]] += 2**trigger.uniqueEraBit
-                    elif leptons_baseline[1][1].pdgId in [-13, 13]: #muon
-                        muon_osv_baseline[leptons_baseline[1][0]] += 2**trigger.uniqueEraBit
-                    else:
-                        raise RuntimeError("Logical Error!")
+                    # if leptons_baseline[0][1].pdgId in [-11, 11]: #electron
+                    #     electron_osv_baseline[leptons_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    # elif leptons_baseline[0][1].pdgId in [-13, 13]: #muon
+                    #     muon_osv_baseline[leptons_baseline[0][0]] += 2**trigger.uniqueEraBit
+                    # else:
+                    #     raise RuntimeError("Logical Error!")
+                    # if leptons_baseline[1][1].pdgId in [-11, 11]: #electron
+                    #     electron_osv_baseline[leptons_baseline[1][0]] += 2**trigger.uniqueEraBit
+                    # elif leptons_baseline[1][1].pdgId in [-13, 13]: #muon
+                    #     muon_osv_baseline[leptons_baseline[1][0]] += 2**trigger.uniqueEraBit
+                    # else:
+                    #     raise RuntimeError("Logical Error!")
 
                 #Partially ascending triggers, to avoid duplicate length checks for safe indexing
                 if len(leadEl_selection[trigger.trigger]) > 0 and (len(nontriggerEl_selection[trigger.trigger]) + len(nontriggerMu_selection[trigger.trigger])) > 1:
