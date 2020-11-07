@@ -73,7 +73,7 @@ class TriggerAndLeptonSkimmer(Module):
                                          subMuThresh=12,
                                          leadElThresh=23,
                                          subElThresh=99999,
-                                         nontriggerLepThresh=15),
+                                         nontriggerLepThresh=12),
                             TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ",
                                          era="2017",
                                          subera="B",
@@ -117,7 +117,7 @@ class TriggerAndLeptonSkimmer(Module):
                                          subMuThresh=99999,
                                          leadElThresh=99999,
                                          subElThresh=99999,
-                                         nontriggerLepThresh=15),
+                                         nontriggerLepThresh=12),
                             TriggerTuple(trigger="HLT_Ele35_WPTight_Gsf",
                                          era="2017",
                                          subera="BCDEF",
@@ -543,7 +543,7 @@ class TriggerAndLeptonSkimmer(Module):
             # pass_common_selection = pass_id_loose and pass_eta and pass_iso_selection and pass_dz_selection and pass_d0_selection
             #Remove the ID and ISO requirement from muons for QCD contamination estimates!
             pass_common_baseline = pass_eta
-            pass_common_selection = pass_id_loose and pass_eta and pass_dz_selection and pass_d0_selection
+            pass_common_selection = pass_id_loose and pass_iso_selection and pass_eta and pass_dz_selection and pass_d0_selection
             #selection is kept exactly as before, for backward compatibility and until all cuts migrated to RDF
 
             for trigger in Fired:
