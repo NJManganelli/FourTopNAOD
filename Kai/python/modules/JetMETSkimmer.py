@@ -93,4 +93,4 @@ class JetMETSkimmer(Module):
                 
     def getSystematics(self, event, exclude_raw=True):
         branches = event._tree._ttrvs.keys() + event._tree._ttras.keys() + event._tree._extrabranches.keys() + [bb.GetName() for bb in event._tree.GetListOfBranches()]
-        return [x.split("_")[-1] for x in branches if x.startswith("Jet_") and "_pt_" in x and (not x.endswith("_raw") if exclude_raw else True)]
+        return [x.split("_pt_")[-1] for x in branches if x.startswith("Jet_") and "_pt_" in x and (not x.endswith("_raw") if exclude_raw else True)]
