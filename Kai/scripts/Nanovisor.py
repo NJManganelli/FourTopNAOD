@@ -446,6 +446,29 @@ config.section_("Site")
 config.Site.storageSite = '{5:s}'
 """
         ret = crab_cfg_content.format(runFolder, requestName, splitting, unitsPerJob, cleanInputDataset, storageSite, str(publication), stage, str(NanoAODPath), str(os.environ['CMSSW_BASE']))
+        # for l in lines:
+        #     temp = copy(l)
+        #     for rin, rout in [("$REQUEST_NAME", requestName),
+        #                       ("$CAMPAIGN", campaign),
+        #                       ("$SPLITTING", splitting),
+        #                       ("$DBS", "global"),
+        #                       ("$UNITS_PER_JOB", unitsPerJob),
+        #                       ("$STORAGE_SITE", storageSite),
+        #                       ("$PUBLICATION", str(publication)),
+        #                       ("$IS_DATA", isData),
+        #                       ("$IS_ULTRA_LEGACY", isUltraLegacy),
+        #                       ("$ERA", era),
+        #                       ("$SUBERA", subera),
+        #                       ("$PRESELECTION", preselection),
+        #                       ("$CROSS_SECTION", crossSection),
+        #                       ("$LUMI", equivLumi),
+        #                       ("$N_EVENTS", nEvents),
+        #                       ("$N_EVENTS_POSITIVE", nEventsPositive),
+        #                       ("$N_EVENTS_NEGATIVE", nEventsNegative),
+        #                       ("$SUM_WEIGHTS", sumWeights),
+        #                       ("$TRIGGER_CHANNEL", TriggerChannel),
+        #                       ]:
+        #         temp = temp.replace(rin, rout)
     else:
         print("We haven't made a stage {0:s} configuration yet... Exiting".format(stage))
         sys.exit()
