@@ -81,7 +81,7 @@ class TriggerAndLeptonSkimmer(Module):
                                          tier=1,
                                          channel="MuMu",
                                          leadMuThresh=17,
-                                         subMuThresh=8,
+                                         subMuThresh=12,
                                          leadElThresh=99999,
                                          subElThresh=99999,
                                          nontriggerLepThresh=12),
@@ -92,7 +92,7 @@ class TriggerAndLeptonSkimmer(Module):
                                          tier=1,
                                          channel="MuMu",
                                          leadMuThresh=17,
-                                         subMuThresh=8,
+                                         subMuThresh=12,
                                          leadElThresh=99999,
                                          subElThresh=99999,
                                          nontriggerLepThresh=12),
@@ -191,7 +191,7 @@ class TriggerAndLeptonSkimmer(Module):
                                          tier=1,
                                          channel="MuMu",
                                          leadMuThresh=17,
-                                         subMuThresh=8,
+                                         subMuThresh=12,
                                          leadElThresh=99999,
                                          subElThresh=99999,
                                          nontriggerLepThresh=12),
@@ -557,11 +557,11 @@ class TriggerAndLeptonSkimmer(Module):
                         nontriggerMu_baseline[trigger.trigger].append((idx, mu))
                 if pass_common_selection:
                     #Create OVERLAPPING selection collections
-                    if mu.pt > 25:
+                    if mu.pt > max(25, trigger.leadMuThresh):
                         leadMu_selection[trigger.trigger].append((idx, mu))
-                    if mu.pt > 15:
+                    if mu.pt > max(15, trigger.subMuThresh):
                         subMu_selection[trigger.trigger].append((idx, mu))
-                    if mu.pt > 15:
+                    if mu.pt > max(15, trigger.nontriggerLepThresh):
                         nontriggerMu_selection[trigger.trigger].append((idx, mu))
     
         for idx, el in enumerate(electrons):
@@ -603,11 +603,11 @@ class TriggerAndLeptonSkimmer(Module):
                         nontriggerEl_baseline[trigger.trigger].append((idx, el))
                 if pass_common_selection:
                     #Create OVERLAPPING selection collections
-                    if el.pt > 25:
+                    if el.pt > max(25, trigger.leadElThresh):
                         leadEl_selection[trigger.trigger].append((idx, el))
-                    if el.pt > 15:
+                    if el.pt > max(15, trigger.subElThresh):
                         subEl_selection[trigger.trigger].append((idx, el))
-                    if el.pt > 15:
+                    if el.pt > max(15, trigger.nontriggerLepThresh):
                         nontriggerEl_selection[trigger.trigger].append((idx, el))
 
         #Do Lepton selection logic here
