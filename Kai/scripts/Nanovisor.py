@@ -345,8 +345,8 @@ def main():
                 total_Data_current_events += current_events_in_files
 
         if args.crab_run:
+            theLumi = {"2017": 41.53, "2018": 59.97}
             requestName = era + "_" + sampleName
-            campaign = "TEST"
             splitting = sample.get('crab_cfg', {}).get("splitting", "FileBased")
             inputDataset = sample.get('source', {}).get(args.source, None)
             if len(inputDataset.split(" instance=")) > 1:
@@ -358,26 +358,27 @@ def main():
             unitsPerJob = sample.get('crab_cfg', {}).get("unitsPerJob", 1)
             storageSite = "T2_CH_CERN"
             publication = True
-            isData = sample.get('dataset', {}).get('isData')
-            isSignal = sample.get('dataset', {}).get('isSignal', False)
-            isUltraLegacy = False
+            isData = sample.get('isData')
+            isSignal = sample.get('isSignal', False)
+            isUltraLegacy = sample.get('isUltraLegacy', False)
             era = sample.get('era')
-            subera = sample.get('subera', 'NONE')
+            templateEra = '\"{}\"'.format(sample.get('era')) if sample.get('era', None) is not None else None
+            templateSubera = '\"{}\"'.format(sample.get('subera')) if sample.get('subera', None) is not None else None
             preselection = None
-            crossSection = sample.get('dataset', {}).get('crossSection', -1)
-            equivLumi = {"2017": 41.53,
-                         "2018": 59.97}.get(era, -123)
-            nEvents = sample.get('dataset', {}).get('nEvents', 0) #Default to 0 when key DNE
-            nEventsPositive = sample.get('dataset', {}).get('nEventsPositive', 0)
-            nEventsNegative = sample.get('dataset', {}).get('nEventsNegative', 0)
-            sumWeights = sample.get('dataset', {}).get('sumWeights')
-            triggerChannel = sample.get('dataset', {}).get('channel', 'NONE')
+            crossSection = sample.get('crossSection', -1) if not isData else None
+            print(theLumi, theLumi.get("2017"), theLumi.get(str(templateEra)))
+            equivLumi = theLumi.get(era, -123)
+            nEvents = sample.get('nEvents', 1) if not isData else None #Default to 0 when key DNE
+            nEventsPositive = sample.get('nEventsPositive', 1) if not isData else None
+            nEventsNegative = sample.get('nEventsNegative', 0) if not isData else None
+            sumWeights = sample.get('sumWeights')
+            triggerChannel = '\"{}\"'.format(sample.get('channel')) if sample.get('channel', None) is not None else None
             tag=args.tag
+            print(requestName, isData, isSignal, isUltraLegacy, era, subera, preselection, crossSection, equivLumi, nEvents, nEventsPositive, nEventsNegative, sumWeights, triggerChannel, tag)
 
             
             replacement_tuples = [("$REQUEST_NAME", requestName),
                                   ("$INPUT_DATASET", cleanInputDataset),
-                                  ("$CAMPAIGN", campaign),
                                   ("$SPLITTING", splitting),
                                   ("$DBS", dbs),
                                   ("$UNITS_PER_JOB", unitsPerJob),
@@ -385,8 +386,8 @@ def main():
                                   ("$PUBLICATION", str(publication)),
                                   ("$IS_DATA", str(isData)),
                                   ("$IS_ULTRA_LEGACY", str(isUltraLegacy)),
-                                  ("$ERA", era),
-                                  ("$SUBERA", subera),
+                                  ("$ERA", templateEra),
+                                  ("$SUBERA", templateSubera),
                                   ("$PRESELECTION", preselection),
                                   ("$CROSS_SECTION", crossSection),
                                   ("$LUMI", equivLumi),
@@ -395,19 +396,22 @@ def main():
                                   ("$N_EVENTS_NEGATIVE", nEventsNegative),
                                   ("$SUM_WEIGHTS", sumWeights),
                                   ("$TRIGGER_CHANNEL", triggerChannel),
+                                  ("$TAG", tag),
                               ]
+            #move keys which are subelements of other keys to end of replacement list
+            replacement_tuples = sorted(replacement_tuples, key=lambda tup: sum([tup[0] in l[0] for l in replacement_tuples]), reverse=False)
             with open("./{0:s}/crab_cfg_{1:s}.py".format(runFolder, requestName), "w") as sample_cfg:
                 template_file = "../scripts/crab_cfg_TEMPLATE.py"
                 modifiedTemplate = replace_template_parameters(load_template(template_file), replacement_tuples=replacement_tuples)
                 for line in modifiedTemplate:
                     sample_cfg.write(line)
             with open("./{0:s}/crab_script_{1:s}.sh".format(runFolder, requestName), "w") as sample_script_sh:
-                template_file = "../scripts/crab_script_TEMPLATE.py"
+                template_file = "../scripts/crab_script_TEMPLATE.sh"
                 modifiedTemplate = replace_template_parameters(load_template(template_file), replacement_tuples=replacement_tuples)
                 for line in modifiedTemplate:
                     sample_script_sh.write(line)
             with open("./{0:s}/crab_script_{1:s}.py".format(runFolder, requestName), "w") as sample_script_py:
-                template_file = "../scripts/crab_script_TEMPLATE.sh"
+                template_file = "../scripts/crab_script_TEMPLATE.py"
                 modifiedTemplate = replace_template_parameters(load_template(template_file), replacement_tuples=replacement_tuples)
                 for line in modifiedTemplate:
                     sample_script_py.write(line)

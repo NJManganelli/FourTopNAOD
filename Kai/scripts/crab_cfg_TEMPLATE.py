@@ -25,9 +25,9 @@ config.Data.splitting = '$SPLITTING'
 if config.Data.splitting == 'FileBased':
     config.Data.unitsPerJob = $UNITS_PER_JOB
 
-config.Data.outLFNDirBase = '/store/user/%s/$CAMPAIGN' % (getUsernameFromCric())
+config.Data.outLFNDirBase = '/store/user/{user}/$TAG'.format(user=getUsernameFromCric())
 config.Data.publication = $PUBLICATION
-config.Data.outputDatasetTag = '$CAMPAIGN'
+config.Data.outputDatasetTag = '$TAG'
 config.section_("Site")
 config.Site.storageSite = '$STORAGE_SITE'
 
