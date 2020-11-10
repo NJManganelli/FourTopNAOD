@@ -4,12 +4,13 @@ import os, pwd, sys, time, datetime
 import argparse
 import subprocess
 import pprint
-from collections import OrderedDict, namedtuple
-from ruamel.yaml import YAML
-from glob import glob
+import copy
 import tempfile
-import ROOT
+from collections import OrderedDict, namedtuple
+from glob import glob
 from FourTopNAOD.Kai.tools.toolbox import getFiles
+import pdb
+import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 SampleTuple = namedtuple("SampleTuple", "fileList era subera isData isSignal nEvents nEventsPositive nEventsNegative crossSection channel")
@@ -31,38 +32,32 @@ parser.add_argument('--fileLists', dest='fileLists', action='store', nargs='?', 
                     help='Write out fileLists for samples, with optional folder specified afterwards. Default folder will be "nanovisorFileLists"')
 parser.add_argument('--filter', dest='filter', action='store', type=str, default=None,
                     help='string to filter samples while checking events or generating configurations')
-# parser.add_argument('--check_size', dest='check_size', action='store_true',
-#                     help='check total dataset sizes')
 parser.add_argument('--local_run', dest='local_run', action='store_true',
                     help='run locally')
 parser.add_argument('--crab_run', dest='crab_run', action='store_true',
                     help='run with crab')
 parser.add_argument('--percent_run', dest='percent_run', action='append', type=int,
                     help='percent (as an integer) of each sample to process for local_run')
-parser.add_argument('--stage', dest='stage', action='store', type=str,
-                    help='analysis stage to be produced')
+parser.add_argument('--tag', dest='tag', action='store', type=str,
+                    help='analysis tag for template production')
 parser.add_argument('--source', dest='source', action='store', type=str, default='0',
                     help='Stage of data storage from which to begin supervisor actions, such as source: 0 which is the unprocessed and centrally maintained data/MC')
 parser.add_argument('--redir', dest='redir', action='append', type=str, default='root://cms-xrd-global.cern.ch/',
                     help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
-parser.add_argument('--btagger', dest='btagger', action='store', nargs='+', type=str, default=['DeepCSV', 'M'],
-                    help='tagger algorithm and working point to be used')
 parser.add_argument('--verbose', dest='verbose', action='store_true',
                     help='Enable more verbose output during actions')
 
 def main():
     args = parser.parse_args()
-    NanoAODPath = "{0:s}/src/PhysicsTools/NanoAODTools".format(os.environ['CMSSW_BASE'])
+    NanoAODPath = os.path.join(os.environ['CMSSW_BASE'], "src/PhysicsTools/NanoAODTools")
     username = pwd.getpwuid( os.getuid() )[ 0 ]
     bareRedir = args.redir.replace("root://", "").replace("/", "")
     if args.local_run and args.crab_run:
         print("Both local_run and crab_run have been set to True; this is not supported. Exiting")
         sys.exit()
     print("Nanovisor will check integrity of sample card's event counts: " + str(args.check_events))
-    if args.btagger:
-        print("Nanovisor will use the following algorithm and working point for any btagging related SF calculations and event selection: " + str(args.btagger))
     if args.crab_run:
-        print("Nanovisor will create crab configurations for stage {0:s} using source {1:s}".format(args.stage, args.source))
+        print("Nanovisor will create crab configurations for tag {0:s} using source {1:s}".format(args.tag, args.source))
     if args.local_run:
         print("Nanovisor will run samples locally... or it would, if this were supported. How unfortunate.")
     if args.sample_cards:
@@ -165,23 +160,17 @@ def main():
         print("Finishing operations that require no sample card(s)")
         sys.exit()
 
-    # SampleList = []
-    # yaml = YAML() #default roundtrip type
-    # for scard in args.sample_cards:
-    #     with open(scard) as sample:
-    #         SampleList += yaml.load(sample)
-
     SampleList = load_sample_cards(args.sample_cards)
 
     #Generate crab and local folder name using the current time, outside the sample loop
-    stageFolder = "Stage_{0:s}_to_{1:s}".format(args.source, args.stage)
+    tagFolder = "{0:s}_{1:s}".format(args.source, args.tag)
     dt = datetime.datetime.now()
     runFolder = "{0:d}{1:02d}{2:02d}_{3:02d}{4:02d}".format(dt.year, dt.month, dt.day, dt.hour, dt.minute)
     if args.crab_run:
-        runFolder = stageFolder + "/crab_" + runFolder
+        runFolder = os.path.join(tagFolder, runFolder)
         print("Creating directory {0:s} for crab configurations and scripts".format(runFolder))
-        if not os.path.exists(stageFolder):
-            os.makedirs(stageFolder)
+        if not os.path.exists(tagFolder):
+            os.makedirs(tagFolder)
         if not os.path.exists(runFolder):
             os.makedirs(runFolder)
         if not os.path.exists(runFolder+"/PSet.py"):
@@ -194,10 +183,10 @@ def main():
             sys.exit()
 
     if args.local_run:
-        runFolder = stageFolder + "/local_" + runFolder
+        runFolder = tagFolder + "/local_" + runFolder
         print("Creating directory {0:s} for local configurations and scripts".format(runFolder))
-        if not os.path.exists(stageFolder):
-            os.makedirs(stageFolder)
+        if not os.path.exists(tagFolder):
+            os.makedirs(tagFolder)
         if not os.path.exists(runFolder):
             os.makedirs(runFolder)
         else:
@@ -212,13 +201,11 @@ def main():
 
     variety_pack_filelist = []
     variety_pack_tuples = []
-    for samplenumber, sample in enumerate(SampleList):
+    for sampleName, sample in SampleList.items():
         #Parse dataset portion
-        dataset = sample.get('dataset')
-        sampleName = dataset.get('name')
-        era = dataset.get('era')
-        subera = dataset.get('subera', 'NONE')
-        channel = dataset.get('channel', 'NONE')
+        era = sample.get('era')
+        subera = sample.get('subera', 'NONE')
+        channel = sample.get('channel', 'NONE')
 
         #Filter samples early
         if args.filter:
@@ -226,12 +213,12 @@ def main():
                 if args.filter not in sampleName+"_"+era:
                     continue
 
-        isData = dataset.get('isData')
-        nEvents = dataset.get('nEvents', 0) #Default to 0 when key DNE
-        nEventsPositive = dataset.get('nEventsPositive', 0)
-        nEventsNegative = dataset.get('nEventsNegative', 0)
-        isSignal = dataset.get('isSignal', False)
-        crossSection = dataset.get('crossSection', -1)
+        isData = sample.get('isData')
+        isSignal = sample.get('isSignal', False)
+        crossSection = sample.get('crossSection', -1)
+        nEvents = sample.get('nEvents', 0) #Default to 0 when key DNE
+        nEventsPositive = sample.get('nEventsPositive', 0)
+        nEventsNegative = sample.get('nEventsNegative', 0)
         
         #parse source portion
         source = sample.get('source')
@@ -245,15 +232,9 @@ def main():
             sampleOutFile = args.fileLists + "/" + sampleName + "_" + era + "_" + args.source + ".txt"
         else:
             sampleOutFile=None
-
-        #parse crab portion
-        crab_cfg = sample.get('crab_cfg', {})
-
-        #parse crab portion
-        postprocessor = sample['postprocessor']
     
         #write out the filelist to personal space in /tmp, if check_events or local_run is true, then use these to run
-        if args.check_events != 'NOCHECK' or args.local_run or args.fileLists: # or args.check_size:
+        if args.check_events != 'NOCHECK' or args.local_run or args.fileLists:
             if inputDataset is None:
                 pass
                 # print("\tSkipped check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))
@@ -364,18 +345,72 @@ def main():
                 total_Data_current_events += current_events_in_files
 
         if args.crab_run:
-            coreName = sampleName + "_" + era
+            requestName = era + "_" + sampleName
+            campaign = "TEST"
+            splitting = sample.get('crab_cfg', {}).get("splitting", "FileBased")
+            inputDataset = sample.get('source', {}).get(args.source, None)
+            if len(inputDataset.split(" instance=")) > 1:
+                cleanInputDataset = inputDataset.split(" instance=")[0].replace("dbs:", "")
+                dbs = inputDataset.split(" instance=")[1].replace("prod/", "")
+            else:
+                cleanInputDataset = inputDataset.replace("dbs:", "")
+                dbs = "global"
+            unitsPerJob = sample.get('crab_cfg', {}).get("unitsPerJob", 1)
+            storageSite = "T2_CH_CERN"
+            publication = True
+            isData = sample.get('dataset', {}).get('isData')
+            isSignal = sample.get('dataset', {}).get('isSignal', False)
+            isUltraLegacy = False
+            era = sample.get('era')
+            subera = sample.get('subera', 'NONE')
+            preselection = None
+            crossSection = sample.get('dataset', {}).get('crossSection', -1)
+            equivLumi = {"2017": 41.53,
+                         "2018": 59.97}.get(era, -123)
+            nEvents = sample.get('dataset', {}).get('nEvents', 0) #Default to 0 when key DNE
+            nEventsPositive = sample.get('dataset', {}).get('nEventsPositive', 0)
+            nEventsNegative = sample.get('dataset', {}).get('nEventsNegative', 0)
+            sumWeights = sample.get('dataset', {}).get('sumWeights')
+            triggerChannel = sample.get('dataset', {}).get('channel', 'NONE')
+            tag=args.tag
 
-            with open("./{0:s}/crab_cfg_{1:s}.py".format(runFolder, coreName), "w") as sample_cfg:
-                sample_cfg.write(get_crab_cfg(runFolder, requestName = coreName, NanoAODPath = NanoAODPath, 
-                                              splitting = crab_cfg.get('splitting', 'FileBased'), unitsPerJob = crab_cfg.get('unitsPerJob', 2), 
-                                              inputDataset=inputDataset, stage=args.stage))
-            if 'extNANO' not in args.stage:
-                with open("./{0:s}/crab_script_{1:s}.sh".format(runFolder, coreName), "w") as sample_script_sh:
-                    sample_script_sh.write(get_crab_script_sh(runFolder, requestName = coreName, stage=args.stage))
-                with open("./{0:s}/crab_script_{1:s}.py".format(runFolder, coreName), "w") as sample_script_py:
-                    sample_script_py.write(get_crab_script_py(runFolder, requestName = coreName, stage=args.stage, 
-                                                              sampleConfig = sample, btagger = args.btagger))
+            
+            replacement_tuples = [("$REQUEST_NAME", requestName),
+                                  ("$INPUT_DATASET", cleanInputDataset),
+                                  ("$CAMPAIGN", campaign),
+                                  ("$SPLITTING", splitting),
+                                  ("$DBS", dbs),
+                                  ("$UNITS_PER_JOB", unitsPerJob),
+                                  ("$STORAGE_SITE", storageSite),
+                                  ("$PUBLICATION", str(publication)),
+                                  ("$IS_DATA", str(isData)),
+                                  ("$IS_ULTRA_LEGACY", str(isUltraLegacy)),
+                                  ("$ERA", era),
+                                  ("$SUBERA", subera),
+                                  ("$PRESELECTION", preselection),
+                                  ("$CROSS_SECTION", crossSection),
+                                  ("$LUMI", equivLumi),
+                                  ("$N_EVENTS", nEvents),
+                                  ("$N_EVENTS_POSITIVE", nEventsPositive),
+                                  ("$N_EVENTS_NEGATIVE", nEventsNegative),
+                                  ("$SUM_WEIGHTS", sumWeights),
+                                  ("$TRIGGER_CHANNEL", triggerChannel),
+                              ]
+            with open("./{0:s}/crab_cfg_{1:s}.py".format(runFolder, requestName), "w") as sample_cfg:
+                template_file = "../scripts/crab_cfg_TEMPLATE.py"
+                modifiedTemplate = replace_template_parameters(load_template(template_file), replacement_tuples=replacement_tuples)
+                for line in modifiedTemplate:
+                    sample_cfg.write(line)
+            with open("./{0:s}/crab_script_{1:s}.sh".format(runFolder, requestName), "w") as sample_script_sh:
+                template_file = "../scripts/crab_script_TEMPLATE.py"
+                modifiedTemplate = replace_template_parameters(load_template(template_file), replacement_tuples=replacement_tuples)
+                for line in modifiedTemplate:
+                    sample_script_sh.write(line)
+            with open("./{0:s}/crab_script_{1:s}.py".format(runFolder, requestName), "w") as sample_script_py:
+                template_file = "../scripts/crab_script_TEMPLATE.sh"
+                modifiedTemplate = replace_template_parameters(load_template(template_file), replacement_tuples=replacement_tuples)
+                for line in modifiedTemplate:
+                    sample_script_py.write(line)
 
     if args.check_events != 'NOCHECK':
         print("All samples:\n\ttotal_Data_size = {0:f}GB, total_Data_current_events = {1:d}\n\t"\
@@ -394,81 +429,42 @@ def main():
                 out_t.write( tup.fileList[0] + "," + tup.era + "," + tup.subera + "," + str(tup.isData) + "," + str(tup.isSignal) + 
                              "," + str(tup.nEvents) + "," + str(tup.nEventsPositive) + "," + str(tup.nEventsNegative) + "," + 
                              str(tup.crossSection) + "," + str(tup.channel) + "\n")
+
+def replace_template_parameters(input_list, replacement_tuples=[("$CAMPAIGN", "TestCampaign")] ):
+    return_list = []
+    for l in input_list:
+        temp = copy.copy(l)
+        for tup in replacement_tuples:
+            rin, rout = tup
+            temp = temp.replace(rin, str(rout))
+        return_list.append(temp)
+    return return_list
+
+def load_template(template_file):
+    template_lines = []
+    with open(template_file, "r") as template:
+        for line in template:
+            template_lines.append(line)
+    return template_lines
             
 def get_crab_cfg(runFolder, requestName, NanoAODPath='.', splitting='', unitsPerJob = 1, inputDataset = '', storageSite = 'T2_CH_CERN', publication=True, stage='Baseline'):
     if 'dbs:' in inputDataset:
-        cleanInputDataset = inputDataset.replace("dbs:", "")
-    if 'glob:' in inputDataset or 'list:' in inputDataset:
+        if len(inputDataset.split(" ")) > 1:
+            cleanInputDataset = inputDataset.split(" ")[0].replace("dbs:", "")
+            dbs = inputDataset.split(" ")[1].replace("", "")
+            raise NotImplementedError("Not fully implemented operation")
+        else:
+            cleanInputDataset = inputDataset.split(" ")[0].replace("dbs:", "")
+            dbs = 'global'
+    elif 'glob:' in inputDataset or 'list:' in inputDataset:
         raise NotImplementedError("get_crab_cfg submethod of Nanovisor.py is not yet trained to handle non-DAS inputs")
-    #Options for splitting:
-    #'Automatic'
-    #'EventAwareLumiBased'
-    #'FileBased'
-    #FIXMEs : scriptExe, inputFiles (including the haddnano script), allow undistributed CMSSW?, publication boolean, 
+
+    template_lines = []
+    with open(template_file, "r") as template:
+        for line in template:
+            template_lines.append(line)
     if stage == 'Baseline' or stage == 'Stitched' or stage == 'LogicChain':
-        crab_cfg_content = """from WMCore.Configuration import Configuration
-from CRABClient.UserUtilities import config, getUsernameFromSiteDB
-
-config = Configuration()
-
-config.section_("General")
-config.General.requestName = '{1:s}'
-config.General.transferLogs = True
-config.section_("JobType")
-config.JobType.allowUndistributedCMSSW = True
-config.JobType.pluginName = 'Analysis'
-config.JobType.psetName = 'PSet.py'
-config.JobType.scriptExe = 'crab_script_{1:s}.sh'
-config.JobType.inputFiles = ['crab_script_{1:s}.py', 
-                             '{8:s}/python/postprocessing/data/pileup/PileupData_GoldenJSON_Full2016.root',
-                             '{8:s}/python/postprocessing/data/pileup/PileupHistogram-goldenJSON-13tev-2017-99bins_withVar.root',
-                             '{8:s}/python/postprocessing/data/pileup/PileupHistogram-goldenJSON-13tev-2018-99bins_withVar.root',
-                             '{8:s}/python/postprocessing/data/pileup/PileupHistogram-goldenJSON-13tev-2018-100bins_withVar.root',
-                             '{8:s}/python/postprocessing/data/pileup/pileup_profile_Summer16.root',
-                             '{8:s}/python/postprocessing/data/pileup/mcPileup2017.root',
-                             '{8:s}/python/postprocessing/data/pileup/mcPileup2018.root',
-                             '{8:s}/scripts/haddnano.py',
-                             '{9:s}/src/FourTopNAOD/Kai/python/jsons/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt',
-                             '{9:s}/src/FourTopNAOD/Kai/python/jsons/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt']
-config.JobType.outputFiles = ['hist.root']
-config.JobType.sendPythonFolder  = True
-config.section_("Data")
-config.Data.inputDataset = '{4:s}'
-config.Data.inputDBS = 'global'
-config.Data.splitting = '{2:s}'
-if config.Data.splitting == 'FileBased':
-    config.Data.unitsPerJob = {3:d}
-
-config.Data.outLFNDirBase = '/store/user/%s/{0:s}' % (getUsernameFromSiteDB())
-config.Data.publication = {6:s}
-config.Data.outputDatasetTag = '{1:s}'
-config.section_("Site")
-config.Site.storageSite = '{5:s}'
-"""
         ret = crab_cfg_content.format(runFolder, requestName, splitting, unitsPerJob, cleanInputDataset, storageSite, str(publication), stage, str(NanoAODPath), str(os.environ['CMSSW_BASE']))
-        # for l in lines:
-        #     temp = copy(l)
-        #     for rin, rout in [("$REQUEST_NAME", requestName),
-        #                       ("$CAMPAIGN", campaign),
-        #                       ("$SPLITTING", splitting),
-        #                       ("$DBS", "global"),
-        #                       ("$UNITS_PER_JOB", unitsPerJob),
-        #                       ("$STORAGE_SITE", storageSite),
-        #                       ("$PUBLICATION", str(publication)),
-        #                       ("$IS_DATA", isData),
-        #                       ("$IS_ULTRA_LEGACY", isUltraLegacy),
-        #                       ("$ERA", era),
-        #                       ("$SUBERA", subera),
-        #                       ("$PRESELECTION", preselection),
-        #                       ("$CROSS_SECTION", crossSection),
-        #                       ("$LUMI", equivLumi),
-        #                       ("$N_EVENTS", nEvents),
-        #                       ("$N_EVENTS_POSITIVE", nEventsPositive),
-        #                       ("$N_EVENTS_NEGATIVE", nEventsNegative),
-        #                       ("$SUM_WEIGHTS", sumWeights),
-        #                       ("$TRIGGER_CHANNEL", TriggerChannel),
-        #                       ]:
-        #         temp = temp.replace(rin, rout)
     else:
         print("We haven't made a stage {0:s} configuration yet... Exiting".format(stage))
         sys.exit()
@@ -508,7 +504,7 @@ fi
     ret = crab_script_sh.format(requestName)
     return ret
 
-def get_crab_script_py(runFolder, requestName, stage='Baseline', sampleConfig = None, stageConfig = None, btagger = ['None', 'None']):
+def get_crab_script_py(runFolder, requestName, stage='Baseline', sampleConfig = None, stageConfig = None):
     eLumiDict = {'2016': 35,
                  '2017': 41.53,
                  '2018': 50
@@ -563,7 +559,6 @@ crossSection = {4:s}
 equivLumi = {5:s}
 nEvents = {6:s}
 sumWeights = {7:s}
-Sup_BTagger = {8:s}
 
 theFiles = inputFiles()
 
@@ -642,7 +637,7 @@ p=PostProcessor(".",
 p.run()
 """
         ret = crab_script_py.format(str(isData), str(era), str(subera), str(preselection), str(crossSection), str(equivLumi), 
-                                    str(nEvents), str(sumWeights), str(btagger))
+                                    str(nEvents), str(sumWeights))
         return ret
     elif stage == 'LogicChain':
         crab_script_py = """#!/usr/bin/env python
@@ -667,7 +662,6 @@ equivLumi = {5:s}
 nEventsPositive = {6:s}
 nEventsNegative = {7:s}
 sumWeights = {8:s}
-Sup_BTagger = {9:s}
 TriggerChannel = {10:s}
 StitchMode = "{11:s}"
 StitchChannel = "{12:s}"
@@ -778,7 +772,7 @@ p=PostProcessor(".",
 p.run()
 """
         ret = crab_script_py.format(str(isData), str(era), str(subera), str(preselection), str(crossSection), str(equivLumi), 
-                                    str(nEventsPositive), str(nEventsNegative), str(sumWeights), str(btagger), str(TriggerChannel),
+                                    str(nEventsPositive), str(nEventsNegative), str(sumWeights), str(TriggerChannel),
                                     str(StitchMode), str(StitchChannel), str(StitchSource))
         return ret
    
@@ -797,7 +791,6 @@ crossSection = {4:s}
 equivLumi = {5:s}
 nEvents = {6:s}
 sumWeights = {7:s}
-Sup_BTagger = {8:s}
 stitch_mode = "{9:s}"
 stitch_source = "{10:s}"
 stitch_channel = "{11:s}"
@@ -830,7 +823,7 @@ p=PostProcessor(".",
 p.run()
 """
         ret = crab_script_py.format(str(isData), str(era), str(subera), str(preselection), str(crossSection), str(equivLumi), 
-                                    str(nEvents), str(sumWeights), str(btagger), str(StitchMode), str(StitchCondition),
+                                    str(nEvents), str(sumWeights), str(StitchMode), str(StitchCondition),
                                     str(StitchChannel))
         return ret
     elif stage == '':
@@ -881,11 +874,17 @@ def get_username():
     return pwd.getpwuid( os.getuid() )[ 0 ]
 
 def load_sample_cards(sample_cards):
-    SampleList = []
-    yaml = YAML() #default roundtrip type
+    SampleList = None
+    try:
+        import ruamel.yaml as yaml
+    except:
+        print("Cannot load ruamel package to convert yaml file. Consider installing in a virtual environment with 'pip install --user 'ruamel.yaml<0.16,>0.15.95' --no-deps'")
     for scard in sample_cards:
         with open(scard) as sample:
-            SampleList += yaml.load(sample)
+            if SampleList is None:
+                SampleList = yaml.load(sample, Loader=yaml.Loader)
+            else:
+                SampleList.update(yaml.load(sample, Loader=yaml.Loader))
     return SampleList
 
 if __name__ == '__main__':

@@ -5,15 +5,15 @@ from CRABClient.UserUtilities import config, getUsernameFromCRIC
 config = Configuration()
 
 config.section_("General")
-config.General.requestName = '$REQUESTNAME'
+config.General.requestName = '$REQUEST_NAME'
 config.General.transferOutputs = True
 config.General.transferLogs = True
 config.section_("JobType")
 config.JobType.allowUndistributedCMSSW = True
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'PSet.py'
-config.JobType.scriptExe = 'crab_script_$REQUESTNAME.sh'
-config.JobType.inputFiles = ['crab_script_$REQUESTNAME.py', 
+config.JobType.scriptExe = 'crab_script_$REQUEST_NAME.sh'
+config.JobType.inputFiles = ['crab_script_$REQUEST_NAME.py', 
                              os.path.join(os.environ['CMSSW_BASE'],'src/PhysicsTools/NanoAODTools/scripts/haddnano.py'),
                          ]
 config.JobType.outputFiles = ['hist.root']
