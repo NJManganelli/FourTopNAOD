@@ -36,6 +36,8 @@ parser.add_argument('--local_run', dest='local_run', action='store_true',
                     help='run locally')
 parser.add_argument('--crab_run', dest='crab_run', action='store_true',
                     help='run with crab')
+parser.add_argument('--templates', dest='templates', action='store', nargs='*', type=str, default=["../scripts/crab_cfg_TEMPLATE.py", "../scripts/crab_script_TEMPLATE.sh", "../scripts/crab_script_TEMPLATE.py"],
+                    help='path and name of the templates to be used, the keyword "TEMPLATE" will be replaced by the <requestName> in filenames.')
 parser.add_argument('--percent_run', dest='percent_run', action='append', type=int,
                     help='percent (as an integer) of each sample to process for local_run')
 parser.add_argument('--tag', dest='tag', action='store', type=str,
@@ -58,6 +60,7 @@ def main():
     print("Nanovisor will check integrity of sample card's event counts: " + str(args.check_events))
     if args.crab_run:
         print("Nanovisor will create crab configurations for tag {0:s} using source {1:s}".format(args.tag, args.source))
+        print("The templates that will be used in generation are: {}".format(args.templates))
     if args.local_run:
         print("Nanovisor will run samples locally... or it would, if this were supported. How unfortunate.")
     if args.sample_cards:
@@ -399,7 +402,7 @@ def main():
             #move keys which are subelements of other keys to end of replacement list
             replacement_tuples = sorted(replacement_tuples, key=lambda tup: sum([tup[0] in l[0] for l in replacement_tuples]), reverse=False)
 
-            for template in ["../scripts/crab_cfg_TEMPLATE.py", "../scripts/crab_script_TEMPLATE.sh", "../scripts/crab_script_TEMPLATE.py"]:
+            for template in args.templates:
                 with open("./{0:s}/{1:s}".format(runFolder, template.split("/")[-1].replace("TEMPLATE", requestName)), "w") as generated:
                     modifiedTemplate = replace_template_parameters(load_template(template), replacement_tuples=replacement_tuples)
                     for line in modifiedTemplate:
@@ -435,10 +438,13 @@ def replace_template_parameters(input_list, replacement_tuples=[("$CAMPAIGN", "T
 
 def load_template(template_file):
     template_lines = []
-    with open(template_file, "r") as template:
-        for line in template:
-            template_lines.append(line)
-    return template_lines
+    try:
+        with open(template_file, "r") as template:
+            for line in template:
+                template_lines.append(line)
+        return template_lines
+    except:
+        raise IOError("template file {} not found".format(template_file))
             
 def get_PSet_py(NanoAODPath):
     PSet_py = """#this fake PSET is needed for local test and for crab to figure the output filename
