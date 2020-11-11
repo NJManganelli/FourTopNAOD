@@ -398,21 +398,12 @@ def main():
                               ]
             #move keys which are subelements of other keys to end of replacement list
             replacement_tuples = sorted(replacement_tuples, key=lambda tup: sum([tup[0] in l[0] for l in replacement_tuples]), reverse=False)
-            with open("./{0:s}/crab_cfg_{1:s}.py".format(runFolder, requestName), "w") as sample_cfg:
-                template_file = "../scripts/crab_cfg_TEMPLATE.py"
-                modifiedTemplate = replace_template_parameters(load_template(template_file), replacement_tuples=replacement_tuples)
-                for line in modifiedTemplate:
-                    sample_cfg.write(line)
-            with open("./{0:s}/crab_script_{1:s}.sh".format(runFolder, requestName), "w") as sample_script_sh:
-                template_file = "../scripts/crab_script_TEMPLATE.sh"
-                modifiedTemplate = replace_template_parameters(load_template(template_file), replacement_tuples=replacement_tuples)
-                for line in modifiedTemplate:
-                    sample_script_sh.write(line)
-            with open("./{0:s}/crab_script_{1:s}.py".format(runFolder, requestName), "w") as sample_script_py:
-                template_file = "../scripts/crab_script_TEMPLATE.py"
-                modifiedTemplate = replace_template_parameters(load_template(template_file), replacement_tuples=replacement_tuples)
-                for line in modifiedTemplate:
-                    sample_script_py.write(line)
+
+            for template in ["../scripts/crab_cfg_TEMPLATE.py", "../scripts/crab_script_TEMPLATE.sh", "../scripts/crab_script_TEMPLATE.py"]:
+                with open("./{0:s}/{1:s}".format(runFolder, template.split("/")[-1].replace("TEMPLATE", requestName)), "w") as generated:
+                    modifiedTemplate = replace_template_parameters(load_template(template), replacement_tuples=replacement_tuples)
+                    for line in modifiedTemplate:
+                        generated.write(line)
 
     if args.check_events != 'NOCHECK':
         print("All samples:\n\ttotal_Data_size = {0:f}GB, total_Data_current_events = {1:d}\n\t"\
