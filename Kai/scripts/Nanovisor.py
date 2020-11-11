@@ -163,7 +163,8 @@ def main():
         print("Finishing operations that require no sample card(s)")
         sys.exit()
 
-    SampleList = load_sample_cards(args.sample_cards)
+    SampleList, SampleDict = load_sample_cards(args.sample_cards)
+    write_sample_cards(SampleDict)
 
     #Generate crab and local folder name using the current time, outside the sample loop
     tagFolder = "{0:s}_{1:s}".format(args.source, args.tag)
@@ -481,17 +482,35 @@ def get_username():
 
 def load_sample_cards(sample_cards):
     SampleList = None
+    SampleDict = OrderedDict()
     try:
-        import ruamel.yaml as yaml
+        import ruamel.yaml
+        ruamel.yaml.preserve_quotes = True
     except:
         print("Cannot load ruamel package to convert yaml file. Consider installing in a virtual environment with 'pip install --user 'ruamel.yaml<0.16,>0.15.95' --no-deps'")
+    
     for scard in sample_cards:
-        with open(scard) as sample:
+        with open(scard, "r") as sample:
             if SampleList is None:
-                SampleList = yaml.load(sample, Loader=yaml.Loader)
+                SampleList = ruamel.yaml.load(sample, Loader=ruamel.yaml.RoundTripLoader)
             else:
-                SampleList.update(yaml.load(sample, Loader=yaml.Loader))
-    return SampleList
+                SampleList.update(ruamel.yaml.load(sample, Loader=ruamel.yaml.RoundTripLoader))
+
+    for scard in sample_cards:
+        with open(scard, "r") as sample:
+            SampleDict[scard] = ruamel.yaml.load(sample, Loader=ruamel.yaml.RoundTripLoader)
+    return SampleList, SampleDict
+
+def write_sample_cards(sample_cards, postfix="_updated"):
+    try:
+        import ruamel.yaml
+        ruamel.yaml.preserve_quotes = True
+    except:
+        print("Cannot load ruamel package to convert yaml file. Consider installing in a virtual environment with 'pip install --user 'ruamel.yaml<0.16,>0.15.95' --no-deps'")
+    
+    for scard, scontent in sample_cards.items():
+        with open(scard.replace(".yaml", postfix+".yaml").replace(".yml", postfix+".yml"), "w") as outf:
+            ruamel.yaml.dump(scontent, outf, Dumper=ruamel.yaml.RoundTripDumper)
 
 if __name__ == '__main__':
     main()
