@@ -1,6 +1,6 @@
 !!omap
 - DYJets_DL:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 6077.22
@@ -12,15 +12,15 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017RECOSIMstep_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
-      NANOv6: "dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017RECOSIMstep_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-*_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/DYJets_DL-*_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/DYJets_DL-*_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/DYJets_DL-*_2017_v2*.root"
+      NANOv5: dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017RECOSIMstep_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
+      NANOv6: dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017RECOSIMstep_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
+      NANOv6p1: dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/DYJets_DL-*_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/DYJets_DL-*_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/DYJets_DL-*_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/DYJets_DL-*_2017_v2*.root
 - DYJets_DL-HT100:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 181.302
@@ -32,11 +32,11 @@
     - All
     nEvents: 1
     source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5: dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
 - DYJets_DL-HT200:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 50.4177
@@ -48,11 +48,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5: dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
 - DYJets_DL-HT400:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 6.98394
@@ -64,11 +64,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
 - DYJets_DL-HT600:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 1.68141
@@ -80,11 +80,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5: dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
 - DYJets_DL-HT800:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.775392
@@ -96,11 +96,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5: dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
 - DYJets_DL-HT1200:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.186222
@@ -112,11 +112,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5: dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
 - DYJets_DL-HT2500:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.00438495
@@ -128,11 +128,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5: dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
 - ST_tW:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 35.83
@@ -144,15 +144,15 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tW_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tW_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tW_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tW_2017_v2*.root"
+      NANOv5: dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tW_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tW_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tW_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tW_2017_v2*.root
 - ST_tbarW:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 35.83
@@ -164,14 +164,14 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tbarW_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tbarW_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tbarW_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tbarW_2017_v2*.root"
+      NANOv5: dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ST_tbarW_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ST_tbarW_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ST_tbarW_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ST_tbarW_2017_v2*.root
 - ST_tW-NoFHad:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 19.553
@@ -183,10 +183,10 @@
     channels:
     - All
     source:
-      NANOv5p1: "dbs:/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
-      NANOv6: "dbs:/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5p1: dbs:/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      NANOv6: dbs:/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
 - ST_tbarW-NoFHad:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 19.553
@@ -198,11 +198,11 @@
     channels:
     - All
     source:
-      NANOv5p1: "dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
-      NANOv6: "dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5p1: dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      NANOv6: dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
 - ST_s-channel:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 3.7866666666666666
@@ -214,11 +214,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv5p1: "dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
-      NANOv6: "dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8_correctnPartonsInBorn/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv5p1: dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      NANOv6: dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8_correctnPartonsInBorn/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
 - ST_t_t-channel:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 80.95
@@ -230,11 +230,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv5p1: "dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
-      NANOv6: "dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv5p1: dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      NANOv6: dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
 - ST_tbar_t-channel:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 136.02
@@ -246,11 +246,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv5p1: "dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
-      NANOv6: "dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv5p1: dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      NANOv6: dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
 - ttH:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.2934
@@ -261,17 +261,18 @@
     nEventsNegative: 83133
     channels:
     - All
-    notes: "Missing PS weights, but contained in the split ttHTobb dilepton/single lepton samples..."
+    notes: Missing PS weights, but contained in the split ttHTobb dilepton/single
+      lepton samples...
     source:
-      NANOv5: "dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttH_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttH_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttH_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttH_2017_v2*.root"
+      NANOv5: dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttH_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttH_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttH_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttH_2017_v2*.root
 - ttH_DL-bb:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.030806999999999998
@@ -283,11 +284,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
 
 - ttH_SL-bb:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.1285092
@@ -299,10 +300,10 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v2/NANOAODSIM"
+      NANOv5: dbs:/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v2/NANOAODSIM
 - ttHH:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.0007408
@@ -314,14 +315,14 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTHH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTHH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v2/NANOAODSIM"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttHH_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttHH_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttHH_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttHH_2017_v2*.root"
+      NANOv5: dbs:/TTHH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTHH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v2/NANOAODSIM
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttHH_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttHH_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttHH_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttHH_2017_v2*.root
 - ttWH:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.001572
@@ -333,14 +334,14 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTWH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTWH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWH_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWH_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWH_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWH_2017_v2*.root"
+      NANOv5: dbs:/TTWH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTWH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWH_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWH_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWH_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWH_2017_v2*.root
 - ttWJets:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.6105
@@ -352,15 +353,15 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
-      NANOv6: "dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWJets_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWJets_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWJets_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWJets_2017_v2*.root"
+      NANOv5: dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
+      NANOv6: dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
+      NANOv6p1: dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWJets_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWJets_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWJets_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWJets_2017_v2*.root
 - ttWJets_QQ:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.4062
@@ -372,11 +373,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5: dbs:/TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
 - ttWJets_LNu:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.2043
@@ -388,10 +389,10 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTWJetsToLNu_TuneCP5_PSweights_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTWJetsToLNu_TuneCP5_PSweights_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_ext_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/TTWJetsToLNu_TuneCP5_PSweights_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTWJetsToLNu_TuneCP5_PSweights_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_ext_102X_mc2017_realistic_v7-v1/NANOAODSIM
 - ttWW:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.007882
@@ -403,15 +404,15 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWW_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWW_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWW_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWW_2017_v2*.root"
+      NANOv5: dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
+      NANOv6p1: dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWW_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWW_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWW_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWW_2017_v2*.root
 - ttWZ:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.002974
@@ -423,15 +424,15 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWZ_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWZ_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWZ_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWZ_2017_v2*.root"
+      NANOv5: dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttWZ_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttWZ_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttWZ_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttWZ_2017_v2*.root
 - ttZH:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.01253
@@ -443,14 +444,14 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v2/NANOAODSIM"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZH_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZH_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZH_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZH_2017_v2*.root"
+      NANOv5: dbs:/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v2/NANOAODSIM
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZH_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZH_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZH_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZH_2017_v2*.root
 - ttZJets:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.7826
@@ -462,11 +463,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
-      NANOv6: "dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5: dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
+      NANOv6: dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
 - ttZZ:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.001572
@@ -478,15 +479,15 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZZ_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZZ_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZZ_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZZ_2017_v2*.root"
+      NANOv5: dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ttZZ_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/ttZZ_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/ttZZ_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/ttZZ_2017_v2*.root
 - ttZ_DL-M10:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.2529
@@ -498,11 +499,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTZToLLNuNu_M-10_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTZToLLNuNu_M-10_TuneCP5_PSweights_correctnPartonsInBorn_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5: dbs:/TTZToLLNuNu_M-10_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTZToLLNuNu_M-10_TuneCP5_PSweights_correctnPartonsInBorn_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
 - ttZ_DL-M1to10:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.2529
@@ -514,11 +515,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_v6_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5: dbs:/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_v6_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
 - ttZ_QQ:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.5297
@@ -530,11 +531,11 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5: dbs:/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
+      NANOv6: dbs:/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
+      NANOv6p1: dbs:/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
 - tt_AH:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 380.1143
@@ -546,9 +547,9 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/umolinat-TopNanoAODv6p1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
+      NANOv5: dbs:/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/umolinat-TopNanoAODv6p1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
     doFilter: true
     splitProcess:
       processes:
@@ -563,7 +564,7 @@
           nEventsNegative: 302
           sumWeights: 22135434.4955
           nEventsPositive: 73301
-          filter: "nAdditionalBJets >= 2"
+          filter: nAdditionalBJets >= 2
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 6767694727.14
@@ -584,7 +585,7 @@
           nEventsNegative: 80517
           sumWeights: 5992649717.25
           nEventsPositive: 19842384
-          filter: "nAdditionalBJets < 2"
+          filter: nAdditionalBJets < 2
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 1832047058040.0
@@ -610,7 +611,7 @@
           nEventsNegative: 81403
           sumWeights: 6052480387.47
           nEventsPositive: 20040607
-          filter: "return true;"
+          filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           sumWeights2: 1850350273590.0
           nominalXS: 364.310902493
@@ -620,7 +621,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.26895164785
 - tt_AH-CR1-QCD:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 380.1143
@@ -632,10 +633,10 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToHadronic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToHadronic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/TTToHadronic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToHadronic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
 - tt_AH-CR2-GluonMove:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 380.1143
@@ -647,10 +648,10 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToHadronic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToHadronic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/TTToHadronic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToHadronic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
 - tt_AH-HDAMPdown:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 380.1143
@@ -662,10 +663,10 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToHadronic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToHadronic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/TTToHadronic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToHadronic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
 - tt_AH-HDAMPup:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 380.1143
@@ -677,10 +678,10 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToHadronic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToHadronic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/TTToHadronic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToHadronic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
 - tt_AH-TuneCP5down:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 380.1143
@@ -692,10 +693,10 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToHadronic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToHadronic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/TTToHadronic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToHadronic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
 - tt_AH-TuneCP5up:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 380.1143
@@ -707,10 +708,10 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToHadronic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToHadronic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/TTToHadronic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToHadronic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
 - tt_DL:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 87.3348
@@ -719,13 +720,13 @@
     nEvents: 69098644
     nEventsPositive: 68818780
     nEventsNegative: 279864
-    Notes: "crossSection folds in the branching ratio to DL. when splitting the process,
+    Notes: crossSection folds in the branching ratio to DL. when splitting the process,
       need to know both the effective crossSection in each phase space and the effective
       number of events to combine multiple samples in that phase space proportional
       to the effective number of simulated events (N_eff = N_positive - N_negative)
       over the nEffectivePhaseSpace (sum of N_eff from all contributing samples)The
-      old XS form 2018 PDG BRs was 89.0482, synchronized with Brown's value 87.3348... Need to update
-      SL technically as well"
+      old XS form 2018 PDG BRs was 89.0482, synchronized with Brown's value 87.3348...
+      Need to update SL technically as well
     stitch:
       source: Nominal
       mode: Flag
@@ -733,14 +734,14 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv5p1: "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
-      NANOv6: "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-*_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-NOM-*_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-NOM-*_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-NOM-*_2017_v2*.root"
+      NANOv5: dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv5p1: dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      NANOv6: dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-NOM-*_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-NOM-*_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-NOM-*_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-NOM-*_2017_v2*.root
     doFilter: true
     splitProcess:
       ID:
@@ -759,7 +760,8 @@
           nEventsNegative: 894
           sumWeights: 15117576.3357
           nEventsPositive: 208932
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 1108001380.45
@@ -780,7 +782,8 @@
           nEventsNegative: 174
           sumWeights: 2776096.39581
           nEventsPositive: 38381
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.00728478735001
           snapshotPriority: 3
           sumWeights2: 203548428.082
@@ -801,7 +804,8 @@
           nEventsNegative: 5757
           sumWeights: 80302570.8316
           nEventsPositive: 1111004
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.166807220112
           snapshotPriority: 1
           sumWeights2: 5895277293.01
@@ -822,7 +826,8 @@
           nEventsNegative: 273039
           sumWeights: 4882573073.47
           nEventsPositive: 67460463
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 357706696495.0
@@ -844,7 +849,7 @@
           nEventsNegative: 279864
           sumWeights: 4980769317.03
           nEventsPositive: 68818780
-          filter: "return true;"
+          filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 1.456734617
           sumWeights2: 364913523596.0
           nominalXS: 87.3348035714
@@ -854,7 +859,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.181324102052
           nLep1nJet9pGenHT500p-nominalXS: 0.0
 - tt_DL-CR1-QCD:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 87.3348
@@ -866,10 +871,10 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
+      NANOv5: dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
 - tt_DL-CR2-GluonMove:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 87.3348
@@ -881,10 +886,10 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
+      NANOv5: dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
 - tt_DL-HDAMPdown:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 87.3348
@@ -896,8 +901,8 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
+      NANOv5: dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
     doFilter: true
     splitProcess:
       ID:
@@ -916,7 +921,8 @@
           nEventsNegative: 894
           sumWeights: 15117576.3357
           nEventsPositive: 208932
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 1108001380.45
@@ -937,7 +943,8 @@
           nEventsNegative: 174
           sumWeights: 2776096.39581
           nEventsPositive: 38381
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.00728478735001
           snapshotPriority: 3
           sumWeights2: 203548428.082
@@ -958,7 +965,8 @@
           nEventsNegative: 5757
           sumWeights: 80302570.8316
           nEventsPositive: 1111004
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.166807220112
           snapshotPriority: 1
           sumWeights2: 5895277293.01
@@ -979,7 +987,8 @@
           nEventsNegative: 273039
           sumWeights: 4882573073.47
           nEventsPositive: 67460463
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 357706696495.0
@@ -1001,7 +1010,7 @@
           nEventsNegative: 279864
           sumWeights: 4980769317.03
           nEventsPositive: 68818780
-          filter: "return true;"
+          filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 1.456734617
           sumWeights2: 364913523596.0
           nominalXS: 87.3348035714
@@ -1011,7 +1020,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.181324102052
           nLep1nJet9pGenHT500p-nominalXS: 0.0
 - tt_DL-HDAMPup:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 87.3348
@@ -1023,8 +1032,8 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTTo2L2Nu_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTTo2L2Nu_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
+      NANOv5: dbs:/TTTo2L2Nu_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTTo2L2Nu_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
     doFilter: true
     splitProcess:
       ID:
@@ -1043,7 +1052,8 @@
           nEventsNegative: 894
           sumWeights: 15117576.3357
           nEventsPositive: 208932
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 1108001380.45
@@ -1064,7 +1074,8 @@
           nEventsNegative: 174
           sumWeights: 2776096.39581
           nEventsPositive: 38381
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.00728478735001
           snapshotPriority: 3
           sumWeights2: 203548428.082
@@ -1085,7 +1096,8 @@
           nEventsNegative: 5757
           sumWeights: 80302570.8316
           nEventsPositive: 1111004
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.166807220112
           snapshotPriority: 1
           sumWeights2: 5895277293.01
@@ -1106,7 +1118,8 @@
           nEventsNegative: 273039
           sumWeights: 4882573073.47
           nEventsPositive: 67460463
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 357706696495.0
@@ -1128,7 +1141,7 @@
           nEventsNegative: 279864
           sumWeights: 4980769317.03
           nEventsPositive: 68818780
-          filter: "return true;"
+          filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 1.456734617
           sumWeights2: 364913523596.0
           nominalXS: 87.3348035714
@@ -1138,7 +1151,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.181324102052
           nLep1nJet9pGenHT500p-nominalXS: 0.0
 - tt_DL-TuneCP5down:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 87.3348
@@ -1150,8 +1163,8 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTTo2L2Nu_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
+      NANOv5: dbs:/TTTo2L2Nu_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTTo2L2Nu_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
     doFilter: true
     splitProcess:
       ID:
@@ -1170,7 +1183,8 @@
           nEventsNegative: 894
           sumWeights: 15117576.3357
           nEventsPositive: 208932
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 1108001380.45
@@ -1191,7 +1205,8 @@
           nEventsNegative: 174
           sumWeights: 2776096.39581
           nEventsPositive: 38381
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.00728478735001
           snapshotPriority: 3
           sumWeights2: 203548428.082
@@ -1212,7 +1227,8 @@
           nEventsNegative: 5757
           sumWeights: 80302570.8316
           nEventsPositive: 1111004
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.166807220112
           snapshotPriority: 1
           sumWeights2: 5895277293.01
@@ -1233,7 +1249,8 @@
           nEventsNegative: 273039
           sumWeights: 4882573073.47
           nEventsPositive: 67460463
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 357706696495.0
@@ -1255,7 +1272,7 @@
           nEventsNegative: 279864
           sumWeights: 4980769317.03
           nEventsPositive: 68818780
-          filter: "return true;"
+          filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 1.456734617
           sumWeights2: 364913523596.0
           nominalXS: 87.3348035714
@@ -1265,7 +1282,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.181324102052
           nLep1nJet9pGenHT500p-nominalXS: 0.0
 - tt_DL-TuneCP5up:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 87.3348
@@ -1277,8 +1294,8 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTTo2L2Nu_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTTo2L2Nu_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM"
+      NANOv5: dbs:/TTTo2L2Nu_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTTo2L2Nu_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
     doFilter: true
     splitProcess:
       ID:
@@ -1297,7 +1314,8 @@
           nEventsNegative: 894
           sumWeights: 15117576.3357
           nEventsPositive: 208932
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 1108001380.45
@@ -1318,7 +1336,8 @@
           nEventsNegative: 174
           sumWeights: 2776096.39581
           nEventsPositive: 38381
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.00728478735001
           snapshotPriority: 3
           sumWeights2: 203548428.082
@@ -1339,7 +1358,8 @@
           nEventsNegative: 5757
           sumWeights: 80302570.8316
           nEventsPositive: 1111004
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.166807220112
           snapshotPriority: 1
           sumWeights2: 5895277293.01
@@ -1360,7 +1380,8 @@
           nEventsNegative: 273039
           sumWeights: 4882573073.47
           nEventsPositive: 67460463
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT < 500)"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 357706696495.0
@@ -1382,7 +1403,7 @@
           nEventsNegative: 279864
           sumWeights: 4980769317.03
           nEventsPositive: 68818780
-          filter: "return true;"
+          filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 1.456734617
           sumWeights2: 364913523596.0
           nominalXS: 87.3348035714
@@ -1392,7 +1413,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.181324102052
           nLep1nJet9pGenHT500p-nominalXS: 0.0
 - tt_DL-GF:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 1.4567346170014
@@ -1409,14 +1430,15 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv5p1: "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
-      NANOv6: "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-*_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-GF-*_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-GF-*_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-GF-*_2017_v2*.root"
-    Notes: "1.4815 was the old XS * BR * stitching factor, now scaled down so that the XS matches Brown's lower BR calculation"
+      NANOv5: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv5p1: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      NANOv6: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_DL-GF-*_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_DL-GF-*_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_DL-GF-*_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_DL-GF-*_2017_v2*.root
+    Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
+      the XS matches Brown's lower BR calculation
     doFilter: true
     splitProcess:
       ID:
@@ -1435,7 +1457,8 @@
           nEventsNegative: 41630
           sumWeights: 591691409.848
           nEventsPositive: 8185412
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 1.2290807799
           snapshotPriority: 2
           sumWeights2: 43429698960.3
@@ -1456,7 +1479,8 @@
           nEventsNegative: 1215
           sumWeights: 20410377.7205
           nEventsPositive: 282130
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0535612126499
           snapshotPriority: 4
           sumWeights2: 1495802529.19
@@ -1485,7 +1509,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.181779039379
           nLep1nJet9pGenHT500p-nominalXS: 0.0
 - tt_DL-GF-HDAMPdown:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 1.4567346170014
@@ -1502,8 +1526,9 @@
     channels:
     - All
     source:
-      NANOv6: "dbs:/TTTo2L2Nu_HT500Njet7_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v2/NANOAODSIM"
-    Notes: "1.4815 was the old XS * BR * stitching factor, now scaled down so that the XS matches Brown's lower BR calculation"
+      NANOv6: dbs:/TTTo2L2Nu_HT500Njet7_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v2/NANOAODSIM
+    Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
+      the XS matches Brown's lower BR calculation
     doFilter: true
     splitProcess:
       ID:
@@ -1522,7 +1547,8 @@
           nEventsNegative: 41630
           sumWeights: 591691409.848
           nEventsPositive: 8185412
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 1.2290807799
           snapshotPriority: 2
           sumWeights2: 43429698960.3
@@ -1543,7 +1569,8 @@
           nEventsNegative: 1215
           sumWeights: 20410377.7205
           nEventsPositive: 282130
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0535612126499
           snapshotPriority: 4
           sumWeights2: 1495802529.19
@@ -1572,7 +1599,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.181779039379
           nLep1nJet9pGenHT500p-nominalXS: 0.0
 - tt_DL-GF-HDAMPup:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 1.4567346170014
@@ -1589,8 +1616,9 @@
     channels:
     - All
     source:
-      NANOv6: "dbs:/TTTo2L2Nu_HT500Njet7_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-    Notes: "1.4815 was the old XS * BR * stitching factor, now scaled down so that the XS matches Brown's lower BR calculation"
+      NANOv6: dbs:/TTTo2L2Nu_HT500Njet7_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+    Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
+      the XS matches Brown's lower BR calculation
     doFilter: true
     splitProcess:
       ID:
@@ -1609,7 +1637,8 @@
           nEventsNegative: 41630
           sumWeights: 591691409.848
           nEventsPositive: 8185412
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 1.2290807799
           snapshotPriority: 2
           sumWeights2: 43429698960.3
@@ -1630,7 +1659,8 @@
           nEventsNegative: 1215
           sumWeights: 20410377.7205
           nEventsPositive: 282130
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0535612126499
           snapshotPriority: 4
           sumWeights2: 1495802529.19
@@ -1659,7 +1689,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.181779039379
           nLep1nJet9pGenHT500p-nominalXS: 0.0
 - tt_DL-GF-TuneCP5down:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 1.4567346170014
@@ -1676,8 +1706,9 @@
     channels:
     - All
     source:
-      NANOv6: "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v2/NANOAODSIM"
-    Notes: "1.4815 was the old XS * BR * stitching factor, now scaled down so that the XS matches Brown's lower BR calculation"
+      NANOv6: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v2/NANOAODSIM
+    Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
+      the XS matches Brown's lower BR calculation
     doFilter: true
     splitProcess:
       ID:
@@ -1696,7 +1727,8 @@
           nEventsNegative: 41630
           sumWeights: 591691409.848
           nEventsPositive: 8185412
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 1.2290807799
           snapshotPriority: 2
           sumWeights2: 43429698960.3
@@ -1717,7 +1749,8 @@
           nEventsNegative: 1215
           sumWeights: 20410377.7205
           nEventsPositive: 282130
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0535612126499
           snapshotPriority: 4
           sumWeights2: 1495802529.19
@@ -1746,7 +1779,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.181779039379
           nLep1nJet9pGenHT500p-nominalXS: 0.0
 - tt_DL-GF-TuneCP5up:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 1.4567346170014
@@ -1763,8 +1796,9 @@
     channels:
     - All
     source:
-      NANOv6: "dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-    Notes: "1.4815 was the old XS * BR * stitching factor, now scaled down so that the XS matches Brown's lower BR calculation"
+      NANOv6: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+    Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
+      the XS matches Brown's lower BR calculation
     doFilter: true
     splitProcess:
       ID:
@@ -1783,7 +1817,8 @@
           nEventsNegative: 41630
           sumWeights: 591691409.848
           nEventsPositive: 8185412
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 1.2290807799
           snapshotPriority: 2
           sumWeights2: 43429698960.3
@@ -1804,7 +1839,8 @@
           nEventsNegative: 1215
           sumWeights: 20410377.7205
           nEventsPositive: 282130
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0535612126499
           snapshotPriority: 4
           sumWeights2: 1495802529.19
@@ -1833,7 +1869,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.181779039379
           nLep1nJet9pGenHT500p-nominalXS: 0.0
 - tt_SL:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 364.3109
@@ -1849,14 +1885,14 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv5p1: "dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
-      NANOv6: "dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6p1: "dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/umolinat-TopNanoAODv6p1_2017-a11761155c05d04d6fed5a2401fa93e8/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-NOM_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-NOM_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-NOM_2017_v2*.root"
+      NANOv5: dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv5p1: dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      NANOv6: dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6p1: dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/umolinat-TopNanoAODv6p1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-NOM_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-NOM_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-NOM_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-NOM_2017_v2*.root
     doFilter: true
     splitProcess:
       ID:
@@ -1875,7 +1911,8 @@
           nEventsNegative: 302
           sumWeights: 22135434.4955
           nEventsPositive: 73301
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 6767694727.14
@@ -1896,7 +1933,8 @@
           nEventsNegative: 80517
           sumWeights: 5992649717.25
           nEventsPositive: 19842384
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 1832047058040.0
@@ -1917,7 +1955,8 @@
           nEventsNegative: 560
           sumWeights: 36038396.785
           nEventsPositive: 119432
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 1
           sumWeights2: 11028806959.9
@@ -1938,7 +1977,8 @@
           nEventsNegative: 24
           sumWeights: 1656838.94388
           nEventsPositive: 5490
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 3
           sumWeights2: 506713855.51
@@ -1960,7 +2000,7 @@
           nEventsNegative: 81403
           sumWeights: 6052480387.47
           nEventsPositive: 20040607
-          filter: "return true;"
+          filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           sumWeights2: 1850350273590.0
           nominalXS: 364.310902493
@@ -1970,7 +2010,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.26895164785
 - tt_SL-CR1-QCD:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 364.3109
@@ -1982,10 +2022,10 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
 - tt_SL-CR2-GluonMove:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 364.3109
@@ -1997,10 +2037,10 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
 - tt_SL-HDAMPdown:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 364.3109
@@ -2012,8 +2052,8 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToSemiLeptonic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToSemiLeptonic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_ext_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/TTToSemiLeptonic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToSemiLeptonic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_ext_102X_mc2017_realistic_v7-v1/NANOAODSIM
     doFilter: true
     splitProcess:
       ID:
@@ -2032,7 +2072,8 @@
           nEventsNegative: 302
           sumWeights: 22135434.4955
           nEventsPositive: 73301
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 6767694727.14
@@ -2053,7 +2094,8 @@
           nEventsNegative: 80517
           sumWeights: 5992649717.25
           nEventsPositive: 19842384
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 1832047058040.0
@@ -2074,7 +2116,8 @@
           nEventsNegative: 560
           sumWeights: 36038396.785
           nEventsPositive: 119432
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 1
           sumWeights2: 11028806959.9
@@ -2095,7 +2138,8 @@
           nEventsNegative: 24
           sumWeights: 1656838.94388
           nEventsPositive: 5490
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 3
           sumWeights2: 506713855.51
@@ -2117,7 +2161,7 @@
           nEventsNegative: 81403
           sumWeights: 6052480387.47
           nEventsPositive: 20040607
-          filter: "return true;"
+          filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           sumWeights2: 1850350273590.0
           nominalXS: 364.310902493
@@ -2127,7 +2171,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.26895164785
 - tt_SL-HDAMPup:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 364.3109
@@ -2139,8 +2183,8 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToSemiLeptonic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToSemiLeptonic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/TTToSemiLeptonic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToSemiLeptonic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
     doFilter: true
     splitProcess:
       ID:
@@ -2159,7 +2203,8 @@
           nEventsNegative: 302
           sumWeights: 22135434.4955
           nEventsPositive: 73301
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 6767694727.14
@@ -2180,7 +2225,8 @@
           nEventsNegative: 80517
           sumWeights: 5992649717.25
           nEventsPositive: 19842384
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 1832047058040.0
@@ -2201,7 +2247,8 @@
           nEventsNegative: 560
           sumWeights: 36038396.785
           nEventsPositive: 119432
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 1
           sumWeights2: 11028806959.9
@@ -2222,7 +2269,8 @@
           nEventsNegative: 24
           sumWeights: 1656838.94388
           nEventsPositive: 5490
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 3
           sumWeights2: 506713855.51
@@ -2244,7 +2292,7 @@
           nEventsNegative: 81403
           sumWeights: 6052480387.47
           nEventsPositive: 20040607
-          filter: "return true;"
+          filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           sumWeights2: 1850350273590.0
           nominalXS: 364.310902493
@@ -2254,7 +2302,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.26895164785
 - tt_SL-TuneCP5down:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 364.3109
@@ -2266,8 +2314,8 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToSemiLeptonic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_ext_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/TTToSemiLeptonic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToSemiLeptonic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_ext_102X_mc2017_realistic_v7-v1/NANOAODSIM
     doFilter: true
     splitProcess:
       ID:
@@ -2286,7 +2334,8 @@
           nEventsNegative: 302
           sumWeights: 22135434.4955
           nEventsPositive: 73301
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 6767694727.14
@@ -2307,7 +2356,8 @@
           nEventsNegative: 80517
           sumWeights: 5992649717.25
           nEventsPositive: 19842384
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 1832047058040.0
@@ -2328,7 +2378,8 @@
           nEventsNegative: 560
           sumWeights: 36038396.785
           nEventsPositive: 119432
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 1
           sumWeights2: 11028806959.9
@@ -2349,7 +2400,8 @@
           nEventsNegative: 24
           sumWeights: 1656838.94388
           nEventsPositive: 5490
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 3
           sumWeights2: 506713855.51
@@ -2371,7 +2423,7 @@
           nEventsNegative: 81403
           sumWeights: 6052480387.47
           nEventsPositive: 20040607
-          filter: "return true;"
+          filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           sumWeights2: 1850350273590.0
           nominalXS: 364.310902493
@@ -2381,7 +2433,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.26895164785
 - tt_SL-TuneCP5up:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 364.3109
@@ -2393,8 +2445,8 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v2/NANOAODSIM"
+      NANOv5: dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v2/NANOAODSIM
     doFilter: true
     splitProcess:
       ID:
@@ -2413,7 +2465,8 @@
           nEventsNegative: 302
           sumWeights: 22135434.4955
           nEventsPositive: 73301
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 6767694727.14
@@ -2434,7 +2487,8 @@
           nEventsNegative: 80517
           sumWeights: 5992649717.25
           nEventsPositive: 19842384
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT < 500)"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && (nFTAGenJet < 9 || FTAGenHT
+            < 500)
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 1832047058040.0
@@ -2455,7 +2509,8 @@
           nEventsNegative: 560
           sumWeights: 36038396.785
           nEventsPositive: 119432
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 1
           sumWeights2: 11028806959.9
@@ -2476,7 +2531,8 @@
           nEventsNegative: 24
           sumWeights: 1656838.94388
           nEventsPositive: 5490
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 3
           sumWeights2: 506713855.51
@@ -2498,7 +2554,7 @@
           nEventsNegative: 81403
           sumWeights: 6052480387.47
           nEventsPositive: 20040607
-          filter: "return true;"
+          filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           sumWeights2: 1850350273590.0
           nominalXS: 364.310902493
@@ -2508,7 +2564,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.26895164785
 - tt_SL-GF:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 2.2689516478593
@@ -2524,13 +2580,13 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv5p1: "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER"
-      NANOv6: "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-GF_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-GF_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-GF_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-GF_2017_v2*.root"
+      NANOv5: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv5p1: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/palencia-TopNanoAODv5p1_2017-caa716c30b9109c88acae23be6386548/USER
+      NANOv6: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tt_SL-GF_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tt_SL-GF_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tt_SL-GF_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tt_SL-GF_2017_v2*.root
     doFilter: true
     splitProcess:
       ID:
@@ -2549,7 +2605,8 @@
           nEventsNegative: 40612
           sumWeights: 2535249552.17
           nEventsPositive: 8403208
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 776075813737.0
@@ -2570,7 +2627,8 @@
           nEventsNegative: 1780
           sumWeights: 118077149.406
           nEventsPositive: 391250
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 36125534258.9
@@ -2601,7 +2659,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.26895046344
 - tt_SL-GF-HDAMPdown:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 2.2689516478593
@@ -2617,8 +2675,8 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToSemiLepton_HT500Njet9_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToSemiLepton_HT500Njet9_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/ANOAODSIM"
+      NANOv5: dbs:/TTToSemiLepton_HT500Njet9_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToSemiLepton_HT500Njet9_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/ANOAODSIM
     doFilter: true
     splitProcess:
       ID:
@@ -2637,7 +2695,8 @@
           nEventsNegative: 40612
           sumWeights: 2535249552.17
           nEventsPositive: 8403208
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 776075813737.0
@@ -2658,7 +2717,8 @@
           nEventsNegative: 1780
           sumWeights: 118077149.406
           nEventsPositive: 391250
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 36125534258.9
@@ -2689,7 +2749,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.26895046344
 - tt_SL-GF-HDAMPup:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 2.2689516478593
@@ -2705,8 +2765,8 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToSemiLepton_HT500Njet9_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToSemiLepton_HT500Njet9_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v2/NANOAODSIM"
+      NANOv5: dbs:/TTToSemiLepton_HT500Njet9_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToSemiLepton_HT500Njet9_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v2/NANOAODSIM
     doFilter: true
     splitProcess:
       ID:
@@ -2725,7 +2785,8 @@
           nEventsNegative: 40612
           sumWeights: 2535249552.17
           nEventsPositive: 8403208
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 776075813737.0
@@ -2746,7 +2807,8 @@
           nEventsNegative: 1780
           sumWeights: 118077149.406
           nEventsPositive: 391250
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 36125534258.9
@@ -2777,7 +2839,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.26895046344
 - tt_SL-GF-TuneCP5down:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 2.2689516478593
@@ -2793,8 +2855,8 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v2/NANOAODSIM"
+      NANOv5: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v2/NANOAODSIM
     doFilter: true
     splitProcess:
       ID:
@@ -2813,7 +2875,8 @@
           nEventsNegative: 40612
           sumWeights: 2535249552.17
           nEventsPositive: 8403208
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 776075813737.0
@@ -2834,7 +2897,8 @@
           nEventsNegative: 1780
           sumWeights: 118077149.406
           nEventsPositive: 391250
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 36125534258.9
@@ -2865,7 +2929,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.26895046344
 - tt_SL-GF-TuneCP5up:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 2.2689516478593
@@ -2881,8 +2945,8 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTToSemiLepton_HT500Njet9_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
+      NANOv5: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
     doFilter: true
     splitProcess:
       ID:
@@ -2901,7 +2965,8 @@
           nEventsNegative: 40612
           sumWeights: 2535249552.17
           nEventsPositive: 8403208
-          filter: "nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets < 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 2
           sumWeights2: 776075813737.0
@@ -2922,7 +2987,8 @@
           nEventsNegative: 1780
           sumWeights: 118077149.406
           nEventsPositive: 391250
-          filter: "nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT >= 500"
+          filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
+            >= 500
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           snapshotPriority: 4
           sumWeights2: 36125534258.9
@@ -2953,7 +3019,7 @@
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.26895046344
 - tttJ:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.0004741
@@ -2965,14 +3031,14 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttJ_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttJ_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttJ_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttJ_2017_v2*.root"
+      NANOv5: dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttJ_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttJ_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttJ_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttJ_2017_v2*.root
 - tttW:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.007882
@@ -2984,14 +3050,14 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttW_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttW_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttW_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttW_2017_v2*.root"
+      NANOv5: dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttW_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttW_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttW_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttW_2017_v2*.root
 - tttt:
-    era: "2017"
+    era: '2017'
     isData: false
     isSignal: true
     crossSection: 0.012
@@ -3003,344 +3069,344 @@
     channels:
     - All
     source:
-      NANOv5: "dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      NANOv6: "dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8_correctnPartonsInBorn/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttt-*_2017_v2.root"
-      LJMLogic__ElEl_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttt-*_2017_v2*.root"
-      LJMLogic__MuMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttt-*_2017_v2*.root"
-      LJMLogic__ElMu_selection: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttt-*_2017_v2*.root"
+      NANOv5: dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      NANOv6: dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8_correctnPartonsInBorn/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/tttt-*_2017_v2.root
+      LJMLogic__ElEl_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/tttt-*_2017_v2*.root
+      LJMLogic__MuMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/tttt-*_2017_v2*.root
+      LJMLogic__ElMu_selection: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/tttt-*_2017_v2*.root
 - ElEl_B:
-    era: "2017"
-    subera: "B"
+    era: '2017'
+    subera: B
     isData: true
     nEvents: 58088760
-    channel: "ElEl"
+    channel: ElEl
     channels:
     - ElEl
     source:
-      NANOv5: "dbs:/DoubleEG/Run2017B-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/DoubleEG/Run2017B-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/DoubleEG/piedavid-Run2017B-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_B*_2017_v2.root"
+      NANOv5: dbs:/DoubleEG/Run2017B-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/DoubleEG/Run2017B-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/DoubleEG/piedavid-Run2017B-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_B*_2017_v2.root
 - ElEl_C:
-    era: "2017"
-    subera: "C"
+    era: '2017'
+    subera: C
     isData: true
     nEvents: 65181125
-    channel: "ElEl"
+    channel: ElEl
     channels:
     - ElEl
     source:
-      NANOv5: "dbs:/DoubleEG/Run2017C-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/DoubleEG/Run2017C-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/DoubleEG/piedavid-Run2017C-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_C*_2017_v2.root"
+      NANOv5: dbs:/DoubleEG/Run2017C-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/DoubleEG/Run2017C-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/DoubleEG/piedavid-Run2017C-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_C*_2017_v2.root
 - ElEl_D:
-    era: "2017"
-    subera: "D"
+    era: '2017'
+    subera: D
     isData: true
     nEvents: 25911432
-    channel: "ElEl"
+    channel: ElEl
     channels:
     - ElEl
     source:
-      NANOv5: "dbs:/DoubleEG/Run2017D-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/DoubleEG/Run2017D-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/DoubleEG/piedavid-Run2017D-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_D*_2017_v2.root"
+      NANOv5: dbs:/DoubleEG/Run2017D-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/DoubleEG/Run2017D-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/DoubleEG/piedavid-Run2017D-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_D*_2017_v2.root
 - ElEl_E:
-    era: "2017"
-    subera: "E"
+    era: '2017'
+    subera: E
     isData: true
     nEvents: 56233597
-    channel: "ElEl"
+    channel: ElEl
     channels:
     - ElEl
     source:
-      NANOv5: "dbs:/DoubleEG/Run2017E-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/DoubleEG/Run2017E-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/DoubleEG/piedavid-Run2017E-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_E*_2017_v2.root"
+      NANOv5: dbs:/DoubleEG/Run2017E-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/DoubleEG/Run2017E-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/DoubleEG/piedavid-Run2017E-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_E*_2017_v2.root
 - ElEl_F:
-    era: "2017"
-    subera: "F"
+    era: '2017'
+    subera: F
     isData: true
     nEvents: 74307066
-    channel: "ElEl"
+    channel: ElEl
     channels:
     - ElEl
     source:
-      NANOv5: "dbs:/DoubleEG/Run2017F-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/DoubleEG/Run2017F-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/DoubleEG/piedavid-Run2017F-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_F*_2017_v2.root"
+      NANOv5: dbs:/DoubleEG/Run2017F-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/DoubleEG/Run2017F-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/DoubleEG/piedavid-Run2017F-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElEl_F*_2017_v2.root
 - ElMu_B:
-    era: "2017"
-    subera: "B"
+    era: '2017'
+    subera: B
     isData: true
     nEvents: 4453465
-    channel: "ElMu"
+    channel: ElMu
     channels:
     - ElMu
     source:
-      NANOv5: "dbs:/MuonEG/Run2017B-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/MuonEG/Run2017B-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/MuonEG/piedavid-Run2017B-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_B*_2017_v2.root"
+      NANOv5: dbs:/MuonEG/Run2017B-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/MuonEG/Run2017B-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/MuonEG/piedavid-Run2017B-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_B*_2017_v2.root
 - ElMu_C:
-    era: "2017"
-    subera: "C"
+    era: '2017'
+    subera: C
     isData: true
     nEvents: 15595214
-    channel: "ElMu"
+    channel: ElMu
     channels:
     - ElMu
     source:
-      NANOv5: "dbs:/MuonEG/Run2017C-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/MuonEG/Run2017C-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/MuonEG/piedavid-Run2017C-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_C*_2017_v2.root"
+      NANOv5: dbs:/MuonEG/Run2017C-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/MuonEG/Run2017C-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/MuonEG/piedavid-Run2017C-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_C*_2017_v2.root
 - ElMu_D:
-    era: "2017"
-    subera: "D"
+    era: '2017'
+    subera: D
     isData: true
     nEvents: 9164365
-    channel: "ElMu"
+    channel: ElMu
     channels:
     - ElMu
     source:
-      NANOv5: "dbs:/MuonEG/Run2017D-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/MuonEG/Run2017D-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/MuonEG/piedavid-Run2017D-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_D*_2017_v2.root"
+      NANOv5: dbs:/MuonEG/Run2017D-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/MuonEG/Run2017D-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/MuonEG/piedavid-Run2017D-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_D*_2017_v2.root
 - ElMu_E:
-    era: "2017"
-    subera: "E"
+    era: '2017'
+    subera: E
     isData: true
     nEvents: 19043421
-    channel: "ElMu"
+    channel: ElMu
     channels:
     - ElMu
     source:
-      NANOv5: "dbs:/MuonEG/Run2017E-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/MuonEG/Run2017E-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/MuonEG/piedavid-Run2017E-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_E*_2017_v2.root"
+      NANOv5: dbs:/MuonEG/Run2017E-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/MuonEG/Run2017E-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/MuonEG/piedavid-Run2017E-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_E*_2017_v2.root
 - ElMu_F:
-    era: "2017"
-    subera: "F"
+    era: '2017'
+    subera: F
     isData: true
     nEvents: 25776363
-    channel: "ElMu"
+    channel: ElMu
     channels:
     - ElMu
     source:
-      NANOv5: "dbs:/MuonEG/Run2017F-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/MuonEG/Run2017F-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/MuonEG/piedavid-Run2017F-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_F*_2017_v2.root"
+      NANOv5: dbs:/MuonEG/Run2017F-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/MuonEG/Run2017F-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/MuonEG/piedavid-Run2017F-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_ElMu_F*_2017_v2.root
 - El_B:
-    era: "2017"
-    subera: "B"
+    era: '2017'
+    subera: B
     isData: true
     nEvents: 60537490
-    channel: "El"
+    channel: El
     channels:
     - ElMu
     - ElEl
     source:
-      NANOv5: "dbs:/SingleElectron/Run2017B-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/SingleElectron/Run2017B-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/SingleElectron/piedavid-Run2017B-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_B*_2017_v2.root"
+      NANOv5: dbs:/SingleElectron/Run2017B-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/SingleElectron/Run2017B-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/SingleElectron/piedavid-Run2017B-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_B*_2017_v2.root
 - El_C:
-    era: "2017"
-    subera: "C"
+    era: '2017'
+    subera: C
     isData: true
     nEvents: 136637888
-    channel: "El"
+    channel: El
     channels:
     - ElMu
     - ElEl
     source:
-      NANOv5: "dbs:/SingleElectron/Run2017C-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/SingleElectron/Run2017C-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/SingleElectron/piedavid-Run2017C-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_C*_2017_v2.root"
+      NANOv5: dbs:/SingleElectron/Run2017C-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/SingleElectron/Run2017C-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/SingleElectron/piedavid-Run2017C-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_C*_2017_v2.root
 - El_D:
-    era: "2017"
-    subera: "D"
+    era: '2017'
+    subera: D
     isData: true
     nEvents: 51526710
-    channel: "El"
+    channel: El
     channels:
     - ElMu
     - ElEl
     source:
-      NANOv5: "dbs:/SingleElectron/Run2017D-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/SingleElectron/Run2017D-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/SingleElectron/piedavid-Run2017D-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_D*_2017_v2.root"
+      NANOv5: dbs:/SingleElectron/Run2017D-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/SingleElectron/Run2017D-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/SingleElectron/piedavid-Run2017D-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_D*_2017_v2.root
 - El_E:
-    era: "2017"
-    subera: "E"
+    era: '2017'
+    subera: E
     isData: true
     nEvents: 102121689
-    channel: "El"
+    channel: El
     channels:
     - ElMu
     - ElEl
     source:
-      NANOv5: "dbs:/SingleElectron/Run2017E-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/SingleElectron/Run2017E-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/SingleElectron/piedavid-Run2017E-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_E*_2017_v2.root"
+      NANOv5: dbs:/SingleElectron/Run2017E-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/SingleElectron/Run2017E-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/SingleElectron/piedavid-Run2017E-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_E*_2017_v2.root
 - El_F:
-    era: "2017"
-    subera: "F"
+    era: '2017'
+    subera: F
     isData: true
     nEvents: 128467223
-    channel: "El"
+    channel: El
     channels:
     - ElMu
     - ElEl
     source:
-      NANOv5: "dbs:/SingleElectron/Run2017F-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/SingleElectron/Run2017F-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/SingleElectron/piedavid-Run2017F-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_F*_2017_v2.root"
+      NANOv5: dbs:/SingleElectron/Run2017F-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/SingleElectron/Run2017F-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/SingleElectron/piedavid-Run2017F-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_El_F*_2017_v2.root
 - MuMu_B:
-    era: "2017"
-    subera: "B"
+    era: '2017'
+    subera: B
     isData: true
     nEvents: 14501767
-    channel: "MuMu"
+    channel: MuMu
     channels:
     - MuMu
     source:
-      NANOv5: "dbs:/DoubleMuon/Run2017B-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/DoubleMuon/Run2017B-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/DoubleMuon/piedavid-Run2017B-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_B*_2017_v2.root"
+      NANOv5: dbs:/DoubleMuon/Run2017B-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/DoubleMuon/Run2017B-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/DoubleMuon/piedavid-Run2017B-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_B*_2017_v2.root
 - MuMu_C:
-    era: "2017"
-    subera: "C"
+    era: '2017'
+    subera: C
     isData: true
     nEvents: 49636525
-    channel: "MuMu"
+    channel: MuMu
     channels:
     - MuMu
     source:
-      NANOv5: "dbs:/DoubleMuon/Run2017C-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/DoubleMuon/Run2017C-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/DoubleMuon/piedavid-Run2017C-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_C*_2017_v2.root"
+      NANOv5: dbs:/DoubleMuon/Run2017C-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/DoubleMuon/Run2017C-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/DoubleMuon/piedavid-Run2017C-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_C*_2017_v2.root
 - MuMu_D:
-    era: "2017"
-    subera: "D"
+    era: '2017'
+    subera: D
     isData: true
     nEvents: 23075733
-    channel: "MuMu"
+    channel: MuMu
     channels:
     - MuMu
     source:
-      NANOv5: "dbs:/DoubleMuon/Run2017D-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/DoubleMuon/Run2017D-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/DoubleMuon/piedavid-Run2017D-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_D*_2017_v2.root"
+      NANOv5: dbs:/DoubleMuon/Run2017D-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/DoubleMuon/Run2017D-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/DoubleMuon/piedavid-Run2017D-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_D*_2017_v2.root
 - MuMu_E:
-    era: "2017"
-    subera: "E"
+    era: '2017'
+    subera: E
     isData: true
     nEvents: 51589091
-    channel: "MuMu"
+    channel: MuMu
     channels:
     - MuMu
     source:
-      NANOv5: "dbs:/DoubleMuon/Run2017E-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/DoubleMuon/Run2017E-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/DoubleMuon/piedavid-Run2017E-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_E*_2017_v2.root"
+      NANOv5: dbs:/DoubleMuon/Run2017E-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/DoubleMuon/Run2017E-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/DoubleMuon/piedavid-Run2017E-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_E*_2017_v2.root
 - MuMu_F:
-    era: "2017"
-    subera: "F"
+    era: '2017'
+    subera: F
     isData: true
     nEvents: 79756560
-    channel: "MuMu"
+    channel: MuMu
     channels:
     - MuMu
     source:
-      NANOv5: "dbs:/DoubleMuon/Run2017F-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/DoubleMuon/Run2017F-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/DoubleMuon/piedavid-Run2017F-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_F*_2017_v2.root"
+      NANOv5: dbs:/DoubleMuon/Run2017F-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/DoubleMuon/Run2017F-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/DoubleMuon/piedavid-Run2017F-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_MuMu_F*_2017_v2.root
 - Mu_B:
-    era: "2017"
-    subera: "B"
+    era: '2017'
+    subera: B
     isData: true
     nEvents: 136300266
-    channel: "Mu"
+    channel: Mu
     channels:
     - ElMu
     - MuMu
     source:
-      NANOv5: "dbs:/SingleMuon/Run2017B-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/SingleMuon/Run2017B-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/SingleMuon/piedavid-Run2017B-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_B*_2017_v2.root"
+      NANOv5: dbs:/SingleMuon/Run2017B-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/SingleMuon/Run2017B-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/SingleMuon/piedavid-Run2017B-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_B*_2017_v2.root
 - Mu_C:
-    era: "2017"
-    subera: "C"
+    era: '2017'
+    subera: C
     isData: true
     nEvents: 165652756
-    channel: "Mu"
+    channel: Mu
     channels:
     - ElMu
     - MuMu
     source:
-      NANOv5: "dbs:/SingleMuon/Run2017C-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/SingleMuon/Run2017C-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/SingleMuon/piedavid-Run2017C-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_C*_2017_v2.root"
+      NANOv5: dbs:/SingleMuon/Run2017C-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/SingleMuon/Run2017C-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/SingleMuon/piedavid-Run2017C-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_C*_2017_v2.root
 - Mu_D:
-    era: "2017"
-    subera: "D"
+    era: '2017'
+    subera: D
     isData: true
     nEvents: 70361660
-    channel: "Mu"
+    channel: Mu
     channels:
     - ElMu
     - MuMu
     source:
-      NANOv5: "dbs:/SingleMuon/Run2017D-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/SingleMuon/Run2017D-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/SingleMuon/piedavid-Run2017D-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_D*_2017_v2.root"
+      NANOv5: dbs:/SingleMuon/Run2017D-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/SingleMuon/Run2017D-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/SingleMuon/piedavid-Run2017D-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_D*_2017_v2.root
 - Mu_E:
-    era: "2017"
-    subera: "E"
+    era: '2017'
+    subera: E
     isData: true
     nEvents: 154630534
-    channel: "Mu"
+    channel: Mu
     channels:
     - ElMu
     - MuMu
     source:
-      NANOv5: "dbs:/SingleMuon/Run2017E-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/SingleMuon/Run2017E-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/SingleMuon/piedavid-Run2017E-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_E*_2017_v2.root"
+      NANOv5: dbs:/SingleMuon/Run2017E-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/SingleMuon/Run2017E-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/SingleMuon/piedavid-Run2017E-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_E*_2017_v2.root
 - Mu_F:
-    era: "2017"
-    subera: "F"
+    era: '2017'
+    subera: F
     isData: true
     nEvents: 242135500
-    channel: "Mu"
+    channel: Mu
     channels:
     - ElMu
     - MuMu
     source:
-      NANOv5: "dbs:/SingleMuon/Run2017F-Nano1June2019-v1/NANOAOD"
-      NANOv6: "dbs:/SingleMuon/Run2017F-Nano25Oct2019-v1/NANOAOD"
-      NANOv6p1: "dbs:/SingleMuon/piedavid-Run2017F-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER"
-      LJMLogic: "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_F*_2017_v2.root"
+      NANOv5: dbs:/SingleMuon/Run2017F-Nano1June2019-v1/NANOAOD
+      NANOv6: dbs:/SingleMuon/Run2017F-Nano25Oct2019-v1/NANOAOD
+      NANOv6p1: dbs:/SingleMuon/piedavid-Run2017F-31Mar2018-v1_TopNanoAODv6-1-1_2017-9721c24ccc7f925c513e24ff74941177/USER
+      LJMLogic: glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/data_Mu_F*_2017_v2.root
