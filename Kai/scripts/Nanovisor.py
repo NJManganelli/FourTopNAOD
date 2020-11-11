@@ -164,8 +164,31 @@ def main():
         sys.exit()
 
     SampleList, SampleDict = load_sample_cards(args.sample_cards)
-    write_sample_cards(SampleDict)
-
+    if True:
+        for sampleName , sample in SampleList.items():
+            inputDataset = sample.get('source', {}).get(args.source, None)
+            if len(inputDataset.split(" instance=")) > 1:
+                cleanInputDataset = inputDataset.split(" instance=")[0].replace("dbs:", "")
+                dbs = inputDataset.split(" instance=")[1].replace("prod/", "")
+            else:
+                cleanInputDataset = inputDataset.replace("dbs:", "")
+            print(sampleName)
+            print(cleanInputDataset)
+            _, dataset, campaign, tier = cleanInputDataset.split("/")
+            if sample['isData']:
+                campaign = campaign.split("Nano25Oct2019")[0] + "*02Apr2020*"
+            else:
+                campaign = campaign.split("-PU2017")[0].replace("NanoAODv6", "NanoAODv7") + "*"
+            updatedInputDataset = "/".join(["", dataset, campaign, tier])
+            # cmd = 'dasgoclient --query="dataset={0:s}" >> temp.txt'.format(updatedInputDataset, sampleName)
+            cmd = 'dasgoclient --query="dataset={0:s}"'.format(updatedInputDataset, sampleName)
+            # print(cmd)
+            returned_value = subprocess.check_output(cmd, shell="/bin/zsh", env=os.environ)
+            # subprocess.Popen(args=cmd, shell=True, executable="/bin/zsh", env=dict(os.environ))
+            print(returned_value.decode("utf-8"))
+        if False:
+            write_sample_cards(SampleDict)
+        
     #Generate crab and local folder name using the current time, outside the sample loop
     tagFolder = "{0:s}_{1:s}".format(args.source, args.tag)
     dt = datetime.datetime.now()
@@ -355,7 +378,9 @@ def main():
             inputDataset = sample.get('source', {}).get(args.source, None)
             if len(inputDataset.split(" instance=")) > 1:
                 cleanInputDataset = inputDataset.split(" instance=")[0].replace("dbs:", "")
-                dbs = inputDataset.split(" instance=")[1].replace("prod/", "")
+                dbs = inputDataset.split(" instance=")[1].replace("prod/", "") 
+                #example dasgoclient -query="file dataset=/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/palencia-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER instance=prod/phys03"
+                #command options https://cmsweb.cern.ch/das/services dsite, file, era, datatype, prepid, lumi, config, tier, summary, date, block, parent, events, mcm, rules, etc
             else:
                 cleanInputDataset = inputDataset.replace("dbs:", "")
                 dbs = "global"
@@ -511,6 +536,8 @@ def write_sample_cards(sample_cards, postfix="_updated"):
     for scard, scontent in sample_cards.items():
         with open(scard.replace(".yaml", postfix+".yaml").replace(".yml", postfix+".yml"), "w") as outf:
             ruamel.yaml.dump(scontent, outf, Dumper=ruamel.yaml.RoundTripDumper)
+
+# def compare_sample_sources(sample_dict, query, source1, source2):
 
 if __name__ == '__main__':
     main()
