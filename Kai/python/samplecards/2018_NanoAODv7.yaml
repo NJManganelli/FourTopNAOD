@@ -2991,9 +2991,9 @@
     channels:
     - All
     source:
+      # extension (9M events, nominal as 2M)
       NANOv6: dbs:/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
-      # extension (9M events, nominal above has 2M, use both? to be checked if the situation is the same in 2017
-      # NANOv6: dbs:/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext2-v1/NANOAODSIM"
+      NANOv6Ext: dbs:/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext2-v1/NANOAODSIM"
       NANOv7: dbs:/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
 - ElEl_A:
     era: '2018'
