@@ -46,6 +46,10 @@ parser.add_argument('--source', dest='source', action='store', type=str, default
                     help='Stage of data storage from which to begin supervisor actions, such as source: 0 which is the unprocessed and centrally maintained data/MC')
 parser.add_argument('--redir', dest='redir', action='append', type=str, default='root://cms-xrd-global.cern.ch/',
                     help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
+parser.add_argument('--prototype', dest='runPrototypeCode', action='store_true',
+                    help='run prototype code for updating yaml bookkeeping information, running das queries on sample sources chosen')
+parser.add_argument('--rt', '--doRoundTrip', dest='doRoundTrip', action='store_true',
+                    help='do Round Trip writing of input yaml cards, with the output being stored in the source folder with postfix "_updated"')
 parser.add_argument('--verbose', dest='verbose', action='store_true',
                     help='Enable more verbose output during actions')
 
@@ -164,29 +168,33 @@ def main():
         sys.exit()
 
     SampleList, SampleDict = load_sample_cards(args.sample_cards)
-    if True:
-        for sampleName , sample in SampleList.items():
-            inputDataset = sample.get('source', {}).get(args.source, None)
-            if len(inputDataset.split(" instance=")) > 1:
-                cleanInputDataset = inputDataset.split(" instance=")[0].replace("dbs:", "")
-                dbs = inputDataset.split(" instance=")[1].replace("prod/", "")
-            else:
-                cleanInputDataset = inputDataset.replace("dbs:", "")
-            print(sampleName)
-            print(cleanInputDataset)
-            _, dataset, campaign, tier = cleanInputDataset.split("/")
-            if sample['isData']:
-                campaign = campaign.split("Nano25Oct2019")[0] + "*02Apr2020*"
-            else:
-                campaign = campaign.split("-PU2017")[0].replace("NanoAODv6", "NanoAODv7") + "*"
-            updatedInputDataset = "/".join(["", dataset, campaign, tier])
-            # cmd = 'dasgoclient --query="dataset={0:s}" >> temp.txt'.format(updatedInputDataset, sampleName)
-            cmd = 'dasgoclient --query="dataset={0:s}"'.format(updatedInputDataset, sampleName)
-            # print(cmd)
-            returned_value = subprocess.check_output(cmd, shell="/bin/zsh", env=os.environ)
-            # subprocess.Popen(args=cmd, shell=True, executable="/bin/zsh", env=dict(os.environ))
-            print(returned_value.decode("utf-8"))
-        if False:
+    if args.runPrototypeCode:
+        for sampleCard, subSampleDict in SampleDict.items():
+            for sampleName , sample in subSampleDict.items():
+                inputDataset = sample.get('source', {}).get(args.source, None)
+                if len(inputDataset.split(" instance=")) > 1:
+                    cleanInputDataset = inputDataset.split(" instance=")[0].replace("dbs:", "")
+                    dbs = inputDataset.split(" instance=")[1].replace("prod/", "")
+                else:
+                    cleanInputDataset = inputDataset.replace("dbs:", "")
+                _, dataset, campaign, tier = cleanInputDataset.split("/")
+                if sample['isData']:
+                    campaign = campaign.split("Nano25Oct2019")[0] + "*02Apr2020*"
+                else:
+                    if sample['era'] == "2017":
+                        campaign = campaign.split("-PU2017")[0].replace("NanoAODv6", "NanoAODv7") + "*"
+                    elif sample['era'] == "2018":
+                        campaign = campaign.split("-Nano")[0].replace("NanoAODv6", "NanoAODv7") + "*"
+                updatedInputDataset = "/".join(["", dataset, campaign, tier])
+                # cmd = 'dasgoclient --query="dataset={0:s}" >> temp.txt'.format(updatedInputDataset, sampleName)
+                cmd = 'dasgoclient --query="dataset={0:s}"'.format(updatedInputDataset, sampleName)
+                # print(cmd)
+                returned_value = subprocess.check_output(cmd, shell="/bin/zsh", env=os.environ)
+                # if "/NANOAOD" not in returned_value: print(sampleName)
+                # sample['source']['NANOv7'] = "dbs:" + returned_value#.decode("utf-8")
+                # print(returned_value.decode("utf-8"))
+                # subprocess.Popen(args=cmd, shell=True, executable="/bin/zsh", env=dict(os.environ))
+        if args.doRoundTrip:
             write_sample_cards(SampleDict)
         
     #Generate crab and local folder name using the current time, outside the sample loop
