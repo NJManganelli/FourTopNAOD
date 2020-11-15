@@ -36,6 +36,8 @@ parser.add_argument('--local_run', dest='local_run', action='store_true',
                     help='run locally')
 parser.add_argument('--crab_run', dest='crab_run', action='store_true',
                     help='run with crab')
+parser.add_argument('--crab_test', dest='crab_test', action='store_true',
+                    help='create test files with crab')
 parser.add_argument('--templates', dest='templates', action='store', nargs='*', type=str, default=["../scripts/crab_cfg_TEMPLATE.py", "../scripts/crab_script_TEMPLATE.sh", "../scripts/crab_script_TEMPLATE.py"],
                     help='path and name of the templates to be used, the keyword "TEMPLATE" will be replaced by the <requestName> in filenames.')
 parser.add_argument('--percent_run', dest='percent_run', action='append', type=int,
@@ -201,7 +203,7 @@ def main():
     tagFolder = "{0:s}_{1:s}".format(args.source, args.tag)
     dt = datetime.datetime.now()
     runFolder = "{0:d}{1:02d}{2:02d}_{3:02d}{4:02d}".format(dt.year, dt.month, dt.day, dt.hour, dt.minute)
-    if args.crab_run:
+    if args.crab_run or args.crab_test:
         runFolder = os.path.join(tagFolder, runFolder)
         print("Creating directory {0:s} for crab configurations and scripts".format(runFolder))
         if not os.path.exists(tagFolder):
@@ -269,7 +271,7 @@ def main():
             sampleOutFile=None
     
         #write out the filelist to personal space in /tmp, if check_events or local_run is true, then use these to run
-        if args.check_events != 'NOCHECK' or args.local_run or args.fileLists:
+        if args.check_events != 'NOCHECK' or args.local_run or args.fileLists or args.crab_test:
             if inputDataset is None:
                 pass
                 # print("\tSkipped check_events for sample {0}({1}) due to lack of valid source path ({2})".format(sampleName, era, args.source))
@@ -433,6 +435,97 @@ def main():
                                   ("$TRIGGER_CHANNEL", triggerChannel),
                                   ("$TAG", tag),
                               ]
+            #move keys which are subelements of other keys to end of replacement list
+            replacement_tuples = sorted(replacement_tuples, key=lambda tup: sum([tup[0] in l[0] for l in replacement_tuples]), reverse=False)
+
+            for template in args.templates:
+                with open("./{0:s}/{1:s}".format(runFolder, template.split("/")[-1].replace("TEMPLATE", requestName)), "w") as generated:
+                    modifiedTemplate = replace_template_parameters(load_template(template), replacement_tuples=replacement_tuples)
+                    for line in modifiedTemplate:
+                        generated.write(line)
+
+    if args.crab_test:
+        test_das_query = {"2017":{"isData":{"UL":None, 
+                                            "non-UL": "/MuonEG/Run2017B-02Apr2020-v1/NANOAOD"},
+                                  "isMC": {"UL":None, 
+                                           "non-UL": "/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8_correctnPartonsInBorn/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM"}},
+                          "2018":{"isData":{"UL":None, 
+                                            "non-UL": "/MuonEG/Run2018B-02Apr2020-v1/NANOAOD"},
+                                  "isMC": {"UL":None, 
+                                           "non-UL": "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM"},
+                              },
+                      }
+        for crab_test_type in ["isData", "isMC"]:
+            
+            theLumi = {"2017": 41.53, "2018": 59.97}
+            requestName = era + "_crab_test_" + crab_test_type
+            splitting = "FileBased"
+            inputDataset = sample.get('source', {}).get(args.source, None)
+            unitsPerJob = 1000
+            storageSite = "T2_CH_CERN"
+            publication = False
+            isData = True if crab_test_type == "isData" else False
+            isSignal = False
+            print("hardcoded isUltraLegacye = False\n\tera=2017")
+            isUltraLegacy = False
+            era = "2017"
+            cleanInputDataset = test_das_query[era][crab_test_type]["UL" if isUltraLegacy else "non-UL"]
+            dbs = "global"
+            templateEra = '\"{}\"'.format(era)
+            templateSubera = '\"{}\"'.format('B') if isData else None
+            preselection = None
+            crossSection = 1 if not isData else None
+            equivLumi = theLumi.get(era, -123)
+            nEvents = 10000 if not isData else None #Default to 0 when key DNE
+            nEventsPositive = 10000 if not isData else None
+            nEventsNegative = 0 if not isData else None
+            sumWeights = 1 if not isData else None
+            triggerChannel = '\"{}\"'.format("ElMu")
+            tag=args.tag
+            
+            # SampleTuple(fileList=['root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv7/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano02Apr2020_new_pmx_102X_mc2017_realistic_v8-v1/270000/4BDF6C48-0A0E-E745-B9E0-7B13CCD939D8.root'], era='2017', subera='NONE', isData=False, isSignal=False, nEvents=7945242, nEventsPositive=7914815, nEventsNegative=30427, crossSection=35.83, channel='NONE')
+            test_tuples = [tup for tup in variety_pack_tuples if tup.isData == isData and tup.era == era]
+            input_files = [tup.fileList[0] for tup in test_tuples]
+            output_files = ["\"" + inf.split("/")[-1].replace(".root", "_SFT.root") +"\",\n" for inf in input_files]
+            input_files = ["\"" + inf + "\",\n" for inf in input_files] #Make input files list clean as well
+            crab_fetch_command = "config.JobType.outputFiles = [\n"
+            for outf in output_files:
+                crab_fetch_command += outf
+            crab_fetch_command += "]"
+            postprocessor_input_list = "theFiles = [\n"
+            for inf in input_files:
+                postprocessor_input_list += inf
+            postprocessor_input_list += "]"
+
+            
+            replacement_tuples = [("$REQUEST_NAME", requestName),
+                                  ("$INPUT_DATASET", cleanInputDataset),
+                                  ("$SPLITTING", splitting),
+                                  ("$DBS", dbs),
+                                  ("$UNITS_PER_JOB", unitsPerJob),
+                                  ("$STORAGE_SITE", storageSite),
+                                  ("$PUBLICATION", str(publication)),
+                                  ("$IS_DATA", str(isData)),
+                                  ("$IS_ULTRA_LEGACY", str(isUltraLegacy)),
+                                  ("$ERA", templateEra),
+                                  ("$SUBERA", templateSubera),
+                                  ("$PRESELECTION", preselection),
+                                  ("$CROSS_SECTION", crossSection),
+                                  ("$LUMI", equivLumi),
+                                  ("$N_EVENTS", nEvents),
+                                  ("$N_EVENTS_POSITIVE", nEventsPositive),
+                                  ("$N_EVENTS_NEGATIVE", nEventsNegative),
+                                  ("$SUM_WEIGHTS", sumWeights),
+                                  ("$TRIGGER_CHANNEL", triggerChannel),
+                                  ("$TAG", tag),
+                              ]
+            replacement_tuples += [("config.JobType.outputFiles = ['hist.root']", crab_fetch_command),
+                                   ("theFiles = inputFiles()", postprocessor_input_list),
+                                   ("postfix=None,", "postfix=\"SFT\","),
+                                   ("prefetch=True,", "prefetch=False,"),
+                                   ("JESUnc = \"Merged\"", "JESUnc = \"Total\""),
+                                   ("JESUnc = \"All\"", "JESUnc = \"Total\"")
+            ]
             #move keys which are subelements of other keys to end of replacement list
             replacement_tuples = sorted(replacement_tuples, key=lambda tup: sum([tup[0] in l[0] for l in replacement_tuples]), reverse=False)
 
