@@ -15,7 +15,7 @@
       NANOv6: dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
 - DYJets_DL-HT100:
-    era: '2017'
+    era: '2018'
     isData: false
     isSignal: false
     crossSection: 181.302
