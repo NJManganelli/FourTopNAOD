@@ -6,7 +6,7 @@ from PhysicsTools.NanoAODTools.postprocessing.tools import * #DeltaR, match coll
 from FourTopNAOD.Kai.tools.toolbox import *
 
 class JetMETSkimmer(Module):
-    def __init__(self, jetMinPt=20.0, jetMaxEta=2.5, jetMinID=0b010, jetMinCount=2, fillHists=False):
+    def __init__(self, jetMinPt=20.0, jetMaxEta=2.5, jetMinID=0b010, jetMinCount=2, minPseudoHT=0, fillHists=False):
                  #passLevel, era="2017", subera=None, isData=True, weightMagnitude=1, fillHists=False, btagging=['DeepJet', 'M'], MET=[45, 50], HT=[450,500], ZWidth=15, jetPtVar = "pt_nom", jetMVar = "mass_nom", verbose=False, probEvt=None, mode="Flag", debug=False):
                  # genEquivalentLuminosity=1, genXS=1, genNEvents=1, genSumWeights=1, era="2017", btagging=['DeepCSV','M'], lepPt=25,  GenTop_LepSelection=None):
         """Slim Jet selection module that looks across all jes/jer variations and selections events with the requirements in initialization. Currentlly no lepton cross-cleaning is done in order to fully support QCD estimations and other studies."""
@@ -17,6 +17,7 @@ class JetMETSkimmer(Module):
         self.jet_max_eta = jetMaxEta
         self.jet_min_id = jetMinID
         self.jet_min_count = jetMinCount
+        self.minPseudoHT = minPseudoHT
 
         self.writeHistFile = False
         self.fillHists = False
@@ -82,13 +83,16 @@ class JetMETSkimmer(Module):
         partial_jets = [j for j in enumerate(jets) if abs(j[1].eta) <= self.jet_max_eta and (j[1].jetId & self.jet_min_id) > 0]
         #Look at all systematic variations for jet pt, preferentially looking at the "Up" variations first
         for syst in sorted(self.systematics, key=lambda k: k.endswith("Up")):
+            pseudoHT = 0
             #append the idx and jet to tuples
             for idx, jet in partial_jets:
                 if getattr(jet, "pt_{syst}".format(syst=syst)) >= self.jet_min_pt:
                     selected_jets[syst].append((idx, jet))
+                    pseudoHT += getattr(jet, "pt_{syst}".format(syst=syst))
             #If at least one systematic variation has two selected jets, the event is kept via potentially-early return
             if len(selected_jets[syst]) >= self.jet_min_count:
-                return True
+                if pseudoHT >= self.minPseudoHT:
+                    return True
         return False
                 
     def getSystematics(self, event, exclude_raw=True):

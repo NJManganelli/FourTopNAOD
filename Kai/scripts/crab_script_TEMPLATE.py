@@ -103,6 +103,7 @@ moduleCache.append(JetMETSkimmer(jetMinPt=20.0,
                                  jetMaxEta=2.4 if era == "2016" else 2.5,
                                  jetMinID=0b010,
                                  jetMinCount=3,
+                                 minPseudoHT=350,
                                  fillHists=False
                              )
                )
