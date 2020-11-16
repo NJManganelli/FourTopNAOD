@@ -4,6 +4,7 @@ import os, pwd, sys, time, datetime
 import argparse
 import subprocess
 import pprint
+import collections
 import copy
 import tempfile
 from collections import OrderedDict, namedtuple
@@ -410,7 +411,7 @@ def main():
             nEventsPositive = sample.get('nEventsPositive', 1) if not isData else None
             nEventsNegative = sample.get('nEventsNegative', 0) if not isData else None
             sumWeights = sample.get('sumWeights')
-            triggerChannel = '\"{}\"'.format(sample.get('channel')) if sample.get('channel', None) is not None else None
+            triggerChannel = '\"{}\"'.format(sample.get('channel')) if sample.get('channel', None) is not None else str(None)
             tag=args.tag
 
             
@@ -455,21 +456,35 @@ def main():
                                            "non-UL": "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM"},
                               },
                       }
-        for crab_test_type in ["isData", "isMC"]:
+        # validEras = list(set([tup.era for tup in variety_pack_tuples]))
+        # validSuberas = list(set([tup.subera for tup in variety_pack_tuples]))
+        for crab_number, crab_test_tuple in enumerate([("isData", "ElMu", slice(0, len(variety_pack_tuples), 1)),
+                                                       ("isData", "MuMu", slice(0, len(variety_pack_tuples), 1)),
+                                                       ("isData", "ElEl", slice(0, len(variety_pack_tuples), 1)),
+                                                       ("isData", "Mu", slice(0, len(variety_pack_tuples), 1)),
+                                                       ("isData", "El", slice(0, len(variety_pack_tuples), 1)),
+                                                       ("isMC", None, slice(0, len(variety_pack_tuples), 7)),
+                                                       ("isMC", None, slice(1, len(variety_pack_tuples), 7)),
+                                                       ("isMC", None, slice(2, len(variety_pack_tuples), 7)),
+                                                       ("isMC", None, slice(3, len(variety_pack_tuples), 7)),
+                                                       ("isMC", None, slice(4, len(variety_pack_tuples), 7)),
+                                                       ("isMC", None, slice(5, len(variety_pack_tuples), 7)),
+                                                       ("isMC", None, slice(6, len(variety_pack_tuples), 7)),]):
             
             theLumi = {"2017": 41.53, "2018": 59.97}
-            requestName = era + "_crab_test_" + crab_test_type
+            requestName = era + "_crab_test_" + crab_test_tuple[0] + "_" + str(crab_number)
             splitting = "FileBased"
             inputDataset = sample.get('source', {}).get(args.source, None)
             unitsPerJob = 1000
             storageSite = "T2_CH_CERN"
             publication = False
-            isData = True if crab_test_type == "isData" else False
+            isData = True if crab_test_tuple[0] == "isData" else False
             isSignal = False
-            print("hardcoded isUltraLegacye = False\n\tera=2017")
+            print("hardcoded isUltraLegacy = False\n\tera set to the dominant one in the sample card")
             isUltraLegacy = False
-            era = "2017"
-            cleanInputDataset = test_das_query[era][crab_test_type]["UL" if isUltraLegacy else "non-UL"]
+            eraCounts = collections.Counter([tup.era for tup in variety_pack_tuples])
+            era = [eC[0] for eC in eraCounts.items() if eC[1] == max(eraCounts.values())][0]
+            cleanInputDataset = test_das_query[era][crab_test_tuple[0]]["UL" if isUltraLegacy else "non-UL"]
             dbs = "global"
             templateEra = '\"{}\"'.format(era)
             templateSubera = '\"{}\"'.format('B') if isData else None
@@ -480,22 +495,23 @@ def main():
             nEventsPositive = 10000 if not isData else None
             nEventsNegative = 0 if not isData else None
             sumWeights = 1 if not isData else None
-            triggerChannel = '\"{}\"'.format("ElMu")
+            triggerChannel = '\"{}\"'.format(crab_test_tuple[1]) if crab_test_tuple[1] is not None else str(None)
             tag=args.tag
             
             # SampleTuple(fileList=['root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAODv7/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano02Apr2020_new_pmx_102X_mc2017_realistic_v8-v1/270000/4BDF6C48-0A0E-E745-B9E0-7B13CCD939D8.root'], era='2017', subera='NONE', isData=False, isSignal=False, nEvents=7945242, nEventsPositive=7914815, nEventsNegative=30427, crossSection=35.83, channel='NONE')
-            test_tuples = [tup for tup in variety_pack_tuples if tup.isData == isData and tup.era == era]
+            test_tuples = [tup for tup in variety_pack_tuples if tup.isData == isData and tup.era == era and 
+                           (tup.channel == crab_test_tuple[1] if crab_test_tuple[1] is not None else True)][crab_test_tuple[2]]
             input_files = [tup.fileList[0] for tup in test_tuples]
             output_files = ["\"" + inf.split("/")[-1].replace(".root", "_SFT.root") +"\",\n" for inf in input_files]
             input_files = ["\"" + inf + "\",\n" for inf in input_files] #Make input files list clean as well
-            crab_fetch_command = "config.JobType.outputFiles = [\n"
-            for outf in output_files:
-                crab_fetch_command += outf
-            crab_fetch_command += "]"
-            postprocessor_input_list = "theFiles = [\n"
-            for inf in input_files:
-                postprocessor_input_list += inf
-            postprocessor_input_list += "]"
+            crab_fetch_command = "".join(["config.JobType.outputFiles = [\n"] + output_files + ["]"])
+            #for outf in output_files:
+            #    crab_fetch_command += outf
+            #crab_fetch_command += "]"
+            postprocessor_input_list = "".join(["theFiles = [\n"] + input_files + ["]"])
+            #for inf in input_files:
+            #    postprocessor_input_list += inf
+            #postprocessor_input_list += "]"
 
             
             replacement_tuples = [("$REQUEST_NAME", requestName),
@@ -521,10 +537,10 @@ def main():
                               ]
             replacement_tuples += [("config.JobType.outputFiles = ['hist.root']", crab_fetch_command),
                                    ("theFiles = inputFiles()", postprocessor_input_list),
-                                   ("postfix=None,", "postfix=\"SFT\","),
+                                   ("postfix=None,", "postfix=\"_SFT\","),
                                    ("prefetch=True,", "prefetch=False,"),
-                                   ("JESUnc = \"Merged\"", "JESUnc = \"Total\""),
-                                   ("JESUnc = \"All\"", "JESUnc = \"Total\"")
+                                   # ("JESUnc = \"Merged\"", "JESUnc = \"Total\""),
+                                   # ("JESUnc = \"All\"", "JESUnc = \"Total\"")
             ]
             #move keys which are subelements of other keys to end of replacement list
             replacement_tuples = sorted(replacement_tuples, key=lambda tup: sum([tup[0] in l[0] for l in replacement_tuples]), reverse=False)
