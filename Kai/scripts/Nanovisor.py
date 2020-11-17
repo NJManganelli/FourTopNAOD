@@ -216,6 +216,8 @@ def main():
                 PSet_py.write(get_PSet_py(NanoAODPath))
             with open(runFolder+"/crab_submit_all.py", "w") as crab_submit_all_py:
                 crab_submit_all_py.write(get_crab_submit_all_py())
+            with open(runFolder+"/partition_crab.zsh", "w") as partition_crab_zsh:
+                partition_crab_zsh.write(get_partition_crab_zsh())
         else:
             print("runfolder '{0:s}' already exists. Rename or delete it and attempt recreation".format(runFolder))
             sys.exit()
@@ -628,6 +630,12 @@ for f in cfg_files:
     cmd = "crab submit -c {0:s} > submission_{1:s}.log".format(f.replace("./", ""), f.replace("crab_cfg_", "").replace(".py","").replace("./", ""))
     # subprocess.Popen(args="print '{}'".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))
     subprocess.Popen(args="{}".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))"""
+    return ret
+
+def get_partition_crab_zsh():
+    ret = """#!bin/zsh
+for d in 'tt_DL-GF' 'tt_DL' 'tt_SL-GF' 'tt_SL' 'DYJets' 'ttW' 'ttH' 'ttZ' 'ttt' 'ST' 'tt_AH' 'ElMu' 'MuMu' 'ElEl' 'El' 'Mu'; do mkdir ${d} && cp PSet.py ${d} && for f\
+ in *${d}*(.); do mv ${f} ${d}; done; done"""
     return ret
 
 def get_username():
