@@ -38,7 +38,7 @@ parser.add_argument('--local_run', dest='local_run', action='store_true',
 parser.add_argument('--crab_run', dest='crab_run', action='store_true',
                     help='run with crab')
 parser.add_argument('--crab_test', dest='crab_test', action='store_true',
-                    help='create test files with crab')
+                    help='create test files with crab, if combined with crab_run, will set total units to 1 for all jobs, allowing single file to be processed per sample')
 parser.add_argument('--templates', dest='templates', action='store', nargs='*', type=str, default=["../scripts/crab_cfg_TEMPLATE.py", "../scripts/crab_script_TEMPLATE.sh", "../scripts/crab_script_TEMPLATE.py"],
                     help='path and name of the templates to be used, the keyword "TEMPLATE" will be replaced by the <requestName> in filenames.')
 parser.add_argument('--percent_run', dest='percent_run', action='append', type=int,
@@ -419,6 +419,9 @@ def main():
                                   ("$INPUT_DATASET", cleanInputDataset),
                                   ("$SPLITTING", splitting),
                                   ("$DBS", dbs),
+                                  ("$MAX_MEMORY_MB", 2000),
+                                  ("$MAX_JOB_RUNTIME_MIN", 1315),
+                                  ("$NUM_CORES", 1),
                                   ("$UNITS_PER_JOB", unitsPerJob),
                                   ("$STORAGE_SITE", storageSite),
                                   ("$PUBLICATION", str(publication)),
@@ -436,6 +439,10 @@ def main():
                                   ("$TRIGGER_CHANNEL", triggerChannel),
                                   ("$TAG", tag),
                               ]
+            if args.crab_test:
+                replacement_tuples += [("# config.Data.totalUnits = $TOTAL_UNITS", "config.Data.totalUnits = 1"),
+                                   ]
+                
             #move keys which are subelements of other keys to end of replacement list
             replacement_tuples = sorted(replacement_tuples, key=lambda tup: sum([tup[0] in l[0] for l in replacement_tuples]), reverse=False)
 
@@ -518,6 +525,9 @@ def main():
                                   ("$INPUT_DATASET", cleanInputDataset),
                                   ("$SPLITTING", splitting),
                                   ("$DBS", dbs),
+                                  ("$MAX_MEMORY_MB", 2000),
+                                  ("$MAX_JOB_RUNTIME_MIN", 1315),
+                                  ("$NUM_CORES", 1),
                                   ("$UNITS_PER_JOB", unitsPerJob),
                                   ("$STORAGE_SITE", storageSite),
                                   ("$PUBLICATION", str(publication)),
@@ -539,6 +549,7 @@ def main():
                                    ("theFiles = inputFiles()", postprocessor_input_list),
                                    ("postfix=None,", "postfix=\"_SFT\","),
                                    ("prefetch=True,", "prefetch=False,"),
+                                   ("# config.Data.totalUnits = $TOTAL_UNITS", "config.Data.totalUnits = 1")
                                    # ("JESUnc = \"Merged\"", "JESUnc = \"Total\""),
                                    # ("JESUnc = \"All\"", "JESUnc = \"Total\"")
             ]

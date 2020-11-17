@@ -12,6 +12,9 @@ config.section_("JobType")
 config.JobType.allowUndistributedCMSSW = True
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'PSet.py'
+config.JobType.maxMemoryMB = $MAX_MEMORY_MB
+config.JobType.maxJobRuntimeMin = $MAX_JOB_RUNTIME_MIN
+config.JobType.numCores = $NUM_CORES
 config.JobType.scriptExe = 'crab_script_$REQUEST_NAME.sh'
 config.JobType.inputFiles = ['crab_script_$REQUEST_NAME.py', 
                              os.path.join(os.environ['CMSSW_BASE'],'src/PhysicsTools/NanoAODTools/scripts/haddnano.py'),
@@ -24,6 +27,8 @@ config.Data.inputDBS = '$DBS'
 config.Data.splitting = '$SPLITTING'
 if config.Data.splitting == 'FileBased':
     config.Data.unitsPerJob = $UNITS_PER_JOB
+    # config.Data.totalUnits = $TOTAL_UNITS
+# config.Data.userInputFiles = []
 
 config.Data.outLFNDirBase = '/store/user/{user}/$TAG'.format(user=getUsernameFromCRIC())
 config.Data.publication = $PUBLICATION
