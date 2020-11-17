@@ -11,14 +11,14 @@ cmsenv
 git clone https://github.com/NJManganelli/nanoAOD-tools.git PhysicsTools/NanoAODTools --branch Fri13
 git clone https://github.com/NJManganelli/FourTopNAOD.git FourTopNAOD --branch Fri13
 scram b -j4
-voms-proxy-init -vomc cms --valid 192:00
+voms-proxy-init -voms cms --valid 192:00
 cd $CMSSW_BASE/src/FourTopNAOD/Kai/crab/NANOv7_Fri13
 ~~~~~~~~~~~~~
 ### Example submission
 ~~~~~~~~~~~~~{sh}
 cd <This_CMSSW>/src
 cmsenv
-voms-proxy-init -vomc cms --valid 192:00
+voms-proxy-init -voms cms --valid 192:00
 cd $CMSSW_BASE/src/FourTopNAOD/Kai/crab/NANOv7_Fri13/2017/ttt
 crab submit -c crab_cfg_2017_tttt.py
 ~~~~~~~~~~~~~
