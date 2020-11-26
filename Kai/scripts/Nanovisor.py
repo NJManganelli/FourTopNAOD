@@ -39,7 +39,7 @@ parser.add_argument('--crab_run', dest='crab_run', action='store_true',
                     help='run with crab')
 parser.add_argument('--crab_test', dest='crab_test', action='store_true',
                     help='create test files with crab, if combined with crab_run, will set total units to 1 for all jobs, allowing single file to be processed per sample')
-parser.add_argument('--templates', dest='templates', action='store', nargs='*', type=str, default=["../scripts/crab_cfg_TEMPLATE.py", "../scripts/crab_script_TEMPLATE.sh", "../scripts/crab_script_TEMPLATE.py"],
+parser.add_argument('--templates', dest='templates', action='store', nargs='*', type=str, default=["../scripts/crab_cfg_TEMPLATE.py", "../scripts/crab_script_TEMPLATE.sh", "../scripts/crab_script_TEMPLATE.py", "../scripts/crab_PSet_TEMPLATE.py"],
                     help='path and name of the templates to be used, the keyword "TEMPLATE" will be replaced by the <requestName> in filenames.')
 parser.add_argument('--percent_run', dest='percent_run', action='append', type=int,
                     help='percent (as an integer) of each sample to process for local_run')
@@ -398,7 +398,7 @@ def main():
                 cleanInputDataset = inputDataset.replace("dbs:", "")
                 dbs = "global"
             unitsPerJob = sample.get('crab_cfg', {}).get("unitsPerJob", 1)
-            storageSite = "T2_CH_CERN"
+            storageSite = "T2_BE_IIHE" #"T2_CH_CERN"
             publication = True
             isData = sample.get('isData')
             isSignal = sample.get('isSignal', False)
@@ -417,11 +417,13 @@ def main():
             tag=args.tag
 
             
-            replacement_tuples = [("$REQUEST_NAME", requestName),
+            replacement_tuples = [("$NANOAOD_TOOLS_PATH", NanoAODPath),
+                                  ("$TREE_NAME", "tree.root"),
+                                  ("$REQUEST_NAME", requestName),
                                   ("$INPUT_DATASET", cleanInputDataset),
                                   ("$SPLITTING", splitting),
                                   ("$DBS", dbs),
-                                  ("$MAX_MEMORY_MB", 2000),
+                                  ("$MAX_MEMORY_MB", 3000),
                                   ("$MAX_JOB_RUNTIME_MIN", 1315),
                                   ("$NUM_CORES", 1),
                                   ("$UNITS_PER_JOB", unitsPerJob),
@@ -523,11 +525,13 @@ def main():
             #postprocessor_input_list += "]"
 
             
-            replacement_tuples = [("$REQUEST_NAME", requestName),
+            replacement_tuples = [("$NANOAOD_TOOLS_PATH", NanoAODPath),
+                                  ("$TREE_NAME", "tree.root"),
+                                  ("$REQUEST_NAME", requestName),
                                   ("$INPUT_DATASET", cleanInputDataset),
                                   ("$SPLITTING", splitting),
                                   ("$DBS", dbs),
-                                  ("$MAX_MEMORY_MB", 2000),
+                                  ("$MAX_MEMORY_MB", 3000),
                                   ("$MAX_JOB_RUNTIME_MIN", 1315),
                                   ("$NUM_CORES", 1),
                                   ("$UNITS_PER_JOB", unitsPerJob),
@@ -608,6 +612,7 @@ def get_PSet_py(NanoAODPath):
 #the one marked below
 import FWCore.ParameterSet.Config as cms
 process = cms.Process('NANO')
+#process.options.numberOfThreads = $NUM_CORES
 process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(),
 #	lumisToProcess=cms.untracked.VLuminosityBlockRange("254231:1-254231:24")
 )
