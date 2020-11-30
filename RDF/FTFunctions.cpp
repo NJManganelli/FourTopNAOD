@@ -471,6 +471,58 @@ namespace FTA{
   //   return retCode;
   // }
   //Can't get what I want from this, so work from the python end. FFS, another day's effort wasted on buggy shit. Need to know the compression enumeration is ROOT.ROOT.(algo)
+  // const UInt_t barWidth = 60;
+  // ULong64_t processed = 0, totalEvents = 0;
+  // std::string progressBar;
+  // std::mutex barMutex;
+  // auto registerEvents = [](ULong64_t nIncrement) {totalEvents += nIncrement;};
+
+  // ROOT::RDF::RResultPtr<ULong64_t> AddProgressBar(ROOT::RDF::RNode df, int everyN=10000, int totalN=100000) {
+  //   registerEvents(totalN);
+  //   auto c = df.Count();
+  //   c.OnPartialResultSlot(everyN, [everyN] (unsigned int slot, ULong64_t &cnt){
+  // 	std::lock_guard<std::mutex> l(barMutex);
+  //       processed += everyN; //everyN captured by value for this lambda
+  //       progressBar = "[";
+  //       for(UInt_t i = 0; i < static_cast<UInt_t>(static_cast<Float_t>(processed)/totalEvents*barWidth); ++i){
+  // 	  progressBar.push_back('|');
+  //       }
+  //       // escape the '\' when defined in python string
+  // 	std::cout << "\\r" << std::left << std::setw(barWidth) << progressBar << "] " << processed << "/" << totalEvents << std::flush;
+  //     });
+  //   return c;
+  // }
+
+  // std::pair< ROOT::RDF::RNode, std::vector<LUT*> > AddLeptonSF(ROOT::RDF::RNode df, std::string_view era, std::map< std::string, std::vector<std::string> > idmap){
+  std::pair< ROOT::RDF::RNode, std::string > AddLeptonSF(ROOT::RDF::RNode df, std::string_view era, std::map< std::string, std::vector<std::string> > idmap){
+    //idmap is a key :: value map with the key being keywords MuonID, MuonISO, ElectronID, ElectronEFF, ElectronEFFLow
+    //the value is a vector containing: 
+
+    std::vector<std::string> requiredLUTs;
+    requiredLUTs.push_back("Muon_SF_ID");
+    requiredLUTs.push_back("Muon_SF_ISO");
+    requiredLUTs.push_back("Electron_SF_ID");
+    requiredLUTs.push_back("Electron_SF_EFF");
+    if(era == "2017" || era == "2016"){
+      requiredLUTs.push_back("Electron_SF_EFFLow");
+    }
+    for(std::vector<string>::const_iterator req_iter = requiredLUTs.begin(); req_iter != requiredLUTs.end(); ++ req_iter){
+      if(idmap.find(*req_iter) == idmap.end()){ std::cout << "Required map not found: " << *req_iter << std::endl; }
+      else {std::cout << "Required map found: " << *req_iter << std::endl;}
+    }
+
+    for(std::map< std::string, std::vector<std::string> >::iterator id_iter = idmap.begin(); id_iter != idmap.end(); ++id_iter){
+      if (id_iter->first != "MuonID") {std::cout << "Okay" << std::endl;}
+      else {std::cout << "Not okay!" << std::endl;}
+    //   std::cout << "Map Key: " << id_iter->first << " Value: " << id_iter->second << std::endl;
+    }
+
+    std::cout << "Slots: " << df.GetNSlots() << std::endl;
+
+    std::pair<ROOT::RDF::RNode, std::string> ret(df, "Help me, Obi-Wan!");
+    return ret;
+  }
+
   template <typename T>
   ROOT::RDF::RResultPtr<T> bookLazySnapshot(ROOT::RDF::RNode df, std::string_view treename, std::string_view filename, 
 			const ROOT::Detail::RDF::ColumnNames_t columnList, std::string_view mode = "RECREATE"){
