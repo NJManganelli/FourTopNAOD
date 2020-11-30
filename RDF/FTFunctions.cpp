@@ -28,7 +28,8 @@ class LUT {
   //LookUp Table
 public:
   LUT() { _LUT_MAP_TH1.clear(); _LUT_MAP_TH2.clear(); _LUT_MAP_TH3.clear(); }
-  LUT(std::string file, std::string path);
+  // LUT(std::string file, std::string path);
+  LUT(const LUT &lut);
   ~LUT() {}
   void Add(std::string file, std::string path, std::string handle = "");
 
@@ -53,6 +54,27 @@ private:
   std::map<std::string, TH3*> _LUT_MAP_TH3;
   
 };
+LUT::LUT(const LUT &lut) {
+
+  TUUID uuid = TUUID();
+  std::map<std::string, TH1*> _LUT_MAP_TH1;
+  std::map<std::string, TH2*> _LUT_MAP_TH2;
+  std::map<std::string, TH3*> _LUT_MAP_TH3;
+  //Clone each histogram in each map, appending this copy constructor's uuid onto the end. Each histogram in the original should have a unique uuid,
+  //the ones here will inherit them and append a single copy-constructor uuid to them
+  for(auto th1_iter = lut._LUT_MAP_TH1.begin(); th1_iter != lut._LUT_MAP_TH1.end(); ++th1_iter){
+    std::string name = static_cast<std::string>(th1_iter->second->GetName()) + "___" + uuid.AsString();
+    _LUT_MAP_TH1[th1_iter->first] = static_cast<TH1*>(th1_iter->second->Clone(name.c_str()));
+  }
+  for(auto th2_iter = lut._LUT_MAP_TH2.begin(); th2_iter != lut._LUT_MAP_TH2.end(); ++th2_iter){
+    std::string name = static_cast<std::string>(th2_iter->second->GetName()) + "___" + uuid.AsString();
+    _LUT_MAP_TH2[th2_iter->first] = static_cast<TH2*>(th2_iter->second->Clone(name.c_str()));
+  }
+  for(auto th3_iter = lut._LUT_MAP_TH3.begin(); th3_iter != lut._LUT_MAP_TH3.end(); ++th3_iter){
+    std::string name = static_cast<std::string>(th3_iter->second->GetName()) + "___" + uuid.AsString();
+    _LUT_MAP_TH3[th3_iter->first] = static_cast<TH3*>(th3_iter->second->Clone(name.c_str()));
+  }
+}  
 void LUT::Add(std::string file, std::string path, std::string handle = "") {
   TUUID uuid = TUUID();
   TFile *f = TFile::Open(file.c_str(), "read");

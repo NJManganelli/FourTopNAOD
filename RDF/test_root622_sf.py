@@ -4,6 +4,8 @@ import ctypes
 import array
 import pdb
 
+print("For the rest of the design, we need to create a vector of LUTs, probably using a manager that gets an std::map<string, std::vector<std::string>> as input containing the key names (used as branch names, which also need to be unique? No, we need to use two histos to get the electron ID efficiency in 2017 and 2016 due to the 'low efficiency' ones... so just the unique reference key for the LUT class) along with the file, histo/profile/spline path inside the file, with the key name eventually passed to the LUT creator. Perhaps the vectors 3rd-6th elements can be the accessors and branch names that will be passed (in order) to the corrector, the type being deduced form the length {'file1.root', 'Muont_pt_abseta_SF', 'Nominal'/'Err', 'Muon_pt', 'Muon_eta'} --> TH2Lookup with central or error value, ... 'When all of these are added properly, the manager can 'finalize' things by using the object cloning to match the number of threads (GetNSlots() in RDataFrame). Finally, it can return the vector of correctors for use in multithreaded applications")
+
 # print((ROOT__version__) #Doesn't work before version 6.22, hahahahaha
 ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
 
@@ -18,7 +20,10 @@ ROOT.gROOT.ProcessLine(code)
 # print("ROOT libraries loaded: ", ROOT.gSystem.GetLibraries())
 print("testing python retrieval of C++ LUT")
 cppLUT = getattr(ROOT, "test2LUT")
-print(cppLUT.TH2Lookup("Test", 35, 1.7))
+print("cppLUT test", cppLUT.TH2Lookup("Test", 35, 1.7))
+ROOT.gROOT.ProcessLine("LUT *test2LUTClone(test2LUT);")
+cppLUTClone = getattr(ROOT, "test2LUTClone")
+print("cppLUT clone test", cppLUTClone.TH2Lookup("Test", 35, 1.7))
 
 # "RunBCDEF_SF_ISO_syst.root==NUM_TightRelIso_DEN_MediumID_pt_abseta",
 # "STAT": "RunBCDEF_SF_ISO_syst.root==NUM_TightRelIso_DEN_MediumID_pt_abseta_stat",
