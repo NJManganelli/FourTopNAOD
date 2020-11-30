@@ -424,7 +424,7 @@ def main():
                                   ("$SPLITTING", splitting),
                                   ("$DBS", dbs),
                                   ("$MAX_MEMORY_MB", 3000),
-                                  ("$MAX_JOB_RUNTIME_MIN", 1315),
+                                  ("$MAX_JOB_RUNTIME_MIN", 2750),
                                   ("$NUM_CORES", 1),
                                   ("$UNITS_PER_JOB", unitsPerJob),
                                   ("$STORAGE_SITE", storageSite),

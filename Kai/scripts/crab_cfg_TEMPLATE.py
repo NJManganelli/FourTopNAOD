@@ -30,8 +30,8 @@ if config.Data.splitting == 'FileBased':
     # config.Data.totalUnits = $TOTAL_UNITS
 # config.Data.userInputFiles = []
 
-# config.Data.outLFNDirBase = '/store/user/{user}/$TAG'.format(user=getUsernameFromCRIC())
-config.Data.outLFNDirBase = '/store/group/fourtop/$TAG'
+# config.Data.outLFNDirBase = '/store/user/{}/$TAG/{}'.format(getUsernameFromCRIC(), $ERA)
+config.Data.outLFNDirBase = '/store/group/fourtop/$TAG/{}'.format($ERA)
 config.Data.publication = $PUBLICATION
 config.Data.outputDatasetTag = '$TAG'
 config.section_("Site")
