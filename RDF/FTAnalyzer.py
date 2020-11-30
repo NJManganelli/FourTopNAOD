@@ -4736,11 +4736,13 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     # nEffective = processDict.get("nEventsPositive") - processDict.get("nEventsNegative")
                     fractionalContribution = processDict.get("fractionalContribution")
                     #Calculate XS * Lumi
-                    wgtFormula = "{eXS:f} * {lumi:f} * 1000 * genWeight * {frCon:f} / {sW:f}".format(eXS=effectiveXS,
-                                                                                                     lumi=lumiDict[era],
-                                                                                                     frCon=fractionalContribution,
-                                                                                                     sW=sumWeights
-                                                                                                 )
+                    print("FIXME: Need to modify fractional sample weighting to use the meta info, defaulting to 1.0 right now")
+                    wgtFormula = "{eXS:f} * {lumi:f} * 1000 * genWeight * {frSample:f} * {frCon:f} / {sW:f}".format(eXS=effectiveXS,
+                                                                                                                    lumi=lumiDict[era],
+                                                                                                                    frSample="1.0",
+                                                                                                                    frCon=fractionalContribution,
+                                                                                                                    sW=sumWeights
+                                                                                                                  )
                     if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
                         formulaForNominalXS = "{nXS:f} * genWeight / {sW:f}".format(nXS=inclusiveDict.get("effectiveCrossSection"),
                                                                                     sW=inclusiveDict.get("sumWeights")
