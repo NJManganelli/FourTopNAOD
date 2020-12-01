@@ -580,7 +580,296 @@ namespace FTA{
   //     });
   //   return c;
   // }
+  std::map< std::string, std::vector<std::string> > GetCorrectorMap(std::string era, 
+								    std::string legacy, 
+								    std::string VFP="",
+								    std::string muon_top_path, 
+								    std::string muon_id = "", 
+								    std::string muon_iso = "", 
+								    std::string electron_top_path, 
+								    std::string electron_id = "", 
+								    std::string electron_eff = "",
+								    std::string btag_top_path, 
+								    std::string btag_doAggregate = "btag_noAggregate", 
+								    std::string btag_event = "btag_HT_nJet"){
+    //python constructor:
+    //def __init__(self, muon_ID=None, muon_ISO=None, electron_ID=None, era=None, doMuonHLT=False, doElectronHLT_ZVtx=False, 
+    //pre2018Run316361Lumi = 8.942, post2018Run316361Lumi = 50.785
 
+    //about paths... will probably need to do a sub-folder for /non-UL and /UL due to file naming conventions...
+    //el_pre = "{0:s}/src/FourTopNAOD/Kai/python/data/leptonSF/Electron/{1:s}/".format(os.environ['CMSSW_BASE'], self.era)
+    if(era != "2016" && legacy != "UL"){
+      std::string muon_path = muon_top_path + "/" + era + "/" + legacy + "/";
+      std::string muon_path = muon_top_path + "/" + era + "/" + legacy + "/";
+    }
+    else{
+      if(!( VFP == "postVFP" || VFP == "preVFP")){
+	std::cout << "WARNING: Invalid path due to VFP parameter not matching options for 2016 Ultra-Legacy production" << std::endl;
+      }
+      std::string muon_path = muon_top_path + "/" + era + "/" + legacy + "/" + VFP + "/";
+      std::string muon_path = muon_top_path + "/" + era + "/" + legacy + "/" + VFP + "/";
+
+    //mu_pre = "{0:s}/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/{1:s}/".format(os.environ['CMSSW_BASE'], self.era)
+    //store the ID map per era, with a path being prepended to the filenames listed below at the end
+    std::map< std::string, std::vector<std::string> > electron_options_central;
+    std::map< std::string, std::vector<std::string> > electron_options_uncertainty;
+    std::map< std::string, std::vector<std::string> > muon_options_central;
+    std::map< std::string, std::vector<std::string> > muon_options_stat;
+    std::map< std::string, std::vector<std::string> > muon_options_systematic;
+    if(legacy == "UL"){
+      std::cout << "WARNING: In FTA:::GetIDMap, legacy = 'UL' was specified. Right now, this defaults to the non-UL/EOY processing maps" << std::endl;
+      //https://twiki.cern.ch/twiki/bin/viewauth/CMS/EgammaUL2016To2018#SFs_for_Electrons_UL_2018
+      if(era == "2016"){
+	std::cout << "WARNING: Ultra-Legacy era 2016 should be handled differently pre and postVFP... Note done yet" << std::endl;
+      }
+    }
+    //Electron ID's
+    //Note on uncertainties: stored in the same maps and accessed by bin error, so just copy...
+    //#EFF SFs
+    // if self.era != "2018" and el.pt < 20;
+    // sf_el_eff_nom.append(self._worker_el_EFF_lowEt.getSF(el.pdgId, el.pt, el.eta));
+    // sf_el_eff_unc.append(self._worker_el_EFF_lowEt.getSFErr(el.pdgId, el.pt, el.eta));
+    // sf_el_eff_nom.append(self._worker_el_EFF.getSF(el.pdgId, el.pt, el.eta));
+    // sf_el_eff_unc.append(self._worker_el_EFF.getSFErr(el.pdgId, el.pt, el.eta));
+    // //#ID SFs;
+    // sf_el_id_nom.append(self._worker_el_ID.getSF(el.pdgId, el.pt, el.eta));
+    // sf_el_id_unc.append(self._worker_el_ID.getSFErr(el.pdgId, el.pt, el.eta));
+    if(era == "2016"){
+      if(legacy == "non-UL"){
+	electron_options_central["EFF_lowEt"] =   {"EGM2D_BtoH_low_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup"};
+	electron_options_central["EFF_highEt"] =  {"EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup"};
+	electron_options_central["LooseID"]  =    {"2016LegacyReReco_ElectronLoose_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MediumID"]  =   {"2016LegacyReReco_ElectronMedium_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["TightID"]  =    {"2016LegacyReReco_ElectronTight_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80iso"]  =   {"2016LegacyReReco_ElectronMVA80_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80noiso"]  = {"2016LegacyReReco_ElectronMVA80noiso_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90iso"]  =   {"2016LegacyReReco_ElectronMVA90_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90noiso"]  = {"2016LegacyReReco_ElectronMVA90noiso_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
+      }
+      elif(legacy == "UL" && VFP == "preVFP"){
+	electron_options_central["EFF_lowEt"] =   {"egammaEffi_ptBelow20.txt_EGM2D_UL2016preVFP.root", "EGamma_SF2D", "TH2Lookup"};
+	electron_options_central["EFF_highEt"] =  {"egammaEffi_ptAbove20.txt_EGM2D_UL2016preVFP.root", "EGamma_SF2D", "TH2Lookup"};
+	electron_options_central["VetoID"]  =     {"egammaEffi.txt_Ele_Veto_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["LooseID"]  =    {"egammaEffi.txt_Ele_Loose_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MediumID"]  =   {"egammaEffi.txt_Ele_Medium_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["TightID"]  =    {"egammaEffi.txt_Ele_Tight_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80iso"]  =   {"egammaEffi.txt_Ele_wp80iso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80noiso"]  = {"egammaEffi.txt_Ele_wp80noiso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90iso"]  =   {"egammaEffi.txt_Ele_wp90iso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90noiso"]  = {"egammaEffi.txt_Ele_wp90noiso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+      }
+      elif(legacy == "UL" && VFP == "postVFP"){
+	std::cout << "WARNING: postVFP UL for 2016 is loading 2016 Legacy efficiencies, since postVFP UL versions haven't been made available as of writing.";
+	std::cout << std::endl;
+	electron_options_central["EFF_lowEt"] =   {"../../non-UL/EGM2D_BtoH_low_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup"};
+	electron_options_central["EFF_highEt"] =  {"../../non-UL/EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup"};
+	electron_options_central["VetoID"]  =     {"egammaEffi.txt_Ele_Veto_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["LooseID"]  =    {"egammaEffi.txt_Ele_Loose_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MediumID"]  =   {"egammaEffi.txt_Ele_Medium_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["TightID"]  =    {"egammaEffi.txt_Ele_Tight_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80iso"]  =   {"egammaEffi.txt_Ele_wp80iso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80noiso"]  = {"egammaEffi.txt_Ele_wp80noiso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90iso"]  =   {"egammaEffi.txt_Ele_wp90iso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90noiso"]  = {"egammaEffi.txt_Ele_wp90noiso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+      }
+    }
+    elif(era == "2017"){
+      if(legacy == "non-UL"){
+	std::cout << "WARNING: for 2017 non-UL, Efficiencies are both from the non-low Et measurements, in case this has changed..." << std::endl;
+	electron_options_central["Eff_lowEt"] =   {"egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["EFF_highEt"] =  {"egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["VetoID"] =      {"2017_ElectronWPVeto_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["LooseID"] =     {"2017_ElectronLoose.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MediumID"] =    {"2017_ElectronMedium.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["TightID"] =     {"2017_ElectronTight.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80iso"] =    {"2017_ElectronMVA80.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80noiso"] =  {"2017_ElectronMVA80noiso.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90iso"] =    {"2017_ElectronMVA90.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90noiso"] =  {"2017_ElectronMVA90noiso.root", "EGamma_SF2D", "TH2Lookup", };
+      }
+      elif(legacy == "UL"){
+	electron_options_central["Eff_lowEt"] =   {"egammaEffi_ptBelow20.txt_EGM2D_UL2017.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["EFF_highEt"] =  {"egammaEffi_ptAbove20.txt_EGM2D_UL2017.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["VetoID"] =      {"egammaEffi.txt_EGM2D_Veto_UL17.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["LooseID"] =     {"egammaEffi.txt_EGM2D_Loose_UL17.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MediumID"] =    {"egammaEffi.txt_EGM2D_Medium_UL17.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["TightID"] =     {"egammaEffi.txt_EGM2D_Tight_UL17.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80iso"] =    {"egammaEffi.txt_EGM2D_MVA80iso_UL17.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80noiso"] =  {"egammaEffi.txt_EGM2D_MVA80noIso_UL17.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90iso"] =    {"egammaEffi.txt_EGM2D_MVA90iso_UL17.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90noiso"] =  {"egammaEffi.txt_EGM2D_MVA90noIso_UL17.root", "EGamma_SF2D", "TH2Lookup", };
+      }
+    }
+    elif(era == "2018"){
+      if(legacy == "non-UL"){
+	electron_options_central["EFF_lowEt"] =  {"egammaEffi.txt_EGM2D_updatedAll.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["EFF_highEt"] = {"egammaEffi.txt_EGM2D_updatedAll.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["LooseID"] =    {"2018_ElectronLoose.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MediumID"] =   {"2018_ElectronMedium.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["TightID"] =    {"2018_ElectronTight.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["VetoID"] =     {"2018_ElectronWPVeto_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80iso"] =   {"2018_ElectronMVA80.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80noiso"] = {"2018_ElectronMVA80noiso.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90iso"] =   {"2018_ElectronMVA90.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90noiso"] = {"2018_ElectronMVA90noiso.root", "EGamma_SF2D", "TH2Lookup", };
+      }
+      elif(legacy == "UL"){
+	electron_options_central["EFF_lowEt"] =  {"egammaEffi_ptBelow20.txt_EGM2D_UL2018.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["EFF_highEt"] = {"egammaEffi_ptAbove20.txt_EGM2D_UL2018.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["VetoID"] =     {"egammaEffi.txt_Ele_Veto_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["LooseID"] =    {"egammaEffi.txt_Ele_Loose_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MediumID"] =   {"egammaEffi.txt_Ele_Medium_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["TightID"] =    {"egammaEffi.txt_Ele_Tight_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80iso"] =   {"egammaEffi.txt_Ele_wp80iso_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA80noiso"] = {"egammaEffi.txt_Ele_wp80noiso_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90iso"] =   {"egammaEffi.txt_Ele_wp90iso_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+	electron_options_central["MVA90noiso"] = {"egammaEffi.txt_Ele_wp90noiso_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
+      }	
+    }
+    //Muon SFs //Mostly the errors are stored in separate histograms inside two files, 1 for ISO and 1 for ID 
+    //So for 2017 and 2018 non-UL: BinContent from unique histogram ...ratio, ...ratio_stat, ...ratio_syst
+    //for 2016, central is BinContent and syst error is BinError on a central histogram
+    //For UL, it's not yet known...
+    //#ID SFs
+    // sf_mu_id_nom.append(self._worker_mu_ID_nom.getSF(mu.pdgId, mu.pt, mu.eta));
+    // sf_mu_id_stat.append(self._worker_mu_ID_stat.getSFErr(mu.pdgId, mu.pt, mu.eta));
+    // sf_mu_id_syst.append(0.0 if self.era == "2016" else self._worker_mu_ID_syst.getSFErr(mu.pdgId, mu.pt, mu.eta));
+    //#ISO SFs
+    // sf_mu_iso_nom.append(self._worker_mu_ISO_nom.getSF(mu.pdgId, mu.pt, mu.eta));
+    // sf_mu_iso_stat.append(self._worker_mu_ISO_stat.getSFErr(mu.pdgId, mu.pt, mu.eta));
+    // sf_mu_iso_syst.append(0.0 if self.era == "2016" else self._worker_mu_ISO_syst.getSFErr(mu.pdgId, mu.pt, mu.eta));
+        self.muD = {"2016": {"TRG_SL": {"Mu_Trg.root", "IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio",
+                                        "STAT": "Mu_Trg.root", "IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio"},
+                             "TRG_SL50": {"Mu_Trg.root", "Mu50_OR_TkMu50_PtEtaBins/pt_abseta_ratio",
+                                          "STAT": "Mu_Trg.root", "Mu50_OR_TkMu50_PtEtaBins/pt_abseta_ratio"},
+                             "LooseID": {"Mu_ID.root", "MC_NUM_LooseID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio",
+                                         "STAT": "Mu_ID.root", "MC_NUM_LooseID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio"},
+                             "MediumID2016": {"Mu_ID.root", "MC_NUM_MediumID2016_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio",
+                                              "STAT": "Mu_ID.root", "MC_NUM_MediumID2016_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio"},
+                             "MediumID": {"Mu_ID.root", "MC_NUM_MediumID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio",
+                                          "STAT": "Mu_ID.root", "MC_NUM_MediumID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio"},
+                             "TightID": {"Mu_ID.root", "MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio",
+                                         "STAT": "Mu_ID.root", "MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio"},
+                             "HighPtID": {"Mu_ID.root", "MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/pair_ne_ratio",
+                                          "STAT": "Mu_ID.root", "MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/pair_ne_ratio"},
+                             "LooseRelIso/LooseID": {"Mu_Iso.root", "LooseISO_LooseID_pt_eta/pt_abseta_ratio",
+                                                     "STAT": "Mu_Iso.root", "LooseISO_LooseID_pt_eta/pt_abseta_ratio"},
+                             "LooseRelIso/MediumID": {"Mu_Iso.root", "LooseISO_MediumID_pt_eta/pt_abseta_ratio",
+                                                      "STAT": "Mu_Iso.root", "LooseISO_MediumID_pt_eta/pt_abseta_ratio"},
+                             "LooseRelIso/TightID": {"Mu_Iso.root", "LooseISO_TightID_pt_eta/pt_abseta_ratio",
+                                                     "STAT": "Mu_Iso.root", "LooseISO_TightID_pt_eta/pt_abseta_ratio"},
+                             "TightRelIso/MediumID": {"Mu_Iso.root", "TightISO_MediumID_pt_eta/pt_abseta_ratio",
+                                                      "STAT": "Mu_Iso.root", "TightISO_MediumID_pt_eta/pt_abseta_ratio"},
+                             "TightRelIso/TightID": {"Mu_Iso.root", "TightISO_TightID_pt_eta/pt_abseta_ratio",
+                                                     "STAT": "Mu_Iso.root", "TightISO_TightID_pt_eta/pt_abseta_ratio"},
+                             "LooseRelTkIso/HighPtID": {"Mu_Iso.root", "tkLooseISO_highptID_newpt_eta/pair_ne_ratio",
+                                                        "STAT": "Mu_Iso.root", "tkLooseISO_highptID_newpt_eta/pair_ne_ratio"}
+                             },
+                    "2017": {"TRG_SL": {"EfficienciesAndSF_RunBtoF_Nov17Nov2017.root", "IsoMu27_PtEtaBins/pt_abseta_ratio",
+                                        "STAT": "EfficienciesAndSF_RunBtoF_Nov17Nov2017.root", "IsoMu27_PtEtaBins/pt_abseta_ratio"},
+                             "LooseID": {"RunBCDEF_SF_ID_syst.root", "NUM_LooseID_DEN_genTracks_pt_abseta",
+                                         "STAT": "RunBCDEF_SF_ID_syst.root", "NUM_LooseID_DEN_genTracks_pt_abseta_stat",
+                                         "SYST": "RunBCDEF_SF_ID_syst.root", "NUM_LooseID_DEN_genTracks_pt_abseta_syst"},
+                             "MediumID": {"RunBCDEF_SF_ID_syst.root", "NUM_MediumID_DEN_genTracks_pt_abseta",
+                                          "STAT": "RunBCDEF_SF_ID_syst.root", "NUM_MediumID_DEN_genTracks_pt_abseta_stat",
+                                          "SYST": "RunBCDEF_SF_ID_syst.root", "NUM_MediumID_DEN_genTracks_pt_abseta_syst"},
+                             "TightID": {"RunBCDEF_SF_ID_syst.root", "NUM_TightID_DEN_genTracks_pt_abseta",
+                                         "STAT": "RunBCDEF_SF_ID_syst.root", "NUM_TightID_DEN_genTracks_pt_abseta_stat",
+                                         "SYST": "RunBCDEF_SF_ID_syst.root", "NUM_TightID_DEN_genTracks_pt_abseta_syst"},
+                             "HighPtID": {"RunBCDEF_SF_ID_syst.root", "NUM_HighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta",
+                                          "STAT": "RunBCDEF_SF_ID_syst.root", "NUM_HighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta_stat",
+                                          "SYST": "RunBCDEF_SF_ID_syst.root", "NUM_HighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta_syst"},
+                             "TrkHighPtID": {"RunBCDEF_SF_ID_syst.root", "NUM_TrkHighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta",
+                                             "STAT": "RunBCDEF_SF_ID_syst.root", "NUM_TrkHighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta_stat",
+                                             "SYST": "RunBCDEF_SF_ID_syst.root", "NUM_TrkHighPtID_DEN_genTracks_pair_newTuneP_probe_pt_abseta_syst"},
+                             "SoftID": {"RunBCDEF_SF_ID_syst.root", "NUM_SoftID_DEN_genTracks_pt_abseta",
+                                        "STAT": "RunBCDEF_SF_ID_syst.root", "NUM_SoftID_DEN_genTracks_pt_abseta_stat",
+                                        "SYST": "RunBCDEF_SF_ID_syst.root", "NUM_SoftID_DEN_genTracks_pt_abseta_syst"},
+                             "LooseRelIso/LooseID": {"RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelIso_DEN_LooseID_pt_abseta",
+                                                     "STAT": "RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelIso_DEN_LooseID_pt_abseta_stat",
+                                                     "SYST": "RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelIso_DEN_LooseID_pt_abseta_syst"},
+                             "LooseRelIso/MediumID": {"RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelIso_DEN_MediumID_pt_abseta",
+                                                      "STAT": "RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelIso_DEN_MediumID_pt_abseta_stat",
+                                                      "SYST": "RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelIso_DEN_MediumID_pt_abseta_syst"},
+                             "TightRelIso/MediumID": {"RunBCDEF_SF_ISO_syst.root", "NUM_TightRelIso_DEN_MediumID_pt_abseta",
+                                                      "STAT": "RunBCDEF_SF_ISO_syst.root", "NUM_TightRelIso_DEN_MediumID_pt_abseta_stat",
+                                                      "SYST": "RunBCDEF_SF_ISO_syst.root", "NUM_TightRelIso_DEN_MediumID_pt_abseta_syst"},
+                             "LooseRelIso/TightIDandIPCut": {"RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelIso_DEN_TightIDandIPCut_pt_abseta",
+                                                             "STAT": "RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelIso_DEN_TightIDandIPCut_pt_abseta_stat",
+                                                             "SYST": "RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelIso_DEN_TightIDandIPCut_pt_abseta_syst"},
+                             "TightRelIso/TightIDandIPCut": {"RunBCDEF_SF_ISO_syst.root", "NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta",
+                                                             "STAT": "RunBCDEF_SF_ISO_syst.root", "NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta_stat",
+                                                             "SYST": "RunBCDEF_SF_ISO_syst.root", "NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta_syst"},
+                             "LooseRelTkIso/TrkHighPtID": {"RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta",
+                                                           "STAT": "RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta_stat",
+                                                           "SYST": "RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta_syst"},
+                             "TightRelTkIso/TrkHighPtID": {"RunBCDEF_SF_ISO_syst.root", "NUM_TightRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta",
+                                                           "STAT": "RunBCDEF_SF_ISO_syst.root", "NUM_TightRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta_stat",
+                                                           "SYST": "RunBCDEF_SF_ISO_syst.root", "NUM_TightRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta_syst"},
+                             "LooseRelTkIso/HighPtIDandIPCut": {"RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta",
+                                                                "STAT": "RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta_stat",
+                                                                "SYST": "RunBCDEF_SF_ISO_syst.root", "NUM_LooseRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta_syst"},
+                             "TightRelTkIso/HighPtIDandIPCut": {"RunBCDEF_SF_ISO_syst.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta",
+                                                                "STAT": "RunBCDEF_SF_ISO_syst.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta_stat",
+                                                                "SYST": "RunBCDEF_SF_ISO_syst.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta_syst"}   
+                         },
+                    "2018": {"TRG_SL_preRun316361": {"EfficienciesAndSF_2018Data_BeforeMuonHLTUpdate.root", "IsoMu24_PtEtaBins/pt_abseta_ratio",
+                                                     "STAT": "EfficienciesAndSF_2018Data_BeforeMuonHLTUpdate.root", "IsoMu24_PtEtaBins/pt_abseta_ratio"},
+                             "TRG_SL": {"EfficienciesAndSF_2018Data_AfterMuonHLTUpdate.root", "IsoMu24_PtEtaBins/pt_abseta_ratio",
+                                        "STAT": "EfficienciesAndSF_2018Data_AfterMuonHLTUpdate.root", "IsoMu24_PtEtaBins/pt_abseta_ratio"},
+                             "LooseID": {"RunABCD_SF_ID.root", "NUM_LooseID_DEN_TrackerMuons_pt_abseta",
+                                         "STAT": "RunABCD_SF_ID.root", "NUM_LooseID_DEN_TrackerMuons_pt_abseta_stat",
+                                         "SYST": "RunABCD_SF_ID.root", "NUM_LooseID_DEN_TrackerMuons_pt_abseta_syst"},
+                             "MediumID": {"RunABCD_SF_ID.root", "NUM_MediumID_DEN_TrackerMuons_pt_abseta",
+                                          "STAT": "RunABCD_SF_ID.root", "NUM_MediumID_DEN_TrackerMuons_pt_abseta_stat",
+                                          "SYST": "RunABCD_SF_ID.root", "NUM_MediumID_DEN_TrackerMuons_pt_abseta_syst"},
+                             "TightID": {"RunABCD_SF_ID.root", "NUM_TightID_DEN_TrackerMuons_pt_abseta",
+                                         "STAT": "RunABCD_SF_ID.root", "NUM_TightID_DEN_TrackerMuons_pt_abseta_stat",
+                                         "SYST": "RunABCD_SF_ID.root", "NUM_TightID_DEN_TrackerMuons_pt_abseta_syst"},
+                             "HighPtID": {"RunABCD_SF_ID.root", "NUM_HighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta",
+                                          "STAT": "RunABCD_SF_ID.root", "NUM_HighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta_stat",
+                                          "SYST": "RunABCD_SF_ID.root", "NUM_HighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta_syst"},
+                             "TrkHighPtID": {"RunABCD_SF_ID.root", "NUM_TrkHighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta",
+                                             "STAT": "RunABCD_SF_ID.root", "NUM_TrkHighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta_stat",
+                                             "SYST": "RunABCD_SF_ID.root", "NUM_TrkHighPtID_DEN_TrackerMuons_pair_newTuneP_probe_pt_abseta_syst"},
+                             "SoftID": {"RunABCD_SF_ID.root", "NUM_SoftID_DEN_TrackerMuons_pt_abseta",
+                                        "STAT": "RunABCD_SF_ID.root", "NUM_SoftID_DEN_TrackerMuons_pt_abseta_stat",
+                                        "SYST": "RunABCD_SF_ID.root", "NUM_SoftID_DEN_TrackerMuons_pt_abseta_syst"},
+                             "MediumPromptID": {"RunABCD_SF_ID.root", "NUM_MediumPromptID_DEN_TrackerMuons_pt_abseta",
+                                                "STAT": "RunABCD_SF_ID.root", "NUM_MediumPromptID_DEN_TrackerMuons_pt_abseta_stat",
+                                                "SYST": "RunABCD_SF_ID.root", "NUM_MediumPromptID_DEN_TrackerMuons_pt_abseta_syst"},
+                             "LooseRelIso/LooseID": {"RunABCD_SF_ISO.root", "NUM_LooseRelIso_DEN_LooseID_pt_abseta",
+                                                     "STAT": "RunABCD_SF_ISO.root", "NUM_LooseRelIso_DEN_LooseID_pt_abseta_stat",
+                                                     "SYST": "RunABCD_SF_ISO.root", "NUM_LooseRelIso_DEN_LooseID_pt_abseta_syst"},
+                             "LooseRelIso/MediumID": {"RunABCD_SF_ISO.root", "NUM_LooseRelIso_DEN_MediumID_pt_abseta",
+                                                      "STAT": "RunABCD_SF_ISO.root", "NUM_LooseRelIso_DEN_MediumID_pt_abseta_stat",
+                                                      "SYST": "RunABCD_SF_ISO.root", "NUM_LooseRelIso_DEN_MediumID_pt_abseta_syst"},
+                             "LooseRelIso/TightIDandIPCut": {"RunABCD_SF_ISO.root", "NUM_LooseRelIso_DEN_TightIDandIPCut_pt_abseta",
+                                                             "STAT": "RunABCD_SF_ISO.root", "NUM_LooseRelIso_DEN_TightIDandIPCut_pt_abseta_stat",
+                                                             "SYST": "RunABCD_SF_ISO.root", "NUM_LooseRelIso_DEN_TightIDandIPCut_pt_abseta_syst"},
+                             "TightRelIso/MediumID": {"RunABCD_SF_ISO.root", "NUM_TightRelIso_DEN_MediumID_pt_abseta",
+                                                      "STAT": "RunABCD_SF_ISO.root", "NUM_TightRelIso_DEN_MediumID_pt_abseta_stat",
+                                                      "SYST": "RunABCD_SF_ISO.root", "NUM_TightRelIso_DEN_MediumID_pt_abseta_syst"},
+                             "TightRelIso/TightIDandIPCut": {"RunABCD_SF_ISO.root", "NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta",
+                                                             "STAT": "RunABCD_SF_ISO.root", "NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta_stat",
+                                                             "SYST": "RunABCD_SF_ISO.root", "NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta_syst"},
+                             "LooseRelTkIso/TrkHighPtID": {"RunABCD_SF_ISO.root", "NUM_LooseRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta",
+                                                           "STAT": "RunABCD_SF_ISO.root", "NUM_LooseRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta_stat",
+                                                           "SYST": "RunABCD_SF_ISO.root", "NUM_LooseRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta_syst"},
+                             "LooseRelTkIso/HighPtIDandIPCut": {"RunABCD_SF_ISO.root", "NUM_LooseRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta",
+                                                                "STAT": "RunABCD_SF_ISO.root", "NUM_LooseRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta_stat",
+                                                                "SYST": "RunABCD_SF_ISO.root", "NUM_LooseRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta_syst"},
+                             "TightRelTkIso/TrkHighPtID": {"RunABCD_SF_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta",
+                                                           "STAT": "RunABCD_SF_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta_stat",
+                                                           "SYST": "RunABCD_SF_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtID_pair_newTuneP_probe_pt_abseta_syst"},
+                             "TightRelTkIso/HighPtIDandIPCut": {"RunABCD_SF_ISO.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta",
+                                                                "STAT": "RunABCD_SF_ISO.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta_stat",
+                                                                "SYST": "RunABCD_SF_ISO.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta_syst"}
+                         }
+                }
+std::map< std::string, std::vector<std::string> > ret;
+    
+  }
   // std::pair< ROOT::RDF::RNode, std::vector<LUT*> > AddLeptonSF(ROOT::RDF::RNode df, std::string_view era, std::map< std::string, std::vector<std::string> > idmap){
   std::pair< ROOT::RDF::RNode, std::string > AddLeptonSF(ROOT::RDF::RNode df, std::string_view era, std::map< std::string, std::vector<std::string> > idmap){
     //idmap is a key :: value map with the key being keywords MuonID, MuonISO, ElectronID, ElectronEFF, ElectronEFFLow
