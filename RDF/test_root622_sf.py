@@ -25,6 +25,20 @@ ROOT.gROOT.ProcessLine("LUT *test2LUTClone(test2LUT);")
 cppLUTClone = getattr(ROOT, "test2LUTClone")
 print("cppLUT clone test", cppLUTClone.TH2Lookup("Test", 35, 1.7))
 
+ROOT.gInterpreter.Declare("std::map<std::string, std::vector<std::string>> testMAP;")
+testMAP = getattr(ROOT, "testMAP")
+testMAP["Muon_SF_ID_nom"].push_back("/afs/cern.ch/user/n/nmangane/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/2017/RunBCDEF_SF_ISO_syst.root")
+testMAP["Muon_SF_ID_nom"].push_back("NUM_TightRelIso_DEN_MediumID_pt_abseta")
+testMAP["Muon_SF_ID_nom"].push_back("TH2Lookup")
+testMAP["Muon_SF_ID_nom"].push_back("Muon_pt")
+testMAP["Muon_SF_ID_nom"].push_back("Muon_eta")
+
+
+print("testing LUTManager")
+LUTManager = ROOT.LUTManager()
+LUTManager.Add(testMAP)
+LUTManager.Finalize(5)
+
 # "RunBCDEF_SF_ISO_syst.root==NUM_TightRelIso_DEN_MediumID_pt_abseta",
 # "STAT": "RunBCDEF_SF_ISO_syst.root==NUM_TightRelIso_DEN_MediumID_pt_abseta_stat",
 # "SYST": "RunBCDEF_SF_ISO_syst.root==NUM_TightRelIso_DEN_MediumID_pt_abseta_syst"
@@ -47,17 +61,8 @@ rdf2 = rdf.Define("Muon_SF_ID_altnom", "ROOT::VecOps::RVec<double> ret = {}; "\
                   "}"\
                   "return ret;"
               )
-ROOT.gInterpreter.Declare("std::map<std::string, std::vector<std::string>> testMAP;")
 
 era = "2017"
-
-testMAP = getattr(ROOT, "testMAP")
-testMAP["TEST"].push_back("Hello")
-testMAP["TEST"].push_back("There")
-testMAP["TEST"].push_back("Poppet!")
-testMAP["MuonID"].push_back("A key")
-testMAP["MuonID"].push_back("A File")
-testMAP["MuonID"].push_back("A Histogram")
 
 node_and_vecLUT = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(rdf2), era, testMAP)
 rdf3 = node_and_vecLUT.first

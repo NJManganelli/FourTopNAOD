@@ -219,6 +219,51 @@ double LUT::TH3LookupErr(std::string key, X xval, Y yval, Z zval){
   }
 }
 
+class LUTManager {
+  //LookUp Table Manager for 
+public:
+  LUTManager() {origin = new LUT(); lut_vector = std::make_shared< std::vector<LUT*> >();}
+  ~LUTManager() {}
+  void Add(std::map< std::string, std::vector<std::string> > idmap);
+  void Finalize(int nThreads);
+std::shared_ptr< std::vector<LUT*> > GetLUTVector();
+
+private:
+  std::shared_ptr< std::vector<LUT*> > lut_vector; // = std::make_shared< std::vector<LUT*> >();
+  LUT *origin;
+};
+void LUTManager::Add(std::map< std::string, std::vector<std::string> > idmap) {
+  for(std::map< std::string, std::vector<std::string> >::iterator id_iter = idmap.begin(); id_iter != idmap.end(); ++id_iter){
+    std::cout << "Key: " << id_iter->first << std::endl;
+    std::cout << "Values: ";
+    std::vector<std::string> vec_values = id_iter->second;
+    for(std::vector<std::string>::iterator vector_iter = id_iter->second.begin(); vector_iter != id_iter->second.end(); ++vector_iter){
+      std::cout << *vector_iter;
+      //LUT *test2LUT;
+      //test2LUT = new LUT; //also new LUT ( <initialization parameters> ) in C++ regular syntax
+    }
+    std::cout << std::endl;
+    //Load each map into the origin LUT, from which all others will be copied in the finalize method
+    if(vec_values.size() > 1){
+      std::cout << vec_values[0] << " " << vec_values[1] << std::endl;
+      origin->Add(vec_values[0], vec_values[1], id_iter->first);
+    }
+      // std::cout << test2LUT->TH2Lookup("Test", 35, 1.7) << std::endl;
+    // std::cout << " Values: " << id_iter->second << std::endl;
+  }
+
+  std::cout << "Finalizing" << std::endl;
+}
+void LUTManager::Finalize(int nThreads) {
+  for(int n_iter = 0; n_iter < nThreads; ++n_iter){
+    LUT *temp = new LUT(*origin);
+    lut_vector->push_back(temp);
+  }
+}
+std::shared_ptr< std::vector<LUT*> > LUTManager::GetLUTVector(){
+  return lut_vector;
+}
+
 class baseLUT {
   //LookUp Table
 public:
