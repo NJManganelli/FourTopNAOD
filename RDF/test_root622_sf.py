@@ -25,6 +25,12 @@ ROOT.gROOT.ProcessLine("LUT *test2LUTClone(test2LUT);")
 cppLUTClone = getattr(ROOT, "test2LUTClone")
 print("cppLUT clone test", cppLUTClone.TH2Lookup("Test", 35, 1.7))
 
+print("python clone test fails, there are no keys when the clone is invoked from the python side.... love it")
+pythonLUTClone = ROOT.LUT(cppLUT)
+print("keys in cppLUT: ", cppLUT.TH2Keys())
+print("keys in cppLUT clone: ", cppLUTClone.TH2Keys())
+print("keys in pythonLUT clone: ", pythonLUTClone.TH2Keys())
+
 ROOT.gInterpreter.Declare("std::map<std::string, std::vector<std::string>> testMAP;")
 testMAP = getattr(ROOT, "testMAP")
 testMAP["Muon_SF_ID_nom"].push_back("/afs/cern.ch/user/n/nmangane/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/2017/RunBCDEF_SF_ISO_syst.root")
@@ -38,6 +44,11 @@ print("testing LUTManager")
 LUTManager = ROOT.LUTManager()
 LUTManager.Add(testMAP)
 LUTManager.Finalize(5)
+vectorLUTs = LUTManager.GetLUTVector()
+print(vectorLUTs[0].TH1Keys())
+print(vectorLUTs[0].TH2Keys())
+print(vectorLUTs[0].TH3Keys())
+# print("vector of LUTs: ", vectorLUTs, vectorLUTs[0].TH2Lookup("Muon_SF_ID_nom", 35, 1.7))
 
 # "RunBCDEF_SF_ISO_syst.root==NUM_TightRelIso_DEN_MediumID_pt_abseta",
 # "STAT": "RunBCDEF_SF_ISO_syst.root==NUM_TightRelIso_DEN_MediumID_pt_abseta_stat",

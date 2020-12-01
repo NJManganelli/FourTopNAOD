@@ -32,6 +32,9 @@ public:
   LUT(const LUT &lut);
   ~LUT() {}
   void Add(std::string file, std::string path, std::string handle = "");
+  std::vector<std::string> TH1Keys();
+  std::vector<std::string> TH2Keys();
+  std::vector<std::string> TH3Keys();
 
   template <typename X>
   double TH1Lookup(std::string key, X xval);
@@ -55,7 +58,6 @@ private:
   
 };
 LUT::LUT(const LUT &lut) {
-
   TUUID uuid = TUUID();
   std::map<std::string, TH1*> _LUT_MAP_TH1;
   std::map<std::string, TH2*> _LUT_MAP_TH2;
@@ -65,14 +67,17 @@ LUT::LUT(const LUT &lut) {
   for(auto th1_iter = lut._LUT_MAP_TH1.begin(); th1_iter != lut._LUT_MAP_TH1.end(); ++th1_iter){
     std::string name = static_cast<std::string>(th1_iter->second->GetName()) + "___" + uuid.AsString();
     _LUT_MAP_TH1[th1_iter->first] = static_cast<TH1*>(th1_iter->second->Clone(name.c_str()));
+    _LUT_MAP_TH1[th1_iter->first]->SetDirectory(0);
   }
   for(auto th2_iter = lut._LUT_MAP_TH2.begin(); th2_iter != lut._LUT_MAP_TH2.end(); ++th2_iter){
     std::string name = static_cast<std::string>(th2_iter->second->GetName()) + "___" + uuid.AsString();
     _LUT_MAP_TH2[th2_iter->first] = static_cast<TH2*>(th2_iter->second->Clone(name.c_str()));
+    _LUT_MAP_TH2[th2_iter->first]->SetDirectory(0);
   }
   for(auto th3_iter = lut._LUT_MAP_TH3.begin(); th3_iter != lut._LUT_MAP_TH3.end(); ++th3_iter){
     std::string name = static_cast<std::string>(th3_iter->second->GetName()) + "___" + uuid.AsString();
     _LUT_MAP_TH3[th3_iter->first] = static_cast<TH3*>(th3_iter->second->Clone(name.c_str()));
+    _LUT_MAP_TH3[th3_iter->first]->SetDirectory(0);
   }
 }  
 void LUT::Add(std::string file, std::string path, std::string handle = "") {
@@ -121,6 +126,27 @@ void LUT::Add(std::string file, std::string path, std::string handle = "") {
       throw std::runtime_error( "LookUpTable got a null pointer opening up the file: " + file );
   }
       
+}
+std::vector<std::string> LUT::TH1Keys(){
+  std::vector<std::string> ret;
+  for(std::map< std::string, TH1* >::iterator th1_iter = _LUT_MAP_TH1.begin(); th1_iter != _LUT_MAP_TH1.end(); ++th1_iter){
+    ret.push_back(th1_iter->first);
+  }  
+  return ret;
+}
+std::vector<std::string> LUT::TH2Keys(){
+  std::vector<std::string> ret;
+  for(std::map< std::string, TH2* >::iterator th2_iter = _LUT_MAP_TH2.begin(); th2_iter != _LUT_MAP_TH2.end(); ++th2_iter){
+    ret.push_back(th2_iter->first);
+  }  
+  return ret;
+}
+std::vector<std::string> LUT::TH3Keys(){
+  std::vector<std::string> ret;
+  for(std::map< std::string, TH3* >::iterator th3_iter = _LUT_MAP_TH3.begin(); th3_iter != _LUT_MAP_TH3.end(); ++th3_iter){
+    ret.push_back(th3_iter->first);
+  }  
+  return ret;
 }
 template<typename X>
 double LUT::TH1Lookup(std::string key, X xval){
@@ -220,7 +246,7 @@ double LUT::TH3LookupErr(std::string key, X xval, Y yval, Z zval){
 }
 
 class LUTManager {
-  //LookUp Table Manager for 
+  //LookUp Table Manager
 public:
   LUTManager() {origin = new LUT(); lut_vector = std::make_shared< std::vector<LUT*> >();}
   ~LUTManager() {}
@@ -239,8 +265,6 @@ void LUTManager::Add(std::map< std::string, std::vector<std::string> > idmap) {
     std::vector<std::string> vec_values = id_iter->second;
     for(std::vector<std::string>::iterator vector_iter = id_iter->second.begin(); vector_iter != id_iter->second.end(); ++vector_iter){
       std::cout << *vector_iter;
-      //LUT *test2LUT;
-      //test2LUT = new LUT; //also new LUT ( <initialization parameters> ) in C++ regular syntax
     }
     std::cout << std::endl;
     //Load each map into the origin LUT, from which all others will be copied in the finalize method
@@ -248,15 +272,12 @@ void LUTManager::Add(std::map< std::string, std::vector<std::string> > idmap) {
       std::cout << vec_values[0] << " " << vec_values[1] << std::endl;
       origin->Add(vec_values[0], vec_values[1], id_iter->first);
     }
-      // std::cout << test2LUT->TH2Lookup("Test", 35, 1.7) << std::endl;
-    // std::cout << " Values: " << id_iter->second << std::endl;
   }
-
   std::cout << "Finalizing" << std::endl;
 }
 void LUTManager::Finalize(int nThreads) {
   for(int n_iter = 0; n_iter < nThreads; ++n_iter){
-    LUT *temp = new LUT(*origin);
+    LUT *temp(origin);
     lut_vector->push_back(temp);
   }
 }
