@@ -590,6 +590,7 @@ namespace FTA{
 								    std::string electron_id = "", 
 								    std::string electron_eff = "",
 								    std::string btag_top_path = "", 
+								    std::vector<std::string> btag_process_names = {},
 								    std::string btag_doAggregate = "btag_noAggregate", 
 								    std::string btag_event = "btag_HT_nJet"){
     //python constructor:
@@ -609,6 +610,10 @@ namespace FTA{
       std::string muon_path = muon_top_path + "/" + era + "/" + legacy + "/" + VFP + "/";
       std::string electron_path = electron_top_path + "/" + era + "/" + legacy + "/" + VFP + "/";
     }
+    
+    std::cout << "Era: " << era << "\nLegacy: " << legacy <<  "\nPreVFP: " << VFP << "\nMuon top path: " << muon_top_path << "\nElectron top path: " << electron_top_path;
+    std::cout << "\nBtag top path: " << btag_top_path << std::endl;
+
     //mu_pre = "{0:s}/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/{1:s}/".format(os.environ['CMSSW_BASE'], self.era)
     //store the ID map per era, with a path being prepended to the filenames listed below at the end
     std::map< std::string, std::vector<std::string> > electron_options_central;
@@ -829,18 +834,18 @@ namespace FTA{
 	muon_options_central["HighPtID"] =               {"Mu_ID.root", "MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/pair_ne_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
 	muon_options_syst["HighPtID"] =                  {"Mu_ID.root", "MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/pair_ne_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
 
-	muon_options_central["LooseRelIso/LooseID"] =    {"Mu_Iso.root", "LooseISO_LooseID_pt_eta/pt_abseta_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
-	muon_options_syst["LooseRelIso/LooseID"] =       {"Mu_Iso.root", "LooseISO_LooseID_pt_eta/pt_abseta_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
-	muon_options_central["LooseRelIso/MediumID"] =   {"Mu_Iso.root", "LooseISO_MediumID_pt_eta/pt_abseta_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
-	muon_options_syst["LooseRelIso/MediumID"] =      {"Mu_Iso.root", "LooseISO_MediumID_pt_eta/pt_abseta_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
-	muon_options_central["LooseRelIso/TightID"] =    {"Mu_Iso.root", "LooseISO_TightID_pt_eta/pt_abseta_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
-	muon_options_syst["LooseRelIso/TightID"] =       {"Mu_Iso.root", "LooseISO_TightID_pt_eta/pt_abseta_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
-	muon_options_central["TightRelIso/MediumID"] =   {"Mu_Iso.root", "TightISO_MediumID_pt_eta/pt_abseta_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
-	muon_options_syst["TightRelIso/MediumID"] =      {"Mu_Iso.root", "TightISO_MediumID_pt_eta/pt_abseta_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
-	muon_options_central["TightRelIso/TightID"] =    {"Mu_Iso.root", "TightISO_TightID_pt_eta/pt_abseta_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
-	muon_options_syst["TightRelIso/TightID"] =       {"Mu_Iso.root", "TightISO_TightID_pt_eta/pt_abseta_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
-	muon_options_central["LooseRelTkIso/HighPtID"] = {"Mu_Iso.root", "tkLooseISO_highptID_newpt_eta/pair_ne_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
-	muon_options_syst["LooseRelTkIso/HighPtID"] =    {"Mu_Iso.root", "tkLooseISO_highptID_newpt_eta/pair_ne_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
+	muon_options_central["LooseRelIso_LooseID"] =    {"Mu_Iso.root", "LooseISO_LooseID_pt_eta/pt_abseta_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
+	muon_options_syst["LooseRelIso_LooseID"] =       {"Mu_Iso.root", "LooseISO_LooseID_pt_eta/pt_abseta_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
+	muon_options_central["LooseRelIso_MediumID"] =   {"Mu_Iso.root", "LooseISO_MediumID_pt_eta/pt_abseta_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
+	muon_options_syst["LooseRelIso_MediumID"] =      {"Mu_Iso.root", "LooseISO_MediumID_pt_eta/pt_abseta_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
+	muon_options_central["LooseRelIso_TightID"] =    {"Mu_Iso.root", "LooseISO_TightID_pt_eta/pt_abseta_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
+	muon_options_syst["LooseRelIso_TightID"] =       {"Mu_Iso.root", "LooseISO_TightID_pt_eta/pt_abseta_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
+	muon_options_central["TightRelIso_MediumID"] =   {"Mu_Iso.root", "TightISO_MediumID_pt_eta/pt_abseta_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
+	muon_options_syst["TightRelIso_MediumID"] =      {"Mu_Iso.root", "TightISO_MediumID_pt_eta/pt_abseta_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
+	muon_options_central["TightRelIso_TightID"] =    {"Mu_Iso.root", "TightISO_TightID_pt_eta/pt_abseta_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
+	muon_options_syst["TightRelIso_TightID"] =       {"Mu_Iso.root", "TightISO_TightID_pt_eta/pt_abseta_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
+	muon_options_central["LooseRelTkIso_HighPtID"] = {"Mu_Iso.root", "tkLooseISO_highptID_newpt_eta/pair_ne_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
+	muon_options_syst["LooseRelTkIso_HighPtID"] =    {"Mu_Iso.root", "tkLooseISO_highptID_newpt_eta/pair_ne_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
       }
       else if(legacy == "UL" && VFP == "preVFP"){
 	muon_options_central["HighPtID"] =		{"Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
@@ -1188,7 +1193,45 @@ namespace FTA{
 	muon_options_syst["TightRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2018_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_syst", "TH2Lookup", "Muon_eta", "Muon_pt"};
       }
     }//era is 2018
+
+
+    //std::string era,std::string legacy,std::string VFP="",std::string muon_top_path = "",std::string muon_id = "",std::string muon_iso = ""
+    //std::string electron_top_path = "",std::string electron_id = "",std::string electron_eff = ""
+    //std::string btag_top_path = "",std::string btag_doAggregate = "btag_noAggregate",std::string btag_event = "btag_HT_nJet"
+
     std::map< std::string, std::vector<std::string> > ret;
+    if(muon_id != ""){
+      if(muon_options_central.find(muon_id) != muon_options_central.end()) 
+	ret["Muon_SF_ID_nom"] = muon_options_central[muon_id];
+      if(muon_options_stat.find(muon_id) != muon_options_stat.end()) 
+	ret["Muon_SF_ID_stat"] = muon_options_stat[muon_id];
+      if(muon_options_syst.find(muon_id) != muon_options_syst.end()) 
+	ret["Muon_SF_ID_syst"] = muon_options_syst[muon_id];
+    }
+    if(muon_iso != ""){
+      if(muon_options_central.find(muon_iso) != muon_options_central.end()) 
+	ret["Muon_SF_ISO_nom"] = muon_options_central[muon_iso];
+      if(muon_options_stat.find(muon_iso) != muon_options_stat.end()) 
+	ret["Muon_SF_ISO_stat"] = muon_options_stat[muon_iso];
+      if(muon_options_syst.find(muon_iso) != muon_options_syst.end()) 
+	ret["Muon_SF_ISO_syst"] = muon_options_syst[muon_iso];
+    }
+    if(electron_id != ""){
+      if(electron_options_central.find(electron_id) != electron_options_central.end()) 
+	ret["Electron_SF_ID_nom"] = electron_options_central[electron_id];
+      if(electron_options_uncertainty.find(electron_id) != electron_options_uncertainty.end()) 
+	ret["Electron_SF_ID_unc"] = electron_options_uncertainty[electron_id];
+    }
+    if(electron_eff != ""){
+      if(electron_options_central.find("EFF_ptBelow20") != electron_options_central.end()) 
+	ret["Electron_SF_EFF_ptBelow20_nom"] = electron_options_central["EFF_ptBelow20"];
+      if(electron_options_uncertainty.find("EFF_ptBelow20") != electron_options_uncertainty.end()) 
+	ret["Electron_SF_EFF_ptAbove20_unc"] = electron_options_uncertainty["EFF_ptBelow20"];
+      if(electron_options_central.find("EFF_ptAbove20") != electron_options_central.end()) 
+	ret["Electron_SF_EFF_ptAbove20_nom"] = electron_options_central["EFF_ptAbove20"];
+      if(electron_options_uncertainty.find("EFF_ptAbove20") != electron_options_uncertainty.end()) 
+	ret["Electron_SF_EFF_ptAbove20_unc"] = electron_options_uncertainty["EFF_ptAbove20"];
+    }    
     return ret;
   }
 

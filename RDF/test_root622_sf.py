@@ -83,6 +83,20 @@ print(np.keys())
 print(len(np["Muon_SF_ID_altnom"]))
 
 
+print("Testing GetCorrectorMap method")
+ROOT.gInterpreter.Declare("std::vector<std::string> testBtag;")
+testBtag = getattr(ROOT, "testBtag")
+testBtag.push_back("tt_DL")
+testBtag.push_back("tt_DL-GF")
+testBtag.push_back("tttt")
+
+cm = ROOT.FTA.GetCorrectorMap(era, "non-UL", "", "../Kai/python/data/leptonSF/Muon", "MediumID", "TightRelIso_MediumID",
+                              "../Kai/python/data/leptonSF/Electron", "Medium", "UseEfficiency",
+                              "/eos/user/n/nmangane/analysis/NovemberTest/BTaggingYields",
+                              testBtag,
+                              "btag_noAggregate",
+                              "btag_HT_nJet")
+
 # TProfile2DModel::TProfile2DModel(const char* name, const char* title, int nbinsx, const double* xbins, int nbinsy, const double* ybins, const char* option = "")
 #                     ModelBefore = ROOT.RDF.TH2DModel("{}_BTaggingYield_{}_sumW_before".format(processName, btagSFProduct.replace("btagSFProduct_","")),
 #                                                      "BTaggingYield #Sigma#omega_{before}; HT; nJet",
