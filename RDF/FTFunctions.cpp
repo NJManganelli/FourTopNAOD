@@ -596,7 +596,7 @@ namespace FTA{
     //def __init__(self, muon_ID=None, muon_ISO=None, electron_ID=None, era=None, doMuonHLT=False, doElectronHLT_ZVtx=False, 
     //pre2018Run316361Lumi = 8.942, post2018Run316361Lumi = 50.785
 
-    //about paths... will probably need to do a sub-folder for /non-UL and /UL due to file naming conventions...
+    //about paths... 
     //el_pre = "{0:s}/src/FourTopNAOD/Kai/python/data/leptonSF/Electron/{1:s}/".format(os.environ['CMSSW_BASE'], self.era)
     if(era != "2016" && legacy != "UL"){
       std::string muon_path = muon_top_path + "/" + era + "/" + legacy + "/";
@@ -636,169 +636,166 @@ namespace FTA{
     // sf_el_id_unc.append(self._worker_el_ID.getSFErr(el.pdgId, el.pt, el.eta));
     if(era == "2016"){
       if(legacy == "non-UL"){
-	electron_options_central["EFF_lowEt"] =   {"EGM2D_BtoH_low_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup"};
-	electron_options_central["EFF_highEt"] =  {"EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup"};
-	electron_options_central["LooseID"]  =    {"2016LegacyReReco_ElectronLoose_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MediumID"]  =   {"2016LegacyReReco_ElectronMedium_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["TightID"]  =    {"2016LegacyReReco_ElectronTight_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80iso"]  =   {"2016LegacyReReco_ElectronMVA80_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80noiso"]  = {"2016LegacyReReco_ElectronMVA80noiso_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90iso"]  =   {"2016LegacyReReco_ElectronMVA90_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90noiso"]  = {"2016LegacyReReco_ElectronMVA90noiso_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_uncertainty["EFF_lowEt"] =   {"EGM2D_BtoH_low_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2LookupErr"};
-	electron_options_uncertainty["EFF_highEt"] =  {"EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2LookupErr"};
-	electron_options_uncertainty["LooseID"]  =    {"2016LegacyReReco_ElectronLoose_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MediumID"]  =   {"2016LegacyReReco_ElectronMedium_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["TightID"]  =    {"2016LegacyReReco_ElectronTight_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80iso"]  =   {"2016LegacyReReco_ElectronMVA80_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80noiso"]  = {"2016LegacyReReco_ElectronMVA80noiso_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90iso"]  =   {"2016LegacyReReco_ElectronMVA90_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90noiso"]  = {"2016LegacyReReco_ElectronMVA90noiso_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", };
+	electron_options_central["EFF_ptBelow20"] =	{"EGM2D_BtoH_low_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["EFF_ptBelow20"] = {"EGM2D_BtoH_low_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2LookupErr""Electron_eta", "Electron_pt"};
+	electron_options_central["EFF_ptAbove20"] =	{"EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["EFF_ptAboe20"] =  {"EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2LookupErr""Electron_eta", "Electron_pt"};
+	electron_options_central["LooseID"]  =		{"2016LegacyReReco_ElectronLoose_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["LooseID"]  =	{"2016LegacyReReco_ElectronLoose_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MediumID"]  =		{"2016LegacyReReco_ElectronMedium_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MediumID"]  =	{"2016LegacyReReco_ElectronMedium_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["TightID"]  =		{"2016LegacyReReco_ElectronTight_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["TightID"]  =	{"2016LegacyReReco_ElectronTight_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80iso"]  =		{"2016LegacyReReco_ElectronMVA80_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80iso"]  =	{"2016LegacyReReco_ElectronMVA80_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80noiso"]  =	{"2016LegacyReReco_ElectronMVA80noiso_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80noiso"]  =	{"2016LegacyReReco_ElectronMVA80noiso_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90iso"]  =		{"2016LegacyReReco_ElectronMVA90_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90iso"]  =	{"2016LegacyReReco_ElectronMVA90_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90noiso"]  =	{"2016LegacyReReco_ElectronMVA90noiso_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90noiso"]  =	{"2016LegacyReReco_ElectronMVA90noiso_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
       }
       elif(legacy == "UL" && VFP == "preVFP"){
-	electron_options_central["EFF_lowEt"] =   {"egammaEffi_ptBelow20.txt_EGM2D_UL2016preVFP.root", "EGamma_SF2D", "TH2Lookup"};
-	electron_options_central["EFF_highEt"] =  {"egammaEffi_ptAbove20.txt_EGM2D_UL2016preVFP.root", "EGamma_SF2D", "TH2Lookup"};
-	electron_options_central["VetoID"]  =     {"egammaEffi.txt_Ele_Veto_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["LooseID"]  =    {"egammaEffi.txt_Ele_Loose_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MediumID"]  =   {"egammaEffi.txt_Ele_Medium_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["TightID"]  =    {"egammaEffi.txt_Ele_Tight_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80iso"]  =   {"egammaEffi.txt_Ele_wp80iso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80noiso"]  = {"egammaEffi.txt_Ele_wp80noiso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90iso"]  =   {"egammaEffi.txt_Ele_wp90iso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90noiso"]  = {"egammaEffi.txt_Ele_wp90noiso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-
-	electron_options_uncertainty["EFF_lowEt"] =   {"egammaEffi_ptBelow20.txt_EGM2D_UL2016preVFP.root", "EGamma_SF2D", "TH2LookupErr"};
-	electron_options_uncertainty["EFF_highEt"] =  {"egammaEffi_ptAbove20.txt_EGM2D_UL2016preVFP.root", "EGamma_SF2D", "TH2LookupErr"};
-	electron_options_uncertainty["VetoID"]  =     {"egammaEffi.txt_Ele_Veto_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["LooseID"]  =    {"egammaEffi.txt_Ele_Loose_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MediumID"]  =   {"egammaEffi.txt_Ele_Medium_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["TightID"]  =    {"egammaEffi.txt_Ele_Tight_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80iso"]  =   {"egammaEffi.txt_Ele_wp80iso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80noiso"]  = {"egammaEffi.txt_Ele_wp80noiso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90iso"]  =   {"egammaEffi.txt_Ele_wp90iso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90noiso"]  = {"egammaEffi.txt_Ele_wp90noiso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
+	//Failed to deduce axis --> eta on x-axis, pt on y-axis. 
+	electron_options_central["EFF_ptAbove20"] =	{"egammaEffi_ptAbove20.txt_EGM2D_UL2016preVFP.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["EFF_ptAbove20"] = {"egammaEffi_ptAbove20.txt_EGM2D_UL2016preVFP.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["EFF_ptBelow20"] =	{"egammaEffi_ptBelow20.txt_EGM2D_UL2016preVFP.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["EFF_ptBelow20"] = {"egammaEffi_ptBelow20.txt_EGM2D_UL2016preVFP.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Veto"] =		{"egammaEffi.txt_Ele_Veto_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Veto"] =		{"egammaEffi.txt_Ele_Veto_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Loose"] =		{"egammaEffi.txt_Ele_Loose_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Loose"] =		{"egammaEffi.txt_Ele_Loose_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Medium"] =		{"egammaEffi.txt_Ele_Medium_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Medium"] =	{"egammaEffi.txt_Ele_Medium_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Tight"] =		{"egammaEffi.txt_Ele_Tight_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Tight"] =		{"egammaEffi.txt_Ele_Tight_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80iso"] =		{"egammaEffi.txt_Ele_wp80iso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80iso"] =	{"egammaEffi.txt_Ele_wp80iso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80noiso"] =	{"egammaEffi.txt_Ele_wp80noiso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80noiso"] =	{"egammaEffi.txt_Ele_wp80noiso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90iso"] =		{"egammaEffi.txt_Ele_wp90iso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90iso"] =	{"egammaEffi.txt_Ele_wp90iso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90noiso"] =	{"egammaEffi.txt_Ele_wp90noiso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90noiso"] =	{"egammaEffi.txt_Ele_wp90noiso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};	
       }
       elif(legacy == "UL" && VFP == "postVFP"){
 	std::cout << "WARNING: postVFP UL for 2016 is loading 2016 Legacy efficiencies, since postVFP UL versions haven't been made available as of writing.";
 	std::cout << std::endl;
-	electron_options_central["EFF_lowEt"] =   {"../../non-UL/EGM2D_BtoH_low_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup"};
-	electron_options_central["EFF_highEt"] =  {"../../non-UL/EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup"};
-	electron_options_central["VetoID"]  =     {"egammaEffi.txt_Ele_Veto_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["LooseID"]  =    {"egammaEffi.txt_Ele_Loose_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MediumID"]  =   {"egammaEffi.txt_Ele_Medium_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["TightID"]  =    {"egammaEffi.txt_Ele_Tight_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80iso"]  =   {"egammaEffi.txt_Ele_wp80iso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80noiso"]  = {"egammaEffi.txt_Ele_wp80noiso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90iso"]  =   {"egammaEffi.txt_Ele_wp90iso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90noiso"]  = {"egammaEffi.txt_Ele_wp90noiso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-
-	electron_options_uncertainty["EFF_lowEt"] =   {"../../non-UL/EGM2D_BtoH_low_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2LookupErr"};
-	electron_options_uncertainty["EFF_highEt"] =  {"../../non-UL/EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2LookupErr"};
-	electron_options_uncertainty["VetoID"]  =     {"egammaEffi.txt_Ele_Veto_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["LooseID"]  =    {"egammaEffi.txt_Ele_Loose_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MediumID"]  =   {"egammaEffi.txt_Ele_Medium_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["TightID"]  =    {"egammaEffi.txt_Ele_Tight_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80iso"]  =   {"egammaEffi.txt_Ele_wp80iso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80noiso"]  = {"egammaEffi.txt_Ele_wp80noiso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90iso"]  =   {"egammaEffi.txt_Ele_wp90iso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90noiso"]  = {"egammaEffi.txt_Ele_wp90noiso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
+	electron_options_central["EFF_ptBelow20"] =	{"../../non-UL/EGM2D_BtoH_low_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_central["EFF_ptBelow20"] =	{"../../non-UL/EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_central["EFF_ptAbove20"] =	{"../../non-UL/EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["EFF_ptAboe20"] =  {"../../non-UL/EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2LookupErr""Electron_eta", "Electron_pt"};
+	electron_options_central["Veto"] =		{"egammaEffi.txt_Ele_Veto_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Veto"] =		{"egammaEffi.txt_Ele_Veto_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Loose"] =		{"egammaEffi.txt_Ele_Loose_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Loose"] =		{"egammaEffi.txt_Ele_Loose_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Medium"] =		{"egammaEffi.txt_Ele_Medium_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Medium"] =	{"egammaEffi.txt_Ele_Medium_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Tight"] =		{"egammaEffi.txt_Ele_Tight_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Tight"] =		{"egammaEffi.txt_Ele_Tight_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80iso"] =		{"egammaEffi.txt_Ele_wp80iso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80iso"] =	{"egammaEffi.txt_Ele_wp80iso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80noiso"] =	{"egammaEffi.txt_Ele_wp80noiso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80noiso"] =	{"egammaEffi.txt_Ele_wp80noiso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90iso"] =		{"egammaEffi.txt_Ele_wp90iso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90iso"] =	{"egammaEffi.txt_Ele_wp90iso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90noiso"] =	{"egammaEffi.txt_Ele_wp90noiso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90noiso"] =	{"egammaEffi.txt_Ele_wp90noiso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
       }
     }
     elif(era == "2017"){
       if(legacy == "non-UL"){
 	std::cout << "WARNING: for 2017 non-UL, Efficiencies are both from the non-low Et measurements, in case this has changed..." << std::endl;
-	electron_options_central["Eff_lowEt"] =   {"egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["EFF_highEt"] =  {"egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["VetoID"] =      {"2017_ElectronWPVeto_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["LooseID"] =     {"2017_ElectronLoose.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MediumID"] =    {"2017_ElectronMedium.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["TightID"] =     {"2017_ElectronTight.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80iso"] =    {"2017_ElectronMVA80.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80noiso"] =  {"2017_ElectronMVA80noiso.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90iso"] =    {"2017_ElectronMVA90.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90noiso"] =  {"2017_ElectronMVA90noiso.root", "EGamma_SF2D", "TH2Lookup", };
-
-	electron_options_uncertainty["Eff_lowEt"] =   {"egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["EFF_highEt"] =  {"egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["VetoID"] =      {"2017_ElectronWPVeto_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["LooseID"] =     {"2017_ElectronLoose.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MediumID"] =    {"2017_ElectronMedium.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["TightID"] =     {"2017_ElectronTight.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80iso"] =    {"2017_ElectronMVA80.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80noiso"] =  {"2017_ElectronMVA80noiso.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90iso"] =    {"2017_ElectronMVA90.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90noiso"] =  {"2017_ElectronMVA90noiso.root", "EGamma_SF2D", "TH2LookupErr", };
+	electron_options_central["EFF_ptBelow20"] =	{"egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["EFF_ptBelow20"] = {"egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["EFF_ptAbove20"] =	{"egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["EFF_ptAbove20"] = {"egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Veto"] =		{"2017_ElectronWPVeto_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Veto"] =		{"2017_ElectronWPVeto_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Loose"] =		{"2017_ElectronLoose.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Loose"] =		{"2017_ElectronLoose.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Medium"] =		{"2017_ElectronMedium.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Medium"] =	{"2017_ElectronMedium.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Tight"] =		{"2017_ElectronTight.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Tight"] =		{"2017_ElectronTight.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80noiso"] =	{"2017_ElectronMVA80noiso.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80noiso"] =	{"2017_ElectronMVA80noiso.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80iso"] =		{"2017_ElectronMVA80.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80iso"] =	{"2017_ElectronMVA80.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90noiso"] =	{"2017_ElectronMVA90noiso.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90noiso"] =	{"2017_ElectronMVA90noiso.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90iso"] =		{"2017_ElectronMVA90.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90iso"] =	{"2017_ElectronMVA90.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
       }
       elif(legacy == "UL"){
-	electron_options_central["Eff_lowEt"] =   {"egammaEffi_ptBelow20.txt_EGM2D_UL2017.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["EFF_highEt"] =  {"egammaEffi_ptAbove20.txt_EGM2D_UL2017.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["VetoID"] =      {"egammaEffi.txt_EGM2D_Veto_UL17.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["LooseID"] =     {"egammaEffi.txt_EGM2D_Loose_UL17.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MediumID"] =    {"egammaEffi.txt_EGM2D_Medium_UL17.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["TightID"] =     {"egammaEffi.txt_EGM2D_Tight_UL17.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80iso"] =    {"egammaEffi.txt_EGM2D_MVA80iso_UL17.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80noiso"] =  {"egammaEffi.txt_EGM2D_MVA80noIso_UL17.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90iso"] =    {"egammaEffi.txt_EGM2D_MVA90iso_UL17.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90noiso"] =  {"egammaEffi.txt_EGM2D_MVA90noIso_UL17.root", "EGamma_SF2D", "TH2Lookup", };
-
-	electron_options_uncertainty["Eff_lowEt"] =   {"egammaEffi_ptBelow20.txt_EGM2D_UL2017.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["EFF_highEt"] =  {"egammaEffi_ptAbove20.txt_EGM2D_UL2017.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["VetoID"] =      {"egammaEffi.txt_EGM2D_Veto_UL17.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["LooseID"] =     {"egammaEffi.txt_EGM2D_Loose_UL17.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MediumID"] =    {"egammaEffi.txt_EGM2D_Medium_UL17.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["TightID"] =     {"egammaEffi.txt_EGM2D_Tight_UL17.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80iso"] =    {"egammaEffi.txt_EGM2D_MVA80iso_UL17.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80noiso"] =  {"egammaEffi.txt_EGM2D_MVA80noIso_UL17.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90iso"] =    {"egammaEffi.txt_EGM2D_MVA90iso_UL17.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90noiso"] =  {"egammaEffi.txt_EGM2D_MVA90noIso_UL17.root", "EGamma_SF2D", "TH2LookupErr", };
+	//Failed to deduce axis--> not checked, assume the same... more waste of my precious goddamned fucking time
+	electron_options_central["EFF_ptBelow20"] =	{"egammaEffi_ptBelow20.txt_EGM2D_UL2017.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["EFF_ptBelow20"] = {"egammaEffi_ptBelow20.txt_EGM2D_UL2017.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["EFF_ptAbove20"] =	{"egammaEffi_ptAbove20.txt_EGM2D_UL2017.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["EFF_ptAbove20"] = {"egammaEffi_ptAbove20.txt_EGM2D_UL2017.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Veto"] =		{"egammaEffi.txt_EGM2D_Veto_UL17.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Veto"] =		{"egammaEffi.txt_EGM2D_Veto_UL17.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Loose"] =		{"egammaEffi.txt_EGM2D_Loose_UL17.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Loose"] =		{"egammaEffi.txt_EGM2D_Loose_UL17.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Medium"] =		{"egammaEffi.txt_EGM2D_Medium_UL17.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Medium"] =	{"egammaEffi.txt_EGM2D_Medium_UL17.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Tight"] =		{"egammaEffi.txt_EGM2D_Tight_UL17.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Tight"] =		{"egammaEffi.txt_EGM2D_Tight_UL17.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80iso"] =		{"egammaEffi.txt_EGM2D_MVA80iso_UL17.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80iso"] =	{"egammaEffi.txt_EGM2D_MVA80iso_UL17.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80noiso"] =	{"egammaEffi.txt_EGM2D_MVA80noIso_UL17.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80noiso"] =	{"egammaEffi.txt_EGM2D_MVA80noIso_UL17.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90iso"] =		{"egammaEffi.txt_EGM2D_MVA90iso_UL17.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90iso"] =	{"egammaEffi.txt_EGM2D_MVA90iso_UL17.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90noiso"] =	{"egammaEffi.txt_EGM2D_MVA90noIso_UL17.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90noiso"] =	{"egammaEffi.txt_EGM2D_MVA90noIso_UL17.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
       }
     }
     elif(era == "2018"){
       if(legacy == "non-UL"){
-	electron_options_central["EFF_lowEt"] =  {"egammaEffi.txt_EGM2D_updatedAll.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["EFF_highEt"] = {"egammaEffi.txt_EGM2D_updatedAll.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["LooseID"] =    {"2018_ElectronLoose.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MediumID"] =   {"2018_ElectronMedium.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["TightID"] =    {"2018_ElectronTight.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["VetoID"] =     {"2018_ElectronWPVeto_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80iso"] =   {"2018_ElectronMVA80.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80noiso"] = {"2018_ElectronMVA80noiso.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90iso"] =   {"2018_ElectronMVA90.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90noiso"] = {"2018_ElectronMVA90noiso.root", "EGamma_SF2D", "TH2Lookup", };
-
-	electron_options_uncertainty["EFF_lowEt"] =  {"egammaEffi.txt_EGM2D_updatedAll.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["EFF_highEt"] = {"egammaEffi.txt_EGM2D_updatedAll.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["LooseID"] =    {"2018_ElectronLoose.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MediumID"] =   {"2018_ElectronMedium.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["TightID"] =    {"2018_ElectronTight.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["VetoID"] =     {"2018_ElectronWPVeto_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80iso"] =   {"2018_ElectronMVA80.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80noiso"] = {"2018_ElectronMVA80noiso.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90iso"] =   {"2018_ElectronMVA90.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90noiso"] = {"2018_ElectronMVA90noiso.root", "EGamma_SF2D", "TH2LookupErr", };
+	electron_options_central["EFF_ptBelow20"] =	{"egammaEffi.txt_EGM2D_updatedAll.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["EFF_ptBelow20"] = {"egammaEffi.txt_EGM2D_updatedAll.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["EFF_ptAbove20"] =	{"egammaEffi.txt_EGM2D_updatedAll.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["EFF_ptAbove20"] = {"egammaEffi.txt_EGM2D_updatedAll.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Veto"] =		{"2018_ElectronWPVeto_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Veto"] =		{"2018_ElectronWPVeto_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Loose"] =		{"2018_ElectronLoose.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Loose"] =		{"2018_ElectronLoose.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Medium"] =		{"2018_ElectronMedium.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Medium"] =	{"2018_ElectronMedium.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Tight"] =		{"2018_ElectronTight.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Tight"] =		{"2018_ElectronTight.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80noiso"] =	{"2018_ElectronMVA80noiso.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80noiso"] =	{"2018_ElectronMVA80noiso.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80iso"] =		{"2018_ElectronMVA80.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80iso"] =	{"2018_ElectronMVA80.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90noiso"] =	{"2018_ElectronMVA90noiso.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90noiso"] =	{"2018_ElectronMVA90noiso.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90iso"] =		{"2018_ElectronMVA90.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90iso"] =	{"2018_ElectronMVA90.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
       }
       elif(legacy == "UL"){
-	electron_options_central["EFF_lowEt"] =  {"egammaEffi_ptBelow20.txt_EGM2D_UL2018.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["EFF_highEt"] = {"egammaEffi_ptAbove20.txt_EGM2D_UL2018.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["VetoID"] =     {"egammaEffi.txt_Ele_Veto_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["LooseID"] =    {"egammaEffi.txt_Ele_Loose_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MediumID"] =   {"egammaEffi.txt_Ele_Medium_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["TightID"] =    {"egammaEffi.txt_Ele_Tight_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80iso"] =   {"egammaEffi.txt_Ele_wp80iso_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA80noiso"] = {"egammaEffi.txt_Ele_wp80noiso_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90iso"] =   {"egammaEffi.txt_Ele_wp90iso_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-	electron_options_central["MVA90noiso"] = {"egammaEffi.txt_Ele_wp90noiso_EGM2D.root", "EGamma_SF2D", "TH2Lookup", };
-
-	electron_options_uncertainty["EFF_lowEt"] =  {"egammaEffi_ptBelow20.txt_EGM2D_UL2018.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["EFF_highEt"] = {"egammaEffi_ptAbove20.txt_EGM2D_UL2018.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["VetoID"] =     {"egammaEffi.txt_Ele_Veto_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["LooseID"] =    {"egammaEffi.txt_Ele_Loose_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MediumID"] =   {"egammaEffi.txt_Ele_Medium_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["TightID"] =    {"egammaEffi.txt_Ele_Tight_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80iso"] =   {"egammaEffi.txt_Ele_wp80iso_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA80noiso"] = {"egammaEffi.txt_Ele_wp80noiso_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90iso"] =   {"egammaEffi.txt_Ele_wp90iso_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
-	electron_options_uncertainty["MVA90noiso"] = {"egammaEffi.txt_Ele_wp90noiso_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", };
+	//Failed to deduce axis
+	electron_options_central["EFF_ptBelow20"] =	{"egammaEffi_ptBelow20.txt_EGM2D_UL2018.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["EFF_ptBelow20"] = {"egammaEffi_ptBelow20.txt_EGM2D_UL2018.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["EFF_ptAbove20"] =	{"egammaEffi_ptAbove20.txt_EGM2D_UL2018.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["EFF_ptAbove20"] = {"egammaEffi_ptAbove20.txt_EGM2D_UL2018.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Veto"] =		{"egammaEffi.txt_Ele_Veto_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Veto"] =		{"egammaEffi.txt_Ele_Veto_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Loose"] =		{"egammaEffi.txt_Ele_Loose_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Loose"] =		{"egammaEffi.txt_Ele_Loose_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Medium"] =		{"egammaEffi.txt_Ele_Medium_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Medium"] =	{"egammaEffi.txt_Ele_Medium_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["Tight"] =		{"egammaEffi.txt_Ele_Tight_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["Tight"] =		{"egammaEffi.txt_Ele_Tight_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80iso"] =		{"egammaEffi.txt_Ele_wp80iso_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80iso"] =	{"egammaEffi.txt_Ele_wp80iso_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA80noiso"] =	{"egammaEffi.txt_Ele_wp80noiso_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA80noiso"] =	{"egammaEffi.txt_Ele_wp80noiso_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90iso"] =		{"egammaEffi.txt_Ele_wp90iso_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90iso"] =	{"egammaEffi.txt_Ele_wp90iso_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
+	electron_options_central["MVA90noiso"] =	{"egammaEffi.txt_Ele_wp90noiso_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
+	electron_options_uncertainty["MVA90noiso"] =	{"egammaEffi.txt_Ele_wp90noiso_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
       }	
     }
     //Muon SFs //Mostly the errors are stored in separate histograms inside two files, 1 for ISO and 1 for ID 
