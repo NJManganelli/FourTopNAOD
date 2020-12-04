@@ -13,7 +13,7 @@ ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
 ROOT.gROOT.ProcessLine("std::cout << \"Hello, There!\" << std::endl;")
 code = """LUT *test2LUT;
           test2LUT = new LUT; //also new LUT ( <initialization parameters> ) in C++ regular syntax
-          test2LUT->Add("/afs/cern.ch/user/n/nmangane/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/2017/RunBCDEF_SF_ISO_syst.root",
+          test2LUT->Add("/afs/cern.ch/user/n/nmangane/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/2017/non-UL/RunBCDEF_SF_ISO_syst.root",
           "NUM_TightRelIso_DEN_MediumID_pt_abseta", "Test");
           std::cout << test2LUT->TH2Lookup("Test", 35, 1.7) << std::endl;"""
 ROOT.gROOT.ProcessLine(code)
@@ -33,7 +33,7 @@ print("keys in pythonLUT clone: ", pythonLUTClone.TH2Keys())
 
 ROOT.gInterpreter.Declare("std::map<std::string, std::vector<std::string>> testMAP;")
 testMAP = getattr(ROOT, "testMAP")
-testMAP["Muon_SF_ID_nom"].push_back("/afs/cern.ch/user/n/nmangane/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/2017/RunBCDEF_SF_ISO_syst.root")
+testMAP["Muon_SF_ID_nom"].push_back("/afs/cern.ch/user/n/nmangane/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/2017/non-UL/RunBCDEF_SF_ISO_syst.root")
 testMAP["Muon_SF_ID_nom"].push_back("NUM_TightRelIso_DEN_MediumID_pt_abseta")
 testMAP["Muon_SF_ID_nom"].push_back("TH2Lookup")
 testMAP["Muon_SF_ID_nom"].push_back("Muon_pt")
@@ -55,9 +55,9 @@ print(vectorLUTs[0].TH3Keys())
 # "SYST": "RunBCDEF_SF_ISO_syst.root==NUM_TightRelIso_DEN_MediumID_pt_abseta_syst"
 ROOT.gInterpreter.ProcessLine("LUT *testLUT; testLUT = new LUT;") #Need the pointer declaration and the class initialization
 testLUT = getattr(ROOT, "testLUT")
-testLUT.Add("/afs/cern.ch/user/n/nmangane/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/2017/RunBCDEF_SF_ISO_syst.root", "NUM_TightRelIso_DEN_MediumID_pt_abseta", "TightRelIso/MediumID")
-testLUT.Add("/afs/cern.ch/user/n/nmangane/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/2017/RunBCDEF_SF_ISO_syst.root", "NUM_TightRelIso_DEN_MediumID_pt_abseta_stat", "TightRelIso/MediumID_stat")
-testLUT.Add("/afs/cern.ch/user/n/nmangane/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/2017/RunBCDEF_SF_ISO_syst.root", "NUM_TightRelIso_DEN_MediumID_pt_abseta_syst", "TightRelIso/MediumID_syst")
+testLUT.Add("/afs/cern.ch/user/n/nmangane/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/2017/non-UL/RunBCDEF_SF_ISO_syst.root", "NUM_TightRelIso_DEN_MediumID_pt_abseta", "TightRelIso/MediumID")
+testLUT.Add("/afs/cern.ch/user/n/nmangane/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/2017/non-UL/RunBCDEF_SF_ISO_syst.root", "NUM_TightRelIso_DEN_MediumID_pt_abseta_stat", "TightRelIso/MediumID_stat")
+testLUT.Add("/afs/cern.ch/user/n/nmangane/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/2017/non-UL/RunBCDEF_SF_ISO_syst.root", "NUM_TightRelIso_DEN_MediumID_pt_abseta_syst", "TightRelIso/MediumID_syst")
 print(testLUT.TH2Lookup("TightRelIso/MediumID", 90, 0.4))
 
 #Test Muon_SF_ID_nom

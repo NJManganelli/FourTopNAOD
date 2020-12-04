@@ -583,13 +583,13 @@ namespace FTA{
   std::map< std::string, std::vector<std::string> > GetCorrectorMap(std::string era, 
 								    std::string legacy, 
 								    std::string VFP="",
-								    std::string muon_top_path, 
+								    std::string muon_top_path = "", 
 								    std::string muon_id = "", 
 								    std::string muon_iso = "", 
-								    std::string electron_top_path, 
+								    std::string electron_top_path = "", 
 								    std::string electron_id = "", 
 								    std::string electron_eff = "",
-								    std::string btag_top_path, 
+								    std::string btag_top_path = "", 
 								    std::string btag_doAggregate = "btag_noAggregate", 
 								    std::string btag_event = "btag_HT_nJet"){
     //python constructor:
@@ -608,7 +608,7 @@ namespace FTA{
       }
       std::string muon_path = muon_top_path + "/" + era + "/" + legacy + "/" + VFP + "/";
       std::string electron_path = electron_top_path + "/" + era + "/" + legacy + "/" + VFP + "/";
-
+    }
     //mu_pre = "{0:s}/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/{1:s}/".format(os.environ['CMSSW_BASE'], self.era)
     //store the ID map per era, with a path being prepended to the filenames listed below at the end
     std::map< std::string, std::vector<std::string> > electron_options_central;
@@ -655,7 +655,7 @@ namespace FTA{
 	electron_options_central["MVA90noiso"]  =	{"2016LegacyReReco_ElectronMVA90noiso_Fall17V2.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
 	electron_options_uncertainty["MVA90noiso"]  =	{"2016LegacyReReco_ElectronMVA90noiso_Fall17V2.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
       }
-      elif(legacy == "UL" && VFP == "preVFP"){
+      else if(legacy == "UL" && VFP == "preVFP"){
 	//Failed to deduce axis --> eta on x-axis, pt on y-axis. 
 	electron_options_central["EFF_ptAbove20"] =	{"egammaEffi_ptAbove20.txt_EGM2D_UL2016preVFP.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
 	electron_options_uncertainty["EFF_ptAbove20"] = {"egammaEffi_ptAbove20.txt_EGM2D_UL2016preVFP.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
@@ -678,7 +678,7 @@ namespace FTA{
 	electron_options_central["MVA90noiso"] =	{"egammaEffi.txt_Ele_wp90noiso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
 	electron_options_uncertainty["MVA90noiso"] =	{"egammaEffi.txt_Ele_wp90noiso_preVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};	
       }
-      elif(legacy == "UL" && VFP == "postVFP"){
+      else if(legacy == "UL" && VFP == "postVFP"){
 	std::cout << "WARNING: postVFP UL for 2016 is loading 2016 Legacy efficiencies, since postVFP UL versions haven't been made available as of writing.";
 	std::cout << std::endl;
 	electron_options_central["EFF_ptBelow20"] =	{"../../non-UL/EGM2D_BtoH_low_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
@@ -703,7 +703,7 @@ namespace FTA{
 	electron_options_uncertainty["MVA90noiso"] =	{"egammaEffi.txt_Ele_wp90noiso_postVFP_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
       }
     }
-    elif(era == "2017"){
+    else if(era == "2017"){
       if(legacy == "non-UL"){
 	std::cout << "WARNING: for 2017 non-UL, Efficiencies are both from the non-low Et measurements, in case this has changed..." << std::endl;
 	electron_options_central["EFF_ptBelow20"] =	{"egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
@@ -727,7 +727,7 @@ namespace FTA{
 	electron_options_central["MVA90iso"] =		{"2017_ElectronMVA90.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
 	electron_options_uncertainty["MVA90iso"] =	{"2017_ElectronMVA90.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
       }
-      elif(legacy == "UL"){
+      else if(legacy == "UL"){
 	//Failed to deduce axis--> not checked, assume the same... more waste of my precious goddamned fucking time
 	electron_options_central["EFF_ptBelow20"] =	{"egammaEffi_ptBelow20.txt_EGM2D_UL2017.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
 	electron_options_uncertainty["EFF_ptBelow20"] = {"egammaEffi_ptBelow20.txt_EGM2D_UL2017.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
@@ -751,7 +751,7 @@ namespace FTA{
 	electron_options_uncertainty["MVA90noiso"] =	{"egammaEffi.txt_EGM2D_MVA90noIso_UL17.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
       }
     }
-    elif(era == "2018"){
+    else if(era == "2018"){
       if(legacy == "non-UL"){
 	electron_options_central["EFF_ptBelow20"] =	{"egammaEffi.txt_EGM2D_updatedAll.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
 	electron_options_uncertainty["EFF_ptBelow20"] = {"egammaEffi.txt_EGM2D_updatedAll.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
@@ -774,7 +774,7 @@ namespace FTA{
 	electron_options_central["MVA90iso"] =		{"2018_ElectronMVA90.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
 	electron_options_uncertainty["MVA90iso"] =	{"2018_ElectronMVA90.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
       }
-      elif(legacy == "UL"){
+      else if(legacy == "UL"){
 	//Failed to deduce axis
 	electron_options_central["EFF_ptBelow20"] =	{"egammaEffi_ptBelow20.txt_EGM2D_UL2018.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
 	electron_options_uncertainty["EFF_ptBelow20"] = {"egammaEffi_ptBelow20.txt_EGM2D_UL2018.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
@@ -796,7 +796,7 @@ namespace FTA{
 	electron_options_uncertainty["MVA90iso"] =	{"egammaEffi.txt_Ele_wp90iso_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
 	electron_options_central["MVA90noiso"] =	{"egammaEffi.txt_Ele_wp90noiso_EGM2D.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
 	electron_options_uncertainty["MVA90noiso"] =	{"egammaEffi.txt_Ele_wp90noiso_EGM2D.root", "EGamma_SF2D", "TH2LookupErr", "Electron_eta", "Electron_pt"};
-      }	
+      }
     }
     //Muon SFs //Mostly the errors are stored in separate histograms inside two files, 1 for ISO and 1 for ID 
     //So for 2017 and 2018 non-UL: BinContent from unique histogram ...ratio, ...ratio_stat, ...ratio_syst
@@ -842,7 +842,7 @@ namespace FTA{
 	muon_options_central["LooseRelTkIso/HighPtID"] = {"Mu_Iso.root", "tkLooseISO_highptID_newpt_eta/pair_ne_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
 	muon_options_syst["LooseRelTkIso/HighPtID"] =    {"Mu_Iso.root", "tkLooseISO_highptID_newpt_eta/pair_ne_ratio", "TH2LookupErr", "Muon_pt", "Muon_eta"};
       }
-      elif(legacy == "UL" && VFP == "preVFP"){
+      else if(legacy == "UL" && VFP == "preVFP"){
 	muon_options_central["HighPtID"] =		{"Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_stat["HighPtID"] =			{"Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt_stat", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_syst["HighPtID"] =			{"Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt_syst", "TH2Lookup", "Muon_eta", "Muon_pt"};
@@ -899,9 +899,8 @@ namespace FTA{
 	muon_options_central["TightRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_stat["TightRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_stat", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_syst["TightRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_syst", "TH2Lookup", "Muon_eta", "Muon_pt"};
-
       }
-      elif(legacy == "UL" && VFP == "postVFP"){
+      else if(legacy == "UL" && VFP == "postVFP"){
 	muon_options_central["HighPtID"] =		{"Efficiencies_muon_generalTracks_Z_Run2016_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_stat["HighPtID"] =			{"Efficiencies_muon_generalTracks_Z_Run2016_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt_stat", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_syst["HighPtID"] =			{"Efficiencies_muon_generalTracks_Z_Run2016_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt_syst", "TH2Lookup", "Muon_eta", "Muon_pt"};
@@ -957,10 +956,9 @@ namespace FTA{
 	muon_options_central["TightRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2016_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_stat["TightRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2016_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_stat", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_syst["TightRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2016_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_syst", "TH2Lookup", "Muon_eta", "Muon_pt"};
-
       }
     }
-    elif(era == "2017"){
+    else if(era == "2017"){
       if(legacy == "non-UL"){
 	// muon_options_central["TRG_SL"] = {"EfficienciesAndSF_RunBtoF_Nov17Nov2017.root", "IsoMu27_PtEtaBins/pt_abseta_ratio", "TH2Lookup", };
 	// muon_options_stat[] = { "EfficienciesAndSF_RunBtoF_Nov17Nov2017.root", "IsoMu27_PtEtaBins/pt_abseta_ratio", "TH2Lookup", };
@@ -1015,9 +1013,8 @@ namespace FTA{
 	muon_options_central["TightRelTkIso_HighPtIDandIPCut"] =	{"RunBCDEF_SF_ISO_syst.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta", "TH2Lookup", "Muon_pt", "Muon_eta"};
 	muon_options_stat["TightRelTkIso_HighPtIDandIPCut"] =		{"RunBCDEF_SF_ISO_syst.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta_stat", "TH2Lookup", "Muon_pt", "Muon_eta"};
 	muon_options_syst["TightRelTkIso_HighPtIDandIPCut"] =		{"RunBCDEF_SF_ISO_syst.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta_syst", "TH2Lookup", "Muon_pt", "Muon_eta"};
-
       }
-      elif(legacy == "UL"){
+      else if(legacy == "UL"){
 	muon_options_central["HighPtID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_stat["HighPtID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt_stat", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_syst["HighPtID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt_syst", "TH2Lookup", "Muon_eta", "Muon_pt"};
@@ -1074,7 +1071,7 @@ namespace FTA{
 	muon_options_syst["TightRelTkIso_TrkHighPtIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_syst", "TH2Lookup", "Muon_eta", "Muon_pt"};
       }
     }
-    elif(era == "2018"){
+    else if(era == "2018"){
       if(legacy == "non-UL"){
 	// muon_options_central["TRG_SL_preRun316361"] =	 {"EfficienciesAndSF_2018Data_BeforeMuonHLTUpdate.root", "IsoMu24_PtEtaBins/pt_abseta_ratio", "TH2Lookup", };
 	// muon_options_stat["TRG_SL_preRun316361"] =		 {"EfficienciesAndSF_2018Data_BeforeMuonHLTUpdate.root", "IsoMu24_PtEtaBins/pt_abseta_ratio", "TH2Lookup", };
@@ -1131,9 +1128,8 @@ namespace FTA{
 	muon_options_central["TightRelTkIso_HighPtIDandIPCut"] =	{"RunABCD_SF_ISO.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta", "TH2Lookup", "Muon_pt", "Muon_eta"};
 	muon_options_stat["TightRelTkIso_HighPtIDandIPCut"] =		{"RunABCD_SF_ISO.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta_stat", "TH2Lookup", "Muon_pt", "Muon_eta"};
 	muon_options_syst["TightRelTkIso_HighPtIDandIPCut"] =		{"RunABCD_SF_ISO.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta_syst", "TH2Lookup", "Muon_pt", "Muon_eta"};
-	
       }
-      elif(legacy == "UL"){
+      else if(legacy == "UL"){
 	muon_options_central["HighPtID"] =		{"Efficiencies_muon_generalTracks_Z_Run2018_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_stat["HighPtID"] =			{"Efficiencies_muon_generalTracks_Z_Run2018_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt_stat", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_syst["HighPtID"] =			{"Efficiencies_muon_generalTracks_Z_Run2018_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt_syst", "TH2Lookup", "Muon_eta", "Muon_pt"};
@@ -1190,13 +1186,13 @@ namespace FTA{
 	muon_options_central["TightRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2018_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_stat["TightRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2018_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_stat", "TH2Lookup", "Muon_eta", "Muon_pt"};
 	muon_options_syst["TightRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2018_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_syst", "TH2Lookup", "Muon_eta", "Muon_pt"};
-
-
       }
-
-std::map< std::string, std::vector<std::string> > ret;
-    
+    }//era is 2018
+    std::map< std::string, std::vector<std::string> > ret;
+    return ret;
   }
+
+
   // std::pair< ROOT::RDF::RNode, std::vector<LUT*> > AddLeptonSF(ROOT::RDF::RNode df, std::string_view era, std::map< std::string, std::vector<std::string> > idmap){
   std::pair< ROOT::RDF::RNode, std::string > AddLeptonSF(ROOT::RDF::RNode df, std::string_view era, std::map< std::string, std::vector<std::string> > idmap){
     //idmap is a key :: value map with the key being keywords MuonID, MuonISO, ElectronID, ElectronEFF, ElectronEFFLow
