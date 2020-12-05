@@ -260,13 +260,13 @@ private:
 };
 void LUTManager::Add(std::map< std::string, std::vector<std::string> > idmap) {
   for(std::map< std::string, std::vector<std::string> >::iterator id_iter = idmap.begin(); id_iter != idmap.end(); ++id_iter){
-    std::cout << "Key: " << id_iter->first << std::endl;
-    std::cout << "Values: ";
+    // std::cout << "Key: " << id_iter->first << std::endl;
+    // std::cout << "Values: ";
     std::vector<std::string> vec_values = id_iter->second;
-    for(std::vector<std::string>::iterator vector_iter = id_iter->second.begin(); vector_iter != id_iter->second.end(); ++vector_iter){
-      std::cout << *vector_iter;
-    }
-    std::cout << std::endl;
+    // for(std::vector<std::string>::iterator vector_iter = id_iter->second.begin(); vector_iter != id_iter->second.end(); ++vector_iter){
+    //   std::cout << *vector_iter;
+    // }
+    // std::cout << std::endl;
     //Load each map into the origin LUT, from which all others will be copied in the finalize method
     if(vec_values.size() > 1){
       std::cout << vec_values[0] << " " << vec_values[1] << std::endl;
@@ -599,16 +599,18 @@ namespace FTA{
 
     //about paths... 
     //el_pre = "{0:s}/src/FourTopNAOD/Kai/python/data/leptonSF/Electron/{1:s}/".format(os.environ['CMSSW_BASE'], self.era)
+
+    std::string muon_path, electron_path;
     if(era != "2016" && legacy != "UL"){
-      std::string muon_path = muon_top_path + "/" + era + "/" + legacy + "/";
-      std::string electron_path = electron_top_path + "/" + era + "/" + legacy + "/";
+      muon_path = muon_top_path + "/" + era + "/" + legacy + "/";
+      electron_path = electron_top_path + "/" + era + "/" + legacy + "/";
     }
     else{
       if(!( VFP == "postVFP" || VFP == "preVFP")){
 	std::cout << "WARNING: Invalid path due to VFP parameter not matching options for 2016 Ultra-Legacy production" << std::endl;
       }
-      std::string muon_path = muon_top_path + "/" + era + "/" + legacy + "/" + VFP + "/";
-      std::string electron_path = electron_top_path + "/" + era + "/" + legacy + "/" + VFP + "/";
+      muon_path = muon_top_path + "/" + era + "/" + legacy + "/" + VFP + "/";
+      electron_path = electron_top_path + "/" + era + "/" + legacy + "/" + VFP + "/";
     }
     
     std::cout << "Era: " << era << "\nLegacy: " << legacy <<  "\nPreVFP: " << VFP << "\nMuon top path: " << muon_top_path << "\nElectron top path: " << electron_top_path;
@@ -1201,71 +1203,149 @@ namespace FTA{
 
     std::map< std::string, std::vector<std::string> > ret;
     if(muon_id != ""){
-      if(muon_options_central.find(muon_id) != muon_options_central.end()) 
-	ret["Muon_SF_ID_nom"] = muon_options_central[muon_id];
-      if(muon_options_stat.find(muon_id) != muon_options_stat.end()) 
-	ret["Muon_SF_ID_stat"] = muon_options_stat[muon_id];
-      if(muon_options_syst.find(muon_id) != muon_options_syst.end()) 
-	ret["Muon_SF_ID_syst"] = muon_options_syst[muon_id];
+      if(muon_options_central.find(muon_id) != muon_options_central.end()){
+	ret["Muon_SF_ID_altnom"] = muon_options_central[muon_id];
+	ret["Muon_SF_ID_altnom"][0] = muon_path + ret["Muon_SF_ID_altnom"][0];
+      }
+      if(muon_options_stat.find(muon_id) != muon_options_stat.end()){
+	ret["Muon_SF_ID_altstat"] = muon_options_stat[muon_id];
+	ret["Muon_SF_ID_altstat"][0] = muon_path + ret["Muon_SF_ID_altstat"][0];
+      }
+      if(muon_options_syst.find(muon_id) != muon_options_syst.end()){
+	ret["Muon_SF_ID_altsyst"] = muon_options_syst[muon_id];
+	ret["Muon_SF_ID_altsyst"][0] = muon_path + ret["Muon_SF_ID_altsyst"][0];
+      }
+
     }
     if(muon_iso != ""){
-      if(muon_options_central.find(muon_iso) != muon_options_central.end()) 
-	ret["Muon_SF_ISO_nom"] = muon_options_central[muon_iso];
-      if(muon_options_stat.find(muon_iso) != muon_options_stat.end()) 
-	ret["Muon_SF_ISO_stat"] = muon_options_stat[muon_iso];
-      if(muon_options_syst.find(muon_iso) != muon_options_syst.end()) 
-	ret["Muon_SF_ISO_syst"] = muon_options_syst[muon_iso];
+      if(muon_options_central.find(muon_iso) != muon_options_central.end()){
+	ret["Muon_SF_ISO_altnom"] = muon_options_central[muon_iso];
+	ret["Muon_SF_ISO_altnom"][0] = muon_path + ret["Muon_SF_ISO_altnom"][0];
+      }
+      if(muon_options_stat.find(muon_iso) != muon_options_stat.end()){
+	ret["Muon_SF_ISO_altstat"] = muon_options_stat[muon_iso];
+	ret["Muon_SF_ISO_altstat"][0] = muon_path + ret["Muon_SF_ISO_altstat"][0];
+      }
+      if(muon_options_syst.find(muon_iso) != muon_options_syst.end()){
+	ret["Muon_SF_ISO_altsyst"] = muon_options_syst[muon_iso];
+	ret["Muon_SF_ISO_altsyst"][0] = muon_path + ret["Muon_SF_ISO_altsyst"][0];
+      }
     }
     if(electron_id != ""){
-      if(electron_options_central.find(electron_id) != electron_options_central.end()) 
-	ret["Electron_SF_ID_nom"] = electron_options_central[electron_id];
-      if(electron_options_uncertainty.find(electron_id) != electron_options_uncertainty.end()) 
-	ret["Electron_SF_ID_unc"] = electron_options_uncertainty[electron_id];
+      if(electron_options_central.find(electron_id) != electron_options_central.end()){
+	ret["Electron_SF_ID_altnom"] = electron_options_central[electron_id];
+	ret["Electron_SF_ID_altnom"][0] = electron_path + ret["Electron_SF_ID_altnom"][0];
+      }
+      if(electron_options_uncertainty.find(electron_id) != electron_options_uncertainty.end()){
+	ret["Electron_SF_ID_altunc"] = electron_options_uncertainty[electron_id];
+	ret["Electron_SF_ID_altunc"][0] = electron_path + ret["Electron_SF_ID_altunc"][0];
+      }
     }
     if(electron_eff != ""){
-      if(electron_options_central.find("EFF_ptBelow20") != electron_options_central.end()) 
+      if(electron_options_central.find("EFF_ptBelow20") != electron_options_central.end()){
 	ret["Electron_SF_EFF_ptBelow20_nom"] = electron_options_central["EFF_ptBelow20"];
-      if(electron_options_uncertainty.find("EFF_ptBelow20") != electron_options_uncertainty.end()) 
-	ret["Electron_SF_EFF_ptAbove20_unc"] = electron_options_uncertainty["EFF_ptBelow20"];
-      if(electron_options_central.find("EFF_ptAbove20") != electron_options_central.end()) 
+	ret["Electron_SF_EFF_ptBelow20_nom"][0] = electron_path + ret["Electron_SF_EFF_ptBelow20_nom"][0];
+      }
+      if(electron_options_uncertainty.find("EFF_ptBelow20") != electron_options_uncertainty.end()){
+	ret["Electron_SF_EFF_ptBelow20_unc"] = electron_options_uncertainty["EFF_ptBelow20"];
+	ret["Electron_SF_EFF_ptBelow20_unc"][0] = electron_path + ret["Electron_SF_EFF_ptBelow20_unc"][0];
+      }
+      if(electron_options_central.find("EFF_ptAbove20") != electron_options_central.end()){
 	ret["Electron_SF_EFF_ptAbove20_nom"] = electron_options_central["EFF_ptAbove20"];
-      if(electron_options_uncertainty.find("EFF_ptAbove20") != electron_options_uncertainty.end()) 
+	ret["Electron_SF_EFF_ptAbove20_nom"][0] = electron_path + ret["Electron_SF_EFF_ptAbove20_nom"][0];
+      }
+      if(electron_options_uncertainty.find("EFF_ptAbove20") != electron_options_uncertainty.end()){
 	ret["Electron_SF_EFF_ptAbove20_unc"] = electron_options_uncertainty["EFF_ptAbove20"];
+	ret["Electron_SF_EFF_ptAbove20_unc"][0] = electron_path + ret["Electron_SF_EFF_ptAbove20_unc"][0];
+      }
     }    
     return ret;
   }
 
 
   // std::pair< ROOT::RDF::RNode, std::vector<LUT*> > AddLeptonSF(ROOT::RDF::RNode df, std::string_view era, std::map< std::string, std::vector<std::string> > idmap){
-  std::pair< ROOT::RDF::RNode, std::string > AddLeptonSF(ROOT::RDF::RNode df, std::string_view era, std::map< std::string, std::vector<std::string> > idmap){
-    //idmap is a key :: value map with the key being keywords MuonID, MuonISO, ElectronID, ElectronEFF, ElectronEFFLow
-    //the value is a vector containing: 
-
-    std::vector<std::string> requiredLUTs;
-    requiredLUTs.push_back("Muon_SF_ID");
-    requiredLUTs.push_back("Muon_SF_ISO");
-    requiredLUTs.push_back("Electron_SF_ID");
-    requiredLUTs.push_back("Electron_SF_EFF");
-    if(era == "2017" || era == "2016"){
-      requiredLUTs.push_back("Electron_SF_EFFLow");
+  ROOT::RDF::RNode AddLeptonSF(ROOT::RDF::RNode df, std::string_view era, std::shared_ptr< std::vector<LUT*> > veclut, std::map< std::string, std::vector<std::string> > correctormap){
+    // for(std::vector<string>::const_iterator req_iter = requiredLUTs.begin(); req_iter != requiredLUTs.end(); ++ req_iter){
+    //   if((*veclut)[0].find(*req_iter) == (*veclut)[0].end()){ std::cout << "Required map not found: " << *req_iter << std::endl; }
+    //   else {std::cout << "Required map found: " << *req_iter << std::endl;}
+    // }
+    // auto vGen = [&](int len) {
+    //   RVec<double> v(len);
+    //   std::transform(v.begin(), v.end(), v.begin(), unifGen);
+    //   return v;
+    // };
+    // RDataFrame d(1024);
+    // auto d0 = d.Define("len", []() { return (int)gRandom->Uniform(0, 16); })
+    //   .Define("x", vGen, {"len"})
+    //   .Define("y", vGen, {"len"});
+    // rdf2 = rdf.Define("Muon_SF_ID_altnom", "ROOT::VecOps::RVec<double> ret = {}; "\
+    //               "for(int i=0; i < Muon_pt.size(); ++i) {"\
+    //               "ret.push_back(testLUT->TH2Lookup(\"TightRelIso/MediumID\", Muon_pt[i], abs(Muon_eta[i])));"\
+    //               "}"\
+    //               "return ret;"
+    ROOT::RDF::RNode ret = df;
+    for(std::map< std::string, std::vector<std::string> >::iterator cm_iter = correctormap.begin(); cm_iter != correctormap.end(); ++cm_iter){
+      std::string branch_and_key, lookup_type;
+      std::vector<std::string> arg_list = {};
+      
+      branch_and_key = cm_iter->first;
+      //store the argument list in a vector
+      for(int i = 0; i < (cm_iter->second).size(); ++i){
+	if(i == 2) lookup_type = cm_iter->second[i];
+	else if(i > 2) arg_list.push_back(cm_iter->second[i]);
+	// std::cout << cm_iter->second[i] << " ";
+      }
+      if(lookup_type == "TH2Lookup"){
+	if(arg_list[0] == "Muon_eta" || arg_list[0] == "Muon_pt"){
+	  auto slottedLookup = [veclut, branch_and_key](int slot, ROOT::VecOps::RVec<float> X, ROOT::VecOps::RVec<float> Y){
+	    ROOT::VecOps::RVec<float> rvec_return = {};
+	    for(int li=0; li < X.size(); ++li) {
+	      rvec_return.push_back((*veclut)[slot]->TH2Lookup(branch_and_key, fabs(X[li]), fabs(Y[li])));
+	    }
+	    return rvec_return;
+	  };
+	  ret = ret.DefineSlot(branch_and_key, slottedLookup, arg_list);
+	}
+	else if(arg_list[0] == "Electron_eta" || arg_list[0] == "Electron_pt"){
+	  auto slottedLookup = [&veclut, &branch_and_key](int slot, ROOT::VecOps::RVec<float> X, ROOT::VecOps::RVec<float> Y){
+	    ROOT::VecOps::RVec<float> rvec_return = {};
+	    for(int li=0; li < X.size(); ++li) {
+	      rvec_return.push_back((*veclut)[slot]->TH2Lookup(branch_and_key, X[li], Y[li]));
+		}
+	    return rvec_return;
+	  };
+	  ret = ret.DefineSlot(branch_and_key, slottedLookup, arg_list);
+	}
+	else std::cout << "Unhandled type in AddLeptonSF()" << std::endl;
+      }
+      else if(lookup_type == "TH2LookupErr"){
+	if(arg_list[0] == "Muon_eta" || arg_list[0] == "Muon_pt"){
+	  auto slottedLookup = [&veclut, &branch_and_key](int slot, ROOT::VecOps::RVec<float> X, ROOT::VecOps::RVec<float> Y){
+	    ROOT::VecOps::RVec<float> rvec_return = {};
+	    for(int li=0; li < X.size(); ++li) {
+	      rvec_return.push_back((*veclut)[slot]->TH2LookupErr(branch_and_key, fabs(X[li]), fabs(Y[li])));
+		}
+	    return rvec_return;
+	  };
+	  ret = ret.DefineSlot(branch_and_key, slottedLookup, arg_list);
+	}
+	else if(arg_list[0] == "Electron_eta" || arg_list[0] == "Electron_pt"){
+	  auto slottedLookup = [&veclut, &branch_and_key](int slot, ROOT::VecOps::RVec<float> X, ROOT::VecOps::RVec<float> Y){
+	    ROOT::VecOps::RVec<float> rvec_return = {};
+	    for(int li=0; li < X.size(); ++li) {
+	      rvec_return.push_back((*veclut)[slot]->TH2LookupErr(branch_and_key, X[li], Y[li]));
+		}
+	    return rvec_return;
+	  };
+	  ret = ret.DefineSlot(branch_and_key, slottedLookup, arg_list);
+	}
+	else std::cout << "Unhandled type in AddLeptonSF()" << std::endl;
+      }
     }
-    for(std::vector<string>::const_iterator req_iter = requiredLUTs.begin(); req_iter != requiredLUTs.end(); ++ req_iter){
-      if(idmap.find(*req_iter) == idmap.end()){ std::cout << "Required map not found: " << *req_iter << std::endl; }
-      else {std::cout << "Required map found: " << *req_iter << std::endl;}
-    }
-
-    for(std::map< std::string, std::vector<std::string> >::iterator id_iter = idmap.begin(); id_iter != idmap.end(); ++id_iter){
-      if (id_iter->first != "MuonID") {std::cout << "Okay" << std::endl;}
-      else {std::cout << "Not okay!" << std::endl;}
-    //   std::cout << "Map Key: " << id_iter->first << " Value: " << id_iter->second << std::endl;
-    }
-
-    std::cout << "Slots: " << df.GetNSlots() << std::endl;
-
-    std::pair<ROOT::RDF::RNode, std::string> ret(df, "Help me, Obi-Wan!");
+    auto branches = ret.GetDefinedColumnNames();
+    for(int bi = 0; bi < branches.size(); ++bi) std::cout << branches[bi] << std::endl;
     return ret;
   }
-
   template <typename T>
   ROOT::RDF::RResultPtr<T> bookLazySnapshot(ROOT::RDF::RNode df, std::string_view treename, std::string_view filename, 
 			const ROOT::Detail::RDF::ColumnNames_t columnList, std::string_view mode = "RECREATE"){

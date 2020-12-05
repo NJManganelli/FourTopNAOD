@@ -40,16 +40,6 @@ testMAP["Muon_SF_ID_nom"].push_back("Muon_pt")
 testMAP["Muon_SF_ID_nom"].push_back("Muon_eta")
 
 
-print("testing LUTManager")
-LUTManager = ROOT.LUTManager()
-LUTManager.Add(testMAP)
-LUTManager.Finalize(5)
-vectorLUTs = LUTManager.GetLUTVector()
-print(vectorLUTs[0].TH1Keys())
-print(vectorLUTs[0].TH2Keys())
-print(vectorLUTs[0].TH3Keys())
-# print("vector of LUTs: ", vectorLUTs, vectorLUTs[0].TH2Lookup("Muon_SF_ID_nom", 35, 1.7))
-
 # "RunBCDEF_SF_ISO_syst.root==NUM_TightRelIso_DEN_MediumID_pt_abseta",
 # "STAT": "RunBCDEF_SF_ISO_syst.root==NUM_TightRelIso_DEN_MediumID_pt_abseta_stat",
 # "SYST": "RunBCDEF_SF_ISO_syst.root==NUM_TightRelIso_DEN_MediumID_pt_abseta_syst"
@@ -66,22 +56,14 @@ rdf = ROOT.ROOT.RDataFrame("Events", "/eos/user/n/nmangane/SWAN_projects/LogicCh
 columns = rdf.GetColumnNames()
 for c in columns:
     if "Muon" in str(c) and "ID" in str(c): print(c)
-rdf2 = rdf.Define("Muon_SF_ID_altnom", "ROOT::VecOps::RVec<double> ret = {}; "\
-                  "for(int i=0; i < Muon_pt.size(); ++i) {"\
-                  "ret.push_back(testLUT->TH2Lookup(\"TightRelIso/MediumID\", Muon_pt[i], abs(Muon_eta[i])));"\
-                  "}"\
-                  "return ret;"
-              )
-
+# rdf2 = rdf.Define("Muon_SF_ID_altnom", "ROOT::VecOps::RVec<double> ret = {}; "\
+#                   "for(int i=0; i < Muon_pt.size(); ++i) {"\
+#                   "ret.push_back(testLUT->TH2Lookup(\"TightRelIso/MediumID\", Muon_pt[i], abs(Muon_eta[i])));"\
+#                   "}"\
+#                   "return ret;"
+#               )
+rdf2 = rdf
 era = "2017"
-
-node_and_vecLUT = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(rdf2), era, testMAP)
-rdf3 = node_and_vecLUT.first
-np = rdf3.AsNumpy(["Muon_SF_ID_altnom"])
-print("rdf3 slot count", rdf.GetNSlots())
-print(np.keys())
-print(len(np["Muon_SF_ID_altnom"]))
-
 
 print("Testing GetCorrectorMap method")
 ROOT.gInterpreter.Declare("std::vector<std::string> testBtag;")
@@ -96,6 +78,42 @@ cm = ROOT.FTA.GetCorrectorMap(era, "non-UL", "", "../Kai/python/data/leptonSF/Mu
                               testBtag,
                               "btag_noAggregate",
                               "btag_HT_nJet")
+
+print("testing LUTManager")
+LUTManager = ROOT.LUTManager()
+LUTManager.Add(cm)
+LUTManager.Finalize(5)
+vectorLUTs = LUTManager.GetLUTVector()
+print(vectorLUTs[0].TH1Keys())
+print(vectorLUTs[0].TH2Keys())
+print(vectorLUTs[0].TH3Keys())
+
+# node_and_vecLUT = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(rdf2), era, vectorLUTs)
+# rdf3 = nod_and_vecLUT.first
+print("Add SFs...")
+rdf3 = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(rdf2), era, vectorLUTs, cm)
+
+print("list added branches")
+b = rdf.GetDefinedColumnNames()
+for bb in b:
+    print(str(bb))
+
+print("make histo of nominal")
+h_nom_raw = rdf3.Histo1D(("h_nom", "nominal", 100, 0.80, 1.20), "Muon_SF_ID_nom")
+h_nom = h_nom_raw.GetValue()
+print("make histo of alt")
+h_alt_raw = rdf3.Histo1D(("h_alt", "alt", 100, 0.80, 1.20), "Muon_SF_ID_altnom")
+h_alt = h_alt_raw.GetValue()
+
+print("Use AsNympy")
+np = rdf3.AsNumpy(["Muon_SF_ID_altnom"])
+print("rdf3 slot count", rdf.GetNSlots())
+print(np.keys())
+print(len(np["Muon_SF_ID_altnom"]))
+
+
+pdb.set_trace()
+# print("vector of LUTs: ", vectorLUTs, vectorLUTs[0].TH2Lookup("Muon_SF_ID_nom", 35, 1.7))
 
 # TProfile2DModel::TProfile2DModel(const char* name, const char* title, int nbinsx, const double* xbins, int nbinsy, const double* ybins, const char* option = "")
 #                     ModelBefore = ROOT.RDF.TH2DModel("{}_BTaggingYield_{}_sumW_before".format(processName, btagSFProduct.replace("btagSFProduct_","")),
