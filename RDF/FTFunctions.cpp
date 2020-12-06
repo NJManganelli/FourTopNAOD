@@ -1204,41 +1204,41 @@ namespace FTA{
     std::map< std::string, std::vector<std::string> > ret;
     if(muon_id != ""){
       if(muon_options_central.find(muon_id) != muon_options_central.end()){
-	ret["Muon_SF_ID_altnom"] = muon_options_central[muon_id];
-	ret["Muon_SF_ID_altnom"][0] = muon_path + ret["Muon_SF_ID_altnom"][0];
+	ret["Muon_SF_ID_nom"] = muon_options_central[muon_id];
+	ret["Muon_SF_ID_nom"][0] = muon_path + ret["Muon_SF_ID_nom"][0];
       }
       if(muon_options_stat.find(muon_id) != muon_options_stat.end()){
-	ret["Muon_SF_ID_altstat"] = muon_options_stat[muon_id];
-	ret["Muon_SF_ID_altstat"][0] = muon_path + ret["Muon_SF_ID_altstat"][0];
+	ret["Muon_SF_ID_stat"] = muon_options_stat[muon_id];
+	ret["Muon_SF_ID_stat"][0] = muon_path + ret["Muon_SF_ID_stat"][0];
       }
       if(muon_options_syst.find(muon_id) != muon_options_syst.end()){
-	ret["Muon_SF_ID_altsyst"] = muon_options_syst[muon_id];
-	ret["Muon_SF_ID_altsyst"][0] = muon_path + ret["Muon_SF_ID_altsyst"][0];
+	ret["Muon_SF_ID_syst"] = muon_options_syst[muon_id];
+	ret["Muon_SF_ID_syst"][0] = muon_path + ret["Muon_SF_ID_syst"][0];
       }
 
     }
     if(muon_iso != ""){
       if(muon_options_central.find(muon_iso) != muon_options_central.end()){
-	ret["Muon_SF_ISO_altnom"] = muon_options_central[muon_iso];
-	ret["Muon_SF_ISO_altnom"][0] = muon_path + ret["Muon_SF_ISO_altnom"][0];
+	ret["Muon_SF_ISO_nom"] = muon_options_central[muon_iso];
+	ret["Muon_SF_ISO_nom"][0] = muon_path + ret["Muon_SF_ISO_nom"][0];
       }
       if(muon_options_stat.find(muon_iso) != muon_options_stat.end()){
-	ret["Muon_SF_ISO_altstat"] = muon_options_stat[muon_iso];
-	ret["Muon_SF_ISO_altstat"][0] = muon_path + ret["Muon_SF_ISO_altstat"][0];
+	ret["Muon_SF_ISO_stat"] = muon_options_stat[muon_iso];
+	ret["Muon_SF_ISO_stat"][0] = muon_path + ret["Muon_SF_ISO_stat"][0];
       }
       if(muon_options_syst.find(muon_iso) != muon_options_syst.end()){
-	ret["Muon_SF_ISO_altsyst"] = muon_options_syst[muon_iso];
-	ret["Muon_SF_ISO_altsyst"][0] = muon_path + ret["Muon_SF_ISO_altsyst"][0];
+	ret["Muon_SF_ISO_syst"] = muon_options_syst[muon_iso];
+	ret["Muon_SF_ISO_syst"][0] = muon_path + ret["Muon_SF_ISO_syst"][0];
       }
     }
     if(electron_id != ""){
       if(electron_options_central.find(electron_id) != electron_options_central.end()){
-	ret["Electron_SF_ID_altnom"] = electron_options_central[electron_id];
-	ret["Electron_SF_ID_altnom"][0] = electron_path + ret["Electron_SF_ID_altnom"][0];
+	ret["Electron_SF_ID_nom"] = electron_options_central[electron_id];
+	ret["Electron_SF_ID_nom"][0] = electron_path + ret["Electron_SF_ID_nom"][0];
       }
       if(electron_options_uncertainty.find(electron_id) != electron_options_uncertainty.end()){
-	ret["Electron_SF_ID_altunc"] = electron_options_uncertainty[electron_id];
-	ret["Electron_SF_ID_altunc"][0] = electron_path + ret["Electron_SF_ID_altunc"][0];
+	ret["Electron_SF_ID_unc"] = electron_options_uncertainty[electron_id];
+	ret["Electron_SF_ID_unc"][0] = electron_path + ret["Electron_SF_ID_unc"][0];
       }
     }
     if(electron_eff != ""){
@@ -1284,11 +1284,32 @@ namespace FTA{
     //               "}"\
     //               "return ret;"
     ROOT::RDF::RNode ret = df;
+    auto branches = ret.GetColumnNames();
+    bool low_electron_eff = false;
+    bool high_electron_eff = false;
+    bool composite_electron_eff_defined = false;
+
     for(std::map< std::string, std::vector<std::string> >::iterator cm_iter = correctormap.begin(); cm_iter != correctormap.end(); ++cm_iter){
       std::string branch_and_key, lookup_type;
       std::vector<std::string> arg_list = {};
-      
+
       branch_and_key = cm_iter->first;
+
+      //skip branches that are already defined
+      bool already_defined = false;
+      for(int bi = 0; bi < branches.size(); ++bi){
+	if(branch_and_key == branches.at(bi)) already_defined = true;
+	if(!composite_electron_eff_defined && branches.at(bi) == "Electron_SF_EFF_nom") composite_electron_eff_defined = true;
+      }
+      if(already_defined){
+	std::cout << "Branch " << branch_and_key << " already defined, skipping." << std::endl;
+	continue;
+      }
+      //check if we should compose the overall electron efficiency scale factor, only after skipping branches that are already defined and don't need a composition
+      if(branch_and_key == "Electron_SF_EFF_ptBelow20_nom") low_electron_eff = true;
+      if(branch_and_key == "Electron_SF_EFF_ptAbove20_nom") high_electron_eff = true;
+
+
       //store the argument list in a vector
       for(int i = 0; i < (cm_iter->second).size(); ++i){
 	if(i == 2) lookup_type = cm_iter->second[i];
@@ -1342,8 +1363,30 @@ namespace FTA{
 	else std::cout << "Unhandled type in AddLeptonSF()" << std::endl;
       }
     }
-    // auto branches = ret.GetDefinedColumnNames();
-    // for(int bi = 0; bi < branches.size(); ++bi) std::cout << branches[bi] << std::endl;
+    if(low_electron_eff && high_electron_eff){
+      // if(!composite_electron_eff_defined){
+      if(true){
+	ret = ret.DefineSlot("Electron_SF_EFF_nom", 
+			     [](int slot, ROOT::VecOps::RVec<float> low_eff,  ROOT::VecOps::RVec<float> high_eff,  ROOT::VecOps::RVec<float> pt){
+			       ROOT::VecOps::RVec<float> rvec_return = {};
+			       for(int pi=0; pi < pt.size(); ++pi) {
+				 rvec_return.push_back((pt.at(pi) >= 20.0 ? high_eff.at(pi) : low_eff.at(pi)));
+			       }
+			       return rvec_return;
+			     },
+			     {"Electron_SF_EFF_ptBelow20_nom", "Electron_SF_EFF_ptAbove20_nom", "Electron_pt"});
+	ret = ret.DefineSlot("Electron_SF_EFF_unc", 
+			     [](int slot, ROOT::VecOps::RVec<float> low_eff,  ROOT::VecOps::RVec<float> high_eff,  ROOT::VecOps::RVec<float> pt){
+			       ROOT::VecOps::RVec<float> rvec_return = {};
+			       for(int pi=0; pi < pt.size(); ++pi) {
+				 rvec_return.push_back((pt.at(pi) >= 20.0 ? high_eff.at(pi) : low_eff.at(pi)));
+			       }
+			       return rvec_return;
+			     },
+			     {"Electron_SF_EFF_ptBelow20_unc", "Electron_SF_EFF_ptAbove20_unc", "Electron_pt"});
+      }
+      else std::cout << "Branch Electron_SF_EFF_nom already defined, skipping composition" << std::endl;
+    }
     return ret;
   }
   template <typename T>
