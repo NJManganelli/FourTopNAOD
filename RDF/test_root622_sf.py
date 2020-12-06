@@ -94,7 +94,7 @@ print("Add SFs...")
 rdf3 = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(rdf2), era, vectorLUTs, cm)
 
 print("list added branches")
-b = rdf.GetDefinedColumnNames()
+b = rdf3.GetDefinedColumnNames()
 for bb in b:
     print(str(bb))
 
@@ -104,6 +104,29 @@ h_nom = h_nom_raw.GetValue()
 print("make histo of alt")
 h_alt_raw = rdf3.Histo1D(("h_alt", "alt", 100, 0.80, 1.20), "Muon_SF_ID_altnom")
 h_alt = h_alt_raw.GetValue()
+
+for x in rdf3.GetColumnNames():
+    if "_SF_" in str(x): print(x)
+
+rdf4 = rdf3.Define("diff_Electron_SF_ID_nom", "Electron_SF_ID_nom - Electron_SF_ID_altnom")\
+       .Define("diff_Electron_SF_ID_unc", "Electron_SF_ID_unc - Electron_SF_ID_altunc")\
+       .Define("diff_Muon_SF_ID_nom", "Muon_SF_ID_nom - Muon_SF_ID_altnom")\
+       .Define("diff_Muon_SF_ID_stat", "Muon_SF_ID_stat - Muon_SF_ID_altstat")\
+       .Define("diff_Muon_SF_ID_syst", "Muon_SF_ID_syst - Muon_SF_ID_altsyst")\
+       .Define("diff_Muon_SF_ISO_nom", "Muon_SF_ISO_nom - Muon_SF_ISO_altnom")\
+       .Define("diff_Muon_SF_ISO_stat", "Muon_SF_ISO_stat - Muon_SF_ISO_altstat")\
+       .Define("diff_Muon_SF_ISO_syst", "Muon_SF_ISO_syst - Muon_SF_ISO_altsyst")
+# rdf4 = rdf4.Define("diff_Electron_SF_EFF_unc", "Electron_SF_EFF_unc - (Electron_pt > 20 ? Electron_SF_EFF_ptAbove20_unc : Electron_SF_EFF_ptBelow20_unc)")\
+#            .Define("diff_Electron_SF_EFF_nom", "Electron_SF_EFF_nom - (Electron_pt > 20 ? Electron_SF_EFF_ptAbove20_nom : Electron_SF_EFF_ptBelow20_nom)")
+
+print("Get differences")
+diffs = {}
+for x in ["diff_Electron_SF_ID_nom", "diff_Electron_SF_ID_unc", "diff_Muon_SF_ID_nom", "diff_Muon_SF_ID_stat", "diff_Muon_SF_ID_syst", "diff_Muon_SF_ISO_nom", "diff_Muon_SF_ISO_stat", "diff_Muon_SF_ISO_syst"]:
+    diffs[x] = rdf4.Stats(x)
+for k, v in diffs.items():
+    v = v.GetValue()
+    v = v.GetMean()
+    print(k, v)
 
 print("Use AsNympy")
 np = rdf3.AsNumpy(["Muon_SF_ID_altnom"])
