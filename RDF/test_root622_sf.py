@@ -97,7 +97,7 @@ print(vectorLUTs[0].TH3Keys())
 # node_and_vecLUT = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(rdf2), era, vectorLUTs)
 # rdf3 = nod_and_vecLUT.first
 print("Add SFs...")
-rdf3 = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(rdf2), era, vectorLUTs, cm)
+rdf3 = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(rdf2), era, "tttt", vectorLUTs, cm)
 
 print("list added branches")
 b = rdf3.GetDefinedColumnNames()

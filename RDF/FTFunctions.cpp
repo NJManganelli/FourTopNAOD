@@ -1263,7 +1263,8 @@ namespace FTA{
 
 
   // std::pair< ROOT::RDF::RNode, std::vector<LUT*> > AddLeptonSF(ROOT::RDF::RNode df, std::string_view era, std::map< std::string, std::vector<std::string> > idmap){
-  ROOT::RDF::RNode AddLeptonSF(ROOT::RDF::RNode df, std::string_view era, std::shared_ptr< std::vector<LUT*> > veclut, std::map< std::string, std::vector<std::string> > correctormap){
+  ROOT::RDF::RNode AddLeptonSF(ROOT::RDF::RNode df, std::string era, std::string processname,
+			       std::shared_ptr< std::vector<LUT*> > veclut, std::map< std::string, std::vector<std::string> > correctormap){
     // for(std::vector<string>::const_iterator req_iter = requiredLUTs.begin(); req_iter != requiredLUTs.end(); ++ req_iter){
     //   if((*veclut)[0].find(*req_iter) == (*veclut)[0].end()){ std::cout << "Required map not found: " << *req_iter << std::endl; }
     //   else {std::cout << "Required map found: " << *req_iter << std::endl;}
@@ -1392,6 +1393,76 @@ namespace FTA{
 			     {"Electron_SF_EFF_ptBelow20_unc", "Electron_SF_EFF_ptAbove20_unc", "Electron_pt"});
       }
       else std::cout << "Branch Electron_SF_EFF_nom already defined, skipping composition" << std::endl;
+    }
+    return ret;
+  }
+  ROOT::RDF::RNode AddBTaggingYieldRenormalization(ROOT::RDF::RNode df, std::string era, std::string processname, 
+						   std::shared_ptr< std::vector<LUT*> > veclut, std::map< std::string, std::vector<std::string> > correctormap){
+    ROOT::RDF::RNode ret = df;
+    auto branches = ret.GetColumnNames();
+    std::string expected_corrector_start = "btag___" + era + "___" + processname + "___";
+
+    Bool_t low_electron_eff = false;
+    Bool_t high_electron_eff = false;
+    Bool_t composite_electron_eff_defined = false;
+
+    for(std::map< std::string, std::vector<std::string> >::iterator cm_iter = correctormap.begin(); cm_iter != correctormap.end(); ++cm_iter){
+      std::string corrector_key, btag_final_weight, btag_sf_product, lookup_type, syst_postfix;
+      std::vector<std::string> arg_list = {};
+
+      //key is not precisely the branch for btag corrections, since we need individual ones for each process!
+      corrector_key = cm_iter->first;
+
+      //store the argument list in a vector
+      for(int i = 0; i < (cm_iter->second).size(); ++i){
+	if(i == 2) lookup_type = cm_iter->second[i];
+	else if(i > 2) arg_list.push_back(cm_iter->second[i]);
+	// std::cout << cm_iter->second[i] << " ";
+      }
+
+      //skip correctors that are not starting with btag___<era>___<process_name>
+      if(std::strncmp(corrector_key.c_str(), expected_corrector_start.c_str(), expected_corrector_start.length()) != 0){
+	std::cout << "AddBTaggingYieldRenormalization() skipping non-relavant correction " << corrector_key << std::endl;
+	continue;
+      }
+
+      //determine the systematic postfix, then define the final btag branch weight name, and the required input branch btag_sf_product, appending the last to the argument list
+      syst_postfix = corrector_key.substr(expected_corrector_start.length(), corrector_key.length() - expected_corrector_start.length());
+      std::cout << "syst_postfix: " << syst_postfix << std::endl;
+      btag_final_weight = "alt_pwgt_btag___" + syst_postfix;
+      btag_sf_product = "btagSFProduct___" + syst_postfix;
+      arg_list.push_back(btag_sf_product);
+
+      //skip branches that are already defined
+      Bool_t already_defined = false;
+      for(int bi = 0; bi < branches.size(); ++bi){
+	if(btag_final_weight == branches.at(bi)) already_defined = true;
+      }
+      if(already_defined){
+	std::cout << "Branch " << btag_final_weight << " already defined, skipping." << std::endl;
+	continue;
+      }
+
+      if(lookup_type == "TH1Lookup"){
+	auto slottedLookup = [veclut, corrector_key](int slot, float X, float input_btag_sf_product){
+	  return input_btag_sf_product * (*veclut)[slot]->TH1Lookup(corrector_key, X);
+	};
+	ret = ret.DefineSlot(corrector_key, slottedLookup, arg_list);
+
+      }
+      else if(lookup_type == "TH2Lookup"){
+	auto slottedLookup = [veclut, corrector_key](int slot, float X, float Y, float input_btag_sf_product){
+	  return input_btag_sf_product * (*veclut)[slot]->TH2Lookup(corrector_key, X, Y);
+	};
+	ret = ret.DefineSlot(corrector_key, slottedLookup, arg_list);
+      }
+      else if(lookup_type == "TH3Lookup"){
+	auto slottedLookup = [veclut, corrector_key](int slot, float X, float Y, float Z, float input_btag_sf_product){
+	  return input_btag_sf_product * (*veclut)[slot]->TH3Lookup(corrector_key, X, Y, Z);
+	};
+	ret = ret.DefineSlot(corrector_key, slottedLookup, arg_list);
+      }
+      else std::cout << "Unhandled type in AddBTaggingYieldRenormalization()" << std::endl;
     }
     return ret;
   }
