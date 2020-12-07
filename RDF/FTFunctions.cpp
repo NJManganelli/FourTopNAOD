@@ -591,6 +591,7 @@ namespace FTA{
 								    std::string electron_eff = "",
 								    std::string btag_top_path = "", 
 								    std::vector<std::string> btag_process_names = {"tttt"},
+								    std::vector<std::string> btag_inclusive_process_names = {"tt_DL"},
 								    std::vector<std::string> btag_systematic_names = {"nom"},
 								    bool btag_use_aggregate = false,
 								    bool btag_use_HT_only = false,
@@ -1252,8 +1253,27 @@ namespace FTA{
 	  if(btag_use_HT_only) btag_key += "1DX";
 	  if(btag_use_nJet_only) btag_key += "1DY";
 	  btag_key += "___" + syst_name;
-	  std::cout << "Btag key formed: " << btag_key << std::endl;
+	  std::cout << "Btag key formed for process " << static_cast<std::string>(*proc_iter) << ": " << btag_key << std::endl;
 	  ret["btag___" + era + "___" + static_cast<std::string>(*proc_iter) + "___" + syst_name] = {btag_top_path + "BTaggingYields.root", 
+												     btag_key, "TH2Lookup", 
+												     "HT__" + syst_name, 
+												     "nFTAJet__" + syst_name};
+	}
+      }
+      for(std::vector<std::string>::iterator incl_iter = btag_inclusive_process_names.begin(); incl_iter != btag_inclusive_process_names.end(); ++incl_iter){
+	for(std::vector<std::string>::iterator syst_iter = btag_systematic_names.begin(); syst_iter != btag_systematic_names.end(); ++syst_iter){
+	  std::string btag_key, syst_name;
+	  syst_name = *syst_iter;
+	  if(strncmp(syst_name.c_str(), "$NOMINAL", 8) == 0) syst_name = "nom";
+	  //Force inclusive processes to use the Aggregate method, because we don't store the maps for the inclusive processes (a previous workaround to avoid double counting in the aggregate maps)
+	  btag_key = "Aggregate"; 
+	  // else btag_key = era + "___" + static_cast<std::string>(*incl_iter) + "_";
+	  
+	  if(btag_use_HT_only) btag_key += "1DX";
+	  if(btag_use_nJet_only) btag_key += "1DY";
+	  btag_key += "___" + syst_name;
+	  std::cout << "Btag key formed for process " << static_cast<std::string>(*incl_iter) << ": " << btag_key << std::endl;
+	  ret["btag___" + era + "___" + static_cast<std::string>(*incl_iter) + "___" + syst_name] = {btag_top_path + "BTaggingYields.root", 
 												     btag_key, "TH2Lookup", 
 												     "HT__" + syst_name, 
 												     "nFTAJet__" + syst_name};
@@ -1398,7 +1418,7 @@ namespace FTA{
     }
     return ret;
   }
-  ROOT::RDF::RNode AddBTaggingYieldRenormalization(ROOT::RDF::RNode df, std::string era, std::string processname, 
+  ROOT::RDF::RNode AddBTaggingYieldsRenormalization(ROOT::RDF::RNode df, std::string era, std::string processname, 
 						   std::shared_ptr< std::vector<LUT*> > veclut, std::map< std::string, std::vector<std::string> > correctormap){
     ROOT::RDF::RNode ret = df;
     auto branches = ret.GetColumnNames();

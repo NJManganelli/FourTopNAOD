@@ -7405,30 +7405,48 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
     ################################################################################
     #### Setup all correctors e.g. LeptonSFs and BTaggingYields Renormalization ####
     ################################################################################
-    ROOT.gInterpreter.Declare("std::vector<std::string> corrector_process_names;")
-    correctorProcessNames = getattr(ROOT, "corrector_process_names")
+    ROOT.gInterpreter.Declare("std::vector<std::string> btagging_process_names;")
+    btaggingProcessNames = getattr(ROOT, "btagging_process_names")
+    ROOT.gInterpreter.Declare("std::vector<std::string> btagging_inclusive_process_names;")
+    btaggingInclusiveProcessNames = getattr(ROOT, "btagging_inclusive_process_names")
     for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
         if name not in valid_samples: 
             continue
         else:
-            correctorProcessNames.push_back(name)
+            #Get all the potential split process names (in BTaggingYields() function era + "___" + subprocess is the 'processName', e.g. 2017___ttbb_DL-GF. Since the corrector map handles this era modifier already, we drop it here...
+            #What an inconsistent mess it all is.
+            earlySplitProcess = vals.get("splitProcess", None)
+            if isinstance(earlySplitProcess, (dict, collections.OrderedDict)):
+                # df_with_IDs = input_df
+                splitProcs = earlySplitProcess.get("processes")
+                for preProcessName, processDict in splitProcs.items():
+                    btaggingProcessNames.push_back(preProcessName)
+                #Get the inclusive process name for those that are also split
+                btaggingInclusiveProcessNames.push_back(name)
+            #store the names 'normally' for samples that are NOT split 
+            else:
+                btaggingProcessNames.push_back(name)
+    print(btaggingProcessNames)
+    print(btaggingInclusiveProcessNames)
 
-    ROOT.gInterpreter.Declare("std::vector<std::string> corrector_systematic_names;")
-    correctorSystematicNames = getattr(ROOT, "corrector_systematic_names")
+    ROOT.gInterpreter.Declare("std::vector<std::string> btagging_systematic_names;")
+    btaggingSystematicNames = getattr(ROOT, "btagging_systematic_names")
     for sysVar, sysDict in sysVariationsAll.items():
-        correctorSystematicNames.push_back(sysVar)        
+        btaggingSystematicNames.push_back(sysVar)
                 
     print("FIXME: hardcoded incorrect btagging top path for the corrector map")
     print("FIXME: hardcoded non-UL/UL and no VFP handling in the corrector map retrieval")
-    BTaggingYieldsTopPath = BTaggingYieldsFile.replace("BTaggingYields.root", "")
+    BTaggingYieldsTopPath = BTaggingYieldsFile.replace("BTaggingYields.root", "") if BTaggingYieldsFile is not None else "" #Trigger the null set of correctors for btagging if there's no yields file we're pointing to...
+    # BTaggingYieldsTopPath = ""
     correctorMap = ROOT.FTA.GetCorrectorMap(era, #2017 or 2018 or 2016, as string
                                             "non-UL", #UL or non_UL
                                             "", ##preVFP or postVFP if 2016
                                             "../Kai/python/data/leptonSF/Muon", "LooseID", "TightRelIso_MediumID",
                                             "../Kai/python/data/leptonSF/Electron", "Loose", "UseEfficiency",
                                             BTaggingYieldsTopPath,
-                                            correctorProcessNames, #std::vector<std::string> btag_process_names = {"tttt"},
-                                            correctorSystematicNames, #std::vector<std::string> btag_systematic_names = {"nom"},
+                                            btaggingProcessNames, #std::vector<std::string> btag_process_names = {"tttt"},
+                                            btaggingInclusiveProcessNames, 
+                                            btaggingSystematicNames, #std::vector<std::string> btag_systematic_names = {"nom"},
                                             BTaggingYieldsAggregate, #bool btag_use_aggregate = false,
                                             useHTOnly, #bool btag_use_HT_only = false,
                                             useNJetOnly) #bool btag_use_nJet_only = false
