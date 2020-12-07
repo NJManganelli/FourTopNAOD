@@ -66,19 +66,25 @@ rdf2 = rdf
 era = "2017"
 
 print("Testing GetCorrectorMap method")
-ROOT.gInterpreter.Declare("std::vector<std::string> testBtag;")
-testBtag = getattr(ROOT, "testBtag")
-testBtag.push_back("tt_DL")
-testBtag.push_back("tt_DL-GF")
+ROOT.gInterpreter.Declare("std::vector<std::string> testBtag_process_names;")
+testBtag = getattr(ROOT, "testBtag_process_names")
+ROOT.gInterpreter.Declare("std::vector<std::string> testBtag_syst_names;")
+testBtag_syst = getattr(ROOT, "testBtag_syst_names")
+testBtag.push_back("tttW")
+testBtag.push_back("ttZZ")
 testBtag.push_back("tttt")
+testBtag_syst.push_back("nom")
+testBtag_syst.push_back("btagSF_shape_lfUp")
+testBtag_syst.push_back("btagSF_shape_lfDown")
 
 cm = ROOT.FTA.GetCorrectorMap(era, "non-UL", "", "../Kai/python/data/leptonSF/Muon", "MediumID", "TightRelIso_MediumID",
                               "../Kai/python/data/leptonSF/Electron", "Medium", "UseEfficiency",
-                              "/eos/user/n/nmangane/analysis/NovemberTest/BTaggingYields",
-                              testBtag,
-                              "btag_noAggregate",
-                              "btag_HT_nJet")
-
+                              "/eos/user/n/nmangane/analysis/September28/BTaggingYields/ElMu/",
+                              testBtag, #std::vector<std::string> btag_process_names = {"tttt"},
+                              testBtag_syst, #std::vector<std::string> btag_systematic_names = {"nom"},
+                              False, #bool btag_use_aggregate = false,
+                              False, #bool btag_use_HT_only = false,
+                              False) #bool btag_use_nJet_only = false
 print("testing LUTManager")
 LUTManager = ROOT.LUTManager()
 LUTManager.Add(cm)

@@ -590,9 +590,11 @@ namespace FTA{
 								    std::string electron_id = "", 
 								    std::string electron_eff = "",
 								    std::string btag_top_path = "", 
-								    std::vector<std::string> btag_process_names = {},
-								    std::string btag_doAggregate = "btag_noAggregate", 
-								    std::string btag_event = "btag_HT_nJet"){
+								    std::vector<std::string> btag_process_names = {"tttt"},
+								    std::vector<std::string> btag_systematic_names = {"nom"},
+								    bool btag_use_aggregate = false,
+								    bool btag_use_HT_only = false,
+								    bool btag_use_nJet_only = false){
     //python constructor:
     //def __init__(self, muon_ID=None, muon_ISO=None, electron_ID=None, era=None, doMuonHLT=False, doElectronHLT_ZVtx=False, 
     //pre2018Run316361Lumi = 8.942, post2018Run316361Lumi = 50.785
@@ -632,15 +634,6 @@ namespace FTA{
     }
     //Electron ID's
     //Note on uncertainties: stored in the same maps and accessed by bin error, so just copy...
-    //#EFF SFs
-    // if self.era != "2018" and el.pt < 20;
-    // sf_el_eff_nom.append(self._worker_el_EFF_lowEt.getSF(el.pdgId, el.pt, el.eta));
-    // sf_el_eff_unc.append(self._worker_el_EFF_lowEt.getSFErr(el.pdgId, el.pt, el.eta));
-    // sf_el_eff_nom.append(self._worker_el_EFF.getSF(el.pdgId, el.pt, el.eta));
-    // sf_el_eff_unc.append(self._worker_el_EFF.getSFErr(el.pdgId, el.pt, el.eta));
-    // //#ID SFs;
-    // sf_el_id_nom.append(self._worker_el_ID.getSF(el.pdgId, el.pt, el.eta));
-    // sf_el_id_unc.append(self._worker_el_ID.getSFErr(el.pdgId, el.pt, el.eta));
     if(era == "2016"){
       if(legacy == "non-UL"){
 	electron_options_central["EFF_ptBelow20"] =	{"EGM2D_BtoH_low_RecoSF_Legacy2016.root", "EGamma_SF2D", "TH2Lookup", "Electron_eta", "Electron_pt"};
@@ -806,23 +799,12 @@ namespace FTA{
       }
     }
     //Muon SFs //Mostly the errors are stored in separate histograms inside two files, 1 for ISO and 1 for ID 
-    //So for 2017 and 2018 non-UL: BinContent from unique histogram ...ratio, ...ratio_stat, ...ratio_syst
-    //for 2016, central is BinContent and syst error is BinError on a central histogram
-    //For UL, it's not yet known...
-    //#ID SFs
-    // sf_mu_id_nom.append(self._worker_mu_ID_nom.getSF(mu.pdgId, mu.pt, mu.eta));
-    // sf_mu_id_stat.append(self._worker_mu_ID_stat.getSFErr(mu.pdgId, mu.pt, mu.eta));
-    // sf_mu_id_syst.append(0.0 if self.era == "2016" else self._worker_mu_ID_syst.getSFErr(mu.pdgId, mu.pt, mu.eta));
-    //#ISO SFs
-    // sf_mu_iso_nom.append(self._worker_mu_ISO_nom.getSF(mu.pdgId, mu.pt, mu.eta));
-    // sf_mu_iso_stat.append(self._worker_mu_ISO_stat.getSFErr(mu.pdgId, mu.pt, mu.eta));
-    // sf_mu_iso_syst.append(0.0 if self.era == "2016" else self._worker_mu_ISO_syst.getSFErr(mu.pdgId, mu.pt, mu.eta));
-                             // "TRG_SL": {"Mu_Trg.root", "IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio",
-                             //            "STAT": "Mu_Trg.root", "IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio"},
-                             // "TRG_SL50": {"Mu_Trg.root", "Mu50_OR_TkMu50_PtEtaBins/pt_abseta_ratio",
-                             //              "STAT": "Mu_Trg.root", "Mu50_OR_TkMu50_PtEtaBins/pt_abseta_ratio"},
-
-
+    //So for 2017 and 2018 non-UL: BinContent from unique histogram ...ratio, BinError from unique histogram ...ratio_stat, ...ratio_syst
+    //for 2016, central is BinContent and syst error is BinError on a single central histogram
+    // "TRG_SL": {"Mu_Trg.root", "IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio",
+    //            "STAT": "Mu_Trg.root", "IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio"},
+    // "TRG_SL50": {"Mu_Trg.root", "Mu50_OR_TkMu50_PtEtaBins/pt_abseta_ratio",
+    //              "STAT": "Mu_Trg.root", "Mu50_OR_TkMu50_PtEtaBins/pt_abseta_ratio"},
     if(era == "2016"){
       if(legacy == "non-UL"){
 	muon_options_central["LooseID"] =                {"Mu_ID.root", "MC_NUM_LooseID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio", "TH2Lookup", "Muon_pt", "Muon_eta"};
@@ -1022,60 +1004,60 @@ namespace FTA{
 	muon_options_syst["TightRelTkIso_HighPtIDandIPCut"] =		{"RunBCDEF_SF_ISO_syst.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_pair_newTuneP_probe_pt_abseta_syst", "TH2LookupErr", "Muon_pt", "Muon_eta"};
       }
       else if(legacy == "UL"){
-	muon_options_central["HighPtID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["HighPtID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["HighPtID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["LooseID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_LooseID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["LooseID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_LooseID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["LooseID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_LooseID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["MediumID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_MediumID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["MediumID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_MediumID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["MediumID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_MediumID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["MediumPromptID"] =	{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_MediumPromptID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["MediumPromptID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_MediumPromptID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["MediumPromptID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_MediumPromptID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["SoftID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_SoftID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["SoftID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_SoftID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["SoftID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_SoftID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["TightID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_TightID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["TightID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_TightID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["TightID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_TightID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["TrkHighPtID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_TrkHighPtID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["TrkHighPtID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_TrkHighPtID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["TrkHighPtID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_TrkHighPtID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};	
-	muon_options_central["LooseRelIso_LooseID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_LooseID_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["LooseRelIso_LooseID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_LooseID_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["LooseRelIso_LooseID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_LooseID_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["LooseRelIso_MediumID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_MediumID_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["LooseRelIso_MediumID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_MediumID_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["LooseRelIso_MediumID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_MediumID_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["LooseRelIso_MediumPromptID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_MediumPromptID_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["LooseRelIso_MediumPromptID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_MediumPromptID_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["LooseRelIso_MediumPromptID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_MediumPromptID_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["LooseRelIso_TightIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_TightIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["LooseRelIso_TightIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_TightIDandIPCut_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["LooseRelIso_TightIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_TightIDandIPCut_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["LooseRelTkIso_HighPtIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelTkIso_DEN_HighPtIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["LooseRelTkIso_HighPtIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelTkIso_DEN_HighPtIDandIPCut_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["LooseRelTkIso_HighPtIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelTkIso_DEN_HighPtIDandIPCut_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["LooseRelTkIso_TrkHighPtIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["LooseRelTkIso_TrkHighPtIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["LooseRelTkIso_TrkHighPtIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["TightRelIso_MediumID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_MediumID_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["TightRelIso_MediumID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_MediumID_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["TightRelIso_MediumID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_MediumID_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["TightRelIso_MediumPromptID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_MediumPromptID_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["TightRelIso_MediumPromptID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_MediumPromptID_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["TightRelIso_MediumPromptID"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_MediumPromptID_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["TightRelIso_TightIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_TightIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["TightRelIso_TightIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_TightIDandIPCut_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["TightRelIso_TightIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_TightIDandIPCut_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["TightRelTkIso_HighPtIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["TightRelTkIso_HighPtIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["TightRelTkIso_HighPtIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_central["TightRelTkIso_TrkHighPtIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
-	muon_options_stat["TightRelTkIso_TrkHighPtIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
-	muon_options_syst["TightRelTkIso_TrkHighPtIDandIPCut"] = {"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["HighPtID"] =				{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["HighPtID"] =					{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["HighPtID"] =					{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_HighPtID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["LooseID"] =				{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_LooseID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["LooseID"] =					{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_LooseID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["LooseID"] =					{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_LooseID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["MediumID"] =				{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_MediumID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["MediumID"] =					{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_MediumID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["MediumID"] =					{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_MediumID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["MediumPromptID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_MediumPromptID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["MediumPromptID"] =				{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_MediumPromptID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["MediumPromptID"] =				{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_MediumPromptID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["SoftID"] =				{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_SoftID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["SoftID"] =					{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_SoftID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["SoftID"] =					{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_SoftID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["TightID"] =				{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_TightID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["TightID"] =					{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_TightID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["TightID"] =					{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_TightID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["TrkHighPtID"] =				{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_TrkHighPtID_DEN_TrackerMuons_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["TrkHighPtID"] =				{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_TrkHighPtID_DEN_TrackerMuons_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["TrkHighPtID"] =				{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root", "NUM_TrkHighPtID_DEN_TrackerMuons_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};	
+	muon_options_central["LooseRelIso_LooseID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_LooseID_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["LooseRelIso_LooseID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_LooseID_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["LooseRelIso_LooseID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_LooseID_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["LooseRelIso_MediumID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_MediumID_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["LooseRelIso_MediumID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_MediumID_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["LooseRelIso_MediumID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_MediumID_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["LooseRelIso_MediumPromptID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_MediumPromptID_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["LooseRelIso_MediumPromptID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_MediumPromptID_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["LooseRelIso_MediumPromptID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_MediumPromptID_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["LooseRelIso_TightIDandIPCut"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_TightIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["LooseRelIso_TightIDandIPCut"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_TightIDandIPCut_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["LooseRelIso_TightIDandIPCut"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelIso_DEN_TightIDandIPCut_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["LooseRelTkIso_HighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelTkIso_DEN_HighPtIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["LooseRelTkIso_HighPtIDandIPCut"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelTkIso_DEN_HighPtIDandIPCut_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["LooseRelTkIso_HighPtIDandIPCut"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelTkIso_DEN_HighPtIDandIPCut_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["LooseRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["LooseRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["LooseRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_LooseRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["TightRelIso_MediumID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_MediumID_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["TightRelIso_MediumID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_MediumID_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["TightRelIso_MediumID"] =			{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_MediumID_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["TightRelIso_MediumPromptID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_MediumPromptID_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["TightRelIso_MediumPromptID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_MediumPromptID_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["TightRelIso_MediumPromptID"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_MediumPromptID_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["TightRelIso_TightIDandIPCut"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_TightIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["TightRelIso_TightIDandIPCut"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_TightIDandIPCut_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["TightRelIso_TightIDandIPCut"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelIso_DEN_TightIDandIPCut_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["TightRelTkIso_HighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["TightRelTkIso_HighPtIDandIPCut"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["TightRelTkIso_HighPtIDandIPCut"] =		{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelTkIso_DEN_HighPtIDandIPCut_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_central["TightRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt", "TH2Lookup", "Muon_eta", "Muon_pt"};
+	muon_options_stat["TightRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_stat", "TH2LookupErr", "Muon_eta", "Muon_pt"};
+	muon_options_syst["TightRelTkIso_TrkHighPtIDandIPCut"] =	{"Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root", "NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut_abseta_pt_syst", "TH2LookupErr", "Muon_eta", "Muon_pt"};
       }
     }
     else if(era == "2018"){
@@ -1196,12 +1178,8 @@ namespace FTA{
       }
     }//era is 2018
 
-
-    //std::string era,std::string legacy,std::string VFP="",std::string muon_top_path = "",std::string muon_id = "",std::string muon_iso = ""
-    //std::string electron_top_path = "",std::string electron_id = "",std::string electron_eff = ""
-    //std::string btag_top_path = "",std::string btag_doAggregate = "btag_noAggregate",std::string btag_event = "btag_HT_nJet"
-
     std::map< std::string, std::vector<std::string> > ret;
+    //muon ID and ISO
     if(muon_id != ""){
       if(muon_options_central.find(muon_id) != muon_options_central.end()){
 	ret["Muon_SF_ID_nom"] = muon_options_central[muon_id];
@@ -1231,6 +1209,7 @@ namespace FTA{
 	ret["Muon_SF_ISO_syst"][0] = muon_path + ret["Muon_SF_ISO_syst"][0];
       }
     }
+    //Electron ID and EFF
     if(electron_id != ""){
       if(electron_options_central.find(electron_id) != electron_options_central.end()){
 	ret["Electron_SF_ID_nom"] = electron_options_central[electron_id];
@@ -1258,7 +1237,27 @@ namespace FTA{
 	ret["Electron_SF_EFF_ptAbove20_unc"] = electron_options_uncertainty["EFF_ptAbove20"];
 	ret["Electron_SF_EFF_ptAbove20_unc"][0] = electron_path + ret["Electron_SF_EFF_ptAbove20_unc"][0];
       }
-    }    
+    }
+
+    //Load btag SFs for each process and systematic specified
+    if(btag_top_path != ""){
+      for(std::vector<std::string>::iterator proc_iter = btag_process_names.begin(); proc_iter != btag_process_names.end(); ++proc_iter){
+	for(std::vector<std::string>::iterator syst_iter = btag_systematic_names.begin(); syst_iter != btag_systematic_names.end(); ++syst_iter){
+	  std::string btag_key;
+	  if(btag_use_aggregate)btag_key = "Aggregate";
+	  else btag_key = era + "___" + static_cast<std::string>(*proc_iter) + "_";
+	  
+	  if(btag_use_HT_only) btag_key += "1DX";
+	  if(btag_use_nJet_only) btag_key += "1DY";
+	  btag_key += "___" + static_cast<std::string>(*syst_iter);
+	  std::cout << "Btag key formed: " << btag_key << std::endl;
+	  ret["btag___" + era + "___" + static_cast<std::string>(*proc_iter) + "___" + static_cast<std::string>(*syst_iter)] = {btag_top_path + "BTaggingYields.root", 
+																btag_key, "TH2Lookup", 
+																"HT__" + static_cast<std::string>(*syst_iter), 
+																"nFTAJet__" + static_cast<std::string>(*syst_iter)};
+	}
+      }
+    }
     return ret;
   }
 
@@ -1285,9 +1284,9 @@ namespace FTA{
     //               "return ret;"
     ROOT::RDF::RNode ret = df;
     auto branches = ret.GetColumnNames();
-    bool low_electron_eff = false;
-    bool high_electron_eff = false;
-    bool composite_electron_eff_defined = false;
+    Bool_t low_electron_eff = false;
+    Bool_t high_electron_eff = false;
+    Bool_t composite_electron_eff_defined = false;
 
     for(std::map< std::string, std::vector<std::string> >::iterator cm_iter = correctormap.begin(); cm_iter != correctormap.end(); ++cm_iter){
       std::string branch_and_key, lookup_type;
@@ -1296,7 +1295,7 @@ namespace FTA{
       branch_and_key = cm_iter->first;
 
       //skip branches that are already defined
-      bool already_defined = false;
+      Bool_t already_defined = false;
       for(int bi = 0; bi < branches.size(); ++bi){
 	if(branch_and_key == branches.at(bi)) already_defined = true;
 	if(!composite_electron_eff_defined && branches.at(bi) == "Electron_SF_EFF_nom") composite_electron_eff_defined = true;
@@ -1305,6 +1304,13 @@ namespace FTA{
 	std::cout << "Branch " << branch_and_key << " already defined, skipping." << std::endl;
 	continue;
       }
+
+      //skip correctors that are not starting with Muon or Electron
+      if(std::strncmp(branch_and_key.c_str(), "Muon", 4) != 0 || std::strncmp(branch_and_key.c_str(), "Electron", 8) != 0){
+	std::cout << "AddLeptonSF() skipping non-Electron and non-Muon branch definitions" << std::endl;
+	continue;
+      }
+
       //check if we should compose the overall electron efficiency scale factor, only after skipping branches that are already defined and don't need a composition
       if(branch_and_key == "Electron_SF_EFF_ptBelow20_nom") low_electron_eff = true;
       if(branch_and_key == "Electron_SF_EFF_ptAbove20_nom") high_electron_eff = true;
