@@ -7203,7 +7203,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
          printBookkeeping=False, triggers=[], includeSampleNames=None, 
          useDeltaR=False, jetPtMin=30.0, jetPUId=None, 
          excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True,
-         testVariables=False, systematicSet="All"
+         testVariables=False, systematicSet="All", nThreads=8
      ):
 
     ##################################################
@@ -7432,21 +7432,19 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                                             BTaggingYieldsAggregate, #bool btag_use_aggregate = false,
                                             useHTOnly, #bool btag_use_HT_only = false,
                                             useNJetOnly) #bool btag_use_nJet_only = false
-    # print("testing LUTManager")
-    # LUTManager = ROOT.LUTManager()
-    # LUTManager.Add(cm)
-    # LUTManager.Finalize(5)
-    # vectorLUTs = LUTManager.GetLUTVector()
+    print("testing LUTManager")
+    LUTManager = ROOT.LUTManager()
+    LUTManager.Add(correctorMap)
+    LUTManager.Finalize(nThreads)
+    vectorLUTs = LUTManager.GetLUTVector()
     # print(vectorLUTs[0].TH1Keys())
     # print(vectorLUTs[0].TH2Keys())
     # print(vectorLUTs[0].TH3Keys())
-    
-    # # node_and_vecLUT = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(rdf2), era, vectorLUTs)
-    # # rdf3 = nod_and_vecLUT.first
-    # print("Add SFs...")
-    # rdf3 = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(rdf2), era, "tttt", vectorLUTs, cm)
 
 
+    ################################
+    #### Loop through processes ####
+    ################################
     for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
         if name not in valid_samples: 
             print("Skipping sample {}".format(name))
@@ -7584,6 +7582,12 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                                           sysVariations=sysVariationsAll, 
                                           verbose=verbose,
                                           )
+            the_df[name][lvl] = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(the_df[name][lvl]), 
+                                                     vals["era"], 
+                                                     name, 
+                                                     vectorLUTs, 
+                                                     correctorMap
+                                                     )
             #Define the leptons based on LeptonLogic bits, to be updated and replaced with code based on triggers/thresholds/leptons present (on-the-fly cuts)
             the_df[name][lvl] = defineLeptons(the_df[name][lvl], 
                                               input_lvl_filter=lvl,
@@ -8029,7 +8033,7 @@ if __name__ == '__main__':
         # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
         packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
-                      printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet)
+                      printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
         #      verbose=False)
         # packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, 
@@ -8073,20 +8077,20 @@ if __name__ == '__main__':
                       BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, 
                       useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet)
+                      systematicSet=systematicSet, nThreads=nThreads)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet)
+                      systematicSet=systematicSet, nThreads=nThreads)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, bookerV2_CURRENT, source, "BOOKKEEPING", bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet)
+                      systematicSet=systematicSet, nThreads=nThreads)
     elif stage == 'fill-histograms':
         #filling ntuples is also possible with the option --doNtuples
         packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
@@ -8095,7 +8099,7 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet)
+                      systematicSet=systematicSet, nThreads=nThreads)
     elif stage == 'fill-combine':
         #filling ntuples is also possible with the option --doNtuples
         packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
@@ -8104,7 +8108,7 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet)
+                      systematicSet=systematicSet, nThreads=nThreads)
     elif stage == 'hadd-histograms' or stage == 'hadd-combine':
         print("Combining root files for plotting")
         if stage == 'hadd-histograms':
@@ -8134,6 +8138,6 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, 
-                      quiet=quiet, testVariables=test, systematicSet=systematicSet)
+                      quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads)
     else:
         print("stage {stag} is not yet prepared, please update the FTAnalyzer".format(stag))
