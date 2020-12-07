@@ -37,7 +37,8 @@ else:
 #Load functions, can eventually be changed to ROOT.gInterpreter.Declare(#include "someheader.h")
 #WARNING! Do not rerun this cell without restarting the kernel, it will kill it!
 ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way
-ROOT.gROOT.ProcessLine(".L /eos/user/n/nmangane/CMSSW/CMSSW_10_2_18/src/FourTopNAOD/RDF/FTFunctions.cpp")
+print("FIXME: Hardcoded FTFunctions.cpp path, needs fixin'...")
+ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
 ROOT.gInterpreter.Declare("""
     const UInt_t barWidth = 60;
     ULong64_t processed = 0, totalEvents = 0;
@@ -4739,7 +4740,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     print("FIXME: Need to modify fractional sample weighting to use the meta info, defaulting to 1.0 right now")
                     wgtFormula = "{eXS:f} * {lumi:f} * 1000 * genWeight * {frSample:f} * {frCon:f} / {sW:f}".format(eXS=effectiveXS,
                                                                                                                     lumi=lumiDict[era],
-                                                                                                                    frSample="1.0",
+                                                                                                                    frSample=1.0,
                                                                                                                     frCon=fractionalContribution,
                                                                                                                     sW=sumWeights
                                                                                                                   )
@@ -7400,6 +7401,52 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
         os.makedirs(analysisDir)
 
     Benchmark = ROOT.TBenchmark()
+
+    ################################################################################
+    #### Setup all correctors e.g. LeptonSFs and BTaggingYields Renormalization ####
+    ################################################################################
+    ROOT.gInterpreter.Declare("std::vector<std::string> corrector_process_names;")
+    correctorProcessNames = getattr(ROOT, "corrector_process_names")
+    for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
+        if name not in valid_samples: 
+            continue
+        else:
+            correctorProcessNames.push_back(name)
+
+    ROOT.gInterpreter.Declare("std::vector<std::string> corrector_systematic_names;")
+    correctorSystematicNames = getattr(ROOT, "corrector_systematic_names")
+    for sysVar, sysDict in sysVariationsAll.items():
+        correctorSystematicNames.push_back(sysVar)        
+                
+    print("FIXME: hardcoded incorrect btagging top path for the corrector map")
+    print("FIXME: hardcoded non-UL/UL and no VFP handling in the corrector map retrieval")
+    BTaggingYieldsTopPath = BTaggingYieldsFile.replace("BTaggingYields.root", "")
+    correctorMap = ROOT.FTA.GetCorrectorMap(era, #2017 or 2018 or 2016, as string
+                                            "non-UL", #UL or non_UL
+                                            "", ##preVFP or postVFP if 2016
+                                            "../Kai/python/data/leptonSF/Muon", "LooseID", "TightRelIso_MediumID",
+                                            "../Kai/python/data/leptonSF/Electron", "Loose", "UseEfficiency",
+                                            BTaggingYieldsTopPath,
+                                            correctorProcessNames, #std::vector<std::string> btag_process_names = {"tttt"},
+                                            correctorSystematicNames, #std::vector<std::string> btag_systematic_names = {"nom"},
+                                            BTaggingYieldsAggregate, #bool btag_use_aggregate = false,
+                                            useHTOnly, #bool btag_use_HT_only = false,
+                                            useNJetOnly) #bool btag_use_nJet_only = false
+    # print("testing LUTManager")
+    # LUTManager = ROOT.LUTManager()
+    # LUTManager.Add(cm)
+    # LUTManager.Finalize(5)
+    # vectorLUTs = LUTManager.GetLUTVector()
+    # print(vectorLUTs[0].TH1Keys())
+    # print(vectorLUTs[0].TH2Keys())
+    # print(vectorLUTs[0].TH3Keys())
+    
+    # # node_and_vecLUT = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(rdf2), era, vectorLUTs)
+    # # rdf3 = nod_and_vecLUT.first
+    # print("Add SFs...")
+    # rdf3 = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(rdf2), era, "tttt", vectorLUTs, cm)
+
+
     for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
         if name not in valid_samples: 
             print("Skipping sample {}".format(name))

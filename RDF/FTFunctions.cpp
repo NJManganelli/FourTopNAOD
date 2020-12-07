@@ -1243,18 +1243,20 @@ namespace FTA{
     if(btag_top_path != ""){
       for(std::vector<std::string>::iterator proc_iter = btag_process_names.begin(); proc_iter != btag_process_names.end(); ++proc_iter){
 	for(std::vector<std::string>::iterator syst_iter = btag_systematic_names.begin(); syst_iter != btag_systematic_names.end(); ++syst_iter){
-	  std::string btag_key;
+	  std::string btag_key, syst_name;
+	  syst_name = *syst_iter;
+	  if(strncmp(syst_name.c_str(), "$NOMINAL", 8) == 0) syst_name = "nom";
 	  if(btag_use_aggregate)btag_key = "Aggregate";
 	  else btag_key = era + "___" + static_cast<std::string>(*proc_iter) + "_";
 	  
 	  if(btag_use_HT_only) btag_key += "1DX";
 	  if(btag_use_nJet_only) btag_key += "1DY";
-	  btag_key += "___" + static_cast<std::string>(*syst_iter);
+	  btag_key += "___" + syst_name;
 	  std::cout << "Btag key formed: " << btag_key << std::endl;
-	  ret["btag___" + era + "___" + static_cast<std::string>(*proc_iter) + "___" + static_cast<std::string>(*syst_iter)] = {btag_top_path + "BTaggingYields.root", 
-																btag_key, "TH2Lookup", 
-																"HT__" + static_cast<std::string>(*syst_iter), 
-																"nFTAJet__" + static_cast<std::string>(*syst_iter)};
+	  ret["btag___" + era + "___" + static_cast<std::string>(*proc_iter) + "___" + syst_name] = {btag_top_path + "BTaggingYields.root", 
+												     btag_key, "TH2Lookup", 
+												     "HT__" + syst_name, 
+												     "nFTAJet__" + syst_name};
 	}
       }
     }
