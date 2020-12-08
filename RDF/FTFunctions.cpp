@@ -1475,20 +1475,20 @@ namespace FTA{
       }
 
       if(lookup_type == "TH1Lookup"){
-	auto slottedLookup = [veclut, corrector_key](int slot, float X, float input_btag_sf_product){
+	auto slottedLookup = [veclut, corrector_key](int slot, float X, double input_btag_sf_product){
 	  return input_btag_sf_product * (*veclut)[slot]->TH1Lookup(corrector_key, X);
 	};
 	ret = ret.DefineSlot(corrector_key, slottedLookup, arg_list);
 
       }
       else if(lookup_type == "TH2Lookup"){
-	auto slottedLookup = [veclut, corrector_key](int slot, float X, float Y, float input_btag_sf_product){
+	auto slottedLookup = [veclut, corrector_key](int slot, float X, int Y, double input_btag_sf_product){
 	  return input_btag_sf_product * (*veclut)[slot]->TH2Lookup(corrector_key, X, Y);
 	};
 	ret = ret.DefineSlot(corrector_key, slottedLookup, arg_list);
       }
       else if(lookup_type == "TH3Lookup"){
-	auto slottedLookup = [veclut, corrector_key](int slot, float X, float Y, float Z, float input_btag_sf_product){
+	auto slottedLookup = [veclut, corrector_key](int slot, float X, int Y, float Z, double input_btag_sf_product){
 	  return input_btag_sf_product * (*veclut)[slot]->TH3Lookup(corrector_key, X, Y, Z);
 	};
 	ret = ret.DefineSlot(corrector_key, slottedLookup, arg_list);

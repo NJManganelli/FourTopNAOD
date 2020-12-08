@@ -39,6 +39,8 @@ else:
 ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way
 print("FIXME: Hardcoded FTFunctions.cpp path, needs fixin'...")
 ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
+print("To compile the loaded file, append a '+' to the '.L <file_name>+' line")
+# ROOT.gROOT.ProcessLine(".L FTFunctions.cpp+")
 ROOT.gInterpreter.Declare("""
     const UInt_t barWidth = 60;
     ULong64_t processed = 0, totalEvents = 0;
