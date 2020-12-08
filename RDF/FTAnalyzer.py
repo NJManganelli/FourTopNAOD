@@ -4157,10 +4157,11 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                     
                 #loadYields path...
                 if loadYields:
-                    # if useAggregate:
-                    # print("\nPROBLEM: syspostfix was assumed to have only one underscore before, now it has two. Until new Yields calculated, gonna hack this away...\n\n\n")
-                    # bTaggingDefineNodes[eraAndProcessName][sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{pn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{spf}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, pn=eraAndProcessName, yk=yieldsKey, spf=syspostfix, nj=nJetName, ht=HTName))) #.replace("__", "_")
-                    bTaggingDefineNodes[eraAndProcessName][sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{pn}\"][rdfslot_]->getEventYieldRatio(\"{lk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, pn=eraAndProcessName, lk=yieldsKey+syspostfix, nj=nJetName, ht=HTName))) #.replace("__", "_")
+                    pass
+                    #Deprecated this part, now done after all systematics are run over in the node
+                    # bTaggingDefineNodes[eraAndProcessName][sysVar].append((btagFinalWeight, "if({ht} > 550 && {ht} < 551 && {nj} == 8)std::cout << \"Original: \" << {nj} << \" \" << {ht} << \" \" << {bsf} << \" \" << \"{lm}\" << \" \" << \"{pn}\" << \" \" << {lm}[\"{pn}\"][rdfslot_]->getEventYieldRatio(\"{lk}\", {nj}, {ht}) << std::endl; return {bsf} * {lm}[\"{pn}\"][rdfslot_]->getEventYieldRatio(\"{lk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, pn=eraAndProcessName, lk=yieldsKey+syspostfix, nj=nJetName, ht=HTName))) #.replace("__", "_")
+                    # bTaggingDefineNodes[eraAndProcessName][sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{pn}\"][rdfslot_]->getEventYieldRatio(\"{lk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, pn=eraAndProcessName, lk=yieldsKey+syspostfix, nj=nJetName, ht=HTName))) #.replace("__", "_")
+                    # compareMethods.append(btagFinalWeight)
 
                 for defName, defFunc in bTaggingDefineNodes[eraAndProcessName][sysVar]:
                     if defName in listOfColumns:
@@ -4233,8 +4234,6 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                                                                                                                     calculationWeightAfter)
             #Insert the new LUT method...
             if loadYields:
-                for x in listOfColumns:
-                    if "HT" in str(x) or "nFTAJet" in str(x): print(x)
                 era, processName = eraAndProcessName.split("___")
                 nodes[eraAndProcessName]["BaseNode"] = ROOT.FTA.AddBTaggingYieldsRenormalization(ROOT.RDF.AsRNode(nodes[eraAndProcessName]["BaseNode"]), 
                                                                                                  era, 
@@ -4242,8 +4241,19 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                                                                                                  vectorLUTs,
                                                                                                  correctorMap,
                                                                                              )
-                print("alt_pwgt_btag___")
-
+            #Conclusion of comparison: the old btagging method is somehow broken, the new one is picking up the CORRECT values from the HT2. The other inputs are the same...
+            # for x in compareMethods:
+            #     if x in listOfColumns:
+            #         print("{} in columns, searching for altnernate".format(x))
+            #         if "alt_{}".format(x) in nodes[eraAndProcessName]["BaseNode"].GetDefinedColumnNames():
+            #             print(x, len(compareMethodsResults))
+            #             compareMethodsResults.append(nodes[eraAndProcessName]["BaseNode"].Define("diff_{}".format(x), "double x = abs({} - alt_{})/{}; if(x > 0.533) std::cout << rdfentry_ << std::endl; return x;".format(x, x, x)).Stats("diff_{}".format(x)))
+            #         else:
+            #             print("alt_{} not found".format(x))
+            #     else:
+            #         print("skipping {}".format(x))
+            # pdb.set_trace()
+            # test3 = compareMethodsResults[3].GetValue()
 
         return input_df_or_nodes
         
@@ -7449,7 +7459,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
     btaggingSystematicNames = getattr(ROOT, "btagging_systematic_names")
     ROOT.gInterpreter.Declare("std::vector<std::string> btag_systematic_scale_postfix;")
     btaggingSystematicScalePostfix = getattr(ROOT, "btag_systematic_scale_postfix")
-    sysVariationsForBtagging = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"]])
+    sysVariationsForBtagging = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"] or "ALL" in systematicSet])
     for sysVar, sysDict in sysVariationsForBtagging.items():
         isWeightVariation = sysDict.get("weightVariation")
         slimbranchpostfix = "nom" if isWeightVariation else sysVar.replace("$NOMINAL", "nom") #branch postfix for identifying input branch variation
@@ -7473,6 +7483,9 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                                             BTaggingYieldsAggregate, #bool btag_use_aggregate = false,
                                             useHTOnly, #bool btag_use_HT_only = false,
                                             useNJetOnly) #bool btag_use_nJet_only = false
+    print("BTagging systematic and branchpostfix names:")
+    print(btaggingSystematicNames)
+    print(btaggingSystematicScalePostfix)
     print("testing LUTManager")
     LUTManager = ROOT.LUTManager()
     LUTManager.Add(correctorMap)
@@ -7740,7 +7753,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
             #Hold the categorization nodes if doing histograms
             if isinstance(systematicSet, list) and "All" not in systematicSet:
                 print("Filtering systematics according to specified sets: {}".format(systematicSet))
-                sysVariationsForHistos = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"]])
+                sysVariationsForHistos = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"] or "ALL" in systematicSet])
                 if "nominal" not in systematicSet:
                     skipNominalHistos = True
                 else:
