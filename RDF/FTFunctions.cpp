@@ -36,20 +36,34 @@ public:
   std::vector<std::string> TH2Keys();
   std::vector<std::string> TH3Keys();
 
+
+  //Lookup gets bin content, Err gets bin error, if Flow is appended, then the histogram bin may be amongst the flow, instead of being forced to the non-flow bins
   template <typename X>
   double TH1Lookup(std::string key, X xval);
   template <typename X>
   double TH1LookupErr(std::string key, X xval);
+  template <typename X>
+  double TH1LookupFlow(std::string key, X xval);
+  template <typename X>
+  double TH1LookupErrFlow(std::string key, X xval);
 
   template <typename X, typename Y>
   double TH2Lookup(std::string key, X xval, Y yval);
   template <typename X, typename Y>
   double TH2LookupErr(std::string key, X xval, Y yval);
+  template <typename X, typename Y>
+  double TH2LookupFlow(std::string key, X xval, Y yval);
+  template <typename X, typename Y>
+  double TH2LookupErrFlow(std::string key, X xval, Y yval);
 
   template <typename X, typename Y, typename Z>
   double TH3Lookup(std::string key, X xval, Y yval, Z zval);
   template <typename X, typename Y, typename Z>
   double TH3LookupErr(std::string key, X xval, Y yval, Z zval);
+  template <typename X, typename Y, typename Z>
+  double TH3LookupFlow(std::string key, X xval, Y yval, Z zval);
+  template <typename X, typename Y, typename Z>
+  double TH3LookupErrFlow(std::string key, X xval, Y yval, Z zval);
 
 private:
   std::map<std::string, TH1*> _LUT_MAP_TH1;
@@ -151,7 +165,7 @@ std::vector<std::string> LUT::TH3Keys(){
 template<typename X>
 double LUT::TH1Lookup(std::string key, X xval){
   try {
-    int binx = std::max(1, std::min(_LUT_MAP_TH1[key]->GetNbinsX(), _LUT_MAP_TH1[key]->GetXaxis()->FindBin(xval)));
+    int binx = std::max(0, std::min(_LUT_MAP_TH1[key]->GetNbinsX() + 1, _LUT_MAP_TH1[key]->GetXaxis()->FindBin(xval)));
     return _LUT_MAP_TH1[key]->GetBinContent(binx);
   }
   catch (const std::exception& e) {
@@ -167,6 +181,36 @@ template<typename X>
 double LUT::TH1LookupErr(std::string key, X xval){
   try {
     int binx = std::max(1, std::min(_LUT_MAP_TH1[key]->GetNbinsX(), _LUT_MAP_TH1[key]->GetXaxis()->FindBin(xval)));
+    return _LUT_MAP_TH1[key]->GetBinError(binx);
+  }
+  catch (const std::exception& e) {
+    std::cout << "Caught exception in LUT::TH1LookupErr" << std::endl;
+    if( _LUT_MAP_TH1.find( key ) != _LUT_MAP_TH1.end() ){ 
+      std::cout << "Key \"" << key << "\" not found in the TH1 LUT" << std::endl;
+    }
+    std::cout << "\nCaught exception: " << e.what() << std::endl;
+    throw;
+  }
+}
+template<typename X>
+double LUT::TH1LookupFlow(std::string key, X xval){
+  try {
+    int binx = std::max(0, std::min(_LUT_MAP_TH1[key]->GetNbinsX() + 1, _LUT_MAP_TH1[key]->GetXaxis()->FindBin(xval)));
+    return _LUT_MAP_TH1[key]->GetBinContent(binx);
+  }
+  catch (const std::exception& e) {
+    std::cout << "Caught exception in LUT::TH1Lookup" << std::endl;
+    if( _LUT_MAP_TH1.find( key ) != _LUT_MAP_TH1.end() ){ 
+      std::cout << "Key \"" << key << "\" not found in the TH1 LUT" << std::endl;
+    }
+    std::cout << "\nCaught exception: " << e.what() << std::endl;
+    throw;
+  }
+}
+template<typename X>
+double LUT::TH1LookupErrFlow(std::string key, X xval){
+  try {
+    int binx = std::max(0, std::min(_LUT_MAP_TH1[key]->GetNbinsX() + 1, _LUT_MAP_TH1[key]->GetXaxis()->FindBin(xval)));
     return _LUT_MAP_TH1[key]->GetBinError(binx);
   }
   catch (const std::exception& e) {
@@ -197,8 +241,40 @@ double LUT::TH2Lookup(std::string key, X xval, Y yval){
 template<typename X, typename Y>
 double LUT::TH2LookupErr(std::string key, X xval, Y yval){
   try {
-    int binx = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsX(), _LUT_MAP_TH2[key]->GetXaxis()->FindBin(xval)));
-    int biny = std::max(1, std::min(_LUT_MAP_TH2[key]->GetNbinsY(), _LUT_MAP_TH2[key]->GetYaxis()->FindBin(yval)));
+    int binx = std::max(0, std::min(_LUT_MAP_TH2[key]->GetNbinsX() + 1, _LUT_MAP_TH2[key]->GetXaxis()->FindBin(xval)));
+    int biny = std::max(0, std::min(_LUT_MAP_TH2[key]->GetNbinsY() + 1, _LUT_MAP_TH2[key]->GetYaxis()->FindBin(yval)));
+    return _LUT_MAP_TH2[key]->GetBinError(binx, biny);
+  }
+  catch (const std::exception& e) {
+    std::cout << "Caught exception in LUT::TH2LookupErr" << std::endl;
+    if( _LUT_MAP_TH2.find( key ) != _LUT_MAP_TH2.end() ){ 
+      std::cout << "Key \"" << key << "\" not found in the TH2 LUT" << std::endl;
+    }
+    std::cout << "\nCaught exception: " << e.what() << std::endl;
+    throw;
+  }
+}
+template<typename X, typename Y>
+double LUT::TH2LookupFlow(std::string key, X xval, Y yval){
+  try {
+    int binx = std::max(0, std::min(_LUT_MAP_TH2[key]->GetNbinsX() + 1, _LUT_MAP_TH2[key]->GetXaxis()->FindBin(xval)));
+    int biny = std::max(0, std::min(_LUT_MAP_TH2[key]->GetNbinsY() + 1, _LUT_MAP_TH2[key]->GetYaxis()->FindBin(yval)));
+    return _LUT_MAP_TH2[key]->GetBinContent(binx, biny);
+  }
+  catch (const std::exception& e) {
+    std::cout << "Caught exception in LUT::TH2Lookup" << std::endl;
+    if( _LUT_MAP_TH2.find( key ) != _LUT_MAP_TH2.end() ){ 
+      std::cout << "Key \"" << key << "\" not found in the TH2 LUT" << std::endl;
+    }
+    std::cout << "\nCaught exception: " << e.what() << std::endl;
+    throw;
+  }
+}
+template<typename X, typename Y>
+double LUT::TH2LookupErrFlow(std::string key, X xval, Y yval){
+  try {
+    int binx = std::max(0, std::min(_LUT_MAP_TH2[key]->GetNbinsX() + 1, _LUT_MAP_TH2[key]->GetXaxis()->FindBin(xval)));
+    int biny = std::max(0, std::min(_LUT_MAP_TH2[key]->GetNbinsY() + 1, _LUT_MAP_TH2[key]->GetYaxis()->FindBin(yval)));
     return _LUT_MAP_TH2[key]->GetBinError(binx, biny);
   }
   catch (const std::exception& e) {
@@ -213,10 +289,10 @@ double LUT::TH2LookupErr(std::string key, X xval, Y yval){
 template<typename X, typename Y, typename Z>
 double LUT::TH3Lookup(std::string key, X xval, Y yval, Z zval){
   try {
-      int binx = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsX(), _LUT_MAP_TH3[key]->GetXaxis()->FindBin(xval)));
-      int biny = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsY(), _LUT_MAP_TH3[key]->GetYaxis()->FindBin(yval)));
-      int binz = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsZ(), _LUT_MAP_TH3[key]->GetZaxis()->FindBin(zval)));
-      return _LUT_MAP_TH3[key]->GetBinContent(binx, biny);
+    int binx = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsX(), _LUT_MAP_TH3[key]->GetXaxis()->FindBin(xval)));
+    int biny = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsY(), _LUT_MAP_TH3[key]->GetYaxis()->FindBin(yval)));
+    int binz = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsZ(), _LUT_MAP_TH3[key]->GetZaxis()->FindBin(zval)));
+    return _LUT_MAP_TH3[key]->GetBinContent(binx, biny);
   }
   catch (const std::exception& e) {
     std::cout << "Caught exception in LUT::TH3Lookup" << std::endl;
@@ -233,6 +309,40 @@ double LUT::TH3LookupErr(std::string key, X xval, Y yval, Z zval){
     int binx = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsX(), _LUT_MAP_TH3[key]->GetXaxis()->FindBin(xval)));
     int biny = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsY(), _LUT_MAP_TH3[key]->GetYaxis()->FindBin(yval)));
     int binz = std::max(1, std::min(_LUT_MAP_TH3[key]->GetNbinsZ(), _LUT_MAP_TH3[key]->GetZaxis()->FindBin(zval)));
+    return _LUT_MAP_TH3[key]->GetBinError(binx, biny);
+  }
+  catch (const std::exception& e) {
+    std::cout << "Caught exception in LUT::TH3LookupErr" << std::endl;
+    if( _LUT_MAP_TH3.find( key ) != _LUT_MAP_TH3.end() ){ 
+      std::cout << "Key \"" << key << "\" not found in the TH3 LUT" << std::endl;
+    }
+    std::cout << "\nCaught exception: " << e.what() << std::endl;
+    throw;
+  }
+}
+template<typename X, typename Y, typename Z>
+double LUT::TH3LookupFlow(std::string key, X xval, Y yval, Z zval){
+  try {
+    int binx = std::max(0, std::min(_LUT_MAP_TH3[key]->GetNbinsX() + 1, _LUT_MAP_TH3[key]->GetXaxis()->FindBin(xval)));
+    int biny = std::max(0, std::min(_LUT_MAP_TH3[key]->GetNbinsY() + 1, _LUT_MAP_TH3[key]->GetYaxis()->FindBin(yval)));
+    int binz = std::max(0, std::min(_LUT_MAP_TH3[key]->GetNbinsZ() + 1, _LUT_MAP_TH3[key]->GetZaxis()->FindBin(zval)));
+    return _LUT_MAP_TH3[key]->GetBinContent(binx, biny);
+  }
+  catch (const std::exception& e) {
+    std::cout << "Caught exception in LUT::TH3Lookup" << std::endl;
+    if( _LUT_MAP_TH3.find( key ) != _LUT_MAP_TH3.end() ){ 
+      std::cout << "Key \"" << key << "\" not found in the TH3 LUT" << std::endl;
+    }
+    std::cout << "\nCaught exception: " << e.what() << std::endl;
+    throw;
+  }
+}
+template<typename X, typename Y, typename Z>
+double LUT::TH3LookupErrFlow(std::string key, X xval, Y yval, Z zval){
+  try {
+    int binx = std::max(0, std::min(_LUT_MAP_TH3[key]->GetNbinsX() + 1, _LUT_MAP_TH3[key]->GetXaxis()->FindBin(xval)));
+    int biny = std::max(0, std::min(_LUT_MAP_TH3[key]->GetNbinsY() + 1, _LUT_MAP_TH3[key]->GetYaxis()->FindBin(yval)));
+    int binz = std::max(0, std::min(_LUT_MAP_TH3[key]->GetNbinsZ() + 1, _LUT_MAP_TH3[key]->GetZaxis()->FindBin(zval)));
     return _LUT_MAP_TH3[key]->GetBinError(binx, biny);
   }
   catch (const std::exception& e) {
@@ -291,8 +401,8 @@ public:
   baseLUT() { _LUT_TH1 = 0; _LUT_TH2 = 0; _LUT_TH3 = 0; }
   baseLUT(std::string file, std::string path);
   ~baseLUT() {}
-  double TH2Lookup(double xval, double yval);
-  double TH2LookupErr(double xval, double yval);
+  double TH2Lookup(double xval, double yval, bool flow = false);
+  double TH2LookupErr(double xval, double yval, bool flow = false);
 
 private:
   //unique uuid for multiple instances to be created in multithreading, will be prepended to histogram memory names to avoid name-clashes, i.e. may be _rdfslot
@@ -343,12 +453,12 @@ baseLUT::baseLUT(std::string file, std::string path) {
   }
       
 }
-double baseLUT::TH2Lookup(double xval, double yval){
+double baseLUT::TH2Lookup(double xval, double yval, bool flow = false){
   int binx = std::max(1, std::min(_LUT_TH2->GetNbinsX(), _LUT_TH2->GetXaxis()->FindBin(xval)));
   int biny = std::max(1, std::min(_LUT_TH2->GetNbinsY(), _LUT_TH2->GetYaxis()->FindBin(yval)));
   return _LUT_TH2->GetBinContent(binx, biny);
 }
-double baseLUT::TH2LookupErr(double xval, double yval){
+double baseLUT::TH2LookupErr(double xval, double yval, bool flow = false){
   int binx = std::max(1, std::min(_LUT_TH2->GetNbinsX(), _LUT_TH2->GetXaxis()->FindBin(xval)));
   int biny = std::max(1, std::min(_LUT_TH2->GetNbinsY(), _LUT_TH2->GetYaxis()->FindBin(yval)));
   return _LUT_TH2->GetBinError(binx, biny);
@@ -1260,7 +1370,8 @@ namespace FTA{
 	  std::cout << "Btag key formed for process " << static_cast<std::string>(*proc_iter) << ": " << btag_key << std::endl;
 	  //the branch_postfix is based on whether a systematic variations is a scale variation/central (nominal, jes, jer...) or purely a weight variation (FSR, ISR, etc...). If the latter, the branch_postfix should default to the 'nominal'
 	  ret["btag___" + era + "___" + static_cast<std::string>(*proc_iter) + "___" + syst_name] = {btag_top_path + "BTaggingYields.root", 
-												     btag_key, "TH2Lookup", 
+												     btag_key, 
+												     "TH2LookupFlow", 
 												     "HT__" + branch_postfix, 
 												     "nFTAJet__" + branch_postfix};
 	}
@@ -1283,7 +1394,8 @@ namespace FTA{
 	  std::cout << "Btag key formed for process " << static_cast<std::string>(*incl_iter) << ": " << btag_key << std::endl;
 	  //the branch_postfix is based on whether a systematic variations is a scale variation/central (nominal, jes, jer...) or purely a weight variation (FSR, ISR, etc...). If the latter, the branch_postfix should default to the 'nominal'
 	  ret["btag___" + era + "___" + static_cast<std::string>(*incl_iter) + "___" + syst_name] = {btag_top_path + "BTaggingYields.root", 
-												     btag_key, "TH2Lookup", 
+												     btag_key, 
+												     "TH2LookupFlow", 
 												     "HT__" + branch_postfix, 
 												     "nFTAJet__" + branch_postfix};
 	}
@@ -1295,7 +1407,7 @@ namespace FTA{
 
   // std::pair< ROOT::RDF::RNode, std::vector<LUT*> > AddLeptonSF(ROOT::RDF::RNode df, std::string_view era, std::map< std::string, std::vector<std::string> > idmap){
   ROOT::RDF::RNode AddLeptonSF(ROOT::RDF::RNode df, std::string era, std::string processname,
-			       std::shared_ptr< std::vector<LUT*> > veclut, std::map< std::string, std::vector<std::string> > correctormap){
+			       std::shared_ptr< std::vector<LUT*> > veclut, std::map< std::string, std::vector<std::string> > correctormap, bool verbose=false){
     // for(std::vector<string>::const_iterator req_iter = requiredLUTs.begin(); req_iter != requiredLUTs.end(); ++ req_iter){
     //   if((*veclut)[0].find(*req_iter) == (*veclut)[0].end()){ std::cout << "Required map not found: " << *req_iter << std::endl; }
     //   else {std::cout << "Required map found: " << *req_iter << std::endl;}
@@ -1333,13 +1445,15 @@ namespace FTA{
 	if(!composite_electron_eff_defined && branches.at(bi) == "Electron_SF_EFF_nom") composite_electron_eff_defined = true;
       }
       if(already_defined){
-	std::cout << "Branch " << branch_and_key << " already defined, skipping." << std::endl;
+	if(verbose)
+	  std::cout << "Branch " << branch_and_key << " already defined, skipping." << std::endl;
 	continue;
       }
 
       //skip correctors that are not starting with Muon or Electron
       if(std::strncmp(branch_and_key.c_str(), "Muon", 4) != 0 || std::strncmp(branch_and_key.c_str(), "Electron", 8) != 0){
-	std::cout << "AddLeptonSF() skipping non-Electron and non-Muon branch definitions" << std::endl;
+	if(verbose)
+	  std::cout << "AddLeptonSF() skipping non-Electron and non-Muon branch definitions" << std::endl;
 	continue;
       }
 
@@ -1428,7 +1542,7 @@ namespace FTA{
     return ret;
   }
   ROOT::RDF::RNode AddBTaggingYieldsRenormalization(ROOT::RDF::RNode df, std::string era, std::string processname, 
-						   std::shared_ptr< std::vector<LUT*> > veclut, std::map< std::string, std::vector<std::string> > correctormap){
+						    std::shared_ptr< std::vector<LUT*> > veclut, std::map< std::string, std::vector<std::string> > correctormap, bool verbose=false){
     ROOT::RDF::RNode ret = df;
     auto branches = ret.GetColumnNames();
     std::string expected_corrector_start = "btag___" + era + "___" + processname + "___";
@@ -1453,14 +1567,16 @@ namespace FTA{
 
       //skip correctors that are not starting with btag___<era>___<process_name>
       if(std::strncmp(corrector_key.c_str(), expected_corrector_start.c_str(), expected_corrector_start.length()) != 0){
-	std::cout << "AddBTaggingYieldRenormalization() skipping non-relavant correction " << corrector_key << std::endl;
+	if(verbose)
+	  std::cout << "AddBTaggingYieldRenormalization() skipping non-relavant correction " << corrector_key << std::endl;
 	continue;
       }
 
       //determine the systematic postfix, then define the final btag branch weight name, and the required input branch btag_sf_product, appending the last to the argument list
       syst_postfix = corrector_key.substr(expected_corrector_start.length(), corrector_key.length() - expected_corrector_start.length());
-      std::cout << "syst_postfix: " << syst_postfix << std::endl;
-      btag_final_weight = "alt_pwgt_btag___" + syst_postfix;
+      if(verbose)
+	std::cout << "syst_postfix: " << syst_postfix << std::endl;
+      btag_final_weight = "pwgt_btag___" + syst_postfix;
       btag_sf_product = "btagSFProduct___" + syst_postfix;
       arg_list.push_back(btag_sf_product);
 
@@ -1470,28 +1586,39 @@ namespace FTA{
 	if(btag_final_weight == branches.at(bi)) already_defined = true;
       }
       if(already_defined){
-	std::cout << "Branch " << btag_final_weight << " already defined, skipping." << std::endl;
+	if(verbose)
+	  std::cout << "Branch " << btag_final_weight << " already defined, skipping." << std::endl;
 	continue;
       }
 
-      if(lookup_type == "TH1Lookup"){
+      if(lookup_type == "TH1LookupFlow"){
 	auto slottedLookup = [veclut, corrector_key](int slot, float X, double input_btag_sf_product){
-	  return input_btag_sf_product * (*veclut)[slot]->TH1Lookup(corrector_key, X);
+	  return input_btag_sf_product * (*veclut)[slot]->TH1LookupFlow(corrector_key, X);
 	};
-	ret = ret.DefineSlot(corrector_key, slottedLookup, arg_list);
+	ret = ret.DefineSlot(btag_final_weight, slottedLookup, arg_list);
 
       }
-      else if(lookup_type == "TH2Lookup"){
+      else if(lookup_type == "TH2LookupFlow"){
+	// arg_list.push_back("rdfentry_");
+	// auto slottedLookup = [veclut, corrector_key](int slot, float X, int Y, double input_btag_sf_product, ULong64_t rdfentry_){
+	//   bool verbose = false;
+	//   if( X > 195.45 && X < 195.55 && Y == 2){
+	//     verbose = true;
+	//     std::cout << "Debugging info:\nX: " << X << "\nY: " << Y << "\nLUT value: " << (*veclut)[slot]->TH2LookupFlow(corrector_key, verbose, X, Y) << "\nSFproduct: " << input_btag_sf_product
+	//     << "\nResult: " << input_btag_sf_product * (*veclut)[slot]->TH2LookupFlow(corrector_key, verbose, X, Y) << std::endl;
+	//   }
+	//   return input_btag_sf_product * (*veclut)[slot]->TH2LookupFlow(corrector_key, verbose, X, Y);
+	//   };
 	auto slottedLookup = [veclut, corrector_key](int slot, float X, int Y, double input_btag_sf_product){
-	  return input_btag_sf_product * (*veclut)[slot]->TH2Lookup(corrector_key, X, Y);
+	  return input_btag_sf_product * (*veclut)[slot]->TH2LookupFlow(corrector_key, X, Y);
 	};
-	ret = ret.DefineSlot(corrector_key, slottedLookup, arg_list);
+	ret = ret.DefineSlot(btag_final_weight, slottedLookup, arg_list);
       }
-      else if(lookup_type == "TH3Lookup"){
+      else if(lookup_type == "TH3LookupFlow"){
 	auto slottedLookup = [veclut, corrector_key](int slot, float X, int Y, float Z, double input_btag_sf_product){
-	  return input_btag_sf_product * (*veclut)[slot]->TH3Lookup(corrector_key, X, Y, Z);
+	  return input_btag_sf_product * (*veclut)[slot]->TH3LookupFlow(corrector_key, X, Y, Z);
 	};
-	ret = ret.DefineSlot(corrector_key, slottedLookup, arg_list);
+	ret = ret.DefineSlot(btag_final_weight, slottedLookup, arg_list);
       }
       else std::cout << "Unhandled type in AddBTaggingYieldRenormalization()" << std::endl;
     }
