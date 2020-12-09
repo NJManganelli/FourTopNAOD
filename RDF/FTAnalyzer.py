@@ -7439,7 +7439,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
     ROOT.gInterpreter.Declare("std::vector<std::string> btagging_inclusive_process_names;")
     btaggingInclusiveProcessNames = getattr(ROOT, "btagging_inclusive_process_names")
     for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
-        if name not in valid_samples: 
+        if name not in valid_samples or vals["isData"]: 
             continue
         else:
             #Get all the potential split process names (in BTaggingYields() function era + "___" + subprocess is the 'processName', e.g. 2017___ttbb_DL-GF. Since the corrector map handles this era modifier already, we drop it here...
