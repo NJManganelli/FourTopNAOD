@@ -2951,13 +2951,14 @@ def delegateFlattening(inputDF, varsToFlatten, channel=None, debug=False):
     flatVars = [] #Already flat
 
     for var in allColumns:
+        strVar = str(var)
         if var not in varsToFlatten:
-            skippedVars.append(var)
+            skippedVars.append(strVar)
             continue
-        if "ROOT::VecOps::RVec" in rdf.GetColumnType(var):
+        if "ROOT::VecOps::RVec" in rdf.GetColumnType(strVar):
             if debug:
-                print("Flatten {}".format(var))
-            if "FTAMuon" in var:
+                print("Flatten {}".format(strVar))
+            if "FTAMuon" in strVar:
                 if "mumu" in channel.lower():
                     depth = 2
                 elif "elmu" in channel.lower():
@@ -2966,9 +2967,9 @@ def delegateFlattening(inputDF, varsToFlatten, channel=None, debug=False):
                     depth = 0
                 else:
                     depth = 2
-            if "FTALepton" in var:
+            if "FTALepton" in strVar:
                 depth = 2
-            if "FTAElectron" in var:
+            if "FTAElectron" in strVar:
                 if "mumu" in channel.lower():
                     depth = 0
                 elif "elmu" in channel.lower():
@@ -2977,19 +2978,19 @@ def delegateFlattening(inputDF, varsToFlatten, channel=None, debug=False):
                     depth = 2
                 else:
                     depth = 2
-            elif "FTAJet" in var:
+            if "FTAJet" in strVar:
                 depth = 10
             else:
                 depth = 2
-            flattenedVars.append(var)
-            rdf, iterFlattenedVars = flattenVariable(rdf, var, depth, static_cast=True, fallback=None, debug=debug)
+            flattenedVars.append(strVar)
+            rdf, iterFlattenedVars = flattenVariable(rdf, strVar, depth, static_cast=True, fallback=None, debug=debug)
             for fvar in iterFlattenedVars:
                 ntupleVariables.push_back(fvar)
         else:
             # if debug:
-            #     print("Retain {}".format(var))
-            flatVars.append(var)
-            ntupleVariables.push_back(var)
+            #     print("Retain {}".format(strVar))
+            flatVars.append(strVar)
+            ntupleVariables.push_back(strVar)
         
     for c in ntupleVariables:
         if debug:
@@ -3041,7 +3042,7 @@ def flattenVariable(input_df, var, depth, static_cast=None, fallback=None, debug
         else:
             raise NotImplementedError("No known fallback rule")        
 
-    for x in xrange(depth):
+    for x in range(depth):
         split_name = str(var).split("_")
         to_replace = split_name[0]
         name = str(var).replace(to_replace, "{tr}{n}".format(tr=to_replace, n=x+1))
@@ -3608,7 +3609,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
         z.append(("FTAJet{pf}_DeepJetB_sorted_LeadtagJet".format(pf=postfix), "FTAJet{pf}_DeepJetB_sorted.size() > 0 ? FTAJet{pf}_DeepJetB_sorted.at(0) : -9999".format(pf=postfix)))
         z.append(("FTAJet{pf}_DeepJetB_sorted_SubleadtagJet".format(pf=postfix), "FTAJet{pf}_DeepJetB_sorted.size() > 1 ? FTAJet{pf}_DeepJetB_sorted.at(1) : -9999".format(pf=postfix)))
         #Deprecating these, taken care of within the delegateFlattening method if the variables are added in the getNtuple...() functions
-        # for x in xrange(nJetsToHisto):
+        # for x in range(nJetsToHisto):
         #     z.append(("FTAJet{pf}_pt_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_pt.size() > {n} ? FTAJet{pf}_pt.at({n}) : -9999".format(pf=postfix, n=x)))
         #     z.append(("FTAJet{pf}_eta_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_eta.size() > {n} ? FTAJet{pf}_phi.at({n}) : -9999".format(pf=postfix, n=x)))
         #     z.append(("FTAJet{pf}_phi_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_phi.size() > {n} ? FTAJet{pf}_phi.at({n}) : -9999".format(pf=postfix, n=x)))
@@ -4086,15 +4087,16 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                 testNJ = 6
                 testHT = 689.0
                 # pdb.set_trace()
-                if verbose:
-                    testVal = iLUM[eraAndProcessName][0].getEventYieldRatio(testKeyA, testNJ, testHT)
-                    print("BTaggingYield has done a test evaluation on the yield histogram with search for histogram {}, nJet={}, HT={} and found value {}"\
-                          .format(testKeyA, testNJ, testHT, testVal))
-                else:
-                    testVal = iLUM[eraAndProcessName][0].getEventYieldRatio(testKeyA, testNJ, testHT)
-                assert type(testVal) == float, "LookupMap did not provide a valid return type, something is wrong"
-                assert testVal >= 0.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... ({} is considered unrealistic...)".format(testVal)
-                assert testVal <= 5.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... ({} is considered unrealistic...)".format(testVal)
+                print("FIXME: BTagging LUT Assertion removed for old method, add new method test?")
+                # if verbose:
+                #     testVal = iLUM[eraAndProcessName][0].getEventYieldRatio(testKeyA, testNJ, testHT)
+                #     print("BTaggingYield has done a test evaluation on the yield histogram with search for histogram {}, nJet={}, HT={} and found value {}"\
+                #           .format(testKeyA, testNJ, testHT, testVal))
+                # else:
+                #     testVal = iLUM[eraAndProcessName][0].getEventYieldRatio(testKeyA, testNJ, testHT)
+                # assert type(testVal) == float, "LookupMap did not provide a valid return type, something is wrong"
+                # assert testVal >= 0.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... ({} is considered unrealistic...)".format(testVal)
+                # assert testVal <= 5.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... ({} is considered unrealistic...)".format(testVal)
         
             listOfColumns = nodes[eraAndProcessName]["BaseNode"].GetColumnNames() #This is a superset, containing non-Define'd columns as well
 
@@ -4714,8 +4716,8 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                 IDs = {}
             if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
                 inclusiveProc = inclusiveProcess.get("processes")
-                inclusiveDict = inclusiveProc.values()[0]
-                if inclusiveProc.keys()[0] not in splitProcs:
+                inclusiveDict = list(inclusiveProc.values())[0]
+                if list(inclusiveProc.keys())[0] not in splitProcs:
                     splitProcs.update(inclusiveProc)
                 else:
                     print("Inclusive process already defined, not overriding in splitProces")
@@ -5576,7 +5578,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                                                     .format(proc=processName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "Lead Lep p_{{T}} (CCJet)({hpf});Lead Lep p_{{T}}(CC Jet); Events".format(hpf=histopostfix.replace("__", "")), 
                                                                     100,0,300), "FTACrossCleanedJet{bpf}_leppt".format(bpf=branchpostfix), wgtVar))
-                    for x in xrange(nJetsToHisto):
+                    for x in range(nJetsToHisto):
                         thisFillJet = fillJetEnumerated.format(n=x+1)
                         defineNodes[processName][decayChannel].append((("{proc}___{chan}___{cat}___Jet{n}_pt{hpf}"\
                                                                         .format(proc=processName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
@@ -5905,8 +5907,9 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                             raise RuntimeError("This histogram name already exists in memory or is intentionally being overwritten:"\
                                                "processName - {}\t decayChannel - {}\t defHName - {}".format(processName, decayChannel, defHName))
                         else:
-                            for i in xrange(1, len(dnode)):
+                            for i in range(1, len(dnode)):
                                 if dnode[i] not in listOfColumns and dnode[i] != "1":
+                                    pdb.set_trace()
                                     raise RuntimeError("This histogram's variable/weight is not defined:"\
                                                        "processName - {}\t decayChannel - {}\t variable/weight - {}".format(processName, decayChannel, dnode[i]))
 
@@ -5953,7 +5956,7 @@ def jetMatchingEfficiency(input_df, max_eta = 2.5, min_pt = 30.0, wgtVar="wgt_SU
     if isData == True:
         pass
     else:
-        theCats = collections.OrderedDict()
+        theCats = dict()
         #Subtract 2 for the GenJets which are actually leptons
         theCats["nGenJet2"] = "jetmatch_nGenJet == 4"
         theCats["nGenJet3"] = "jetmatch_nGenJet == 5"
@@ -5966,7 +5969,7 @@ def jetMatchingEfficiency(input_df, max_eta = 2.5, min_pt = 30.0, wgtVar="wgt_SU
         theCats["nGenJet10+"] = "jetmatch_nGenJet >= 12"
         #define genjets as needed for this study
         input_df_defined = input_df.Define("jetmatch_nGenJet", "GenJet_pt[GenJet_pt >= {}  && abs(GenJet_eta) <= {}].size()".format(min_pt, max_eta))
-        cat_df = collections.OrderedDict()
+        cat_df = dict()
         for ck, cs in theCats.items():
             cat_df[ck] = input_df_defined.Filter(cs, "Jet Matching Efficiency " + cs)
             stats_dict[ck] = {}
@@ -5976,7 +5979,7 @@ def jetMatchingEfficiency(input_df, max_eta = 2.5, min_pt = 30.0, wgtVar="wgt_SU
             stats_dict[ck]["nJet_genMatched_puIdLoose"] = cat_df[ck].Stats("nGJet_genMatched_puIdLoose", wgtVar)
 
 def fillHLTMeans(input_df, wgtVar="wgt_SUMW_PU_L1PF", stats_dict=None):
-    theCats = collections.OrderedDict()
+    theCats = dict()
     theCats["Inclusive"] = "nGJet >= 4"
     theCats["nJet4to5"] = "nGJet == 4 || nGJet == 5"
     theCats["nJet6+"] = "nGJet >= 6"
@@ -5993,7 +5996,7 @@ def fillHLTMeans(input_df, wgtVar="wgt_SUMW_PU_L1PF", stats_dict=None):
         input_df_defined = input_df_defined.Define("{}_weighted".format(branch), 
                                                    "{} == true ? {} : 0".format(branch, wgtVar))
                 
-    cat_df = collections.OrderedDict()
+    cat_df = dict()
     for ck, cs in theCats.items():
         cat_df[ck] = input_df_defined.Filter(cs, "HLT Report " + cs)
     if stats_dict != None:
@@ -6830,8 +6833,8 @@ def rebin2D(hist, name, xbins, ybins, return_numpy_arrays=False):
             hist_contents = np.zeros((nBinsY, nBinsX), dtype=float)
             hist_errors = np.zeros((nBinsY, nBinsX), dtype=float)
             #Reverse the y array since numpy counts from top to bottom, and swap X and Y coordinates (row-column)
-            for x in xrange(nBinsX):
-                for y in xrange(nBinsY):
+            for x in range(nBinsX):
+                for y in range(nBinsY):
                     hist_contents[nBinsY-1-y, x] = final_hist.GetBinContent(x, y)
                     hist_errors[nBinsY-1-y, x] = final_hist.GetBinError(x, y)
             return final_hist, hist_contents, hist_errors
@@ -6853,8 +6856,8 @@ def rebin2D(hist, name, xbins, ybins, return_numpy_arrays=False):
     for yn, y in enumerate(ybins):
         nybins.append(hist.GetYaxis().FindBin(y))
         #ybins_vec[yn] = y
-    #Get xrange objects that store the bins to be projected and added
-    ybinsrange = [xrange(nybins[:-1][z], nybins[1:][z]) for z in xrange(len(nybins)-1)]
+    #Get range objects that store the bins to be projected and added
+    ybinsrange = [range(nybins[:-1][z], nybins[1:][z]) for z in range(len(nybins)-1)]
     
     #set up the final histogram, copying most of the parameters over
     final_hist = ROOT.TH2D(name, hist.GetTitle(), len(xbins)-1, xbins_vec, len(ybins)-1, ybins_vec)
@@ -6887,7 +6890,7 @@ def rebin2D(hist, name, xbins, ybins, return_numpy_arrays=False):
     #Begin looping through slices that are to be made, each slice composed of multiple bins in the yrange, potentially
     for sn, ybinset in enumerate(ybinsrange):
         slice_dict[str(sn)] = {}
-        #ybinset is an xrange object, so iterate through it for each ybin to be added in this slice
+        #ybinset is an range object, so iterate through it for each ybin to be added in this slice
         for bn, ybin in enumerate(ybinset):
             #Create hist for this slice if it's the first bin being combined
             if bn is 0:
@@ -6904,9 +6907,9 @@ def rebin2D(hist, name, xbins, ybins, return_numpy_arrays=False):
                 else:
                     pass
         #Carry over slice content and errors to the new histogram, remembering sn starts at 0, and non-underflow
-        #in histograms begins at 1 (overflow at NBins + 1, requiring us to add 2 when creating an xrange object)
+        #in histograms begins at 1 (overflow at NBins + 1, requiring us to add 2 when creating an range object)
         #print(slice_dict[str(sn)])
-        for fbn in xrange(slice_dict[str(sn)]["hist"].GetXaxis().GetNbins()+2):
+        for fbn in range(slice_dict[str(sn)]["hist"].GetXaxis().GetNbins()+2):
             #sn+1 might be in error if we actually need underflows and overflows in the y range...
             final_hist.SetBinContent(fbn, sn+1, slice_dict[str(sn)]["hist"].GetBinContent(fbn))
             final_hist.SetBinError(fbn, sn+1, slice_dict[str(sn)]["hist"].GetBinError(fbn))
@@ -6921,8 +6924,8 @@ def rebin2D(hist, name, xbins, ybins, return_numpy_arrays=False):
         hist_contents = np.zeros((nBinsY, nBinsX), dtype=float)
         hist_errors = np.zeros((nBinsY, nBinsX), dtype=float)
         #Reverse the y array since numpy counts from top to bottom, and swap X and Y coordinates (row-column)
-        for x in xrange(nBinsX):
-            for y in xrange(nBinsY):
+        for x in range(nBinsX):
+            for y in range(nBinsY):
                 hist_contents[nBinsY-1-y, x] = final_hist.GetBinContent(x, y)
                 hist_errors[nBinsY-1-y, x] = final_hist.GetBinError(x, y)
         return final_hist, hist_contents, hist_errors
@@ -7130,19 +7133,19 @@ def rootToPDF(directory, outDirectory="{}/PDF", globKey="*.root", stripKey=".roo
 def makeJetEfficiencyReport(input_stats_dict, directory, levelsOfInterest="All"):
     if not os.path.isdir(directory):
         os.makedirs(directory)
-    stats_dict = collections.OrderedDict()
+    stats_dict = dict()
     all_names = []
     for name, name_dict in input_stats_dict.items():
         all_names.append(name)
         for level, level_dict in name_dict.items():
             if level not in stats_dict.keys():
-                stats_dict[level] = collections.OrderedDict()
+                stats_dict[level] = dict()
             if name not in stats_dict[level].keys():
-                stats_dict[level][name] = collections.OrderedDict()
+                stats_dict[level][name] = dict()
             if levelsOfInterest is not "All" and level not in levelsOfInterest: continue
             for category, category_dict in level_dict.items():
                 if category not in stats_dict[level].keys():
-                    stats_dict[level][name][category] = collections.OrderedDict()
+                    stats_dict[level][name][category] = dict()
                 for stat_name, stat_obj in category_dict.items():
                     stats_dict[level][name][category][stat_name] = [name, category, stat_name, str(stat_obj.GetMean()), 
                                                                     str(stat_obj.GetMeanErr()), str(stat_obj.GetRMS())]
@@ -7163,16 +7166,16 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
     if not os.path.isdir(directory):
         os.makedirs(directory)
     #name, level, weighted/unweighted, category, (count?)
-    path_dict = collections.OrderedDict()
-    count_dict = collections.OrderedDict()
+    path_dict = dict()
+    count_dict = dict()
     all_names = []
     for name, name_dict in stats_dict.items():
         all_names.append(name)
         for level, level_dict in name_dict.items():
             if level not in path_dict.keys():
-                path_dict[level] = collections.OrderedDict()
+                path_dict[level] = dict()
             if level not in count_dict.keys():
-                count_dict[level] = collections.OrderedDict()
+                count_dict[level] = dict()
             if levelsOfInterest is not "All" and level not in levelsOfInterest: continue
             for stat_category, stat_category_dict in level_dict.items():
                 if stat_category is "counts":
@@ -7180,26 +7183,26 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                         count_dict[level][category] = str(counter.GetValue())
                 elif stat_category in ["weighted", "unweighted"]:
                     if stat_category not in path_dict[level].keys():
-                        path_dict[level][stat_category] = collections.OrderedDict()
+                        path_dict[level][stat_category] = dict()
                     #pprint.pprint(stat_category_dict)
                     for category, category_dict in stat_category_dict.items():
                         if category not in path_dict[level][stat_category].keys():
-                            path_dict[level][stat_category][category] = collections.OrderedDict()
+                            path_dict[level][stat_category][category] = dict()
                         for path, count in category_dict.items():
                             if path not in path_dict[level][stat_category][category].keys():
-                                #path_dict[level][stat_category][category][path] = collections.OrderedDict()
+                                #path_dict[level][stat_category][category][path] = dict()
                                 path_dict[level][stat_category][category][path] = {}
                             path_dict[level][stat_category][category][path][name] = str(count.GetValue())
                 elif stat_category in ["weightedStats", "weightedStatsSMT"]:
                     if stat_category not in path_dict[level].keys():
-                        path_dict[level][stat_category] = collections.OrderedDict()
+                        path_dict[level][stat_category] = dict()
                     #pprint.pprint(stat_category_dict)
                     for category, category_dict in stat_category_dict.items():
                         if category not in path_dict[level][stat_category].keys():
-                            path_dict[level][stat_category][category] = collections.OrderedDict()
+                            path_dict[level][stat_category][category] = dict()
                         for path, count in category_dict.items():
                             if path not in path_dict[level][stat_category][category].keys():
-                                #path_dict[level][stat_category][category][path] = collections.OrderedDict()
+                                #path_dict[level][stat_category][category][path] = dict()
                                 path_dict[level][stat_category][category][path] = {}
                             path_dict[level][stat_category][category][path][name] = str(count.GetMean() * count.GetW())
                     
@@ -7439,13 +7442,13 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
     ROOT.gInterpreter.Declare("std::vector<std::string> btagging_inclusive_process_names;")
     btaggingInclusiveProcessNames = getattr(ROOT, "btagging_inclusive_process_names")
     for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
-        if name not in valid_samples or vals["isData"]: 
+        if name not in valid_samples or vals["isData"]:
             continue
         else:
             #Get all the potential split process names (in BTaggingYields() function era + "___" + subprocess is the 'processName', e.g. 2017___ttbb_DL-GF. Since the corrector map handles this era modifier already, we drop it here...
             #What an inconsistent mess it all is.
             earlySplitProcess = vals.get("splitProcess", None)
-            if isinstance(earlySplitProcess, (dict, collections.OrderedDict)):
+            if isinstance(earlySplitProcess, (dict)):
                 # df_with_IDs = input_df
                 splitProcs = earlySplitProcess.get("processes")
                 for preProcessName, processDict in splitProcs.items():
@@ -7603,7 +7606,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                 else:
                     print("Booking progress bar")
                     booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(base[name]), 
-                                                      2000, long(metainfo[name]["totalEvents"]))
+                                                      2000, int(metainfo[name]["totalEvents"]))
                 prePackedNodes = splitProcess(base[name], 
                                               splitProcess = splitProcessConfig, 
                                               inclusiveProcess = inclusiveProcessConfig,
@@ -7682,7 +7685,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
             else:
                 print("Booking progress bar")
                 counts[name][lvl] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(the_df[name][lvl]), 
-                                                        min(5000, max(1000, int(metainfo[name]["totalEvents"]/5000))), long(metainfo[name]["totalEvents"]))
+                                                        min(5000, max(1000, int(metainfo[name]["totalEvents"]/5000))), int(metainfo[name]["totalEvents"]))
             packedNodes[name][lvl] = None
             stats[name][lvl] = {}
             effic[name][lvl] = {}
