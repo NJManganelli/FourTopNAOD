@@ -7433,6 +7433,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
     ################################################################################
     #### Setup all correctors e.g. LeptonSFs and BTaggingYields Renormalization ####
     ################################################################################
+    cppVerbosity = False
     ROOT.gInterpreter.Declare("std::vector<std::string> btagging_process_names;")
     btaggingProcessNames = getattr(ROOT, "btagging_process_names")
     ROOT.gInterpreter.Declare("std::vector<std::string> btagging_inclusive_process_names;")
@@ -7460,7 +7461,8 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
     ROOT.gInterpreter.Declare("std::vector<std::string> btag_systematic_scale_postfix;")
     btaggingSystematicScalePostfix = getattr(ROOT, "btag_systematic_scale_postfix")
     sysVariationsForBtagging = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"] or "ALL" in systematicSet])
-    for sysVar, sysDict in sysVariationsForBtagging.items():
+    # for sysVar, sysDict in sysVariationsForBtagging.items():
+    for sysVar, sysDict in sysVariationsAll.items():
         isWeightVariation = sysDict.get("weightVariation")
         slimbranchpostfix = "nom" if isWeightVariation else sysVar.replace("$NOMINAL", "nom") #branch postfix for identifying input branch variation
         btaggingSystematicNames.push_back(sysVar)
@@ -7482,13 +7484,14 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                                             btaggingSystematicScalePostfix,
                                             BTaggingYieldsAggregate, #bool btag_use_aggregate = false,
                                             useHTOnly, #bool btag_use_HT_only = false,
-                                            useNJetOnly) #bool btag_use_nJet_only = false
-    print("BTagging systematic and branchpostfix names:")
-    print(btaggingSystematicNames)
-    print(btaggingSystematicScalePostfix)
+                                            useNJetOnly,
+                                            cppVerbosity) #bool btag_use_nJet_only = false
+    # print("BTagging systematic and branchpostfix names:")
+    # print(btaggingSystematicNames)
+    # print(btaggingSystematicScalePostfix)
     print("testing LUTManager")
     LUTManager = ROOT.LUTManager()
-    LUTManager.Add(correctorMap)
+    LUTManager.Add(correctorMap, cppVerbosity)
     LUTManager.Finalize(nThreads)
     vectorLUTs = LUTManager.GetLUTVector()
     # print(vectorLUTs[0].TH1Keys())

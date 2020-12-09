@@ -360,7 +360,7 @@ class LUTManager {
 public:
   LUTManager() {origin = new LUT(); lut_vector = std::make_shared< std::vector<LUT*> >();}
   ~LUTManager() {}
-  void Add(std::map< std::string, std::vector<std::string> > idmap);
+  void Add(std::map< std::string, std::vector<std::string> > idmap, bool verbose = false);
   void Finalize(int nThreads);
 std::shared_ptr< std::vector<LUT*> > GetLUTVector();
 
@@ -368,7 +368,7 @@ private:
   std::shared_ptr< std::vector<LUT*> > lut_vector; // = std::make_shared< std::vector<LUT*> >();
   LUT *origin;
 };
-void LUTManager::Add(std::map< std::string, std::vector<std::string> > idmap) {
+void LUTManager::Add(std::map< std::string, std::vector<std::string> > idmap, bool verbose = false) {
   for(std::map< std::string, std::vector<std::string> >::iterator id_iter = idmap.begin(); id_iter != idmap.end(); ++id_iter){
     // std::cout << "Key: " << id_iter->first << std::endl;
     // std::cout << "Values: ";
@@ -379,7 +379,8 @@ void LUTManager::Add(std::map< std::string, std::vector<std::string> > idmap) {
     // std::cout << std::endl;
     //Load each map into the origin LUT, from which all others will be copied in the finalize method
     if(vec_values.size() > 1){
-      std::cout << vec_values[0] << " " << vec_values[1] << std::endl;
+      if(verbose)
+	std::cout << vec_values[0] << " " << vec_values[1] << std::endl;
       origin->Add(vec_values[0], vec_values[1], id_iter->first);
     }
   }
@@ -706,7 +707,8 @@ namespace FTA{
 								    std::vector<std::string> btag_systematic_scale_postfix = {"nom"},
 								    bool btag_use_aggregate = false,
 								    bool btag_use_HT_only = false,
-								    bool btag_use_nJet_only = false){
+								    bool btag_use_nJet_only = false,
+								    bool verbose = false){
     //python constructor:
     //def __init__(self, muon_ID=None, muon_ISO=None, electron_ID=None, era=None, doMuonHLT=False, doElectronHLT_ZVtx=False, 
     //pre2018Run316361Lumi = 8.942, post2018Run316361Lumi = 50.785
@@ -1367,7 +1369,8 @@ namespace FTA{
 	  if(btag_use_HT_only) btag_key += "1DX";
 	  if(btag_use_nJet_only) btag_key += "1DY";
 	  btag_key += "___" + syst_name;
-	  std::cout << "Btag key formed for process " << static_cast<std::string>(*proc_iter) << ": " << btag_key << std::endl;
+	  if(verbose)
+	    std::cout << "Btag key formed for process " << static_cast<std::string>(*proc_iter) << ": " << btag_key << std::endl;
 	  //the branch_postfix is based on whether a systematic variations is a scale variation/central (nominal, jes, jer...) or purely a weight variation (FSR, ISR, etc...). If the latter, the branch_postfix should default to the 'nominal'
 	  ret["btag___" + era + "___" + static_cast<std::string>(*proc_iter) + "___" + syst_name] = {btag_top_path + "BTaggingYields.root", 
 												     btag_key, 
@@ -1582,12 +1585,19 @@ namespace FTA{
 
       //skip branches that are already defined
       Bool_t already_defined = false;
+      Bool_t btag_sf_product_exists = false;
       for(int bi = 0; bi < branches.size(); ++bi){
 	if(btag_final_weight == branches.at(bi)) already_defined = true;
+	if(btag_sf_product == branches.at(bi)) btag_sf_product_exists = true;
       }
       if(already_defined){
 	if(verbose)
 	  std::cout << "Branch " << btag_final_weight << " already defined, skipping." << std::endl;
+	continue;
+      }
+      if(!btag_sf_product_exists){
+	if(verbose)
+	  std::cout << "btagSFProduct branch " << btag_sf_product << " does not exist, not calculating btag event weight in AddBTaggingYieldsRenormalization()" << std::endl;
 	continue;
       }
 
