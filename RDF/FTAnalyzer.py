@@ -17,7 +17,7 @@ import pprint
 import re
 import pdb
 import ROOT
-# from ruamel.yaml import YAML
+import ruamel.yaml as yaml
 from FourTopNAOD.RDF.tools.toolbox import getFiles
 #from IPython.display import Image, display, SVG
 #import graphviz
@@ -3412,47 +3412,6 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfL
             listOfColumns.push_back(defName)
     return rdf
 
-def defineInitWeights(input_df, crossSection=0, era="2017", sumWeights=-1, lumiOverride=None,
-                  nEvents=-1, nEventsPositive=2, nEventsNegative=1,
-                  isData=True, verbose=False):
-    leppostfix = ""
-    lumiDict = {"2017": 41.53,
-                "2018": 59.97}
-    lumi = lumiDict.get(era, 41.53)
-    
-    mc_def = collections.OrderedDict()
-    data_def = collections.OrderedDict()
-    mc_def["wgt_NUMW"] = "({xs:s} * {lumi:s} * 1000 * genWeight) / (abs(genWeight) * ( {nevtp:s} - {nevtn:s} ) )".format(xs=str(crossSection), lumi=str(lumi), nevt=str(nEvents),
-                    nevtp=str(nEventsPositive), nevtn=str(nEventsNegative))
-    mc_def["wgt_SUMW"] = "({xs:s} * {lumi:s} * 1000 * genWeight) / {sumw:s}".format(xs=str(crossSection), lumi=str(lumi), sumw=str(sumWeights))
-    mc_def["wgt_LSF"] = "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)
-    mc_def["wgt_SUMW_PU"] = "wgt_SUMW * puWeight"
-    mc_def["wgt_SUMW_LSF"] = "wgt_SUMW * wgt_LSF"
-    mc_def["wgt_SUMW_L1PF"] = "wgt_SUMW * L1PreFiringWeight_Nom"
-    mc_def["wgt_SUMW_PU_LSF"] = "wgt_SUMW * puWeight * wgt_LSF"
-    mc_def["wgt_SUMW_PU_L1PF"] = "wgt_SUMW * puWeight * L1PreFiringWeight_Nom"
-    mc_def["wgt_SUMW_PU_LSF_L1PF"] = "wgt_SUMW * puWeight * wgt_LSF * L1PreFiringWeight_Nom"
-    mc_def["wgt_SUMW_LSF_L1PF"] = "wgt_SUMW * wgt_LSF * L1PreFiringWeight_Nom"
-    mc_def["wgt_NUMW_LSF_L1PF"] = "wgt_NUMW * wgt_LSF * L1PreFiringWeight_Nom"
-    #mc_def["wgt_SUMW_PU_LSF"] = "wgt_SUMW * puWeight * GLepton_SF_nom.at(0) * GLepton_SF_nom.at(1)"
-    mc_def["SPL_SP"] = "wgt_SUMW_PU_LSF/wgt_SUMW_PU"
-    mc_def["wgt_diff"] = "abs(wgt_NUMW - wgt_SUMW)/max(abs(wgt_SUMW), abs(wgt_NUMW))"
-    for k in mc_def.keys():
-        data_def[k] = "1"
-    if verbose == True:
-        print("===data and mc weight definitions===")
-        print(data_def)
-        print(mc_def)
-        
-    rdf = input_df
-    if isData:
-        for k, v in data_def.items():
-            rdf = rdf.Define(k, v)
-    else:
-        for k, v in mc_def.items():
-            rdf = rdf.Define(k, v)
-    return rdf
-
 def testVariableProcessing(inputDForNodes, nodes=False, searchMode=True, skipColumns=[],
                            allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool']):
     """Pass in a dataframe or head dictionary containing nodes (as returned by splitProcess function), walking through each variable and defining a mean and getting it's value to test if it causes issue. type as retuned by dataframe's GetColumnType should be in the list of 'allowedTypes'"""
@@ -4086,7 +4045,6 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                 # testKeyB = "__nom"
                 testNJ = 6
                 testHT = 689.0
-                # pdb.set_trace()
                 print("FIXME: BTagging LUT Assertion removed for old method, add new method test?")
                 # if verbose:
                 #     testVal = iLUM[eraAndProcessName][0].getEventYieldRatio(testKeyA, testNJ, testHT)
@@ -4254,257 +4212,10 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
             #             print("alt_{} not found".format(x))
             #     else:
             #         print("skipping {}".format(x))
-            # pdb.set_trace()
             # test3 = compareMethodsResults[3].GetValue()
 
         return input_df_or_nodes
         
-
-def BTaggingYieldsV1(input_df, sampleName, channel="All", isData = True, histosDict=None, verbose=False,
-                   loadYields=None, lookupMap="LUM", useAggregate=True, useHTOnly=False, useNJetOnly=False, 
-                   calculateYields=True, HTBinWidth=10, HTMin=200, HTMax=3200, nJetBinWidth=1, nJetMin=4, nJetMax=20,
-                   sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
-                                               "lep_postfix": "", 
-                                               "jet_pt_var": "Jet_pt",
-                                               "jet_mass_var": "Jet_mass",
-                                               "met_pt_var": "METFixEE2017_pt",
-                                               "met_phi_var": "METFixEE2017_phi",
-                                               "btagSF": "Jet_btagSF_deepcsv_shape",
-                                               "weightVariation": False},
-                                              },
-               ):
-    """Calculate or load the event yields in various categories for the purpose of renormalizing btagging shape correction weights.
-    
-    A btagging preweight (event level) must be calculated using the product of all SF(function of discriminant, pt, eta) for
-    all selected jets. Then a ratio of the sum(weights before)/sum(weights after) for application of this btagging 
-    preweight serves as a renormalization, and this phase space extrapolation can be a function of multiple variables.
-    For high-jet multiplicity analyses, it can be expected to depend on nJet. The final btagging event weight
-    is then the product of this phase space ratio and the btagging preweight. This should be computed PRIOR to ANY
-    btagging requirements (cut on number of BTags); after, the event yields and shapes are expected to shift.
-    
-    The final and preweight are computed separately from the input weight (that is, it must be multiplied with the non-btagging event weight)
-    The yields are calculated as the sum of weights before and after multiplying the preweight with the input weight
-
-    <sampleName> should be passed to provide a 'unique' key for the declared lookupMap. This is purely to avoid namesplace conflicts
-    when aggregate yields are to be used. If not using aggregates, it provides the actual lookup key (into a yields histogram)
-    <isData> If running on data, disable all systematic variations besides $NOMINAL/'_nom'
-    <histosDict> dictionary for writing the histograms to fill yields
-
-    Group - Yield Loading
-    <loadYields> string path to the BTaggingYields.root file containing the ratios
-    <lookupMap> is a string name for the lookupMap object (std::map<std::string, std::vector<TH2Lookup*> > in the ROOT interpreter.
-    This object can be shared amongnst several dataframes, as the key (std::string) is the sampleName. For each thread/slot assigned
-    to an RDataFrame, there will be a TH2Lookup pointer, to avoid multiple threads accessing the same object (has state)
-    <useAggregate> will toggle using the weighted average of all processed samples (those used when choosing to analyze the files)
-    <useHTOnly> and <useNJetOnly> will toggle the lookup to use the 1D yield ratios computed in either HT only or nJet only
-
-    Group - Yield Computation
-    <calculateYields> as indicated, fill histograms for the yields, making an assumption that there is a weight named
-    "prewgt<SYSTEMATIC_POSTFIX>" where the postfix is the key inside sysVariations. i.e. "$NOMINAL" -> "prewgt_nom" due to 
-    special replacement for nominal, and "jec_13TeV_R2017Up" -> "prewgt_jec_13TeV_R2017Up" is expected
-    <HTBinWidth>, <HTMin>, <HTMax> are as expected. Don't screw up the math on your end, (max-min) should be evenly divisible.
-    <nJetBinWidth>, <nJetMin>, <nJetMax> are similar
-
-    For more info on btagging, see...
-    https://twiki.cern.ch/twiki/bin/viewauth/CMS/BTagShapeCalibration"""
-                        
-    JetBins = int((nJetMax - nJetMin)/nJetBinWidth)
-    HTBins = int((HTMax-HTMin)/HTBinWidth)
-
-    if useAggregate:
-        yieldsKey = "Aggregate_"
-    else:
-        yieldsKey = "{}_".format(sampleName) #copy it, we'll modify
-    if useHTOnly:
-        yieldsKey += "1DX"
-    elif useNJetOnly:
-        yieldsKey += "1DY"        
-    
-    #internal variable/pointer to the TH2 lookup map, and the sample-specific one
-    iLUM = None
-    if loadYields != None:
-        calculateYields = False
-        #We need a lookupMap to store the TH2Lookup class with the yields loaded in them,
-        #With key1 based on the sample name and key2 based on slot number in the RDataFrame
-        #We need the string name for the object in the ROOT space, creating it if necessary
-        if type(lookupMap) == str:
-            #It's a string name, see if it's been declared in the ROOT instance and if not create it
-            try:
-                if str(type(getattr(ROOT, lookupMap))) == "<class 'ROOT.map<string,vector<TH2Lookup*> >'>":
-                    #We'll pick it up after the except statement
-                    pass
-            except:
-                ROOT.gInterpreter.Declare("std::map<std::string, std::vector<TH2Lookup*>> {0};".format(lookupMap))
-            iLUM = getattr(ROOT, lookupMap)
-        else:
-            raise RuntimeError("lookupMap (used in BTaggingYields function) must either be a string name "                               "for the declared function's (C++ variable) name, used to find or declare one of type "                               "std::map<std::string, std::vector<TH2Lookup*>>")
-        nSlots = input_df.GetNSlots()
-        assert os.path.isfile(loadYields), "BTaggingYield file does not appear to exist... aborting execution"
-        while iLUM[sampleName].size() < nSlots:
-            if type(loadYields) == str:
-                iLUM[sampleName].push_back(ROOT.TH2Lookup(loadYields))
-            else:
-                raise RuntimeError("No string path to a yields file has been provided in BTaggingYields() ...")
-                
-        #Test to see that it's accessible...
-        testKeyA = yieldsKey
-        testKeyB = "_nom"
-        testNJ = 6
-        testHT = 689.0
-        testVal = iLUM[sampleName][0].getEventYieldRatio(testKeyA, testKeyB, testNJ, testHT)
-        if verbose:
-            print("BTaggingYield has done a test evaluation on the yield histogram with search for histogram {}{}, nJet={}, HT={} and found value {}"\
-                  .format(testKeyA, testKeyB, testNJ, testHT, testVal))
-        assert type(testVal) == float, "LookupMap did not provide a valid return type, something is wrong"
-        assert testVal < 5.0, "LookupMap did not provide a reasonable BTagging Yield ratio in the test... (>5.0 is considered unrealistic...)"        
-    
-    #column guards
-    listOfColumns = input_df.GetColumnNames() #This is a superset, containing non-Define'd columns as well
-
-    if isData == True:
-        return input_df
-    else:
-        rdf = input_df
-        #List of defines to do
-        z = {}
-        #Create list of the variations to be histogrammed (2D yields)
-        yieldList = []
-        #Add key to histos dictionary, if calculating the yields
-        if calculateYields and "BTaggingYields" not in histosDict.keys():
-            histosDict["BTaggingYields"] = {}
-        for sysVar, sysDict in sysVariations.items():
-            z[sysVar] = []
-            isWeightVariation = sysDict.get("weightVariation")
-            branchpostfix = "__nom" if isWeightVariation else "__" + sysVar.replace("$NOMINAL", "nom") #branch postfix for 
-            syspostfix = "___" + sysVar.replace("$NOMINAL", "nom")
-            jetMask = sysDict.get("jet_mask") #mask as defined for the jet collection under this systematic variation
-            jetPt = sysDict.get("jet_pt_var") #colum name of jet pt collection for this systematic
-            jetSF = sysDict.get("btagSF") #colum name of per-jet shape SFs
-            #We must get or calculate various weights, defined below
-            #This btagSFProduct is the product of the SFs for the selected jets from collection jetPt with mask jetMask
-            btagSFProduct = "btagSFProduct{spf}".format(spf=syspostfix)
-            #input weight, should include all corrections for this systematic variation except BTagging SF and yield ratio
-            calculationWeightBefore = "prewgt{spf}".format(spf=syspostfix)
-            #For calculating the yeild ratio, we need this weight, which will be the product of calculationWeightBefore and the product of btag SFs (no yield ratio!)
-            calculationWeightAfter = "calcBtagYields_after{spf}".format(spf=syspostfix)
-            #Define the form of the final name of the btagSFProduct * YieldRatio(HT, nJet)
-            #This needs to match what will be picked up in the final weight definitions!
-            btagFinalWeight = "pwgt_btag{spf}".format(spf=syspostfix)
-            
-            #Lets be really obvious about missing jet_masks... exception it
-            if jetMask not in listOfColumns:
-                raise RuntimeError("Could not find {} column in method BTaggingYields".format(jetMask))
-            
-            #Skip SFs for which the requisite per-jet SFs are not present...
-            if jetSF not in listOfColumns:
-                if verbose: print("Skipping {} in BTaggingYields as it is not a valid column name".format(jetSF))
-                continue
-                
-            #Check we have the input weight for before btagSF and yield ratio multiplication
-            if calculationWeightBefore not in listOfColumns:
-                raise RuntimeError("{} is not defined, cannot continue with calculating BTaggingYields".format(calculationWeightBefore))
-            
-            #Now check if the event preweight SF is in the list of columns, and if not, define it (common to calculating yields and loading them...)
-            #We might want to call this function twice to calculate yields for a future iteration and use an older iteration at the same time
-            if btagSFProduct not in listOfColumns:
-                if calculateYields and btagSFProduct not in histosDict["BTaggingYields"].keys():
-                    histosDict["BTaggingYields"][btagSFProduct] = {}
-                z[sysVar].append(("{}".format(btagSFProduct), "FTA::btagEventWeight_shape({}, {})".format(jetSF, jetMask)))
-            if calculationWeightAfter not in listOfColumns:
-                z[sysVar].append(("{}".format(calculationWeightAfter), "{} * {}".format(calculationWeightBefore, 
-                                                                                         btagSFProduct)))
-                
-            #Check that the HT and nJet numbers are available to us, and if not, define them based on the available masks    
-            #if isScaleVariation:
-            nJetName = "nFTAJet{bpf}".format(bpf=branchpostfix)
-            HTName = "HT{bpf}".format(bpf=branchpostfix)
-            if nJetName not in listOfColumns:
-                z[sysVar].append((nJetName, "{0}[{1}].size()".format(jetPt, jetMask)))
-            if HTName not in listOfColumns:
-                z[sysVar].append((HTName, "Sum({0}[{1}])".format(jetPt, jetMask)))
-            
-            #loadYields path...
-            if loadYields:
-                # if useAggregate:
-                print("\nPROBLEM: syspostfix was assumed to have only one underscore before, now it has two. Until new Yields calculated, gonna hack this away...\n\n\n")
-                z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=yieldsKey + syspostfix, nj=nJetName, ht=HTName)))
-                # else:
-                #     z[sysVar].append((btagFinalWeight, "{bsf} * {lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{vk}\", {nj}, {ht});".format(bsf=btagSFProduct, lm=lookupMap, sn=sampleName, yk=sampleName, vk=btagSFProduct.replace("nonorm_",""), nj=nJetName, ht=HTName)))
-
-            for defName, defFunc in z[sysVar]:
-                if defName in listOfColumns:
-                    if verbose:
-                        print("{} already defined, skipping".format(defName))
-                    continue
-                else:
-                    if verbose:
-                        print("rdf = rdf.Define(\"{}\", \"{}\")".format(defName, defFunc))
-                    rdf = rdf.Define(defName, defFunc)
-                    listOfColumns.push_back(defName)        
-
- #            test = rdf.Define("testThis", "{lm}[\"{sn}\"][rdfslot_]->getEventYieldRatio(\"{yk}\", \"{spf}\", {nj}, {ht}, true);".format(bsf=btagSFProduct, lm=lookupMap,\
- # sn=sampleName, yk=yieldsKey, spf=syspostfix, nj=nJetName, ht=HTName)).Stats("testThis").GetMean()
-            # print("Debugging test: {}".format(test))
-            #calculate Yields path
-            if calculateYields:
-                k = btagSFProduct
-                histosDict["BTaggingYields"][k] = {}
-                #Prepare working variable-bin-size 2D models (root 6.20.04+ ?)
-                nJetArr = array.array('d', [4, 5, 6, 7, 8, 20])
-                HTArr = array.array('d', [500, 650, 800, 1000, 1200, 10000])
-                ModelBefore = ("{}_BTaggingYield_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
-                                                                               "BTaggingYield #Sigma#omega_{before}; HT; nJet",
-                                                                               len(HTArr), HTArr, len(nJetArr), nJetArr)
-                ModelAfter = ("{}_BTaggingYield_{}_sumW_after".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
-                                                                               "BTaggingYield #Sigma#omega_{after}; HT; nJet",
-                                                                               len(HTArr), HTArr, len(nJetArr), nJetArr)
-                histosDict["BTaggingYields"][k]["sumW_before"] = rdf.Histo2D(("{}_BTaggingYield_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")), 
-                                                                               "BTaggingYield #Sigma#omega_{before}; HT; nJet",
-                                                                               HTBins, HTMin, HTMax,
-                                                                               JetBins, nJetMin, nJetMax),
-                                                                               HTName,
-                                                                               nJetName,
-                                                                               calculationWeightBefore)
-                histosDict["BTaggingYields"][k]["sumW_after"] = rdf.Histo2D(("{}_BTaggingYield_{}_sumW_after".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
-                                                                              "BTaggingYield #Sigma#omega_{after}; HT; nJet",
-                                                                              HTBins, HTMin, HTMax,
-                                                                              JetBins, nJetMin, nJetMax),
-                                                                              HTName,
-                                                                              nJetName,
-                                                                              calculationWeightAfter)
-                #For Unified JetBinning calculation
-                histosDict["BTaggingYields"][k]["1DXsumW_before"] = rdf.Histo2D(("{}_BTaggingYield1DX_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")), 
-                                                                               "BTaggingYield #Sigma#omega_{before}; HT; nJet",
-                                                                               HTBins, HTMin, HTMax,
-                                                                               1, nJetMin, nJetMax),
-                                                                               HTName,
-                                                                               nJetName,
-                                                                               calculationWeightBefore)
-                histosDict["BTaggingYields"][k]["1DXsumW_after"] = rdf.Histo2D(("{}_BTaggingYield1DX_{}_sumW_after".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
-                                                                              "BTaggingYield #Sigma#omega_{after}; HT; nJet",
-                                                                              HTBins, HTMin, HTMax,
-                                                                              1, nJetMin, nJetMax),
-                                                                              HTName,
-                                                                              nJetName,
-                                                                              calculationWeightAfter)
-                #For Unified HTBinning calculation
-                histosDict["BTaggingYields"][k]["1DYsumW_before"] = rdf.Histo2D(("{}_BTaggingYield1DY_{}_sumW_before".format(sampleName, btagSFProduct.replace("btagSFProduct_","")), 
-                                                                               "BTaggingYield #Sigma#omega_{before}; HT; nJet",
-                                                                               1, HTMin, HTMax,
-                                                                               JetBins, nJetMin, nJetMax),
-                                                                               HTName,
-                                                                               nJetName,
-                                                                               calculationWeightBefore)
-                histosDict["BTaggingYields"][k]["1DYsumW_after"] = rdf.Histo2D(("{}_BTaggingYield1DY_{}_sumW_after".format(sampleName, btagSFProduct.replace("btagSFProduct_","")),
-                                                                              "BTaggingYield #Sigma#omega_{after}; HT; nJet",
-                                                                              1, HTMin, HTMax,
-                                                                              JetBins, nJetMin, nJetMax),
-                                                                              HTName,
-                                                                              nJetName,
-                                                                              calculationWeightAfter)
-        return rdf
-
-
 def BTaggingEfficiencies(input_df, sampleName=None, era="2017", wgtVar="wgt_SUMW_PU_L1PF", isData = True, histosDict=None, 
                doDeepCSV=True, doDeepJet=True):
     validAlgos = []
@@ -4973,42 +4684,6 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
         
     else:
         raise RuntimeError("Deprecated, form an inclusive process and configure splitProcess with it.")
-        # processName = era + "___" + sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
-        # nodes["BaseNode"] = input_df #Always store the base node we'll build upon in the next level
-        # #The below references branchpostfix since we only need nodes for these types of scale variations...
-        # if processName not in nodes:
-        #     #L-2 filter, should be the packedEventID filter in that case
-        #     filterNodes[processName] = dict()
-        #     filterNodes[processName]["BaseNode"] = ("return true;", "{}".format(processName), processName, None, None, None, None)
-        #     nodes[processName] = dict()
-        #     nodes[processName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[processName]["BaseNode"][0], filterNodes[processName]["BaseNode"][1])
-        #     countNodes[processName] = collections.OrderedDict()
-        #     countNodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Count()
-        #     diagnosticNodes[processName] = collections.OrderedDict()
-        #     defineNodes[processName] = collections.OrderedDict()
-        #     if not isData:
-        #         #Need to gather those bookkeeping stats from the original source rather than the ones after event selection...
-        #         diagnosticNodes[processName]["sumWeights::Sum"] = nodes[processName]["BaseNode"].Sum("genWeight")
-        #         diagnosticNodes[processName]["nEventsPositive::Count"] = nodes[processName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
-        #         diagnosticNodes[processName]["nEventsNegative::Count"] = nodes[processName]["BaseNode"].Filter("genWeight < 0", "genWeight < 0").Count()
-        #     if printInfo == True:
-        #         print("splitProcess(..., printInfo=True, ...) set, executing the event loop to gather and print diagnostic info (presumably from the non-event-selected source...")
-        #         for pName, pDict in diagnosticNodes.items():
-        #             print("processName == {}".format(pName))
-        #             for dName, dNode in pDict.items():
-        #                 parseDName = dName.split("::")
-        #                 if parseDName[1] in ["Count", "Sum"]:
-        #                     dString = "\t\t\"{}\": {},".format(parseDName[0], dNode.GetValue())
-        #                 elif parseDName[1] in ["Stats"]:
-        #                     thisStat = dNode.GetValue()
-        #                     dString = "\t\t\"{}::Min\": {}".format(parseDName[0], thisStat.GetMin())
-        #                     dString += "\n\t\t\"{}::Mean\": {}".format(parseDName[0], thisStat.GetMean())
-        #                     dString += "\n\t\t\"{}::Max\": {}".format(parseDName[0], thisStat.GetMax())
-        #                 elif parseDName[1] in ["Histo"]:
-        #                     dString = "\t\tNo method implemented for histograms, yet"
-        #                 else:
-        #                     dString = "\tDiagnostic node type not recognized: {}".format(parseDName[1])
-        #                 print(dString)
             
     prePackedNodes = dict()
     prePackedNodes["snapshotPriority"] = snapshotPriority
@@ -5909,7 +5584,6 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         else:
                             for i in range(1, len(dnode)):
                                 if dnode[i] not in listOfColumns and dnode[i] != "1":
-                                    pdb.set_trace()
                                     raise RuntimeError("This histogram's variable/weight is not defined:"\
                                                        "processName - {}\t decayChannel - {}\t variable/weight - {}".format(processName, decayChannel, dnode[i]))
 
@@ -7242,607 +6916,651 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
     ### CHOOSE SAMPLE DICT AND CHANNEL TO ANALYZE ####
     ##################################################
     ##################################################
-    
-    all_samples = [s[0] for s in inputSamples.items() if channel in s[1].get("channels",[""]) or "All" in s[1].get("channels",[""])]
-    print("All samples: {}".format(" ".join(sorted(all_samples))))
-    if includeSampleNames:
-        if (type(includeSampleNames) == list or type(includeSampleNames) == dict):
-            valid_samples = [s for s in all_samples if s in includeSampleNames]
+    inputSamplesAll, inputSampleCardDict = load_yaml_cards(args.sample_cards)
+    sysVariationsYaml, sysVariationCardDict = load_yaml_cards(args.systematics_cards)
+    sysVariationsAll = sysVariationsYaml 
+    # with open("2017_systematics_NANOv5.yaml", "w") as of:
+    #     of.write(yaml.dump(sysVariationsAll, Dumper=yaml.RoundTripDumper))
+    # with open("2017_samples_NANOv5.yaml", "w") as of:
+    #     of.write(yaml.dump(inputSamples, Dumper=yaml.RoundTripDumper))
+    # inputSamplesYaml = None
+    # sysVariationsAllYaml = None
+    # with open("2017_samples_NANOv5.yaml", "r") as inf:
+    #     inputSamplesYaml = yaml.load(inf)
+    # with open("2017_systematics_NANOv5.yaml", "r") as inf:
+    #     sysVariationsAllYaml = yaml.load(inf)
+    # print("samples")
+    # for k, v in inputSamples.items():
+    #     for inputSampleCardName, inputSampleCardYaml in inputSampleCardDict.items():
+    #         if k in inputSampleCardYaml.keys():
+    #             if isinstance(v, dict):
+    #                 for kk, vv in v.items():
+    #                     if kk in inputSampleCardYaml[k].keys() and vv == inputSampleCardYaml[k][kk]:
+    #                         print("success")
+    #                     else:
+    #                         print(k, kk, vv, inputSampleCardYaml[k][kk] if kk in inputSampleCardYaml[k].keys() else "FailFail")
+    #             else:
+    #                 if v == inputSampleCardYaml[k]:
+    #                     print("success")
+    #         else:
+    #             print(k, type(v), type(inputSampleCardYaml[k]) if k in inputSampleCardYaml else "Fail")
+    # print("systematics")
+    # for k, v in sysVariationsAll.items():
+    #     for sysVariationCardName, sysVariationCardYaml in sysVariationCardDict.items():
+    #         if k in sysVariationCardYaml.keys():
+    #             if isinstance(v, dict):
+    #                 for kk, vv in v.items():
+    #                     if kk in sysVariationCardYaml[k].keys() and vv == sysVariationCardYaml[k][kk]:
+    #                         print("success")
+    #                     else:
+    #                         print(k, kk, vv, sysVariationCardYaml[k][kk] if kk in sysVariationCardYaml[k].keys() else "FailFail")
+    #             else:
+    #                 if v == sysVariationCardYaml[k]:
+    #                     print("success")
+    #         else:
+    #             print(k, type(v), type(sysVariationCardYaml[k]) if k in sysVariationCardYaml else "Fail")
+
+    for inputSampleCardName, inputSampleCardYaml in inputSampleCardDict.items():
+        all_samples = [s[0] for s in inputSampleCardYaml.items() if channel in s[1].get("channels",[""]) or "All" in s[1].get("channels",[""])]
+        print("All samples: {}".format(" ".join(sorted(all_samples))))
+        if includeSampleNames:
+            if (type(includeSampleNames) == list or type(includeSampleNames) == dict):
+                valid_samples = [s for s in all_samples if s in includeSampleNames]
+            else:
+                raise RuntimeError("include option is neither a list nor a dictionary, this is not expected")
+        elif excludeSampleNames:
+            if (type(excludeSampleNames) == list or type(excludeSampleNames) == dict):
+                valid_samples = [s for s in all_samples if s not in excludeSampleNames]
+            else:
+                raise RuntimeError("exclude option is neither a list nor a dictionary, this is not expected")
         else:
-            raise RuntimeError("include option is neither a list nor a dictionary, this is not expected")
-    elif excludeSampleNames:
-        if (type(excludeSampleNames) == list or type(excludeSampleNames) == dict):
-            valid_samples = [s for s in all_samples if s not in excludeSampleNames]
-        else:
-            raise RuntimeError("exclude option is neither a list nor a dictionary, this is not expected")
-    else:
-        valid_samples = all_samples
-
-    #Decide on things to do: either calculate yields for ratios or fill histograms
-    #Did we not chooose to do incompatible actions at the same time?
-    if doBTaggingYields and (doHistos or doDiagnostics or printBookkeeping or doLeptonSelection):
-        raise RuntimeError("Cannot calculate BTaggingYields and Fill Histograms simultaneously, choose only one mode")
-    elif not doHistos and not doBTaggingYields and not doDiagnostics and not printBookkeeping and not doLeptonSelection and not doNtuples:
-        raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics and not printing Bookkeeping and not checking lepton selection, there is no work to be done.")
-
-    #These are deprecated for now!
-    doJetEfficiency = False
-    doBTaggingEfficiencies = False
-    doHLTMeans = False
+            valid_samples = all_samples
     
-    if doBTaggingYields:
-        print("\nLoading all samples for calculating BTaggingYields")
-        #Set these options for the BTaggingYields module, to differentiate between calculating and loading yields
-        BTaggingYieldsFile = None
-        calculateTheYields = True
-    else:
-        #If we're not calculating the yields, we need to have the string value of the Yields to be loaded...
-        #Where to load BTaggingYields from
-        if BTaggingYieldsFile == "{}":
-            BTaggingYieldsFile = "{}/BTaggingYields/{}/BTaggingYields.root".format(analysisDir, channel)
-        calculateTheYields = False
-        print("Loading BTaggingYields from this path: {}".format(BTaggingYieldsFile))
-
-
-    #The source level used is... the source
-    source_level = source
-
-
-    if channel == "BOOKKEEPING":
-        levelsOfInterest=set(["BOOKKEEPING"])
-        theSampleDict = bookerV2_SplitData.copy()
-        theSampleDict.update(bookerV2_MC)
-    elif channel == "ElMu":
-        levelsOfInterest = set(["ElMu",])
-        theSampleDict = bookerV2_ElMu.copy()
-        theSampleDict.update(bookerV2_MC)
-    elif channel == "MuMu":
-        levelsOfInterest = set(["MuMu",])
-        theSampleDict = bookerV2_MuMu.copy()
-        theSampleDict.update(bookerV2_MC)
-    elif channel == "ElEl":    
-        levelsOfInterest = set(["ElEl",])
-        theSampleDict = bookerV2_ElEl.copy()
-        theSampleDict.update(bookerV2_MC)
-    elif channel == "ElEl_LowMET":    
-        levelsOfInterest = set(["ElEl_LowMET",])
-        theSampleDict = bookerV2_ElEl.copy()
-        theSampleDict.update(bookerV2_MC)
-    elif channel == "ElEl_HighMET":    
-        levelsOfInterest = set(["ElEl_HighMET",])
-        theSampleDict = bookerV2_ElEl.copy()
-        theSampleDict.update(bookerV2_MC)
-    # This doesn't work, need the corrections on all the samples and such...
-    # elif channel == "All":
-    #     levelsOfInterest = set(["ElMu", "MuMu", "ElEl",])
-    #     theSampleDict = bookerV2_ElMu.copy()
-    #     theSampleDict.update(bookerV2_ElEl)
-    #     theSampleDict.update(bookerV2_MuMu)
-    #     theSampleDict.update(bookerV2_MC)
-    elif channel == "Mu":    
-        levelsOfInterest = set(["Mu",])
-        theSampleDict = bookerV2_Mu.copy()
-        theSampleDict.update(bookerV2_MC)
-    elif channel == "El":    
-        levelsOfInterest = set(["El",])
-        theSampleDict = bookerV2_El.copy()
-        theSampleDict.update(bookerV2_MC)
-    elif channel == "test":
-        print("More work to be done, exiting")
-        sys.exit(2)
+        #Decide on things to do: either calculate yields for ratios or fill histograms
+        #Did we not chooose to do incompatible actions at the same time?
+        if doBTaggingYields and (doHistos or doDiagnostics or printBookkeeping or doLeptonSelection):
+            raise RuntimeError("Cannot calculate BTaggingYields and Fill Histograms simultaneously, choose only one mode")
+        elif not doHistos and not doBTaggingYields and not doDiagnostics and not printBookkeeping and not doLeptonSelection and not doNtuples:
+            raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics and not printing Bookkeeping and not checking lepton selection, there is no work to be done.")
+    
+        #These are deprecated for now!
+        doJetEfficiency = False
+        doBTaggingEfficiencies = False
+        doHLTMeans = False
         
-    
-    print("Creating selection and baseline bits")
-    #Set up channel bits for selection and baseline. Separation not necessary in this stage, but convenient for loops
-    Chan = {}
-    Chan["ElMu"] = 24576
-    Chan["MuMu"] = 6144
-    Chan["ElEl"] = 512
-    Chan["ElEl_LowMET"] = Chan["ElEl"]
-    Chan["ElEl_HighMET"] = Chan["ElEl"]
-    Chan["Mu"] = 128
-    Chan["El"] = 64
-    Chan["selection"] = Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"] + Chan["El"]
-    Chan["ElMu_baseline"] = 24576
-    Chan["MuMu_baseline"] = 6144
-    Chan["ElEl_baseline"] = 512
-    Chan["Mu_baseline"] = 128
-    Chan["El_baseline"] = 64
-    Chan["baseline"] = Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"] + Chan["Mu_baseline"] + Chan["El_baseline"]
-    
-    b = {}
-    b["ElMu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) > 0".format(Chan["ElMu_baseline"])
-    b["MuMu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
-        .format(Chan["ElMu_baseline"], 
-                Chan["MuMu_baseline"])
-    b["ElEl_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
-        .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"], Chan["ElEl_baseline"])
-    b["Mu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
-        .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"], Chan["Mu_baseline"])
-    b["El_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
-        .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"] + Chan["Mu_baseline"], Chan["El_baseline"])
-    b["selection"] = "ESV_TriggerAndLeptonLogic_selection > 0"
-    b["ElMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu"])
-    b["MuMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu"], Chan["MuMu"])
-    b["ElEl"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu"] + Chan["MuMu"], Chan["ElEl"])
-    b["ElEl_LowMET"] = b["ElEl"]
-    b["ElEl_HighMET"] = b["ElEl"]
-    b["Mu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"], Chan["Mu"])
-    b["El"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-        .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"], Chan["El"]) 
-    #This is deprecated, use dedicated RDF module
-    #b["ESV_JetMETLogic_baseline"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00001100011111111111) #This enables the MET pt cut (11) and nJet (15) and HT (16) cuts from PostProcessor
-    #b["ESV_JetMETLogic_baseline"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00000000001111111111) #Only do the PV and MET filters, nothing else
-    #b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00001100011111111111) #FIXME, this isn't right!
-    #b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00001100011111111111)#This enables the MET pt cut (11) and nJet (15) and HT (16) cuts from PostProcessor
-    #b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00000000001111111111)
-    #b["ESV_JetMETLogic_default"] = "(ESV_JetMETLogic_baseline & {}) > 0".format(0b11111111111111111111)
-    #print(b["ESV_JetMETLogic_selection"])
-    
-    stitchDict = {'2016': {'SL': {'nGenJets': None,
-                                               'nGenLeps': None,
-                                               'GenHT': None},
-                                        'DL': {'nGenJets': None,
-                                               'nGenLeps': None,
-                                               'GenHT': None}
-                                    },
-                               '2017': {'SL': {'nGenJets': 9,
-                                               'nGenLeps': 1,
-                                               'GenHT': 500},
-                                        'DL': {'nGenJets': 7,
-                                               'nGenLeps': 2,
-                                               'GenHT': 500}
-                                    },
-                               '2018': {'SL': {'nGenJets': 9,
-                                               'nGenLeps': 1,
-                                               'GenHT': 500},
-                                        'DL': {'nGenJets': 7,
-                                               'nGenLeps': 2,
-                                               'GenHT': 500}
-                                    }
-                           }
-    
-    
-    filtered = {}
-    base = {}
-    metanode = {}
-    metainfo = {}
-    reports = {}
-    samples = {}
-    counts = {}
-    histos = {}
-    packedNodes = {}
-    varsToFlattenOrSave = {} #Variables that will be saved to ntuples (completely flat)
-    flatteningDict = {} #Dict breaking down variables that have been flattened, were already flat, were skipped due to function rules, etc.
-    the_df = {}
-    stats = {} #Stats for HLT branches
-    effic = {} #Stats for jet matching efficiencies
-    btagging = {} #For btagging efficiencies
-    cat_df = {} #Categorization node dictionary, returned by fillHistos method
-    masterstart = time.clock()#Timers...
-    substart = {}
-    subfinish = {}
-    processed = {}
-    processedSampleList = []
-
-    if not os.path.isdir(analysisDir):
-        os.makedirs(analysisDir)
-
-    Benchmark = ROOT.TBenchmark()
-
-    ################################################################################
-    #### Setup all correctors e.g. LeptonSFs and BTaggingYields Renormalization ####
-    ################################################################################
-    cppVerbosity = False
-    ROOT.gInterpreter.Declare("std::vector<std::string> btagging_process_names;")
-    btaggingProcessNames = getattr(ROOT, "btagging_process_names")
-    ROOT.gInterpreter.Declare("std::vector<std::string> btagging_inclusive_process_names;")
-    btaggingInclusiveProcessNames = getattr(ROOT, "btagging_inclusive_process_names")
-    for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
-        if name not in valid_samples or vals["isData"]:
-            continue
+        if doBTaggingYields:
+            print("\nLoading all samples for calculating BTaggingYields")
+            #Set these options for the BTaggingYields module, to differentiate between calculating and loading yields
+            BTaggingYieldsFile = None
+            calculateTheYields = True
         else:
-            #Get all the potential split process names (in BTaggingYields() function era + "___" + subprocess is the 'processName', e.g. 2017___ttbb_DL-GF. Since the corrector map handles this era modifier already, we drop it here...
-            #What an inconsistent mess it all is.
-            earlySplitProcess = vals.get("splitProcess", None)
-            if isinstance(earlySplitProcess, (dict)):
-                # df_with_IDs = input_df
-                splitProcs = earlySplitProcess.get("processes")
-                for preProcessName, processDict in splitProcs.items():
-                    btaggingProcessNames.push_back(preProcessName)
-                #Get the inclusive process name for those that are also split
-                btaggingInclusiveProcessNames.push_back(name)
-            #store the names 'normally' for samples that are NOT split 
-            else:
-                btaggingProcessNames.push_back(name)
-
-    ROOT.gInterpreter.Declare("std::vector<std::string> btagging_systematic_names;")
-    btaggingSystematicNames = getattr(ROOT, "btagging_systematic_names")
-    ROOT.gInterpreter.Declare("std::vector<std::string> btag_systematic_scale_postfix;")
-    btaggingSystematicScalePostfix = getattr(ROOT, "btag_systematic_scale_postfix")
-    sysVariationsForBtagging = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"] or "ALL" in systematicSet])
-    # for sysVar, sysDict in sysVariationsForBtagging.items():
-    for sysVar, sysDict in sysVariationsAll.items():
-        isWeightVariation = sysDict.get("weightVariation")
-        slimbranchpostfix = "nom" if isWeightVariation else sysVar.replace("$NOMINAL", "nom") #branch postfix for identifying input branch variation
-        btaggingSystematicNames.push_back(sysVar)
-        btaggingSystematicScalePostfix.push_back(slimbranchpostfix)
-                
-    print("FIXME: hardcoded incorrect btagging top path for the corrector map")
-    print("FIXME: hardcoded non-UL/UL and no VFP handling in the corrector map retrieval")
-    BTaggingYieldsTopPath = BTaggingYieldsFile.replace("BTaggingYields.root", "") if BTaggingYieldsFile is not None else "" #Trigger the null set of correctors for btagging if there's no yields file we're pointing to...
-    # BTaggingYieldsTopPath = ""
-    correctorMap = ROOT.FTA.GetCorrectorMap(era, #2017 or 2018 or 2016, as string
-                                            "non-UL", #UL or non_UL
-                                            "", ##preVFP or postVFP if 2016
-                                            "../Kai/python/data/leptonSF/Muon", "LooseID", "TightRelIso_MediumID",
-                                            "../Kai/python/data/leptonSF/Electron", "Loose", "UseEfficiency",
-                                            BTaggingYieldsTopPath,
-                                            btaggingProcessNames, #std::vector<std::string> btag_process_names = {"tttt"},
-                                            btaggingInclusiveProcessNames, 
-                                            btaggingSystematicNames, #std::vector<std::string> btag_systematic_names = {"nom"},
-                                            btaggingSystematicScalePostfix,
-                                            BTaggingYieldsAggregate, #bool btag_use_aggregate = false,
-                                            useHTOnly, #bool btag_use_HT_only = false,
-                                            useNJetOnly,
-                                            cppVerbosity) #bool btag_use_nJet_only = false
-    # print("BTagging systematic and branchpostfix names:")
-    # print(btaggingSystematicNames)
-    # print(btaggingSystematicScalePostfix)
-    print("testing LUTManager")
-    LUTManager = ROOT.LUTManager()
-    LUTManager.Add(correctorMap, cppVerbosity)
-    LUTManager.Finalize(nThreads)
-    vectorLUTs = LUTManager.GetLUTVector()
-    # print(vectorLUTs[0].TH1Keys())
-    # print(vectorLUTs[0].TH2Keys())
-    # print(vectorLUTs[0].TH3Keys())
-
-
-    ################################
-    #### Loop through processes ####
-    ################################
-    for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
-        if name not in valid_samples: 
-            print("Skipping sample {}".format(name))
-            continue
-        filelistDir = analysisDir + "/Filelists"
-        if not os.path.isdir(filelistDir):
-            os.makedirs(filelistDir)
-        sampleOutFile = "{base}/{era}__{src}__{sample}.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
-        # sampleFriendFile = "{base}/{era}__{src}__{sample}__Friend0.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
-        fileList = []
-        if os.path.isfile(sampleOutFile):
-            fileList = getFiles(query="list:{}".format(sampleOutFile), outFileName=None)
-        else:
-            if "/eos/" in vals["source"][source_level]:
-                redir="root://eosuser.cern.ch/".format(str(pwd.getpwuid(os.getuid()).pw_name)[0])
-            else:
-                redir="root://cms-xrd-global.cern.ch/"
-            # if "dbs:" in vals["source"][source_level]:
-            fileList = getFiles(query=vals["source"][source_level], redir=redir, outFileName=sampleOutFile)
-            # else:
-            #     fileList = getFiles(query=vals["source"][source_level], outFileName=sampleOutFile)
-        transformedFileList = ROOT.std.vector(str)()
-        for fle in fileList:
-            transformedFileList.push_back(fle)
-        if transformedFileList.size() < 1:
-            print("No files located... skipping sample {}".format(name))
-            continue
-
-        #Construct TChain that we can add friends to potentially, but similarly constructin TChains and adding the chains with AddFriend
-        print("Creating TChain for sample {}".format(name))
-        tcmain = ROOT.TChain("Events")
-        tcmeta = ROOT.TChain("Runs")
-        for vfe in transformedFileList:
-            print("\t{}".format(vfe))
-            tcmain.Add(str(vfe))
-            if checkMeta:
-                tcmeta.Add(str(vfe))
-        # tcfriend0 = ROOT.TChain("Events")
-        # for vfef0 in transformedFileList_Friend0:
-        #     tcfriend0.Add(vfef0)
-        # tcmain.AddFriend(tcfriend0)
-        # print("Initializing RDataFrame\n\t{} - {}".format(name, vals["source"][source_level]))
-        # print("Initializing RDataFrame\n\t{} - {}".format(name, len(transformedFileList)))
-        print("Initializing RDataFrame with TChain")
-        filtered[name] = {}
-        base[name] = RDF(tcmain)
-        if checkMeta:
-            metanode[name] = RDF(tcmeta) #meta tree
-            if vals["isData"]:
-                metainfo[name] = {"run": metanode[name].Sum("run")}
-            else:
-                metainfo[name] = {"run": metanode[name].Sum("run"), 
-                                  "genEventCount": metanode[name].Sum("genEventCount"), 
-                                  "genEventSumw": metanode[name].Sum("genEventSumw"), 
-                                  "genEventSumw2": metanode[name].Sum("genEventSumw2"), 
-                                  "nLHEScaleSumw": metanode[name].Sum("nLHEScaleSumw"), 
-                                  "LHEScaleSumw": metanode[name].Sum("LHEScaleSumw"), 
-                                  "nLHEPdfSumw": metanode[name].Sum("nLHEPdfSumw"), 
-                                  "LHEPdfSumw": metanode[name].Sum("LHEPdfSumw")
-                              }
-            for mk, mv in metainfo[name].items():
-                metainfo[name][mk] = mv.GetValue()
-        metainfo[name]["totalEvents"] = tcmain.GetEntries()
-        print("\n{}".format(name))
-        pprint.pprint(metainfo[name])
-        reports[name] = base[name].Report()
-        counts[name] = {}
-        # histos[name] = {}
-        packedNodes[name] = {}
-        the_df[name] = {}
-        stats[name] = {}
-        effic[name] = {}
-        varsToFlattenOrSave[name] = {}
-        flatteningDict[name] = {}
-        # btagging[name] = {}
-        cat_df[name] = {}
-        substart[name] = {}
-        subfinish[name] = {}
-        processed[name] = {}
-        #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
-        for lvl in levelsOfInterest:
-            splitProcessConfig = vals.get("splitProcess", None)
-            #Note the snapshotPriority value of -1, which means this dataset does not get cached or written to disk with Snapshot
-            inclusiveProcessConfig = {"processes": {"{}".format(name): {"filter": "return true;",
-                                                                        "nEventsPositive": vals.get("nEventsPositive", -1),
-                                                                        "nEventsNegative": vals.get("nEventsNegative", -1),
-                                                                        "fractionalContribution": 1,
-                                                                        "sumWeights": vals.get("sumWeights", -1.0),
-                                                                        "effectiveCrossSection": vals.get("crossSection", 0),
-                                                                        "snapshotPriority": -1,
-                                                              }}}
-            pprint.pprint(inclusiveProcessConfig)
+            #If we're not calculating the yields, we need to have the string value of the Yields to be loaded...
+            #Where to load BTaggingYields from
+            if BTaggingYieldsFile == "{}":
+                BTaggingYieldsFile = "{}/BTaggingYields/{}/BTaggingYields.root".format(analysisDir, channel)
+            calculateTheYields = False
+            print("Loading BTaggingYields from this path: {}".format(BTaggingYieldsFile))
+    
+    
+        #The source level used is... the source
+        source_level = source
+    
+    
+        if channel == "BOOKKEEPING":
+            levelsOfInterest=set(["BOOKKEEPING"])
+            theSampleDict = bookerV2_SplitData.copy()
+            theSampleDict.update(bookerV2_MC)
+        elif channel == "ElMu":
+            levelsOfInterest = set(["ElMu",])
+            theSampleDict = bookerV2_ElMu.copy()
+            theSampleDict.update(bookerV2_MC)
+        elif channel == "MuMu":
+            levelsOfInterest = set(["MuMu",])
+            theSampleDict = bookerV2_MuMu.copy()
+            theSampleDict.update(bookerV2_MC)
+        elif channel == "ElEl":    
+            levelsOfInterest = set(["ElEl",])
+            theSampleDict = bookerV2_ElEl.copy()
+            theSampleDict.update(bookerV2_MC)
+        elif channel == "ElEl_LowMET":    
+            levelsOfInterest = set(["ElEl_LowMET",])
+            theSampleDict = bookerV2_ElEl.copy()
+            theSampleDict.update(bookerV2_MC)
+        elif channel == "ElEl_HighMET":    
+            levelsOfInterest = set(["ElEl_HighMET",])
+            theSampleDict = bookerV2_ElEl.copy()
+            theSampleDict.update(bookerV2_MC)
+        # This doesn't work, need the corrections on all the samples and such...
+        # elif channel == "All":
+        #     levelsOfInterest = set(["ElMu", "MuMu", "ElEl",])
+        #     theSampleDict = bookerV2_ElMu.copy()
+        #     theSampleDict.update(bookerV2_ElEl)
+        #     theSampleDict.update(bookerV2_MuMu)
+        #     theSampleDict.update(bookerV2_MC)
+        elif channel == "Mu":    
+            levelsOfInterest = set(["Mu",])
+            theSampleDict = bookerV2_Mu.copy()
+            theSampleDict.update(bookerV2_MC)
+        elif channel == "El":    
+            levelsOfInterest = set(["El",])
+            theSampleDict = bookerV2_El.copy()
+            theSampleDict.update(bookerV2_MC)
+        elif channel == "test":
+            print("More work to be done, exiting")
+            sys.exit(2)
             
-            if lvl == "BOOKKEEPING":
-                #We just need the info printed on this one... book a Count node with progress bar if not quiet
+        
+        print("Creating selection and baseline bits")
+        #Set up channel bits for selection and baseline. Separation not necessary in this stage, but convenient for loops
+        Chan = {}
+        Chan["ElMu"] = 24576
+        Chan["MuMu"] = 6144
+        Chan["ElEl"] = 512
+        Chan["ElEl_LowMET"] = Chan["ElEl"]
+        Chan["ElEl_HighMET"] = Chan["ElEl"]
+        Chan["Mu"] = 128
+        Chan["El"] = 64
+        Chan["selection"] = Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"] + Chan["El"]
+        Chan["ElMu_baseline"] = 24576
+        Chan["MuMu_baseline"] = 6144
+        Chan["ElEl_baseline"] = 512
+        Chan["Mu_baseline"] = 128
+        Chan["El_baseline"] = 64
+        Chan["baseline"] = Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"] + Chan["Mu_baseline"] + Chan["El_baseline"]
+        
+        b = {}
+        b["ElMu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) > 0".format(Chan["ElMu_baseline"])
+        b["MuMu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
+            .format(Chan["ElMu_baseline"], 
+                    Chan["MuMu_baseline"])
+        b["ElEl_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
+            .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"], Chan["ElEl_baseline"])
+        b["Mu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
+            .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"], Chan["Mu_baseline"])
+        b["El_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
+            .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"] + Chan["Mu_baseline"], Chan["El_baseline"])
+        b["selection"] = "ESV_TriggerAndLeptonLogic_selection > 0"
+        b["ElMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu"])
+        b["MuMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+            .format(Chan["ElMu"], Chan["MuMu"])
+        b["ElEl"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+            .format(Chan["ElMu"] + Chan["MuMu"], Chan["ElEl"])
+        b["ElEl_LowMET"] = b["ElEl"]
+        b["ElEl_HighMET"] = b["ElEl"]
+        b["Mu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+            .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"], Chan["Mu"])
+        b["El"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+            .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"], Chan["El"]) 
+        #This is deprecated, use dedicated RDF module
+        #b["ESV_JetMETLogic_baseline"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00001100011111111111) #This enables the MET pt cut (11) and nJet (15) and HT (16) cuts from PostProcessor
+        #b["ESV_JetMETLogic_baseline"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00000000001111111111) #Only do the PV and MET filters, nothing else
+        #b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00001100011111111111) #FIXME, this isn't right!
+        #b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00001100011111111111)#This enables the MET pt cut (11) and nJet (15) and HT (16) cuts from PostProcessor
+        #b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00000000001111111111)
+        #b["ESV_JetMETLogic_default"] = "(ESV_JetMETLogic_baseline & {}) > 0".format(0b11111111111111111111)
+        #print(b["ESV_JetMETLogic_selection"])
+        
+        stitchDict = {'2016': {'SL': {'nGenJets': None,
+                                                   'nGenLeps': None,
+                                                   'GenHT': None},
+                                            'DL': {'nGenJets': None,
+                                                   'nGenLeps': None,
+                                                   'GenHT': None}
+                                        },
+                                   '2017': {'SL': {'nGenJets': 9,
+                                                   'nGenLeps': 1,
+                                                   'GenHT': 500},
+                                            'DL': {'nGenJets': 7,
+                                                   'nGenLeps': 2,
+                                                   'GenHT': 500}
+                                        },
+                                   '2018': {'SL': {'nGenJets': 9,
+                                                   'nGenLeps': 1,
+                                                   'GenHT': 500},
+                                            'DL': {'nGenJets': 7,
+                                                   'nGenLeps': 2,
+                                                   'GenHT': 500}
+                                        }
+                               }
+        
+        
+        filtered = {}
+        base = {}
+        metanode = {}
+        metainfo = {}
+        reports = {}
+        samples = {}
+        counts = {}
+        histos = {}
+        packedNodes = {}
+        varsToFlattenOrSave = {} #Variables that will be saved to ntuples (completely flat)
+        flatteningDict = {} #Dict breaking down variables that have been flattened, were already flat, were skipped due to function rules, etc.
+        the_df = {}
+        stats = {} #Stats for HLT branches
+        effic = {} #Stats for jet matching efficiencies
+        btagging = {} #For btagging efficiencies
+        cat_df = {} #Categorization node dictionary, returned by fillHistos method
+        masterstart = time.clock()#Timers...
+        substart = {}
+        subfinish = {}
+        processed = {}
+        processedSampleList = []
+    
+        if not os.path.isdir(analysisDir):
+            os.makedirs(analysisDir)
+    
+        Benchmark = ROOT.TBenchmark()
+    
+        ################################################################################
+        #### Setup all correctors e.g. LeptonSFs and BTaggingYields Renormalization ####
+        ################################################################################
+        cppVerbosity = False
+        ROOT.gInterpreter.Declare("std::vector<std::string> btagging_process_names;")
+        btaggingProcessNames = getattr(ROOT, "btagging_process_names")
+        ROOT.gInterpreter.Declare("std::vector<std::string> btagging_inclusive_process_names;")
+        btaggingInclusiveProcessNames = getattr(ROOT, "btagging_inclusive_process_names")
+        for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
+            if name not in valid_samples or vals["isData"]:
+                continue
+            else:
+                #Get all the potential split process names (in BTaggingYields() function era + "___" + subprocess is the 'processName', e.g. 2017___ttbb_DL-GF. Since the corrector map handles this era modifier already, we drop it here...
+                #What an inconsistent mess it all is.
+                earlySplitProcess = vals.get("splitProcess", None)
+                if isinstance(earlySplitProcess, (dict)):
+                    # df_with_IDs = input_df
+                    splitProcs = earlySplitProcess.get("processes")
+                    for preProcessName, processDict in splitProcs.items():
+                        btaggingProcessNames.push_back(preProcessName)
+                    #Get the inclusive process name for those that are also split
+                    btaggingInclusiveProcessNames.push_back(name)
+                #store the names 'normally' for samples that are NOT split 
+                else:
+                    btaggingProcessNames.push_back(name)
+    
+        ROOT.gInterpreter.Declare("std::vector<std::string> btagging_systematic_names;")
+        btaggingSystematicNames = getattr(ROOT, "btagging_systematic_names")
+        ROOT.gInterpreter.Declare("std::vector<std::string> btag_systematic_scale_postfix;")
+        btaggingSystematicScalePostfix = getattr(ROOT, "btag_systematic_scale_postfix")
+        sysVariationsForBtagging = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"] or "ALL" in systematicSet])
+        # for sysVar, sysDict in sysVariationsForBtagging.items():
+        for sysVar, sysDict in sysVariationsAll.items():
+            isWeightVariation = sysDict.get("weightVariation")
+            slimbranchpostfix = "nom" if isWeightVariation else sysVar.replace("$NOMINAL", "nom") #branch postfix for identifying input branch variation
+            btaggingSystematicNames.push_back(sysVar)
+            btaggingSystematicScalePostfix.push_back(slimbranchpostfix)
+                    
+        print("FIXME: hardcoded incorrect btagging top path for the corrector map")
+        print("FIXME: hardcoded non-UL/UL and no VFP handling in the corrector map retrieval")
+        BTaggingYieldsTopPath = BTaggingYieldsFile.replace("BTaggingYields.root", "") if BTaggingYieldsFile is not None else "" #Trigger the null set of correctors for btagging if there's no yields file we're pointing to...
+        # BTaggingYieldsTopPath = ""
+        correctorMap = ROOT.FTA.GetCorrectorMap(era, #2017 or 2018 or 2016, as string
+                                                "non-UL", #UL or non_UL
+                                                "", ##preVFP or postVFP if 2016
+                                                "../Kai/python/data/leptonSF/Muon", "LooseID", "TightRelIso_MediumID",
+                                                "../Kai/python/data/leptonSF/Electron", "Loose", "UseEfficiency",
+                                                BTaggingYieldsTopPath,
+                                                btaggingProcessNames, #std::vector<std::string> btag_process_names = {"tttt"},
+                                                btaggingInclusiveProcessNames, 
+                                                btaggingSystematicNames, #std::vector<std::string> btag_systematic_names = {"nom"},
+                                                btaggingSystematicScalePostfix,
+                                                BTaggingYieldsAggregate, #bool btag_use_aggregate = false,
+                                                useHTOnly, #bool btag_use_HT_only = false,
+                                                useNJetOnly,
+                                                cppVerbosity) #bool btag_use_nJet_only = false
+        # print("BTagging systematic and branchpostfix names:")
+        # print(btaggingSystematicNames)
+        # print(btaggingSystematicScalePostfix)
+        print("testing LUTManager")
+        LUTManager = ROOT.LUTManager()
+        LUTManager.Add(correctorMap, cppVerbosity)
+        LUTManager.Finalize(nThreads)
+        vectorLUTs = LUTManager.GetLUTVector()
+        # print(vectorLUTs[0].TH1Keys())
+        # print(vectorLUTs[0].TH2Keys())
+        # print(vectorLUTs[0].TH3Keys())
+    
+    
+        ################################
+        #### Loop through processes ####
+        ################################
+        for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
+            if name not in valid_samples: 
+                print("Skipping sample {}".format(name))
+                continue
+            filelistDir = analysisDir + "/Filelists"
+            if not os.path.isdir(filelistDir):
+                os.makedirs(filelistDir)
+            sampleOutFile = "{base}/{era}__{src}__{sample}.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
+            # sampleFriendFile = "{base}/{era}__{src}__{sample}__Friend0.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
+            fileList = []
+            if os.path.isfile(sampleOutFile):
+                fileList = getFiles(query="list:{}".format(sampleOutFile), outFileName=None)
+            else:
+                if "/eos/" in vals["source"][source_level]:
+                    redir="root://eosuser.cern.ch/".format(str(pwd.getpwuid(os.getuid()).pw_name)[0])
+                else:
+                    redir="root://cms-xrd-global.cern.ch/"
+                # if "dbs:" in vals["source"][source_level]:
+                fileList = getFiles(query=vals["source"][source_level], redir=redir, outFileName=sampleOutFile)
+                # else:
+                #     fileList = getFiles(query=vals["source"][source_level], outFileName=sampleOutFile)
+            transformedFileList = ROOT.std.vector(str)()
+            for fle in fileList:
+                transformedFileList.push_back(fle)
+            if transformedFileList.size() < 1:
+                print("No files located... skipping sample {}".format(name))
+                continue
+    
+            #Construct TChain that we can add friends to potentially, but similarly constructin TChains and adding the chains with AddFriend
+            print("Creating TChain for sample {}".format(name))
+            tcmain = ROOT.TChain("Events")
+            tcmeta = ROOT.TChain("Runs")
+            for vfe in transformedFileList:
+                print("\t{}".format(vfe))
+                tcmain.Add(str(vfe))
+                if checkMeta:
+                    tcmeta.Add(str(vfe))
+            # tcfriend0 = ROOT.TChain("Events")
+            # for vfef0 in transformedFileList_Friend0:
+            #     tcfriend0.Add(vfef0)
+            # tcmain.AddFriend(tcfriend0)
+            # print("Initializing RDataFrame\n\t{} - {}".format(name, vals["source"][source_level]))
+            # print("Initializing RDataFrame\n\t{} - {}".format(name, len(transformedFileList)))
+            print("Initializing RDataFrame with TChain")
+            filtered[name] = {}
+            base[name] = RDF(tcmain)
+            if checkMeta:
+                metanode[name] = RDF(tcmeta) #meta tree
+                if vals["isData"]:
+                    metainfo[name] = {"run": metanode[name].Sum("run")}
+                else:
+                    metainfo[name] = {"run": metanode[name].Sum("run"), 
+                                      "genEventCount": metanode[name].Sum("genEventCount"), 
+                                      "genEventSumw": metanode[name].Sum("genEventSumw"), 
+                                      "genEventSumw2": metanode[name].Sum("genEventSumw2"), 
+                                      "nLHEScaleSumw": metanode[name].Sum("nLHEScaleSumw"), 
+                                      "LHEScaleSumw": metanode[name].Sum("LHEScaleSumw"), 
+                                      "nLHEPdfSumw": metanode[name].Sum("nLHEPdfSumw"), 
+                                      "LHEPdfSumw": metanode[name].Sum("LHEPdfSumw")
+                                  }
+                for mk, mv in metainfo[name].items():
+                    metainfo[name][mk] = mv.GetValue()
+            metainfo[name]["totalEvents"] = tcmain.GetEntries()
+            print("\n{}".format(name))
+            pprint.pprint(metainfo[name])
+            reports[name] = base[name].Report()
+            counts[name] = {}
+            # histos[name] = {}
+            packedNodes[name] = {}
+            the_df[name] = {}
+            stats[name] = {}
+            effic[name] = {}
+            varsToFlattenOrSave[name] = {}
+            flatteningDict[name] = {}
+            # btagging[name] = {}
+            cat_df[name] = {}
+            substart[name] = {}
+            subfinish[name] = {}
+            processed[name] = {}
+            #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
+            for lvl in levelsOfInterest:
+                splitProcessConfig = vals.get("splitProcess", None)
+                #Note the snapshotPriority value of -1, which means this dataset does not get cached or written to disk with Snapshot
+                inclusiveProcessConfig = {"processes": {"{}".format(name): {"filter": "return true;",
+                                                                            "nEventsPositive": vals.get("nEventsPositive", -1),
+                                                                            "nEventsNegative": vals.get("nEventsNegative", -1),
+                                                                            "fractionalContribution": 1,
+                                                                            "sumWeights": vals.get("sumWeights", -1.0),
+                                                                            "effectiveCrossSection": vals.get("crossSection", 0),
+                                                                            "snapshotPriority": -1,
+                                                                  }}}
+                pprint.pprint(inclusiveProcessConfig)
+                
+                if lvl == "BOOKKEEPING":
+                    #We just need the info printed on this one... book a Count node with progress bar if not quiet
+                    if quiet:
+                        print("Going Quiet")
+                        booktrigger = base[name].Count()
+                    else:
+                        print("Booking progress bar")
+                        booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(base[name]), 
+                                                          2000, int(metainfo[name]["totalEvents"]))
+                    prePackedNodes = splitProcess(base[name], 
+                                                  splitProcess = splitProcessConfig, 
+                                                  inclusiveProcess = inclusiveProcessConfig,
+                                                  sampleName = name, 
+                                                  isData = vals["isData"], 
+                                                  era = vals["era"],
+                                                  printInfo = True,
+                                                  fillDiagnosticHistos = True,
+                    )
+                    #Trigger the loop
+                    _ = booktrigger.GetValue()
+                    print("Finished processing")
+                    for k, v in prePackedNodes["diagnosticHistos"].items():
+                        print("{} - {}".format(k, v.keys()))
+                    print("Writing diagnostic histos to {}".format(analysisDir + "/Diagnostics"))
+                    writeHistos(prePackedNodes["diagnosticHistos"], 
+                                analysisDir + "/Diagnostics",
+                                channelsOfInterest="All",
+                                samplesOfInterest="All",
+                                dict_keys="All",
+                                mode="RECREATE"
+                    )
+                    
+                    #skip any further calculations for bookkeeping
+                    continue
+                else:
+                    filtered[name][lvl] = base[name].Filter(b[lvl], lvl)
+                #Add the MET corrections, creating a consistently named branch incorporating the systematics loaded
+                the_df[name][lvl] = METXYCorr(filtered[name][lvl],
+                                              run_branch="run",
+                                              era=vals["era"],
+                                              isData=vals["isData"],
+                                              sysVariations=sysVariationsAll, 
+                                              verbose=verbose,
+                                              )
+                the_df[name][lvl] = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(the_df[name][lvl]), 
+                                                         vals["era"], 
+                                                         name, 
+                                                         vectorLUTs, 
+                                                         correctorMap
+                                                         )
+                #Define the leptons based on LeptonLogic bits, to be updated and replaced with code based on triggers/thresholds/leptons present (on-the-fly cuts)
+                the_df[name][lvl] = defineLeptons(the_df[name][lvl], 
+                                                  input_lvl_filter=lvl,
+                                                  isData=vals["isData"], 
+                                                  era=vals["era"],
+                                                  useBackupChannel=False,
+                                                  triggers=triggers,
+                                                  sysVariations=sysVariationsAll,
+                                                  rdfLeptonSelection=doLeptonSelection,
+                                                  verbose=verbose,
+                                                 )
+                print("Introducing early cut on lepton number: 2 required")
+                the_df[name][lvl] = the_df[name][lvl].Filter("nFTALepton > 1")
+                if testVariables:
+                    skipTestVariables = testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=[],
+                                                               allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
+                #Use the cutPV and METFilters function to do cutflow on these requirements... this should be updated, still uses JetMETLogic bits... FIXME
+                the_df[name][lvl] = cutPVandMETFilters(the_df[name][lvl], lvl, isData=vals["isData"])
+                the_df[name][lvl] = defineJets(the_df[name][lvl],
+                                               era=vals["era"],
+                                               bTagger=bTagger,
+                                               isData=vals["isData"],
+                                               sysVariations=sysVariationsAll, 
+                                               jetPtMin=jetPtMin,
+                                               jetPUId=jetPUId,
+                                               useDeltaR=useDeltaR,
+                                               verbose=verbose,
+                                              )
+                if testVariables:
+                    skipTestVariables += testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=skipTestVariables,
+                                                                allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
                 if quiet:
                     print("Going Quiet")
-                    booktrigger = base[name].Count()
+                    counts[name][lvl] = the_df[name][lvl].Count()
                 else:
                     print("Booking progress bar")
-                    booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(base[name]), 
-                                                      2000, int(metainfo[name]["totalEvents"]))
-                prePackedNodes = splitProcess(base[name], 
-                                              splitProcess = splitProcessConfig, 
+                    counts[name][lvl] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(the_df[name][lvl]), 
+                                                            min(5000, max(1000, int(metainfo[name]["totalEvents"]/5000))), int(metainfo[name]["totalEvents"]))
+                packedNodes[name][lvl] = None
+                stats[name][lvl] = {}
+                effic[name][lvl] = {}
+                # btagging[name][lvl] = {}
+                cat_df[name][lvl] = {'fillHistos(...)':'NotRunOrFailed'} #will be a dictionary returned by fillHistos, so empty histo if fillHistos not run or fails
+                #Get the variables to save using a function that takes the processDict as input (for special sample-specific variables to add)
+                #Variable which are NOT flat will be subsequently flattened by delegateFlattening(which calls flattenVariable with some hints)
+                varsToFlattenOrSave[name][lvl] = getNtupleVariables(vals, 
+                                                                    isData=vals["isData"], 
+                                                                    sysVariations=sysVariationsAll,
+                                                                    bTagger=bTagger
+                )
+                #Actually flatten variables, and store in a dict various info for those variables flattened, already flat, final ntuple vars, etc.
+                the_df[name][lvl], flatteningDict[name][lvl] = delegateFlattening(the_df[name][lvl], 
+                                                                                  varsToFlattenOrSave[name][lvl], 
+                                                                                  channel=lvl, 
+                                                                                  debug=False
+                )
+                if testVariables:
+                    skipTestVariables += testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=skipTestVariables,
+                                                                allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
+                #Inject the flat and flattened variables for saving in ntuples through the 'inputNtupleVariables'
+                #Split the process based on sample-specific flags in its vals dictionary, some of which was parsed above i.e. splitProcessConfig, inclusive...
+                prePackedNodes = splitProcess(the_df[name][lvl], 
+                                              splitProcess = splitProcessConfig,
+                                              inputNtupleVariables=flatteningDict[name][lvl]["ntupleVariables"],
                                               inclusiveProcess = inclusiveProcessConfig,
                                               sampleName = name, 
                                               isData = vals["isData"], 
                                               era = vals["era"],
-                                              printInfo = True,
-                                              fillDiagnosticHistos = True,
+                                              printInfo = printBookkeeping,
                 )
-                #Trigger the loop
-                _ = booktrigger.GetValue()
-                print("Finished processing")
-                for k, v in prePackedNodes["diagnosticHistos"].items():
-                    print("{} - {}".format(k, v.keys()))
-                print("Writing diagnostic histos to {}".format(analysisDir + "/Diagnostics"))
-                writeHistos(prePackedNodes["diagnosticHistos"], 
-                            analysisDir + "/Diagnostics",
-                            channelsOfInterest="All",
-                            samplesOfInterest="All",
-                            dict_keys="All",
-                            mode="RECREATE"
-                )
-                
-                #skip any further calculations for bookkeeping
-                continue
-            else:
-                filtered[name][lvl] = base[name].Filter(b[lvl], lvl)
-            #Add the MET corrections, creating a consistently named branch incorporating the systematics loaded
-            the_df[name][lvl] = METXYCorr(filtered[name][lvl],
-                                          run_branch="run",
-                                          era=vals["era"],
-                                          isData=vals["isData"],
-                                          sysVariations=sysVariationsAll, 
-                                          verbose=verbose,
-                                          )
-            the_df[name][lvl] = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(the_df[name][lvl]), 
-                                                     vals["era"], 
-                                                     name, 
-                                                     vectorLUTs, 
-                                                     correctorMap
-                                                     )
-            #Define the leptons based on LeptonLogic bits, to be updated and replaced with code based on triggers/thresholds/leptons present (on-the-fly cuts)
-            the_df[name][lvl] = defineLeptons(the_df[name][lvl], 
-                                              input_lvl_filter=lvl,
-                                              isData=vals["isData"], 
-                                              era=vals["era"],
-                                              useBackupChannel=False,
-                                              triggers=triggers,
-                                              sysVariations=sysVariationsAll,
-                                              rdfLeptonSelection=doLeptonSelection,
-                                              verbose=verbose,
-                                             )
-            print("Introducing early cut on lepton number: 2 required")
-            the_df[name][lvl] = the_df[name][lvl].Filter("nFTALepton > 1")
-            if testVariables:
-                skipTestVariables = testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=[],
-                                                           allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
-            #Use the cutPV and METFilters function to do cutflow on these requirements... this should be updated, still uses JetMETLogic bits... FIXME
-            the_df[name][lvl] = cutPVandMETFilters(the_df[name][lvl], lvl, isData=vals["isData"])
-            the_df[name][lvl] = defineJets(the_df[name][lvl],
-                                           era=vals["era"],
-                                           bTagger=bTagger,
-                                           isData=vals["isData"],
-                                           sysVariations=sysVariationsAll, 
-                                           jetPtMin=jetPtMin,
-                                           jetPUId=jetPUId,
-                                           useDeltaR=useDeltaR,
-                                           verbose=verbose,
-                                          )
-            if testVariables:
-                skipTestVariables += testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=skipTestVariables,
-                                                            allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
-            if quiet:
-                print("Going Quiet")
-                counts[name][lvl] = the_df[name][lvl].Count()
-            else:
-                print("Booking progress bar")
-                counts[name][lvl] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(the_df[name][lvl]), 
-                                                        min(5000, max(1000, int(metainfo[name]["totalEvents"]/5000))), int(metainfo[name]["totalEvents"]))
-            packedNodes[name][lvl] = None
-            stats[name][lvl] = {}
-            effic[name][lvl] = {}
-            # btagging[name][lvl] = {}
-            cat_df[name][lvl] = {'fillHistos(...)':'NotRunOrFailed'} #will be a dictionary returned by fillHistos, so empty histo if fillHistos not run or fails
-            #Get the variables to save using a function that takes the processDict as input (for special sample-specific variables to add)
-            #Variable which are NOT flat will be subsequently flattened by delegateFlattening(which calls flattenVariable with some hints)
-            varsToFlattenOrSave[name][lvl] = getNtupleVariables(vals, 
-                                                                isData=vals["isData"], 
-                                                                sysVariations=sysVariationsAll,
-                                                                bTagger=bTagger
-            )
-            #Actually flatten variables, and store in a dict various info for those variables flattened, already flat, final ntuple vars, etc.
-            the_df[name][lvl], flatteningDict[name][lvl] = delegateFlattening(the_df[name][lvl], 
-                                                                              varsToFlattenOrSave[name][lvl], 
-                                                                              channel=lvl, 
-                                                                              debug=False
-            )
-            if testVariables:
-                skipTestVariables += testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=skipTestVariables,
-                                                            allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
-            #Inject the flat and flattened variables for saving in ntuples through the 'inputNtupleVariables'
-            #Split the process based on sample-specific flags in its vals dictionary, some of which was parsed above i.e. splitProcessConfig, inclusive...
-            prePackedNodes = splitProcess(the_df[name][lvl], 
-                                          splitProcess = splitProcessConfig,
-                                          inputNtupleVariables=flatteningDict[name][lvl]["ntupleVariables"],
-                                          inclusiveProcess = inclusiveProcessConfig,
-                                          sampleName = name, 
-                                          isData = vals["isData"], 
-                                          era = vals["era"],
-                                          printInfo = printBookkeeping,
-            )
-            if testVariables:
-                testVariableProcessing(prePackedNodes, nodes=True, searchMode=True, skipColumns=skipTestVariables,
-                                       allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
-            #Do initial round of weights, preparation for btagging yields to be calculated
-            print("\n\nFIXME: defineWeights needs input normalization for PS and potentially other systematic variations\n")
-            prePackedNodes = defineWeights(prePackedNodes,
-                                           splitProcess = splitProcessConfig,
-                                           era=vals["era"],
-                                           isData=vals["isData"],
-                                           final=False,
-                                           sysVariations=sysVariationsAll, 
-                                           verbose=verbose,
-            )
-            #Get the yields, the ultimate goal of which is to determin in a parameterized way the renormalization factors for btag shape reweighting procedure
-            prePackedNodes = BTaggingYields(prePackedNodes, sampleName=name, isData=vals["isData"], channel=lvl,
-                                            histosDict=btagging, loadYields=BTaggingYieldsFile,
-                                            useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
-                                            sysVariations=sysVariationsAll, 
-                                            vectorLUTs=vectorLUTs,
-                                            correctorMap=correctorMap,
-                                            bTagger=bTagger,
-                                            calculateYields=calculateTheYields,
-                                            HTArray=[500, 650, 800, 1000, 1200, 10000], 
-                                            nJetArray=[4,5,6,7,8,20],
-                                            verbose=verbose,
-            )
-            # testnode = prePackedNodes["nodes"]['2017___ttbb_SL_nr']['BaseNode']
-            #Use the fact we have a yields file as the flag for being in the "final" mode for weights, so do final=True variant
-            if BTaggingYieldsFile:
+                if testVariables:
+                    testVariableProcessing(prePackedNodes, nodes=True, searchMode=True, skipColumns=skipTestVariables,
+                                           allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
+                #Do initial round of weights, preparation for btagging yields to be calculated
+                print("\n\nFIXME: defineWeights needs input normalization for PS and potentially other systematic variations\n")
                 prePackedNodes = defineWeights(prePackedNodes,
                                                splitProcess = splitProcessConfig,
-                                               # inclusiveProcess = inclusiveProcessConfig,
-                                               era = vals["era"],
-                                               isData = vals["isData"],
-                                               final=True,
-                                               sysVariations=sysVariationsAll,
+                                               era=vals["era"],
+                                               isData=vals["isData"],
+                                               final=False,
+                                               sysVariations=sysVariationsAll, 
                                                verbose=verbose,
                 )
-            #Hold the categorization nodes if doing histograms
-            if isinstance(systematicSet, list) and "All" not in systematicSet:
-                print("Filtering systematics according to specified sets: {}".format(systematicSet))
-                sysVariationsForHistos = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"] or "ALL" in systematicSet])
-                if "nominal" not in systematicSet:
-                    skipNominalHistos = True
+                #Get the yields, the ultimate goal of which is to determin in a parameterized way the renormalization factors for btag shape reweighting procedure
+                prePackedNodes = BTaggingYields(prePackedNodes, sampleName=name, isData=vals["isData"], channel=lvl,
+                                                histosDict=btagging, loadYields=BTaggingYieldsFile,
+                                                useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
+                                                sysVariations=sysVariationsAll, 
+                                                vectorLUTs=vectorLUTs,
+                                                correctorMap=correctorMap,
+                                                bTagger=bTagger,
+                                                calculateYields=calculateTheYields,
+                                                HTArray=[500, 650, 800, 1000, 1200, 10000], 
+                                                nJetArray=[4,5,6,7,8,20],
+                                                verbose=verbose,
+                )
+                # testnode = prePackedNodes["nodes"]['2017___ttbb_SL_nr']['BaseNode']
+                #Use the fact we have a yields file as the flag for being in the "final" mode for weights, so do final=True variant
+                if BTaggingYieldsFile:
+                    prePackedNodes = defineWeights(prePackedNodes,
+                                                   splitProcess = splitProcessConfig,
+                                                   # inclusiveProcess = inclusiveProcessConfig,
+                                                   era = vals["era"],
+                                                   isData = vals["isData"],
+                                                   final=True,
+                                                   sysVariations=sysVariationsAll,
+                                                   verbose=verbose,
+                    )
+                #Hold the categorization nodes if doing histograms
+                if isinstance(systematicSet, list) and "All" not in systematicSet:
+                    print("Filtering systematics according to specified sets: {}".format(systematicSet))
+                    sysVariationsForHistos = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"] or "ALL" in systematicSet])
+                    if "nominal" not in systematicSet:
+                        skipNominalHistos = True
+                    else:
+                        skipNominalHistos = False
+                    if verbose:
+                        print(sysVariationsForHistos.keys())
                 else:
+                    sysVariationsForHistos = sysVariationsAll
                     skipNominalHistos = False
-                if verbose:
-                    print(sysVariationsForHistos.keys())
-            else:
-                sysVariationsForHistos = sysVariationsAll
-                skipNominalHistos = False
-            if doHistos:
-                packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
-                                                    era = vals["era"], triggers = triggers,
-                                                    sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
-                                                    histosDict=histos, sysVariations=sysVariationsForHistos, doCategorized=True, 
-                                                    doDiagnostics=False, doCombineHistosOnly=doCombineHistosOnly, bTagger=bTagger, 
-                                                    skipNominalHistos=skipNominalHistos, verbose=verb)
-            if doDiagnostics:
-                packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
-                                                    era = vals["era"], triggers = triggers,
-                                                    sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
-                                                    histosDict=histos, sysVariations=sysVariationsForHistos, doCategorized=False, 
-                                                    doDiagnostics=True, bTagger=bTagger, 
-                                                    skipNominalHistos=skipNominalHistos, verbose=verb)
-
-            #Trigger the loop either by hitting the count/progressbar node or calling for a (Non-lazy) snapshot
-            print("\nSTARTING THE EVENT LOOP")
-            substart[name][lvl] = time.clock()
-            Benchmark.Start("{}/{}".format(name, lvl))
-            if doNtuples:
-                print("Writing outputs...")
-                ntupleDir = analysisDir + "/Ntuples"
-                subNtupleDir = ntupleDir + "/" + lvl
-                if not os.path.isdir(subNtupleDir):
-                    os.makedirs(subNtupleDir)
-                writeNtuples(prePackedNodes, subNtupleDir)
-                print("Wrote Ntuples for {} to this directory:\n{}".format(name, subNtupleDir))
-
-            #The ntuple writing will trigger the loop first, if that path is taken, but this is still safe to do always
-            processed[name][lvl] = counts[name][lvl].GetValue()
-            print("\nFINISHING THE EVENT LOOP")
-            print("ROOT Benchmark stats...")
-            Benchmark.Show("{}/{}".format(name, lvl))
-            subfinish[name][lvl] = time.clock()
-            theTime = subfinish[name][lvl] - substart[name][lvl]
-
-            if doCombineHistosOnly or doHistos or doBTaggingYields:
-                print("Writing outputs...")
-                processesOfInterest = []
-                if splitProcessConfig != None:
-                    for thisProc in splitProcessConfig.get("processes", {}).keys():
-                        processesOfInterest.append(vals.get("era") + "___" + thisProc)
-                else:
-                    processesOfInterest.append(vals.get("era") + "___" + name)
-                print("Writing historams for...{}".format(processesOfInterest))
-
-                if doCombineHistosOnly:
-                    writeDir = analysisDir + "/Combine"
-                    writeDict = histos
-                elif doHistos:
-                    writeDir = analysisDir + "/Histograms"
-                    writeDict = histos
-                if doBTaggingYields:
-                    writeDir = analysisDir + "/BTaggingYields"
-                    writeDict = btagging
-                writeHistos(writeDict, 
-                            writeDir,
-                            channelsOfInterest="All",
-                            samplesOfInterest=processesOfInterest,
-                            systematicsOfInterest=systematicSet,
-                            dict_keys="All",
-                            mode="RECREATE"
-                        )
-                print("Wrote Histograms for {} to this directory:\n{}".format(name, writeDir))
-            processedSampleList.append(name)
-            print("Processed Samples:")
-            processedSamples = ""
-            for n in processedSampleList:
-                processedSamples += "{} ".format(n)
-            print(processedSamples)
-            print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theTime//60, theTime%60, theTime, processed[name][lvl], 
-                         name, lvl, "".join(["\_/"]*25)))
-    # Benchmark.Summary()
-    return packedNodes
+                if doHistos:
+                    packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
+                                                        era = vals["era"], triggers = triggers,
+                                                        sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
+                                                        histosDict=histos, sysVariations=sysVariationsForHistos, doCategorized=True, 
+                                                        doDiagnostics=False, doCombineHistosOnly=doCombineHistosOnly, bTagger=bTagger, 
+                                                        skipNominalHistos=skipNominalHistos, verbose=verb)
+                if doDiagnostics:
+                    packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
+                                                        era = vals["era"], triggers = triggers,
+                                                        sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
+                                                        histosDict=histos, sysVariations=sysVariationsForHistos, doCategorized=False, 
+                                                        doDiagnostics=True, bTagger=bTagger, 
+                                                        skipNominalHistos=skipNominalHistos, verbose=verb)
+    
+                #Trigger the loop either by hitting the count/progressbar node or calling for a (Non-lazy) snapshot
+                print("\nSTARTING THE EVENT LOOP")
+                substart[name][lvl] = time.clock()
+                Benchmark.Start("{}/{}".format(name, lvl))
+                if doNtuples:
+                    print("Writing outputs...")
+                    ntupleDir = analysisDir + "/Ntuples"
+                    subNtupleDir = ntupleDir + "/" + lvl
+                    if not os.path.isdir(subNtupleDir):
+                        os.makedirs(subNtupleDir)
+                    writeNtuples(prePackedNodes, subNtupleDir)
+                    print("Wrote Ntuples for {} to this directory:\n{}".format(name, subNtupleDir))
+    
+                #The ntuple writing will trigger the loop first, if that path is taken, but this is still safe to do always
+                processed[name][lvl] = counts[name][lvl].GetValue()
+                print("\nFINISHING THE EVENT LOOP")
+                print("ROOT Benchmark stats...")
+                Benchmark.Show("{}/{}".format(name, lvl))
+                subfinish[name][lvl] = time.clock()
+                theTime = subfinish[name][lvl] - substart[name][lvl]
+    
+                if doCombineHistosOnly or doHistos or doBTaggingYields:
+                    print("Writing outputs...")
+                    processesOfInterest = []
+                    if splitProcessConfig != None:
+                        for thisProc in splitProcessConfig.get("processes", {}).keys():
+                            processesOfInterest.append(vals.get("era") + "___" + thisProc)
+                    else:
+                        processesOfInterest.append(vals.get("era") + "___" + name)
+                    print("Writing historams for...{}".format(processesOfInterest))
+    
+                    if doCombineHistosOnly:
+                        writeDir = analysisDir + "/Combine"
+                        writeDict = histos
+                    elif doHistos:
+                        writeDir = analysisDir + "/Histograms"
+                        writeDict = histos
+                    if doBTaggingYields:
+                        writeDir = analysisDir + "/BTaggingYields"
+                        writeDict = btagging
+                    writeHistos(writeDict, 
+                                writeDir,
+                                channelsOfInterest="All",
+                                samplesOfInterest=processesOfInterest,
+                                systematicsOfInterest=systematicSet,
+                                dict_keys="All",
+                                mode="RECREATE"
+                            )
+                    print("Wrote Histograms for {} to this directory:\n{}".format(name, writeDir))
+                processedSampleList.append(name)
+                print("Processed Samples:")
+                processedSamples = ""
+                for n in processedSampleList:
+                    processedSamples += "{} ".format(n)
+                print(processedSamples)
+                print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theTime//60, theTime%60, theTime, processed[name][lvl], 
+                             name, lvl, "".join(["\_/"]*25)))
+        # Benchmark.Summary()
+        return packedNodes
 def otherFuncs():
     """Code stripped from jupyter notebook when converted to script."""
 
@@ -7963,6 +7681,37 @@ def otherFuncs():
 
     makeJetEfficiencyReport(effic, "{}/ElMu_selection/BTaggingEfficiency".format(histDir))
     
+def load_yaml_cards(sample_cards):
+    SampleList = None
+    SampleDict = dict()
+    try:
+        import ruamel.yaml
+        ruamel.yaml.preserve_quotes = True
+    except:
+        print("Cannot load ruamel package to convert yaml file. Consider installing in a virtual environment with 'pip install --user 'ruamel.yaml<0.16,>0.15.95' --no-deps'")
+
+    for scard in sample_cards:
+        with open(scard, "r") as sample:
+            if SampleList is None:
+                SampleList = ruamel.yaml.load(sample, Loader=ruamel.yaml.RoundTripLoader)
+            else:
+                SampleList.update(ruamel.yaml.load(sample, Loader=ruamel.yaml.RoundTripLoader))
+
+    for scard in sample_cards:
+        with open(scard, "r") as sample:
+            SampleDict[scard] = ruamel.yaml.load(sample, Loader=ruamel.yaml.RoundTripLoader)
+    return SampleList, SampleDict
+
+def write_yaml_cards(sample_cards, postfix="_updated"):
+    try:
+        import ruamel.yaml
+        ruamel.yaml.preserve_quotes = True
+    except:
+        print("Cannot load ruamel package to convert yaml file. Consider installing in a virtual environment with 'pip install --user 'ruamel.yaml<0.16,>0.15.95' --no-deps'")
+
+    for scard, scontent in sample_cards.items():
+        with open(scard.replace(".yaml", postfix+".yaml").replace(".yml", postfix+".yml"), "w") as outf:
+            ruamel.yaml.dump(scontent, outf, Dumper=ruamel.yaml.RoundTripDumper)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
@@ -8011,8 +7760,10 @@ if __name__ == '__main__':
                         help='Enable more verbose output during actions')
     parser.add_argument('--test', dest='test', action='store_true',
                         help='Test variables one-by-one to scan for runtime errors')
-    # parser.add_argument('--sample_cards', dest='sample_cards', action='store', nargs='*', type=str,
-    #                     help='path and name of the sample card(s) to be used')
+    parser.add_argument('--sample_cards', dest='sample_cards', action='store', nargs='*', type=str,
+                        help='path and name of the sample card(s) to be used')
+    parser.add_argument('--systematics_cards', dest='systematics_cards', action='store', nargs='*', type=str,
+                        help='path and name of the systematics card(s) to be used')
     # parser.add_argument('--filter', dest='filter', action='store', type=str, default=None,
     #                     help='string to filter samples while checking events or generating configurations')
     # parser.add_argument('--redir', dest='redir', action='append', type=str, default='root://cms-xrd-global.cern.ch/',
@@ -8032,6 +7783,9 @@ if __name__ == '__main__':
     #Grab and format required and optional arguments
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday)
     stage = args.stage
+    # inputSampleNames, inputSamples = load_yaml_cards(args.sample_cards)
+    # sysVariationNames, sysVariationsAll = load_yaml_cards(args.systematics_cards)
+    inputSamples = bookerV2_CURRENT
     sysVariationsAll=systematics_2017
     systematicSet = args.systematicSet
     channel = args.channel
@@ -8093,7 +7847,7 @@ if __name__ == '__main__':
         print("This function needs reworking... work on it")
         print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
         # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
-        packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
+        packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
                       printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
@@ -8135,27 +7889,27 @@ if __name__ == '__main__':
                                #        },
                            )
     elif stage == 'lepton-selection':
-        packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
+        packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
                       BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, 
                       useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
-        packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+        packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads)
     elif stage == 'bookkeeping':
-        packed = main(analysisDir, bookerV2_CURRENT, source, "BOOKKEEPING", bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+        packed = main(analysisDir, inputSamples, source, "BOOKKEEPING", bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads)
     elif stage == 'fill-histograms':
         #filling ntuples is also possible with the option --doNtuples
-        packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
+        packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
                       doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=False,
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
@@ -8164,7 +7918,7 @@ if __name__ == '__main__':
                       systematicSet=systematicSet, nThreads=nThreads)
     elif stage == 'fill-combine':
         #filling ntuples is also possible with the option --doNtuples
-        packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
+        packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
                       doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=True,
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
@@ -8194,7 +7948,7 @@ if __name__ == '__main__':
         spo = subprocess.Popen(args="{}".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))
         spo.communicate()
     elif stage == 'fill-ntuples':
-        packed = main(analysisDir, bookerV2_CURRENT, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
+        packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
                       doNtuples=doNtuples, 
                       doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
