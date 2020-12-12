@@ -4402,7 +4402,7 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 #    rdf = rdf.Define("JML_selection_pass", "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00000000001111111111))#Only PV and MET filters required to pass
 #    return rdf
 
-def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017", inputNtupleVariables=None, printInfo=False, inclusiveProcess=None, fillDiagnosticHistos=False):
+def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017", inputNtupleVariables=None, printInfo=False, inclusiveProcess=None, fillDiagnosticHistos=False, inputSampleCard=None):
     lumiDict = {"2017": 41.53,
                 "2018": 59.97}
     filterNodes = dict() #For storing tuples to debug and be verbose about
@@ -4429,7 +4429,8 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                 inclusiveProc = inclusiveProcess.get("processes")
                 inclusiveDict = list(inclusiveProc.values())[0]
                 if list(inclusiveProc.keys())[0] not in splitProcs:
-                    splitProcs.update(inclusiveProc)
+                    pass
+                    # splitProcs.update(inclusiveProc) #don't update the central dict, so we can roundtrip write it...
                 else:
                     print("Inclusive process already defined, not overriding in splitProces")
             listOfColumns = df_with_IDs.GetColumnNames()
@@ -4464,7 +4465,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                 if IDbool and IDname == "subera":
                     raise NotImplementedError("splitProcess 'subera' not yet implemented")
             nodes["BaseNode"] = df_with_IDs #Always store the base node we'll build upon in the next level
-            for preProcessName, processDict in splitProcs.items():
+            for preProcessName, processDict in list(splitProcs.items()) + list(inclusiveProc.items()):
                 processName = era + "___" + preProcessName
                 filterString = processDict.get("filter")
                 snapshotPriority[processName] = processDict.get("snapshotPriority", 0)
@@ -4664,11 +4665,19 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
             if printInfo == True:
                 print("splitProcess(..., printInfo=True, ...) set, executing the event loop to gather and print diagnostic info (presumably from the non-event-selected source...")
                 for pName, pDict in diagnosticNodes.items():
+                    preProcessName = pName.split("___")[1]
                     print("processName == {}".format(pName))
                     for dName, dNode in pDict.items():
                         parseDName = dName.split("::")
                         if parseDName[1] in ["Count", "Sum"]:
                             dString = "\t\t\"{}\": {},".format(parseDName[0], dNode.GetValue())
+                            if inputSampleCard is not None and sampleName in inputSampleCard:
+                                if preProcessName in inputSampleCard[sampleName]['splitProcess']['processes'].keys() and parseDName[0] in inputSampleCard[sampleName]['splitProcess']['processes'][preProcessName]:
+                                    if dName == "sumWeights::Sum": print(preProcessName, " updated in yaml file for split process")
+                                    inputSampleCard[sampleName]['splitProcess']['processes'][preProcessName][parseDName[0]] = dNode.GetValue()
+                                elif preProcessName + "_inclusive" in inputSampleCard[sampleName]['splitProcess']['inclusiveProcess'].keys() and parseDName[0] in inputSampleCard[sampleName]['splitProcess']['inclusiveProcess'][preProcessName + "_inclusive"]:
+                                    if dName == "sumWeights::Sum": print(preProcessName, " updated in yaml file for inclusive process")
+                                    inputSampleCard[sampleName]['splitProcess']['inclusiveProcess'][preProcessName + "_inclusive"][parseDName[0]] = dNode.GetValue()
                         elif parseDName[1] in ["Stats"]:
                             thisStat = dNode.GetValue()
                             dString = "\t\t\"{}::Min\": {}".format(parseDName[0], thisStat.GetMin())
@@ -7191,7 +7200,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                     
         print("FIXME: hardcoded incorrect btagging top path for the corrector map")
         print("FIXME: hardcoded non-UL/UL and no VFP handling in the corrector map retrieval")
-        BTaggingYieldsTopPath = BTaggingYieldsFile.replace("BTaggingYields.root", "") if BTaggingYieldsFile is not None else "" #Trigger the null set of correctors for btagging if there's no yields file we're pointing to...
+        BTaggingYieldsTopPath = BTaggingYieldsFile.replace("BTaggingYields.root", "") if BTaggingYieldsFile is not None and channel not in ["BOOKKEEPING"] else "" #Trigger the null set of correctors for btagging if there's no yields file we're pointing to...
         # BTaggingYieldsTopPath = ""
         correctorMap = ROOT.FTA.GetCorrectorMap(era, #2017 or 2018 or 2016, as string
                                                 "non-UL", #UL or non_UL
@@ -7333,6 +7342,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                                                   era = vals["era"],
                                                   printInfo = True,
                                                   fillDiagnosticHistos = True,
+                                                  inputSampleCard=inputSampleCardYaml,
                     )
                     #Trigger the loop
                     _ = booktrigger.GetValue()
@@ -7435,6 +7445,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                                               isData = vals["isData"], 
                                               era = vals["era"],
                                               printInfo = printBookkeeping,
+                                              inputSampleCard=inputSampleCardYaml,
                 )
                 if testVariables:
                     testVariableProcessing(prePackedNodes, nodes=True, searchMode=True, skipColumns=skipTestVariables,
@@ -7560,6 +7571,9 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                 print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theTime//60, theTime%60, theTime, processed[name][lvl], 
                              name, lvl, "".join(["\_/"]*25)))
         # Benchmark.Summary()
+        if channel in ["BOOKKEEPING"]:
+            with open(inputSampleCardName.replace(".yaml", "{}.roundtrip.yaml".format(channel)), "w") as of:
+                of.write(yaml.dump(inputSampleCardYaml, Dumper=yaml.RoundTripDumper))
         return packedNodes
 def otherFuncs():
     """Code stripped from jupyter notebook when converted to script."""

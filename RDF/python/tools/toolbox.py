@@ -37,14 +37,14 @@ doEOSHOME will override the redir string with the one formatted based on your us
                 print("dbs query reformatted to:\n\t" + query)
             os.system(cmd)
             for line in f:
-                fileList.append(line.rstrip("\s\n\t"))
+                fileList.append(line.decode("utf-8").rstrip("\s\n\t"))
     elif "glob:" in query:
         query_stripped = query.replace("glob:","")
         fileList = glob(query_stripped)
     elif "list:" in query:
         query_stripped = query.replace("list:","")
         fileList = []
-        with open(query_stripped) as in_f:
+        with open(query_stripped, "r") as in_f:
             for line in in_f:
                 fileList.append(line.rstrip("\s\n\t"))
     else:
