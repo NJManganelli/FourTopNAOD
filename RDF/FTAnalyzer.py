@@ -7017,28 +7017,34 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
     
         if channel == "BOOKKEEPING":
             levelsOfInterest=set(["BOOKKEEPING"])
-            theSampleDict = bookerV2_SplitData.copy()
-            theSampleDict.update(bookerV2_MC)
+            theSampleDict = inputSampleCardYaml.keys()
+            # theSampleDict = bookerV2_SplitData.copy()
+            # theSampleDict.update(bookerV2_MC)
         elif channel == "ElMu":
             levelsOfInterest = set(["ElMu",])
-            theSampleDict = bookerV2_ElMu.copy()
-            theSampleDict.update(bookerV2_MC)
+            theSampleDict = [nn for nn in inputSampleCardYaml.keys() if not inputSampleCardYaml[nn]["isData"] or (inputSampleCardYaml[nn]["isData"] and inputSampleCardYaml[nn]["channel"] == channel)]
+            # theSampleDict = bookerV2_ElMu.copy()
+            # theSampleDict.update(bookerV2_MC)
         elif channel == "MuMu":
             levelsOfInterest = set(["MuMu",])
-            theSampleDict = bookerV2_MuMu.copy()
-            theSampleDict.update(bookerV2_MC)
+            theSampleDict = [nn for nn in inputSampleCardYaml.keys() if not inputSampleCardYaml[nn]["isData"] or (inputSampleCardYaml[nn]["isData"] and inputSampleCardYaml[nn]["channel"] == channel)]
+            # theSampleDict = bookerV2_MuMu.copy()
+            # theSampleDict.update(bookerV2_MC)
         elif channel == "ElEl":    
             levelsOfInterest = set(["ElEl",])
-            theSampleDict = bookerV2_ElEl.copy()
-            theSampleDict.update(bookerV2_MC)
+            theSampleDict = [nn for nn in inputSampleCardYaml.keys() if not inputSampleCardYaml[nn]["isData"] or (inputSampleCardYaml[nn]["isData"] and inputSampleCardYaml[nn]["channel"] == channel)]
+            # theSampleDict = bookerV2_ElEl.copy()
+            # theSampleDict.update(bookerV2_MC)
         elif channel == "ElEl_LowMET":    
             levelsOfInterest = set(["ElEl_LowMET",])
-            theSampleDict = bookerV2_ElEl.copy()
-            theSampleDict.update(bookerV2_MC)
+            theSampleDict = [nn for nn in inputSampleCardYaml.keys() if not inputSampleCardYaml[nn]["isData"] or (inputSampleCardYaml[nn]["isData"] and inputSampleCardYaml[nn]["channel"] == "ElEl")]
+            # theSampleDict = bookerV2_ElEl.copy()
+            # theSampleDict.update(bookerV2_MC)
         elif channel == "ElEl_HighMET":    
             levelsOfInterest = set(["ElEl_HighMET",])
-            theSampleDict = bookerV2_ElEl.copy()
-            theSampleDict.update(bookerV2_MC)
+            theSampleDict = [nn for nn in inputSampleCardYaml.keys() if not inputSampleCardYaml[nn]["isData"] or (inputSampleCardYaml[nn]["isData"] and inputSampleCardYaml[nn]["channel"] == "ElEl")]
+            # theSampleDict = bookerV2_ElEl.copy()
+            # theSampleDict.update(bookerV2_MC)
         # This doesn't work, need the corrections on all the samples and such...
         # elif channel == "All":
         #     levelsOfInterest = set(["ElMu", "MuMu", "ElEl",])
@@ -7048,12 +7054,14 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
         #     theSampleDict.update(bookerV2_MC)
         elif channel == "Mu":    
             levelsOfInterest = set(["Mu",])
-            theSampleDict = bookerV2_Mu.copy()
-            theSampleDict.update(bookerV2_MC)
+            theSampleDict = [nn for nn in inputSampleCardYaml.keys() if not inputSampleCardYaml[nn]["isData"] or (inputSampleCardYaml[nn]["isData"] and inputSampleCardYaml[nn]["channel"] == channel)]
+            # theSampleDict = bookerV2_Mu.copy()
+            # theSampleDict.update(bookerV2_MC)
         elif channel == "El":    
             levelsOfInterest = set(["El",])
-            theSampleDict = bookerV2_El.copy()
-            theSampleDict.update(bookerV2_MC)
+            theSampleDict = [nn for nn in inputSampleCardYaml.keys() if not inputSampleCardYaml[nn]["isData"] or (inputSampleCardYaml[nn]["isData"] and inputSampleCardYaml[nn]["channel"] == channel)]
+            # theSampleDict = bookerV2_El.copy()
+            # theSampleDict.update(bookerV2_MC)
         elif channel == "test":
             print("More work to be done, exiting")
             sys.exit(2)
@@ -7149,7 +7157,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
         effic = {} #Stats for jet matching efficiencies
         btagging = {} #For btagging efficiencies
         cat_df = {} #Categorization node dictionary, returned by fillHistos method
-        masterstart = time.clock()#Timers...
+        masterstart = time.perf_counter()#Timers...
         substart = {}
         subfinish = {}
         processed = {}
@@ -7168,7 +7176,10 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
         btaggingProcessNames = getattr(ROOT, "btagging_process_names")
         ROOT.gInterpreter.Declare("std::vector<std::string> btagging_inclusive_process_names;")
         btaggingInclusiveProcessNames = getattr(ROOT, "btagging_inclusive_process_names")
-        for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
+        for name in sorted(theSampleDict, key=lambda n: n):
+            if name not in inputSampleCardYaml.keys():
+                continue
+            vals = inputSampleCardYaml[name]
             if name not in valid_samples or vals["isData"]:
                 continue
             else:
@@ -7232,7 +7243,11 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
         ################################
         #### Loop through processes ####
         ################################
-        for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
+        # for name, vals in sorted(theSampleDict.items(), key=lambda n: n[0]):
+        for name in sorted(theSampleDict, key=lambda n: n):
+            if name not in inputSampleCardYaml.keys():
+                continue
+            vals = inputSampleCardYaml[name]
             if name not in valid_samples: 
                 print("Skipping sample {}".format(name))
                 continue
@@ -7515,7 +7530,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
     
                 #Trigger the loop either by hitting the count/progressbar node or calling for a (Non-lazy) snapshot
                 print("\nSTARTING THE EVENT LOOP")
-                substart[name][lvl] = time.clock()
+                substart[name][lvl] = time.perf_counter()
                 Benchmark.Start("{}/{}".format(name, lvl))
                 if doNtuples:
                     print("Writing outputs...")
@@ -7531,7 +7546,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                 print("\nFINISHING THE EVENT LOOP")
                 print("ROOT Benchmark stats...")
                 Benchmark.Show("{}/{}".format(name, lvl))
-                subfinish[name][lvl] = time.clock()
+                subfinish[name][lvl] = time.perf_counter()
                 theTime = subfinish[name][lvl] - substart[name][lvl]
     
                 if doCombineHistosOnly or doHistos or doBTaggingYields:
@@ -7572,7 +7587,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                              name, lvl, "".join(["\_/"]*25)))
         # Benchmark.Summary()
         if channel in ["BOOKKEEPING"]:
-            with open(inputSampleCardName.replace(".yaml", "{}.roundtrip.yaml".format(channel)), "w") as of:
+            with open(inputSampleCardName.replace(".yaml", ".{}.roundtrip.yaml".format(channel)), "w") as of:
                 of.write(yaml.dump(inputSampleCardYaml, Dumper=yaml.RoundTripDumper))
         return packedNodes
 def otherFuncs():
@@ -7595,12 +7610,12 @@ def otherFuncs():
 
     print("Warning: if filtered[name][lvl] RDFs are not reset, then calling Define(*) on them will cause the error"      " with 'program state reset' due to multiple definitions for the same variable")
     loopcounter = 0
-    masterstart = time.clock()
+    masterstart = time.perf_counter()
     substart = {}
     subfinish = {}
     for name, cnt in counts.items():
         #if name in ["MuMu", "ElMu", "ElEl"]: continue
-        substart[name] = time.clock()
+        substart[name] = time.perf_counter()
         loopcounter += 1
         print("==========={}/{}\n{}".format(loopcounter, len(counts), name))
         if "baseline" in cnt:
@@ -7639,13 +7654,11 @@ def otherFuncs():
             print("\nTotal = {}".format(cnt["ElMu_selection"].GetValue() + cnt["MuMu_selection"].GetValue() + cnt["ElEl_selection"].GetValue() + cnt["Mu_selection"].GetValue() + cnt["El_selection"].GetValue()))
         subfinish[name] = time.time()
         print("====> Took {}s to process sample {}".format(subfinish[name] - substart[name], name))
-    finish = time.clock()
-    masterfinish = time.clock()
+    finish = time.perf_counter()
+    masterfinish = time.perf_counter()
     
     for name, val in substart.items():
         print("Took {}s to process sample {}".format(subfinish[name] - substart[name], name))
-    print()
-    masterfinish = time.time() #clock gives cpu time, not accurate multi-core?
     print("Took {}m {}s to process in real-time".format((masterfinish - masterstart)//60, (masterfinish - masterstart)%60))
     
     mode="RECREATE"
@@ -7838,6 +7851,8 @@ if __name__ == '__main__':
     print("Threads: {}".format(nThreads))
     print("Analysis stage: {stg}".format(stg=stage))
     print("Analysis directory: {adir}".format(adir=analysisDir))
+    print("Sample cards: {scards}".format(scards=args.sample_cards))
+    print("Systematics cards: {systcards}".format(systcards=args.systematics_cards))
     print("Era to be analyzed: {era}".format(era=era))
     print("Channel to be analyzed: {chan}".format(chan=channel))
     print("Algorithm for Lepton-Jet crosscleaning: {}".format("PFMatching" if not useDeltaR else "DeltaR < {}".format(useDeltaR)))
