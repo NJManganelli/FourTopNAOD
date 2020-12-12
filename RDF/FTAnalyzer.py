@@ -7368,6 +7368,16 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                     if updatedMeta == True:
                         print("reloading sample card information due to updates.")
                         vals = inputSampleCardYaml[name]
+                        splitProcessConfig = inputSampleCardYaml[name].get("splitProcess", None)
+                        inclusiveProcessConfig = {"processes": {"{}".format(name): {"filter": "return true;",
+                                                                            "nEventsPositive": inputSampleCardYaml[name].get("nEventsPositive", -1),
+                                                                            "nEventsNegative": inputSampleCardYaml[name].get("nEventsNegative", -1),
+                                                                            "fractionalContribution": 1,
+                                                                            "sumWeights": inputSampleCardYaml[name].get("sumWeights", -1.0),
+                                                                            "effectiveCrossSection": inputSampleCardYaml[name].get("crossSection", 0),
+                                                                            "snapshotPriority": -1,
+                                                                  }}}
+                        pprint.pprint(inclusiveProcessConfig)
                         print("Updated meta information for process based on discrepancy in inputsample card and loaded files from source ", source_level)
                     prePackedNodes = splitProcess(base[name], 
                                                   splitProcess = splitProcessConfig, 
