@@ -7607,6 +7607,11 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                              name, lvl, "".join(["\_/"]*25)))
         # Benchmark.Summary()
         if channel in ["BOOKKEEPING"]:
+            # sort_order = ["filter", "fractionalContribution", "effectiveCrossSection", "snapshotPriority", 
+            #               "nEventsPositive", "nEventsNegative", "sumWeights", "sumWeights2", "nominalXS", "nominalXS2", "effectiveXS", "effectiveXS2",
+            #               "nLep2nJet7GenHT500-550-nominalXS", "nLep2nJet7pGenHT500p-nominalXS", "nLep1nJet9GenHT500-550-nominalXS",
+            #               "nLep1nJet9pGenHT500p-nominalXS", "nLep2nJet7GenHT500-550-effectiveXS", "nLep2nJet7pGenHT500p-effectiveXS",
+            #               "nLep1nJet9GenHT500-550-effectiveXS", "nLep1nJet9pGenHT500p-effectiveXS",]
             with open(inputSampleCardName.replace(".yaml", ".{}.roundtrip.yaml".format(channel)), "w") as of:
                 of.write(yaml.dump(inputSampleCardYaml, Dumper=yaml.RoundTripDumper))
         return packedNodes
