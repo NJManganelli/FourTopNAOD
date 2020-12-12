@@ -7349,6 +7349,26 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                         print("Booking progress bar")
                         booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(base[name]), 
                                                           2000, int(metainfo[name]["totalEvents"]))
+                    updatedMeta = False
+                    for mk, mv in metainfo[name].items():
+                        if mk == "genEventSumw":
+                            updatedMeta = True
+                            print(inputSampleCardYaml[name]["sumWeights"], mv)
+                            inputSampleCardYaml[name]["sumWeights"] = mv
+                        elif mk == "genEventSumw2":
+                            updatedMeta = True
+                            print(inputSampleCardYaml[name]["sumWeights2"], mv)
+                            inputSampleCardYaml[name]["sumWeights2"] = mv
+                        if mk == "genEventCount":
+                            updatedMeta = True
+                            print(inputSampleCardYaml[name]["nEvents"], mv)
+                            inputSampleCardYaml[name]["nEvents"] = int(mv)
+                        updatedMeta = True
+                        inputSampleCardYaml[name][mk] = metainfo[name][mk]
+                    if updatedMeta == True:
+                        print("reloading sample card information due to updates.")
+                        vals = inputSampleCardYaml[name]
+                        print("Updated meta information for process based on discrepancy in inputsample card and loaded files from source ", source_level)
                     prePackedNodes = splitProcess(base[name], 
                                                   splitProcess = splitProcessConfig, 
                                                   inclusiveProcess = inclusiveProcessConfig,
