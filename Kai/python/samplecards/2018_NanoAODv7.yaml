@@ -496,12 +496,16 @@
       NANOv7: dbs:/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext2-v1/NANOAODSIM
     doFilter: true
     splitProcess:
+      ID:
+        nFTAGenJet/FTAGenHT: false
+        subera: false
+        unpackGenTtbarId: true
       processes:
         ttbb_AH:
           filter: nAdditionalBJets >= 2
           fractionalContribution: 1
-          effectiveCrossSection: 1.5886022542742309
-          snapshotPriority: 4
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 2
           nEventsPositive: 73301
           nEventsNegative: 302
           sumWeights: 22135434.4955
@@ -521,8 +525,8 @@
         ttother_AH:
           filter: nAdditionalBJets < 2
           fractionalContribution: 1
-          effectiveCrossSection: 360.4533485909558
-          snapshotPriority: 2
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 1
           nEventsPositive: 19842384
           nEventsNegative: 80517
           sumWeights: 5992649717.25
@@ -539,16 +543,12 @@
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
-      ID:
-        nFTAGenJet/FTAGenHT: false
-        subera: false
-        unpackGenTtbarId: true
       inclusiveProcess:
         tt_AH_inclusive:
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.193983337319
           nLep1nJet9pGenHT500p-effectiveXS: 2.26895164785
-          effectiveCrossSection: 364.3109
+          effectiveCrossSection: 380.1143
           nominalXS2: 0.00670396137791
           effectiveXS: 364.310902493
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
@@ -579,6 +579,51 @@
     source:
       NANOv6: dbs:/TTToHadronic_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToHadronic_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    splitProcess:
+      ID:
+        nFTAGenJet/FTAGenHT: false
+        subera: false
+        unpackGenTtbarId: true
+      processes:
+        ttbb_AH-CR1-QCD:
+          filter: nAdditionalBJets >= 2
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 2
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+        ttother_AH-CR1-QCD:
+          filter: nAdditionalBJets < 2
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 1
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+      inclusiveProcess:
+        tt_AH-CR1-QCD_inclusive:
+          filter: return true;
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          nEventsPositive: 68818780
+          nEventsNegative: 279864
+          sumWeights: 4980769317.03
+          sumWeights2: 364913523596.0
+          nominalXS: 87.3348035714
+          nominalXS2: 0.000112194559601
+          effectiveXS: 87.3348035714
+          effectiveXS2: 0.000112194559601
 - tt_AH-CR2-GluonMove:
     era: '2018'
     isData: false
@@ -594,6 +639,51 @@
     source:
       NANOv6: dbs:/TTToHadronic_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToHadronic_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    splitProcess:
+      ID:
+        nFTAGenJet/FTAGenHT: false
+        subera: false
+        unpackGenTtbarId: true
+      processes:
+        ttbb_AH-CR2-GluonMove:
+          filter: nAdditionalBJets >= 2
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 2
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+        ttother_AH-CR2-GluonMove:
+          filter: nAdditionalBJets < 2
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 1
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+      inclusiveProcess:
+        tt_AH-CR2-GluonMove_inclusive:
+          filter: return true;
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          nEventsPositive: 68818780
+          nEventsNegative: 279864
+          sumWeights: 4980769317.03
+          sumWeights2: 364913523596.0
+          nominalXS: 87.3348035714
+          nominalXS2: 0.000112194559601
+          effectiveXS: 87.3348035714
+          effectiveXS2: 0.000112194559601
 - tt_AH-HDAMPdown:
     era: '2018'
     isData: false
@@ -609,6 +699,51 @@
     source:
       NANOv6: dbs:/TTToHadronic_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToHadronic_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    splitProcess:
+      ID:
+        nFTAGenJet/FTAGenHT: false
+        subera: false
+        unpackGenTtbarId: true
+      processes:
+        ttbb_AH-HDAMPdown:
+          filter: nAdditionalBJets >= 2
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 2
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+        ttother_AH-HDAMPdown:
+          filter: nAdditionalBJets < 2
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 1
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+      inclusiveProcess:
+        tt_AH-HDAMPdown_inclusive:
+          filter: return true;
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          nEventsPositive: 68818780
+          nEventsNegative: 279864
+          sumWeights: 4980769317.03
+          sumWeights2: 364913523596.0
+          nominalXS: 87.3348035714
+          nominalXS2: 0.000112194559601
+          effectiveXS: 87.3348035714
+          effectiveXS2: 0.000112194559601
 - tt_AH-HDAMPup:
     era: '2018'
     isData: false
@@ -624,6 +759,51 @@
     source:
       NANOv6: dbs:/TTToHadronic_hdampUP_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToHadronic_hdampUP_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    splitProcess:
+      ID:
+        nFTAGenJet/FTAGenHT: false
+        subera: false
+        unpackGenTtbarId: true
+      processes:
+        ttbb_AH-HDAMPup:
+          filter: nAdditionalBJets >= 2
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 2
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+        ttother_AH-HDAMPup:
+          filter: nAdditionalBJets < 2
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 1
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+      inclusiveProcess:
+        tt_AH-HDAMPup_inclusive:
+          filter: return true;
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          nEventsPositive: 68818780
+          nEventsNegative: 279864
+          sumWeights: 4980769317.03
+          sumWeights2: 364913523596.0
+          nominalXS: 87.3348035714
+          nominalXS2: 0.000112194559601
+          effectiveXS: 87.3348035714
+          effectiveXS2: 0.000112194559601
 - tt_AH-TuneCP5down:
     era: '2018'
     isData: false
@@ -639,6 +819,51 @@
     source:
       NANOv6: dbs:/TTToHadronic_TuneCP5down_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToHadronic_TuneCP5down_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    splitProcess:
+      ID:
+        nFTAGenJet/FTAGenHT: false
+        subera: false
+        unpackGenTtbarId: true
+      processes:
+        ttbb_AH-TuneCP5down:
+          filter: nAdditionalBJets >= 2
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 2
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+        ttother_AH-TuneCP5down:
+          filter: nAdditionalBJets < 2
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 1
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+      inclusiveProcess:
+        tt_AH-TuneCP5down_inclusive:
+          filter: return true;
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          nEventsPositive: 68818780
+          nEventsNegative: 279864
+          sumWeights: 4980769317.03
+          sumWeights2: 364913523596.0
+          nominalXS: 87.3348035714
+          nominalXS2: 0.000112194559601
+          effectiveXS: 87.3348035714
+          effectiveXS2: 0.000112194559601
 - tt_AH-TuneCP5up:
     era: '2018'
     isData: false
@@ -654,6 +879,51 @@
     source:
       NANOv6: dbs:/TTToHadronic_TuneCP5up_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToHadronic_TuneCP5up_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    splitProcess:
+      ID:
+        nFTAGenJet/FTAGenHT: false
+        subera: false
+        unpackGenTtbarId: true
+      processes:
+        ttbb_AH-TuneCP5up:
+          filter: nAdditionalBJets >= 2
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 2
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+        ttother_AH-TuneCP5up:
+          filter: nAdditionalBJets < 2
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          snapshotPriority: 1
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+      inclusiveProcess:
+        tt_AH-TuneCP5up_inclusive:
+          filter: return true;
+          fractionalContribution: 1
+          effectiveCrossSection: 380.1143
+          nEventsPositive: 68818780
+          nEventsNegative: 279864
+          sumWeights: 4980769317.03
+          sumWeights2: 364913523596.0
+          nominalXS: 87.3348035714
+          nominalXS2: 0.000112194559601
+          effectiveXS: 87.3348035714
+          effectiveXS2: 0.000112194559601
 - tt_DL:
     era: '2018'
     isData: false
@@ -812,6 +1082,51 @@
       NANOv6: dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
       NANOv7NonExt: dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    splitProcess:
+      ID:
+        nFTAGenJet/FTAGenHT: false
+        subera: false
+        unpackGenTtbarId: true
+      processes:
+        ttbb_DL-CR1-QCD:
+          filter: nAdditionalBJets >= 2
+          fractionalContribution: 1
+          effectiveCrossSection: 0.3921
+          snapshotPriority: 2
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+        ttother_DL-CR1-QCD:
+          filter: nAdditionalBJets < 2
+          fractionalContribution: 1
+          effectiveCrossSection: 86.9426
+          snapshotPriority: 1
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+      inclusiveProcess:
+        tt_DL-CR1-QCD_inclusive:
+          filter: return true;
+          fractionalContribution: 1
+          effectiveCrossSection: 87.3348035714
+          nEventsPositive: 68818780
+          nEventsNegative: 279864
+          sumWeights: 4980769317.03
+          sumWeights2: 364913523596.0
+          nominalXS: 87.3348035714
+          nominalXS2: 0.000112194559601
+          effectiveXS: 87.3348035714
+          effectiveXS2: 0.000112194559601
 - tt_DL-CR2-GluonMove:
     era: '2018'
     isData: false
@@ -828,6 +1143,51 @@
       NANOv6: dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
       NANOv7NonExt: dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    splitProcess:
+      ID:
+        nFTAGenJet/FTAGenHT: false
+        subera: false
+        unpackGenTtbarId: true
+      processes:
+        ttbb_DL-CR2-GluonMove:
+          filter: nAdditionalBJets >= 2
+          fractionalContribution: 1
+          effectiveCrossSection: 0.3921
+          snapshotPriority: 2
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+        ttother_DL-CR2-GluonMove:
+          filter: nAdditionalBJets < 2
+          fractionalContribution: 1
+          effectiveCrossSection: 86.9426
+          snapshotPriority: 1
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+      inclusiveProcess:
+        tt_DL-CR2-GluonMove_inclusive:
+          filter: return true;
+          fractionalContribution: 1
+          effectiveCrossSection: 87.3348035714
+          nEventsPositive: 68818780
+          nEventsNegative: 279864
+          sumWeights: 4980769317.03
+          sumWeights2: 364913523596.0
+          nominalXS: 87.3348035714
+          nominalXS2: 0.000112194559601
+          effectiveXS: 87.3348035714
+          effectiveXS2: 0.000112194559601
 - tt_DL-HDAMPdown:
     era: '2018'
     isData: false
@@ -2040,6 +2400,51 @@
     source:
       NANOv6: dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    splitProcess:
+      ID:
+        nFTAGenJet/FTAGenHT: false
+        subera: false
+        unpackGenTtbarId: true
+      processes:
+        ttbb_SL-CR1-QCD:
+          filter: nAdditionalBJets >= 2
+          fractionalContribution: 1
+          effectiveCrossSection: 1.7075092529941656
+          snapshotPriority: 2
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+        ttother_SL-CR1-QCD:
+          filter: nAdditionalBJets < 2
+          fractionalContribution: 1
+          effectiveCrossSection: 362.60339324009516
+          snapshotPriority: 1
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+      inclusiveProcess:
+        tt_SL-CR1-QCD_inclusive:
+          filter: return true;
+          fractionalContribution: 1
+          effectiveCrossSection: 364.3109
+          nEventsPositive: 68818780
+          nEventsNegative: 279864
+          sumWeights: 4980769317.03
+          sumWeights2: 364913523596.0
+          nominalXS: 87.3348035714
+          nominalXS2: 0.000112194559601
+          effectiveXS: 87.3348035714
+          effectiveXS2: 0.000112194559601
 - tt_SL-CR2-GluonMove:
     era: '2018'
     isData: false
@@ -2055,6 +2460,51 @@
     source:
       NANOv6: dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    splitProcess:
+      ID:
+        nFTAGenJet/FTAGenHT: false
+        subera: false
+        unpackGenTtbarId: true
+      processes:
+        ttbb_SL-CR2-GluonMove:
+          filter: nAdditionalBJets >= 2
+          fractionalContribution: 1
+          effectiveCrossSection: 1.7075092529941656
+          snapshotPriority: 2
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+        ttother_SL-CR2-GluonMove:
+          filter: nAdditionalBJets < 2
+          fractionalContribution: 1
+          effectiveCrossSection: 362.60339324009516
+          snapshotPriority: 1
+          nEventsPositive: 208932
+          nEventsNegative: 894
+          sumWeights: 15117576.3357
+          sumWeights2: 1108001380.45
+          nominalXS: 0.265077636755
+          nominalXS2: 3.40660783667e-07
+          effectiveXS: 0.331347
+          effectiveXS2: 5.32282326868e-07
+      inclusiveProcess:
+        tt_SL-CR2-GluonMove_inclusive:
+          filter: return true;
+          fractionalContribution: 1
+          effectiveCrossSection: 364.3109
+          nEventsPositive: 68818780
+          nEventsNegative: 279864
+          sumWeights: 4980769317.03
+          sumWeights2: 364913523596.0
+          nominalXS: 87.3348035714
+          nominalXS2: 0.000112194559601
+          effectiveXS: 87.3348035714
+          effectiveXS2: 0.000112194559601
 - tt_SL-HDAMPdown:
     era: '2018'
     isData: false
