@@ -4563,7 +4563,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     diagnosticNodes[processName]["effectiveXS2::Sum"] = nodes[processName]["BaseNode"].Sum("effectiveXS2")
                     diagnosticNodes[processName]["nEventsPositive::Count"] = nodes[processName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
                     diagnosticNodes[processName]["nEventsNegative::Count"] = nodes[processName]["BaseNode"].Filter("genWeight < 0", "genWeight < 0").Count()
-                if "nFTAGenJet/FTAGenHT" in IDs:
+                if "nFTAGenJet/FTAGenHT" in IDs and IDs["nFTAGenJet/FTAGenHT"]:
                     if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
                         diagnosticNodes[processName]["nLep2nJet7GenHT500-550-nominalXS::Sum"] = nodes[processName]["BaseNode"]\
                             .Filter("nFTAGenLep == 2 && nFTAGenJet == 7 && 500 <= FTAGenHT && FTAGenHT < 550", "nFTAGenLep 2, nFTAGenJet 7, FTAGenHT 500-550").Sum("nominalXS")
@@ -4672,12 +4672,21 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                         if parseDName[1] in ["Count", "Sum"]:
                             dString = "\t\t\"{}\": {},".format(parseDName[0], dNode.GetValue())
                             if inputSampleCard is not None and sampleName in inputSampleCard:
-                                if preProcessName in inputSampleCard[sampleName]['splitProcess']['processes'].keys() and parseDName[0] in inputSampleCard[sampleName]['splitProcess']['processes'][preProcessName]:
-                                    if dName == "sumWeights::Sum": print(preProcessName, " updated in yaml file for split process")
-                                    inputSampleCard[sampleName]['splitProcess']['processes'][preProcessName][parseDName[0]] = dNode.GetValue()
-                                elif preProcessName + "_inclusive" in inputSampleCard[sampleName]['splitProcess']['inclusiveProcess'].keys() and parseDName[0] in inputSampleCard[sampleName]['splitProcess']['inclusiveProcess'][preProcessName + "_inclusive"]:
-                                    if dName == "sumWeights::Sum": print(preProcessName, " updated in yaml file for inclusive process")
-                                    inputSampleCard[sampleName]['splitProcess']['inclusiveProcess'][preProcessName + "_inclusive"][parseDName[0]] = dNode.GetValue()
+                                if "splitProcess" in inputSampleCard[sampleName].keys():
+                                    if preProcessName in inputSampleCard[sampleName]['splitProcess']['processes'].keys() and parseDName[0] in inputSampleCard[sampleName]['splitProcess']['processes'][preProcessName]:
+                                        if dName == "sumWeights::Sum": print(preProcessName, " updated in yaml file for split process")
+                                        inputSampleCard[sampleName]['splitProcess']['processes'][preProcessName][parseDName[0]] = dNode.GetValue()
+                                    elif preProcessName + "_inclusive" in inputSampleCard[sampleName]['splitProcess']['inclusiveProcess'].keys() and parseDName[0] in inputSampleCard[sampleName]['splitProcess']['inclusiveProcess'][preProcessName + "_inclusive"]:
+                                        if dName == "sumWeights::Sum": 
+                                            print(preProcessName, " updated in yaml file for inclusive process")
+                                            if inputSampleCard[sampleName]['sumWeights'] != dNode.GetValue(): 
+                                                print("Mismatch in inclusive sumWeights(2) with Runs tree value: {} vs {}".format(dNode.GetValue(), inputSampleCard[sampleName]['sumWeights']))
+                                        inputSampleCard[sampleName]['splitProcess']['inclusiveProcess'][preProcessName + "_inclusive"][parseDName[0]] = dNode.GetValue()
+                                        if dName in ["nEventsPositive::Count", "nEventsNegative::Count"]:
+                                            inputSampleCard[sampleName][parseDName[0]] = dNode.GetValue()
+                                else:
+                                    if dName in ["nEventsPositive::Count", "nEventsNegative::Count"]:
+                                        inputSampleCard[sampleName][parseDName[0]] = dNode.GetValue()
                         elif parseDName[1] in ["Stats"]:
                             thisStat = dNode.GetValue()
                             dString = "\t\t\"{}::Min\": {}".format(parseDName[0], thisStat.GetMin())
@@ -7366,7 +7375,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                         updatedMeta = True
                         inputSampleCardYaml[name][mk] = metainfo[name][mk]
                     if updatedMeta == True:
-                        print("reloading sample card information due to updates.")
+                        #Reloading the vals and split/inclusive ProcessConfigs
                         vals = inputSampleCardYaml[name]
                         splitProcessConfig = inputSampleCardYaml[name].get("splitProcess", None)
                         inclusiveProcessConfig = {"processes": {"{}".format(name): {"filter": "return true;",
@@ -7386,9 +7395,10 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                                                   isData = vals["isData"], 
                                                   era = vals["era"],
                                                   printInfo = True,
-                                                  fillDiagnosticHistos = True,
+                                                  fillDiagnosticHistos = False,
                                                   inputSampleCard=inputSampleCardYaml,
                     )
+                    print("\n\nDisabled fillDiagnosticHistos temporarily to test speedier baseline number crunching, to be re-enabled for plots...\n\n")
                     #Trigger the loop
                     _ = booktrigger.GetValue()
                     print("Finished processing")
