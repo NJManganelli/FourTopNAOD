@@ -1,0 +1,292 @@
+../Kai/python/samplecards/2017_NanoAODv7.yaml
+#######################################
+
+ttbb_AH
+548953
+ttother_AH
+127241131
+ttbb_AH-CR1-QCD
+116252
+ttother_AH-CR1-QCD
+27003998
+ttbb_AH-CR2-GluonMove
+116759
+ttother_AH-CR2-GluonMove
+27130199
+ttbb_AH-HDAMPdown
+108436
+ttother_AH-HDAMPdown
+26562632
+ttbb_AH-HDAMPup
+121177
+ttother_AH-HDAMPup
+26959699
+ttbb_AH-TuneCP5down
+116294
+ttother_AH-TuneCP5down
+26916508
+ttbb_AH-TuneCP5up
+115708
+ttother_AH-TuneCP5up
+26774188
+ttbb_DL_nr
+207235
+ttbb_DL_fr
+38052
+ttother_DL_fr
+1100616
+ttother_DL_nr
+66908917
+ttbb_DL-CR1-QCD
+35407
+ttother_DL-CR1-QCD
+9882445
+ttbb_DL-CR2-GluonMove
+34854
+ttother_DL-CR2-GluonMove
+9703366
+ttbb_DL-HDAMPdown_nr
+83507
+ttbb_DL-HDAMPdown_fr
+14810
+ttother_DL-HDAMPdown_fr
+431757
+ttother_DL-HDAMPdown_nr
+28599274
+ttbb_DL-HDAMPup_nr
+92378
+ttbb_DL-HDAMPup_fr
+17826
+ttother_DL-HDAMPup_fr
+510673
+ttother_DL-HDAMPup_nr
+28589655
+ttbb_DL-TuneCP5down_nr
+90713
+ttbb_DL-TuneCP5down_fr
+16662
+ttother_DL-TuneCP5down_fr
+476691
+ttother_DL-TuneCP5down_nr
+29114138
+ttbb_DL-TuneCP5up_nr
+88581
+ttbb_DL-TuneCP5up_fr
+16305
+ttother_DL-TuneCP5up_fr
+473071
+ttother_DL-TuneCP5up_nr
+28561759
+ttother_DL-GF_fr
+8143782
+ttbb_DL-GF_fr
+280915
+ttother_DL-GF-HDAMPdown_fr
+1911061
+ttbb_DL-GF-HDAMPdown_fr
+65571
+ttother_DL-GF-HDAMPup_fr
+8143782
+ttbb_DL-GF-HDAMPup_fr
+280915
+ttother_DL-GF-TuneCP5down_fr
+2095688
+ttbb_DL-GF-TuneCP5down_fr
+72299
+ttother_DL-GF-TuneCP5up_fr
+1985079
+ttbb_DL-GF-TuneCP5up_fr
+68341
+ttbb_SL_nr
+72999
+ttother_SL_nr
+19761867
+ttother_SL_fr
+118872
+ttbb_SL_fr
+5466
+ttbb_SL-CR1-QCD
+105111
+ttother_SL-CR1-QCD
+26801431
+ttbb_SL-CR2-GluonMove
+106052
+ttother_SL-CR2-GluonMove
+26836100
+ttbb_SL-HDAMPdown_nr
+90473
+ttother_SL-HDAMPdown_nr
+25695088
+ttother_SL-HDAMPdown_fr
+139888
+ttbb_SL-HDAMPdown_fr
+6540
+ttbb_SL-HDAMPup_nr
+90672
+ttother_SL-HDAMPup_nr
+23618004
+ttother_SL-HDAMPup_fr
+153116
+ttbb_SL-HDAMPup_fr
+7118
+ttbb_SL-TuneCP5down_nr
+96302
+ttother_SL-TuneCP5down_nr
+26115608
+ttother_SL-TuneCP5down_fr
+153896
+ttbb_SL-TuneCP5down_fr
+7246
+ttbb_SL-TuneCP5up_nr
+72576
+ttother_SL-TuneCP5up_nr
+19649883
+ttother_SL-TuneCP5up_fr
+118214
+ttbb_SL-TuneCP5up_fr
+5431
+ttother_SL-GF_fr
+8362596
+ttbb_SL-GF_fr
+389470
+ttother_SL-GF-HDAMPdown_fr
+1722809
+ttbb_SL-GF-HDAMPdown_fr
+80095
+ttother_SL-GF-HDAMPup_fr
+2218499
+ttbb_SL-GF-HDAMPup_fr
+103505
+ttother_SL-GF-TuneCP5down_fr
+1953003
+ttbb_SL-GF-TuneCP5down_fr
+91418
+ttother_SL-GF-TuneCP5up_fr
+1626508
+ttbb_SL-GF-TuneCP5up_fr
+76077
+
+
+../Kai/python/samplecards/2018_NanoAODv7.yaml
+#######################################
+Number of effective events (Number with positive weight - Number with negative weight)
+fr - filtered region (Njet7 in DL or Njet9 in SL, and HT500)
+nr - non-filtered region (complement)
+inclusive does not split between filtered and non-filtered phase space, due to no dedicated filtered region sample existing
+ttbb should be rescaled for cross-section according to latest simultaneous measurement of ttbb, ttcc, and tt(all other), where it's .409pb += 0.34 (stat) +- 0.55 (stat)
+This makes a scaling of 1.22 +.17 - .18 relative to the simulation input for TuneCP5 samples.
+| Phase space:         |         |         |            |            |                |                   |
+| Variation vvv        | ttbb fr | ttbb nr | ttother fr | ttother nr | ttbb inclusive | ttother inclusive |
+|----------------------+---------+---------+------------+------------+----------------+-------------------|
+| tt_AH nominal        |       - | -       |          - | -          | 846400         | 196306496         |
+| tt_AH CR1-QCD        |       - | -       |          - | -          | 116032         | 27013004          |
+| tt_AH CR2-GluonMove  |       - | -       |          - | -          | 117874         | 27148300          |
+| tt_AH HDAMPdown      |       - | -       |          - | -          | 105918         | 25882224          |
+| tt_AH HDAMPup        |       - | -       |          - | -          | 110893         | 24741095          |
+| tt_AH TuneCP5down    |       - | -       |          - | -          | 113317         | 26346225          |
+| tt_AH TuneCP5up      |       - | -       |          - | -          | 100318         | 23198654          |
+|----------------------+---------+---------+------------+------------+----------------+-------------------|
+| tt_DL nominal        |   35401 | 193164  |    1029156 | 62533763   | -              | -                 |
+| tt_DL CR1-QCD        |       - | -       |          - | -          | 103833         | 28963607          |
+| tt_DL CR2-GluonMove  |       - | -       |          - | -          | 105951         | 29474133          |
+| tt_DL HDAMPdown      |   14584 | 82811   |     426716 | 28302309   | -              | -                 |
+| tt_DL HDAMPup        |    6017 | 31248   |     172761 | 9648240    | -              | -                 |
+| tt_DL TuneCP5down    |    5427 | 29219   |     156219 | 9545655    | -              | -                 |
+| tt_DL TuneCP5up      |    5512 | 30272   |     160757 | 9690539    | -              | -                 |
+| tt_DL-GF nominal     |  299303 | -       |    8693427 | -          | -              | -                 |
+| tt_DL-GF HDAMPdown   |   65203 | -       |    1901435 | -          | -              | -                 |
+| tt_DL-GF HDAMPup     |   77394 | -       |    2240084 | -          | -              | -                 |
+| tt_DL-GF TuneCP5down |   70207 | -       |    2053409 | -          | -              | -                 |
+| tt_DL-GF TuneCP5up   |   69739 | -       |    2034579 | -          | -              | -                 |
+|----------------------+---------+---------+------------+------------+----------------+-------------------|
+| tt_SL nominal        |   54691 | 723490  |    1167691 | 196272214  | -              | -                 |
+| tt_SL CR1-QCD        |       - | -       |          - | -          | 104157         | 26371331          |
+| tt_SL CR2-GluonMove  |       - | -       |          - | -          | 106772         | 27170258          |
+| tt_SL HDAMPdown      |    6282 | 87915   |     138308 | 25244091   | -              | -                 |
+| tt_SL HDAMPup        |    7931 | 101531  |     172755 | 26559573   | -              | -                 |
+| tt_SL TuneCP5down    |    5562 | 73662   |     118917 | 20118121   | -              | -                 |
+| tt_SL TuneCP5up      |    7462 | 97746   |     159153 | 26465563   | -              | -                 |
+| tt_SL-GF nominal     |  376348 | -       |    8064496 | -          | -              | -                 |
+| tt_SL-GF HDAMPdown   |   81218 | -       |    1741840 | -          | -              | -                 |
+| tt_SL-GF HDAMPup     |   99257 | -       |    2123216 | -          | -              | -                 |
+| tt_SL-GF TuneCP5down |   84810 | -       |    1821748 | -          | -              | -                 |
+| tt_SL-GF TuneCP5up   |   90961 | -       |    1946811 | -          | -              | -                 |
+|----------------------+---------+---------+------------+------------+----------------+-------------------|
+
+Converted to fractional contribution
+| Phase space:         |              |         |              |            |                |                   |
+| Variation vvv        |      ttbb fr | ttbb nr |   ttother fr | ttother nr | ttbb inclusive | ttother inclusive |
+|----------------------+--------------+---------+--------------+------------+----------------+-------------------|
+| tt_AH nominal        |            - | -       |            - | -          | 1              | 1                 |
+| tt_AH CR1-QCD        |            - | -       |            - | -          | 1              | 1                 |
+| tt_AH CR2-GluonMove  |            - | -       |            - | -          | 1              | 1                 |
+| tt_AH HDAMPdown      |            - | -       |            - | -          | 1              | 1                 |
+| tt_AH HDAMPup        |            - | -       |            - | -          | 1              | 1                 |
+| tt_AH TuneCP5down    |            - | -       |            - | -          | 1              | 1                 |
+| tt_AH TuneCP5up      |            - | -       |            - | -          | 1              | 1                 |
+|----------------------+--------------+---------+--------------+------------+----------------+-------------------|
+| tt_DL nominal        | 0.1057687136 | 1       | 0.1058521176 | 1          | -              | -                 |
+| tt_DL-GF nominal     | 0.8942312863 | -       | 0.8941478823 | -          | -              | -                 |
+| tt_DL HDAMPdown      | 0.1827866695 | 1       | 0.1832853625 | 1          | -              | -                 |
+| tt_DL-GF HDAMPdown   | 0.8172133304 | -       | 0.8167146374 | -          | -              | -                 |
+| tt_DL HDAMPup        | 0.0721367685 | 1       | 0.0716005379 | 1          | -              | -                 |
+| tt_DL-GF HDAMPup     | 0.9278632314 | -       | 0.9283994620 | -          | -              | -                 |
+| tt_DL TuneCP5down    | 0.0717534442 | 1       | 0.0706992308 | 1          | -              | -                 |
+| tt_DL-GF TuneCP5down | 0.9282465557 | -       | 0.9293007691 | -          | -              | -                 |
+| tt_DL TuneCP5up      | 0.0732481960 | 1       | 0.0732266040 | 1          | -              | -                 |
+| tt_DL-GF TuneCP5up   | 0.9267518039 | -       | 0.9267733959 | -          | -              | -                 |
+| tt_DL CR1-QCD        |            - | -       |            - | -          | 1              | 1                 |
+| tt_DL CR2-GluonMove  |            - | -       |            - | -          | 1              | 1                 |
+|----------------------+--------------+---------+--------------+------------+----------------+-------------------|
+| tt_SL nominal        | 0.1268817902 | 1       | 0.1264804319 | 1          | -              | -                 |
+| tt_SL-GF nominal     | 0.8731182097 | -       | 0.8735195680 | -          | -              | -                 |
+| tt_SL HDAMPdown      | 0.0717942857 | 1       | 0.0735622940 | 1          | -              | -                 |
+| tt_SL-GF HDAMPdown   | 0.9282057142 | -       | 0.9264377059 | -          | -              | -                 |
+| tt_SL HDAMPup        | 0.0739914915 | 1       | 0.0752426751 | 1          | -              | -                 |
+| tt_SL-GF HDAMPup     | 0.9260085084 | -       | 0.9247573248 | -          | -              | -                 |
+| tt_SL TuneCP5down    | 0.0615456114 | 1       | 0.0612764181 | 1          | -              | -                 |
+| tt_SL-GF TuneCP5down | 0.9384543885 | -       | 0.9387235818 | -          | -              | -                 |
+| tt_SL TuneCP5up      | 0.0758156122 | 1       | 0.0755725169 | 1          | -              | -                 |
+| tt_SL-GF TuneCP5up   | 0.9241843877 | -       | 0.9244274830 | -          | -              | -                 |
+| tt_SL CR1-QCD        |            - | -       |            - | -          | 1              | 1                 |
+| tt_SL CR2-GluonMove  |            - | -       |            - | -          | 1              | 1                 |
+|----------------------+--------------+---------+--------------+------------+----------------+-------------------|
+
+Converted to percent of individual sample (i.e. ttbb fr is 10% of tt_DL, in extreme and unrealistic example)
+| Phase space:         |         |         |            |            |                |                   |
+| Variation vvv        | ttbb fr | ttbb nr | ttother fr | ttother nr | ttbb inclusive | ttother inclusive |
+|----------------------+---------+---------+------------+------------+----------------+-------------------|
+| tt_AH nominal        |       - | -       |          - | -          | 846400         | 196306496         |
+| tt_AH CR1-QCD        |       - | -       |          - | -          | 116032         | 27013004          |
+| tt_AH CR2-GluonMove  |       - | -       |          - | -          | 117874         | 27148300          |
+| tt_AH HDAMPdown      |       - | -       |          - | -          | 105918         | 25882224          |
+| tt_AH HDAMPup        |       - | -       |          - | -          | 110893         | 24741095          |
+| tt_AH TuneCP5down    |       - | -       |          - | -          | 113317         | 26346225          |
+| tt_AH TuneCP5up      |       - | -       |          - | -          | 100318         | 23198654          |
+|----------------------+---------+---------+------------+------------+----------------+-------------------|
+| tt_DL nominal        |   35401 | 193164  |    1029156 | 62533763   | -              | -                 |
+| tt_DL CR1-QCD        |       - | -       |          - | -          | 103833         | 28963607          |
+| tt_DL CR2-GluonMove  |       - | -       |          - | -          | 105951         | 29474133          |
+| tt_DL HDAMPdown      |   14584 | 82811   |     426716 | 28302309   | -              | -                 |
+| tt_DL HDAMPup        |    6017 | 31248   |     172761 | 9648240    | -              | -                 |
+| tt_DL TuneCP5down    |    5427 | 29219   |     156219 | 9545655    | -              | -                 |
+| tt_DL TuneCP5up      |    5512 | 30272   |     160757 | 9690539    | -              | -                 |
+| tt_DL-GF nominal     |  299303 | -       |    8693427 | -          | -              | -                 |
+| tt_DL-GF HDAMPdown   |   65203 | -       |    1901435 | -          | -              | -                 |
+| tt_DL-GF HDAMPup     |   77394 | -       |    2240084 | -          | -              | -                 |
+| tt_DL-GF TuneCP5down |   70207 | -       |    2053409 | -          | -              | -                 |
+| tt_DL-GF TuneCP5up   |   69739 | -       |    2034579 | -          | -              | -                 |
+|----------------------+---------+---------+------------+------------+----------------+-------------------|
+| tt_SL nominal        |   54691 | 723490  |    1167691 | 196272214  | -              | -                 |
+| tt_SL CR1-QCD        |       - | -       |          - | -          | 104157         | 26371331          |
+| tt_SL CR2-GluonMove  |       - | -       |          - | -          | 106772         | 27170258          |
+| tt_SL HDAMPdown      |    6282 | 87915   |     138308 | 25244091   | -              | -                 |
+| tt_SL HDAMPup        |    7931 | 101531  |     172755 | 26559573   | -              | -                 |
+| tt_SL TuneCP5down    |    5562 | 73662   |     118917 | 20118121   | -              | -                 |
+| tt_SL TuneCP5up      |    7462 | 97746   |     159153 | 26465563   | -              | -                 |
+| tt_SL-GF nominal     |  376348 | -       |    8064496 | -          | -              | -                 |
+| tt_SL-GF HDAMPdown   |   81218 | -       |    1741840 | -          | -              | -                 |
+| tt_SL-GF HDAMPup     |   99257 | -       |    2123216 | -          | -              | -                 |
+| tt_SL-GF TuneCP5down |   84810 | -       |    1821748 | -          | -              | -                 |
+| tt_SL-GF TuneCP5up   |   90961 | -       |    1946811 | -          | -              | -                 |
+|----------------------+---------+---------+------------+------------+----------------+-------------------|
