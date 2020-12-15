@@ -4,11 +4,11 @@
     isData: false
     isSignal: false
     crossSection: 6077.22
-    sumWeights: 49082157.0
-    sumWeights2: 49125561.0
-    nEvents: 49125561
-    nEventsPositive: 49103859
-    nEventsNegative: 21702
+    sumWeights: 48968256.0
+    sumWeights2: 49011552.0
+    nEvents: 49011552
+    nEventsPositive: 48989904
+    nEventsNegative: 21648
     channels:
     - All
     source:
@@ -16,33 +16,51 @@
       NANOv6: dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017RECOSIMstep_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7_ext1-v1/NANOAODSIM
       NANOv6p1: dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
       NANOv7: dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017RECOSIMstep_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8_ext1-v1/NANOAODSIM
+    run: 34.0
+    genEventCount: 49011552.0
+    genEventSumw: 48968256.0
+    genEventSumw2: 49011552.0
+    nLHEScaleSumw: 306.0
+    LHEScaleSumw: 304.75152874763194
+    nLHEPdfSumw: 1122.0
+    LHEPdfSumw: 1103.064139267616
+    totalEvents: 49011552
 - DYJets_DL-HT100:
     era: '2017'
     isData: false
     isSignal: false
     crossSection: 181.302
-    sumWeights: 1
-    sumWeights2: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
+    sumWeights: 11180126.0
+    sumWeights2: 11197488.0
+    nEventsPositive: 11188807
+    nEventsNegative: 8681
     channels:
     - All
-    nEvents: 1
+    nEvents: 11197488
     source:
       NANOv5: dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
       NANOv6: dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
       NANOv6p1: dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
       NANOv7: dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_new_pmx_102X_mc2017_realistic_v8-v1/NANOAODSIM
+    run: 13.0
+    genEventCount: 11197488.0
+    genEventSumw: 11180126.0
+    genEventSumw2: 11197488.0
+    nLHEScaleSumw: 117.0
+    LHEScaleSumw: 116.6347593731649
+    nLHEPdfSumw: 429.0
+    LHEPdfSumw: 424.41894399960495
+    totalEvents: 11197488
 - DYJets_DL-HT200:
     era: '2017'
     isData: false
     isSignal: false
     crossSection: 50.4177
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
+    sumWeights: 10699051.0
+    sumWeights2: 10728447.0
+    nEvents: 10728447
+    nEventsPositive: 10713749
+    nEventsNegative: 14698
     channels:
     - All
     source:
@@ -50,16 +68,25 @@
       NANOv6: dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
       NANOv6p1: dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
       NANOv7: dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
+    run: 16.0
+    genEventCount: 10728447.0
+    genEventSumw: 10699051.0
+    genEventSumw2: 10728447.0
+    nLHEScaleSumw: 144.0
+    LHEScaleSumw: 144.34664840211778
+    nLHEPdfSumw: 528.0
+    LHEPdfSumw: 526.5484572027477
+    totalEvents: 10728447
 - DYJets_DL-HT400:
     era: '2017'
     isData: false
     isSignal: false
     crossSection: 6.98394
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
+    sumWeights: 10174800.0
+    sumWeights2: 10219524.0
+    nEvents: 10219524
+    nEventsPositive: 10197162
+    nEventsNegative: 22362
     channels:
     - All
     source:
@@ -67,16 +94,25 @@
       NANOv6: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
       NANOv6p1: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
       NANOv7: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_new_pmx_102X_mc2017_realistic_v8-v1/NANOAODSIM
+    run: 12.0
+    genEventCount: 10219524.0
+    genEventSumw: 10174800.0
+    genEventSumw2: 10219524.0
+    nLHEScaleSumw: 108.0
+    LHEScaleSumw: 109.02789830664076
+    nLHEPdfSumw: 396.0
+    LHEPdfSumw: 398.23505601671553
+    totalEvents: 10219524
 - DYJets_DL-HT600:
     era: '2017'
     isData: false
     isSignal: false
     crossSection: 1.68141
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
+    sumWeights: 8691608.0
+    sumWeights2: 8743640.0
+    nEvents: 8743640
+    nEventsPositive: 8717624
+    nEventsNegative: 26016
     channels:
     - All
     source:
@@ -84,16 +120,25 @@
       NANOv6: dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
       NANOv6p1: dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
       NANOv7: dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_new_pmx_102X_mc2017_realistic_v8-v1/NANOAODSIM
+    run: 10.0
+    genEventCount: 8743640.0
+    genEventSumw: 8691608.0
+    genEventSumw2: 8743640.0
+    nLHEScaleSumw: 90.0
+    LHEScaleSumw: 91.17285424107439
+    nLHEPdfSumw: 330.0
+    LHEPdfSumw: 333.65311757127074
+    totalEvents: 8743640
 - DYJets_DL-HT800:
     era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.775392
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsNegative: 0
-    nEventsPositive: 1
+    sumWeights: 3089712.0
+    sumWeights2: 3114980.0
+    nEvents: 3114980
+    nEventsNegative: 12634
+    nEventsPositive: 3102346
     channels:
     - All
     source:
@@ -101,16 +146,25 @@
       NANOv6: dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
       NANOv6p1: dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
       NANOv7: dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_new_pmx_102X_mc2017_realistic_v8-v1/NANOAODSIM
+    run: 6.0
+    genEventCount: 3114980.0
+    genEventSumw: 3089712.0
+    genEventSumw2: 3114980.0
+    nLHEScaleSumw: 54.0
+    LHEScaleSumw: 54.84633879902612
+    nLHEPdfSumw: 198.0
+    LHEPdfSumw: 201.50457794590397
+    totalEvents: 3114980
 - DYJets_DL-HT1200:
     era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.186222
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
+    sumWeights: 616923.0
+    sumWeights2: 625517.0
+    nEvents: 625517
+    nEventsPositive: 621220
+    nEventsNegative: 4297
     channels:
     - All
     source:
@@ -118,16 +172,25 @@
       NANOv6: dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/NANOAODSIM
       NANOv6p1: dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
       NANOv7: dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
+    run: 1.0
+    genEventCount: 625517.0
+    genEventSumw: 616923.0
+    genEventSumw2: 625517.0
+    nLHEScaleSumw: 9.0
+    LHEScaleSumw: 9.168823884646647
+    nLHEPdfSumw: 33.0
+    LHEPdfSumw: 33.92302576119836
+    totalEvents: 625517
 - DYJets_DL-HT2500:
     era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.00438495
-    sumWeights: 1
-    sumWeights2: 1
-    nEvents: 1
-    nEventsPositive: 1
-    nEventsNegative: 0
+    sumWeights: 401334.0
+    sumWeights2: 419308.0
+    nEvents: 419308
+    nEventsPositive: 410321
+    nEventsNegative: 8987
     channels:
     - All
     source:
@@ -135,6 +198,15 @@
       NANOv6: dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
       NANOv6p1: dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/piedavid-TopNanoAODv6-1-1_2017-a11761155c05d04d6fed5a2401fa93e8/USER
       NANOv7: dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_new_pmx_102X_mc2017_realistic_v8-v1/NANOAODSIM
+    run: 3.0
+    genEventCount: 419308.0
+    genEventSumw: 401334.0
+    genEventSumw2: 419308.0
+    nLHEScaleSumw: 27.0
+    LHEScaleSumw: 27.626686316272547
+    nLHEPdfSumw: 99.0
+    LHEPdfSumw: 104.03064708232463
+    totalEvents: 419308
 - ST_tW:
     era: '2017'
     isData: false
