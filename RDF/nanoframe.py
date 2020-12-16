@@ -5,7 +5,8 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 def bookSnapshot(input_df, filename, columnList, lazy=True, treename="Events", mode="RECREATE", compressionAlgo="LZ4", compressionLevel=6, splitLevel=99, debug=False):
     if columnList is None:
-        raise RuntimeError("Cannot take empty columnList in bookSnapshot")
+        columns = input_df.GetColumnNames()
+        # raise RuntimeError("Cannot take empty columnList in bookSnapshot")
     elif isinstance(columnList, str) or 'vector<string>' in str(type(columnList)):
         columns = columnList #regexp case or vector of strings
     elif isinstance(columnList, list):
@@ -25,7 +26,6 @@ def bookSnapshot(input_df, filename, columnList, lazy=True, treename="Events", m
     sopt = ROOT.RDF.RSnapshotOptions(mode, Algos[compressionAlgo], compressionLevel, 0, splitLevel, True) #lazy is last option
     if lazy is False:
         sopt.fLazy = False
-    print("snapshot columns", columns)
     handle = input_df.Snapshot(treename, filename, columns, sopt)
 
     return handle
@@ -40,10 +40,12 @@ parser.add_argument('--nThreads', dest='nThreads', action='store', type=int, def
 #                     help='list of new variables with syntax variable_name=variable_definition, where both are valid C++ variable names and code, respectively')
 # parser.add_argument('--filters', dest='filters', action='store', nargs='*', type=str,
 #                     help='list of filters with syntax filter_name=filter_cut, where the former is any text and the latter is valid C++ code')
-parser.add_argument('--keep', dest='keep', action='store', nargs='*', type=str,
+parser.add_argument('--keep', dest='keep', action='store', nargs='*', type=str, default=None,
                     help='list of branch names to keep in output files, does not accept wildcards')
 parser.add_argument('--postfix', dest='postfix', action='store', type=str, default="_Skim",
                     help='name to append to root filenames')
+parser.add_argument('--write', dest='write', action='store_true',
+                    help='Write output files')
 # parser.add_argument('--merge', dest='merge', action='store_true',
 #                     help='Merge output files immediately on input, which may be susceptible to problems if requested branches do not align')
 # parser.add_argument('--haddnano', dest='haddnano', action='store_true',
@@ -68,25 +70,26 @@ for fn in fileList:
     foName = fn.replace(".root", args.postfix + ".root")
     rdf = ROOT.ROOT.RDataFrame("Events", fn)
     rdfFinal = rdf #Placeholder
-    columnList = [str(c) for c in rdf.GetColumnNames() if str(c) in args.keep]
-    print("columns to keep: ", columnList)
-    snaphandle = bookSnapshot(rdfFinal, foName, columnList, lazy=False, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=9, splitLevel=99, debug=False)
+    columnList = [str(c) for c in rdf.GetColumnNames() if str(c) in args.keep] if args.keep is not None else None
+    if args.write:
+        print("columns to keep: ", columnList)
+        snaphandle = bookSnapshot(rdfFinal, foName, columnList, lazy=False, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=9, splitLevel=99, debug=False)
 
-    #Handle the rest of the trees
-    fi = ROOT.TFile.Open(fn, "read")
-    treeNames = [str(ll.GetName()) for ll in fi.GetListOfKeys() if ll.GetClassName() in ['TTree']]
-    print("TTrees: ", treeNames)
-    fo = ROOT.TFile.Open(foName, "update")
-    fo.cd()
-    for treeName in treeNames:
-        if treeName != "Events": #Handle the events tree using RDataFrame
-            fi.cd()
-            tree = fi.Get(treeName)
-            fo.cd()
-            treeclone = tree.CloneTree(-1, "fast")# if goFast else "")
-            treeclone.Write()
-    fi.Close()
-    fo.Close()
+        #Handle the rest of the trees
+        fi = ROOT.TFile.Open(fn, "read")
+        treeNames = [str(ll.GetName()) for ll in fi.GetListOfKeys() if ll.GetClassName() in ['TTree']]
+        print("TTrees: ", treeNames)
+        fo = ROOT.TFile.Open(foName, "update")
+        fo.cd()
+        for treeName in treeNames:
+            if treeName != "Events": #Handle the events tree using RDataFrame
+                fi.cd()
+                tree = fi.Get(treeName)
+                fo.cd()
+                treeclone = tree.CloneTree(-1, "fast")# if goFast else "")
+                treeclone.Write()
+        fi.Close()
+        fo.Close()
     
 # rdf = ROOT.ROOT.RDataFrame("Events", 
 keepBranches = args.keep
