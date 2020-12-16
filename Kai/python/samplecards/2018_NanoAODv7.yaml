@@ -14,6 +14,7 @@
     source:
       NANOv6: dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 57.0
     genEventCount: 100194597.0
     genEventSumw: 100108281.94794682
@@ -38,6 +39,7 @@
     source:
       NANOv6: dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/DYJetsToLL_M-50_HT-100to200_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 12.0
     genEventCount: 11530510.0
     genEventSumw: 11516745.853159329
@@ -62,6 +64,7 @@
     source:
       NANOv6: dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/DYJetsToLL_M-50_HT-200to400_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 11.0
     genEventCount: 10860690.0
     genEventSumw: 10840078.364005698
@@ -86,6 +89,7 @@
     source:
       NANOv6: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext4-v1/NANOAODSIM
       NANOv7: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_EXT2_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
       NANOv7Ext1: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
       NANOv7Ext2: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext2-v1/NANOAODSIM
       NANOv7EXT1: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_EXT1_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
@@ -114,6 +118,7 @@
     source:
       NANOv6: dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/DYJetsToLL_M-50_HT-600to800_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 12.0
     genEventCount: 8862104.0
     genEventSumw: 8826238.14914645
@@ -138,6 +143,7 @@
     source:
       NANOv6: dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/DYJetsToLL_M-50_HT-800to1200_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 5.0
     genEventCount: 3138129.0
     genEventSumw: 3120982.106065329
@@ -162,6 +168,7 @@
     source:
       NANOv6: dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 2.0
     genEventCount: 536416.0
     genEventSumw: 531566.8627523624
@@ -186,6 +193,7 @@
     source:
       NANOv6: dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 2.0
     genEventCount: 427051.0
     genEventSumw: 415517.0219344225
@@ -210,6 +218,7 @@
     source:
       NANOv6: dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 11.0
     genEventCount: 9598000.0
     genEventSumw: 334874722.2088431
@@ -234,6 +243,7 @@
     source:
       NANOv6: dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 9.0
     genEventCount: 7527000.0
     genEventSumw: 263114694.7407968
@@ -258,6 +268,7 @@
     source:
       NANOv6: dbs:/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext2-v1/NANOAODSIM
       NANOv7: dbs:/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_EXT1_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 18.0
     genEventCount: 7636887.0
     genEventSumw: 266461860.6748265
@@ -282,6 +293,7 @@
     source:
       NANOv6: dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext2-v1/NANOAODSIM
       NANOv7: dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_EXT1_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 15.0
     genEventCount: 5823328.0
     genEventSumw: 203553870.0718795
@@ -306,6 +318,7 @@
     source:
       NANOv6: dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 19.0
     genEventCount: 19890000.0
     genEventSumw: 74301218.71740441
@@ -330,6 +343,7 @@
     source:
       NANOv6: dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 103.0
     genEventCount: 154307600.0
     genEventSumw: 16603455266.973835
@@ -354,6 +368,7 @@
     source:
       NANOv6: dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 61.0
     genEventCount: 79090800.0
     genEventSumw: 5125996535.388435
@@ -380,6 +395,7 @@
     source:
       NANOv6: dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_ext1_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 34.0
     genEventCount: 11835999.0
     genEventSumw: 6235661.084600946
@@ -404,6 +420,7 @@
     source:
       NANOv6: dbs:/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 75.0
     genEventCount: 9572600.0
     genEventSumw: 544235.3664052121
@@ -428,6 +445,7 @@
     source:
       NANOv6: dbs:/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 77.0
     genEventCount: 9632600.0
     genEventSumw: 2285301.058989409
@@ -453,6 +471,7 @@
       # only ext1-v1 found
       NANOv6: dbs:/TTHH_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTHH_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTHH_TuneCP5_13TeV-madgraph-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 2.0
     genEventCount: 200000.0
     genEventSumw: 199173.67350704473
@@ -478,6 +497,7 @@
       # only ext1-v1 found
       NANOv6: dbs:/TTWH_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTWH_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTWH_TuneCP5_13TeV-madgraph-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 2.0
     genEventCount: 200000.0
     genEventSumw: 198923.4823714278
@@ -503,6 +523,7 @@
       # only ext1-v1 found
       NANOv6: dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 55.0
     genEventCount: 12816567.0
     genEventSumw: 12763411.875761079
@@ -527,6 +548,7 @@
     source:
       NANOv6: dbs:/TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 13.0
     genEventCount: 835296.0
     genEventSumw: 580758.8456673446
@@ -551,6 +573,7 @@
     source:
       NANOv6: dbs:/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 7.0
     genEventCount: 4911941.0
     genEventSumw: 1690091.7820566026
@@ -577,6 +600,7 @@
       # NANOv6: dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM" 
       NANOv6: dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext2-v1/NANOAODSIM
       NANOv7: dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext2-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTWW_TuneCP5_13TeV-madgraph-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 12.0
     genEventCount: 800000.0
     genEventSumw: 795283.7527018783
@@ -602,6 +626,7 @@
       # only the ext1-v1 found
       NANOv6: dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTWZ_TuneCP5_13TeV-madgraph-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 2.0
     genEventCount: 200000.0
     genEventSumw: 198618.95447194716
@@ -627,6 +652,7 @@
       # only ext1-v1 found
       NANOv6: dbs:/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTZH_TuneCP5_13TeV-madgraph-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 2.0
     genEventCount: 200000.0
     genEventSumw: 199302.8336875437
@@ -652,6 +678,7 @@
       # only ext1-v1 found
       NANOv6: dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 75.0
     genEventCount: 22646257.0
     genEventSumw: 22594871.59365764
@@ -677,6 +704,7 @@
       # only ext1-v1 found
       NANOv6: dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTZZ_TuneCP5_13TeV-madgraph-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 1.0
     genEventCount: 200000.0
     genEventSumw: 199270.1540918618
@@ -701,6 +729,7 @@
     source:
       NANOv6: dbs:/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 18.0
     genEventCount: 13280000.0
     genEventSumw: 3226764.9057380576
@@ -725,6 +754,7 @@
     source:
       NANOv6: dbs:/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 14.0
     genEventCount: 250000.0
     genEventSumw: 13361.866623262555
@@ -749,6 +779,7 @@
     source:
       NANOv6: dbs:/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 11.0
     genEventCount: 8822000.0
     genEventSumw: 4498969.452155011
@@ -773,6 +804,7 @@
     source:
       NANOv6: dbs:/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext2-v1/NANOAODSIM
       NANOv7: dbs:/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext2-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -867,6 +899,7 @@
     source:
       NANOv6: dbs:/TTToHadronic_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToHadronic_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToHadronic_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     splitProcess:
       ID:
         nFTAGenJet/FTAGenHT: false
@@ -936,6 +969,7 @@
     source:
       NANOv6: dbs:/TTToHadronic_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToHadronic_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToHadronic_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     splitProcess:
       ID:
         nFTAGenJet/FTAGenHT: false
@@ -1005,6 +1039,7 @@
     source:
       NANOv6: dbs:/TTToHadronic_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToHadronic_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToHadronic_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     splitProcess:
       ID:
         nFTAGenJet/FTAGenHT: false
@@ -1074,6 +1109,7 @@
     source:
       NANOv6: dbs:/TTToHadronic_hdampUP_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToHadronic_hdampUP_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToHadronic_hdampUP_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     splitProcess:
       ID:
         nFTAGenJet/FTAGenHT: false
@@ -1143,6 +1179,7 @@
     source:
       NANOv6: dbs:/TTToHadronic_TuneCP5down_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToHadronic_TuneCP5down_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToHadronic_TuneCP5down_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     splitProcess:
       ID:
         nFTAGenJet/FTAGenHT: false
@@ -1212,6 +1249,7 @@
     source:
       NANOv6: dbs:/TTToHadronic_TuneCP5up_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToHadronic_TuneCP5up_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToHadronic_TuneCP5up_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     splitProcess:
       ID:
         nFTAGenJet/FTAGenHT: false
@@ -1292,6 +1330,7 @@
     source:
       NANOv6: dbs:/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -1433,6 +1472,7 @@
       NANOv6: dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
       NANOv7NonExt: dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTo2L2Nu_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/nmangane-NoveCampaign-1cea6da0d07fd8de4a53b465a6714af5/USER
     splitProcess:
       ID:
         nFTAGenJet/FTAGenHT: false
@@ -1503,6 +1543,7 @@
       NANOv6: dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
       NANOv7NonExt: dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTo2L2Nu_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/nmangane-NoveCampaign-1cea6da0d07fd8de4a53b465a6714af5/USER
     splitProcess:
       ID:
         nFTAGenJet/FTAGenHT: false
@@ -1572,6 +1613,7 @@
     source:
       NANOv6: dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext2-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-1cea6da0d07fd8de4a53b465a6714af5/USER
     doFilter: true
     splitProcess:
       ID:
@@ -1712,6 +1754,7 @@
     source:
       NANOv6: dbs:/TTTo2L2Nu_hdampUP_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_hdampUP_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTo2L2Nu_hdampUP_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -1852,6 +1895,7 @@
     source:
       NANOv6: dbs:/TTTo2L2Nu_TuneCP5down_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_TuneCP5down_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTo2L2Nu_TuneCP5down_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -1992,6 +2036,7 @@
     source:
       NANOv6: dbs:/TTTo2L2Nu_TuneCP5up_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_TuneCP5up_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTo2L2Nu_TuneCP5up_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -2137,6 +2182,7 @@
     source:
       NANOv6: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
       the XS matches Brown's lower BR calculation
     doFilter: true
@@ -2237,6 +2283,7 @@
     source:
       NANOv6: dbs:/TTTo2L2Nu_HT500Njet7_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_HT500Njet7_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTo2L2Nu_HT500Njet7_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
       the XS matches Brown's lower BR calculation
     doFilter: true
@@ -2337,6 +2384,7 @@
     source:
       NANOv6: dbs:/TTTo2L2Nu_HT500Njet7_hdampUP_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_HT500Njet7_hdampUP_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTo2L2Nu_HT500Njet7_hdampUP_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
       the XS matches Brown's lower BR calculation
     doFilter: true
@@ -2437,6 +2485,7 @@
     source:
       NANOv6: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5down_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5down_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5down_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
       the XS matches Brown's lower BR calculation
     doFilter: true
@@ -2537,6 +2586,7 @@
     source:
       NANOv6: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5up_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5up_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5up_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
       the XS matches Brown's lower BR calculation
     doFilter: true
@@ -2638,6 +2688,7 @@
       NANOv6NonExt: dbs:/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext3-v1/NANOAODSIM
       NANOv7NonExt: dbs:/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -2778,6 +2829,7 @@
     source:
       NANOv6: dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     splitProcess:
       ID:
         nFTAGenJet/FTAGenHT: false
@@ -2847,6 +2899,7 @@
     source:
       NANOv6: dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     splitProcess:
       ID:
         nFTAGenJet/FTAGenHT: false
@@ -2916,6 +2969,7 @@
     source:
       NANOv6: dbs:/TTToSemiLeptonic_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToSemiLeptonic_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToSemiLeptonic_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -3056,6 +3110,7 @@
     source:
       NANOv6: dbs:/TTToSemiLeptonic_hdampUP_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToSemiLeptonic_hdampUP_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToSemiLeptonic_hdampUP_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -3196,6 +3251,7 @@
     source:
       NANOv6: dbs:/TTToSemiLeptonic_TuneCP5down_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToSemiLeptonic_TuneCP5down_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToSemiLeptonic_TuneCP5down_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -3336,6 +3392,7 @@
     source:
       NANOv6: dbs:/TTToSemiLeptonic_TuneCP5up_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToSemiLeptonic_TuneCP5up_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToSemiLeptonic_TuneCP5up_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -3480,6 +3537,7 @@
     source:
       NANOv6: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -3579,6 +3637,7 @@
     source:
       NANOv6: dbs:/TTToSemiLepton_HT500Njet9_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToSemiLepton_HT500Njet9_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToSemiLepton_HT500Njet9_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -3678,6 +3737,7 @@
     source:
       NANOv6: dbs:/TTToSemiLepton_HT500Njet9_hdampUP_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToSemiLepton_HT500Njet9_hdampUP_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToSemiLepton_HT500Njet9_hdampUP_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -3777,6 +3837,7 @@
     source:
       NANOv6: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5down_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5down_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5down_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -3876,6 +3937,7 @@
     source:
       NANOv6: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5up_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v2/NANOAODSIM
       NANOv7: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5up_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v2/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5up_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     doFilter: true
     splitProcess:
       ID:
@@ -3971,6 +4033,7 @@
     source:
       NANOv6: dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 4.0
     genEventCount: 184000.0
     genEventSumw: 182502.81536198017
@@ -3995,6 +4058,7 @@
     source:
       NANOv6: dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER
     run: 2.0
     genEventCount: 200000.0
     genEventSumw: 199540.72431053393
@@ -4022,6 +4086,7 @@
       NANOv6Ext1: dbs:/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext2-v1/NANOAODSIM
       NANOv7Ext1: dbs:/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext1-v1/NANOAODSIM
+      NANOv7_CorrNov: dbs:/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/nmangane-NoveCampaign-1cea6da0d07fd8de4a53b465a6714af5/USER
     run: 18.0
     genEventCount: 9592768.0
     genEventSumw: 78728.08262201947
@@ -4042,6 +4107,7 @@
     source:
       NANOv6: dbs:/EGamma/Run2018A-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018A-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - ElEl_B:
     era: '2018'
     subera: B
@@ -4053,6 +4119,7 @@
     source:
       NANOv6: dbs:/EGamma/Run2018B-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018B-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - ElEl_C:
     era: '2018'
     subera: C
@@ -4064,6 +4131,7 @@
     source:
       NANOv6: dbs:/EGamma/Run2018C-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018C-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - ElEl_D:
     era: '2018'
     subera: D
@@ -4075,6 +4143,7 @@
     source:
       NANOv6: dbs:/EGamma/Run2018D-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018D-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - ElMu_A:
     era: '2018'
     subera: A
@@ -4086,6 +4155,7 @@
     source:
       NANOv6: dbs:/MuonEG/Run2018A-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/MuonEG/Run2018A-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/MuonEG/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - ElMu_B:
     era: '2018'
     subera: B
@@ -4097,6 +4167,7 @@
     source:
       NANOv6: dbs:/MuonEG/Run2018B-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/MuonEG/Run2018B-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/MuonEG/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - ElMu_C:
     era: '2018'
     subera: C
@@ -4108,6 +4179,7 @@
     source:
       NANOv6: dbs:/MuonEG/Run2018C-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/MuonEG/Run2018C-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/MuonEG/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - ElMu_D:
     era: '2018'
     subera: D
@@ -4119,6 +4191,7 @@
     source:
       NANOv6: dbs:/MuonEG/Run2018D-Nano25Oct2019_ver2-v1/NANOAOD
       NANOv7: dbs:/MuonEG/Run2018D-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/MuonEG/nmangane-NoveCampaign-1ba100824a3ed69a9fd5c48668243bf1/USER
 - El_A:
     era: '2018'
     subera: A
@@ -4131,6 +4204,7 @@
     source:
       NANOv6: dbs:/EGamma/Run2018A-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018A-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - El_B:
     era: '2018'
     subera: B
@@ -4143,6 +4217,7 @@
     source:
       NANOv6: dbs:/EGamma/Run2018B-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018B-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - El_C:
     era: '2018'
     subera: C
@@ -4155,6 +4230,7 @@
     source:
       NANOv6: dbs:/EGamma/Run2018C-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018C-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - El_D:
     era: '2018'
     subera: D
@@ -4167,6 +4243,7 @@
     source:
       NANOv6: dbs:/EGamma/Run2018D-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018D-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - MuMu_A:
     era: '2018'
     subera: A
@@ -4178,6 +4255,7 @@
     source:
       NANOv6: dbs:/DoubleMuon/Run2018A-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/DoubleMuon/Run2018A-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/DoubleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - MuMu_B:
     era: '2018'
     subera: B
@@ -4189,6 +4267,7 @@
     source:
       NANOv6: dbs:/DoubleMuon/Run2018B-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/DoubleMuon/Run2018B-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/DoubleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - MuMu_C:
     era: '2018'
     subera: C
@@ -4200,6 +4279,7 @@
     source:
       NANOv6: dbs:/DoubleMuon/Run2018C-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/DoubleMuon/Run2018C-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/DoubleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - MuMu_D:
     era: '2018'
     subera: D
@@ -4211,6 +4291,7 @@
     source:
       NANOv6: dbs:/DoubleMuon/Run2018D-Nano25Oct2019_ver2-v1/NANOAOD
       NANOv7: dbs:/DoubleMuon/Run2018D-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/DoubleMuon/nmangane-NoveCampaign-1ba100824a3ed69a9fd5c48668243bf1/USER
 - Mu_A:
     era: '2018'
     subera: A
@@ -4223,6 +4304,7 @@
     source:
       NANOv6: dbs:/SingleMuon/Run2018A-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/SingleMuon/Run2018A-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/SingleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - Mu_B:
     era: '2018'
     subera: B
@@ -4235,6 +4317,7 @@
     source:
       NANOv6: dbs:/SingleMuon/Run2018B-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/SingleMuon/Run2018B-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/SingleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - Mu_C:
     era: '2018'
     subera: C
@@ -4247,6 +4330,7 @@
     source:
       NANOv6: dbs:/SingleMuon/Run2018C-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/SingleMuon/Run2018C-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/SingleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
 - Mu_D:
     era: '2018'
     subera: D
@@ -4259,3 +4343,4 @@
     source:
       NANOv6: dbs:/SingleMuon/Run2018D-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/SingleMuon/Run2018D-02Apr2020-v1/NANOAOD
+      NANOv7_CorrNov: dbs:/SingleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER
