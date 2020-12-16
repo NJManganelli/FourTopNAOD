@@ -2837,7 +2837,7 @@ def bookSnapshot(input_df, filename, columnList, lazy=True, treename="Events", m
     elif isinstance(columnList, str) or 'vector<string>' in str(type(columnList)):
         columns = columnList #regexp case or vector of strings
     elif isinstance(columnList, list):
-        columns = ROOT.std.vector(str)(len(columnList))
+        columns = ROOT.std.vector(str)()
         for col in columnList:
             columns.push_back(col)
     else:
