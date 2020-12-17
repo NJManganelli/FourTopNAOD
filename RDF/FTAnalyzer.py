@@ -7286,8 +7286,20 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
             for fle in fileList:
                 transformedFileList.push_back(fle)
             if transformedFileList.size() < 1:
-                print("No files located... skipping sample {}".format(name))
-                continue
+                print("Filelist empty, attempting new query in case the cache file ({}) is wrong".format(sampleOutFile))
+                if isinstance(redirector, str):
+                    redir = redirector
+                elif "/eos/" in vals["source"][source_level]:
+                    redir="root://eosuser.cern.ch/".format(str(pwd.getpwuid(os.getuid()).pw_name)[0])
+                else:
+                    redir="root://cms-xrd-global.cern.ch/"
+                # if "dbs:" in vals["source"][source_level]:
+                fileList = getFiles(query=vals["source"][source_level], redir=redir, outFileName=sampleOutFile)
+                for fle in fileList:
+                    transformedFileList.push_back(fle)
+                if transformedFileList.size() < 1:
+                    print("No files located... skipping sample {}".format(name))
+                    continue
     
             #Construct TChain that we can add friends to potentially, but similarly constructin TChains and adding the chains with AddFriend
             print("Creating TChain for sample {}".format(name))
@@ -7843,7 +7855,7 @@ if __name__ == '__main__':
                         help='path and name of the systematics card(s) to be used')
     # parser.add_argument('--filter', dest='filter', action='store', type=str, default=None,
     #                     help='string to filter samples while checking events or generating configurations')
-    parser.add_argument('--redirector', dest='redir', action='append', type=str, default='root://cms-xrd-global.cern.ch/',
+    parser.add_argument('--redirector', dest='redir', action='store', type=str, default='root://cms-xrd-global.cern.ch/',
                         help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
     parser.add_argument('--era', dest='era', action='store', type=str, default="2017", choices=['2016', '2017', '2018'],
                         help='simulation/run year')
