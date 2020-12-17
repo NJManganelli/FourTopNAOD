@@ -4780,21 +4780,23 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
              ]
     #Variables to save for Combine when doCombineHistosOnly=True
     # combineHistoTemplate = ["HT{bpf}"]
-    combineHistoTemplate = ["HT{bpf}", "ST{bpf}", "HTH{bpf}", "HTRat{bpf}", "HTb{bpf}", "HT2M{bpf}", "H{bpf}", "H2M{bpf}", "dRbb{bpf}", 
-                             # "FTALepton_dRll", 
-                             "FTALepton1_pt", "FTALepton1_eta",
-                             "FTALepton2_pt", "FTALepton2_eta", 
-                             "FTAMuon_InvariantMass", "FTAElectron_InvariantMass",
-                             "MTofMETandMu{bpf}", "MTofMETandEl{bpf}", "MTofElandMu{bpf}"
-                             "nFTAJet{bpf}", 
-                             "FTAJet1{bpf}_pt", "FTAJet1{bpf}_eta", "FTAJet1{bpf}_DeepJetB", 
-                             "FTAJet2{bpf}_pt", "FTAJet2{bpf}_eta", "FTAJet2{bpf}_DeepJetB", 
-                             "FTAJet3{bpf}_pt", "FTAJet3{bpf}_eta", "FTAJet3{bpf}_DeepJetB", 
-                             "FTAJet4{bpf}_pt", "FTAJet4{bpf}_eta", "FTAJet4{bpf}_DeepJetB",
-                             # "nLooseFTAMuon", "nMediumFTAMuon", "nTightFTAMuon",
-                             # "nLooseFTAElectron", "nMediumFTAElectron", "nTightFTAElectron",
-                             # "nLooseFTALepton", "nMediumFTALepton", "nTightFTALepton",
-                         ]
+    # combineHistoTemplate = ["HT{bpf}", "ST{bpf}", "HTH{bpf}", "HTRat{bpf}", "HTb{bpf}", "HT2M{bpf}", "H{bpf}", "H2M{bpf}", "dRbb{bpf}", 
+    #                          # "FTALepton_dRll", 
+    #                          "FTALepton1_pt", "FTALepton1_eta",
+    #                          "FTALepton2_pt", "FTALepton2_eta", 
+    #                          "FTAMuon_InvariantMass", "FTAElectron_InvariantMass",
+    #                          "MTofMETandMu{bpf}", "MTofMETandEl{bpf}", "MTofElandMu{bpf}"
+    #                          "nFTAJet{bpf}", 
+    #                          "FTAJet1{bpf}_pt", "FTAJet1{bpf}_eta", "FTAJet1{bpf}_DeepJetB", 
+    #                          "FTAJet2{bpf}_pt", "FTAJet2{bpf}_eta", "FTAJet2{bpf}_DeepJetB", 
+    #                          "FTAJet3{bpf}_pt", "FTAJet3{bpf}_eta", "FTAJet3{bpf}_DeepJetB", 
+    #                          "FTAJet4{bpf}_pt", "FTAJet4{bpf}_eta", "FTAJet4{bpf}_DeepJetB",
+    #                          # "nLooseFTAMuon", "nMediumFTAMuon", "nTightFTAMuon",
+    #                          # "nLooseFTAElectron", "nMediumFTAElectron", "nTightFTAElectron",
+    #                          # "nLooseFTALepton", "nMediumFTALepton", "nTightFTALepton",
+    #                      ]
+    print("\n\nDisabled histo templates except HT!!!!!\n\n")
+    combineHistoTemplate = ["HT{bpf}",]
     if bTagger.lower() == "deepjet":
         combineHistoTemplate += ["nLooseDeepJetB{bpf}", "nMediumDeepJetB{bpf}", "nTightDeepJetB{bpf}",]
     elif bTagger.lower() == "deepcsv":
