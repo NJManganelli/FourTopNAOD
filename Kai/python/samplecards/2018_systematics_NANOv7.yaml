@@ -1,0 +1,922 @@
+$NOMINAL:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_pt_nom
+  met_phi_var: MET_phi_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  systematicSet:
+  - nominal
+jec_13TeV_R2017Up:
+  jet_mask: jet_mask_jec_13TeV_R2017Up
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_jesTotalUp
+  jet_mass_var: Jet_mass_jesTotalUp
+  met_pt_var: MET_pt_jesTotalUp
+  met_phi_var: MET_phi_jesTotalUp
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  systematicSet:
+  - jerc
+  notes: Corresponds to jec_13TeV_R2017Up most likely...
+jec_13TeV_R2017Down:
+  jet_mask: jet_mask_jec_13TeV_R2017Down
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_jesTotalDown
+  jet_mass_var: Jet_mass_jesTotalDown
+  met_pt_var: MET_pt_jesTotalDown
+  met_phi_var: MET_phi_jesTotalDown
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  systematicSet:
+  - jerc
+  notes: Corresponds to jec_13TeV_R2017Down most likely...
+pileupUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - pu
+pileupDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - pu
+prefireUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - pf
+prefireDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - pf
+jer_13TeV_R2017Up:
+  jet_mask: jet_mask_jer_13TeV_R2017Up
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_jerUp
+  jet_mass_var: Jet_mass_jerUp
+  met_pt_var: MET_pt_jerUp
+  met_phi_var: MET_phi_jerUp
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  systematicSet:
+  - jerc
+jer_13TeV_R2017Down:
+  jet_mask: jet_mask_jer_13TeV_R2017Down
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_jerDown
+  jet_mass_var: Jet_mass_jerDown
+  met_pt_var: MET_pt_jerDown
+  met_phi_var: MET_phi_jerDown
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  systematicSet:
+  - jerc
+btagSF_shape_hfUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_hf
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_hf
+    DeepJet: Jet_btagSF_deepjet_shape_up_hf
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+btagSF_shape_hfDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_hf
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_hf
+    DeepJet: Jet_btagSF_deepjet_shape_down_hf
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+btagSF_shape_hfstats1Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_hfstats1
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_hfstats1
+    DeepJet: Jet_btagSF_deepjet_shape_up_hfstats1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+btagSF_shape_hfstats1Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_hfstats1
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_hfstats1
+    DeepJet: Jet_btagSF_deepjet_shape_down_hfstats1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+btagSF_shape_hfstats2Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_hfstats2
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_hfstats2
+    DeepJet: Jet_btagSF_deepjet_shape_up_hfstats2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+btagSF_shape_hfstats2Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_hfstats2
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_hfstats2
+    DeepJet: Jet_btagSF_deepjet_shape_down_hfstats2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+btagSF_shape_cferr1Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_cferr1
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_cferr1
+    DeepJet: Jet_btagSF_deepjet_shape_up_cferr1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_other
+btagSF_shape_cferr1Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_cferr1
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_cferr1
+    DeepJet: Jet_btagSF_deepjet_shape_down_cferr1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_other
+btagSF_shape_cferr2Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_cferr2
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_cferr2
+    DeepJet: Jet_btagSF_deepjet_shape_up_cferr2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_other
+btagSF_shape_cferr2Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_cferr2
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_cferr2
+    DeepJet: Jet_btagSF_deepjet_shape_down_cferr2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_other
+btagSF_shape_lfUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_lf
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_lf
+    DeepJet: Jet_btagSF_deepjet_shape_up_lf
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+btagSF_shape_lfDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_lf
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_lf
+    DeepJet: Jet_btagSF_deepjet_shape_down_lf
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+btagSF_shape_lfstats1Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_lfstats1
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_lfstats1
+    DeepJet: Jet_btagSF_deepjet_shape_up_lfstats1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+btagSF_shape_lfstats1Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_lfstats1
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_lfstats1
+    DeepJet: Jet_btagSF_deepjet_shape_down_lfstats1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+btagSF_shape_lfstats2Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_lfstats2
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_lfstats2
+    DeepJet: Jet_btagSF_deepjet_shape_up_lfstats2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+btagSF_shape_lfstats2Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_lfstats2
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_lfstats2
+    DeepJet: Jet_btagSF_deepjet_shape_down_lfstats2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+btagSF_shape_jesUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_jes
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_jes
+    DeepJet: Jet_btagSF_deepjet_shape_up_jes
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_other
+btagSF_shape_jesDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_jes
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_jes
+    DeepJet: Jet_btagSF_deepjet_shape_down_jes
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_other
+ISRDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_pt_nom
+  met_phi_var: MET_phi_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - ps
+  sampleRemapping:
+    ewkISRDown:
+    - DYJets_DL
+    ttISRDown:
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    ttultrarareISRDown:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    ttVJetsISRDown:
+    - ttWJets
+    - ttZJets
+    ttHISRDown:
+    - ttH
+    singletopISRDown:
+    - ST_tW
+    - ST_tbarW
+    ttttISRDown:
+    - tttt
+ISRUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_pt_nom
+  met_phi_var: MET_phi_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - ps
+  sampleRemapping:
+    ewkISRUp:
+    - DYJets_DL
+    ttISRUp:
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    ttultrarareISRUp:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    ttVJetsISRUp:
+    - ttWJets
+    - ttZJets
+    ttHISRUp:
+    - ttH
+    singletopISRUp:
+    - ST_tW
+    - ST_tbarW
+    ttttISRUp:
+    - tttt
+FSRDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_pt_nom
+  met_phi_var: MET_phi_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - ps
+  sampleRemapping:
+    ewkFSRDown:
+    - DYJets_DL
+    ttFSRDown:
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    ttultrarareFSRDown:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    ttVJetsFSRDown:
+    - ttWJets
+    - ttZJets
+    ttHFSRDown:
+    - ttH
+    singletopFSRDown:
+    - ST_tW
+    - ST_tbarW
+    ttttFSRDown:
+    - tttt
+FSRUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_pt_nom
+  met_phi_var: MET_phi_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - ps
+  sampleRemapping:
+    ewkFSRUp:
+    - DYJets_DL
+    ttFSRUp:
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    ttultrarareFSRUp:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    ttVJetsFSRUp:
+    - ttWJets
+    - ttZJets
+    ttHFSRUp:
+    - ttH
+    singletopFSRUp:
+    - ST_tW
+    - ST_tbarW
+    ttttFSRUp:
+    - tttt
+muFNomRDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_pt_nom
+  met_phi_var: MET_phi_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - rf
+  sampleRemapping:
+    ewkmuFNomRDown:
+    - DYJets_DL
+    ttmuFNomRDown:
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    ttultrararemuFNomRDown:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    ttVJetsmuFNomRDown:
+    - ttWJets
+    - ttZJets
+    ttHmuFNomRDown:
+    - ttH
+    singletopmuFNomRDown:
+    - ST_tW
+    - ST_tbarW
+    ttttmuFNomRDown:
+    - tttt
+muFNomRUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_pt_nom
+  met_phi_var: MET_phi_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - rf
+  sampleRemapping:
+    ewkmuFNomRUp:
+    - DYJets_DL
+    ttmuFNomRUp:
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    ttultrararemuFNomRUp:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    ttVJetsmuFNomRUp:
+    - ttWJets
+    - ttZJets
+    ttHmuFNomRUp:
+    - ttH
+    singletopmuFNomRUp:
+    - ST_tW
+    - ST_tbarW
+    ttttmuFNomRUp:
+    - tttt
+muRNomFDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_pt_nom
+  met_phi_var: MET_phi_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - rf
+  sampleRemapping:
+    ewkmuRNomFDown:
+    - DYJets_DL
+    ttmuRNomFDown:
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    ttultrararemuRNomFDown:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    ttVJetsmuRNomFDown:
+    - ttWJets
+    - ttZJets
+    ttHmuRNomFDown:
+    - ttH
+    singletopmuRNomFDown:
+    - ST_tW
+    - ST_tbarW
+    ttttmuRNomFDown:
+    - tttt
+muRNomFUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_pt_nom
+  met_phi_var: MET_phi_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - rf
+  sampleRemapping:
+    ewkmuRNomFUp:
+    - DYJets_DL
+    ttmuRNomFUp:
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    ttultrararemuRNomFUp:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    ttVJetsmuRNomFUp:
+    - ttWJets
+    - ttZJets
+    ttHmuRNomFUp:
+    - ttH
+    singletopmuRNomFUp:
+    - ST_tW
+    - ST_tbarW
+    ttttmuRNomFUp:
+    - tttt
+muRFcorrelatedUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_pt_nom
+  met_phi_var: MET_phi_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - rf
+  sampleRemapping:
+    ewkmuRFcorrelatedUp:
+    - DYJets_DL
+    ttmuRFcorrelatedUp:
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    ttultrararemuRFcorrelatedUp:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    ttVJetsmuRFcorrelatedUp:
+    - ttWJets
+    - ttZJets
+    ttHmuRFcorrelatedUp:
+    - ttH
+    singletopmuRFcorrelatedUp:
+    - ST_tW
+    - ST_tbarW
+    ttttmuRFcorrelatedUp:
+    - tttt
+muRFcorrelatedDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_pt_nom
+  met_phi_var: MET_phi_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - rf
+  sampleRemapping:
+    ewkmuRFcorrelatedDown:
+    - DYJets_DL
+    ttmuRFcorrelatedDown:
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    ttultrararemuRFcorrelatedDown:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    ttVJetsmuRFcorrelatedDown:
+    - ttWJets
+    - ttZJets
+    ttHmuRFcorrelatedDown:
+    - ttH
+    singletopmuRFcorrelatedDown:
+    - ST_tW
+    - ST_tbarW
+    ttttmuRFcorrelatedDown:
+    - tttt
