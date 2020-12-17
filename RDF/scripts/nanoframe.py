@@ -98,12 +98,14 @@ for fnumber, fn in enumerate(fileList):
     print("output {}: {}".format(fnumber, foName))
     rdf = ROOT.ROOT.RDataFrame("Events", fn)
     rdfFinal = rdf #Placeholder
-    for define in args.defines:
-        var, defn = define.split("::")
-        rdfFinal = rdfFinal.Define(var, defn)
-    for cut in args.filters:
-        name, defn = cut.split("::")
-        rdfFinal = rdfFinal.Filter(defn, name)
+    if args.defines is not None:
+        for define in args.defines:
+            var, defn = define.split("::")
+            rdfFinal = rdfFinal.Define(var, defn)
+    if args.filters is not None:
+        for cut in args.filters:
+            name, defn = cut.split("::")
+            rdfFinal = rdfFinal.Filter(defn, name)
     columnList = [str(c) for c in rdf.GetColumnNames() if str(c) in args.keep] if args.keep is not None else None
     if args.write:
         snaphandle = bookSnapshot(rdfFinal, foName, columnList, lazy=True, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=9, splitLevel=99, debug=False)
