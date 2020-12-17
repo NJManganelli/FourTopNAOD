@@ -6926,7 +6926,8 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
          printBookkeeping=False, triggers=[], includeSampleNames=None, 
          useDeltaR=False, jetPtMin=30.0, jetPUId=None, 
          excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True,
-         testVariables=False, systematicSet="All", nThreads=8
+         testVariables=False, systematicSet="All", nThreads=8,
+         redirector=None
      ):
 
     ##################################################
@@ -7269,7 +7270,9 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
             if os.path.isfile(sampleOutFile):
                 fileList = getFiles(query="list:{}".format(sampleOutFile), outFileName=None)
             else:
-                if "/eos/" in vals["source"][source_level]:
+                if isinstance(redirector, str):
+                    redir = redirector
+                elif "/eos/" in vals["source"][source_level]:
                     redir="root://eosuser.cern.ch/".format(str(pwd.getpwuid(os.getuid()).pw_name)[0])
                 else:
                     redir="root://cms-xrd-global.cern.ch/"
@@ -7838,8 +7841,8 @@ if __name__ == '__main__':
                         help='path and name of the systematics card(s) to be used')
     # parser.add_argument('--filter', dest='filter', action='store', type=str, default=None,
     #                     help='string to filter samples while checking events or generating configurations')
-    # parser.add_argument('--redir', dest='redir', action='append', type=str, default='root://cms-xrd-global.cern.ch/',
-    #                     help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
+    parser.add_argument('--redirector', dest='redir', action='append', type=str, default='root://cms-xrd-global.cern.ch/',
+                        help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
     parser.add_argument('--era', dest='era', action='store', type=str, default="2017", choices=['2016', '2017', '2018'],
                         help='simulation/run year')
     parser.add_argument('--nThreads', dest='nThreads', action='store', type=int, default=8, #nargs='?', const=0.4,
@@ -7923,7 +7926,7 @@ if __name__ == '__main__':
         # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
         packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
-                      printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads)
+                      printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
         #      verbose=False)
         # packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, 
@@ -7967,20 +7970,20 @@ if __name__ == '__main__':
                       BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, 
                       useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, inputSamples, source, "BOOKKEEPING", bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
     elif stage == 'fill-histograms':
         #filling ntuples is also possible with the option --doNtuples
         packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
@@ -7989,7 +7992,7 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
     elif stage == 'fill-combine':
         #filling ntuples is also possible with the option --doNtuples
         packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
@@ -7998,7 +8001,7 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
     elif stage == 'hadd-histograms' or stage == 'hadd-combine':
         print("Combining root files for plotting")
         if stage == 'hadd-histograms':
@@ -8028,6 +8031,6 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, 
-                      quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads)
+                      quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
     else:
         print("stage {stag} is not yet prepared, please update the FTAnalyzer".format(stag))
