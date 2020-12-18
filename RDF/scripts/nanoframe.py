@@ -1,3 +1,4 @@
+import os
 import argparse
 from FourTopNAOD.RDF.tools.toolbox import getFiles
 import ROOT
@@ -61,15 +62,19 @@ parser.add_argument('--input', dest='input', action='store', type=str, required=
 parser.add_argument('--nThreads', dest='nThreads', action='store', type=int, default=1, #nargs='?', const=0.4,
                     help='number of threads for implicit multithreading (0 or 1 to disable)')
 parser.add_argument('--define', dest='defines', action='append', type=str, #nargs='*'
-                    help='list of new variables with syntax variable_name::variable_definition, where both are valid C++ variable names and code, respectively')
+                    help='list of new variables with syntax variable_name>==>variable_definition, where both are valid C++ variable names and code, respectively')
 parser.add_argument('--filter', dest='filters', action='append', type=str, #nargs='*', 
-                    help='list of filters with syntax filter_name::filter_cut, where the former is any text and the latter is valid C++ code')
+                    help='list of filters with syntax filter_name>==>filter_cut, where the former is any text and the latter is valid C++ code')
 parser.add_argument('--keep', dest='keep', action='store', nargs='*', type=str, default=None,
                     help='list of branch names to keep in output files, does not accept wildcards')
 parser.add_argument('--postfix', dest='postfix', action='store', type=str, default="_Skim",
                     help='name to append to root filenames')
 parser.add_argument('--write', dest='write', action='store_true',
                     help='Write output files')
+parser.add_argument('--redirector', dest='redir', action='store', type=str, nargs='?', default=None, const='root://cms-xrd-global.cern.ch/',
+                    help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
+parser.add_argument('--outdir', dest='outdir', action='store', type=str, default='skims/',
+                    help='directory to place output in')
 # parser.add_argument('--merge', dest='merge', action='store_true',
 #                     help='Merge output files immediately on input, which may be susceptible to problems if requested branches do not align')
 # parser.add_argument('--haddnano', dest='haddnano', action='store_true',
@@ -84,31 +89,45 @@ print(args.input)
 print("filters/cuts: ", args.filters)
 print("defines: ", args.defines)
 if args.input.startswith("dbs:") or args.input.startswith("glob:") or args.input.startswith("list:"):
-    fileList = getFiles(query=args.input, outFileName=None)
+    fileList = getFiles(query=args.input, redir=args.redir, outFileName=None)
 else:
     fileList = [args.input]
 print("inputs: ", fileList)
+print("output directory: ", args.outdir)
+if args.write and not os.path.isdir(args.outdir):
+    os.makedirs(args.outdir)
+
 print("nThreads: ", args.nThreads)
 print("keep list: ", args.keep)
 print("postfix: ", args.postfix)
 
+tchains = {}
+rdf_bases = {}
+rdf_finals = {}
 handles = []
 for fnumber, fn in enumerate(fileList):
-    foName = fn.replace(".root", args.postfix + ".root")
+    foName = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
     print("output {}: {}".format(fnumber, foName))
-    rdf = ROOT.ROOT.RDataFrame("Events", fn)
-    rdfFinal = rdf #Placeholder
+    tchains[fn] = ROOT.TChain("Events")
+    # tcmeta = ROOT.TChain("Runs")
+    tchains[fn].Add(str(fn))
+    rdf_bases[fn] = ROOT.ROOT.RDataFrame(tchains[fn])
+    # if checkMeta:
+    #     tcmeta.Add(str(vfe))
+    # rdf = ROOT.ROOT.RDataFrame("Events", fn)
+    rdfFinal = rdf_bases[fn] #Placeholder
     if args.defines is not None:
         for define in args.defines:
-            var, defn = define.split("::")
+            var, defn = define.split(">==>")
             rdfFinal = rdfFinal.Define(var, defn)
     if args.filters is not None:
         for cut in args.filters:
-            name, defn = cut.split("::")
+            name, defn = cut.split(">==>")
             rdfFinal = rdfFinal.Filter(defn, name)
-    columnList = [str(c) for c in rdf.GetColumnNames() if str(c) in args.keep] if args.keep is not None else None
+    rdf_finals[fn] = rdfFinal
+    columnList = [str(c) for c in rdf_finals[fn].GetColumnNames() if str(c) in args.keep] if args.keep is not None else None
     if args.write:
-        snaphandle = bookSnapshot(rdfFinal, foName, columnList, lazy=True, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=9, splitLevel=99, debug=False)
+        snaphandle = bookSnapshot(rdf_finals[fn], foName, columnList, lazy=True, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=9, splitLevel=99, debug=False)
         # booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(), 
         #                                   2000, int(metainfo[name]["totalEvents"]))
         handles.append(snaphandle)
@@ -117,8 +136,10 @@ results = list(map(getResults, handles))
 print("results length: ", len(results))
 print("results: ", results)
 
+rdf_finals = {}; rdf_bases = {}; tchains = {} #Release pointers to objects, permit GC?
+
 for fn in fileList:
-    foName = fn.replace(".root", args.postfix + ".root")
+    foName = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
     if args.write:
         #Handle the rest of the trees
         fi = ROOT.TFile.Open(fn, "read")
