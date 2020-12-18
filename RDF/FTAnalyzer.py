@@ -40,6 +40,12 @@ ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way
 print("FIXME: Hardcoded FTFunctions.cpp path, needs fixin'...")
 ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
 print("To compile the loaded file, append a '+' to the '.L <file_name>+' line")
+# David Ren-Hwa Yu
+# 22:43
+# In older versions of ROOT, I vaguely remember that you had to load the header files for the libraries, like 
+
+# gInterpreter.Declare("#include \"MyTools/RootUtils/interface/HistogramManager.h\"")
+# gSystem.Load(os.path.expandvars("$CMSSW_BASE/lib/$SCRAM_ARCH/libMyToolsRootUtils.so"))
 # ROOT.gROOT.ProcessLine(".L FTFunctions.cpp+")
 ROOT.gInterpreter.Declare("""
     const UInt_t barWidth = 60;
@@ -7183,6 +7189,8 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
         ################################################################################
         #### Setup all correctors e.g. LeptonSFs and BTaggingYields Renormalization ####
         ################################################################################
+        globalisUL = "non-UL"
+        globalVFP = "" #should be either preVFP or postVFP if era == "2016" and isUL = "UL"
         cppVerbosity = False
         ROOT.gInterpreter.Declare("std::vector<std::string> btagging_process_names;")
         btaggingProcessNames = getattr(ROOT, "btagging_process_names")
@@ -7226,8 +7234,8 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
         BTaggingYieldsTopPath = BTaggingYieldsFile.replace("BTaggingYields.root", "") if BTaggingYieldsFile is not None and channel not in ["BOOKKEEPING"] else "" #Trigger the null set of correctors for btagging if there's no yields file we're pointing to...
         # BTaggingYieldsTopPath = ""
         correctorMap = ROOT.FTA.GetCorrectorMap(era, #2017 or 2018 or 2016, as string
-                                                "non-UL", #UL or non_UL
-                                                "", ##preVFP or postVFP if 2016
+                                                globalisUL, #UL or non_UL
+                                                globalVFP, ##preVFP or postVFP if 2016
                                                 "../Kai/python/data/leptonSF/Muon", "LooseID", "TightRelIso_MediumID",
                                                 "../Kai/python/data/leptonSF/Electron", "Loose", "UseEfficiency",
                                                 BTaggingYieldsTopPath,
@@ -7277,7 +7285,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                 elif "/eos/" in vals["source"][source_level]:
                     redir="root://eosuser.cern.ch/".format(str(pwd.getpwuid(os.getuid()).pw_name)[0])
                 else:
-                    redir="root://cms-xrd-global.cern.ch/"
+                    redir=""
                 # if "dbs:" in vals["source"][source_level]:
                 fileList = getFiles(query=vals["source"][source_level], redir=redir, outFileName=sampleOutFile)
                 # else:
@@ -7442,6 +7450,13 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                                               sysVariations=sysVariationsAll, 
                                               verbose=verbose,
                                               )
+                the_df[name][lvl] = ROOT.FTA.applyMETandPVFilters(ROOT.RDF.AsRNode(the_df[name][lvl]), 
+                                                                  vals["era"], 
+                                                                  globalisUL, 
+                                                                  globalVFP, 
+                                                                  vals["isData"], 
+                                                                  cppVerbosity
+                                                                  )
                 the_df[name][lvl] = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(the_df[name][lvl]), 
                                                          vals["era"], 
                                                          name, 
@@ -7465,7 +7480,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                     skipTestVariables = testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=[],
                                                                allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
                 #Use the cutPV and METFilters function to do cutflow on these requirements... this should be updated, still uses JetMETLogic bits... FIXME
-                the_df[name][lvl] = cutPVandMETFilters(the_df[name][lvl], lvl, isData=vals["isData"])
+                # the_df[name][lvl] = cutPVandMETFilters(the_df[name][lvl], lvl, isData=vals["isData"])
                 the_df[name][lvl] = defineJets(the_df[name][lvl],
                                                era=vals["era"],
                                                bTagger=bTagger,
@@ -7605,7 +7620,8 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                 Benchmark.Show("{}/{}".format(name, lvl))
                 subfinish[name][lvl] = time.perf_counter()
                 theTime = subfinish[name][lvl] - substart[name][lvl]
-    
+                print("The report...")
+                reports[name].Print()
                 if doCombineHistosOnly or doHistos or doBTaggingYields:
                     print("Writing outputs...")
                     processesOfInterest = []
@@ -7855,7 +7871,7 @@ if __name__ == '__main__':
                         help='path and name of the systematics card(s) to be used')
     # parser.add_argument('--filter', dest='filter', action='store', type=str, default=None,
     #                     help='string to filter samples while checking events or generating configurations')
-    parser.add_argument('--redirector', dest='redir', action='store', type=str, default='root://cms-xrd-global.cern.ch/',
+    parser.add_argument('--redirector', dest='redir', action='store', type=str, nargs='?', default=None, const='root://cms-xrd-global.cern.ch/',
                         help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
     parser.add_argument('--era', dest='era', action='store', type=str, default="2017", choices=['2016', '2017', '2018'],
                         help='simulation/run year')

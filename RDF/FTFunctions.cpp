@@ -691,6 +691,53 @@ namespace FTA{
   //     });
   //   return c;
   // }
+
+  ROOT::RDF::RNode applyMETandPVFilters(ROOT::RDF::RNode df, std::string era, std::string legacy, std::string VFP="", bool isData=true, bool verbose=false){
+    auto rdf = df;
+    //flags for MET filters
+    ROOT::Detail::RDF::ColumnNames_t flags = {};
+    // std::vector<ROOT::RDF::RInterface::ColumnNames_t> flags = {};
+    double minNDoF, maxAbsZ, maxRho;
+    std::vector<std::string> deprecated_flags = {"Flag_BadChargedCandidateFilter", "Flag_eeBadScFilter"};
+    if(legacy == "non-UL"){
+      if(era == "2016" || era == "2017" || era == "2018") flags.push_back("Flag_goodVertices");
+      if(era == "2016" || era == "2017" || era == "2018") flags.push_back("Flag_globalSuperTightHalo2016Filter");
+      if(era == "2016" || era == "2017" || era == "2018") flags.push_back("Flag_HBHENoiseFilter");
+      if(era == "2016" || era == "2017" || era == "2018") flags.push_back("Flag_HBHENoiseIsoFilter");
+      if(era == "2016" || era == "2017" || era == "2018") flags.push_back("Flag_EcalDeadCellTriggerPrimitiveFilter");
+      if(era == "2016" || era == "2017" || era == "2018") flags.push_back("Flag_BadPFMuonFilter");
+      if(                 era == "2017" || era == "2018") flags.push_back("Flag_ecalBadCalibFilterV2");
+      if(era == "2016" || era == "2017" || era == "2018") minNDoF = 4;
+      if(era == "2016" || era == "2017" || era == "2018") maxAbsZ = 24.0;
+      if(era == "2016" || era == "2017" || era == "2018") maxRho = 2;
+      
+    }
+    else if(legacy == "UL"){
+      std::cout << "Recommendations were still under review for MET Filters on Ultra-Legacy datasets. Please check current recommendations. Check for differences in preVFP and postVFP" << std::endl;
+      if(era == "2016" || era == "2017" || era == "2018") flags.push_back("Flag_goodVertices");
+      if(era == "2016" || era == "2017" || era == "2018") flags.push_back("Flag_globalSuperTightHalo2016Filter");
+      if(era == "2016" || era == "2017" || era == "2018") flags.push_back("Flag_HBHENoiseFilter");
+      if(era == "2016" || era == "2017" || era == "2018") flags.push_back("Flag_HBHENoiseIsoFilter");
+      if(era == "2016" || era == "2017" || era == "2018") flags.push_back("Flag_EcalDeadCellTriggerPrimitiveFilter");
+      if(era == "2016" || era == "2017" || era == "2018") flags.push_back("Flag_BadPFMuonFilter");
+      if(                 era == "2017" || era == "2018") flags.push_back("Flag_ecalBadCalibFilterV2");
+      if(era == "2016" || era == "2017" || era == "2018") minNDoF = 4;
+      if(era == "2016" || era == "2017" || era == "2018") maxAbsZ = 24.0;
+      if(era == "2016" || era == "2017" || era == "2018") maxRho = 2;
+    }
+    auto checkFilter =   [](bool met_filter){return met_filter;};
+    auto lambdaMinNDoF = [minNDoF](float ndof){return ndof > minNDoF;};
+    auto lambdaMaxAbsZ = [maxAbsZ](float z){return abs(z) < maxAbsZ;};
+    auto lambdaMaxRho =  [maxRho](float x, float y){return sqrt(pow(x, 2) + pow(y, 2)) < maxRho;};
+    df = df
+      .Filter(lambdaMinNDoF, {"PV_ndof"}, "PV minimum d.o.f.")
+      .Filter(lambdaMaxAbsZ, {"PV_z"}, "PV maximum |z|")
+      .Filter(lambdaMaxRho, {"PV_x", "PV_y"}, "PV maximum rho");
+    for(int i = 0; i < flags.size(); ++i){
+      df = df.Filter(checkFilter, {flags.at(i)}, "MET filter " + flags.at(i));
+    }
+    return df;
+  }
   std::map< std::string, std::vector<std::string> > GetCorrectorMap(std::string era, 
 								    std::string legacy, 
 								    std::string VFP="",
@@ -1440,7 +1487,6 @@ namespace FTA{
       std::vector<std::string> arg_list = {};
 
       branch_and_key = cm_iter->first;
-
       //skip branches that are already defined
       Bool_t already_defined = false;
       for(int bi = 0; bi < branches.size(); ++bi){
@@ -1454,9 +1500,9 @@ namespace FTA{
       }
 
       //skip correctors that are not starting with Muon or Electron
-      if(std::strncmp(branch_and_key.c_str(), "Muon", 4) != 0 || std::strncmp(branch_and_key.c_str(), "Electron", 8) != 0){
+      if(std::strncmp(branch_and_key.c_str(), "Muon", 4) != 0 && std::strncmp(branch_and_key.c_str(), "Electron", 8) != 0){
 	if(verbose)
-	  std::cout << "AddLeptonSF() skipping non-Electron and non-Muon branch definitions" << std::endl;
+	  std::cout << "AddLeptonSF() skipping non-Electron and non-Muon branch definition for: " << branch_and_key << std::endl;
 	continue;
       }
 
