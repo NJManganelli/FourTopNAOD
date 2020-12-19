@@ -1331,6 +1331,7 @@
       NANOv6: dbs:/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER  instance=prod/phys03
+      NANOv7_bookkeeping: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2018/tt_DL/*Skim.root
     doFilter: true
     splitProcess:
       ID:
@@ -2183,6 +2184,7 @@
       NANOv6: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-b007c9995322e232a5f950905968126e/USER  instance=prod/phys03
+      NANOv7_bookkeeping: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2018/tt_DL-GF/*Skim.root
     Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
       the XS matches Brown's lower BR calculation
     doFilter: true
