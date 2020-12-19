@@ -5881,8 +5881,10 @@ def writeHistos(histDict, directory, samplesOfInterest="All", systematicsOfInter
             #Cute way to format the name as 'blah.root' or 'blah.nominal.ps.rf.root'
             if isinstance(systematicsOfInterest, str) and systematicsOfInterest.lower() == "all":
                 systematicsAndRoot = ["", "root"]
+            if isinstance(systematicsOfInterest, list) and len(systematicsOfInterest) == 1 and systematicsOfInterest[0].lower() == "all": #Handle case of passing the systematicsSet the option 'ALL'
+                systematicsAndRoot = ["", "root"]
             else:
-               systematicsAndRoot = [""] + systematicsOfInterest + ["root"]
+                systematicsAndRoot = [""] + systematicsOfInterest + ["root"]
             if not os.path.isdir(directory + "/" + channel):
                 os.makedirs(directory + "/" + channel)
             rootFileName = "{}{}".format(directory + "/" + channel + "/"+ name, ".".join(systematicsAndRoot))
@@ -6935,7 +6937,7 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
          useDeltaR=False, jetPtMin=30.0, jetPUId=None, 
          excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True,
          testVariables=False, systematicSet="All", nThreads=8,
-         redirector=None
+         redirector=None, doRDFReport=False
      ):
 
     ##################################################
@@ -7202,6 +7204,8 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
             vals = inputSampleCardYaml[name]
             if name not in valid_samples or vals["isData"]:
                 continue
+            elif vals["era"] != era:
+                print("\nSkipping sample with disparate era: {} in the sample, {} expected by analyzer.\n".format(vals["era"], era))
             else:
                 #Get all the potential split process names (in BTaggingYields() function era + "___" + subprocess is the 'processName', e.g. 2017___ttbb_DL-GF. Since the corrector map handles this era modifier already, we drop it here...
                 #What an inconsistent mess it all is.
@@ -7420,10 +7424,10 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                                                   isData = vals["isData"], 
                                                   era = vals["era"],
                                                   printInfo = True,
-                                                  fillDiagnosticHistos = False,
+                                                  fillDiagnosticHistos = True,
                                                   inputSampleCard=inputSampleCardYaml,
                     )
-                    print("\n\nDisabled fillDiagnosticHistos temporarily to test speedier baseline number crunching, to be re-enabled for plots...\n\n")
+                    # print("\n\nDisabled fillDiagnosticHistos temporarily to test speedier baseline number crunching, to be re-enabled for plots...\n\n")
                     #Trigger the loop
                     _ = booktrigger.GetValue()
                     print("Finished processing")
@@ -7620,8 +7624,10 @@ def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, 
                 Benchmark.Show("{}/{}".format(name, lvl))
                 subfinish[name][lvl] = time.perf_counter()
                 theTime = subfinish[name][lvl] - substart[name][lvl]
-                print("The report...")
-                reports[name].Print()
+                if doRDFReport:
+                    print("\nPrinting the report...")
+                    reports[name].Print()
+                    print("\n\n")
                 if doCombineHistosOnly or doHistos or doBTaggingYields:
                     print("Writing outputs...")
                     processesOfInterest = []
@@ -7877,6 +7883,8 @@ if __name__ == '__main__':
                         help='simulation/run year')
     parser.add_argument('--nThreads', dest='nThreads', action='store', type=int, default=8, #nargs='?', const=0.4,
                         help='number of threads for implicit multithreading (0 or 1 to disable)')
+    parser.add_argument('--report', dest='report', action='store_true',
+                        help='Toggle the RDataFrame Filter Report')
 
     #Parse the arguments
     args = parser.parse_args()
@@ -7956,7 +7964,7 @@ if __name__ == '__main__':
         # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
         packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
-                      printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
+                      printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
         #      verbose=False)
         # packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, 
@@ -8000,20 +8008,20 @@ if __name__ == '__main__':
                       BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, 
                       useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, inputSamples, source, "BOOKKEEPING", bTagger, sysVariationsAll, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
     elif stage == 'fill-histograms':
         #filling ntuples is also possible with the option --doNtuples
         packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
@@ -8022,7 +8030,7 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
     elif stage == 'fill-combine':
         #filling ntuples is also possible with the option --doNtuples
         packed = main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
@@ -8031,7 +8039,7 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
     elif stage == 'hadd-histograms' or stage == 'hadd-combine':
         print("Combining root files for plotting")
         if stage == 'hadd-histograms':
@@ -8061,6 +8069,6 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, 
-                      quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir)
+                      quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
     else:
         print("stage {stag} is not yet prepared, please update the FTAnalyzer".format(stag))
