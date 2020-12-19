@@ -5881,7 +5881,7 @@ def writeHistos(histDict, directory, samplesOfInterest="All", systematicsOfInter
             #Cute way to format the name as 'blah.root' or 'blah.nominal.ps.rf.root'
             if isinstance(systematicsOfInterest, str) and systematicsOfInterest.lower() == "all":
                 systematicsAndRoot = ["", "root"]
-            if isinstance(systematicsOfInterest, list) and len(systematicsOfInterest) == 1 and systematicsOfInterest[0].lower() == "all": #Handle case of passing the systematicsSet the option 'ALL'
+            elif isinstance(systematicsOfInterest, list) and len(systematicsOfInterest) == 1 and systematicsOfInterest[0].lower() == "all": #Handle case of passing the systematicsSet the option 'ALL'
                 systematicsAndRoot = ["", "root"]
             else:
                 systematicsAndRoot = [""] + systematicsOfInterest + ["root"]
