@@ -4109,7 +4109,8 @@
     source:
       NANOv6: dbs:/EGamma/Run2018A-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018A-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov: list:/eos/home-n/nmangane/analysis/LongTermFilelists/2018__NANOv7_CorrNov__ElEl_A.txt_corrected
+      NANOv7_CorrNov_brokenpublishing: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - ElEl_B:
     era: '2018'
     subera: B
@@ -4121,7 +4122,8 @@
     source:
       NANOv6: dbs:/EGamma/Run2018B-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018B-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov: list:/eos/home-n/nmangane/analysis/LongTermFilelists/2018__NANOv7_CorrNov__ElEl_B.txt_corrected
+      NANOv7_CorrNov_brokenpublishing: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - ElEl_C:
     era: '2018'
     subera: C
@@ -4133,7 +4135,8 @@
     source:
       NANOv6: dbs:/EGamma/Run2018C-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018C-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov: list:/eos/home-n/nmangane/analysis/LongTermFilelists/2018__NANOv7_CorrNov__ElEl_C.txt_corrected
+      NANOv7_CorrNov_brokenpublishing: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - ElEl_D:
     era: '2018'
     subera: D
@@ -4145,7 +4148,8 @@
     source:
       NANOv6: dbs:/EGamma/Run2018D-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018D-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov: list:/eos/home-n/nmangane/analysis/LongTermFilelists/2018__NANOv7_CorrNov__ElEl_D.txt_corrected
+      NANOv7_CorrNov_brokenpublishing: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - ElMu_A:
     era: '2018'
     subera: A
@@ -4157,7 +4161,8 @@
     source:
       NANOv6: dbs:/MuonEG/Run2018A-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/MuonEG/Run2018A-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/MuonEG/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov: list:/eos/home-n/nmangane/analysis/LongTermFilelists/2018__NANOv7_CorrNov__ElMu_A.txt_corrected
+      NANOv7_CorrNov_brokenpublishing: dbs:/MuonEG/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - ElMu_B:
     era: '2018'
     subera: B
@@ -4169,7 +4174,8 @@
     source:
       NANOv6: dbs:/MuonEG/Run2018B-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/MuonEG/Run2018B-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/MuonEG/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov: list:/eos/home-n/nmangane/analysis/LongTermFilelists/2018__NANOv7_CorrNov__ElMu_B.txt_corrected
+      NANOv7_CorrNov_brokenpublishing: dbs:/MuonEG/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - ElMu_C:
     era: '2018'
     subera: C
@@ -4181,7 +4187,8 @@
     source:
       NANOv6: dbs:/MuonEG/Run2018C-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/MuonEG/Run2018C-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/MuonEG/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov: list:/eos/home-n/nmangane/analysis/LongTermFilelists/2018__NANOv7_CorrNov__ElMu_C.txt_corrected
+      NANOv7_CorrNov_brokenpublishing: dbs:/MuonEG/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - ElMu_D:
     era: '2018'
     subera: D
@@ -4193,7 +4200,8 @@
     source:
       NANOv6: dbs:/MuonEG/Run2018D-Nano25Oct2019_ver2-v1/NANOAOD
       NANOv7: dbs:/MuonEG/Run2018D-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/MuonEG/nmangane-NoveCampaign-1ba100824a3ed69a9fd5c48668243bf1/USER  instance=prod/phys03
+      NANOv7_CorrNov: list:/eos/home-n/nmangane/analysis/LongTermFilelists/2018__NANOv7_CorrNov__ElMu_D.txt_corrected
+      NANOv7_CorrNov_brokenpublishing: dbs:/MuonEG/nmangane-NoveCampaign-1ba100824a3ed69a9fd5c48668243bf1/USER  instance=prod/phys03
 - El_A:
     era: '2018'
     subera: A
@@ -4206,7 +4214,7 @@
     source:
       NANOv6: dbs:/EGamma/Run2018A-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018A-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov_brokenpublishing: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - El_B:
     era: '2018'
     subera: B
@@ -4219,7 +4227,7 @@
     source:
       NANOv6: dbs:/EGamma/Run2018B-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018B-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov_brokenpublishing: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - El_C:
     era: '2018'
     subera: C
@@ -4232,7 +4240,7 @@
     source:
       NANOv6: dbs:/EGamma/Run2018C-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018C-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov_brokenpublishing: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - El_D:
     era: '2018'
     subera: D
@@ -4245,7 +4253,7 @@
     source:
       NANOv6: dbs:/EGamma/Run2018D-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/EGamma/Run2018D-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov_brokenpublishing: dbs:/EGamma/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - MuMu_A:
     era: '2018'
     subera: A
@@ -4257,7 +4265,8 @@
     source:
       NANOv6: dbs:/DoubleMuon/Run2018A-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/DoubleMuon/Run2018A-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/DoubleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov: list:/eos/home-n/nmangane/analysis/LongTermFilelists/2018__NANOv7_CorrNov__MuMu_A.txt_corrected
+      NANOv7_CorrNov_brokenpublishing: dbs:/DoubleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - MuMu_B:
     era: '2018'
     subera: B
@@ -4269,7 +4278,8 @@
     source:
       NANOv6: dbs:/DoubleMuon/Run2018B-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/DoubleMuon/Run2018B-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/DoubleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov: list:/eos/home-n/nmangane/analysis/LongTermFilelists/2018__NANOv7_CorrNov__MuMu_B.txt_corrected
+      NANOv7_CorrNov_brokenpublishing: dbs:/DoubleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - MuMu_C:
     era: '2018'
     subera: C
@@ -4281,7 +4291,8 @@
     source:
       NANOv6: dbs:/DoubleMuon/Run2018C-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/DoubleMuon/Run2018C-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/DoubleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov: list:/eos/home-n/nmangane/analysis/LongTermFilelists/2018__NANOv7_CorrNov__MuMu_C.txt_corrected
+      NANOv7_CorrNov_brokenpublishing: dbs:/DoubleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - MuMu_D:
     era: '2018'
     subera: D
@@ -4293,7 +4304,8 @@
     source:
       NANOv6: dbs:/DoubleMuon/Run2018D-Nano25Oct2019_ver2-v1/NANOAOD
       NANOv7: dbs:/DoubleMuon/Run2018D-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/DoubleMuon/nmangane-NoveCampaign-1ba100824a3ed69a9fd5c48668243bf1/USER  instance=prod/phys03
+      NANOv7_CorrNov: list:/eos/home-n/nmangane/analysis/LongTermFilelists/2018__NANOv7_CorrNov__MuMu_D.txt_corrected
+      NANOv7_CorrNov_brokenpublishing: dbs:/DoubleMuon/nmangane-NoveCampaign-1ba100824a3ed69a9fd5c48668243bf1/USER  instance=prod/phys03
 - Mu_A:
     era: '2018'
     subera: A
@@ -4306,7 +4318,7 @@
     source:
       NANOv6: dbs:/SingleMuon/Run2018A-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/SingleMuon/Run2018A-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/SingleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov_brokenpublishing: dbs:/SingleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - Mu_B:
     era: '2018'
     subera: B
@@ -4319,7 +4331,7 @@
     source:
       NANOv6: dbs:/SingleMuon/Run2018B-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/SingleMuon/Run2018B-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/SingleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov_brokenpublishing: dbs:/SingleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - Mu_C:
     era: '2018'
     subera: C
@@ -4332,7 +4344,7 @@
     source:
       NANOv6: dbs:/SingleMuon/Run2018C-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/SingleMuon/Run2018C-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/SingleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov_brokenpublishing: dbs:/SingleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
 - Mu_D:
     era: '2018'
     subera: D
@@ -4345,4 +4357,4 @@
     source:
       NANOv6: dbs:/SingleMuon/Run2018D-Nano25Oct2019-v1/NANOAOD
       NANOv7: dbs:/SingleMuon/Run2018D-02Apr2020-v1/NANOAOD
-      NANOv7_CorrNov: dbs:/SingleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
+      NANOv7_CorrNov_brokenpublishing: dbs:/SingleMuon/nmangane-NoveCampaign-bbf89cdf76a3c3d36b22aa33ba75d46e/USER  instance=prod/phys03
