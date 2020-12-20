@@ -6932,7 +6932,7 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
 def main(analysisDir, inputSamples, source, channel, bTagger, sysVariationsAll, doDiagnostics=False, 
          doNtuples=False, doHistos=False, doCombineHistosOnly=False,
          doLeptonSelection=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-         BTaggingYieldsAggregate=True, useHTOnly=False, useNJetOnly=False, 
+         BTaggingYieldsAggregate=False, useHTOnly=False, useNJetOnly=False, 
          printBookkeeping=False, triggers=[], includeSampleNames=None, 
          useDeltaR=False, jetPtMin=30.0, jetPUId=None, 
          excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True,

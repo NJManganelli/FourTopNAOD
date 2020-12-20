@@ -1441,7 +1441,7 @@ namespace FTA{
 	  if(btag_use_HT_only) btag_key += "1DX";
 	  if(btag_use_nJet_only) btag_key += "1DY";
 	  btag_key += "___" + syst_name;
-	  std::cout << "Btag key formed for process " << static_cast<std::string>(*incl_iter) << ": " << btag_key << std::endl;
+	  std::cout << "Btag key formed for inclusive process " << static_cast<std::string>(*incl_iter) << "(default to Aggregate): " << btag_key << std::endl;
 	  //the branch_postfix is based on whether a systematic variations is a scale variation/central (nominal, jes, jer...) or purely a weight variation (FSR, ISR, etc...). If the latter, the branch_postfix should default to the 'nominal'
 	  ret["btag___" + era + "___" + static_cast<std::string>(*incl_iter) + "___" + syst_name] = {btag_top_path + "BTaggingYields.root", 
 												     btag_key, 
