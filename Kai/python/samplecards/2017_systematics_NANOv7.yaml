@@ -348,12 +348,15 @@ ISRDown:
     ewkISRDown:
     - DYJets_DL
     ttISRDown:
+    - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    - ttbb_AH
     - ttbb_SL_fr
     - ttbb_SL_nr
+    - ttother_AH
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -407,12 +410,15 @@ ISRUp:
     ewkISRUp:
     - DYJets_DL
     ttISRUp:
+    - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    - ttbb_AH
     - ttbb_SL_fr
     - ttbb_SL_nr
+    - ttother_AH
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -466,12 +472,15 @@ FSRDown:
     ewkFSRDown:
     - DYJets_DL
     ttFSRDown:
+    - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    - ttbb_AH
     - ttbb_SL_fr
     - ttbb_SL_nr
+    - ttother_AH
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -525,12 +534,15 @@ FSRUp:
     ewkFSRUp:
     - DYJets_DL
     ttFSRUp:
+    - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    - ttbb_AH
     - ttbb_SL_fr
     - ttbb_SL_nr
+    - ttother_AH
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -584,12 +596,15 @@ muFNomRDown:
     ewkmuFNomRDown:
     - DYJets_DL
     ttmuFNomRDown:
+    - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    - ttbb_AH
     - ttbb_SL_fr
     - ttbb_SL_nr
+    - ttother_AH
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -643,12 +658,15 @@ muFNomRUp:
     ewkmuFNomRUp:
     - DYJets_DL
     ttmuFNomRUp:
+    - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    - ttbb_AH
     - ttbb_SL_fr
     - ttbb_SL_nr
+    - ttother_AH
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -702,12 +720,15 @@ muRNomFDown:
     ewkmuRNomFDown:
     - DYJets_DL
     ttmuRNomFDown:
+    - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    - ttbb_AH
     - ttbb_SL_fr
     - ttbb_SL_nr
+    - ttother_AH
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -761,12 +782,15 @@ muRNomFUp:
     ewkmuRNomFUp:
     - DYJets_DL
     ttmuRNomFUp:
+    - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    - ttbb_AH
     - ttbb_SL_fr
     - ttbb_SL_nr
+    - ttother_AH
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -820,12 +844,15 @@ muRFcorrelatedUp:
     ewkmuRFcorrelatedUp:
     - DYJets_DL
     ttmuRFcorrelatedUp:
+    - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    - ttbb_AH
     - ttbb_SL_fr
     - ttbb_SL_nr
+    - ttother_AH
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -879,12 +906,15 @@ muRFcorrelatedDown:
     ewkmuRFcorrelatedDown:
     - DYJets_DL
     ttmuRFcorrelatedDown:
+    - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    - ttbb_AH
     - ttbb_SL_fr
     - ttbb_SL_nr
+    - ttother_AH
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
