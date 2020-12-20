@@ -22,8 +22,8 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
     varsOfInterest = ["HTUnweighted"]
     erasOfInterest = [era]
     channelsOfInterest = [channel]
-    samplesOfInterest = ['ttbb_SL_nr', 'ttbb_SL_fr', 'ttbb_SL-GF_fr', 'ttbb_DL_nr', 'ttbb_DL_fr', 'ttbb_DL-GF_fr', 
-                         'ttother_SL_nr', 'ttother_SL_fr', 'ttother_SL-GF_fr', 'ttother_DL_nr', 'ttother_DL_fr', 'ttother_DL-GF_fr',]
+    samplesOfInterest = ['ttbb_SL_nr', 'ttbb_SL_fr', 'ttbb_SL-GF_fr', 'ttbb_DL_nr', 'ttbb_DL_fr', 'ttbb_DL-GF_fr', 'ttbb_AH'
+                         'ttother_SL_nr', 'ttother_SL_fr', 'ttother_SL-GF_fr', 'ttother_DL_nr', 'ttother_DL_fr', 'ttother_DL-GF_fr', 'ttother_AH']
     categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4', 'HT500_nMediumDeepJetB2_nJet5', 'HT500_nMediumDeepJetB2_nJet6',
                             'HT500_nMediumDeepJetB2_nJet7', 'HT500_nMediumDeepJetB2_nJet8+',
                             'HT500_nMediumDeepJetB3_nJet4', 'HT500_nMediumDeepJetB3_nJet5', 'HT500_nMediumDeepJetB3_nJet6',
@@ -84,7 +84,7 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
                     entryArray = np.zeros((len(systematics), nBinsX+2), dtype=np.int32)
                     # binningArray.append(0) #Can't rebin the overflow anyway... thanks ROOT
                     for nsyst, systematic in enumerate(systematics):
-                        for nbin in xrange(0, hists[systematic].GetNbinsX()+2): #Include underflow and overflow for bin numbering clarity                            
+                        for nbin in range(0, hists[systematic].GetNbinsX()+2): #Include underflow and overflow for bin numbering clarity                            
                             entryArray[nsyst, nbin] = hists[systematic].GetBinContent(nbin)
                     start = 1 #Don't include underflow
                     stop = start + 1 #Initialize so that we start with checking the singular bin
@@ -116,13 +116,13 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
                             print("Numpy Entry Array: {}".format(entryArray))
                     rebinningEdges = []
                     for binNumber in binningArray:
-                        rebinningEdges.append(hists.values()[0].GetBinLowEdge(binNumber))
+                        rebinningEdges.append(list(hists.values())[0].GetBinLowEdge(binNumber))
                     edgesArray = array.array('d', rebinningEdges)
                     for systematic in systematics:
                         rebinnedHists[systematic] = hists[systematic].Rebin(len(edgesArray)-1, hists[systematic].GetName() + "_rebin", edgesArray)
-                        # for binNumber in xrange(1, rebinnedHists[systematic].GetNbinsX()+1):
+                        # for binNumber in range(1, rebinnedHists[systematic].GetNbinsX()+1):
                         #     assert rebinnedHists[systematic].GetBinError(binNumber)/rebinnedHists[systematic].GetBinContent(binNumber) <= relUncertainty, "Rebinning not below threshold in the rebinned hist for '{}' systematic, bin {}, range {} - {}".format(systematic, binNumber, rebinnedHists[systematic].GetBinLowEdge(binNumber), rebinnedHists[systematic].GetBinLowEdge(binNumber) + rebinnedHists[systematic].GetBinWidth(binNumber))
-                print(rebinningEdges)
+                print('        "Rebin":', rebinningEdges, ',')
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Determine binning automatically for categorized histograms using a particular subset of processes')
     parser.add_argument('stage', action='store', type=str, choices=['determine-binning'],
