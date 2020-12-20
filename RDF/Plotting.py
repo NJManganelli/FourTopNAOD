@@ -2001,7 +2001,10 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
     fileDict = {}
     for fn in fileList:
         if fn == "NON-STRING FILES VALUE": continue
-        fileDict["{}/{}".format(histogramDirectory, fn)] = ROOT.TFile.Open("{}/{}".format(histogramDirectory, fn), "read")
+        fileToBeOpened = "{}/{}".format(histogramDirectory, fn)
+        if not os.path.isfile(fileToBeOpened):
+            raise RuntimeError("File does not exist: {}".format(fileToBeOpened))
+        fileDict[fileToBeOpened] = ROOT.TFile.Open(fileToBeOpened, "read")
     defaults = dict([(i, j) for i, j in inputJSON.items() if j.get("Type") in ["DefaultPlot", "DefaultCanvas", "DefaultLegend"]])
 
     #Save histograms for Combine
@@ -2212,8 +2215,11 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                         print("*", end="")
                     else:
                         print("* Done")
-                    if skipSystematics is not None and syst in skipSystematics: 
-                        continue
+                    if skipSystematics is not None:
+                        if "all" in skipSystematics or "All" in skipSystematics or "ALL" in skipSystematics:
+                            continue
+                        if syst in skipSystematics: 
+                            continue
                     sD[syst] = nSyst
                     CanCache["subplots/supercategories/systematics"][syst].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, 
                                 nice_name,
