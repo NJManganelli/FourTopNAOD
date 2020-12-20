@@ -4,7 +4,6 @@ import ROOT
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor 
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
-from PhysicsTools.NanoAODTools.postprocessing.modules.common.lepSplitSFProducer import *
 from FourTopNAOD.Kai.tools.toolbox import *
 import collections, copy, json, math
 from array import array
