@@ -2325,7 +2325,9 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             #if len(CanCache["subplots/supercategories"][-1]["Categories/hists"]) == 0:
             #    continue
             CanCache["canvas/upperPads"][pn].cd()
-            
+            if doLogY:
+                CanCache["canvas/upperPads"][pn].SetLogy()
+
             if verbose:
                 print("Unfound histograms(including fallbacks):")
                 pprint.pprint(CanCache["subplots/supercategories"][pn]["Categories/theUnfound"])
@@ -2432,8 +2434,6 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             else:
                 scaleText = 2.0
                 offsetText = 0
-            if doLogY:
-                CanCache["canvas/upperPads"][pn].SetLogy()
                 
             #Create the subpad label, to be drawn. Text stored in CanCache["sublabels"] which should be a list, possibly a list of tuples in the future
             CanCache["subplots/labels"].append(ROOT.TLatex())
@@ -2552,7 +2552,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 drawPoint += padWidth
             #Modify the vertical axes now that we have the first drawn object, and each maximum and minima.
         if doLogY:
-            canvasMin = min(CanCache["subplots/minima"] + [10e-3])
+            canvasMin = max(min(CanCache["subplots/minima"]), 10e-4)
+            print("setting mimimum to: " + str(canvasMin))
         else:
             canvasMin = min(CanCache["subplots/minima"])
         if useCanvasMax:
