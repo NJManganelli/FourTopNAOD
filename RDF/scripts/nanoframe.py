@@ -61,6 +61,8 @@ parser.add_argument('--input', dest='input', action='store', type=str, required=
                     help='input path, in the form accepted by getFiles method')
 parser.add_argument('--nThreads', dest='nThreads', action='store', type=int, default=1, #nargs='?', const=0.4,
                     help='number of threads for implicit multithreading (0 or 1 to disable)')
+parser.add_argument('--threadsPerGraph', dest='threadsPerGraph', action='store', type=int, default=1, #nargs='?', const=0.4,
+                    help='approximate number of threads per file (simultaneously process nThreads/threadsPerGraph files)')
 parser.add_argument('--define', dest='defines', action='append', type=str, #nargs='*'
                     help='list of new variables with syntax variable_name>==>variable_definition, where both are valid C++ variable names and code, respectively')
 parser.add_argument('--filter', dest='filters', action='append', type=str, #nargs='*', 
@@ -98,6 +100,8 @@ if args.write and not os.path.isdir(args.outdir):
     os.makedirs(args.outdir)
 
 print("nThreads: ", args.nThreads)
+print("threadsPerGraph: ", args.threadsPerGraph)
+assert int(args.nThreads/args.threadsPerGraph) >= 1, "nThreads/threadsPerGraph must be >= 1"
 print("keep list: ", args.keep)
 print("postfix: ", args.postfix)
 
@@ -105,36 +109,40 @@ tchains = {}
 rdf_bases = {}
 rdf_finals = {}
 handles = []
-for fnumber, fn in enumerate(fileList):
-    foName = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
-    print("output {}: {}".format(fnumber, foName))
-    tchains[fn] = ROOT.TChain("Events")
-    # tcmeta = ROOT.TChain("Runs")
-    tchains[fn].Add(str(fn))
-    rdf_bases[fn] = ROOT.ROOT.RDataFrame(tchains[fn])
-    # if checkMeta:
-    #     tcmeta.Add(str(vfe))
-    # rdf = ROOT.ROOT.RDataFrame("Events", fn)
-    rdfFinal = rdf_bases[fn] #Placeholder
-    if args.defines is not None:
-        for define in args.defines:
-            var, defn = define.split(">==>")
-            rdfFinal = rdfFinal.Define(var, defn)
-    if args.filters is not None:
-        for cut in args.filters:
-            name, defn = cut.split(">==>")
-            rdfFinal = rdfFinal.Filter(defn, name)
-    rdf_finals[fn] = rdfFinal
-    columnList = [str(c) for c in rdf_finals[fn].GetColumnNames() if str(c) in args.keep] if args.keep is not None else None
-    if args.write:
-        snaphandle = bookSnapshot(rdf_finals[fn], foName, columnList, lazy=True, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=9, splitLevel=99, debug=False)
-        # booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(), 
-        #                                   2000, int(metainfo[name]["totalEvents"]))
-        handles.append(snaphandle)
-
-results = list(map(getResults, handles))
-print("results length: ", len(results))
-print("results: ", results)
+results = []
+simultaneousGraphs = int(args.nThreads/args.threadsPerGraph)
+print("Processing {} files per batch".format(simultaneousGraphs))
+for x in range(0, len(fileList), simultaneousGraphs):
+    for fnumber, fn in enumerate(fileList[x:min(simultaneousGraphs, len(fileList))]):
+        fnumber += x
+        foName = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
+        print("output {}: {}".format(fnumber, foName))
+        tchains[fn] = ROOT.TChain("Events")
+        # tcmeta = ROOT.TChain("Runs")
+        tchains[fn].Add(str(fn))
+        rdf_bases[fn] = ROOT.ROOT.RDataFrame(tchains[fn])
+        # if checkMeta:
+        #     tcmeta.Add(str(vfe))
+        # rdf = ROOT.ROOT.RDataFrame("Events", fn)
+        rdfFinal = rdf_bases[fn] #Placeholder
+        if args.defines is not None:
+            for define in args.defines:
+                var, defn = define.split(">==>")
+                rdfFinal = rdfFinal.Define(var, defn)
+        if args.filters is not None:
+            for cut in args.filters:
+                name, defn = cut.split(">==>")
+                rdfFinal = rdfFinal.Filter(defn, name)
+        rdf_finals[fn] = rdfFinal
+        columnList = [str(c) for c in rdf_finals[fn].GetColumnNames() if str(c) in args.keep] if args.keep is not None else None
+        if args.write:
+            snaphandle = bookSnapshot(rdf_finals[fn], foName, columnList, lazy=True, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=9, splitLevel=99, debug=False)
+            # booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(), 
+            #                                   2000, int(metainfo[name]["totalEvents"]))
+            handles.append(snaphandle)
+    print("Writing results for files {} to {}".format(x, x+simultaneousGraphs))
+    results += list(map(getResults, handles[x:min(simultaneousGraphs, len(fileList))]))
+# results = list(map(getResults, handles))
 
 rdf_finals = {}; rdf_bases = {}; tchains = {} #Release pointers to objects, permit GC?
 
