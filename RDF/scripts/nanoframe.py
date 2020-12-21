@@ -4,29 +4,29 @@ from FourTopNAOD.RDF.tools.toolbox import getFiles
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
-# ROOT.gInterpreter.Declare("""
-#     const UInt_t barWidth = 60;
-#     ULong64_t processed = 0, totalEvents = 0;
-#     std::string progressBar;
-#     std::mutex barMutex; 
-#     auto registerEvents = [](ULong64_t nIncrement) {totalEvents += nIncrement;};
+ROOT.gInterpreter.Declare("""
+    const UInt_t barWidth = 60;
+    ULong64_t processed = 0, totalEvents = 0;
+    std::string progressBar;
+    std::mutex barMutex; 
+    auto registerEvents = [](ULong64_t nIncrement) {totalEvents += nIncrement;};
 
-#     ROOT::RDF::RResultPtr<ULong64_t> AddProgressBar(ROOT::RDF::RNode df, int everyN=10000, int totalN=100000) {
-#         registerEvents(totalN);
-#         auto c = df.Count();
-#         c.OnPartialResultSlot(everyN, [everyN] (unsigned int slot, ULong64_t &cnt){
-#             std::lock_guard<std::mutex> l(barMutex);
-#             processed += everyN; //everyN captured by value for this lambda
-#             progressBar = "[";
-#             for(UInt_t i = 0; i < static_cast<UInt_t>(static_cast<Float_t>(processed)/totalEvents*barWidth); ++i){
-#                 progressBar.push_back('|');
-#             }
-#             // escape the '\' when defined in python string
-#             std::cout << "\\r" << std::left << std::setw(barWidth) << progressBar << "] " << processed << "/" << totalEvents << std::flush;
-#         });
-#         return c;
-#     }
-# """)
+    ROOT::RDF::RResultPtr<ULong64_t> AddProgressBar(ROOT::RDF::RNode df, int everyN=10000, int totalN=100000) {
+        registerEvents(totalN);
+        auto c = df.Count();
+        c.OnPartialResultSlot(everyN, [everyN] (unsigned int slot, ULong64_t &cnt){
+            std::lock_guard<std::mutex> l(barMutex);
+            processed += everyN; //everyN captured by value for this lambda
+            progressBar = "[";
+            for(UInt_t i = 0; i < static_cast<UInt_t>(static_cast<Float_t>(processed)/totalEvents*barWidth); ++i){
+                progressBar.push_back('|');
+            }
+            // escape the '\' when defined in python string
+            std::cout << "\\r" << std::left << std::setw(barWidth) << progressBar << "] " << processed << "/" << totalEvents << std::flush;
+        });
+        return c;
+    }
+""")
 def getResults(node):
     return node.GetValue()
 
@@ -43,10 +43,14 @@ def bookSnapshot(input_df, filename, columnList, lazy=True, treename="Events", m
     else:
         raise RuntimeError("Cannot handle columnList of type {} in bookSnapshot".format(type(columnList)))
         
-    Algos = {"ZLIB": 1,
+    Algos = {"Inherit": -1,
+             "UseGlobal": 0,
+             "ZLIB": 1,
              "LZMA": 2,
+             "OldCompressionAlgo": 3,
              "LZ4": 4,
-             "ZSTD": 5
+             "ZSTD": 5,
+             "Undefined": 6
          }
     sopt = ROOT.RDF.RSnapshotOptions(mode, Algos[compressionAlgo], compressionLevel, 0, splitLevel, True) #lazy is last option
     if lazy is False:
@@ -61,7 +65,7 @@ parser.add_argument('--input', dest='input', action='store', type=str, required=
                     help='input path, in the form accepted by getFiles method')
 parser.add_argument('--nThreads', dest='nThreads', action='store', type=int, default=1, #nargs='?', const=0.4,
                     help='number of threads for implicit multithreading (0 or 1 to disable)')
-parser.add_argument('--threadsPerGraph', dest='threadsPerGraph', action='store', type=int, default=1, #nargs='?', const=0.4,
+parser.add_argument('--simultaneous', dest='simultaneous', action='store', type=int, default=1, #nargs='?', const=0.4,
                     help='approximate number of threads per file (simultaneously process nThreads/threadsPerGraph files)')
 parser.add_argument('--define', dest='defines', action='append', type=str, #nargs='*'
                     help='list of new variables with syntax variable_name>==>variable_definition, where both are valid C++ variable names and code, respectively')
@@ -94,33 +98,40 @@ if args.input.startswith("dbs:") or args.input.startswith("glob:") or args.input
     fileList = getFiles(query=args.input, redir=args.redir, outFileName=None)
 else:
     fileList = [args.input]
-print("inputs: ", fileList)
-print("output directory: ", args.outdir)
+print("Inputs: ")
+for fn in fileList:
+    print("\t{}".format(fn))
+print("Output directory: ", args.outdir)
 if args.write and not os.path.isdir(args.outdir):
     os.makedirs(args.outdir)
 
 print("nThreads: ", args.nThreads)
-print("threadsPerGraph: ", args.threadsPerGraph)
-assert int(args.nThreads/args.threadsPerGraph) >= 1, "nThreads/threadsPerGraph must be >= 1"
-print("keep list: ", args.keep)
-print("postfix: ", args.postfix)
+print("Simultaneous graph executions: ", args.simultaneous)
+assert int(args.nThreads/args.simultaneous) > 1, "nThreads/simultaneous must be >= 1"
+print("Keep list: ", args.keep)
+print("Postfix: ", args.postfix)
 
 tchains = {}
+tcmeta = {}
 rdf_bases = {}
 rdf_finals = {}
+booktriggers = {}
 handles = []
 results = []
-simultaneousGraphs = int(args.nThreads/args.threadsPerGraph)
-print("Processing {} files per batch".format(simultaneousGraphs))
-for x in range(0, len(fileList), simultaneousGraphs):
-    for fnumber, fn in enumerate(fileList[x:min(simultaneousGraphs, len(fileList))]):
+print("Processing {} files per batch".format(args.simultaneous))
+for x in range(0, len(fileList), args.simultaneous):
+    for fnumber, fn in enumerate(fileList[x:min(x + args.simultaneous, len(fileList))]):
         fnumber += x
         foName = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
         print("output {}: {}".format(fnumber, foName))
         tchains[fn] = ROOT.TChain("Events")
-        # tcmeta = ROOT.TChain("Runs")
+        # tcmeta[fn] = ROOT.TChain("Runs")
         tchains[fn].Add(str(fn))
+        # tcmeta[fn].Add(str(fn))
+        rdfEntries = tchains[fn].GetEntries()
         rdf_bases[fn] = ROOT.ROOT.RDataFrame(tchains[fn])
+        booktriggers[fn] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(rdf_bases[fn]), 
+                                               2000, int(rdfEntries))
         # if checkMeta:
         #     tcmeta.Add(str(vfe))
         # rdf = ROOT.ROOT.RDataFrame("Events", fn)
@@ -140,11 +151,11 @@ for x in range(0, len(fileList), simultaneousGraphs):
             # booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(), 
             #                                   2000, int(metainfo[name]["totalEvents"]))
             handles.append(snaphandle)
-    print("Writing results for files {} to {}".format(x, x+simultaneousGraphs))
-    results += list(map(getResults, handles[x:min(simultaneousGraphs, len(fileList))]))
+    print("Writing results for files {} to {}".format(x, x+args.simultaneous))
+    results += list(map(getResults, handles[x:min(x + args.simultaneous, len(fileList))]))
 # results = list(map(getResults, handles))
 
-rdf_finals = {}; rdf_bases = {}; tchains = {} #Release pointers to objects, permit GC?
+rdf_finals = {}; rdf_bases = {}; tchains = {} ; tcmeta = {} #Release pointers to objects, permit GC?
 
 for fn in fileList:
     foName = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
