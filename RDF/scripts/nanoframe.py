@@ -29,6 +29,11 @@ ROOT.gInterpreter.Declare("""
 """)
 def getResults(node):
     return node.GetValue()
+class dummyResult:
+    def __init__(self):
+        pass
+    def GetValue(self):
+        return "Dummy Result"
 
 def bookSnapshot(input_df, filename, columnList, lazy=True, treename="Events", mode="RECREATE", compressionAlgo="LZ4", compressionLevel=6, splitLevel=99, debug=False):
     if columnList is None:
@@ -77,6 +82,8 @@ parser.add_argument('--postfix', dest='postfix', action='store', type=str, defau
                     help='name to append to root filenames')
 parser.add_argument('--write', dest='write', action='store_true',
                     help='Write output files')
+parser.add_argument('--overwrite', dest='overwrite', action='store_true',
+                    help='Overwrite already completed output files, these will be skipped otherwise')
 parser.add_argument('--redirector', dest='redir', action='store', type=str, nargs='?', default=None, const='root://cms-xrd-global.cern.ch/',
                     help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
 parser.add_argument('--outdir', dest='outdir', action='store', type=str, default='skims/',
@@ -118,12 +125,23 @@ rdf_finals = {}
 booktriggers = {}
 handles = []
 results = []
+foNameDict = {}
 print("Processing {} files per batch".format(args.simultaneous))
 for x in range(0, len(fileList), args.simultaneous):
+    print("")
     for fnumber, fn in enumerate(fileList[x:min(x + args.simultaneous, len(fileList))]):
         fnumber += x
-        foName = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
-        print("output {}: {}".format(fnumber, foName))
+        if fn not in foNameDict.keys(): 
+            foNameDict[fn] = {}
+        foNameDict[fn]["final"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
+        foNameDict[fn]["temp"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", "_temp" + ".root"))
+        #Skip files that are finished unless overwrite is requested
+        if os.path.isfile(foNameDict[fn]["final"]) and not args.overwrite:
+            #Put a dummy result in the list to keep array indexing consistent
+            if args.write:
+                handles.append(dummyResult())
+            continue
+        print("temp output {}: {}".format(fnumber, foNameDict[fn]["temp"]))
         tchains[fn] = ROOT.TChain("Events")
         # tcmeta[fn] = ROOT.TChain("Runs")
         tchains[fn].Add(str(fn))
@@ -147,31 +165,36 @@ for x in range(0, len(fileList), args.simultaneous):
         rdf_finals[fn] = rdfFinal
         columnList = [str(c) for c in rdf_finals[fn].GetColumnNames() if str(c) in args.keep] if args.keep is not None else None
         if args.write:
-            snaphandle = bookSnapshot(rdf_finals[fn], foName, columnList, lazy=True, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=9, splitLevel=99, debug=False)
+            snaphandle = bookSnapshot(rdf_finals[fn], foNameDict[fn]["temp"], columnList, lazy=True, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=9, splitLevel=99, debug=False)
             # booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(), 
             #                                   2000, int(metainfo[name]["totalEvents"]))
             handles.append(snaphandle)
     print("Writing results for files {} to {}".format(x, x+args.simultaneous))
     results += list(map(getResults, handles[x:min(x + args.simultaneous, len(fileList))]))
-# results = list(map(getResults, handles))
-
-rdf_finals = {}; rdf_bases = {}; tchains = {} ; tcmeta = {} #Release pointers to objects, permit GC?
-
-for fn in fileList:
-    foName = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
-    if args.write:
-        #Handle the rest of the trees
-        fi = ROOT.TFile.Open(fn, "read")
-        treeNames = [str(ll.GetName()) for ll in fi.GetListOfKeys() if ll.GetClassName() in ['TTree']]
-        print("TTrees: ", treeNames)
-        fo = ROOT.TFile.Open(foName, "update")
-        fo.cd()
-        for treeName in treeNames:
-            if treeName != "Events": #Handle the events tree using RDataFrame
-                fi.cd()
-                tree = fi.Get(treeName)
-                fo.cd()
-                treeclone = tree.CloneTree(-1, "fast")# if goFast else "")
-                treeclone.Write()
-        fi.Close()
-        fo.Close()
+    print("\nWriting meta information to files.")
+    for fnumber, fn in enumerate(fileList[x:min(x + args.simultaneous, len(fileList))]):
+        if os.path.isfile(foNameDict[fn]["final"]) and not args.overwrite:
+            continue
+        if args.write:
+            #Handle the rest of the trees
+            fi = ROOT.TFile.Open(fn, "read")
+            treeNames = [str(ll.GetName()) for ll in fi.GetListOfKeys() if ll.GetClassName() in ['TTree']]
+            # print("TTrees: ", treeNames)
+            fo = ROOT.TFile.Open(foNameDict[fn]["temp"], "update")
+            fo.cd()
+            for treeName in treeNames:
+                if treeName != "Events": #Handle the events tree using RDataFrame
+                    fi.cd()
+                    tree = fi.Get(treeName)
+                    fo.cd()
+                    treeclone = tree.CloneTree(-1, "fast")# if goFast else "")
+                    treeclone.Write()
+            fi.Close()
+            fo.Close()
+            try:
+                os.rename(foNameDict[fn]["temp"], foNameDict[fn]["final"])
+            except:
+                print("Rename of file {} to {} failed, continuing".format(foNameDict[fn]["temp"], foNameDict[fn]["final"]))
+    #Do NOT release foNameDict entries, they are required for final meta info insertion
+    rdf_finals = {}; rdf_bases = {}; tchains = {} ; tcmeta = {} #Release pointers to objects, permit GC?
+print("Done")
