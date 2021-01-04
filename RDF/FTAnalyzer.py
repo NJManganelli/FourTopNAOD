@@ -1366,6 +1366,9 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     zFin.append(("pwgt_LSF___nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
     zPre.append(("pwgt_LSF___nom", "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))".format(lpf=leppostfix)))
     if era == "2017": #This only applies to 2017
+        #https://twiki.cern.ch/twiki/bin/view/CMS/EgammaRunIIRecommendations#HLT_Zvtx_Scale_Factor
+        zPre.append(("EGamma_HLT_ZVtx_SF_nom", "return 0.991;"))
+        zPre.append(("EGamma_HLT_ZVtx_SF_unc", "return 0.001;"))
         zPre.append(("pwgt_Z_vtx___nom", "((FTALepton{lpf}_pdgId.size() > 1 && (abs(FTALepton{lpf}_pdgId.at(0)) == 11 || abs(FTALepton{lpf}_pdgId.at(1)) == 11)) || (FTALepton{lpf}_pdgId.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 11)) ? EGamma_HLT_ZVtx_SF_nom : 1.00000000000000".format(lpf=leppostfix)))
     else:
         zPre.append(("pwgt_Z_vtx___nom", "(Int_t)1;"))
