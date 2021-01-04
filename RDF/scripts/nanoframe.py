@@ -1,5 +1,7 @@
 import os
+import subprocess
 import argparse
+import time
 from FourTopNAOD.RDF.tools.toolbox import getFiles
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -27,6 +29,44 @@ ROOT.gInterpreter.Declare("""
         return c;
     }
 """)
+
+def prefetchFile(fname, longTermCache=False, verbose=True):
+    #Taken from the nanoAOD-tools, with a few python3-izations and more functional form
+    tmpdir = os.environ['TMPDIR'] if 'TMPDIR' in os.environ else "/tmp/{}".format(os.getuname())
+    if not fname.startswith("root://"):
+        return fname, False
+    rndchars = "".join([hex(ord(str(i)[0:1]))[2:] for i in os.urandom(
+        8)]) if not longTermCache else "long_cache-id{:d}-{:s}"\
+        .format((os.getuid(), hashlib.sha1(fname).hexdigest()))
+    localfile = "{:s}/{:s}-{:s}.root"\
+                .format(tmpdir, os.path.basename(fname).replace(".root", ""), rndchars)
+    if longTermCache and os.path.exists(localfile):
+        if verbose:
+            print("Filename %s is already available in local path {} "\
+                .format((fname, localfile)))
+        return localfile, False
+    try:
+        if verbose:
+            print("Filename {:s} is remote, will do a copy to local path {}"\
+                  .format(fname, localfile))
+        start = time.perf_counter()
+        subprocess.check_output(["xrdcp", "-f", "-N", fname, localfile])
+        if verbose:
+            print("Time used for transferring the file locally: {:.2f}s"\
+                  .format(time.perf_counter() - start))
+        return localfile, (not longTermCache)
+    except:
+        if verbose:
+            print("Error: could not save file locally, will run from remote")
+        if os.path.exists(localfile):
+            if verbose:
+                print("Deleting partially transferred file {}".format(localfile))
+            try:
+                os.unlink(localfile)
+            except:
+                pass
+        return fname, False
+
 def getResults(node):
     return node.GetValue()
 class dummyResult:
@@ -71,7 +111,7 @@ parser.add_argument('--input', dest='input', action='store', type=str, required=
 parser.add_argument('--nThreads', dest='nThreads', action='store', type=int, default=1, #nargs='?', const=0.4,
                     help='number of threads for implicit multithreading (0 or 1 to disable)')
 parser.add_argument('--simultaneous', dest='simultaneous', action='store', type=int, default=1, #nargs='?', const=0.4,
-                    help='approximate number of threads per file (simultaneously process nThreads/threadsPerGraph files)')
+                    help='simultaneous graphs to process (recommendation for network-accessed files: 3 or less)')
 parser.add_argument('--define', dest='defines', action='append', type=str, #nargs='*'
                     help='list of new variables with syntax variable_name>==>variable_definition, where both are valid C++ variable names and code, respectively')
 parser.add_argument('--filter', dest='filters', action='append', type=str, #nargs='*', 
@@ -88,6 +128,10 @@ parser.add_argument('--redirector', dest='redir', action='store', type=str, narg
                     help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
 parser.add_argument('--outdir', dest='outdir', action='store', type=str, default='skims/',
                     help='directory to place output in')
+parser.add_argument('--prefetch', dest='prefetch', action='store_true',
+                    help='Prefetch files locally before processing and then deleting upon successful completion')
+parser.add_argument('--longTermCache', dest='longTermCache', action='store_true',
+                    help='LongTermCache files, preventing deletion of source files transferred locally')
 # parser.add_argument('--merge', dest='merge', action='store_true',
 #                     help='Merge output files immediately on input, which may be susceptible to problems if requested branches do not align')
 # parser.add_argument('--haddnano', dest='haddnano', action='store_true',
@@ -133,6 +177,7 @@ for x in range(0, len(fileList), args.simultaneous):
         fnumber += x
         if fn not in foNameDict.keys(): 
             foNameDict[fn] = {}
+        foNameDict[fn]["source"], requiresDeletion = prefetchFile(fn, longTermCache=args.longTermCache, verbose=True) if (args.prefetch or args.longTermCache) else (fn, False)
         foNameDict[fn]["final"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
         foNameDict[fn]["temp"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", "_temp" + ".root"))
         #Skip files that are finished unless overwrite is requested
@@ -144,8 +189,8 @@ for x in range(0, len(fileList), args.simultaneous):
         print("temp output {}: {}".format(fnumber, foNameDict[fn]["temp"]))
         tchains[fn] = ROOT.TChain("Events")
         # tcmeta[fn] = ROOT.TChain("Runs")
-        tchains[fn].Add(str(fn))
-        # tcmeta[fn].Add(str(fn))
+        tchains[fn].Add(str(foNameDict[fn]["source"]))
+        # tcmeta[fn].Add(str(foNameDict[fn]["source"]))
         rdfEntries = tchains[fn].GetEntries()
         rdf_bases[fn] = ROOT.ROOT.RDataFrame(tchains[fn])
         booktriggers[fn] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(rdf_bases[fn]), 
@@ -169,7 +214,7 @@ for x in range(0, len(fileList), args.simultaneous):
             # booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(), 
             #                                   2000, int(metainfo[name]["totalEvents"]))
             handles.append(snaphandle)
-    print("Writing results for files {} to {}".format(x, x+args.simultaneous))
+    print("Writing results for files {} through {}".format(x, min(x + args.simultaneous, len(fileList))-1))
     results += list(map(getResults, handles[x:min(x + args.simultaneous, len(fileList))]))
     print("\nWriting meta information to files.")
     for fnumber, fn in enumerate(fileList[x:min(x + args.simultaneous, len(fileList))]):
@@ -177,7 +222,7 @@ for x in range(0, len(fileList), args.simultaneous):
             continue
         if args.write:
             #Handle the rest of the trees
-            fi = ROOT.TFile.Open(fn, "read")
+            fi = ROOT.TFile.Open(foNameDict[fn]["source"], "read")
             treeNames = [str(ll.GetName()) for ll in fi.GetListOfKeys() if ll.GetClassName() in ['TTree']]
             # print("TTrees: ", treeNames)
             fo = ROOT.TFile.Open(foNameDict[fn]["temp"], "update")
@@ -196,5 +241,15 @@ for x in range(0, len(fileList), args.simultaneous):
             except:
                 print("Rename of file {} to {} failed, continuing".format(foNameDict[fn]["temp"], foNameDict[fn]["final"]))
     #Do NOT release foNameDict entries, they are required for final meta info insertion
-    rdf_finals = {}; rdf_bases = {}; tchains = {} ; tcmeta = {} #Release pointers to objects, permit GC?
+    # rdf_finals = {}; rdf_bases = {}; tchains = {} ; tcmeta = {} #Release pointers to objects, permit GC?
+    for fnumber, fn in enumerate(fileList[x:min(x + args.simultaneous, len(fileList))]):
+        del booktriggers[fn]
+        del rdf_bases[fn]
+        del tchains[fn]
+        # del tcmeta[fn]
+        if args.prefetch and not args.longTermCache:
+            try:
+                os.unlink(foNameDict[fn]["source"])
+            except:
+                print("Could not remove prefetched source file {}".format(foNameDict[fn]["source"]))
 print("Done")
