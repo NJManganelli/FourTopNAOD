@@ -2236,6 +2236,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     fractionalContribution = processDict.get("fractionalContribution")
                     #Calculate XS * Lumi
                     print("FIXME: Need to modify fractional sample weighting to use the meta info, defaulting to 1.0 right now")
+                    print("OPTIONAL: Need to take the lumi value from the actual sample card era, not the presumed one passed to analyzer")
                     wgtFormula = "{eXS:f} * {lumi:f} * 1000 * genWeight * {frSample:f} * {frCon:f} / {sW:f}".format(eXS=effectiveXS,
                                                                                                                     lumi=lumiDict[era],
                                                                                                                     frSample=1.0,
@@ -5174,11 +5175,10 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     vetoChannelCode[trig_channel] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0".format(tieredTriggerBitSums[trig_channel])
                     passChannelCode[trig_channel] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(tieredTriggerBitSums[trig_channel])
                     bb[trig_channel] = ""
-                    print("channel to tier mapping: {} :: {}".format(trig_channel, channelToTierDict[trig_channel]))
-                    print("{} channel bits: {}".format(trig_channel, tieredTriggerBitSums[trig_channel]))
-                    print("pass code: {}".format(passChannelCode[trig_channel]))
-                    print("veto code: {}".format(vetoChannelCode[trig_channel]))
-                print(passChannelCode)
+                    # print("channel to tier mapping: {} :: {}".format(trig_channel, channelToTierDict[trig_channel]))
+                    # print("{} channel bits: {}".format(trig_channel, tieredTriggerBitSums[trig_channel]))
+                    # print("pass code: {}".format(passChannelCode[trig_channel]))
+                    # print("veto code: {}".format(vetoChannelCode[trig_channel]))
                 for trig_channel_outer in bb.keys():                    
                     skipList = []
                     for trig_channel, tier in [(trig.channel, trig.tier) for trig in sorted(eraTriggers, key=lambda nTup: nTup.tier, reverse=False)]:
@@ -5198,27 +5198,10 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                             #Do nothing, the code is finished
                             pass
 
-                for trig_channel in bb.keys():
-                    print(bb[trig_channel] if trig_channel in bb.keys() else "No match for bb key {}".format(trig_channel))
-                    print(b[trig_channel] if trig_channel in b.keys() else "No match for b key {}".format(trig_channel))
-
-                pdb.set_trace()
-
-                # for trig_channel in list(set([trig.channel for trig in eraTriggers])):
-                #     vetoChannels = list(set([trig.channel for trig in eraTriggers if]))
-                #     bb[trig_channel]
-                b["ElMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu"])
-                b["MuMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-                    .format(Chan["ElMu"], Chan["MuMu"])
-                b["ElEl"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-                    .format(Chan["ElMu"] + Chan["MuMu"], Chan["ElEl"])
-                b["ElEl_LowMET"] = b["ElEl"]
-                b["ElEl_HighMET"] = b["ElEl"]
-                b["Mu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-                    .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"], Chan["Mu"])
-                b["El"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-                    .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"], Chan["El"]) 
-
+                # for trig_channel in bb.keys():
+                #     #See different setup of code, 2018 bits now match up as they should
+                #     print(bb[trig_channel] if trig_channel in bb.keys() else "No match for bb key {}".format(trig_channel))
+                #     print(b[trig_channel] if trig_channel in b.keys() else "No match for b key {}".format(trig_channel))
 
                 #########################
                 ### Split proc config ###
@@ -5302,7 +5285,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     #skip any further calculations for bookkeeping
                     continue
                 else:
-                    filtered[name][lvl] = base[name].Filter(b[lvl], lvl)
+                    filtered[name][lvl] = base[name].Filter(bb[lvl], lvl)
                 #Add the MET corrections, creating a consistently named branch incorporating the systematics loaded
                 the_df[name][lvl] = METXYCorr(filtered[name][lvl],
                                               run_branch="run",
@@ -5736,7 +5719,7 @@ if __name__ == '__main__':
     #                     help='string to filter samples while checking events or generating configurations')
     parser.add_argument('--redirector', dest='redir', action='store', type=str, nargs='?', default=None, const='root://cms-xrd-global.cern.ch/',
                         help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
-    parser.add_argument('--era', dest='era', action='store', type=str, default="2017", choices=['2016', '2017', '2018'],
+    parser.add_argument('--era', dest='era', action='store', type=str, default="2015", choices=['2016', '2017', '2018'],
                         help='simulation/run year')
     parser.add_argument('--nThreads', dest='nThreads', action='store', type=int, default=8, #nargs='?', const=0.4,
                         help='number of threads for implicit multithreading (0 or 1 to disable)')
