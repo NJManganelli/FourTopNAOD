@@ -235,163 +235,218 @@ btagWPsystematics = {"btagSF_L": {"jet_mask": "jet_mask",
                                       "weightVariation": True},
 }
 
-TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier lumi channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
+#Add lumi to the trigger tuple?
+TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
                             era="2017",
                             subera="BCDEF",
                             uniqueEraBit=14,
                             tier=0,
-                            lumi=0,
                             channel="ElMu",
-                            leadMuThresh=25,
+                            leadMuThresh=23,
                             subMuThresh=99999,
                             leadElThresh=99999,
-                            subElThresh=15,
-                            nontriggerLepThresh=15),
+                            subElThresh=12,
+                            nontriggerLepThresh=12),
                TriggerTuple(trigger="HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
                             era="2017",
                             subera="BCDEF",
                             uniqueEraBit=13,
                             tier=0,
-                            lumi=0,
                             channel="ElMu",
                             leadMuThresh=99999,
-                            subMuThresh=15,
-                            leadElThresh=25,
+                            subMuThresh=12,
+                            leadElThresh=23,
                             subElThresh=99999,
-                            nontriggerLepThresh=15),
+                            nontriggerLepThresh=12),
                TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ",
                             era="2017",
                             subera="B",
                             uniqueEraBit=12,
                             tier=1,
-                            lumi=0,
                             channel="MuMu",
-                            leadMuThresh=25,
-                            subMuThresh=15,
+                            leadMuThresh=17,
+                            subMuThresh=12,
                             leadElThresh=99999,
                             subElThresh=99999,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8",
+                            nontriggerLepThresh=12),
+               TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8",
                             era="2017",
                             subera="CDEF",
                             uniqueEraBit=11,
                             tier=1,
-                            lumi=0,
                             channel="MuMu",
-                            leadMuThresh=25,
-                            subMuThresh=15,
+                            leadMuThresh=17,
+                            subMuThresh=12,
                             leadElThresh=99999,
                             subElThresh=99999,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
+                            nontriggerLepThresh=12),
+               TriggerTuple(trigger="HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL",
                             era="2017",
                             subera="BCDEF",
                             uniqueEraBit=9,
                             tier=2,
-                            lumi=0,
                             channel="ElEl",
                             leadMuThresh=99999,
                             subMuThresh=99999,
-                            leadElThresh=25,
-                            subElThresh=15,
-                            nontriggerLepThresh=15),
+                            leadElThresh=23,
+                            subElThresh=12,
+                            nontriggerLepThresh=12),
                TriggerTuple(trigger="HLT_IsoMu27",
                             era="2017",
                             subera="BCDEF",
                             uniqueEraBit=7,
                             tier=3,
-                            lumi=0,
                             channel="Mu",
-                            leadMuThresh=28,
+                            leadMuThresh=27,
                             subMuThresh=99999,
                             leadElThresh=99999,
                             subElThresh=99999,
-                            nontriggerLepThresh=15),
+                            nontriggerLepThresh=12),
                TriggerTuple(trigger="HLT_Ele35_WPTight_Gsf",
                             era="2017",
                             subera="BCDEF",
                             uniqueEraBit=6,
                             tier=4,
-                            lumi=0,
                             channel="El",
                             leadMuThresh=99999,
                             subMuThresh=99999,
-                            leadElThresh=36,
+                            leadElThresh=35,
                             subElThresh=99999,
-                            nontriggerLepThresh=15),
+                            nontriggerLepThresh=12),
+               TriggerTuple(trigger="HLT_PFMET200_NotCleaned",
+                            era="2017",
+                            subera="BCDEF",
+                            uniqueEraBit=3,
+                            tier=5,
+                            channel="MET",
+                            leadMuThresh=99999,
+                            subMuThresh=99999,
+                            leadElThresh=99999,
+                            subElThresh=99999,
+                            nontriggerLepThresh=12),
+               TriggerTuple(trigger="HLT_PFMET200_HBHECleaned",
+                            era="2017",
+                            subera="BCDEF",
+                            uniqueEraBit=2,
+                            tier=5,
+                            channel="MET",
+                            leadMuThresh=99999,
+                            subMuThresh=99999,
+                            leadElThresh=99999,
+                            subElThresh=99999,
+                            nontriggerLepThresh=12),
+               TriggerTuple(trigger="HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned",
+                            era="2017",
+                            subera="BCDEF",
+                            uniqueEraBit=1,
+                            tier=5,
+                            channel="MET",
+                            leadMuThresh=99999,
+                            subMuThresh=99999,
+                            leadElThresh=99999,
+                            subElThresh=99999,
+                            nontriggerLepThresh=12),
                TriggerTuple(trigger="HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
                             era="2018",
                             subera="ABCD",
                             uniqueEraBit=14,
                             tier=0,
-                            lumi=0,
                             channel="ElMu",
                             leadMuThresh=99999,
-                            subMuThresh=15,
-                            leadElThresh=25,
+                            subMuThresh=12,
+                            leadElThresh=23,
                             subElThresh=99999,
-                            nontriggerLepThresh=15),
+                            nontriggerLepThresh=12),
                TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
                             era="2018",
                             subera="ABCD",
                             uniqueEraBit=12,
                             tier=0,
-                            lumi=0,
                             channel="ElMu",
-                            leadMuThresh=25,
+                            leadMuThresh=23,
                             subMuThresh=99999,
                             leadElThresh=99999,
-                            subElThresh=15,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8",
+                            subElThresh=12,
+                            nontriggerLepThresh=12),
+               TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8",
                             era="2018",
                             subera="ABCD",
                             uniqueEraBit=11,
                             tier=1,
-                            lumi=0,
                             channel="MuMu",
-                            leadMuThresh=25,
-                            subMuThresh=15,
+                            leadMuThresh=17,
+                            subMuThresh=12,
                             leadElThresh=99999,
                             subElThresh=99999,
-                            nontriggerLepThresh=15),
-               TriggerTuple(trigger="HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
+                            nontriggerLepThresh=12),
+               TriggerTuple(trigger="HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL",
                             era="2018",
                             subera="ABCD",
                             uniqueEraBit=9,
                             tier=2,
-                            lumi=0,
                             channel="ElEl",
                             leadMuThresh=99999,
                             subMuThresh=99999,
-                            leadElThresh=25,
-                            subElThresh=15,
-                            nontriggerLepThresh=15),
+                            leadElThresh=23,
+                            subElThresh=12,
+                            nontriggerLepThresh=12),
                TriggerTuple(trigger="HLT_IsoMu24",
                             era="2018",
                             subera="ABCD",
                             uniqueEraBit=8,
                             tier=3,
-                            lumi=0,
                             channel="Mu",
-                            leadMuThresh=25,
+                            leadMuThresh=24,
                             subMuThresh=99999,
                             leadElThresh=99999,
                             subElThresh=99999,
-                            nontriggerLepThresh=15),
+                            nontriggerLepThresh=12),
                TriggerTuple(trigger="HLT_Ele32_WPTight_Gsf",
                             era="2018",
                             subera="ABCD",
                             uniqueEraBit=7,
                             tier=4,
-                            lumi=0,
                             channel="El",
                             leadMuThresh=99999,
                             subMuThresh=99999,
-                            leadElThresh=33,
+                            leadElThresh=32,
                             subElThresh=99999,
-                            nontriggerLepThresh=15)]
+                            nontriggerLepThresh=12),
+               TriggerTuple(trigger="HLT_PFMET200_NotCleaned",
+                            era="2018",
+                            subera="ABCD",
+                            uniqueEraBit=3,
+                            tier=5,
+                            channel="MET",
+                            leadMuThresh=99999,
+                            subMuThresh=99999,
+                            leadElThresh=99999,
+                            subElThresh=99999,
+                            nontriggerLepThresh=12),
+               TriggerTuple(trigger="HLT_PFMET200_HBHECleaned",
+                            era="2018",
+                            subera="ABCD",
+                            uniqueEraBit=2,
+                            tier=5,
+                            channel="MET",
+                            leadMuThresh=99999,
+                            subMuThresh=99999,
+                            leadElThresh=99999,
+                            subElThresh=99999,
+                            nontriggerLepThresh=12),
+               TriggerTuple(trigger="HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned",
+                            era="2018",
+                            subera="ABCD",
+                            uniqueEraBit=1,
+                            tier=5,
+                            channel="MET",
+                            leadMuThresh=99999,
+                            subMuThresh=99999,
+                            leadElThresh=99999,
+                            subElThresh=99999,
+                            nontriggerLepThresh=12),
+           ]
 
 # cutoutV2_ToBeFixed = {
 #     "QCD_HT200":{
@@ -4622,10 +4677,31 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                             wroteKey = True
                         line = path + "," + ",".join(path_values.values()) + "\n"
                         f.write(line)
+def getTriggerCutString(passTriggers, vetoTriggers):
+    vetoSection = "!("
+    for tn, trigger in enumerate(vetoTriggers):
+        if tn > 0:
+            vetoSection += " || "
+        vetoSection += trigger.trigger
+    vetoSection += ")"
+
+    passSection = "("
+    for tn, trigger in enumerate(passTriggers):
+        if tn > 0:
+            passSection += " || "
+        passSection += trigger.trigger
+    passSection += ")"
+
+    retString = ""
+    if len(vetoTriggers) > 0: retString += vetoSection + " && "
+    retString += passSection
+
+    return retString
+
 
             
-def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, doDiagnostics=False, 
-         doNtuples=False, doHistos=False, doCombineHistosOnly=False,
+def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList,
+         doDiagnostics=False, doNtuples=False, doHistos=False, doCombineHistosOnly=False,
          doLeptonSelection=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
          BTaggingYieldsAggregate=False, useHTOnly=False, useNJetOnly=False, 
          printBookkeeping=False, triggers=[], includeSampleNames=None, 
@@ -4780,7 +4856,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, do
         elif channel == "test":
             print("More work to be done, exiting")
             sys.exit(2)
-            
+
         
         print("Creating selection and baseline bits")
         #Set up channel bits for selection and baseline. Separation not necessary in this stage, but convenient for loops
@@ -5061,6 +5137,92 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, do
             processed[name] = {}
             #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
             for lvl in levelsOfInterest:
+                ####################
+                ### Trigger Code ###
+                ####################
+                #At this stage, lvl ~ channel (except specials like BOOKKEEPING), i.e. "ElMu", "MuMu", "El" - used to include 'baseline' or '
+                #Code for triggers from LeptonSkimmer (LeptonLogic previously)
+                #This will eventually move into defineLeptons ideally, to do the HLT and lepton selecetion entirely in RDF
+                eraTriggers = [trig for trig in TriggerList if vals.get("era", "NOERA") == trig.era]
+                #NOTE IMPORTANT CHANGE w.r.t. LeptonSkimmer: now check that either MC or that the subera matches, 
+                #but require the channel matching for BOTH instead of only data... now we filter out the MC that belongs to other channels, 
+                #instead of accepting all inclusively (skimming-appropriate)
+                triggers = [trig for trig in eraTriggers if (vals.get("isData", None) == False or vals.get("subera", "NOSUBERA") in trig.subera) and lvl == trig.channel]
+                print("This will break if BOOKKEEPING is requested <-- FIXME")
+                #Create list of veto triggers for data, where explicit tiers are expected (calculating the tier first)
+                tier = [trig.tier for trig in triggers]
+                tier.sort(key=lambda i: i, reverse=False)
+                # if debug: 
+                #     print("Sorted trigger tiers selected are: " + str(tier))
+                tier = tier[0] if len(tier) > 0 else 9999
+                #Logic: select triggers if the channel matches and either it's MC (isData == False) or it's Data and the subera matches (Run B, C, D...)
+                triggers = [trig for trig in eraTriggers if (vals.get("isData", None) == False or vals.get("subera", "NOSUBERA") in trig.subera) and lvl == trig.channel]
+                #Logic: veto on triggers if the event fired a higher tier trigger and is either data + matching subera or is MC
+                vetoTriggers = [trig for trig in eraTriggers if (vals.get("isData", None) == False or vals.get("subera", "NOSUBERA") in trig.subera) and trig.tier < tier]
+                # Fired = [trig for trig in triggers if hasattr(event, trig.trigger) and getattr(event, trig.trigger, False)]
+                # Vetoed = [trig for trig in vetoTriggers if hasattr(event, trig.trigger) and getattr(event, trig.trigger, False)]
+                triggerBitSum = sum([pow(2, t.uniqueEraBit) for t in eraTriggers if t.channel == lvl])
+                tieredTriggerBitSums = {}
+                channelToTierDict = {}
+                vetoChannelCode = {}
+                passChannelCode = {}
+                bb = {}
+                for trig_channel, tier in [(trig.channel, trig.tier) for trig in sorted(eraTriggers, key=lambda nTup: nTup.tier, reverse=False)]:
+                    if trig_channel in tieredTriggerBitSums.keys(): continue
+                    channelToTierDict[trig_channel] = min([trig.tier for trig in eraTriggers if trig.channel == trig_channel])
+                    tieredTriggerBitSums[trig_channel] = sum([pow(2, t.uniqueEraBit) for t in eraTriggers if t.channel == trig_channel])
+                    vetoChannelCode[trig_channel] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0".format(tieredTriggerBitSums[trig_channel])
+                    passChannelCode[trig_channel] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(tieredTriggerBitSums[trig_channel])
+                    bb[trig_channel] = ""
+                    print("channel to tier mapping: {} :: {}".format(trig_channel, channelToTierDict[trig_channel]))
+                    print("{} channel bits: {}".format(trig_channel, tieredTriggerBitSums[trig_channel]))
+                    print("pass code: {}".format(passChannelCode[trig_channel]))
+                    print("veto code: {}".format(vetoChannelCode[trig_channel]))
+                print(passChannelCode)
+                for trig_channel_outer in bb.keys():                    
+                    skipList = []
+                    for trig_channel, tier in [(trig.channel, trig.tier) for trig in sorted(eraTriggers, key=lambda nTup: nTup.tier, reverse=False)]:
+                        if trig_channel in skipList: 
+                            continue
+                        else:
+                            skipList.append(trig_channel)
+                        if channelToTierDict[trig_channel_outer] == tier:
+                            if len(bb[trig_channel_outer]) > 0:
+                                bb[trig_channel_outer] += " && "
+                            bb[trig_channel_outer] += passChannelCode[trig_channel]
+                        elif channelToTierDict[trig_channel_outer] > tier:
+                            if len(bb[trig_channel_outer]) > 0:
+                                bb[trig_channel_outer] += " && "
+                            bb[trig_channel_outer] += vetoChannelCode[trig_channel]
+                        else:
+                            #Do nothing, the code is finished
+                            pass
+
+                for trig_channel in bb.keys():
+                    print(bb[trig_channel] if trig_channel in bb.keys() else "No match for bb key {}".format(trig_channel))
+                    print(b[trig_channel] if trig_channel in b.keys() else "No match for b key {}".format(trig_channel))
+
+                pdb.set_trace()
+
+                # for trig_channel in list(set([trig.channel for trig in eraTriggers])):
+                #     vetoChannels = list(set([trig.channel for trig in eraTriggers if]))
+                #     bb[trig_channel]
+                b["ElMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu"])
+                b["MuMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+                    .format(Chan["ElMu"], Chan["MuMu"])
+                b["ElEl"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+                    .format(Chan["ElMu"] + Chan["MuMu"], Chan["ElEl"])
+                b["ElEl_LowMET"] = b["ElEl"]
+                b["ElEl_HighMET"] = b["ElEl"]
+                b["Mu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+                    .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"], Chan["Mu"])
+                b["El"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
+                    .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"], Chan["El"]) 
+
+
+                #########################
+                ### Split proc config ###
+                #########################
                 splitProcessConfig = vals.get("splitProcess", None)
                 #Note the snapshotPriority value of -1, which means this dataset does not get cached or written to disk with Snapshot
                 inclusiveProcessConfig = {"processes": {"{}".format(name): {"filter": "return true;",
@@ -5657,7 +5819,7 @@ if __name__ == '__main__':
         print("This function needs reworking... work on it")
         print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
         # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
-        packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
+        packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
                       printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
@@ -5699,27 +5861,27 @@ if __name__ == '__main__':
                                #        },
                            )
     elif stage == 'lepton-selection':
-        packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
+        packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
                       BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, 
                       useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
-        packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+        packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
     elif stage == 'bookkeeping':
-        packed = main(analysisDir, sampleCards, source, "BOOKKEEPING", bTagger, systematicCards, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+        packed = main(analysisDir, sampleCards, source, "BOOKKEEPING", bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
     elif stage == 'fill-histograms':
         #filling ntuples is also possible with the option --doNtuples
-        packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, doDiagnostics=False, 
+        packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, 
                       doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=False,
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
@@ -5728,7 +5890,7 @@ if __name__ == '__main__':
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
     elif stage == 'fill-combine':
         #filling ntuples is also possible with the option --doNtuples
-        packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, doDiagnostics=False, 
+        packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, 
                       doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=True,
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
@@ -5758,7 +5920,7 @@ if __name__ == '__main__':
         spo = subprocess.Popen(args="{}".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))
         spo.communicate()
     elif stage == 'fill-ntuples':
-        packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, doDiagnostics=False, 
+        packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, 
                       doNtuples=doNtuples, 
                       doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
