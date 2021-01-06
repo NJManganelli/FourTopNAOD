@@ -922,10 +922,6 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
             #listOfColumns.push_back(metPhi)
     #return rdf
 
-
-# In[ ]:
-
-
 def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfLeptonSelection=False, useBackupChannel=False, verbose=False,
                   triggers=[],
                  sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
@@ -4857,57 +4853,6 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
         elif channel == "test":
             print("More work to be done, exiting")
             sys.exit(2)
-
-        
-        print("Creating selection and baseline bits")
-        #Set up channel bits for selection and baseline. Separation not necessary in this stage, but convenient for loops
-        Chan = {}
-        Chan["ElMu"] = 24576
-        Chan["MuMu"] = 6144
-        Chan["ElEl"] = 512
-        Chan["ElEl_LowMET"] = Chan["ElEl"]
-        Chan["ElEl_HighMET"] = Chan["ElEl"]
-        Chan["Mu"] = 128
-        Chan["El"] = 64
-        Chan["selection"] = Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"] + Chan["El"]
-        Chan["ElMu_baseline"] = 24576
-        Chan["MuMu_baseline"] = 6144
-        Chan["ElEl_baseline"] = 512
-        Chan["Mu_baseline"] = 128
-        Chan["El_baseline"] = 64
-        Chan["baseline"] = Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"] + Chan["Mu_baseline"] + Chan["El_baseline"]
-        
-        b = {}
-        b["ElMu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) > 0".format(Chan["ElMu_baseline"])
-        b["MuMu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
-            .format(Chan["ElMu_baseline"], 
-                    Chan["MuMu_baseline"])
-        b["ElEl_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
-            .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"], Chan["ElEl_baseline"])
-        b["Mu_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
-            .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"], Chan["Mu_baseline"])
-        b["El_baseline"] = "(ESV_TriggerAndLeptonLogic_baseline & {0}) == 0 && (ESV_TriggerAndLeptonLogic_baseline & {1}) > 0"\
-            .format(Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"] + Chan["Mu_baseline"], Chan["El_baseline"])
-        b["selection"] = "ESV_TriggerAndLeptonLogic_selection > 0"
-        b["ElMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(Chan["ElMu"])
-        b["MuMu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-            .format(Chan["ElMu"], Chan["MuMu"])
-        b["ElEl"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-            .format(Chan["ElMu"] + Chan["MuMu"], Chan["ElEl"])
-        b["ElEl_LowMET"] = b["ElEl"]
-        b["ElEl_HighMET"] = b["ElEl"]
-        b["Mu"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-            .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"], Chan["Mu"])
-        b["El"] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0 && (ESV_TriggerAndLeptonLogic_selection & {1}) > 0"\
-            .format(Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"], Chan["El"]) 
-        #This is deprecated, use dedicated RDF module
-        #b["ESV_JetMETLogic_baseline"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00001100011111111111) #This enables the MET pt cut (11) and nJet (15) and HT (16) cuts from PostProcessor
-        #b["ESV_JetMETLogic_baseline"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00000000001111111111) #Only do the PV and MET filters, nothing else
-        #b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_baseline & {0}) >= {0}".format(0b00001100011111111111) #FIXME, this isn't right!
-        #b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00001100011111111111)#This enables the MET pt cut (11) and nJet (15) and HT (16) cuts from PostProcessor
-        #b["ESV_JetMETLogic_selection"] = "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00000000001111111111)
-        #b["ESV_JetMETLogic_default"] = "(ESV_JetMETLogic_baseline & {}) > 0".format(0b11111111111111111111)
-        #print(b["ESV_JetMETLogic_selection"])
         
         stitchDict = {'2016': {'SL': {'nGenJets': None,
                                                    'nGenLeps': None,
@@ -5138,71 +5083,6 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             processed[name] = {}
             #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
             for lvl in levelsOfInterest:
-                ####################
-                ### Trigger Code ###
-                ####################
-                #At this stage, lvl ~ channel (except specials like BOOKKEEPING), i.e. "ElMu", "MuMu", "El" - used to include 'baseline' or '
-                #Code for triggers from LeptonSkimmer (LeptonLogic previously)
-                #This will eventually move into defineLeptons ideally, to do the HLT and lepton selecetion entirely in RDF
-                eraTriggers = [trig for trig in TriggerList if vals.get("era", "NOERA") == trig.era]
-                #NOTE IMPORTANT CHANGE w.r.t. LeptonSkimmer: now check that either MC or that the subera matches, 
-                #but require the channel matching for BOTH instead of only data... now we filter out the MC that belongs to other channels, 
-                #instead of accepting all inclusively (skimming-appropriate)
-                triggers = [trig for trig in eraTriggers if (vals.get("isData", None) == False or vals.get("subera", "NOSUBERA") in trig.subera) and lvl == trig.channel]
-                print("This will break if BOOKKEEPING is requested <-- FIXME")
-                #Create list of veto triggers for data, where explicit tiers are expected (calculating the tier first)
-                tier = [trig.tier for trig in triggers]
-                tier.sort(key=lambda i: i, reverse=False)
-                # if debug: 
-                #     print("Sorted trigger tiers selected are: " + str(tier))
-                tier = tier[0] if len(tier) > 0 else 9999
-                #Logic: select triggers if the channel matches and either it's MC (isData == False) or it's Data and the subera matches (Run B, C, D...)
-                triggers = [trig for trig in eraTriggers if (vals.get("isData", None) == False or vals.get("subera", "NOSUBERA") in trig.subera) and lvl == trig.channel]
-                #Logic: veto on triggers if the event fired a higher tier trigger and is either data + matching subera or is MC
-                vetoTriggers = [trig for trig in eraTriggers if (vals.get("isData", None) == False or vals.get("subera", "NOSUBERA") in trig.subera) and trig.tier < tier]
-                # Fired = [trig for trig in triggers if hasattr(event, trig.trigger) and getattr(event, trig.trigger, False)]
-                # Vetoed = [trig for trig in vetoTriggers if hasattr(event, trig.trigger) and getattr(event, trig.trigger, False)]
-                triggerBitSum = sum([pow(2, t.uniqueEraBit) for t in eraTriggers if t.channel == lvl])
-                tieredTriggerBitSums = {}
-                channelToTierDict = {}
-                vetoChannelCode = {}
-                passChannelCode = {}
-                bb = {}
-                for trig_channel, tier in [(trig.channel, trig.tier) for trig in sorted(eraTriggers, key=lambda nTup: nTup.tier, reverse=False)]:
-                    if trig_channel in tieredTriggerBitSums.keys(): continue
-                    channelToTierDict[trig_channel] = min([trig.tier for trig in eraTriggers if trig.channel == trig_channel])
-                    tieredTriggerBitSums[trig_channel] = sum([pow(2, t.uniqueEraBit) for t in eraTriggers if t.channel == trig_channel])
-                    vetoChannelCode[trig_channel] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0".format(tieredTriggerBitSums[trig_channel])
-                    passChannelCode[trig_channel] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(tieredTriggerBitSums[trig_channel])
-                    bb[trig_channel] = ""
-                    # print("channel to tier mapping: {} :: {}".format(trig_channel, channelToTierDict[trig_channel]))
-                    # print("{} channel bits: {}".format(trig_channel, tieredTriggerBitSums[trig_channel]))
-                    # print("pass code: {}".format(passChannelCode[trig_channel]))
-                    # print("veto code: {}".format(vetoChannelCode[trig_channel]))
-                for trig_channel_outer in bb.keys():                    
-                    skipList = []
-                    for trig_channel, tier in [(trig.channel, trig.tier) for trig in sorted(eraTriggers, key=lambda nTup: nTup.tier, reverse=False)]:
-                        if trig_channel in skipList: 
-                            continue
-                        else:
-                            skipList.append(trig_channel)
-                        if channelToTierDict[trig_channel_outer] == tier:
-                            if len(bb[trig_channel_outer]) > 0:
-                                bb[trig_channel_outer] += " && "
-                            bb[trig_channel_outer] += passChannelCode[trig_channel]
-                        elif channelToTierDict[trig_channel_outer] > tier:
-                            if len(bb[trig_channel_outer]) > 0:
-                                bb[trig_channel_outer] += " && "
-                            bb[trig_channel_outer] += vetoChannelCode[trig_channel]
-                        else:
-                            #Do nothing, the code is finished
-                            pass
-
-                # for trig_channel in bb.keys():
-                #     #See different setup of code, 2018 bits now match up as they should
-                #     print(bb[trig_channel] if trig_channel in bb.keys() else "No match for bb key {}".format(trig_channel))
-                #     print(b[trig_channel] if trig_channel in b.keys() else "No match for b key {}".format(trig_channel))
-
                 #########################
                 ### Split proc config ###
                 #########################
@@ -5285,7 +5165,67 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     #skip any further calculations for bookkeeping
                     continue
                 else:
-                    filtered[name][lvl] = base[name].Filter(bb[lvl], lvl)
+                    ####################
+                    ### Trigger Code ###
+                    ####################
+                    #At this stage, lvl ~ channel (except specials like BOOKKEEPING), i.e. "ElMu", "MuMu", "El" - used to include 'baseline' or '
+                    #Code for triggers from LeptonSkimmer (LeptonLogic previously)
+                    #This will eventually move into defineLeptons ideally, to do the HLT and lepton selecetion entirely in RDF
+                    eraTriggers = [trig for trig in TriggerList if vals.get("era", "NOERA") == trig.era]
+                    #NOTE IMPORTANT CHANGE w.r.t. LeptonSkimmer: now check that either MC or that the subera matches, 
+                    #but require the channel matching for BOTH instead of only data... now we filter out the MC that belongs to other channels, 
+                    #instead of accepting all inclusively (skimming-appropriate)
+                    triggers = [trig for trig in eraTriggers if (vals.get("isData", None) == False or vals.get("subera", "NOSUBERA") in trig.subera) and lvl == trig.channel]
+                    print("This will break if BOOKKEEPING is requested <-- FIXME")
+                    #Create list of veto triggers for data, where explicit tiers are expected (calculating the tier first)
+                    tier = [trig.tier for trig in triggers]
+                    tier.sort(key=lambda i: i, reverse=False)
+                    # if debug: 
+                    #     print("Sorted trigger tiers selected are: " + str(tier))
+                    tier = tier[0] if len(tier) > 0 else 9999
+                    #Logic: select triggers if the channel matches and either it's MC (isData == False) or it's Data and the subera matches (Run B, C, D...)
+                    triggers = [trig for trig in eraTriggers if (vals.get("isData", None) == False or vals.get("subera", "NOSUBERA") in trig.subera) and lvl == trig.channel]
+                    #Logic: veto on triggers if the event fired a higher tier trigger and is either data + matching subera or is MC
+                    vetoTriggers = [trig for trig in eraTriggers if (vals.get("isData", None) == False or vals.get("subera", "NOSUBERA") in trig.subera) and trig.tier < tier]
+                    # Fired = [trig for trig in triggers if hasattr(event, trig.trigger) and getattr(event, trig.trigger, False)]
+                    # Vetoed = [trig for trig in vetoTriggers if hasattr(event, trig.trigger) and getattr(event, trig.trigger, False)]
+                    triggerBitSum = sum([pow(2, t.uniqueEraBit) for t in eraTriggers if t.channel == lvl])
+                    tieredTriggerBitSums = {}
+                    channelToTierDict = {}
+                    vetoChannelCode = {}
+                    passChannelCode = {}
+                    channelFilterCode = {}
+                    for trig_channel, tier in [(trig.channel, trig.tier) for trig in sorted(eraTriggers, key=lambda nTup: nTup.tier, reverse=False)]:
+                        if trig_channel in tieredTriggerBitSums.keys(): continue
+                        channelToTierDict[trig_channel] = min([trig.tier for trig in eraTriggers if trig.channel == trig_channel])
+                        tieredTriggerBitSums[trig_channel] = sum([pow(2, t.uniqueEraBit) for t in eraTriggers if t.channel == trig_channel])
+                        vetoChannelCode[trig_channel] = "(ESV_TriggerAndLeptonLogic_selection & {0}) == 0".format(tieredTriggerBitSums[trig_channel])
+                        passChannelCode[trig_channel] = "(ESV_TriggerAndLeptonLogic_selection & {0}) > 0".format(tieredTriggerBitSums[trig_channel])
+                        channelFilterCode[trig_channel] = ""
+                    for trig_channel_outer in channelFilterCode.keys():                    
+                        skipList = []
+                        for trig_channel, tier in [(trig.channel, trig.tier) for trig in sorted(eraTriggers, key=lambda nTup: nTup.tier, reverse=False)]:
+                            if trig_channel in skipList: 
+                                continue
+                            else:
+                                skipList.append(trig_channel)
+                            if channelToTierDict[trig_channel_outer] == tier:
+                                if len(channelFilterCode[trig_channel_outer]) > 0:
+                                    channelFilterCode[trig_channel_outer] += " && "
+                                channelFilterCode[trig_channel_outer] += passChannelCode[trig_channel]
+                            elif channelToTierDict[trig_channel_outer] > tier:
+                                if len(channelFilterCode[trig_channel_outer]) > 0:
+                                    channelFilterCode[trig_channel_outer] += " && "
+                                channelFilterCode[trig_channel_outer] += vetoChannelCode[trig_channel]
+                            else:
+                                #Do nothing, the code is finished
+                                pass
+                    #Print the filter code for each channel here...
+                    # for k, v in channelFilterCode.items():
+                    #     print(k, v)
+        
+                    #Finished verification that new bitset channelFilterCode produces same output as old b, swapping in and deprecating the old one.
+                    filtered[name][lvl] = base[name].Filter(channelFilterCode[lvl], lvl)
                 #Add the MET corrections, creating a consistently named branch incorporating the systematics loaded
                 the_df[name][lvl] = METXYCorr(filtered[name][lvl],
                                               run_branch="run",
