@@ -1623,7 +1623,7 @@
     source:
       NANOv6: dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv6-Nano25Oct2019_102X_upgrade2018_realistic_v20_ext1-v1/NANOAODSIM
       NANOv7: dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext2-v1/NANOAODSIM
-      NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2018/tt_DL-HDMAPdown/*Skim.root
+      NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2018/tt_DL-HDAMPdown/*Skim.root
       NANOv7_CorrNov: dbs:/TTTo2L2Nu_hdampDOWN_TuneCP5_13TeV-powheg-pythia8/nmangane-NoveCampaign-1cea6da0d07fd8de4a53b465a6714af5/USER  instance=prod/phys03
     doFilter: true
     splitProcess:
