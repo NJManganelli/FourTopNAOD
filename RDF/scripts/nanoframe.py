@@ -177,7 +177,6 @@ for x in range(0, len(fileList), args.simultaneous):
         fnumber += x
         if fn not in foNameDict.keys(): 
             foNameDict[fn] = {}
-        foNameDict[fn]["source"], requiresDeletion = prefetchFile(fn, longTermCache=args.longTermCache, verbose=True) if (args.prefetch or args.longTermCache) else (fn, False)
         foNameDict[fn]["final"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
         foNameDict[fn]["temp"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", "_temp" + ".root"))
         #Skip files that are finished unless overwrite is requested
@@ -185,7 +184,9 @@ for x in range(0, len(fileList), args.simultaneous):
             #Put a dummy result in the list to keep array indexing consistent
             if args.write:
                 handles.append(dummyResult())
+            foNameDict[fn]["source"] = "Done"
             continue
+        foNameDict[fn]["source"], requiresDeletion = prefetchFile(fn, longTermCache=args.longTermCache, verbose=True) if (args.prefetch or args.longTermCache) else (fn, False)
         print("temp output {}: {}".format(fnumber, foNameDict[fn]["temp"]))
         tchains[fn] = ROOT.TChain("Events")
         # tcmeta[fn] = ROOT.TChain("Runs")
@@ -243,11 +244,12 @@ for x in range(0, len(fileList), args.simultaneous):
     #Do NOT release foNameDict entries, they are required for final meta info insertion
     # rdf_finals = {}; rdf_bases = {}; tchains = {} ; tcmeta = {} #Release pointers to objects, permit GC?
     for fnumber, fn in enumerate(fileList[x:min(x + args.simultaneous, len(fileList))]):
-        del booktriggers[fn]
-        del rdf_bases[fn]
-        del tchains[fn]
+        if fn in booktriggers.keys():
+            del booktriggers[fn]
+            del rdf_bases[fn]
+            del tchains[fn]
         # del tcmeta[fn]
-        if args.prefetch and not args.longTermCache:
+        if args.prefetch and not args.longTermCache and os.path.isfile(foNameDict[fn]["source"]):
             try:
                 os.unlink(foNameDict[fn]["source"])
             except:
