@@ -1,0 +1,8 @@
+root://cms-xrd-global.cern.ch//pnfs/iihe/cms/store/group/fourtop/NoveCampaign/2017/MuonEG/NoveCampaign/201129_140308/0000/tree_1.root
+root://cms-xrd-global.cern.ch//pnfs/iihe/cms/store/group/fourtop/NoveCampaign/2017/MuonEG/NoveCampaign/201129_140308/0000/tree_8.root
+root://cms-xrd-global.cern.ch//pnfs/iihe/cms/store/group/fourtop/NoveCampaign/2017/MuonEG/NoveCampaign/201129_140308/0000/tree_7.root
+root://cms-xrd-global.cern.ch//pnfs/iihe/cms/store/group/fourtop/NoveCampaign/2017/MuonEG/NoveCampaign/201129_140308/0000/tree_3.root
+root://cms-xrd-global.cern.ch//pnfs/iihe/cms/store/group/fourtop/NoveCampaign/2017/MuonEG/NoveCampaign/201129_140308/0000/tree_2.root
+root://cms-xrd-global.cern.ch//pnfs/iihe/cms/store/group/fourtop/NoveCampaign/2017/MuonEG/NoveCampaign/201129_140308/0000/tree_6.root
+root://cms-xrd-global.cern.ch//pnfs/iihe/cms/store/group/fourtop/NoveCampaign/2017/MuonEG/NoveCampaign/201129_140308/0000/tree_4.root
+root://cms-xrd-global.cern.ch//pnfs/iihe/cms/store/group/fourtop/NoveCampaign/2017/MuonEG/NoveCampaign/201129_140308/0000/tree_5.root
