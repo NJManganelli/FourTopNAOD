@@ -4287,7 +4287,6 @@
     channels:
     - ElMu
     - ElEl
-    - El
     source:
       NANOv5: dbs:/SingleElectron/Run2017B-Nano1June2019-v1/NANOAOD
       NANOv6: dbs:/SingleElectron/Run2017B-Nano25Oct2019-v1/NANOAOD
@@ -4303,7 +4302,6 @@
     channels:
     - ElMu
     - ElEl
-    - El
     source:
       NANOv5: dbs:/SingleElectron/Run2017C-Nano1June2019-v1/NANOAOD
       NANOv6: dbs:/SingleElectron/Run2017C-Nano25Oct2019-v1/NANOAOD
@@ -4319,7 +4317,6 @@
     channels:
     - ElMu
     - ElEl
-    - El
     source:
       NANOv5: dbs:/SingleElectron/Run2017D-Nano1June2019-v1/NANOAOD
       NANOv6: dbs:/SingleElectron/Run2017D-Nano25Oct2019-v1/NANOAOD
@@ -4335,7 +4332,6 @@
     channels:
     - ElMu
     - ElEl
-    - El
     source:
       NANOv5: dbs:/SingleElectron/Run2017E-Nano1June2019-v1/NANOAOD
       NANOv6: dbs:/SingleElectron/Run2017E-Nano25Oct2019-v1/NANOAOD
@@ -4351,7 +4347,6 @@
     channels:
     - ElMu
     - ElEl
-    - El
     source:
       NANOv5: dbs:/SingleElectron/Run2017F-Nano1June2019-v1/NANOAOD
       NANOv6: dbs:/SingleElectron/Run2017F-Nano25Oct2019-v1/NANOAOD
@@ -4437,7 +4432,6 @@
     channels:
     - ElMu
     - MuMu
-    - Mu
     source:
       NANOv5: dbs:/SingleMuon/Run2017B-Nano1June2019-v1/NANOAOD
       NANOv6: dbs:/SingleMuon/Run2017B-Nano25Oct2019-v1/NANOAOD
@@ -4453,7 +4447,6 @@
     channels:
     - ElMu
     - MuMu
-    - Mu
     source:
       NANOv5: dbs:/SingleMuon/Run2017C-Nano1June2019-v1/NANOAOD
       NANOv6: dbs:/SingleMuon/Run2017C-Nano25Oct2019-v1/NANOAOD
@@ -4469,7 +4462,6 @@
     channels:
     - ElMu
     - MuMu
-    - Mu
     source:
       NANOv5: dbs:/SingleMuon/Run2017D-Nano1June2019-v1/NANOAOD
       NANOv6: dbs:/SingleMuon/Run2017D-Nano25Oct2019-v1/NANOAOD
@@ -4485,7 +4477,6 @@
     channels:
     - ElMu
     - MuMu
-    - Mu
     source:
       NANOv5: dbs:/SingleMuon/Run2017E-Nano1June2019-v1/NANOAOD
       NANOv6: dbs:/SingleMuon/Run2017E-Nano25Oct2019-v1/NANOAOD
@@ -4501,7 +4492,6 @@
     channels:
     - ElMu
     - MuMu
-    - Mu
     source:
       NANOv5: dbs:/SingleMuon/Run2017F-Nano1June2019-v1/NANOAOD
       NANOv6: dbs:/SingleMuon/Run2017F-Nano25Oct2019-v1/NANOAOD
