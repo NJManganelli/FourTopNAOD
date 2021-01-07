@@ -39,14 +39,14 @@ else:
 ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way
 print("FIXME: Hardcoded FTFunctions.cpp path, needs fixin'...")
 ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
-print("To compile the loaded file, append a '+' to the '.L <file_name>+' line")
+print("To compile the loaded file, append a '+' to the '.L <file_name>+' line, and to specify gcc as the compile, also add 'g' after that")
 # David Ren-Hwa Yu
 # 22:43
 # In older versions of ROOT, I vaguely remember that you had to load the header files for the libraries, like 
 
 # gInterpreter.Declare("#include \"MyTools/RootUtils/interface/HistogramManager.h\"")
 # gSystem.Load(os.path.expandvars("$CMSSW_BASE/lib/$SCRAM_ARCH/libMyToolsRootUtils.so"))
-# ROOT.gROOT.ProcessLine(".L FTFunctions.cpp+")
+# ROOT.gROOT.ProcessLine(".L FTFunctions.cpp+g") #+ compiles, g specifies gcc as the compiler to use instead of whatever ROOT naturally prefers (llvm? clang?)
 ROOT.gInterpreter.Declare("""
     const UInt_t barWidth = 60;
     ULong64_t processed = 0, totalEvents = 0;
@@ -4705,7 +4705,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
          useDeltaR=False, jetPtMin=30.0, jetPUId=None, 
          excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True,
          testVariables=False, systematicSet="All", nThreads=8,
-         redirector=None, doRDFReport=False
+         redirector=None, recreateFileList=False, doRDFReport=False
      ):
 
     ##################################################
@@ -4998,7 +4998,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             sampleOutFile = "{base}/{era}__{src}__{sample}.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
             # sampleFriendFile = "{base}/{era}__{src}__{sample}__Friend0.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
             fileList = []
-            if os.path.isfile(sampleOutFile):
+            if os.path.isfile(sampleOutFile) and not recreateFileList:
                 fileList = getFiles(query="list:{}".format(sampleOutFile), outFileName=None)
             else:
                 if isinstance(redirector, str):
@@ -5619,7 +5619,7 @@ if __name__ == '__main__':
     parser.add_argument('--source', dest='source', action='store', type=str, default='LJMLogic__{chan}_selection',
                         help='Stage of data storage to pull from, as referenced in Sample dictionaries as subkeys of the "source" key.'\
                         'Must be available in all samples to be processed. {chan} will be replaced with the channel analyzed')
-    parser.add_argument('--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 'ElEl_HighMET'],
+    parser.add_argument('--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 'ElEl_HighMET', 'Mu', 'El'],
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
                         help='output directory path defaulting to "."')
@@ -5659,6 +5659,8 @@ if __name__ == '__main__':
     #                     help='string to filter samples while checking events or generating configurations')
     parser.add_argument('--redirector', dest='redir', action='store', type=str, nargs='?', default=None, const='root://cms-xrd-global.cern.ch/',
                         help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
+    parser.add_argument('--recreateFileList', dest='recreateFileList', action='store_true',
+                        help='Replace old fileList caches with newly created ones, necessary if the "source" value changes for a key already used in an analysis directory.')
     parser.add_argument('--era', dest='era', action='store', type=str, default="2015", choices=['2016', '2017', '2018'],
                         help='simulation/run year')
     parser.add_argument('--nThreads', dest='nThreads', action='store', type=int, default=8, #nargs='?', const=0.4,
@@ -5732,6 +5734,8 @@ if __name__ == '__main__':
         print("Exclude samples: {excld}".format(excld=excludeSampleNames))
     else:
         print("Using all samples!")
+    print("Redirector used (overridden if '/eos/' is in the file path!): ".format(args.redir))
+    print("cached fileLists will be recreated, if they exist: {}".format(args.recreateFileList))
     print("Verbose option: {verb}".format(verb=verb))
     print("Quiet option: {qt}".format(qt=quiet))
     print("Systematic Set: {sS}".format(sS=systematicSet))    
@@ -5744,7 +5748,7 @@ if __name__ == '__main__':
         # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
-                      printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
+                      printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
         #      verbose=False)
         # packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, 
@@ -5788,20 +5792,20 @@ if __name__ == '__main__':
                       BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, 
                       useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, sampleCards, source, "BOOKKEEPING", bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'fill-histograms':
         #filling ntuples is also possible with the option --doNtuples
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, 
@@ -5810,7 +5814,7 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'fill-combine':
         #filling ntuples is also possible with the option --doNtuples
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, 
@@ -5819,7 +5823,7 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
-                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'hadd-histograms' or stage == 'hadd-combine':
         print("Combining root files for plotting")
         if stage == 'hadd-histograms':
@@ -5849,6 +5853,6 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, 
-                      quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, doRDFReport=args.report)
+                      quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     else:
         print("stage {stag} is not yet prepared, please update the FTAnalyzer".format(stag))
