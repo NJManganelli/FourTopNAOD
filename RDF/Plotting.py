@@ -2101,8 +2101,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         # ]
         # systematics = ['btagSF_shape_hfDown', 'btagSF_shape_hfUp',
         # ]
-        print("Removing systematics")
-        systematics = []
+        # print("Removing systematics")
+        # systematics = []
 
         #Deduce systematics automatically...
         
