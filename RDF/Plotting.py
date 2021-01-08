@@ -1247,34 +1247,41 @@ argsDOTplotJSON = {
 #Add the defaults and any common legends to the dictionary
 argsDOTplotJSON.update(defaultAndLegends)
 
+
 def json_load_byteified(file_handle):
-    return _byteify(
-        json.load(file_handle, object_hook=_byteify),
-        ignore_dicts=True
-    )
+    return json.load(file_handle)
 
 def json_loads_byteified(json_text):
-    return _byteify(
-        json.loads(json_text, object_hook=_byteify),
-        ignore_dicts=True
-    )
+    return json.loads(json_text)
 
-def _byteify(data, ignore_dicts = False):
-    # if this is a unicode string, return its string representation
-    if isinstance(data, unicode):
-        return data.encode('utf-8')
-    # if this is a list of values, return list of byteified values
-    if isinstance(data, list):
-        return [ _byteify(item, ignore_dicts=True) for item in data ]
-    # if this is a dictionary, return dictionary of byteified keys and values
-    # but only if we haven't already byteified it
-    if isinstance(data, dict) and not ignore_dicts:
-        return {
-            _byteify(key, ignore_dicts=True): _byteify(value, ignore_dicts=True)
-            for key, value in data.iteritems()
-        }
-    # if it's anything else, return it in its original form
-    return data
+# def json_load_byteified(file_handle):
+#     return _byteify(
+#         json.load(file_handle, object_hook=_byteify),
+#         ignore_dicts=True
+#     )
+
+# def json_loads_byteified(json_text):
+#     return _byteify(
+#         json.loads(json_text, object_hook=_byteify),
+#         ignore_dicts=True
+#     )
+
+# def _byteify(data, ignore_dicts = False):
+#     # if this is a unicode string, return its string representation
+#     if isinstance(data, unicode):
+#         return data.encode('utf-8')
+#     # if this is a list of values, return list of byteified values
+#     if isinstance(data, list):
+#         return [ _byteify(item, ignore_dicts=True) for item in data ]
+#     # if this is a dictionary, return dictionary of byteified keys and values
+#     # but only if we haven't already byteified it
+#     if isinstance(data, dict) and not ignore_dicts:
+#         return {
+#             _byteify(key, ignore_dicts=True): _byteify(value, ignore_dicts=True)
+#             for key, value in data.iteritems()
+#         }
+#     # if it's anything else, return it in its original form
+#     return data
 
 def cartesianProductList(name_format="$NUM_$LET_$SYM", name_tuples=[("$NUM", ["1", "2"]), ("$LET", ["A", "B", "C"]), ("$SYM", ["*", "@"])]):
     """Take as input a string <name_format> and list of tuples <name_tuple> where a cartesian product of the tuples is formed.
@@ -1437,8 +1444,10 @@ def createRatio(h1, h2, Cache=None, ratioTitle="input 0 vs input 1", ratioColor 
     # Set up plot for markers and errors according to ROOT example, but SetStats(0) might be too minimal sometimes
     # h3.Sumw2() #Not necesary if set globally already
     h3.SetStats(0)
-    if "ROOT.TH" in str(type(h2)):
+    if str(h2.ClassName()) in ["TH1I", "TH1F", "TH1D"]:
         h3.Divide(h2)
+    else:
+        raise NotImplementedError("Unhandled class type for histogram division: {}".format(str(h2.ClassName())))
     h3.SetMinimum(yMin)
     h3.SetMaximum(yMax)
 
@@ -1463,7 +1472,7 @@ def createRatio(h1, h2, Cache=None, ratioTitle="input 0 vs input 1", ratioColor 
 
     #Do blinding
     if isBlinded:
-        for i in xrange(h3.GetNbinsX()):
+        for i in range(h3.GetNbinsX()):
             h3.SetBinContent(i+1, 0.0)
         h3.SetMarkerColor(ROOT.kWhite)
         h3.SetLineColor(ROOT.kWhite)
@@ -1497,10 +1506,10 @@ def createCanvasPads(canvasTitle, Cache=None, doRatio=False, doMountainrange=Fal
     #FIXME: This is really for Mountain Ranges where they're all joined. If pads are to be separated, should 
     #not make assumptions about the larger left/right pads that include border size.
     #Then try limiting precision to get rid of weird visual artifacts by casting to limited precision string and back
-    xEdgesLow = [bordersL + usableLR*z/float(nXPads) for z in xrange(nXPads)]
+    xEdgesLow = [bordersL + usableLR*z/float(nXPads) for z in range(nXPads)]
     #Unnecessary for pdf, doesn't help with jsroot canvas gap between 3rd and 4th pads in mountain range
     #xEdgesLow = [float("{:.3f}".format(edge)) for edge in xEdgesLow] 
-    xEdgesHigh = [bordersL + usableLR*(z+1)/float(nXPads) for z in xrange(nXPads)]
+    xEdgesHigh = [bordersL + usableLR*(z+1)/float(nXPads) for z in range(nXPads)]
     #xEdgesHigh = [float("{:.3f}".format(edge)) for edge in xEdgesHigh]
     #Now the edges must be calculated for each pad, hardcode nYPads = 2
     nYPads = 2
@@ -1528,7 +1537,7 @@ def createCanvasPads(canvasTitle, Cache=None, doRatio=False, doMountainrange=Fal
     #print("{} {} {} {}".format(marginL, marginR, marginT, marginB))
 
 
-    for z in xrange(nXPads):
+    for z in range(nXPads):
         c.cd()  # returns to main canvas before defining another pad, to not create sub-subpad
         padU = ROOT.TPad("{}_{}".format(canvasTitle,z), "{}_{}".format(canvasTitle,z), 
                         xEdgesLow[z], yEdgesLow[-1], xEdgesHigh[z], yEdgesHigh[-1]) #xmin ymin xmax ymax as fraction
@@ -1910,11 +1919,13 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
         else:
             retDict["Supercategories"][super_cat_name] = addHists([tup[2] for tup in tmpList], 
                                                                   "s_{blind}{cat}{sep}{com}{sep}{sys}".format(cat=super_cat_name, 
-                                                                                                       sep=separator,
-                                                                                                       com=histNameCommon,
+                                                                                                              sep=separator,
+                                                                                                              com=histNameCommon,
                                                                                                               sys="" if systematic == None else systematic,
                                                                                                               blind="BLIND" if len([tup[2].GetName() for tup in tmpList if "BLIND" in tup[2].GetName()]) > 0 else ""), 
                                                                   scaleArray = None)
+            #We need the tuple, which one? Choose the last/most significant one...
+            tup = tmpList[-1]
             legendCode = legendConfig["Categories"][tup[1]]["Style"]
             if legendCode == "Fill" or legendCode == "FillAlpha":
                 legendCode = "F"
@@ -1924,7 +1935,7 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
                 #Assume Marker style
                 legendCode = "P"
             #Add the legend entry, but instead of the tup[2] histogram, the overall added hist.
-            legendLabel = tup[1] + " (blind)" if "blind" in tup[2].GetName().lower() else tup[1] #This only works if the first category is blinded
+            legendLabel = tup[1] + " (partially/blind)" if any(["blind" in tup[2].GetName().lower() for tup in tmpList]) else tup[1]
             leg.AddEntry(retDict["Supercategories"][super_cat_name], legendLabel, legendCode)
             retDict["Supercategories/hists"][super_cat_name] = retDict["Supercategories"][super_cat_name]#.GetListOfFunctions().FindObject("stats")
             #retDict["Supercategories/xAxis"][super_cat_name] = retDict["Supercategories"][super_cat_name].GetXaxis()
@@ -2090,8 +2101,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         # ]
         # systematics = ['btagSF_shape_hfDown', 'btagSF_shape_hfUp',
         # ]
-        # print("Removing systematics")
-        # systematics = []
+        print("Removing systematics")
+        systematics = []
 
         #Deduce systematics automatically...
         
@@ -2168,7 +2179,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             if combineOutput is not None or (pdfOutput is not None and len(blindSupercategories) < 1):
                 nSysts = len(systematics)
                 print(" {} systematics: ".format(nSysts), end="")
-                nBins = CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values()[0].GetNbinsX()
+                nBins = list(CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values())[0].GetNbinsX()
                 sD = dict() #systematic dictionary for lookup into numpy array
                 sD['statisticsUp'] = nSysts + 0
                 sD['statisticsDown'] = nSysts + 1
@@ -2186,8 +2197,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                     # multiprocessing.Pool.map() may be faster... but it didn't work in my first test. list comprehension better if tupled up?
                     if "data" in supercategory.lower(): continue
                     # histoArrays = [(scHisto.GetBinContent(x), scHisto.GetBinErrorLow(x), scHisto.GetBinErrorUp(x),
-                    #                 scHisto.GetBinLowEdge(x), scHisto.GetBinCenter(x), scHisto.GetBinWidth(x)) for x in xrange(nBins + 2)]
-                    histoArrays = [(scHisto.GetBinErrorLow(x), scHisto.GetBinErrorUp(x)) for x in xrange(nBins + 2)]
+                    #                 scHisto.GetBinLowEdge(x), scHisto.GetBinCenter(x), scHisto.GetBinWidth(x)) for x in range(nBins + 2)]
+                    histoArrays = [(scHisto.GetBinErrorLow(x), scHisto.GetBinErrorUp(x)) for x in range(nBins + 2)]
                     # npNominal[pn][supercategory] = np.asarray([bt[0] for bt in histoArrays], dtype=float)
                     npNominal[pn][supercategory], edgesTuple = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=True)
                     npValues[pn][supercategory] = np.zeros((nSysts + 2, nBins + 2), dtype=float)
@@ -2228,7 +2239,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                 nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn))
                     for supercategory, scHisto in CanCache["subplots/supercategories/systematics"][syst][pn]['Supercategories/hists'].items():
                         if "data" in supercategory.lower(): continue                        
-                        # npValues[pn][supercategory][nSyst, :] = np.asarray(map(lambda l: l[0].GetBinContent(l[1]), [(scHisto, x) for x in xrange(nBins + 2)]))
+                        # npValues[pn][supercategory][nSyst, :] = np.asarray(map(lambda l: l[0].GetBinContent(l[1]), [(scHisto, x) for x in range(nBins + 2)]))
                         npValues[pn][supercategory][nSyst, :] = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=False)
                         npDifferences[pn][supercategory] = npValues[pn][supercategory] - npNominal[pn][supercategory]
                         npStatSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
@@ -2363,7 +2374,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                 #Don't draw blinded data...
                 if "data" in super_cat_name.lower() and "blind" in drawable.GetName().lower() and subplot_dict.get("Unblind", False) == False:
                     if isinstance(drawable, ROOT.TH1):
-                        for binnumber in xrange(drawable.GetNbinsX()+2):
+                        for binnumber in range(drawable.GetNbinsX()+2):
                             drawable.SetBinContent(binnumber, 0); drawable.SetBinError(binnumber, 0)
                     else: #handle TH2, graphs?
                         pass
@@ -2541,7 +2552,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         if drawYields:
             padWidth = (1.0 - CanCache["canvas/bordersL"] - CanCache["canvas/bordersR"])/nXPads
             drawPoint = CanCache["canvas/marginL"]*0.33
-            for pn in xrange(len(CanCache["subplots/integrals"])):
+            for pn in range(len(CanCache["subplots/integrals"])):
                 tmp = ROOT.TLatex()
                 tmp.SetTextSize(0.016)
                 tmpString = "#splitline"
@@ -2600,7 +2611,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
             if "signalSensitive_HT" in can_name: continue
             # if "nBtag2p" in can_name: continue
             normalizationDict = {}
-            for i in xrange(len(CanCache["subplots/supercategories"])):
+            for i in range(len(CanCache["subplots/supercategories"])):
                 for preProcessName, hist in CanCache["subplots/supercategories"][i]['Categories/hists'].items():
                     processName = preProcessName.replace("BLIND", "").replace("Data", "data_obs")
                     if processName not in combSystematics:
@@ -2627,7 +2638,7 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                         print("Blinding histogram for Combine")
                         combHist = hist.Clone(hist.GetName().replace("Data", "data_obs").replace("+", "p").replace("BLIND", ""))
                         combHist.SetDirectory(0)
-                        for combBin in xrange(combHist.GetNbinsX() + 2):
+                        for combBin in range(combHist.GetNbinsX() + 2):
                             combHist.SetBinContent(combBin, 0); combHist.SetBinError(combBin, 0)
                     else:
                         combHist = hist.Clone(histName)
@@ -2636,15 +2647,15 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                     if removeNegativeBins:
                         negativeBins = np.nonzero(root_numpy.hist2array(hist, include_overflow=True, copy=True, return_edges=False) < 0)[0]
                         for bin in negativeBins:
-                            combHist.SetBinContent(bin, 0)
-                            combHist.SetBinError(bin, 0)
+                            combHist.SetBinContent(int(bin), 0)
+                            combHist.SetBinError(int(bin), 0)
                         if abs(combHist.Integral()) > 0.00001:
                             combHist.Scale(normalizationDict[combHist.GetName()]/combHist.Integral())
                         #Reset normalization so that systematics that are shape-only will match.
                         normalizationDict[combHist.GetName()] = combHist.Integral()
                     combHistograms[processName].append(combHist)
             for syst in CanCache["subplots/supercategories/systematics"].keys():
-                for i in xrange(len(CanCache["subplots/supercategories/systematics"][syst])):
+                for i in range(len(CanCache["subplots/supercategories/systematics"][syst])):
                     for preProcessName, hist in CanCache["subplots/supercategories/systematics"][syst][i]['Categories/hists'].items():
                         processName = preProcessName.replace("BLIND", "").replace("Data", "data_obs")
                         if processName not in combSystematics:
@@ -2701,8 +2712,8 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                         if removeNegativeBins:
                             negativeBins = np.nonzero(root_numpy.hist2array(combHist, include_overflow=True, copy=True, return_edges=False) < 0)[0]
                             for bin in negativeBins:
-                                combHist.SetBinContent(bin, 0)
-                                combHist.SetBinError(bin, 0)
+                                combHist.SetBinContent(int(bin), 0)
+                                combHist.SetBinError(int(bin), 0)
                         #Regardless if negative weight bins are removed, check if there is a normalization to do
                         if systIntegral > 0.00001:
                             if normalizeUncertainties is not None:
