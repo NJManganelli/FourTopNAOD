@@ -1465,19 +1465,6 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                 nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
         else:
             for defName, defFunc in z:
-                ###Testing new weights methods
-                if len([(dNew[0], dNew[1]) for dNew in z if dNew[0] == "new_" + defName]) > 0:
-                    newDefName, newDefFunc = [(dNew[0], dNew[1]) for dNew in z if dNew[0] == "new_" + defName][0]
-                    if not defFunc == newDefFunc:
-                        print("{} :: {}".format(defName, defFunc))
-                        print("{} :: {}".format(newDefName, newDefFunc))
-                    else:
-                        print("Equivalence: {}".format(defFunc == newDefFunc))
-                else:
-                    if defName.startswith("new_"):
-                        pass
-                    else:
-                        print("No new equivalent for {} :: {}".format(defName, defFunc))
                 #Apply era-specific rules to the weights, such as whether L1PreFire applies
                 if era == "2016":
                     if defName in ["NONE"]:
