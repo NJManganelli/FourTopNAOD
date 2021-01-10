@@ -3764,7 +3764,7 @@ def BTaggingYieldsAnalyzer(directory, outDirectory="{}", globKey="*.root", strip
     #deduce names from the filenames, with optional stripKey parameter that defaults to .root
     names = [fname.split("/")[-1].replace(stripKey, "") for fname in files]
     fileDict = {}
-    oFile = ROOT.TFile.Open("{}/BTaggingYields.root".format(outDirectory).replace("//", "/"),"RECREATE")
+    oFile = ROOT.TFile.Open("{}/BTaggingYields.root".format(outDirectory).replace("//", "/"), mode)
     keysDict = {}
     numerators_dict = {}
     denominator_dict = {}
@@ -5029,10 +5029,15 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             else:
                 if isinstance(redirector, str):
                     redir = redirector
-                elif "/eos/" in vals["source"][source_level]:
-                    redir="root://eosuser.cern.ch/".format(str(pwd.getpwuid(os.getuid()).pw_name)[0])
+                elif "/eos/user/" in vals["source"][source_level] or "/eos/home-" in vals["source"][source_level]:
+                    #If we can directly access the files, then do so, otherwise redirector is called for
+                    if vals["source"][source_level].startswith("glob:") and len(glob.glob(vals["source"][source_level].replace("glob:",""))) > 0:
+                        redir=""
+                    else:
+                        redir="root://eosuser.cern.ch/".format(str(pwd.getpwuid(os.getuid()).pw_name)[0])
                 else:
                     redir=""
+                print("Determining redirector...{}".format(redir))
                 # if "dbs:" in vals["source"][source_level]:
                 fileList = getFiles(query=vals["source"][source_level], redir=redir, outFileName=sampleOutFile)
                 # else:
@@ -5357,7 +5362,6 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                sysVariations=sysVariationsAll, 
                                                verbose=verbose,
                 )
-                pdb.set_trace()
                 #Get the yields, the ultimate goal of which is to determin in a parameterized way the renormalization factors for btag shape reweighting procedure
                 prePackedNodes = BTaggingYields(prePackedNodes, sampleName=name, isData=vals["isData"], channel=lvl,
                                                 histosDict=btagging, loadYields=BTaggingYieldsFile,
