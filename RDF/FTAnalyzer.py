@@ -1387,7 +1387,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
     return rdf
 
 
-def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbose=False, final=False, sysVariations={"$NOMINAL":"NoValueNeeded"}):
+def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbose=False, final=False, sysVariations={"$NOMINAL":"ValueNeeded"}):
     """Define all the pre-final or final weights and the variations, to be referened by the sysVariations dictionaries as wgt_final.
     if final=False, do the pre-final weights for BTaggingYields calculations.
     
@@ -1408,8 +1408,6 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
 
     #There's only one lepton branch variation (nominal), but if it ever changes, this will serve as sign it's referenced here and made need to be varied
     leppostfix = ""
-    lumiDict = {"2017": 41.53,
-                "2018": 59.97}
 
     #Two lists of weight definitions, one or the other is chosen at the end via 'final' optional parameter
     zFin = []
@@ -1582,6 +1580,20 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     if "no_L1PreFiringWeight" in sysVariations.keys():
         zFin.append(("wgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
         zPre.append(("prewgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
+
+    #Start the new implementatino
+    for sysVar, sysDict in sysVariations.items():
+        leppostfix = sysDict.get('lep_postfix', '')
+        if sysDict.get("isNominal", False): 
+            for wgtKey, wgtDef in sysDict.get("commonWeights", {}).items():
+                zPre.append(("new_" + wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
+                             wgtDef.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix)))
+        for wgtKey, wgtDef in sysDict.get("preWeights", {}).items():
+            zPre.append(("new_" + wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
+                         wgtDef.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix)))
+        for wgtKey, wgtDef in sysDict.get("finalWeights", {}).items():
+            zFin.append(("new_" + wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
+                         wgtDef.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix)))
     
     #Load the initial or final definitions
     if final:
@@ -1599,6 +1611,19 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                 nodes[processName]["BaseNode"] = nodes[processName]["BaseNode"].Define(defName, defFunc)
         else:
             for defName, defFunc in z:
+                ###Testing new weights methods
+                if len([(dNew[0], dNew[1]) for dNew in z if dNew[0] == "new_" + defName]) > 0:
+                    newDefName, newDefFunc = [(dNew[0], dNew[1]) for dNew in z if dNew[0] == "new_" + defName][0]
+                    if not defFunc == newDefFunc:
+                        print("{} :: {}".format(defName, defFunc))
+                        print("{} :: {}".format(newDefName, newDefFunc))
+                    else:
+                        print("Equivalence: {}".format(defFunc == newDefFunc))
+                else:
+                    if defName.startswith("new_"):
+                        pass
+                    else:
+                        print("No new equivalent for {} :: {}".format(defName, defFunc))
                 #Apply era-specific rules to the weights, such as whether L1PreFire applies
                 if era == "2016":
                     if defName in ["NONE"]:
@@ -5332,6 +5357,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                sysVariations=sysVariationsAll, 
                                                verbose=verbose,
                 )
+                pdb.set_trace()
                 #Get the yields, the ultimate goal of which is to determin in a parameterized way the renormalization factors for btag shape reweighting procedure
                 prePackedNodes = BTaggingYields(prePackedNodes, sampleName=name, isData=vals["isData"], channel=lvl,
                                                 histosDict=btagging, loadYields=BTaggingYieldsFile,
