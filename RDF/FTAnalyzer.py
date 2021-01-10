@@ -878,8 +878,8 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
             continue
         else:
             branchpostfix = "__" + sysVar.replace("$NOMINAL", "nom")
-        metPt = sysDict.get("met_pt_var")
-        metPhi = sysDict.get("met_phi_var")
+        metPt = sysDict.get("met_pt_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
+        metPhi = sysDict.get("met_phi_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
         metDoublet = "MET_xycorr_doublet{bpf}".format(bpf=branchpostfix)
         metPtName = "FTAMET{bpf}_pt".format(bpf=branchpostfix)
         metPhiName = "FTAMET{bpf}_phi".format(bpf=branchpostfix)
@@ -1246,9 +1246,9 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
         if isWeightVariation == True: continue
-        jetMask = sysDict.get("jet_mask")
-        jetPt = sysDict.get("jet_pt_var")
-        jetMass = sysDict.get("jet_mass_var")
+        jetMask = sysDict.get("jet_mask").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
+        jetPt = sysDict.get("jet_pt_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
+        jetMass = sysDict.get("jet_mass_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
         postfix = "__" + sysVar.replace("$NOMINAL", "nom")
         
         #Fill lists
@@ -1819,8 +1819,8 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                 isWeightVariation = sysDict.get("weightVariation")
                 branchpostfix = "__nom" if isWeightVariation else "__" + sysVar.replace("$NOMINAL", "nom") #branch postfix for identifying input branch variation
                 syspostfix = "___" + sysVar.replace("$NOMINAL", "nom")
-                jetMask = sysDict.get("jet_mask") #mask as defined for the jet collection under this systematic variation
-                jetPt = sysDict.get("jet_pt_var") #colum name of jet pt collection for this systematic
+                jetMask = sysDict.get("jet_mask").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')) #mask as defined for the jet collection under this systematic variation
+                jetPt = sysDict.get("jet_pt_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')) #colum name of jet pt collection for this systematic
                 jetSF = sysDict.get("btagSF").get(bTagger, "NO / VALID / jetSF") #colum name of per-jet shape SFs
                 #We must get or calculate various weights, defined below
                 #This btagSFProduct is the product of the SFs for the selected jets from collection jetPt with mask jetMask
@@ -2596,7 +2596,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
             continue
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
-        #jetMask = sysDict.get("jet_mask")
+        #jetMask = sysDict.get("jet_mask").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
         #jetPt = sysDict.get("jet_pt_var")
         #jetMass = sysDict.get("jet_mass_var")
         #Name histograms with their actual systematic variation postfix, using the convention that HISTO_NAME__nom is
@@ -4999,6 +4999,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             # sampleFriendFile = "{base}/{era}__{src}__{sample}__Friend0.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
             fileList = []
             if os.path.isfile(sampleOutFile) and not recreateFileList:
+                print("Loading filelist from the cached list in this analysis directory: {}".format(sampleOutFile))
                 fileList = getFiles(query="list:{}".format(sampleOutFile), outFileName=None)
             else:
                 if isinstance(redirector, str):
