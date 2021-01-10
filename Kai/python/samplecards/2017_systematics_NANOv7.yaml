@@ -12,8 +12,26 @@ $NOMINAL:
   weightVariation: false
   systematicSet:
   - nominal
+  commonWeights:
+  - pwgt_LSF___nom: "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))"
+  - pwgt_LSF___nom: "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))"
+  - EGamma_HLT_ZVtx_SF_nom: "return 0.991;"
+  - EGamma_HLT_ZVtx_SF_unc: "return 0.001;"
+  - pwgt_Z_vtx___nom: "((FTALepton{lpf}_pdgId.size() > 1 && (abs(FTALepton{lpf}_pdgId.at(0)) == 11 || abs(FTALepton{lpf}_pdgId.at(1)) == 11)) || (FTALepton{lpf}_pdgId.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 11)) ? EGamma_HLT_ZVtx_SF_nom : 1.00000000000000".format(lpf=leppostfix)
+  - prewgt___nom: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom" #Used as base for many other weights, e.g. btag variation, take care modifying this one
+  - pwgt_btagSF_common: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"
+  # weight for non-2017    zPre.append(("pwgt_Z_vtx___nom: "(Int_t)1;"))
+  finalWeights:
+  - wgt___nom: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_btag___nom"
+# #Correlated JES Up and Down - with the jes btag weight for those jets, the correlated version
+# if "jes_btagSF_correlatedDown" in sysVariations.keys():
+#     zFin.append(("wgt___jes_btagSF_correlatedDown: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jes_btagSF_correlatedDown * pwgt_Z_vtx___nom"))
+#     zPre.append(("prewgt___jes_btagSF_correlatedDown: "prewgt___nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
+# if "jes_btagSF_correlatedUp" in sysVariations.keys():
+#     zFin.append(("wgt___jes_btagSF_correlatedUp: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___jes_btagSF_correlatedUp * pwgt_Z_vtx___nom"))
+#     zPre.append(("prewgt___jes_btagSF_correlatedUp: "prewgt___nom")) #JES *weight* only changes with event-level btag weight, so this is just the nominal
 jec_13TeV_R2017Up:
-  jet_mask: jet_mask_jec_13TeV_R2017Up
+  jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesTotalUp
   jet_mass_var: Jet_mass_jesTotalUp
@@ -27,8 +45,12 @@ jec_13TeV_R2017Up:
   systematicSet:
   - jerc
   notes: Corresponds to jec_13TeV_R2017Up most likely...
+  preWeights:
+  - prewgt___$SYSTEMATIC: "prewgt___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
 jec_13TeV_R2017Down:
-  jet_mask: jet_mask_jec_13TeV_R2017Down
+  jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesTotalDown
   jet_mass_var: Jet_mass_jesTotalDown
@@ -42,6 +64,10 @@ jec_13TeV_R2017Down:
   systematicSet:
   - jerc
   notes: Corresponds to jec_13TeV_R2017Down most likely...
+  preWeights:
+  - prewgt___$SYSTEMATIC: "prewgt___nom" #JES weight only changes with event-level btag weight, so this is just the nominal
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
 pileupUp:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -53,6 +79,10 @@ pileupUp:
   weightVariation: true
   systematicSet:
   - pu
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
 pileupDown:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -64,6 +94,10 @@ pileupDown:
   weightVariation: true
   systematicSet:
   - pu
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
 prefireUp:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -75,6 +109,10 @@ prefireUp:
   weightVariation: true
   systematicSet:
   - pf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
 prefireDown:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -86,6 +124,10 @@ prefireDown:
   weightVariation: true
   systematicSet:
   - pf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
 jer_13TeV_R2017Up:
   jet_mask: jet_mask_jer_13TeV_R2017Up
   lep_postfix: ''
@@ -100,6 +142,10 @@ jer_13TeV_R2017Up:
   weightVariation: false
   systematicSet:
   - jerc
+  preWeights:
+  - prewgt___$SYSTEMATIC: "prewgt___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
 jer_13TeV_R2017Down:
   jet_mask: jet_mask_jer_13TeV_R2017Down
   lep_postfix: ''
@@ -114,6 +160,10 @@ jer_13TeV_R2017Down:
   weightVariation: false
   systematicSet:
   - jerc
+  preWeights:
+  - prewgt___$SYSTEMATIC: "prewgt___nom" #JER *weight* only changes with event-level btag weight, so this is just the nominal
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
 btagSF_shape_hfUp:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -126,6 +176,10 @@ btagSF_shape_hfUp:
   systematicSet:
   - btag
   - btag_hf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_hfDown:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -138,6 +192,10 @@ btagSF_shape_hfDown:
   systematicSet:
   - btag
   - btag_hf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_hfstats1Up:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -150,6 +208,10 @@ btagSF_shape_hfstats1Up:
   systematicSet:
   - btag
   - btag_hf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_hfstats1Down:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -162,6 +224,10 @@ btagSF_shape_hfstats1Down:
   systematicSet:
   - btag
   - btag_hf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_hfstats2Up:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -174,6 +240,10 @@ btagSF_shape_hfstats2Up:
   systematicSet:
   - btag
   - btag_hf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_hfstats2Down:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -186,6 +256,10 @@ btagSF_shape_hfstats2Down:
   systematicSet:
   - btag
   - btag_hf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_cferr1Up:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -198,6 +272,10 @@ btagSF_shape_cferr1Up:
   systematicSet:
   - btag
   - btag_other
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_cferr1Down:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -210,6 +288,10 @@ btagSF_shape_cferr1Down:
   systematicSet:
   - btag
   - btag_other
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_cferr2Up:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -222,6 +304,10 @@ btagSF_shape_cferr2Up:
   systematicSet:
   - btag
   - btag_other
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_cferr2Down:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -234,6 +320,10 @@ btagSF_shape_cferr2Down:
   systematicSet:
   - btag
   - btag_other
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_lfUp:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -246,6 +336,10 @@ btagSF_shape_lfUp:
   systematicSet:
   - btag
   - btag_lf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_lfDown:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -258,6 +352,10 @@ btagSF_shape_lfDown:
   systematicSet:
   - btag
   - btag_lf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_lfstats1Up:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -270,6 +368,10 @@ btagSF_shape_lfstats1Up:
   systematicSet:
   - btag
   - btag_lf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_lfstats1Down:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -282,6 +384,10 @@ btagSF_shape_lfstats1Down:
   systematicSet:
   - btag
   - btag_lf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_lfstats2Up:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -294,6 +400,10 @@ btagSF_shape_lfstats2Up:
   systematicSet:
   - btag
   - btag_lf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_lfstats2Down:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -306,10 +416,17 @@ btagSF_shape_lfstats2Down:
   systematicSet:
   - btag
   - btag_lf
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_jesUp:
-  jet_mask: jet_mask
+  jet_mask: jet_mask_jec_13TeV_R2017Up
   lep_postfix: ''
-  jet_pt_var: Jet_pt_nom
+  jet_pt_var: Jet_pt_jesTotalUp
+  jet_mass_var: Jet_mass_jesTotalUp
+  met_pt_var: METFixEE2017_T1_pt_jesTotalUp
+  met_phi_var: METFixEE2017_T1_phi_jesTotalUp
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_up_jes
     DeepCSV: Jet_btagSF_deepcsv_shape_up_jes
@@ -318,10 +435,17 @@ btagSF_shape_jesUp:
   systematicSet:
   - btag
   - btag_other
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_jesDown:
-  jet_mask: jet_mask
+  jet_mask: jet_mask_jec_13TeV_R2017Down
   lep_postfix: ''
-  jet_pt_var: Jet_pt_nom
+  jet_pt_var: Jet_pt_jesTotalDown
+  jet_mass_var: Jet_mass_jesTotalDown
+  met_pt_var: METFixEE2017_T1_pt_jesTotalDown
+  met_phi_var: METFixEE2017_T1_phi_jesTotalDown
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_down_jes
     DeepCSV: Jet_btagSF_deepcsv_shape_down_jes
@@ -330,6 +454,10 @@ btagSF_shape_jesDown:
   systematicSet:
   - btag
   - btag_other
+  preWeights:
+  - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights
+  - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 ISRDown:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -344,6 +472,11 @@ ISRDown:
   weightVariation: true
   systematicSet:
   - ps
+  preWeights:
+  - pwgt_$SYSTEMATIC: "nPSWeight == 4 ? PSWeight.at(0) : 0"
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_$SYSTEMATIC * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_$SYSTEMATIC * pwgt_btag___ISRDown * pwgt_Z_vtx___nom"
   sampleRemapping:
     ewkISRDown:
     - DYJets_DL
@@ -406,6 +539,11 @@ ISRUp:
   weightVariation: true
   systematicSet:
   - ps
+  preWeights:
+  - pwgt_$SYSTEMATIC: "nPSWeight == 4 ? PSWeight.at(2) : 0"
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_$SYSTEMATIC * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_btag___$SYSTEMATIC * pwgt_$SYSTEMATIC * pwgt_Z_vtx___nom"
   sampleRemapping:
     ewkISRUp:
     - DYJets_DL
@@ -468,6 +606,11 @@ FSRDown:
   weightVariation: true
   systematicSet:
   - ps
+  preWeights:
+  - pwgt_$SYSTEMATIC: "nPSWeight == 4 ? PSWeight.at(1) : 0"
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_$SYSTEMATIC * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_$SYSTEMATIC * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
   sampleRemapping:
     ewkFSRDown:
     - DYJets_DL
@@ -530,6 +673,11 @@ FSRUp:
   weightVariation: true
   systematicSet:
   - ps
+  preWeights:
+  - pwgt_$SYSTEMATIC: "nPSWeight == 4 ? PSWeight.at(3) : 0"
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_$SYSTEMATIC * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_$SYSTEMATIC * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
   sampleRemapping:
     ewkFSRUp:
     - DYJets_DL
@@ -592,6 +740,12 @@ muFNomRDown:
   weightVariation: true
   systematicSet:
   - rf
+  notes: Factorization, Renormalization weights... depend on dividing genWeight back out?
+  preWeights:
+  - pwgt_RenormalizationDownFactorizationNominal: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(1) : 0"
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationNominal * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationNominal * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
   sampleRemapping:
     ewkmuFNomRDown:
     - DYJets_DL
@@ -654,6 +808,11 @@ muFNomRUp:
   weightVariation: true
   systematicSet:
   - rf
+  preWeights:
+  - pwgt_RenormalizationUpFactorizationNominal: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(7) : 0"
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationNominal * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationNominal * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
   sampleRemapping:
     ewkmuFNomRUp:
     - DYJets_DL
@@ -716,6 +875,11 @@ muRNomFDown:
   weightVariation: true
   systematicSet:
   - rf
+  preWeights:
+  - pwgt_RenormalizationNominalFactorizationDown: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(3) : 0"
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationNominalFactorizationDown * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationNominalFactorizationDown * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
   sampleRemapping:
     ewkmuRNomFDown:
     - DYJets_DL
@@ -778,6 +942,11 @@ muRNomFUp:
   weightVariation: true
   systematicSet:
   - rf
+  preWeights:
+  - pwgt_RenormalizationNominalFactorizationUp: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(5) : 0"
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationNominalFactorizationUp * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationNominalFactorizationUp * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
   sampleRemapping:
     ewkmuRNomFUp:
     - DYJets_DL
@@ -840,6 +1009,11 @@ muRFcorrelatedUp:
   weightVariation: true
   systematicSet:
   - rf
+  preWeights:
+  - pwgt_RenormalizationUpFactorizationUp: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(8) : 0"
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationUp * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationUp * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
   sampleRemapping:
     ewkmuRFcorrelatedUp:
     - DYJets_DL
@@ -902,6 +1076,11 @@ muRFcorrelatedDown:
   weightVariation: true
   systematicSet:
   - rf
+  preWeights:
+  - pwgt_RenormalizationDownFactorizationDown: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(0) : 0"
+  - prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationDown * pwgt_Z_vtx___nom"
+  finalWeights:
+  - wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationDown * pwgt_btag___$SYSTEMATIC * pwgt_Z_vtx___nom"
   sampleRemapping:
     ewkmuRFcorrelatedDown:
     - DYJets_DL
@@ -950,3 +1129,12 @@ muRFcorrelatedDown:
     - ST_tbarW
     ttttmuRFcorrelatedDown:
     - tttt
+# if "muRFanticorrelatedUp" in sysVariations.keys():
+#     zFin.append(("wgt___muRFanticorrelatedUp: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationUp * pwgt_btag___muRFanticorrelatedUp * pwgt_Z_vtx___nom"))
+#     zPre.append(("pwgt_RenormalizationDownFactorizationUp: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(2) : 0"))
+#     zPre.append(("prewgt___muRFanticorrelatedUp: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationUp * pwgt_Z_vtx___nom"))
+# if "muRFanticorrelatedDown" in sysVariations.keys():
+#     zFin.append(("wgt___muRFanticorrelatedDown: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationDown * pwgt_btag___muRFanticorrelatedDown * pwgt_Z_vtx___nom"))
+#     zPre.append(("pwgt_RenormalizationUpFactorizationDown: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(6) : 0"))
+#     zPre.append(("prewgt___muRFanticorrelatedDown: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationDown * pwgt_Z_vtx___nom"))
+
