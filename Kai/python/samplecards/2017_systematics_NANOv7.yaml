@@ -13,11 +13,11 @@ $NOMINAL:
   systematicSet:
   - nominal
   commonWeights:
-  - pwgt_LSF___nom: "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))"
-  - pwgt_LSF___nom: "(FTALepton{lpf}_SF_nom.size() > 1 ? FTALepton{lpf}_SF_nom.at(0) * FTALepton{lpf}_SF_nom.at(1) : FTALepton{lpf}_SF_nom.at(0))"
+  - pwgt_LSF___nom: "(FTALepton$LEP_POSTFIX_SF_nom.size() > 1 ? FTALepton$LEP_POSTFIX_SF_nom.at(0) * FTALepton$LEP_POSTFIX_SF_nom.at(1) : FTALepton$LEP_POSTFIX_SF_nom.at(0))"
+  - pwgt_LSF___nom: "(FTALepton$LEP_POSTFIX_SF_nom.size() > 1 ? FTALepton$LEP_POSTFIX_SF_nom.at(0) * FTALepton$LEP_POSTFIX_SF_nom.at(1) : FTALepton$LEP_POSTFIX_SF_nom.at(0))"
   - EGamma_HLT_ZVtx_SF_nom: "return 0.991;"
   - EGamma_HLT_ZVtx_SF_unc: "return 0.001;"
-  - pwgt_Z_vtx___nom: "((FTALepton{lpf}_pdgId.size() > 1 && (abs(FTALepton{lpf}_pdgId.at(0)) == 11 || abs(FTALepton{lpf}_pdgId.at(1)) == 11)) || (FTALepton{lpf}_pdgId.size() > 0 && abs(FTALepton{lpf}_pdgId.at(0)) == 11)) ? EGamma_HLT_ZVtx_SF_nom : 1.00000000000000".format(lpf=leppostfix)
+  - pwgt_Z_vtx___nom: "((FTALepton$LEP_POSTFIX_pdgId.size() > 1 && (abs(FTALepton$LEP_POSTFIX_pdgId.at(0)) == 11 || abs(FTALepton$LEP_POSTFIX_pdgId.at(1)) == 11)) || (FTALepton$LEP_POSTFIX_pdgId.size() > 0 && abs(FTALepton$LEP_POSTFIX_pdgId.at(0)) == 11)) ? EGamma_HLT_ZVtx_SF_nom : 1.00000000000000"
   - prewgt___nom: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom" #Used as base for many other weights, e.g. btag variation, take care modifying this one
   - pwgt_btagSF_common: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"
   # weight for non-2017    zPre.append(("pwgt_Z_vtx___nom: "(Int_t)1;"))
@@ -178,7 +178,7 @@ btagSF_shape_hfUp:
   - btag_hf
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_hfDown:
   jet_mask: jet_mask
@@ -194,7 +194,7 @@ btagSF_shape_hfDown:
   - btag_hf
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_hfstats1Up:
   jet_mask: jet_mask
@@ -210,7 +210,7 @@ btagSF_shape_hfstats1Up:
   - btag_hf
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_hfstats1Down:
   jet_mask: jet_mask
@@ -226,7 +226,7 @@ btagSF_shape_hfstats1Down:
   - btag_hf
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_hfstats2Up:
   jet_mask: jet_mask
@@ -242,7 +242,7 @@ btagSF_shape_hfstats2Up:
   - btag_hf
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_hfstats2Down:
   jet_mask: jet_mask
@@ -258,7 +258,7 @@ btagSF_shape_hfstats2Down:
   - btag_hf
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_cferr1Up:
   jet_mask: jet_mask
@@ -274,7 +274,7 @@ btagSF_shape_cferr1Up:
   - btag_other
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_cferr1Down:
   jet_mask: jet_mask
@@ -290,7 +290,7 @@ btagSF_shape_cferr1Down:
   - btag_other
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_cferr2Up:
   jet_mask: jet_mask
@@ -306,7 +306,7 @@ btagSF_shape_cferr2Up:
   - btag_other
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_cferr2Down:
   jet_mask: jet_mask
@@ -322,7 +322,7 @@ btagSF_shape_cferr2Down:
   - btag_other
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_lfUp:
   jet_mask: jet_mask
@@ -338,7 +338,7 @@ btagSF_shape_lfUp:
   - btag_lf
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_lfDown:
   jet_mask: jet_mask
@@ -354,7 +354,7 @@ btagSF_shape_lfDown:
   - btag_lf
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_lfstats1Up:
   jet_mask: jet_mask
@@ -370,7 +370,7 @@ btagSF_shape_lfstats1Up:
   - btag_lf
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_lfstats1Down:
   jet_mask: jet_mask
@@ -386,7 +386,7 @@ btagSF_shape_lfstats1Down:
   - btag_lf
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_lfstats2Up:
   jet_mask: jet_mask
@@ -402,7 +402,7 @@ btagSF_shape_lfstats2Up:
   - btag_lf
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_lfstats2Down:
   jet_mask: jet_mask
@@ -418,7 +418,7 @@ btagSF_shape_lfstats2Down:
   - btag_lf
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_jesUp:
   jet_mask: jet_mask_jec_13TeV_R2017Up
@@ -437,7 +437,7 @@ btagSF_shape_jesUp:
   - btag_other
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 btagSF_shape_jesDown:
   jet_mask: jet_mask_jec_13TeV_R2017Down
@@ -456,7 +456,7 @@ btagSF_shape_jesDown:
   - btag_other
   preWeights:
   - prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
-  finalWeights
+  finalWeights:
   - wgt___$SYSTEMATIC: "pwgt_btagSF_common * pwgt_btag___$SYSTEMATIC" 
 ISRDown:
   jet_mask: jet_mask
