@@ -1582,17 +1582,20 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
         zPre.append(("prewgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
 
     #Start the new implementatino
+    #Cut the old implemented definitions out, see what breaks...
+    zPre = []
+    sFin = []
     for sysVar, sysDict in sysVariations.items():
         leppostfix = sysDict.get('lep_postfix', '')
         if sysDict.get("isNominal", False): 
             for wgtKey, wgtDef in sysDict.get("commonWeights", {}).items():
-                zPre.append(("new_" + wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
+                zPre.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
                              wgtDef.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix)))
         for wgtKey, wgtDef in sysDict.get("preWeights", {}).items():
-            zPre.append(("new_" + wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
+            zPre.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
                          wgtDef.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix)))
         for wgtKey, wgtDef in sysDict.get("finalWeights", {}).items():
-            zFin.append(("new_" + wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
+            zFin.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
                          wgtDef.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix)))
     
     #Load the initial or final definitions
