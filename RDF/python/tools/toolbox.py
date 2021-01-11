@@ -1,7 +1,8 @@
 import copy
-from glob import glob #For getFiles
+import glob #For getFiles
 import os, pwd, sys #For getFiles
 import tempfile #For getFiles
+import ruamel.yaml as yaml #for load and write yaml files
 
 def getFiles(query, redir="", outFileName=None, globSort=lambda f: int(f.split('_')[-1].replace('.root', '')), doEOSHOME=False, doGLOBAL=False, verbose=False):
     """Use one of several different methods to acquire a list or text file specifying the filenames.
@@ -40,7 +41,7 @@ doEOSHOME will override the redir string with the one formatted based on your us
                 fileList.append(line.decode("utf-8").rstrip("\s\n\t"))
     elif "glob:" in query:
         query_stripped = query.replace("glob:","")
-        fileList = glob(query_stripped)
+        fileList = glob.glob(query_stripped)
     elif "list:" in query:
         query_stripped = query.replace("list:","")
         fileList = []
@@ -65,3 +66,56 @@ doEOSHOME will override the redir string with the one formatted based on your us
                 out_f.write(line + "\n")
     #Return the list
     return fileList
+
+def load_yaml_cards(sample_cards):
+    SampleList = None
+    SampleDict = dict()
+    try:
+        import ruamel.yaml
+        ruamel.yaml.preserve_quotes = True
+    except:
+        print("Cannot load ruamel package to convert yaml file. Consider installing in a virtual environment with 'pip install --user 'ruamel.yaml<0.16,>0.15.95' --no-deps'")
+
+    for scard in sample_cards:
+        with open(scard, "r") as sample:
+            if SampleList is None:
+                SampleList = ruamel.yaml.load(sample, Loader=ruamel.yaml.RoundTripLoader)
+            else:
+                SampleList.update(ruamel.yaml.load(sample, Loader=ruamel.yaml.RoundTripLoader))
+
+    for scard in sample_cards:
+        with open(scard, "r") as sample:
+            SampleDict[scard] = ruamel.yaml.load(sample, Loader=ruamel.yaml.RoundTripLoader)
+    return SampleList, SampleDict
+
+def write_yaml_cards(sample_cards, postfix="_updated"):
+    try:
+        import ruamel.yaml
+        ruamel.yaml.preserve_quotes = True
+    except:
+        print("Cannot load ruamel package to convert yaml file. Consider installing in a virtual environment with 'pip install --user 'ruamel.yaml<0.16,>0.15.95' --no-deps'")
+
+    for scard, scontent in sample_cards.items():
+        with open(scard.replace(".yaml", postfix+".yaml").replace(".yml", postfix+".yml"), "w") as outf:
+            ruamel.yaml.dump(scontent, outf, Dumper=ruamel.yaml.RoundTripDumper)
+
+def filter_systematics(yaml_dict, nominal=True, scale=True, weight=True, dedicatedSystematic=True, resolveEnsembles=False, resolveRemappings=False):
+    #In general, nominal is both nominal and a scale variation, is not a weight variation, is not dedicated systematic
+    #resolveEnsembles means a group of systematics for which the many are summed in quadrature, or some other process is done, to produce a single systematic.
+    #How to handle up/down in an ensemble remains to be seen
+    pass
+
+def get_template_systematics(yaml_dict, era, channel):
+    assert isinstance(era, str)
+    assert isinstance(channel, str)
+    systs = []
+    for sysVarRaw, sysDictRaw in yaml_dict.items():
+        lep_postfix = sysDictRaw.get("lep_postfix", "")
+        # if sysDictRaw.get("ensembleMapping", None) is not None:
+        sampleRemappings = sysDictRaw.get("sampleRemapping", None)
+        if sampleRemappings is not None:
+            for name, samples in sampleRemappings.items():
+                systs.append(name.replace("$ERA", era).replace("$CHANNEL", channel).replace("$LEP_POSTFIX", lep_postfix))
+        else:
+            systs.append(sysVarRaw.replace("$ERA", era).replace("$CHANNEL", channel).replace("$LEP_POSTFIX", lep_postfix))
+    return systs

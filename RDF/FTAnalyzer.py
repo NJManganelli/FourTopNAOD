@@ -18,7 +18,7 @@ import re
 import pdb
 import ROOT
 import ruamel.yaml as yaml
-from FourTopNAOD.RDF.tools.toolbox import getFiles
+from FourTopNAOD.RDF.tools.toolbox import getFiles, load_yaml_cards, write_yaml_cards
 #from IPython.display import Image, display, SVG
 #import graphviz
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -5444,38 +5444,6 @@ def otherFuncs():
 
     makeJetEfficiencyReport(effic, "{}/ElMu_selection/BTaggingEfficiency".format(histDir))
     
-def load_yaml_cards(sample_cards):
-    SampleList = None
-    SampleDict = dict()
-    try:
-        import ruamel.yaml
-        ruamel.yaml.preserve_quotes = True
-    except:
-        print("Cannot load ruamel package to convert yaml file. Consider installing in a virtual environment with 'pip install --user 'ruamel.yaml<0.16,>0.15.95' --no-deps'")
-
-    for scard in sample_cards:
-        with open(scard, "r") as sample:
-            if SampleList is None:
-                SampleList = ruamel.yaml.load(sample, Loader=ruamel.yaml.RoundTripLoader)
-            else:
-                SampleList.update(ruamel.yaml.load(sample, Loader=ruamel.yaml.RoundTripLoader))
-
-    for scard in sample_cards:
-        with open(scard, "r") as sample:
-            SampleDict[scard] = ruamel.yaml.load(sample, Loader=ruamel.yaml.RoundTripLoader)
-    return SampleList, SampleDict
-
-def write_yaml_cards(sample_cards, postfix="_updated"):
-    try:
-        import ruamel.yaml
-        ruamel.yaml.preserve_quotes = True
-    except:
-        print("Cannot load ruamel package to convert yaml file. Consider installing in a virtual environment with 'pip install --user 'ruamel.yaml<0.16,>0.15.95' --no-deps'")
-
-    for scard, scontent in sample_cards.items():
-        with open(scard.replace(".yaml", postfix+".yaml").replace(".yml", postfix+".yml"), "w") as outf:
-            ruamel.yaml.dump(scontent, outf, Dumper=ruamel.yaml.RoundTripDumper)
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
     parser.add_argument('stage', action='store', type=str, choices=['bookkeeping', 'fill-yields', 'combine-yields', 'lepton-selection', 'fill-diagnostics', 
@@ -5728,3 +5696,4 @@ if __name__ == '__main__':
                       quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     else:
         print("stage {stag} is not yet prepared, please update the FTAnalyzer".format(stag))
+
