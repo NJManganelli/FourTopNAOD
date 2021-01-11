@@ -4,7 +4,7 @@ import pdb
 import argparse
 import ROOT
 
-def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keyword, verbose=False):
+def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keyword, skipNull, verbose=False):
     if not os.path.isfile(input1):
         raise IOError("Input 1 ({}) does not exist".format(input1))
     if not os.path.isfile(input2):
@@ -27,11 +27,32 @@ def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keyword, 
     KSTestResults = {}
     Chi2TestResults = {}
     IntegralResults = {}
+    NullResults = {}
     for kk in kInBoth:
+        norm1 = f1.Get(kk).Integral()
+        norm2 = f2.Get(kk).Integral()
+        if skipNull:
+            thresh = 1e-25
+            if abs(norm1) < thresh:
+                if abs(norm2) < thresh:
+                    NullResults[kk] = "Both"
+                else:
+                    NullResults[kk] = "input1"
+                continue
+            elif abs(norm2) < thresh:
+                NullResults[kk] = "input2"
+                continue
         KSTestResults[kk] = f1.Get(kk).KolmogorovTest(f2.Get(kk), "U O N")
         Chi2TestResults[kk] = f1.Get(kk).Chi2Test(f2.Get(kk), "WW OF UF Chi2/NDF")
-        IntegralResults[kk] = (f1.Get(kk).Integral() - f2.Get(kk).Integral())/max(f1.Get(kk).Integral(), 1e-29)
-    Results = [(kk, KSTestResults[kk], Chi2TestResults[kk], IntegralResults[kk]) for kk in kInBoth]
+        IntegralResults[kk] = (norm1 - norm2)/max(norm1, 1e-29)
+    if skipNull:
+        print("{} results had null norms and were skipped according to skipNull option ({} both, {} input1, {} input2)".format(len(NullResults.keys()), 
+                                                                                                                               len([vv for vv in NullResults.values() if vv.lower() == "both"]),
+                                                                                                                               len([vv for vv in NullResults.values() if vv.lower() == "input1"]),
+                                                                                                                               len([vv for vv in NullResults.values() if vv.lower() == "input2"]),
+                                                                                                                           )
+          )
+    Results = [(kk, KSTestResults[kk], Chi2TestResults[kk], IntegralResults[kk]) for kk in kInBoth if (not skipNull or kk not in NullResults.keys())]
     sort_function = None
     if sort_key == 'Chi2':
         Results = sorted(Results, key=lambda k: k[2], reverse=True)
@@ -46,7 +67,7 @@ def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keyword, 
 
     maxToPrint = min(maxResults, len(Results))
     for result in Results[:maxToPrint]:
-        print("KS: ", result[1], " Chi2/NDoF: ", result[2], " Integral %diff: ", result[3], " Histogram: ", result[0])
+        print("KS: {:.5f}".format(result[1]), " Chi2/NDoF: {:.5f}".format(result[2]), " Integral %diff: {:.5f}".format(result[3]), " Histogram: ", result[0])
 # doCSV = False
 # if doCSV:
 #     print("branch,KS,CHI2/NDF")
@@ -73,10 +94,12 @@ if __name__ == '__main__':
                         help='Max number of results to print out')
     parser.add_argument('--keyword', dest='keyword', action='store', default=None, type=str,
                         help='Keyword to search for in histogram names, will skip any that do not contain this string, if invoked')
+    parser.add_argument('--skipNull', dest='skipNull', action='store_true',
+                        help='Skip comparisons where one or both histograms have 0 integral')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
 
     #Parse the arguments
     args = parser.parse_args()
     verbose = args.verbose
-    main(args.input1, args.input2, args.Chi2Maximum, args.KSMinimum, args.sort, args.maxResults, args.keyword, verbose=verbose)
+    main(args.input1, args.input2, args.Chi2Maximum, args.KSMinimum, args.sort, args.maxResults, args.keyword, args.skipNull, verbose=verbose)
