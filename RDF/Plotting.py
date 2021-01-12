@@ -17,6 +17,7 @@ import copy
 import argparse
 import uuid
 import pdb
+from FourTopNAOD.RDF.tools.toolbox import load_yaml_cards, write_yaml_cards, get_template_systematics
 # from ruamel.yaml import YAML
 from IPython.display import Image, display, SVG
 #import graphviz
@@ -1967,7 +1968,7 @@ def makeStack_Prototype(histFile, histList=None, legendConfig=None, rootName=Non
     print(hists_systematic)
     print(hists_nominal)
     
-def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutput=False, closeFiles=True, 
+def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Cache=None, histogramDirectory = ".", batchOutput=False, closeFiles=True, 
                      pdfOutput=None, combineOutput=None, combineInput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
                      debug=False, nDivisions=105, lumi="N/A", drawYields=False,
@@ -2063,35 +2064,9 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
         legendConfig = legends.get(can_dict.get("Legend", "FallbackToDefault"), defaults["DefaultLegend"])
         # systematics = legendConfig["Systematics"]
         print("Making systematics list by hand here, FIXME FIXME")
-        systematics = ['prefireDown', 'prefireUp', 'pileupDown', 'pileupUp', 
-                       'jec_13TeV_R2017Down', 'jec_13TeV_R2017Up', 'jer_13TeV_R2017Down', 'jer_13TeV_R2017Up', 
-                       'btagSF_shape_lfDown', 'btagSF_shape_lfUp', 'btagSF_shape_hfDown', 'btagSF_shape_hfUp', 
-                       'btagSF_shape_jesDown', 'btagSF_shape_jesUp', 
-                       'btagSF_shape_lfstats1Down', 'btagSF_shape_lfstats1Up', 'btagSF_shape_lfstats2Up', 'btagSF_shape_lfstats2Down', 
-                       'btagSF_shape_hfstats1Down', 'btagSF_shape_hfstats1Up', 'btagSF_shape_hfstats2Down', 'btagSF_shape_hfstats2Up', 
-                       'btagSF_shape_cferr1Down', 'btagSF_shape_cferr1Up', 'btagSF_shape_cferr2Down', 'btagSF_shape_cferr2Up', 
-                       'ewkFSRDown', 'ewkFSRUp', 'ewkISRDown', 'ewkISRUp', 
-                       'ttFSRDown', 'ttFSRUp', 'ttISRDown', 'ttISRUp', 
-                       'ttVJetsFSRDown', 'ttVJetsFSRUp', 'ttVJetsISRDown', 'ttVJetsISRUp', 
-                       'singletopFSRDown', 'singletopFSRUp', 'singletopISRDown', 'singletopISRUp', 
-                       'ttultrarareFSRDown', 'ttultrarareFSRUp', 'ttultrarareISRDown', 'ttultrarareISRUp', 
-                       'ttHFSRDown', 'ttHFSRUp', 'ttHISRDown', 'ttHISRUp', 
-                       'ttttFSRDown', 'ttttFSRUp', 'ttttISRDown', 'ttttISRUp', 
-                       'ewkmuRNomFDown', 'ewkmuRNomFUp', 'ewkmuFNomRDown', 'ewkmuFNomRUp', 
-                       'ewkmuRFcorrelatedDown', 'ewkmuRFcorrelatedUp', 
-                       'ttmuRNomFDown', 'ttmuRNomFUp', 'ttmuFNomRDown', 'ttmuFNomRUp', 
-                       'ttmuRFcorrelatedDown', 'ttmuRFcorrelatedUp', 
-                       'ttVJetsmuRNomFDown', 'ttVJetsmuRNomFUp', 'ttVJetsmuFNomRDown', 'ttVJetsmuFNomRUp', 
-                       'ttVJetsmuRFcorrelatedDown', 'ttVJetsmuRFcorrelatedUp', 
-                       'singletopmuRNomFDown', 'singletopmuRNomFUp', 'singletopmuFNomRDown', 'singletopmuFNomRUp', 
-                       'singletopmuRFcorrelatedDown', 'singletopmuRFcorrelatedUp', 
-                       'ttultrararemuRNomFDown', 'ttultrararemuRNomFUp', 'ttultrararemuFNomRDown', 'ttultrararemuFNomRUp', 
-                       'ttultrararemuRFcorrelatedDown', 'ttultrararemuRFcorrelatedUp', 
-                       'ttHmuRNomFDown', 'ttHmuRNomFUp', 'ttHmuFNomRDown', 'ttHmuFNomRUp', 
-                       'ttHmuRFcorrelatedDown', 'ttHmuRFcorrelatedUp', 
-                       'ttttmuRNomFDown', 'ttttmuRNomFUp', 'ttttmuFNomRDown', 'ttttmuFNomRUp', 
-                       'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp', 
-        ]
+        sysVariationsYaml, sysVariationCardDict = load_yaml_cards(systematicCards)
+        systematics = get_template_systematics(sysVariationsYaml, era, channel, include_nominal=False)
+        pdb.set_trace()
         # print("Making reduced systematic set for testing!")
         # systematics = ['jec_13TeV_R2017Down', 'jec_13TeV_R2017Up', 
         #                'btagSF_shape_hfDown', 'btagSF_shape_hfUp', 
@@ -2173,6 +2148,10 @@ def loopPlottingJSON(inputJSON, Cache=None, histogramDirectory = ".", batchOutpu
                                 systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
                                 projection=CanCache["subplots/projections"][pn], 
                                 nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn))
+            #This is not sufficient for skipping undone histograms
+            # if len(list(CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values())) == 0:
+            #     print("No histograms found for '{}', skipping".format(nice_name))
+            #     continue
             print(" Done :: ", end="")
             blindSupercategories = [k for k in CanCache["subplots/supercategories"][pn]['Supercategories'] if "BLIND" in k]
             if len(blindSupercategories) > 0: print("Blinded - skipping systematics")
@@ -2886,6 +2865,8 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 
                                                                                                               'ElEl_HighMET', 'MuMu_ElMu','MuMu_ElMu_ElEl', 'All'],
                         help='Decay channel for opposite-sign dilepton analysis')
+    parser.add_argument('--systematics_cards', dest='systematics_cards', action='store', nargs='*', type=str,
+                        help='path and name of the systematics card(s) to be used')
     parser.add_argument('-ci', '--combineInput', dest='combineInput', action='store', type=str, default=None, choices=['HT',],
                         help='Variable to be used as input to Higgs Combine. If None, output histograms will not be produced')
     parser.add_argument('-d', '--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
@@ -2896,8 +2877,8 @@ if __name__ == '__main__':
                         help='input plotting configuration, defaulting to "$ADIR/Histograms/All/plots.json"')
     parser.add_argument('-l', '--legendCard', dest='legendCard', action='store', type=str, default="$ADIR/Histograms/All/legend.json",
                         help='input legend configuration, defaulting to "$ADIR/Histograms/All/legend.json". This card controls the grouping of histograms into categories and supercategories, colors, stacking, sample-scaling, etc.')
-    parser.add_argument('--era', dest='era', type=str, default="2017",
-                        help='era for plotting, which deduces the lumi only for now')
+    parser.add_argument('--era', dest='era', type=str, default="2001", choices=["2017", "2018"],
+                        help='era for plotting, lumi, systematics deduction')
     parser.add_argument('--vars', '--variables', dest='variables', action='store', default=None, type=str, nargs='*',
                         help='List of variables for generating a plotcard')
     parser.add_argument('--nJets', '--nJetCategories', dest='nJetCategories', action='store', default=None, type=str, nargs='*',
@@ -2909,7 +2890,7 @@ if __name__ == '__main__':
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
     parser.add_argument('--useCanvasMax', dest='useCanvasMax', action='store_true',
-                        help='use the Canvas card\' maximum rather than 110% of the subplots\' maxima')
+                        help='use the Canvas card\'s maximum rather than 110% of the subplots\' maxima')
     parser.add_argument('--skipSystematics', '--skipSystematics', dest='skipSystematics', action='store', 
                         default=None, type=str, nargs='*',
                         help='List of systematics to skip')
@@ -3005,7 +2986,8 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                 print("pdfOutput = {}".format(pdfOut))
         else:
             combineOut = None
-        resultsDict = loopPlottingJSON(loadedPlotConfig, Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, 
+        resultsDict = loopPlottingJSON(loadedPlotConfig, era=args.era, channel=args.channel, systematicCards=args.systematics_cards,
+                                       Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, 
                                        pdfOutput=pdfOut, combineOutput=combineOut, combineInput=combineInput, lumi=lumi, useCanvasMax=useCanvasMax, 
                                        skipSystematics=skipSystematics, verbose=verb);
     else:

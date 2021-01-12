@@ -105,7 +105,7 @@ def filter_systematics(yaml_dict, nominal=True, scale=True, weight=True, dedicat
     #How to handle up/down in an ensemble remains to be seen
     pass
 
-def get_template_systematics(yaml_dict, era, channel):
+def get_template_systematics(yaml_dict, era, channel, include_nominal=True):
     assert isinstance(era, str)
     assert isinstance(channel, str)
     systs = []
@@ -115,7 +115,9 @@ def get_template_systematics(yaml_dict, era, channel):
         sampleRemappings = sysDictRaw.get("sampleRemapping", None)
         if sampleRemappings is not None:
             for name, samples in sampleRemappings.items():
-                systs.append(name.replace("$ERA", era).replace("$CHANNEL", channel).replace("$LEP_POSTFIX", lep_postfix))
+                systs.append(name.replace("$ERA", era).replace("$CHANNEL", channel).replace("$LEP_POSTFIX", lep_postfix).replace("$NOMINAL", "nom"))
         else:
-            systs.append(sysVarRaw.replace("$ERA", era).replace("$CHANNEL", channel).replace("$LEP_POSTFIX", lep_postfix))
+            if not include_nominal and sysVarRaw.replace("$ERA", era).replace("$CHANNEL", channel).replace("$LEP_POSTFIX", lep_postfix) in ["$NOMINAL", "nom"]:
+                continue
+            systs.append(sysVarRaw.replace("$ERA", era).replace("$CHANNEL", channel).replace("$LEP_POSTFIX", lep_postfix).replace("$NOMINAL", "nom"))
     return systs
