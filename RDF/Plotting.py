@@ -2063,10 +2063,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         #create ratios of, and draw systematics for. Each 'Supercategory' defined here gets a legend entry,
         legendConfig = legends.get(can_dict.get("Legend", "FallbackToDefault"), defaults["DefaultLegend"])
         # systematics = legendConfig["Systematics"]
-        print("Making systematics list by hand here, FIXME FIXME")
         sysVariationsYaml, sysVariationCardDict = load_yaml_cards(systematicCards)
         systematics = get_template_systematics(sysVariationsYaml, era, channel, include_nominal=False)
-        pdb.set_trace()
         # print("Making reduced systematic set for testing!")
         # systematics = ['jec_13TeV_R2017Down', 'jec_13TeV_R2017Up', 
         #                'btagSF_shape_hfDown', 'btagSF_shape_hfUp', 
@@ -2079,8 +2077,6 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         # print("Removing systematics")
         # systematics = []
 
-        #Deduce systematics automatically...
-        
         #Load the LegendConfig which denotes which samples to use, colors to assign, etc.
         
         #Call createCanvasPads with our Can(vas)Cache passed to it, which will be subsequently filled,
