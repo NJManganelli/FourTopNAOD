@@ -4,7 +4,7 @@ import pdb
 import argparse
 import ROOT
 
-def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keyword, skipNull, verbose=False):
+def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keywords, findReplace, skipNull, verbose=False):
     if not os.path.isfile(input1):
         raise IOError("Input 1 ({}) does not exist".format(input1))
     if not os.path.isfile(input2):
@@ -13,24 +13,47 @@ def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keyword, 
     f2 = ROOT.TFile.Open(input2, "read")
     k1 = [kk.GetName() for kk in f1.GetListOfKeys() if kk.GetClassName() in ['TH1I', 'TH1F', 'TH1D', 'TH2I', 'TH2F', 'TH2D', 'TH3I', 'TH3F', 'TH3D']]
     k2 = [kk.GetName() for kk in f2.GetListOfKeys() if kk.GetClassName() in ['TH1I', 'TH1F', 'TH1D', 'TH2I', 'TH2F', 'TH2D', 'TH3I', 'TH3F', 'TH3D']]
+    kAll = k1 + k2
     kNotKeyworded = []
-    if keyword is not None:
-        k1 = [kk for kk in k1 if keyword in kk]
-        k2 = [kk for kk in k2 if keyword in kk]
-        kNotKeyworded = list(set([kk for kk in k1 + k2 if keyword not in kk]))
-    kOnlyInOne = set(k1) - set(k2)
-    kOnlyInTwo = set(k2) - set(k1)
-    kInBoth = set(k1).intersection(set(k2))
-    print("Histogram keys...\n\tOnly in input1: {}\n\tOnly in input2: {}\n\tIn common: {}\n\tKeyword not found: {}".format(len(kOnlyInOne), len(kOnlyInTwo), len(kInBoth), len(kNotKeyworded)))
+    keywords2 = keywords
+    if keywords is not None and isinstance(keywords, list) and len(keywords) > 0:
+        if isinstance(findReplace, list):
+            keywords2 = []
+            for keyword in keywords:
+                keyword2 = "{}".format(keyword)
+                for mapping in findReplace:
+                    keyword2 = keyword2.replace(mapping.split("==")[0], mapping.split("==")[1])
+                keywords2.append(keyword2)
+        print(keywords, keywords2)
+        k1 = dict([(kk, kk) for kk in k1 if all([keyword in kk for keyword in keywords])])
+        k2temp = dict([(kk, kk) for kk in k2 if all([keyword in kk for keyword in keywords2])])
+        if isinstance(findReplace, list):
+            k2 = dict()
+            for key, value in k2temp.items():
+                key2 = "{}".format(key)
+                for mapping in findReplace:
+                    #The mapping is reversed here, to get back to equivalence of input1
+                    key2 = key2.replace(mapping.split("==")[1], mapping.split("==")[0])
+                k2[key2] = value
+        else:
+            k2 = k2temp
+        kAll = list(k1.keys()) + list(k2.keys())
+        kNotKeyworded = list(set([kk for kk in kAll if kk not in list(k1.keys()) + list(k2.keys())]))
+        kOnlyInOne = set(k1.keys()) - set(k2.keys())
+        kOnlyInTwo = set(k2.keys()) - set(k1.keys())
+        kInBoth = set(k1.keys()).intersection(set(k2.keys()))
+    print("Histogram keys...\n\tOnly in input1: {}\n\tOnly in input2: {}\n\tIn common: {}\n\tKeywords not found: {}".format(len(kOnlyInOne), len(kOnlyInTwo), len(kInBoth), len(kNotKeyworded)))
     print("Running KS and Chi2 tests on matching histograms")
 
     KSTestResults = {}
     Chi2TestResults = {}
     IntegralResults = {}
+    Integrals1 = {}
+    Integrals2 = {}
     NullResults = {}
     for kk in kInBoth:
-        norm1 = f1.Get(kk).Integral()
-        norm2 = f2.Get(kk).Integral()
+        norm1 = f1.Get(k1[kk]).Integral()
+        norm2 = f2.Get(k2[kk]).Integral()
         if skipNull:
             thresh = 1e-25
             if abs(norm1) < thresh:
@@ -42,9 +65,11 @@ def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keyword, 
             elif abs(norm2) < thresh:
                 NullResults[kk] = "input2"
                 continue
-        KSTestResults[kk] = f1.Get(kk).KolmogorovTest(f2.Get(kk), "U O N")
-        Chi2TestResults[kk] = f1.Get(kk).Chi2Test(f2.Get(kk), "WW OF UF Chi2/NDF")
-        IntegralResults[kk] = (norm1 - norm2)/max(norm1, 1e-29)
+        KSTestResults[kk] = f1.Get(k1[kk]).KolmogorovTest(f2.Get(k2[kk]), "U O N")
+        Chi2TestResults[kk] = f1.Get(k1[kk]).Chi2Test(f2.Get(k2[kk]), "WW OF UF Chi2/NDF")
+        IntegralResults[kk] = (norm2 - norm1)/max(norm1, 1e-29)
+        Integrals1[kk] = norm1
+        Integrals2[kk] = norm2
     if skipNull:
         print("{} results had null norms and were skipped according to skipNull option ({} both, {} input1, {} input2)".format(len(NullResults.keys()), 
                                                                                                                                len([vv for vv in NullResults.values() if vv.lower() == "both"]),
@@ -52,7 +77,7 @@ def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keyword, 
                                                                                                                                len([vv for vv in NullResults.values() if vv.lower() == "input2"]),
                                                                                                                            )
           )
-    Results = [(kk, KSTestResults[kk], Chi2TestResults[kk], IntegralResults[kk]) for kk in kInBoth if (not skipNull or kk not in NullResults.keys())]
+    Results = [(kk, KSTestResults[kk], Chi2TestResults[kk], IntegralResults[kk], Integrals1[kk], Integrals2[kk]) for kk in kInBoth if (not skipNull or kk not in NullResults.keys())]
     sort_function = None
     if sort_key == 'Chi2':
         Results = sorted(Results, key=lambda k: k[2], reverse=True)
@@ -67,7 +92,7 @@ def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keyword, 
 
     maxToPrint = min(maxResults, len(Results))
     for result in Results[:maxToPrint]:
-        print("KS: {:.5f}".format(result[1]), " Chi2/NDoF: {:.5f}".format(result[2]), " Integral %diff: {:.5f}".format(result[3]), " Histogram: ", result[0])
+        print("KS: {:.5f}".format(result[1]), " Chi2/NDoF: {:.5f}".format(result[2]), " Integral (new/old - 1): {:+.5f}".format(result[3]), " Histogram: ", result[0])
 # doCSV = False
 # if doCSV:
 #     print("branch,KS,CHI2/NDF")
@@ -92,8 +117,10 @@ if __name__ == '__main__':
                         help='Sorting key, defaulting to descending Chi2 test values; KS sorts in ascending order; Integral/Area/Norm are synonyms and sort in descending order')
     parser.add_argument('--maxResults', dest='maxResults', action='store', default=10, type=int,
                         help='Max number of results to print out')
-    parser.add_argument('--keyword', dest='keyword', action='store', default=None, type=str,
-                        help='Keyword to search for in histogram names, will skip any that do not contain this string, if invoked')
+    parser.add_argument('--keywords', dest='keywords', action='store', default=None, type=str, nargs='*',
+                        help='Keywords to search for in histogram names, will skip any that do not contain a match for all, if invoked')
+    parser.add_argument('--findReplace', dest='findReplace', action='store', default=None, type=str, nargs='*',
+                        help='VALUE1==VALUE2 pairs to replace when comparing histograms in input1 to histograms in input2')
     parser.add_argument('--skipNull', dest='skipNull', action='store_true',
                         help='Skip comparisons where one or both histograms have 0 integral')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
@@ -102,4 +129,4 @@ if __name__ == '__main__':
     #Parse the arguments
     args = parser.parse_args()
     verbose = args.verbose
-    main(args.input1, args.input2, args.Chi2Maximum, args.KSMinimum, args.sort, args.maxResults, args.keyword, args.skipNull, verbose=verbose)
+    main(args.input1, args.input2, args.Chi2Maximum, args.KSMinimum, args.sort, args.maxResults, args.keywords, args.findReplace, args.skipNull, verbose=verbose)
