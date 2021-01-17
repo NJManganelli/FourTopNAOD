@@ -99,13 +99,52 @@ def write_yaml_cards(sample_cards, postfix="_updated"):
         with open(scard.replace(".yaml", postfix+".yaml").replace(".yml", postfix+".yml"), "w") as outf:
             ruamel.yaml.dump(scontent, outf, Dumper=ruamel.yaml.RoundTripDumper)
 
-def filter_systematics(yaml_dict, nominal=True, scale=True, weight=True, dedicatedSystematic=True, resolveEnsembles=False, resolveRemappings=False):
+def filter_systematics(yaml_dict, era, sampleName, isSystematicSample, nominal=False, scale=False, weight=False):
+                       #resolveEnsembles=False, resolveRemappings=False):
     #In general, nominal is both nominal and a scale variation, is not a weight variation, is not dedicated systematic
     #resolveEnsembles means a group of systematics for which the many are summed in quadrature, or some other process is done, to produce a single systematic.
     #How to handle up/down in an ensemble remains to be seen
-    pass
+    if nominal is False and scale is False and weight is False:
+        if not isSystematicSample:
+            raise RuntimeError("All systematics are either scale or weight, with nominal being a subset of scale. The only other option is a systematic for a dedicated systematic sample. Change request in filter_systematics")
+    pass_filter = []
+    for sysVar, sysDict in yaml_dict.items():
+        ### Logic for handling scale, weight, nominal systematics
+        isNominal = sysDict.get("isNominal", False)
+        isWeight = sysDict.get("weightVariation", True)
+        isScale = not isWeight
+        isSampleSpecificSystematic = True if sysDict.get("isSystematicForSample", False) else False
+        # print("{} is counted as sampleSpecificSystematic: {}".format(sysVar, isSampleSpecificSystematic))
+        #Filter out systematics if they aren't matched by dedicated systematic status:
+        if isSampleSpecificSystematic:
+            if isSystematicSample and sampleName in sysDict.get("isSystematicForSample", []):
+                #Potential match
+                pass
+            else:
+                #Skip dedicated systematic if the sampleName isn't in the systematics' list of applicable ones
+                # print("Skipping dedicated systematic {} for non-matching era sample {} {}".format(sysVar, era, sampleName))
+                continue
+        else:
+            if isSystematicSample:
+                #skip non-dedicated systematics if the sample is a nominal type
+                # print("Skipping non-dedicated systematic {} for systematic era sample {} {}".format(sysVar, era, sampleName))
+                continue
+            else:
+                #Potential match
+                pass
+        #Now choose which ones to append...
+        if nominal and isNominal:
+            pass_filter.append(sysVar)
+            continue
+        if scale and isScale:
+            pass_filter.append(sysVar)
+            continue
+        if weight and isWeight:
+            pass_filter.append(sysVar)
+            continue
+    return pass_filter
 
-def get_template_systematics(yaml_dict, era, channel, include_nominal=True):
+def configure_template_systematics(yaml_dict, era, channel):
     assert isinstance(era, str)
     assert isinstance(channel, str)
     systs = []
