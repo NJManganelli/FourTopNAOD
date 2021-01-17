@@ -985,6 +985,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_AH
     crossSection: 380.1143
     sumWeights: 8582110100.858218
     sumWeights2: 2737026854700.6064
@@ -1059,6 +1060,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_AH
     crossSection: 380.1143
     sumWeights: 8625523827.326399
     sumWeights2: 2750855940861.884
@@ -1133,6 +1135,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_AH
     crossSection: 380.1143
     sumWeights: 8291625878.819002
     sumWeights2: 2689960917872.832
@@ -1207,6 +1210,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_AH
     crossSection: 380.1143
     sumWeights: 7833949812.204013
     sumWeights2: 2480692145252.9883
@@ -1281,6 +1285,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_AH
     crossSection: 380.1143
     sumWeights: 8370351407.138842
     sumWeights2: 2669496345960.937
@@ -1355,6 +1360,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_AH
     crossSection: 380.1143
     sumWeights: 7370522086.267927
     sumWeights2: 2350558155722.423
@@ -1585,6 +1591,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_DL
     crossSection: 87.3348
     sumWeights: 2112342041.566109
     sumWeights2: 154754776954.45413
@@ -1660,6 +1667,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_DL
     crossSection: 87.3348
     sumWeights: 2149602238.5635357
     sumWeights2: 157480646600.9632
@@ -1735,6 +1743,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_DL
     crossSection: 87.3348
     sumWeights: 2112770962.0244012
     sumWeights2: 157460252262.1438
@@ -1880,6 +1889,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_DL
     crossSection: 87.3348
     sumWeights: 713867654.7181448
     sumWeights2: 51928200943.60941
@@ -2025,6 +2035,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_DL
     crossSection: 87.3348
     sumWeights: 707559889.5191178
     sumWeights2: 51838837785.12113
@@ -2170,6 +2181,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_DL
     crossSection: 87.3348
     sumWeights: 718500136.0131245
     sumWeights2: 52641440456.23044
@@ -2420,6 +2432,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_DL-GF
     crossSection: 1.45714855
     crossSectionGenHT500-550nJet7Matching: 1.4529
     sumWeights: 144110285.22172877
@@ -2525,6 +2538,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_DL-GF
     crossSection: 1.45714855
     crossSectionGenHT500-550nJet7Matching: 1.4529
     sumWeights: 167781848.74368203
@@ -2630,6 +2644,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_DL-GF
     crossSection: 1.45714855
     crossSectionGenHT500-550nJet7Matching: 1.4529
     sumWeights: 154292870.4020065
@@ -2735,6 +2750,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_DL-GF
     crossSection: 1.45714855
     crossSectionGenHT500-550nJet7Matching: 1.4529
     sumWeights: 152890537.9266991
@@ -2991,6 +3007,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_SL
     crossSection: 364.3109
     sumWeights: 8028466248.751033
     sumWeights2: 2454485069084.2603
@@ -3065,6 +3082,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_SL
     crossSection: 364.3109
     sumWeights: 8271549636.100281
     sumWeights2: 2528799802517.891
@@ -3139,6 +3157,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_SL
     crossSection: 364.3109
     sumWeights: 7791745466.726479
     sumWeights2: 2423012543091.5337
@@ -3284,6 +3303,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_SL
     crossSection: 364.3109
     sumWeights: 8110739651.7008705
     sumWeights2: 2461979544241.1104
@@ -3429,6 +3449,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_SL
     crossSection: 364.3109
     sumWeights: 6160758124.112902
     sumWeights2: 1883547048628.1194
@@ -3574,6 +3595,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_SL
     crossSection: 364.3109
     sumWeights: 8105653276.33072
     sumWeights2: 2478044961356.284
@@ -3823,6 +3845,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_SL-GF
     crossSection: 2.246079
     sumWeights: 557420459.7925782
     sumWeights2: 172768208141.47415
@@ -3927,6 +3950,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_SL-GF
     crossSection: 2.246079
     sumWeights: 671389685.0929762
     sumWeights2: 204276768015.38904
@@ -4031,6 +4055,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_SL-GF
     crossSection: 2.246079
     sumWeights: 578002883.4930297
     sumWeights2: 176890416924.3273
@@ -4135,6 +4160,7 @@
     era: '2018'
     isData: false
     isSignal: false
+    isSystematicSampleFor: tt_SL-GF
     crossSection: 2.246079
     sumWeights: 617782190.2084124
     sumWeights2: 189098386991.58563
