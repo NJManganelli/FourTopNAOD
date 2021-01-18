@@ -2435,14 +2435,15 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     #                          # "nLooseFTAElectron", "nMediumFTAElectron", "nTightFTAElectron",
     #                          # "nLooseFTALepton", "nMediumFTALepton", "nTightFTALepton",
     #                      ]
-    print("\n\nDisabled histo templates except HT!!!!!\n\n")
-    combineHistoTemplate = ["HT{bpf}",]
     if bTagger.lower() == "deepjet":
         combineHistoTemplate += ["nLooseDeepJetB{bpf}", "nMediumDeepJetB{bpf}", "nTightDeepJetB{bpf}",]
     elif bTagger.lower() == "deepcsv":
         combineHistoTemplate += ["nLooseDeepCSVB{bpf}", "nMediumDeepCSVB{bpf}", "nTightDeepCSVB{bpf}",]
     elif bTagger.lower() == "csvv2":
         combineHistoTemplate += ["nLooseCSVv2B{bpf}", "nMediumCSVv2B{bpf}", "nTightCSVv2B{bpf}",]
+
+    print("\n\nDisabled histo templates except HT!!!!!\n\n")
+    combineHistoTemplate = ["HT{bpf}",]
 
     #Fill this list with variables for each branchpostfix
     combineHistoVariables = [] 
@@ -3021,9 +3022,9 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar))
-                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_HT{hpf}"\
-                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
-                                                                    ";npvsGood;HT", 100, 400, 2000, 20, 0, 100), "PV_npvsGood", "HT{bpf}".format(bpf=branchpostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_HT{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 ";npvsGood;HT", 100, 400, 2000, 20, 0, 100), "PV_npvsGood", "HT{bpf}".format(bpf=branchpostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___ST{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "", 100,400,2000), "ST{bpf}".format(bpf=branchpostfix), wgtVar))
