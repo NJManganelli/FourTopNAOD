@@ -18,7 +18,7 @@ import re
 import pdb
 import ROOT
 import ruamel.yaml as yaml
-from FourTopNAOD.RDF.tools.toolbox import getFiles, load_yaml_cards, write_yaml_cards
+from FourTopNAOD.RDF.tools.toolbox import getFiles, load_yaml_cards, write_yaml_cards, filter_systematics
 #from IPython.display import Image, display, SVG
 #import graphviz
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -36,7 +36,8 @@ else:
 
 #Load functions, can eventually be changed to ROOT.gInterpreter.Declare(#include "someheader.h")
 #WARNING! Do not rerun this cell without restarting the kernel, it will kill it!
-ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way
+ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way #Extra note, this is completely irrelevant, since ROOT 6 all histograms that have a (non-unitary) weight provided for filling 
+print("FIXME? Consider removing even unitary weight from data histogram filling, due to the bug in ROOT where Sumw2 is impossible to disable using the documented method")
 print("FIXME: Hardcoded FTFunctions.cpp path, needs fixin'...")
 ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
 print("To compile the loaded file, append a '+' to the '.L <file_name>+' line, and to specify gcc as the compile, also add 'g' after that")
@@ -863,11 +864,15 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
                                            "btagSF": "Jet_btagSF_deepcsv_shape",
                                            "weightVariation": False},
                                      },
+              sysFilter=["$NOMINAL"],
                        verbose=False):
     rdf = input_df
     listOfColumns = input_df.GetColumnNames()
     z = []
     for sysVar, sysDict in sysVariations.items():
+        #Only do systematics that are in the filter list (storing raw systematic names...
+        if sysVar not in sysFilter:
+            continue
         #skip systematic variations on data, only do the nominal
         if isData and sysVar != "$NOMINAL": 
             continue
@@ -924,16 +929,17 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
 
 def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfLeptonSelection=False, useBackupChannel=False, verbose=False,
                   triggers=[],
-                 sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
-                                             "lep_postfix": "",
-                                             "jet_pt_var": "Jet_pt",
-                                             "jet_mass_var": "Jet_mass",
-                                             "met_pt_var": "METFixEE2017_pt",
-                                             "met_phi_var": "METFixEE2017_phi",
-                                             "btagSF": "Jet_btagSF_deepcsv_shape",
-                                             "weightVariation": False},
-                                },
-                 ):
+                  sysVariations={"$NOMINAL": {"jet_mask": "jet_mask", 
+                                              "lep_postfix": "",
+                                              "jet_pt_var": "Jet_pt",
+                                              "jet_mass_var": "Jet_mass",
+                                              "met_pt_var": "METFixEE2017_pt",
+                                              "met_phi_var": "METFixEE2017_phi",
+                                              "btagSF": "Jet_btagSF_deepcsv_shape",
+                                              "weightVariation": False},
+                             },
+                  sysFilter=["$NOMINAL"],
+              ):
     """Function to take in a dataframe and return one with new columns defined,
     plus event filtering based on the criteria defined inside the function"""
         
@@ -1128,6 +1134,9 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfL
         #skip systematic variations on data, only do the nominal
         if isData and sysVar != "$NOMINAL": 
             continue
+        #Only do systematics that are in the filter list (storing raw systematic names...
+        if sysVar not in sysFilter:
+            continue
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
         if isWeightVariation == True: continue
@@ -1210,6 +1219,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
                                            "btagSF": "Jet_btagSF_deepcsv_shape",
                                            "weightVariation": False},
                           },
+              sysFilter=["$NOMINAL"],
               ):
     """Function to take in a dataframe and return one with new columns defined,
     plus event filtering based on the criteria defined inside the function"""
@@ -1242,6 +1252,9 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
     for sysVar, sysDict in sysVariations.items():
         #skip systematic variations on data, only do the nominal
         if isData and sysVar != "$NOMINAL": 
+            continue
+        #Only do systematics that are in the filter list (storing raw systematic names...
+        if sysVar not in sysFilter:
             continue
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
@@ -1387,7 +1400,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
     return rdf
 
 
-def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbose=False, final=False, sysVariations={"$NOMINAL":"ValueNeeded"}):
+def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbose=False, final=False, sysVariations={"$NOMINAL":"ValueNeeded"}, sysFilter=["$NOMINAL"]):
     """Define all the pre-final or final weights and the variations, to be referened by the sysVariations dictionaries as wgt_final.
     if final=False, do the pre-final weights for BTaggingYields calculations.
     
@@ -1437,8 +1450,11 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     zFin = []
     z = []
     for sysVar, sysDict in sysVariations.items():
+        #Only do systematics that are in the filter list (storing raw systematic names...
+        if sysVar not in sysFilter:
+            continue
         leppostfix = sysDict.get('lep_postfix', '')
-        if sysDict.get("isNominal", False): 
+        if sysDict.get("isNominal", False) or sysDict.get("isSystematicForSample", False): 
             for wgtKey, wgtDef in sysDict.get("commonWeights", {}).items():
                 zPre.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
                              wgtDef.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix)))
@@ -1524,6 +1540,7 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                                                       },
                                                "weightVariation": False},
                                               },
+                   sysFilter=["$NOMINAL"],
                ):
     """Calculate or load the event yields in various categories for the purpose of renormalizing btagging shape correction weights.
     
@@ -1681,6 +1698,9 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
             #Create list of the variations to be histogrammed (2D yields)
             yieldList = []
             for sysVar, sysDict in sysVariations.items():
+                #Only do systematics that are in the filter list (storing raw systematic names...
+                if sysVar not in sysFilter:
+                    continue
                 bTaggingDefineNodes[eraAndSampleName][sysVar] = []
                 isWeightVariation = sysDict.get("weightVariation")
                 branchpostfix = "__nom" if isWeightVariation else "__" + sysVar.replace("$NOMINAL", "nom") #branch postfix for identifying input branch variation
@@ -2347,6 +2367,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                            "btagSF": "Jet_btagSF_deepcsv_shape",
                                            "weightVariation": False},
                                      },
+               sysFilter=["$NOMINAL"],
                skipNominalHistos=False
 ):
     """Method to fill histograms given an input RDataFrame, input sample/dataset name, input histogram dictionaries.
@@ -2459,6 +2480,9 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     for sysVar, sysDict in sorted(sysVariations.items(), key=lambda x: "$NOMINAL" in x[0], reverse=True):
         #skip systematic variations on data, only do the nominal
         if isData and sysVar != "$NOMINAL": 
+            continue
+        #Only do systematics that are in the filter list (storing raw systematic names...
+        if sysVar not in sysFilter:
             continue
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
@@ -2798,7 +2822,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
             continue
         for eraAndSampleName in nodes:
             if eraAndSampleName.lower() == "basenode": continue
-            eraAndProcessName = eraAndSampleName #Minimal change in prep for systematic samples
+            eraAndProcessName = eraAndSampleName.replace("-HDAMPdown", "").replace("-HDAMPup", "").replace("-TuneCP5down", "").replace("-TuneCP5up", "")
             histopostfix = None
             if systematicRemapping is None:
                 histopostfix = syspostfix
@@ -4811,7 +4835,14 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
         btaggingSystematicScalePostfix = getattr(ROOT, "btag_systematic_scale_postfix")
         sysVariationsForBtagging = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"] or "ALL" in systematicSet])
         # for sysVar, sysDict in sysVariationsForBtagging.items():
+        if len(valid_samples) > 1:
+            print("\n\n\n\nFor now, the ability to iterate over multiple samples is broken, so that the GetCorrectorMap can retrieve the right LUTs for that one sample without breaking")
+            print("\n\n\nThe clusterfuck of btag yield aggregates leads to another rewrite. In order to handle multiple samples in an FTAnalyzer instance, the GetCorrectorMap would need to change so that the process, systematic, scalepostfix vectors are changed into a map, where the key is the process and the systematic and scalepostfix are paired string vectors in a submap, i.e. input['tt_DL-GF']['systematic_names'] = {'nom', 'btagSF_shape_hfUp', 'jec'}, input['tt_DL-GF']['scale_postfix'] = {'nom', 'nom', 'jec'}")
+            raise NotImplementedError("Hahahahahaa")
+        allSystematicsWorkaround = filter_systematics(sysVariationsAll, era=era, sampleName=valid_samples[0], isSystematicSample=inputSampleCardYaml[valid_samples[0]].get("isSystematicSampleFor", False), nominal=True, scale=True, weight=True)
         for sysVar, sysDict in sysVariationsAll.items():
+            if sysVar not in allSystematicsWorkaround:
+                continue
             isWeightVariation = sysDict.get("weightVariation")
             slimbranchpostfix = "nom" if isWeightVariation else sysVar.replace("$NOMINAL", "nom") #branch postfix for identifying input branch variation
             btaggingSystematicNames.push_back(sysVar)
@@ -4859,6 +4890,10 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             if name not in valid_samples: 
                 print("Skipping sample {}".format(name))
                 continue
+            #Deduce filters for scale calculations (MET, defineLeptons, defineJets) and where all are needed (defineWeights, BTaggingYields, fillHistos...)
+            scaleSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=False)
+            allSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=True)
+            print("scale systematics: {}\nall systematics: {}".format(scaleSystematics, allSystematics))
             filelistDir = analysisDir + "/Filelists"
             if not os.path.isdir(filelistDir):
                 os.makedirs(filelistDir)
@@ -5104,7 +5139,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                               run_branch="run",
                                               era=vals["era"],
                                               isData=vals["isData"],
-                                              sysVariations=sysVariationsAll, 
+                                              sysVariations=sysVariationsAll,
+                                              sysFilter=scaleSystematics,
                                               verbose=verbose,
                                               )
                 the_df[name][lvl] = ROOT.FTA.applyMETandPVFilters(ROOT.RDF.AsRNode(the_df[name][lvl]), 
@@ -5128,6 +5164,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                   useBackupChannel=False,
                                                   triggers=triggers,
                                                   sysVariations=sysVariationsAll,
+                                                  sysFilter=scaleSystematics,
                                                   rdfLeptonSelection=doLeptonSelection,
                                                   verbose=verbose,
                                                  )
@@ -5143,6 +5180,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                bTagger=bTagger,
                                                isData=vals["isData"],
                                                sysVariations=sysVariationsAll, 
+                                               sysFilter=scaleSystematics,
                                                jetPtMin=jetPtMin,
                                                jetPUId=jetPUId,
                                                useDeltaR=useDeltaR,
@@ -5202,6 +5240,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                isData=vals["isData"],
                                                final=False,
                                                sysVariations=sysVariationsAll, 
+                                               sysFilter=allSystematics,
                                                verbose=verbose,
                 )
                 #Get the yields, the ultimate goal of which is to determin in a parameterized way the renormalization factors for btag shape reweighting procedure
@@ -5209,6 +5248,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                 histosDict=btagging, loadYields=BTaggingYieldsFile,
                                                 useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
                                                 sysVariations=sysVariationsAll, 
+                                                sysFilter=allSystematics,
                                                 vectorLUTs=vectorLUTs,
                                                 correctorMap=correctorMap,
                                                 bTagger=bTagger,
@@ -5227,6 +5267,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                    isData = vals["isData"],
                                                    final=True,
                                                    sysVariations=sysVariationsAll,
+                                                   sysFilter=allSystematics,
                                                    verbose=verbose,
                     )
                 #Hold the categorization nodes if doing histograms
@@ -5246,15 +5287,15 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
                                                         era = vals["era"], triggers = triggers,
                                                         sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
-                                                        histosDict=histos, sysVariations=sysVariationsForHistos, doCategorized=True, 
-                                                        doDiagnostics=False, doCombineHistosOnly=doCombineHistosOnly, bTagger=bTagger, 
+                                                        histosDict=histos, sysVariations=sysVariationsForHistos, sysFilter=allSystematics, 
+                                                        doCategorized=True, doDiagnostics=False, doCombineHistosOnly=doCombineHistosOnly, bTagger=bTagger, 
                                                         skipNominalHistos=skipNominalHistos, verbose=verb)
                 if doDiagnostics:
                     packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
                                                         era = vals["era"], triggers = triggers,
                                                         sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
-                                                        histosDict=histos, sysVariations=sysVariationsForHistos, doCategorized=False, 
-                                                        doDiagnostics=True, bTagger=bTagger, 
+                                                        histosDict=histos, sysVariations=sysVariationsForHistos, sysFilter=allSystematics, 
+                                                        doCategorized=False, doDiagnostics=True, bTagger=bTagger, 
                                                         skipNominalHistos=skipNominalHistos, verbose=verb)
     
                 #Trigger the loop either by hitting the count/progressbar node or calling for a (Non-lazy) snapshot
