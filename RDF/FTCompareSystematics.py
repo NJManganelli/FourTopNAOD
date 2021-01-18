@@ -18,7 +18,7 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 ROOT.gROOT.SetBatch(True)
 
-def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSamples=None, verbose=False):
+def main(stage, analysisDirectory, channel, era, includeSystematics=None, excludeSystematics=None, skipSamples=None, verbose=False):
     varsOfInterest = ["HT"]
     erasOfInterest = [era]
     channelsOfInterest = [channel]
@@ -35,7 +35,7 @@ def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSampl
     # ]
 
     # systematicsOfInterest = [''] #Not needed, only scale systematics get the unweighted histogram in FTAnalyzer.py as of writing
-    histogramFile = "$ADIR/Combine/combTest_$CHANNEL.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$CHANNEL", channel).replace("//", "/") # 
+    histogramFile = "$ADIR/Combine/CI_$ERA_$CHANNEL_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$CHANNEL", channel).replace("$VAR", varsOfInterest[0]).replace("//", "/") # 
     f = ROOT.TFile.Open(histogramFile, "read")
     keys = [k.GetName() for k in f.GetListOfKeys()]
     if len(keys[0].split("___")) == 7: #format post-fill-(histograms/combine)
@@ -48,7 +48,7 @@ def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSampl
         systematics = list(set([k.split("___")[6] for k in keys]))
     elif len(keys[0].split("___")) == 4: #combine-input format
         # eras = sorted(list(set([k.split("___")[0] for k in keys])))
-        eras = None
+        eras = erasOfInterest
         samples = sorted(list(set([k.split("___")[0] for k in keys])))
         # channels = sorted(list(set([k.split("___")[2] for k in keys])))
         # channelWindows = list(set(["___".join(k.split("___")[2:4]) for k in keys]))
@@ -125,13 +125,13 @@ def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSampl
                         print("Skipping sample {}".format(sample))
                         continue
                     print("\t\t\t\t\t{}".format(sample))
-                    hist[category][variable][sample] = {}
                     histUp[category][variable][sample] = {}
                     histDown[category][variable][sample] = {}
                     histRU[category][variable][sample] = {}
                     histRD[category][variable][sample] = {}
                     # thisSampleSystematics = []
                     thisSampleSystematics = list(set([k.split("___")[3] for k in keys if k.split("___")[0] == sample]))
+                    print(sample, thisSampleSystematics)
                     maxes = []
                     mins = []
                     # for systematic in systematics:
@@ -146,7 +146,10 @@ def main(stage, analysisDirectory, channel, era, skipSystematics=None, skipSampl
                         else:
                             thisSyst = "nom"
                         thisKey = "___".join([sample, category, variable, systematic])
-                        if skipSystematics and thisSyst in skipSystematics:
+                        if includeSystematics and thisSyst not in includeSystematics + ["nom"]:
+                            print("Skipping systematic {}".format(thisSyst))
+                            continue
+                        elif excludeSystematics and thisSyst in excludeSystematics:
                             print("Skipping systematic {}".format(thisSyst))
                             continue
                         if "Up" == systematic[-2:]:
@@ -245,7 +248,9 @@ if __name__ == '__main__':
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('--era', dest='era', type=str, default="2017",
                         help='era for plotting, which deduces the lumi only for now')
-    parser.add_argument('--skipSystematics', dest='skipSystematics', action='store', default=None, type=str, nargs='*',
+    parser.add_argument('--includeSystematics', dest='includeSystematics', action='store', default=None, type=str, nargs='*',
+                        help='List of systematic names to be considered when setting common miminma/maxima and plotting')
+    parser.add_argument('--excludeSystematics', dest='excludeSystematics', action='store', default=None, type=str, nargs='*',
                         help='List of systematic names to be ignored when setting common miminma/maxima and plotting')
     parser.add_argument('--skipSamples', dest='skipSamples', action='store', default=None, type=str, nargs='*',
                         help='List of sample names to be ignored when setting common miminma/maxima and plotting')
@@ -270,4 +275,4 @@ if __name__ == '__main__':
     channel = args.channel
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel)
     verbose = args.verbose
-    main(stage, analysisDir, channel, args.era, skipSystematics = args.skipSystematics, skipSamples = args.skipSamples, verbose=verbose)
+    main(stage, analysisDir, channel, args.era, includeSystematics = args.includeSystematics, excludeSystematics = args.excludeSystematics, skipSamples = args.skipSamples, verbose=verbose)
