@@ -1096,8 +1096,8 @@ ueUp:
   lep_postfix: ''
   jet_pt_var: Jet_pt_nom
   jet_mass_var: Jet_mass_nom
-  met_pt_var: MET_T1_pt
-  met_phi_var: MET_T1_phi
+  met_pt_var: METFixEE2017_T1_pt
+  met_phi_var: METFixEE2017_T1_phi
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape
     DeepCSV: Jet_btagSF_deepcsv_shape
@@ -1124,8 +1124,8 @@ ueDown:
   lep_postfix: ''
   jet_pt_var: Jet_pt_nom
   jet_mass_var: Jet_mass_nom
-  met_pt_var: MET_T1_pt
-  met_phi_var: MET_T1_phi
+  met_pt_var: METFixEE2017_T1_pt
+  met_phi_var: METFixEE2017_T1_phi
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape
     DeepCSV: Jet_btagSF_deepcsv_shape
@@ -1152,8 +1152,8 @@ hdampUp:
   lep_postfix: ''
   jet_pt_var: Jet_pt_nom
   jet_mass_var: Jet_mass_nom
-  met_pt_var: MET_T1_pt
-  met_phi_var: MET_T1_phi
+  met_pt_var: METFixEE2017_T1_pt
+  met_phi_var: METFixEE2017_T1_phi
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape
     DeepCSV: Jet_btagSF_deepcsv_shape
@@ -1180,8 +1180,8 @@ hdampDown:
   lep_postfix: ''
   jet_pt_var: Jet_pt_nom
   jet_mass_var: Jet_mass_nom
-  met_pt_var: MET_T1_pt
-  met_phi_var: MET_T1_phi
+  met_pt_var: METFixEE2017_T1_pt
+  met_phi_var: METFixEE2017_T1_phi
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape
     DeepCSV: Jet_btagSF_deepcsv_shape
