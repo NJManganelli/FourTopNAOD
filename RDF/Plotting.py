@@ -17,7 +17,7 @@ import copy
 import argparse
 import uuid
 import pdb
-from FourTopNAOD.RDF.tools.toolbox import load_yaml_cards, write_yaml_cards, get_template_systematics
+from FourTopNAOD.RDF.tools.toolbox import load_yaml_cards, write_yaml_cards, configure_template_systematics
 # from ruamel.yaml import YAML
 from IPython.display import Image, display, SVG
 #import graphviz
@@ -1633,6 +1633,22 @@ def getLabelAndHeader(Cache=None, label="#bf{CMS Internal}",
     Cache["cms_header"] = cms_header
     return Cache
 
+def prepareLabel(pixels=None):
+    cms_label = ROOT.TLatex()
+    if type(pixels) == int:
+        cms_label.SetTextSizePixels(int(0.04*pixels))
+    else:
+        cms_label.SetTextSize(0.04)
+    return cms_label
+
+def prepareLumi(pixels=None):
+    cms_header = ROOT.TLatex()
+    if type(pixels) == int:
+        cms_header.SetTextSizePixels(int(0.03*pixels))
+    else:
+        cms_header.SetTextSize(0.03)
+    return cms_header
+
 def addHists(inputHists, name, scaleArray = None, blind=False):
     """Add a list of histograms together, with the name passed, and with scaling done according to a matching length array containing the floats for each histogram.
 
@@ -1841,6 +1857,12 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
     coord = legendConfig.get("Coordinates")
     nColumns = legendConfig.get("nColumns")
     leg = ROOT.TLegend(coord[0], coord[1], coord[2], coord[3])
+    #From other plotting scripts:
+    # leg.SetBorderSize(0)
+    # leg.SetFillStyle(0)
+    # leg.SetTextFont(43)
+    # leg.SetTextSize(16)
+
     #leg.SetBorderSize(0)
     #nColumns = math.floor(math.sqrt(len(legendConfig.get("Categories"))))
     leg.SetNColumns(nColumns)
@@ -2064,7 +2086,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         legendConfig = legends.get(can_dict.get("Legend", "FallbackToDefault"), defaults["DefaultLegend"])
         # systematics = legendConfig["Systematics"]
         sysVariationsYaml, sysVariationCardDict = load_yaml_cards(systematicCards)
-        systematics = get_template_systematics(sysVariationsYaml, era, channel, include_nominal=False)
+        systematics = configure_template_systematics(sysVariationsYaml, era, channel, include_nominal=False)
         # print("Making reduced systematic set for testing!")
         # systematics = ['jec_13TeV_R2017Down', 'jec_13TeV_R2017Up', 
         #                'btagSF_shape_hfDown', 'btagSF_shape_hfUp', 
@@ -2107,15 +2129,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         #generate the header and label for the canvas, adding them in the cache as 'cms_label' and 'cms_header'
         header = can_dict.get("Header", legendConfig.get("Header", "#sqrt{{s}} = 13 TeV, L_{{int}} = {lumi} fb^{{-1}}"))
         header_position = can_dict.get("HeaderPosition", legendConfig.get("HeaderPosition", 0.063))
-        label = can_dict.get("Label", legendConfig.get("Label", "#bf{CMS Internal}"))
-        label_position = can_dict.get("LabelPosition", legendConfig.get("LabelPosition", 0.05))
-        _ = getLabelAndHeader(Cache=CanCache, 
-                              label=label, 
-                              header=header.format(lumi=lumi),
-                              header_position=header_position,
-                              label_position=label_position,
-                              marginTop=CanCache["canvas/marginT"])
-        
+        label = can_dict.get("Label", legendConfig.get("Label", "#bf{CMS} #it{Preliminary}"))
+        label_position = can_dict.get("LabelPosition", legendConfig.get("LabelPosition", 0.05))        
         npValues = [] #npValues[padNumber][Supercategory][systematic, bin] stores the contents of each histogram of systematics, with a reverse lookup sD dictionary for mapping systematic name to number in the last array lookup
         npDifferences = []
         npNominal = [] # n-vector
@@ -2404,7 +2419,6 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 CanCache["subplots/supercategories"][pn]["Legend"].Draw()
                 scaleText = 1.3
                 offsetText = CanCache["canvas/marginL"]
-                CanCache["cms_label"].Draw()
                 #Draw the label on the leftmost top pad
                 #CanCache["cms_label"].Draw()
                 #Set the y axis title
@@ -2414,7 +2428,6 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 scaleText = 2.0
                 #scaleText = (1-CanCache["canvas/marginR"])
                 offsetText = 0
-                CanCache["cms_header"].Draw()
                 #####drawable.SetTitle(yAxisTitle)
                 pass
             else:
@@ -2553,15 +2566,38 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             CanCache["canvas/upperPads"][pn].Draw()
 
         #Disable default title and make our own
+        #aligntment: leading digit for left/center/right alignment as 1 2 3, following digit for bottom center top alignment, i.e. 11 = left bottom, 32 = right center
+        #https://root.cern.ch/root/html604/TAttText.html
         ROOT.gStyle.SetOptTitle(1);
         #CanCache["canvas_title"] = ROOT.TPaveLabel(.25,.95,.6,.99, canTitle,"trndc");
-        CanCache["canvas_title"] = ROOT.TLatex()
         canTitlePerc = 0.2
-        CanCache["canvas_title"].SetTextSizePixels(int(canTitlePerc*xPixels))
-        CanCache["canvas_title"].DrawLatexNDC(0.5 - len(canTitle)/80.0, 0.95, str(canTitle))
+
+        CanCache["canvas_label"] = ROOT.TLatex()
+        CanCache["canvas_label"].SetNDC(True)
+        CanCache["canvas_label"].SetTextFont(43)
+        CanCache["canvas_label"].SetTextSize(35)
+        CanCache["canvas_label"].SetTextAlign(13)
+        CanCache["canvas_label"].DrawLatexNDC(0.33*CanCache["canvas/marginL"], 1-0.40*CanCache["canvas/marginT"], str(label))
+        CanCache["canvas_label"].Draw()
+
+        CanCache["canvas_title"] = ROOT.TLatex()
+        CanCache["canvas_title"].SetNDC(True)
+        CanCache["canvas_title"].SetTextFont(43) #Includes precision 3, which locks text size so that it stops fucking scaling according to pad size
+        CanCache["canvas_title"].SetTextSize(40)
+        CanCache["canvas_title"].SetTextAlign(22)
+        CanCache["canvas_title"].DrawLatexNDC(0.5, 1-0.35*CanCache["canvas/marginT"], str(canTitle))
         CanCache["canvas_title"].Draw()
-        #CanCache["cms_label"].Draw()
+
+        CanCache["canvas_header"] = ROOT.TLatex()
+        CanCache["canvas_header"].SetNDC(True)
+        CanCache["canvas_header"].SetTextFont(43)
+        CanCache["canvas_header"].SetTextSize(30)
+        CanCache["canvas_header"].SetTextAlign(33) #Lumi and sqrt(s)
+        CanCache["canvas_header"].DrawLatexNDC(1.0-0.2*CanCache["canvas/marginR"], 1-0.40*CanCache["canvas/marginT"], str(header.format(lumi=lumi)))
+        CanCache["canvas_header"].Draw()
+
         CanCache["canvas"].Draw()
+
         if pdfOutput != None and can_num == 1: #count from 1 since we increment at the beginning of the loop on this one
             print("Opening {}".format(pdfOutput))
         print("\tDrew {}".format(can_name))
@@ -2574,8 +2610,6 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 CanCache["canvas"].SaveAs("{})".format(pdfOutput))
             else:
                 CanCache["canvas"].SaveAs("{}".format(pdfOutput))
-        #for f in CanCache["subplots/files"]:
-        #    f.Close()
         if macroOutput != None:
                 CanCache["canvas"].SaveAs("{}".format(macroOutput))
         if pngOutput != None:
