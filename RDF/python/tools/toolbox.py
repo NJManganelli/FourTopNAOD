@@ -144,7 +144,7 @@ def filter_systematics(yaml_dict, era, sampleName, isSystematicSample, nominal=F
             continue
     return pass_filter
 
-def configure_template_systematics(yaml_dict, era, channel):
+def configure_template_systematics(yaml_dict, era, channel, include_nominal=True):
     assert isinstance(era, str)
     assert isinstance(channel, str)
     systs = []
