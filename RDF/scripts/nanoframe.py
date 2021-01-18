@@ -158,7 +158,7 @@ if args.write and not os.path.isdir(args.outdir):
 
 print("nThreads: ", args.nThreads)
 print("Simultaneous graph executions: ", args.simultaneous)
-assert int(args.nThreads/args.simultaneous) > 1, "nThreads/simultaneous must be >= 1"
+assert int(args.nThreads/args.simultaneous) >= 1, "nThreads/simultaneous must be >= 1"
 print("Keep list: ", args.keep)
 print("Postfix: ", args.postfix)
 
