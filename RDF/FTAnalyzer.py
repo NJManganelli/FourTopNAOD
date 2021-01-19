@@ -2418,6 +2418,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                  ["nMedium{tag}3".format(tag=tagger)],
                  ["nMedium{tag}4+".format(tag=tagger)],
              ]
+    combineHistoTemplate = []    
     #Variables to save for Combine when doCombineHistosOnly=True
     # combineHistoTemplate = ["HT{bpf}"]
     # combineHistoTemplate = ["HT{bpf}", "ST{bpf}", "HTH{bpf}", "HTRat{bpf}", "HTb{bpf}", "HT2M{bpf}", "H{bpf}", "H2M{bpf}", "dRbb{bpf}", 
@@ -4840,7 +4841,11 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             print("\n\n\n\nFor now, the ability to iterate over multiple samples is broken, so that the GetCorrectorMap can retrieve the right LUTs for that one sample without breaking")
             print("\n\n\nThe clusterfuck of btag yield aggregates leads to another rewrite. In order to handle multiple samples in an FTAnalyzer instance, the GetCorrectorMap would need to change so that the process, systematic, scalepostfix vectors are changed into a map, where the key is the process and the systematic and scalepostfix are paired string vectors in a submap, i.e. input['tt_DL-GF']['systematic_names'] = {'nom', 'btagSF_shape_hfUp', 'jec'}, input['tt_DL-GF']['scale_postfix'] = {'nom', 'nom', 'jec'}")
             raise NotImplementedError("Hahahahahaa")
-        allSystematicsWorkaround = filter_systematics(sysVariationsAll, era=era, sampleName=valid_samples[0], isSystematicSample=inputSampleCardYaml[valid_samples[0]].get("isSystematicSampleFor", False), nominal=True, scale=True, weight=True)
+        elif len(valid_samples) == 1:
+            allSystematicsWorkaround = filter_systematics(sysVariationsAll, era=era, sampleName=valid_samples[0], isSystematicSample=inputSampleCardYaml[valid_samples[0]].get("isSystematicSampleFor", False), nominal=True, scale=True, weight=True)
+        else:
+            print("No valid samples found, continuing")
+            continue
         for sysVar, sysDict in sysVariationsAll.items():
             if sysVar not in allSystematicsWorkaround:
                 continue
