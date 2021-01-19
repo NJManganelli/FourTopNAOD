@@ -3011,7 +3011,7 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
             if verb:
                 print("pdfOutput = {}".format(pdfOut))
         if combineInput is not None:
-            combineOut = "$ADIR/Combine/CI_$CHAN_$VAR.root".replace("$ADIR", analysisDir).replace("$VAR", combineInput).replace("$TAG", tag).replace("$PLOTCARD", plotcard).replace("$CHAN", channel).replace("//", "/")
+            combineOut = "$ADIR/Combine/CI_$ERA_$CHAN_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", combineInput).replace("$TAG", tag).replace("$PLOTCARD", plotcard).replace("$CHAN", channel).replace("//", "/")
             if verb:
                 print("pdfOutput = {}".format(pdfOut))
         else:
