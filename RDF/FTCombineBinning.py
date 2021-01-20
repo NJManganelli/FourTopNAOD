@@ -18,12 +18,13 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 ROOT.gROOT.SetBatch(True)
 
-def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
+def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outDir, verbose=False):
     varsOfInterest = ["HTUnweighted"]
     erasOfInterest = [era]
     channelsOfInterest = [channel]
-    samplesOfInterest = ['ttbb_SL_nr', 'ttbb_SL_fr', 'ttbb_SL-GF_fr', 'ttbb_DL_nr', 'ttbb_DL_fr', 'ttbb_DL-GF_fr', 'ttbb_AH'
-                         'ttother_SL_nr', 'ttother_SL_fr', 'ttother_SL-GF_fr', 'ttother_DL_nr', 'ttother_DL_fr', 'ttother_DL-GF_fr', 'ttother_AH']
+    samplesOfInterest = ['ttbb_SL_nr', 'ttbb_SL_fr', 'ttbb_SL-GF_fr', 'ttbb_DL_nr', 'ttbb_DL_fr', 'ttbb_DL-GF_fr', #'ttbb_AH'
+                         'ttother_SL_nr', 'ttother_SL_fr', 'ttother_SL-GF_fr', 'ttother_DL_nr', 'ttother_DL_fr', 'ttother_DL-GF_fr', #'ttother_AH'
+    ]
     categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4', 'HT500_nMediumDeepJetB2_nJet5', 'HT500_nMediumDeepJetB2_nJet6',
                             'HT500_nMediumDeepJetB2_nJet7', 'HT500_nMediumDeepJetB2_nJet8+',
                             'HT500_nMediumDeepJetB3_nJet4', 'HT500_nMediumDeepJetB3_nJet5', 'HT500_nMediumDeepJetB3_nJet6',
@@ -55,13 +56,23 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
         print("Systematics: {}".format(systematics))
     print("Looping...")
     for era in eras:
-        print("\t{}".format(era))
+        if verbose:
+            print("\t{}".format(era))
         for channelWindow in channelWindows:
-            print("\t\t{}".format(channelWindow))
+            if verbose:
+                print("\t\t{}".format(channelWindow))
+            if jsonInput:
+                jsonInputPath = jsonInput.replace("$ERA", era).replace("$CHANNEL", channel)
+                jsonOutputPath = os.path.join(outDir, jsonInput.split("/")[-1].replace("$ERA", era).replace("$CHANNEL", channel))
+                jsonCopy = None
+                with open(jsonInputPath, "r") as jI:
+                    jsonCopy = copy.copy(json.load(jI))
             for category in categories:
-                print("\t\t\t{}".format(category))
+                if verbose:
+                    print("\t\t\t{}".format(category))
                 for variable in variables:
-                    print("\t\t\t\t{}".format(variable))
+                    if verbose:
+                        print("\t\t\t\t{}".format(variable))
                     hists = {}
                     rebinnedHists = {}
                     nBinsX = 0
@@ -79,7 +90,10 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
                                 else:
                                     raise RuntimeError("Key not found: {}".format(thisKey))
                             else:
-                                hists[systematic].Add(f.Get(thisKey))
+                                if thisKey in keys:
+                                    hists[systematic].Add(f.Get(thisKey))
+                                else:
+                                    raise RuntimeError("Key not found: {}".format(thisKey))                                    
                     #Have all the systematic variations that are relevant and adding the histograms together; create empty numpy array
                     entryArray = np.zeros((len(systematics), nBinsX+2), dtype=np.int32)
                     # binningArray.append(0) #Can't rebin the overflow anyway... thanks ROOT
@@ -93,12 +107,17 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
                     binningArray.append(start)
                     with np.errstate(divide='ignore'):
                         while(stop <= end): #Need quality to end to append the end as a stop in the array
-                            while(np.all(1/np.sqrt(entryArray[:, start:stop].sum(axis=1)) > relUncertainty)):
+                            while(np.any(1/np.sqrt(np.sum(entryArray[:, start:stop], axis=1)) > relUncertainty)):
                                 stop += 1
                                 #After the while loop, we should have a good start:stop range for rebinning, unless it failed for the last bin, so merge (start:end)! range
                                 if stop > end:
-                                    if np.all(1/np.sqrt(entryArray[:, start:end].sum(axis=1)) > relUncertainty):
-                                        binningArray[-1] = end
+                                    if np.any(1/np.sqrt(entryArray[:, start:end].sum(axis=1)) > relUncertainty):
+                                        if len(binningArray) > 1:
+                                            #Merge with the previous bin by replacement of the last deduced stop with end
+                                            binningArray[-1] = end
+                                        else:
+                                            #Array has only the histogram lowest edge, looks like we've got a one-bin pony show!
+                                            binningArray.append(end)
                                         break
                                     else:
                                         raise RuntimeError("Unhandled logical path")
@@ -122,7 +141,23 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, verbose=False):
                         rebinnedHists[systematic] = hists[systematic].Rebin(len(edgesArray)-1, hists[systematic].GetName() + "_rebin", edgesArray)
                         # for binNumber in range(1, rebinnedHists[systematic].GetNbinsX()+1):
                         #     assert rebinnedHists[systematic].GetBinError(binNumber)/rebinnedHists[systematic].GetBinContent(binNumber) <= relUncertainty, "Rebinning not below threshold in the rebinned hist for '{}' systematic, bin {}, range {} - {}".format(systematic, binNumber, rebinnedHists[systematic].GetBinLowEdge(binNumber), rebinnedHists[systematic].GetBinLowEdge(binNumber) + rebinnedHists[systematic].GetBinWidth(binNumber))
-                print('        "Rebin":', rebinningEdges, ',')
+                replacements = []
+                if jsonInput:
+                    for jkey, jdict in jsonCopy.items():
+                        if category in jkey and variable.replace("Unweighted", "") in jkey:
+                            if verbose:
+                                print("Input array: ", jdict.get("Rebin"), "\nOutput array: ", rebinningEdges)
+                            jdict["Rebin"] = rebinningEdges
+                            replacements.append(jkey)
+                    if len(replacements) > 1:
+                        print("Potential error: [{era}][{cat}][{var}] rebin array used as replacement in following items: {keys}".format(era=era, cat=category, var=variable, keys=replacements))
+                else:
+                    print(era, channel, category))
+                    print('        "Rebin":', rebinningEdges, ',')
+            if jsonInput:                
+                print("Writing output json to: {}".format(jsonOutputPath))
+                with open(jsonOutputPath, "w") as jo:
+                    jo.write(json.dumps(jsonCopy, indent=4))
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Determine binning automatically for categorized histograms using a particular subset of processes')
     parser.add_argument('stage', action='store', type=str, choices=['determine-binning'],
@@ -141,6 +176,8 @@ if __name__ == '__main__':
                         help='List of sample names to not be used in the stage (if not called, defaults to none; include takes precedence)')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
+    parser.add_argument('--json', '-j', dest='json', action='store', default=None, type=str,
+                        help='path to json file plotcard to overwrite "Rebin" categories with those determined here. Output determined by --out argument')
     # parser.add_argument('--era', dest='era', action='store', type=str, default="2017", choices=['2016', '2017', '2018'],
     #                     help='simulation/run year')
     # parser.add_argument('--nThreads', dest='nThreads', action='store', type=int, default=8, #nargs='?', const=0.4,
@@ -156,4 +193,4 @@ if __name__ == '__main__':
     channel = args.channel
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel)
     verbose = args.verbose
-    main(stage, analysisDir, channel, args.era, args.relUncertainty, verbose=verbose)
+    main(stage, analysisDir, channel, args.era, args.relUncertainty, args.json, ".", verbose=verbose)
