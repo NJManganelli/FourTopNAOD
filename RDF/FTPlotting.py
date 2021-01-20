@@ -1991,7 +1991,8 @@ def makeStack_Prototype(histFile, histList=None, legendConfig=None, rootName=Non
     print(hists_nominal)
     
 def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Cache=None, histogramDirectory = ".", batchOutput=False, closeFiles=True, 
-                     pdfOutput=None, combineOutput=None, combineInput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
+                     analysisDirectory=None, tag=None, plotCard=None, drawSystematic=None,
+                     plotDir=None, pdfOutput=None, combineOutput=None, combineInput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
                      debug=False, nDivisions=105, lumi="N/A", drawYields=False,
                      removeNegativeBins=True, normalizeUncertainties=['ttmuRNomFDown', 'ttmuRNomFUp', 'ttmuFNomRDown', 'ttmuFNomRUp', 
@@ -2006,9 +2007,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                    'ttHmuRFcorrdNewDown', 'ttHmuRFcorrdNewUp', 
                                                                    'ttttmuRNomFDown', 'ttttmuRNomFUp', 'ttttmuFNomRDown', 'ttttmuFNomRUp', 
                                                                    'ttttmuRFcorrdNewDown', 'ttttmuRFcorrdNewUp', ],
-                     normalizeProcess=['tttt'],
+                     normalizeAllUncertaintiesForProcess=['tttt'],
 ):
-    """Loop through a JSON encoded plotcard to draw plots based on root files containing histograms.
+    """Loop through a JSON encoded plotCard to draw plots based on root files containing histograms.
     Must pass a cache (python dictionary) to the function to prevent python from garbage collecting everything.
     
     This latter point could be fixed via SetDirectory(0) being called on relevant histograms and not creating python
@@ -2131,6 +2132,11 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         header_position = can_dict.get("HeaderPosition", legendConfig.get("HeaderPosition", 0.063))
         label = can_dict.get("Label", legendConfig.get("Label", "#bf{CMS} #it{Preliminary}"))
         label_position = can_dict.get("LabelPosition", legendConfig.get("LabelPosition", 0.05))        
+        histDrawSystematicNom = []
+        histDrawSystematicUp = []
+        histDrawSystematicDown = []
+        histDrawSystematicUpRatio = []
+        histDrawSystematicDownRatio = []
         npValues = [] #npValues[padNumber][Supercategory][systematic, bin] stores the contents of each histogram of systematics, with a reverse lookup sD dictionary for mapping systematic name to number in the last array lookup
         npDifferences = []
         npNominal = [] # n-vector
@@ -2166,13 +2172,19 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             print(" Done :: ", end="")
             blindSupercategories = [k for k in CanCache["subplots/supercategories"][pn]['Supercategories'] if "BLIND" in k]
             if len(blindSupercategories) > 0: print("Blinded - skipping systematics")
+            nSystsEnd = len(systematics) - 1 if skipSystematics is None else len(systematics) - 1 - len(skipSystematics)
             if combineOutput is not None or (pdfOutput is not None and len(blindSupercategories) < 1):
                 nSysts = len(systematics)
-                print(" {} systematics: ".format(nSysts), end="")
+                print(" {} unskipped systematics: ".format(nSystsEnd + 1), end="")
                 nBins = list(CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values())[0].GetNbinsX()
                 sD = dict() #systematic dictionary for lookup into numpy array
                 sD['statisticsUp'] = nSysts + 0
                 sD['statisticsDown'] = nSysts + 1
+                histDrawSystematicNom.append(dict())
+                histDrawSystematicUp.append(dict())
+                histDrawSystematicDown.append(dict())
+                histDrawSystematicUpRatio.append(dict())
+                histDrawSystematicDownRatio.append(dict())
                 npValues.append(dict())
                 npDifferences.append(dict())
                 npNominal.append(dict())
@@ -2190,6 +2202,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     #                 scHisto.GetBinLowEdge(x), scHisto.GetBinCenter(x), scHisto.GetBinWidth(x)) for x in range(nBins + 2)]
                     histoArrays = [(scHisto.GetBinErrorLow(x), scHisto.GetBinErrorUp(x)) for x in range(nBins + 2)]
                     # npNominal[pn][supercategory] = np.asarray([bt[0] for bt in histoArrays], dtype=float)
+                    histDrawSystematicNom[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematic_" + "nom")
                     npNominal[pn][supercategory], edgesTuple = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=True)
                     npValues[pn][supercategory] = np.zeros((nSysts + 2, nBins + 2), dtype=float)
                     #Stat errors up and down Assumes positive return value, untrue for esoteric stat options?
@@ -2212,10 +2225,10 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 for nSyst, syst in enumerate(sorted(sorted(systematics, key = lambda l: l[-2:] == "Up", reverse=True), 
                                                     key = lambda l: l.replace("Down", "").replace("Up", "")
                                                 )):
-                    if nSyst < nSysts - 1:
+                    if nSyst < nSystsEnd:
                         print("*", end="")
                     else:
-                        print("* Done")
+                        print("*")
                     if skipSystematics is not None:
                         if "all" in skipSystematics or "All" in skipSystematics or "ALL" in skipSystematics:
                             continue
@@ -2248,6 +2261,31 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         #                                                                         2, 
                         #                                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
                         #                                                                         where=npDifferences[pn][supercategory] < 0 & (np.divide(np.abs(npDifferences[pn][supercategory], np.broadcast_to(npNominal[pn][supercategory], (nSysts+2, nBins+2)))) < 3)), axis=0))
+                        #HERE
+                        if drawSystematic == syst.replace("Up", ""):
+                            histDrawSystematicUp[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematic_" + syst)
+                            histDrawSystematicUpRatio[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematicRatio_" + syst)
+                            histDrawSystematicUpRatio[pn][supercategory].Divide(histDrawSystematicNom[pn][supercategory])
+                            histDrawSystematicUp[pn][supercategory].SetLineColor(ROOT.kRed)
+                            histDrawSystematicUp[pn][supercategory].SetFillColor(0)
+                            histDrawSystematicUp[pn][supercategory].SetLineWidth(1)
+                            histDrawSystematicUp[pn][supercategory].SetLineStyle(2)
+                            histDrawSystematicUpRatio[pn][supercategory].SetLineColor(ROOT.kRed)
+                            histDrawSystematicUpRatio[pn][supercategory].SetFillColor(0)
+                            histDrawSystematicUpRatio[pn][supercategory].SetLineWidth(1)
+                            histDrawSystematicUpRatio[pn][supercategory].SetLineStyle(2)
+                        if drawSystematic == syst.replace("Down", ""):
+                            histDrawSystematicDown[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematic_" + syst)
+                            histDrawSystematicDownRatio[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematicRatio_" + syst)
+                            histDrawSystematicDownRatio[pn][supercategory].Divide(histDrawSystematicNom[pn][supercategory])
+                            histDrawSystematicDown[pn][supercategory].SetLineColor(ROOT.kBlue)
+                            histDrawSystematicDown[pn][supercategory].SetFillColor(0)
+                            histDrawSystematicDown[pn][supercategory].SetLineWidth(1)
+                            histDrawSystematicDown[pn][supercategory].SetLineStyle(2)
+                            histDrawSystematicDownRatio[pn][supercategory].SetLineColor(ROOT.kBlue)
+                            histDrawSystematicDownRatio[pn][supercategory].SetFillColor(0)
+                            histDrawSystematicDownRatio[pn][supercategory].SetLineWidth(1)
+                            histDrawSystematicDownRatio[pn][supercategory].SetLineStyle(2)
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'] = dict()
@@ -2357,6 +2395,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             CanCache["subplots/maxima"].append(thisMax)
             CanCache["subplots/minima"].append(thisMin)
             
+
+            # for drawVariation in ["complete"]:
             #Do nasty in-place sorting of the dictionary to get the Stacks drawn first, by getting the key from each key-value pair and getting the "Stack" field value,
             #from the legendConfig, recalling we need the key part of the tuple (tuple[0]) with a reverse to put the Stack == True items up front...
             for super_cat_name, drawable in sorted(CanCache["subplots/supercategories"][pn]["Supercategories"].items(), 
@@ -2523,6 +2563,11 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     if redraw:
                         CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].Draw(ratio_draw_command + "SAME")
                         
+                    if den in histDrawSystematicDownRatio[pn].keys():
+                        histDrawSystematicDownRatio[pn][supercategory].Draw("HIST SAME")
+                    if den in histDrawSystematicUpRatio[pn].keys():
+                        histDrawSystematicUpRatio[pn][supercategory].Draw("HIST SAME")
+
                     #Set the x axis title if it's the last drawable item
                     if pn == (len(CanCache["subplots"]) - 1):
                         if xAxisTitle != None:
@@ -2598,9 +2643,17 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
 
         CanCache["canvas"].Draw()
 
-        if pdfOutput != None and can_num == 1: #count from 1 since we increment at the beginning of the loop on this one
-            print("Opening {}".format(pdfOutput))
-        print("\tDrew {}".format(can_name))
+        formattedCanvasName = "$ADIR/Plots/$ERA/$CHANNEL/$PLOTCARD/$SYST/$CANVAS".replace("$ADIR", analysisDir)\
+                                                                                 .replace("$TAG", tag)\
+                                                                                 .replace("$ERA", era)\
+                                                                                 .replace("$PLOTCARD", plotCard)\
+                                                                                 .replace("$CHANNEL", channel)\
+                                                                                 .replace("$SYST", "nominal" if drawSystematic is None else drawSystematic)\
+                                                                                 .replace("$CANVAS", can_name.replace("___", "_").replace("Canvas_", ""))\
+                                                                                 .replace("//", "/")
+        formattedCanvasPath, _ = os.path.split(formattedCanvasName)
+        if not os.path.isdir(formattedCanvasPath):
+            os.makedirs(formattedCanvasPath)
         if pdfOutput != None:
             if can_num == 1 and can_num != can_max: #count from 1 since we increment at the beginning of the loop on this one
                 #print(CanCache["canvas"])
@@ -2611,9 +2664,11 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             else:
                 CanCache["canvas"].SaveAs("{}".format(pdfOutput))
         if macroOutput != None:
-                CanCache["canvas"].SaveAs("{}".format(macroOutput))
+            CanCache["canvas"].SaveAs("{}".format(formattedCanvasName + ".C"))
         if pngOutput != None:
-            CanCache["canvas"].SaveAs("{}".format(pngOutput))
+            CanCache["canvas"].SaveAs("{}".format(formattedCanvasName + ".png"))
+        if pdfOutput or macroOutput or pngOutput:
+            print("\tDrew {}".format(can_name))
 
         #Save histograms for Combine, this is a hacked first attempt, might be cleaner to create a dictionary of histograms with keys from the histogram name to avoid duplicates/cycle numbers in the root files.
         if combineOutput is not None and (combineInput in can_name):
@@ -2737,9 +2792,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             #to avoid double scaling calculations
                             elif removeNegativeBins:
                                 combHist.Scale(systIntegral()/combHist.Integral())
-                            if normalizeProcess is not None:
-                                # print("Process in normalizeProcess: ({}, {}): {}".format(processName, normalizeProcess, processName in normalizeProcess))
-                                if processName in normalizeProcess:
+                            if normalizeAllUncertaintiesForProcess is not None:
+                                # print("Process in normalizeAllUncertaintiesForProcess: ({}, {}): {}".format(processName, normalizeAllUncertaintiesForProcess, processName in normalizeAllUncertaintiesForProcess))
+                                if processName in normalizeAllUncertaintiesForProcess:
                                     normValue = normalizationDict.get(combHist.GetName().replace(combSystematic, "nom"), 
                                                                       combHist.GetName().replace(combSystematic, ""))
                                     combHist.Scale(normValue/combHist.Integral())
@@ -2901,7 +2956,7 @@ if __name__ == '__main__':
                         help='Variable to be used as input to Higgs Combine. If None, output histograms will not be produced')
     parser.add_argument('-d', '--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
                         help='analysis directory where btagging yields, histograms, etc. are stored')
-    parser.add_argument('-f', '--formats', dest='formats', action='append', choices=['pdf', 'C', 'png'],
+    parser.add_argument('-f', '--formats', dest='formats', action='store', choices=['pdf', 'C', 'png'], nargs="*",
                         help='Formats to save plots as, supporting subset of ROOT SaveAs() formats: pdf, C macro, png')
     parser.add_argument('-p', '--plotCard', dest='plotCard', action='store', type=str, default="$ADIR/Histograms/All/plots.json",
                         help='input plotting configuration, defaulting to "$ADIR/Histograms/All/plots.json"')
@@ -2910,11 +2965,11 @@ if __name__ == '__main__':
     parser.add_argument('--era', dest='era', type=str, default="2001", choices=["2017", "2018"],
                         help='era for plotting, lumi, systematics deduction')
     parser.add_argument('--vars', '--variables', dest='variables', action='store', default=None, type=str, nargs='*',
-                        help='List of variables for generating a plotcard')
+                        help='List of variables for generating a plotCard')
     parser.add_argument('--nJets', '--nJetCategories', dest='nJetCategories', action='store', default=None, type=str, nargs='*',
-                        help='List of nJet categories for generating a plotcard, i.e. "nJet4 nJet5 nJet6p"')
+                        help='List of nJet categories for generating a plotCard, i.e. "nJet4 nJet5 nJet6p"')
     parser.add_argument('--nBTags', '--nBTagCategories', dest='nBTagCategories', action='store', default=None, type=str, nargs='*',
-                        help='List of nBTag categories for generating a plotcard, i.e. "nMediumDeepJetB2 nMediumDeepJetB3 nMediumDeepJetB4p"')
+                        help='List of nBTag categories for generating a plotCard, i.e. "nMediumDeepJetB2 nMediumDeepJetB3 nMediumDeepJetB4p"')
     parser.add_argument('--noBatch', dest='noBatch', action='store_true',
                         help='Disable batch output and attempt to draw histograms to display')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
@@ -2924,6 +2979,8 @@ if __name__ == '__main__':
     parser.add_argument('--skipSystematics', '--skipSystematics', dest='skipSystematics', action='store', 
                         default=None, type=str, nargs='*',
                         help='List of systematics to skip')
+    parser.add_argument('--drawSystematic', dest='drawSystematic', action='store', default=None, type=str,
+                        help='Single systematic name to be drawn on plots, besides the total statistical and systematic + statistical errors')
     
 
     #Parse the arguments
@@ -2953,7 +3010,7 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
     legendConfig = args.legendCard.replace("$ADIR", analysisDir).replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel).replace("//", "/")
     tag = analysisDir.split("/")[-1]
     plotCardName = plotConfig.split("/")[-1]
-    plotcard = plotCardName.replace(".json", "")
+    plotCard = plotCardName.replace(".json", "")
     legendCardName = legendConfig.split("/")[-1]
     legendcard = legendCardName.replace(".json", "")
 
@@ -3004,21 +3061,28 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
             print("channel = {}".format(channel))
             print("plotConfig = {}".format(plotConfig))
             print("legendConfig = {}".format(legendConfig))
-            print("plotcard = {}".format(plotcard))
+            print("plotCard = {}".format(plotCard))
             
         if 'pdf' in args.formats:
-            pdfOut = "$ADIR/Plots/$TAG_$PLOTCARD_$CHAN.pdf".replace("$ADIR", analysisDir).replace("$TAG", tag).replace("$PLOTCARD", plotcard).replace("$CHAN", channel).replace("//", "/")
+            pdfOutput = "$ADIR/Plots/$TAG_$PLOTCARD_$CHAN.pdf".replace("$ADIR", analysisDir).replace("$TAG", tag).replace("$PLOTCARD", plotCard).replace("$CHAN", channel).replace("//", "/")
+            if args.drawSystematic is not None:
+                pdfOutput = pdfOutput.replace(".pdf", ".{}.pdf".format(args.drawSystematic))
             if verb:
-                print("pdfOutput = {}".format(pdfOut))
+                print("pdfOutput = {}".format(pdfOutput))
+        if 'C' in args.formats:
+            macroOutput = True
+        if 'png' in args.formats:
+            pngOutput = True
         if combineInput is not None:
-            combineOut = "$ADIR/Combine/CI_$ERA_$CHAN_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", combineInput).replace("$TAG", tag).replace("$PLOTCARD", plotcard).replace("$CHAN", channel).replace("//", "/")
+            combineOut = "$ADIR/Combine/CI_$ERA_$CHAN_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", combineInput).replace("$TAG", tag).replace("$PLOTCARD", plotCard).replace("$CHAN", channel).replace("//", "/")
             if verb:
-                print("pdfOutput = {}".format(pdfOut))
+                print("pdfOutput = {}".format(pdfOutput))
         else:
             combineOut = None
         resultsDict = loopPlottingJSON(loadedPlotConfig, era=args.era, channel=args.channel, systematicCards=args.systematics_cards,
-                                       Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, 
-                                       pdfOutput=pdfOut, combineOutput=combineOut, combineInput=combineInput, lumi=lumi, useCanvasMax=useCanvasMax, 
+                                       Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, drawSystematic=args.drawSystematic,
+                                       analysisDirectory=analysisDir, tag=tag, plotCard=plotCard, macroOutput=macroOutput, pngOutput=pngOutput,
+                                       pdfOutput=pdfOutput, combineOutput=combineOut, combineInput=combineInput, lumi=lumi, useCanvasMax=useCanvasMax, 
                                        skipSystematics=skipSystematics, verbose=verb);
     else:
         raise RuntimeError("The loading of the plot or legend cards failed. They are of type {} and {}, respectively".format(type(loadedPlotConfig),type(loadedLegendConfig)))
