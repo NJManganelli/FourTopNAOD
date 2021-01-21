@@ -58,7 +58,7 @@ def main(analysisDirectory, era, variable, verbose=False):
         for msample in samples:
             merge[mera][msample] = dict()
             for mvariable in variables:
-                if mvariable != variable: 
+                if mvariable not in [variable, variable + "Unweighted"]:
                     continue
                 merge[mera][msample][mvariable] = dict()
                 for msyst in systematics:
@@ -68,7 +68,7 @@ def main(analysisDirectory, era, variable, verbose=False):
 
     for key in keys:
         mera, msample, mchannel, mwindow, mcategory, mvariable, msyst = key.split("___")
-        if mvariable != variable or mera != era:
+        if mvariable not in [variable, variable + "Unweighted"] or mera != era:
             continue
         mcat = mcategory.split("_")[-1].replace("+", "p").replace("BLIND", "")
         merge[mera][msample][mvariable][msyst][mcat].append(key)
@@ -84,7 +84,7 @@ def main(analysisDirectory, era, variable, verbose=False):
                 for msyst, subsubsubsubmerge in subsubsubmerge.items():
                     print("*", end="")
                     for mcat, subsubsubsubsubmerge in subsubsubsubmerge.items():
-                        mergeName = "___".join([mera, msample, "All", "ZWindow", "MergedChannelsBTags_" + mcat, variable, msyst])
+                        mergeName = "___".join([mera, msample, "All", "ZWindow", "MergedChannelsBTags_" + mcat, mvariable, msyst])
                         hist = None
                         blind = len([hk for hk in subsubsubsubsubmerge if "blind" in hk.lower()]) > 0
                         for histKey in subsubsubsubsubmerge:
