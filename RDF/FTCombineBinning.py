@@ -18,19 +18,24 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 ROOT.gROOT.SetBatch(True)
 
-def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outDir, sourceVariable = "HT", merged = False, verbose=False):
+def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outDir, sourceVariable = "HT", merge="", verbose=False):
     varsOfInterest = [sourceVariable + "Unweighted"]
     erasOfInterest = [era]
     channelsOfInterest = [channel]
     samplesOfInterest = ['ttbb_SL_nr', 'ttbb_SL_fr', 'ttbb_SL-GF_fr', 'ttbb_DL_nr', 'ttbb_DL_fr', 'ttbb_DL-GF_fr', #'ttbb_AH'
                          'ttother_SL_nr', 'ttother_SL_fr', 'ttother_SL-GF_fr', 'ttother_DL_nr', 'ttother_DL_fr', 'ttother_DL-GF_fr', #'ttother_AH'
     ]
-    if merged:
+    if merge.lower() == "btags":
         histogramFile = "$ADIR/Combine/All/$ERA___MergedChannelsBTags_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", sourceVariable).replace("//", "/") # 
         categoriesOfInterest = ['MergedChannelsBTags_nJet4', 'MergedChannelsBTags_nJet5', 'MergedChannelsBTags_nJet6',
                                 'MergedChannelsBTags_nJet7', 'MergedChannelsBTags_nJet8+',
         ]
+    elif merge.lower() == "jets":
+        histogramFile = "$ADIR/Combine/All/$ERA___MergedChannelsJets_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", sourceVariable).replace("//", "/") # 
+        categoriesOfInterest = ['MergedChannelsJets_nMediumDeepJetB2', 'MergedChannelsJets_nMediumDeepJetB3', 'MergedChannelsJets_nMediumDeepJetB4+',
+        ]
     else:
+        histogramFile = "$ADIR/Combine/All/$ERA___Combined.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", sourceVariable).replace("//", "/") # 
         categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4', 'HT500_nMediumDeepJetB2_nJet5', 'HT500_nMediumDeepJetB2_nJet6',
                                 'HT500_nMediumDeepJetB2_nJet7', 'HT500_nMediumDeepJetB2_nJet8+',
                                 'HT500_nMediumDeepJetB3_nJet4', 'HT500_nMediumDeepJetB3_nJet5', 'HT500_nMediumDeepJetB3_nJet6',
@@ -38,8 +43,6 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outD
                                 'HT500_nMediumDeepJetB4+_nJet4', 'HT500_nMediumDeepJetB4+_nJet5', 'HT500_nMediumDeepJetB4+_nJet6',
                                 'HT500_nMediumDeepJetB4+_nJet7', 'HT500_nMediumDeepJetB4+_nJet8+',
         ]
-        # systematicsOfInterest = [''] #Not needed, only scale systematics get the unweighted histogram in FTAnalyzer.py as of writing
-        histogramFile = "$ADIR/Combine/All/$ERA___Combined.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", sourceVariable).replace("//", "/") # 
     f = ROOT.TFile.Open(histogramFile, "read")
     keys = [k.GetName() for k in f.GetListOfKeys()]
     keys = [k for k in keys if k.split("___")[0] in erasOfInterest and k.split("___")[1] in samplesOfInterest]
@@ -184,8 +187,8 @@ if __name__ == '__main__':
                         help='List of sample names to not be used in the stage (if not called, defaults to none; include takes precedence)')
     parser.add_argument('--json', '-j', dest='json', action='store', default=None, type=str,
                         help='path to json file plotcard to overwrite "Rebin" categories with those determined here. Output determined by --out argument')
-    parser.add_argument('--merged', dest='merged', action='store_true',
-                        help='Check for the $ERA___MergedChannelsBTags_$VAR.root file in the Combine/All subdirectory, a product of FTMergeChannelsBTags.py for systematic studies')
+    parser.add_argument('--merge', dest='merge', action='store', type=str, nargs='?', const="btags", default="", choices = ["BTags", "Jets"],
+                        help='Check for the $ERA___MergedChannels$MERGE_$VAR.root file in the Combine/All subdirectory, a product of FTMergeChannels$MERGE.py for systematic studies, where $MERGE = BTags, Jets')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
     # parser.add_argument('--era', dest='era', action='store', type=str, default="2017", choices=['2016', '2017', '2018'],
@@ -203,4 +206,4 @@ if __name__ == '__main__':
     channel = args.channel
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel)
     verbose = args.verbose
-    main(stage, analysisDir, channel, args.era, args.relUncertainty, args.json, ".", args.variable, args.merged, verbose=verbose)
+    main(stage, analysisDir, channel, args.era, args.relUncertainty, args.json, ".", args.variable, args.merge, verbose=verbose)
