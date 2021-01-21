@@ -20,11 +20,11 @@ ROOT.gROOT.SetBatch(True)
 
 def main(analysisDirectory, era, variable, verbose=False):
     categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4', 'HT500_nMediumDeepJetB2_nJet5', 'HT500_nMediumDeepJetB2_nJet6',
-                            'HT500_nMediumDeepJetB2_nJet7', 'HT500_nMediumDeepJetB2_nJet8p',
+                            'HT500_nMediumDeepJetB2_nJet7', 'HT500_nMediumDeepJetB2_nJet8+',
                             'HT500_nMediumDeepJetB3_nJet4', 'HT500_nMediumDeepJetB3_nJet5', 'HT500_nMediumDeepJetB3_nJet6',
-                            'HT500_nMediumDeepJetB3_nJet7', 'HT500_nMediumDeepJetB3_nJet8p',
-                            'HT500_nMediumDeepJetB4p_nJet4', 'HT500_nMediumDeepJetB4p_nJet5', 'HT500_nMediumDeepJetB4p_nJet6',
-                            'HT500_nMediumDeepJetB4p_nJet7', 'HT500_nMediumDeepJetB4p_nJet8p',
+                            'HT500_nMediumDeepJetB3_nJet7', 'HT500_nMediumDeepJetB3_nJet8+',
+                            'HT500_nMediumDeepJetB4+_nJet4', 'HT500_nMediumDeepJetB4+_nJet5', 'HT500_nMediumDeepJetB4+_nJet6',
+                            'HT500_nMediumDeepJetB4+_nJet7', 'HT500_nMediumDeepJetB4+_nJet8+',
     ]
     histogramFile = "$ADIR/Combine/All/$ERA___Combined.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("//", "/") 
     f = ROOT.TFile.Open(histogramFile, "read")
@@ -63,14 +63,14 @@ def main(analysisDirectory, era, variable, verbose=False):
                 merge[mera][msample][mvariable] = dict()
                 for msyst in systematics:
                     merge[mera][msample][mvariable][msyst] = dict()
-                    for mcategory in ["nJet4", "nJet5", "nJet6", "nJet7", "nJet8p"]:
+                    for mcategory in ["nJet4", "nJet5", "nJet6", "nJet7", "nJet8+"]:
                         merge[mera][msample][mvariable][msyst][mcategory] = []
 
     for key in keys:
         mera, msample, mchannel, mwindow, mcategory, mvariable, msyst = key.split("___")
         if mvariable not in [variable, variable + "Unweighted"] or mera != era:
             continue
-        mcat = mcategory.split("_")[-1].replace("+", "p").replace("BLIND", "")
+        mcat = mcategory.split("_")[-1].replace("BLIND", "")
         merge[mera][msample][mvariable][msyst][mcat].append(key)
     
     outputHistogramFile = histogramFile.replace("Combined", "").replace(".root", "MergedChannelsBTags_" + variable + ".root")

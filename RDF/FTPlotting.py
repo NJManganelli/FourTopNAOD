@@ -2630,7 +2630,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["canvas_title"].SetTextFont(43) #Includes precision 3, which locks text size so that it stops fucking scaling according to pad size
         CanCache["canvas_title"].SetTextSize(40)
         CanCache["canvas_title"].SetTextAlign(22)
-        CanCache["canvas_title"].DrawLatexNDC(0.5, 1-0.35*CanCache["canvas/marginT"], str(canTitle))
+        CanCache["canvas_title"].DrawLatexNDC(0.5, 1-0.2*CanCache["canvas/marginT"], str(canTitle) + "[{}]".format(drawSystematic) if isinstance(drawSystematic, str) else str(canTitle))
         CanCache["canvas_title"].Draw()
 
         CanCache["canvas_header"] = ROOT.TLatex()
@@ -2663,6 +2663,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 CanCache["canvas"].SaveAs("{})".format(pdfOutput))
             else:
                 CanCache["canvas"].SaveAs("{}".format(pdfOutput))
+        if isinstance(drawSystematic, str):
+            formattedCanvasName += "." + drawSystematic
         if macroOutput != None:
             CanCache["canvas"].SaveAs("{}".format(formattedCanvasName + ".C"))
         if pngOutput != None:
