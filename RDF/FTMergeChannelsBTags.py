@@ -105,7 +105,7 @@ def main(analysisDirectory, era, variable, verbose=False):
     of.Close()
     print("Done")
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Determine binning automatically for categorized histograms using a particular subset of processes')
+    parser = argparse.ArgumentParser(description='Merge BTag categories and decay channels for the purpose of jet-dependent systematic studies')
     parser.add_argument('--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE", required=True,
                         help='output directory path defaulting to "."')
     parser.add_argument('--era', dest='era', type=str, default="2017", required=True,
