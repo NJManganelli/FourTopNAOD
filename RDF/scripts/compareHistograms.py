@@ -37,11 +37,14 @@ def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keywords,
                 k2[key2] = value
         else:
             k2 = k2temp
-        kAll = list(k1.keys()) + list(k2.keys())
-        kNotKeyworded = list(set([kk for kk in kAll if kk not in list(k1.keys()) + list(k2.keys())]))
-        kOnlyInOne = set(k1.keys()) - set(k2.keys())
-        kOnlyInTwo = set(k2.keys()) - set(k1.keys())
-        kInBoth = set(k1.keys()).intersection(set(k2.keys()))
+    else:
+        k1 = dict([(kk, kk) for kk in k1])
+        k2 = dict([(kk, kk) for kk in k2])
+    kAll = list(k1.keys()) + list(k2.keys())
+    kNotKeyworded = list(set([kk for kk in kAll if kk not in list(k1.keys()) + list(k2.keys())]))
+    kOnlyInOne = set(k1.keys()) - set(k2.keys())
+    kOnlyInTwo = set(k2.keys()) - set(k1.keys())
+    kInBoth = set(k1.keys()).intersection(set(k2.keys()))
     print("Histogram keys...\n\tOnly in input1: {}\n\tOnly in input2: {}\n\tIn common: {}\n\tKeywords not found: {}".format(len(kOnlyInOne), len(kOnlyInTwo), len(kInBoth), len(kNotKeyworded)))
     print("Running KS and Chi2 tests on matching histograms")
 
