@@ -12,6 +12,10 @@ def main(analysisDirectory, era, channel, variable, categories, template):
             for line in outputLines:
                 if "prefire" in line and era == "2018":
                     continue
+                if "leptonSFEl" in line and channel == "MuMu":
+                    continue
+                if "leptonSFMu" in line and channel == "ElEl":
+                    continue
                 outFile.write(line\
                               .replace("$ERA", era)\
                               .replace("$CHANNEL", channel)\
