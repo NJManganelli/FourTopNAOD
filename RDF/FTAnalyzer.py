@@ -869,20 +869,22 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
     rdf = input_df
     listOfColumns = input_df.GetColumnNames()
     z = []
-    for sysVar, sysDict in sysVariations.items():
+    for sysVarRaw, sysDict in sysVariations.items():
         #Only do systematics that are in the filter list (storing raw systematic names...
-        if sysVar not in sysFilter:
+        if sysVarRaw not in sysFilter:
             continue
         #skip systematic variations on data, only do the nominal
-        if isData and sysVar != "$NOMINAL": 
+        if isData and sysVarRaw != "$NOMINAL": 
             continue
+        #get final systematic name
+        sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
         branchpostfix = "ERROR_NO_BRANCH_POSTFIX_METXYCorr"
         if isWeightVariation == True: 
             continue
         else:
-            branchpostfix = "__" + sysVar.replace("$NOMINAL", "nom")
+            branchpostfix = "__" + sysVar
         metPt = sysDict.get("met_pt_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
         metPhi = sysDict.get("met_phi_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
         metDoublet = "MET_xycorr_doublet{bpf}".format(bpf=branchpostfix)
@@ -1130,18 +1132,20 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfL
               "FTALepton{lpf}_phi.size() > 1 && abs(FTALepton{lpf}_pdgId.at(1)) == 11 ? FTALepton{lpf}_phi.at(1) : -9999".format(lpf=leppostfix)))
 
 
-    for sysVar, sysDict in sysVariations.items():
+    for sysVarRaw, sysDict in sysVariations.items():
         #skip systematic variations on data, only do the nominal
-        if isData and sysVar != "$NOMINAL": 
+        if isData and sysVarRaw != "$NOMINAL": 
             continue
         #Only do systematics that are in the filter list (storing raw systematic names...
-        if sysVar not in sysFilter:
+        if sysVarRaw not in sysFilter:
             continue
+        #get final systematic name
+        sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
         if isWeightVariation == True: continue
-        syspostfix = "___" + sysVar.replace("$NOMINAL", "nom")
-        branchpostfix = "__nom" if isWeightVariation else "__" + sysVar.replace("$NOMINAL", "nom")
+        syspostfix = "___" + sysVar
+        branchpostfix = "__nom" if isWeightVariation else "__" + sysVar
         #metPt = sysDict.get("met_pt_var")
         #metPhi = sysDict.get("met_phi_var")
         #These are the xy corrected MET values, to be used in the calculations
@@ -1249,20 +1253,22 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
     leppostfix = ""
     #z will be a list of tuples to define, so that we can do cleaner error handling and checks
     z = []
-    for sysVar, sysDict in sysVariations.items():
+    for sysVarRaw, sysDict in sysVariations.items():
         #skip systematic variations on data, only do the nominal
-        if isData and sysVar != "$NOMINAL": 
+        if isData and sysVarRaw != "$NOMINAL": 
             continue
         #Only do systematics that are in the filter list (storing raw systematic names...
-        if sysVar not in sysFilter:
+        if sysVarRaw not in sysFilter:
             continue
+        #get final systematic name
+        sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
         if isWeightVariation == True: continue
         jetMask = sysDict.get("jet_mask").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
         jetPt = sysDict.get("jet_pt_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
         jetMass = sysDict.get("jet_mass_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
-        postfix = "__" + sysVar.replace("$NOMINAL", "nom")
+        postfix = "__" + sysVar
         
         #Fill lists
         if jetPUId:
@@ -1449,11 +1455,13 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     zPre = []
     zFin = []
     z = []
-    for sysVar, sysDict in sysVariations.items():
+    for sysVarRaw, sysDict in sysVariations.items():
         #Only do systematics that are in the filter list (storing raw systematic names...
-        if sysVar not in sysFilter:
+        if sysVarRaw not in sysFilter:
             continue
         leppostfix = sysDict.get('lep_postfix', '')
+        #get final systematic name
+        sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
         if sysDict.get("isNominal", False) or sysDict.get("isSystematicForSample", False): 
             for wgtKey, wgtDef in sysDict.get("commonWeights", {}).items():
                 zPre.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
@@ -1525,7 +1533,7 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #return the dictionary of all nodes
     return input_df_or_nodes
 
-def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, histosDict=None, bTagger="DeepCSV", verbose=False,
+def BTaggingYields(input_df_or_nodes, sampleName, era, channel="All", isData = True, histosDict=None, bTagger="DeepCSV", verbose=False,
                    loadYields=None, lookupMap="LUM", vectorLUTs=None, correctorMap=None,
                    useAggregate=True, useHTOnly=False, useNJetOnly=False, 
                    calculateYields=True, HTArray=[500, 650, 800, 1000, 1200, 10000], nJetArray=[4,5,6,7,8,20],
@@ -1697,14 +1705,16 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
             # rdf = input_df
             #Create list of the variations to be histogrammed (2D yields)
             yieldList = []
-            for sysVar, sysDict in sysVariations.items():
+            for sysVarRaw, sysDict in sysVariations.items():
                 #Only do systematics that are in the filter list (storing raw systematic names...
-                if sysVar not in sysFilter:
+                if sysVarRaw not in sysFilter:
                     continue
+                #get final systematic name
+                sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
                 bTaggingDefineNodes[eraAndSampleName][sysVar] = []
                 isWeightVariation = sysDict.get("weightVariation")
                 branchpostfix = "__nom" if isWeightVariation else "__" + sysVar.replace("$NOMINAL", "nom") #branch postfix for identifying input branch variation
-                syspostfix = "___" + sysVar.replace("$NOMINAL", "nom")
+                syspostfix = "___" + sysVar
                 jetMask = sysDict.get("jet_mask").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')) #mask as defined for the jet collection under this systematic variation
                 jetPt = sysDict.get("jet_pt_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')) #colum name of jet pt collection for this systematic
                 jetSF = sysDict.get("btagSF").get(bTagger, "NO / VALID / jetSF") #colum name of per-jet shape SFs
@@ -1713,6 +1723,9 @@ def BTaggingYields(input_df_or_nodes, sampleName, channel="All", isData = True, 
                 btagSFProduct = "btagSFProduct{spf}".format(spf=syspostfix)
                 #input weight, should include all corrections for this systematic variation except BTagging SF and yield ratio
                 calculationWeightBefore = "prewgt{spf}".format(spf=syspostfix)
+
+                if isWeightVariation and jetMask not in ["jet_mask", "jet_mask_nom"]:
+                    print("Warning: Potential systematic card misconfiguration, weightVariation:true overrides the use of a scale-varying jet_mask, and the jet_mask name is not 'jet_mask' or 'jet_mask_nom' for the systematic {}".format(sysVar))
                 if verbose:
                     print(calculationWeightBefore)
                 #For calculating the yeild ratio, we need this weight, which will be the product of calculationWeightBefore and the product of btag SFs (no yield ratio!)
@@ -2479,13 +2492,15 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
 
 
     #Make sure the nominal is done first so that categorization is successful
-    for sysVar, sysDict in sorted(sysVariations.items(), key=lambda x: "$NOMINAL" in x[0], reverse=True):
+    for sysVarRaw, sysDict in sorted(sysVariations.items(), key=lambda x: "$NOMINAL" in x[0], reverse=True):
         #skip systematic variations on data, only do the nominal
-        if isData and sysVar != "$NOMINAL": 
+        if isData and sysVarRaw != "$NOMINAL": 
             continue
         #Only do systematics that are in the filter list (storing raw systematic names...
-        if sysVar not in sysFilter:
+        if sysVarRaw not in sysFilter:
             continue
+        #get final systematic name
+        sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
         #jetMask = sysDict.get("jet_mask").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
@@ -2493,7 +2508,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         #jetMass = sysDict.get("jet_mass_var")
         #Name histograms with their actual systematic variation postfix, using the convention that HISTO_NAME__nom is
         # the nominal and HISTO_NAME__$SYSTEMATIC is the variation, like so:
-        syspostfix = "___nom" if sysVar == "$NOMINAL" else "___{}".format(sysVar)
+        syspostfix = "___nom" if sysVarRaw == "$NOMINAL" else "___{}".format(sysVar)
         #Rename systematics on a per-sample basis, rest of code in the eraAndSampleName cycle
         systematicRemapping = sysDict.get("sampleRemapping", None)
         #name branches for filling with the nominal postfix if weight variations, and systematic postfix if scale variation (jes_up, etc.)
@@ -2501,7 +2516,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         if isWeightVariation:
             branchpostfix = "__nom"
         else:
-            branchpostfix = "__" + sysVar.replace("$NOMINAL", "nom")
+            branchpostfix = "__" + sysVar
         leppostfix = sysDict.get("lep_postfix", "") #No variation on this yet, but just in case
         combineHistoVariables += [templateVar.format(bpf=branchpostfix) for templateVar in combineHistoTemplate]
 
@@ -4846,11 +4861,13 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
         else:
             print("No valid samples found, continuing")
             continue
-        for sysVar, sysDict in sysVariationsAll.items():
-            if sysVar not in allSystematicsWorkaround:
+        for sysVarRaw, sysDict in sysVariationsAll.items():
+            if sysVarRaw not in allSystematicsWorkaround:
                 continue
+            #get final systematic name
+            sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
             isWeightVariation = sysDict.get("weightVariation")
-            slimbranchpostfix = "nom" if isWeightVariation else sysVar.replace("$NOMINAL", "nom") #branch postfix for identifying input branch variation
+            slimbranchpostfix = "nom" if isWeightVariation else sysVar #branch postfix for identifying input branch variation
             btaggingSystematicNames.push_back(sysVar)
             btaggingSystematicScalePostfix.push_back(slimbranchpostfix)
                     
@@ -5250,7 +5267,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                verbose=verbose,
                 )
                 #Get the yields, the ultimate goal of which is to determin in a parameterized way the renormalization factors for btag shape reweighting procedure
-                prePackedNodes = BTaggingYields(prePackedNodes, sampleName=name, isData=vals["isData"], channel=lvl,
+                prePackedNodes = BTaggingYields(prePackedNodes, sampleName=name, era=vals["era"], isData=vals["isData"], channel=lvl,
                                                 histosDict=btagging, loadYields=BTaggingYieldsFile,
                                                 useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
                                                 sysVariations=sysVariationsAll, 
@@ -5279,6 +5296,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 #Hold the categorization nodes if doing histograms
                 if isinstance(systematicSet, list) and "All" not in systematicSet:
                     print("Filtering systematics according to specified sets: {}".format(systematicSet))
+                    #Don't need to do replacements for keys or values in this dict ($SYSTEMATIC, $ERA, $LEP_POSTFIX, etc.) as this is done in fillHistos anyway
                     sysVariationsForHistos = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"] or "ALL" in systematicSet])
                     if "nominal" not in systematicSet:
                         skipNominalHistos = True
