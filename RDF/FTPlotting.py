@@ -1382,8 +1382,9 @@ def setGStyle(nDivisions=105):
     ROOT.gStyle.SetHatchesSpacing(0.05)
 
     ROOT.TGaxis.SetExponentOffset(-0.08, 0.01, "Y")
+    #Improve png resolution 
+    ROOT.gStyle.SetImageScaling(4.0)
 
-###########SAME UP TO THIS POINT##############
 def createRatio(h1, h2, Cache=None, ratioTitle="input 0 vs input 1", ratioColor = None, ratioStyle = None,
                 ratioMarkerStyle = 20, ratioAlpha = 0.5, yMin = 0.1, yMax = 1.9, isBlinded=False, scaleText=2.0, nDivisions=105,):
     #h3 = h1.Clone("rat_{}_{}".format(h1.GetName(), ratioTitle.replace(" ", "_")))
@@ -2019,6 +2020,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
     #Disable drawing in batch mode
     if batchOutput is True:
         ROOT.gROOT.SetBatch()
+        #Improve png resolution 
+        ROOT.gStyle.SetImageScaling(4.0)
         
     #set default style
     setGStyle(nDivisions=nDivisions)
