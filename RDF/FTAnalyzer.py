@@ -1507,6 +1507,8 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                                               .replace("L1PreFiringWeight_Up", "1.0")
                 else:
                     raise RuntimeError("Unhandled era '{}' in method defineWeights()".format(era))
+                if "ttother" not in eraAndSampleName and "ttnobb" not in eraAndSampleName:
+                    defFuncModulated = defFuncModulated.replace("pwgt_top_pT_data_nlo", "1.0").replace("pwgt_top_pT_nnlo_nlo", "1.0")
                 if defName in listOfColumns:
                     if verbose:
                         print("{} already defined, skipping".format(defName))
