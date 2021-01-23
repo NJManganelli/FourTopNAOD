@@ -2693,6 +2693,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         combHistograms[processName] = []
                     #BLINDData___HT500_nMediumDeepJetB4+_nJet8+___HT___nom
                     combProcess, combCategory, combVariable, combSystematic = hist.GetName().split(separator)
+                    if "_stack_" in combSystematic:
+                        combSystematic = combSystematic.split("_stack_")[0]
                     for iName, oName in [("ttother", "ttnobb")]:
                         combProcess = combProcess.replace(iName, oName)
                     combSystematics[processName].append(combSystematic)
@@ -2735,8 +2737,10 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             combCategories[processName] = []
                         if processName not in combHistograms:
                             combHistograms[processName] = []
-                        #BLINDData___HT500_nMediumDeepJetB4+_nJet8+___HT___nom
                         combProcess, combCategory, combVariable, combSystematic = hist.GetName().split(separator)
+                        #Fix stack appends to the systematic name
+                        if "_stack_" in combSystematic:
+                            combSystematic = combSystematic.split("_stack_")[0]
                         #Remap systematic names for decorrelation in Higgs Combine
                         #Decorrelated systematics: mu(Factorization/Renormalization) scale and ISR, FSR usually correlated (qcd vs ewk like ttbar vs singletop) unless
                         # " the analysis is too sensitive to off-shell effects" https://twiki.cern.ch/twiki/bin/viewauth/CMS/TopSystematics#Factorization_and_renormalizatio
@@ -2787,9 +2791,11 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         if systIntegral > 0.00001:
                             if normalizeUncertainties is not None:
                                 if combSystematic in normalizeUncertainties:
-                                    normValue = normalizationDict.get(combHist.GetName().replace(combSystematic, "nom"), 
-                                                                      combHist.GetName().replace(combSystematic, ""))
-                                    combHist.Scale(normValue/combHist.Integral())
+                                    normValue = normalizationDict.get(combHist.GetName().replace(combSystematic, "nom"), "FAILED TO FIND NORM VALUE")
+                                    try:
+                                        combHist.Scale(normValue/combHist.Integral())
+                                    except:
+                                        print(normValue, type(normValue))
                                 #If we're not normalizing to the non-systematic, check if we still need to normalize to itself
                                 elif removeNegativeBins:
                                     combHist.Scale(systIntegral/combHist.Integral())
@@ -2963,7 +2969,7 @@ if __name__ == '__main__':
                         help='analysis directory where btagging yields, histograms, etc. are stored')
     parser.add_argument('-f', '--formats', dest='formats', action='store', choices=['pdf', 'C', 'png'], nargs="*",
                         help='Formats to save plots as, supporting subset of ROOT SaveAs() formats: pdf, C macro, png')
-    parser.add_argument('-p', '--plotCard', dest='plotCard', action='store', type=str, default="$ADIR/Histograms/All/plots.json",
+    parser.add_argument('--json', '-p', '--plotCard', dest='plotCard', action='store', type=str, default="$ADIR/Histograms/All/plots.json",
                         help='input plotting configuration, defaulting to "$ADIR/Histograms/All/plots.json"')
     parser.add_argument('-l', '--legendCard', dest='legendCard', action='store', type=str, default="$ADIR/Histograms/All/legend.json",
                         help='input legend configuration, defaulting to "$ADIR/Histograms/All/legend.json". This card controls the grouping of histograms into categories and supercategories, colors, stacking, sample-scaling, etc.')
@@ -3004,15 +3010,15 @@ if __name__ == '__main__':
     doBatch = not args.noBatch
     verb = args.verbose
     useCanvasMax = args.useCanvasMax
-    analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel)
+    analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHANNEL", channel)
     skipSystematics = args.skipSystematics
 
     lumiDict = {"2017": 41.53,
                 "2018": 59.97}
     lumi = lumiDict.get(era, "N/A")
 if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepare-combine':    
-    plotConfig = args.plotCard.replace("$ADIR", analysisDir).replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel).replace("//", "/")
-    legendConfig = args.legendCard.replace("$ADIR", analysisDir).replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel).replace("//", "/")
+    plotConfig = args.plotCard.replace("$ADIR", analysisDir).replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHANNEL", channel).replace("$ERA", era).replace("//", "/")
+    legendConfig = args.legendCard.replace("$ADIR", analysisDir).replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHANNEL", channel).replace("$ERA", era).replace("//", "/")
     tag = analysisDir.split("/")[-1]
     plotCardName = plotConfig.split("/")[-1]
     plotCard = plotCardName.replace(".json", "")
@@ -3069,7 +3075,7 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
             print("plotCard = {}".format(plotCard))
             
         if 'pdf' in args.formats:
-            pdfOutput = "$ADIR/Plots/$TAG_$PLOTCARD_$CHAN.pdf".replace("$ADIR", analysisDir).replace("$TAG", tag).replace("$PLOTCARD", plotCard).replace("$CHAN", channel).replace("//", "/")
+            pdfOutput = "$ADIR/Plots/$TAG_$PLOTCARD_$CHANNEL.pdf".replace("$ADIR", analysisDir).replace("$TAG", tag).replace("$PLOTCARD", plotCard).replace("$CHANNEL", channel).replace("//", "/")
             if args.drawSystematic is not None:
                 pdfOutput = pdfOutput.replace(".pdf", ".{}.pdf".format(args.drawSystematic))
             if verb:
@@ -3079,7 +3085,7 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
         if 'png' in args.formats:
             pngOutput = True
         if combineInput is not None:
-            combineOut = "$ADIR/Combine/CI_$ERA_$CHAN_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", combineInput).replace("$TAG", tag).replace("$PLOTCARD", plotCard).replace("$CHAN", channel).replace("//", "/")
+            combineOut = "$ADIR/Combine/CI_$ERA_$CHANNEL_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", combineInput).replace("$TAG", tag).replace("$PLOTCARD", plotCard).replace("$CHANNEL", channel).replace("//", "/")
             if verb:
                 print("pdfOutput = {}".format(pdfOutput))
         else:
