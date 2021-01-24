@@ -18,6 +18,7 @@ import argparse
 import uuid
 import pdb
 from FourTopNAOD.RDF.tools.toolbox import load_yaml_cards, write_yaml_cards, configure_template_systematics
+from FourTopNAOD.RDF.combine.templating import write_combine_cards
 # from ruamel.yaml import YAML
 from IPython.display import Image, display, SVG
 #import graphviz
@@ -1993,7 +1994,8 @@ def makeStack_Prototype(histFile, histList=None, legendConfig=None, rootName=Non
     
 def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Cache=None, histogramDirectory = ".", batchOutput=False, closeFiles=True, 
                      analysisDirectory=None, tag=None, plotCard=None, drawSystematic=None,
-                     plotDir=None, pdfOutput=None, combineOutput=None, combineInput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
+                     plotDir=None, pdfOutput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
+                     combineOutput=None, combineInput=None, combineCards=False,
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
                      debug=False, nDivisions=105, lumi="N/A", drawYields=False,
                      removeNegativeBins=True, normalizeUncertainties=['ttmuRNomFDown', 'ttmuRNomFUp', 'ttmuFNomRDown', 'ttmuFNomRUp', 
@@ -2821,11 +2823,27 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
     if combineOutput is not None:
         print("Opening file for combine input templates: {}".format(combineOutput))
         combFile = ROOT.TFile.Open(combineOutput, "recreate")
+        combCounts = dict()
         for processName, processDict in combHistogramsFinal.items():
             for histName, hist in processDict.items():
+                countsProc, countsHTandCategory, countsVar, countsSyst = histName.split("___")
+                # countsCategory = countsHTandCategory.replace("HT500_", "")
+                if countsVar == combineInput:
+                    if countsHTandCategory not in combCounts:
+                        combCounts[countsHTandCategory] = dict()
+                    if countsProc not in combCounts[countsHTandCategory]:
+                        combCounts[countsHTandCategory][countsProc] = dict()
+                    combCounts[countsHTandCategory][countsProc][countsSyst] = hist.Integral()
                 hist.Write()
         combFile.Close()
         print("Wrote file for combine input templates")
+        if combineCards:
+            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV5.txt", counts=combCounts)
+            print("Wrote combine cards")
+        # cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
+        # # print(cmd)
+        # spo = subprocess.Popen(args="{}".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))
+        # spo.communicate()
     if closeFiles == True:
         for fo in fileDict.values():
             fo.Close()
@@ -2965,6 +2983,8 @@ if __name__ == '__main__':
                         help='path and name of the systematics card(s) to be used')
     parser.add_argument('-ci', '--combineInput', dest='combineInput', action='store', type=str, default=None, choices=['HT',],
                         help='Variable to be used as input to Higgs Combine. If None, output histograms will not be produced')
+    parser.add_argument('--combineCards', dest='combineCards', action='store_true',
+                        help='If --combineInput is active as well, write out combine card templates')
     parser.add_argument('-d', '--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
                         help='analysis directory where btagging yields, histograms, etc. are stored')
     parser.add_argument('-f', '--formats', dest='formats', action='store', choices=['pdf', 'C', 'png'], nargs="*",
@@ -3003,6 +3023,7 @@ if __name__ == '__main__':
     stage = args.stage
     channel = args.channel
     combineInput = args.combineInput
+    combineCards = args.combineCards
     era = args.era
     variables = args.variables
     nJets = args.nJetCategories
@@ -3093,7 +3114,8 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
         resultsDict = loopPlottingJSON(loadedPlotConfig, era=args.era, channel=args.channel, systematicCards=args.systematics_cards,
                                        Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, drawSystematic=args.drawSystematic,
                                        analysisDirectory=analysisDir, tag=tag, plotCard=plotCard, macroOutput=macroOutput, pngOutput=pngOutput,
-                                       pdfOutput=pdfOutput, combineOutput=combineOut, combineInput=combineInput, lumi=lumi, useCanvasMax=useCanvasMax, 
+                                       pdfOutput=pdfOutput, combineOutput=combineOut, combineInput=combineInput, combineCards=combineCards,
+                                       lumi=lumi, useCanvasMax=useCanvasMax, 
                                        skipSystematics=skipSystematics, verbose=verb);
     else:
         raise RuntimeError("The loading of the plot or legend cards failed. They are of type {} and {}, respectively".format(type(loadedPlotConfig),type(loadedLegendConfig)))
