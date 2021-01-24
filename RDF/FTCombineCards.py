@@ -1,36 +1,6 @@
 from __future__ import print_function, division
 import argparse
-
-def main(analysisDirectory, era, channel, variable, categories, template):
-    lumistr = {"2017": "1.023", "2018": "1.025"}[era]
-    outputLines = []
-    with open(template, "r") as inFile:
-        for line in inFile:
-            outputLines.append(line)
-    for category in categories:
-        with open("{}/TTTT_{}_{}_{}_{}.txt".format(analysisDirectory, era, channel, category, variable).replace("//", "/"), "w") as outFile:
-            for line in outputLines:
-                if "prefire" in line and era == "2018":
-                    continue
-                if "leptonSFEl" in line and channel == "MuMu":
-                    continue
-                if "leptonSFMu" in line and channel == "ElEl":
-                    continue
-                outFile.write(line\
-                              .replace("$ERA", era)\
-                              .replace("$CHANNEL", channel)\
-                              .replace("$CATEGORY", category)\
-                              .replace("$VAR", variable)\
-                              .replace("$LUMI", lumistr)\
-                              .replace("$R_TTNOBB       ", "{:16s}".format(str(-1)))\
-                              .replace("$R_TTBB         ", "{:16s}".format(str(-1)))\
-                              .replace("$R_ST           ", "{:16s}".format(str(-1)))\
-                              .replace("$R_TTH          ", "{:16s}".format(str(-1)))\
-                              .replace("$R_TTV          ", "{:16s}".format(str(-1)))\
-                              .replace("$R_TTRARE       ", "{:16s}".format(str(-1)))\
-                              .replace("$R_EWK          ", "{:16s}".format(str(-1)))\
-                              .replace("$R_TTTT", "{:16s}".format(str(-1))))
-            print("Finished writing output for category {}".format(category))
+from FourTopNAOD.RDF.combine.templating import write_combine_cards
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate cards from simple template')
@@ -42,15 +12,16 @@ if __name__ == '__main__':
                         help='combine input for opposite-sign dilepton analysis')
     parser.add_argument('--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu'],
                         help='Decay channel for opposite-sign dilepton analysis')
-    parser.add_argument('--categories', dest='categories', action='store', nargs='*', type=str, default=["nMediumDeepJetB2_nJet4", "nMediumDeepJetB2_nJet5", "nMediumDeepJetB2_nJet6", "nMediumDeepJetB2_nJet7", "nMediumDeepJetB2_nJet8p",
-                                                                                                         "nMediumDeepJetB3_nJet4", "nMediumDeepJetB3_nJet5", "nMediumDeepJetB3_nJet6", "nMediumDeepJetB3_nJet7", "nMediumDeepJetB3_nJet8p",
-                                                                                                         "nMediumDeepJetB4p_nJet4", "nMediumDeepJetB4p_nJet5", "nMediumDeepJetB4p_nJet6", "nMediumDeepJetB4p_nJet7", "nMediumDeepJetB4p_nJet8p"],
-                        help='categories for the combine cards, i.e. nMediumDeepJetB2_nJet8p')
-    parser.add_argument('--template', dest='template', action='store', type=str, default="TTTT_templateV4.txt",
+    parser.add_argument('--categories', dest='categories', action='store', nargs='*', type=str, default=["HT500_nMediumDeepJetB2_nJet4", "HT500_nMediumDeepJetB2_nJet5", "HT500_nMediumDeepJetB2_nJet6", "HT500_nMediumDeepJetB2_nJet7", "HT500_nMediumDeepJetB2_nJet8p",
+                                                                                                         "HT500_nMediumDeepJetB3_nJet4", "HT500_nMediumDeepJetB3_nJet5", "HT500_nMediumDeepJetB3_nJet6", "HT500_nMediumDeepJetB3_nJet7", "HT500_nMediumDeepJetB3_nJet8p",
+                                                                                                         "HT500_nMediumDeepJetB4p_nJet4", "HT500_nMediumDeepJetB4p_nJet5", "HT500_nMediumDeepJetB4p_nJet6", "HT500_nMediumDeepJetB4p_nJet7", "HT500_nMediumDeepJetB4p_nJet8p"],
+                        help='categories for the combine cards, i.e. HT500_nMediumDeepJetB2_nJet8p')
+    parser.add_argument('--template', dest='template', action='store', type=str, default="TTTT_templateV5.txt",
                         help='directory for analysis inputs and outputs')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
 
     args = parser.parse_args()
 
-    main(args.analysisDirectory, args.era, args.channel, args.variable, args.categories, template=args.template)
+    print("Function called from FTPlotting.py with --combineInput $VAR and --combineCards will integrate template counts into the generated cards.")
+    write_combine_cards(args.analysisDirectory, args.era, args.channel, args.variable, args.categories, template=args.template)
