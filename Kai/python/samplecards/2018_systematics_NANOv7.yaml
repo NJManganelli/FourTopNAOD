@@ -1162,7 +1162,7 @@ hdampDown:
     pwgt_btagSF_common: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"
   finalWeights:
     wgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_btag___$SYSTEMATIC"
-OSDL_$ERA_pdfUp:
+OSDL_$ERA_pdfV2Up:
   jet_mask: jet_mask
   lep_postfix: ''
   jet_pt_var: Jet_pt_nom
@@ -1174,10 +1174,10 @@ OSDL_$ERA_pdfUp:
   systematicSet:
   - pdf
   preWeights:
-    prewgt___$SYSTEMATIC: "prewgt___nom * Max(LHEPdfWeight)"
+    prewgt___$SYSTEMATIC: "prewgt___nom * (Mean(LHEPdfWeight) + 3.0 * StdDev(LHEPdfWeight))"
   finalWeights:
-    wgt___$SYSTEMATIC: "prewgt___nom * Max(LHEPdfWeight) * pwgt_btag___$SYSTEMATIC" 
-OSDL_$ERA_pdfDown:
+    wgt___$SYSTEMATIC: "prewgt___nom * (Mean(LHEPdfWeight) + 3.0 * StdDev(LHEPdfWeight)) * pwgt_btag___$SYSTEMATIC" 
+OSDL_$ERA_pdfV2Down:
   jet_mask: jet_mask
   lep_postfix: ''
   jet_pt_var: Jet_pt_nom
@@ -1189,9 +1189,39 @@ OSDL_$ERA_pdfDown:
   systematicSet:
   - pdf
   preWeights:
-    prewgt___$SYSTEMATIC: "prewgt___nom * Min(LHEPdfWeight)"
+    prewgt___$SYSTEMATIC: "prewgt___nom * (Mean(LHEPdfWeight) - 3.0 * StdDev(LHEPdfWeight))"
   finalWeights:
-    wgt___$SYSTEMATIC: "prewgt___nom * Min(LHEPdfWeight) * pwgt_btag___$SYSTEMATIC" 
+    wgt___$SYSTEMATIC: "prewgt___nom * (Mean(LHEPdfWeight) - 3.0 * StdDev(LHEPdfWeight)) * pwgt_btag___$SYSTEMATIC" 
+# OSDL_$ERA_pdfUp:
+#   jet_mask: jet_mask
+#   lep_postfix: ''
+#   jet_pt_var: Jet_pt_nom
+#   btagSF:
+#     CSVv2: Jet_btagSF_csvv2_shape
+#     DeepCSV: Jet_btagSF_deepcsv_shape
+#     DeepJet: Jet_btagSF_deepjet_shape
+#   weightVariation: true
+#   systematicSet:
+#   - pdf
+#   preWeights:
+#     prewgt___$SYSTEMATIC: "prewgt___nom * Max(LHEPdfWeight)"
+#   finalWeights:
+#     wgt___$SYSTEMATIC: "prewgt___nom * Max(LHEPdfWeight) * pwgt_btag___$SYSTEMATIC" 
+# OSDL_$ERA_pdfDown:
+#   jet_mask: jet_mask
+#   lep_postfix: ''
+#   jet_pt_var: Jet_pt_nom
+#   btagSF:
+#     CSVv2: Jet_btagSF_csvv2_shape
+#     DeepCSV: Jet_btagSF_deepcsv_shape
+#     DeepJet: Jet_btagSF_deepjet_shape
+#   weightVariation: true
+#   systematicSet:
+#   - pdf
+#   preWeights:
+#     prewgt___$SYSTEMATIC: "prewgt___nom * Min(LHEPdfWeight)"
+#   finalWeights:
+#     wgt___$SYSTEMATIC: "prewgt___nom * Min(LHEPdfWeight) * pwgt_btag___$SYSTEMATIC" 
 OSDL_$ERA_top_pTUp:
   jet_mask: jet_mask
   lep_postfix: ''
