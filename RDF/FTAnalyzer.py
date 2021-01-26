@@ -19,6 +19,7 @@ import pdb
 import ROOT
 import ruamel.yaml as yaml
 from FourTopNAOD.RDF.tools.toolbox import getFiles, load_yaml_cards, write_yaml_cards, filter_systematics
+from FourTopNAOD.RDF.analyzer.histogram import fill_histos_ndim
 #from IPython.display import Image, display, SVG
 #import graphviz
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -5310,12 +5311,32 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     sysVariationsForHistos = sysVariationsAll
                     skipNominalHistos = False
                 if doHistos:
-                    packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
-                                                        era = vals["era"], triggers = triggers,
-                                                        sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
-                                                        histosDict=histos, sysVariations=sysVariationsForHistos, sysFilter=allSystematics, 
-                                                        doCategorized=True, doDiagnostics=False, doCombineHistosOnly=doCombineHistosOnly, bTagger=bTagger, 
-                                                        skipNominalHistos=skipNominalHistos, verbose=verb)
+                    if True:
+                        fill_histos_ndim(prePackedNodes, 
+                                         splitProcess=splitProcessConfig, 
+                                         sampleName=name, 
+                                         channel=lvl.replace("_selection", "").replace("_baseline", ""), 
+                                         isData=vals.get("isData", True), 
+                                         era=vals.get("era"), 
+                                         histosDict=histos,
+                                         doDiagnostics=False, 
+                                         doCombineHistosOnly=doCombineHistosOnly, 
+                                         nJetsToHisto=10, 
+                                         bTagger=bTagger,
+                                         HTCut=500, 
+                                         ZMassMETWindow=[15.0, 0.0], 
+                                         sysVariations=sysVariationsForHistos, 
+                                         sysFilter=allSystematics,
+                                         skipNominalHistos=skipNominalHistos,
+                                         verbose=verb,
+                        )
+                    else:
+                        packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
+                                                            era = vals["era"], triggers = triggers,
+                                                            sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
+                                                            histosDict=histos, sysVariations=sysVariationsForHistos, sysFilter=allSystematics, 
+                                                            doCategorized=True, doDiagnostics=False, doCombineHistosOnly=doCombineHistosOnly, bTagger=bTagger, 
+                                                            skipNominalHistos=skipNominalHistos, verbose=verb)
                 if doDiagnostics:
                     packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
                                                         era = vals["era"], triggers = triggers,
