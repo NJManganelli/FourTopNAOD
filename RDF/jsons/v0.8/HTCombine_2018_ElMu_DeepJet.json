@@ -157,11 +157,11 @@
         "Title": "HT (3 b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu nB=2 nJ=4", 
-            "#it{e}#mu nB=2 nJ=5", 
-            "#it{e}#mu nB=2 nJ=6", 
-            "#it{e}#mu nB=2 nJ=7", 
-            "#it{e}#mu nB=2 nJ=8+"
+            "#it{e}#mu nB=3 nJ=4", 
+            "#it{e}#mu nB=3 nJ=5", 
+            "#it{e}#mu nB=3 nJ=6", 
+            "#it{e}#mu nB=3 nJ=7", 
+            "#it{e}#mu nB=3 nJ=8+"
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
@@ -242,11 +242,11 @@
         "Title": "HT (4+ b-tagged jets)", 
         "YAxisTitle": "Events/bin", 
         "Labels": [
-            "#it{e}#mu nB=2 nJ=4", 
-            "#it{e}#mu nB=2 nJ=5", 
-            "#it{e}#mu nB=2 nJ=6", 
-            "#it{e}#mu nB=2 nJ=7", 
-            "#it{e}#mu nB=2 nJ=8+"
+            "#it{e}#mu nB=4+ nJ=4", 
+            "#it{e}#mu nB=4+ nJ=5", 
+            "#it{e}#mu nB=4+ nJ=6", 
+            "#it{e}#mu nB=4+ nJ=7", 
+            "#it{e}#mu nB=4+ nJ=8+"
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
