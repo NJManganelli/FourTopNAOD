@@ -378,7 +378,8 @@ def fill_histos_ndim(input_df_or_nodes, splitProcess,
                     #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Electron_ip3d"] = categoryNode.Stats("FTAElectron{lpf}_ip3d".format(lpf=leppostfix))
                         
                     crossSeparated = "___".join(category.split("___")[:-1]).split("_CROSS_")#Strip the systematic name from the branch by taking all but the last element
-                    categoryName = "_".join(crossSeparated) #No extra references to (lep/branch/sys)postfixes...
+                    #Hack for nDim to put the tagger and nJet into the category name... might be best to handle a different weay
+                    categoryName = "_".join(crossSeparated + ["nMedium{tag}".format(tag=tagger), "nJet"]) #No extra references to (lep/branch/sys)postfixes...
                     HTArray=[400 + 16*x for x in range(101)]
                     nJetArray=[4,5,6,7,8,20]
                     nBTagArray=[0,1,2,3,4,10]
