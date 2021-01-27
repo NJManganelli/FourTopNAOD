@@ -68,7 +68,7 @@ def group(available_keys, eras, processes, channels, categories, variable, syste
                                        name_tuples=[("$ERA", eras),
                                                     ("$PROCESS", processes),
                                                     ("$CHANNEL", channels),
-                                                    ("$WINDOW", list(windows.values())),
+                                                    ("$WINDOW", list(set(windows.values()))),
                                                     ("$CATEGORY", categories),
                                                     ("$VARIABLE", [variable]),])
                                                     # ("$SYSTEMATIC", [systematic])])
@@ -182,9 +182,11 @@ f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Jan25_2018/Combine/All/2018__
 fkeys = [kk.GetName() for kk in f.GetListOfKeys()]
 histos = dict()
 name_format="$ERA___$PROCESS___$CHANNEL___$WINDOW___$CATEGORY$BLIND___$VARIABLE___$SYSTEMATIC"
+erasDict = {"2018": ["2018"], "2017": ["2017"], "RunII": ["2017", "2018"]}
 era = "2018"
-channel = "ElMu"
+channels = ["ElMu", "MuMu"]
 var = "HT"
+# syst = "OSDL_2018_top_pTDown"
 syst = "nom"
 for k, v in processGroups.items():
     print(k)
@@ -193,10 +195,10 @@ for k, v in processGroups.items():
     for n in ["4", "5", "6", "7", "8+"]:
         name = name_format.replace("$ERA", era).replace("$PROCESS", k).replace("$WINDOW", "ZMETWindow").replace("$CATEGORY", "HT500_nMediumDeepJetB2_nJet{njet}".format(njet=n)).replace("$VARIABLE", var).replace("$SYSTEMATIC", syst).replace("$BLIND", "")
         histos[k][n] = None
-        keys[n], blind, fails = group(fkeys, [era], v.get("Names"), channels=[channel], categories=["HT500_nMediumDeepJetB2_nJet{njet}".format(njet=n)], variable=var, systematic=syst, input_format=name_format)
-        # assert len(list(set(keys[n]))) == len(keys[n]), "Duplicate keys detected"
-        if len(list(set(keys[n]))) != len(keys[n]):
-            print("\n\n\n\n\n\n", keys[n], "\n\n\n")
+        keys[n], blind, fails = group(fkeys, erasDict[era], v.get("Names"), channels=channels, categories=["HT500_nMediumDeepJetB2_nJet{njet}".format(njet=n)], variable=var, systematic=syst, input_format=name_format)
+        assert len(list(set(keys[n]))) == len(keys[n]), "Duplicate keys detected"
+        # if len(list(set(keys[n]))) != len(keys[n]):
+        #     print("\n\n\n\n\n\n", keys[n], "\n\n\n")
         for nhist, histkey in enumerate(keys[n]):
             try:
                 hist = f.Get(histkey)
@@ -206,12 +208,13 @@ for k, v in processGroups.items():
                     histos[k][n].Add(hist)
             except:
                 print(histkey)
-        print(keys[n])
-        print(k, " Blind: ", blind)
-        print(len(fails))
+        # print(keys[n])
+        print(k, " Blind: ", blind, " Succeeded/Failed to find match: ", len(keys[n]), len(fails))
 
-
+print("\neras = ", erasDict[era], " channels = ", channels)
+print("nBTag, Data, Data/Bkg, Data/(Sgnl+Bkg), ", ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','DY', 'tttt'])
 for n in ['4', '5', '6', '7', '8+']:
-    print(n, 
+    print(n, histos['Data'][n].Integral(),
           histos['Data'][n].Integral()/sum([histos[s][n].Integral() for s in ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','DY']]),
-          histos['Data'][n].Integral()/sum([histos[s][n].Integral() for s in ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','DY', 'tttt']]))
+          histos['Data'][n].Integral()/sum([histos[s][n].Integral() for s in ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','DY', 'tttt']]),
+          [histos[s][n].Integral() for s in ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','DY', 'tttt']])
