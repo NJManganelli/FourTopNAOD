@@ -610,7 +610,7 @@ def bookSnapshot(input_df, filename, columnList, lazy=True, treename="Events", m
 
     return handle
 
-def getNtupleVariables(vals, isData=True, sysVariations=None, bTagger="DeepJet"):
+def getNtupleVariables(vals, isData=True, sysVariations=None, sysFilter=["$NOMINAL"],bTagger="DeepJet"):
     varsToFlattenOrSave = []
     varsToFlattenOrSave += ["run", 
                             "luminosityBlock", 
@@ -634,9 +634,11 @@ def getNtupleVariables(vals, isData=True, sysVariations=None, bTagger="DeepJet")
             "MTofElandMu{bpf}"            
         ]
     if isData:
-        branchPostFixes = ["__nom"]
+        branchPostFixes = ["$NOMINAL".replace("$NOMINAL", "nom")]
     else:
-        branchPostFixes = ["__" + sysV[0].replace("$NOMINAL", "nom") for sysV in sysVariations.items() if sysV[1].get("weightVariation", True) is False]
+        branchPostFixes = ["__" + sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era) 
+                           for sysVarRaw, sysDict in sysVariations.items() if sysVarRaw in sysFilter and sysDict.get("weightVariation", True) is False]
+        # branchPostFixes = ["__" + sysV[0].replace("$NOMINAL", "nom") for sysV in sysVariations.items() if sysV[1].get("weightVariation", True) is False]
     for branchpostfix in branchPostFixes:
         varsToFlattenOrSave += [
             "nFTAJet{bpf}".format(bpf=branchpostfix),
@@ -886,8 +888,8 @@ def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_bra
             continue
         else:
             branchpostfix = "__" + sysVar
-        metPt = sysDict.get("met_pt_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
-        metPhi = sysDict.get("met_phi_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
+        metPt = sysDict.get("met_pt_var").replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
+        metPhi = sysDict.get("met_phi_var").replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
         metDoublet = "MET_xycorr_doublet{bpf}".format(bpf=branchpostfix)
         metPtName = "FTAMET{bpf}_pt".format(bpf=branchpostfix)
         metPhiName = "FTAMET{bpf}_phi".format(bpf=branchpostfix)
@@ -1266,9 +1268,9 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
         #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
         isWeightVariation = sysDict.get("weightVariation", False)
         if isWeightVariation == True: continue
-        jetMask = sysDict.get("jet_mask").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
-        jetPt = sysDict.get("jet_pt_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
-        jetMass = sysDict.get("jet_mass_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
+        jetMask = sysDict.get("jet_mask").replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
+        jetPt = sysDict.get("jet_pt_var").replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
+        jetMass = sysDict.get("jet_mass_var").replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
         postfix = "__" + sysVar
         
         #Fill lists
@@ -1465,14 +1467,14 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
         sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
         if sysDict.get("isNominal", False) or sysDict.get("isSystematicForSample", False): 
             for wgtKey, wgtDef in sysDict.get("commonWeights", {}).items():
-                zPre.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
-                             wgtDef.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix)))
+                zPre.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix),
+                             wgtDef.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix)))
         for wgtKey, wgtDef in sysDict.get("preWeights", {}).items():
-            zPre.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
-                         wgtDef.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix)))
+            zPre.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix),
+                         wgtDef.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix)))
         for wgtKey, wgtDef in sysDict.get("finalWeights", {}).items():
-            zFin.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix),
-                         wgtDef.replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", leppostfix)))
+            zFin.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix),
+                         wgtDef.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix)))
     
     #Load the initial or final definitions
     if final:
@@ -1508,8 +1510,10 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                                               .replace("L1PreFiringWeight_Up", "1.0")
                 else:
                     raise RuntimeError("Unhandled era '{}' in method defineWeights()".format(era))
-                if "ttother" not in eraAndSampleName and "ttnobb" not in eraAndSampleName:
+                if "ttother" not in eraAndSampleName.lower() and "ttnobb" not in eraAndSampleName.lower():
                     defFuncModulated = defFuncModulated.replace("pwgt_top_pT_data_nlo", "1.0").replace("pwgt_top_pT_nnlo_nlo", "1.0")
+                if "ttother" not in eraAndSampleName.lower() and "ttnobb" not in eraAndSampleName.lower() and "ttbb" not in eraAndSampleName.lower():
+                    defFuncModulated = defFuncModulated.replace("pwgt_ttbar_njet_multiplicity___$SYSTEMATIC".replace("$SYSTEMATIC", sysVar), "1.0").replace("pwgt_ttbar_njet_multiplicity___$NOMINAL".replace("$NOMINAL", "nom"), "1.0")
                 if defName in listOfColumns:
                     if verbose:
                         print("{} already defined, skipping".format(defName))
@@ -1718,8 +1722,8 @@ def BTaggingYields(input_df_or_nodes, sampleName, era, channel="All", isData = T
                 isWeightVariation = sysDict.get("weightVariation")
                 branchpostfix = "__nom" if isWeightVariation else "__" + sysVar.replace("$NOMINAL", "nom") #branch postfix for identifying input branch variation
                 syspostfix = "___" + sysVar
-                jetMask = sysDict.get("jet_mask").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')) #mask as defined for the jet collection under this systematic variation
-                jetPt = sysDict.get("jet_pt_var").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')) #colum name of jet pt collection for this systematic
+                jetMask = sysDict.get("jet_mask").replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')) #mask as defined for the jet collection under this systematic variation
+                jetPt = sysDict.get("jet_pt_var").replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')) #colum name of jet pt collection for this systematic
                 jetSF = sysDict.get("btagSF").get(bTagger, "NO / VALID / jetSF") #colum name of per-jet shape SFs
                 #We must get or calculate various weights, defined below
                 #This btagSFProduct is the product of the SFs for the selected jets from collection jetPt with mask jetMask
@@ -5232,6 +5236,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 varsToFlattenOrSave[name][lvl] = getNtupleVariables(vals, 
                                                                     isData=vals["isData"], 
                                                                     sysVariations=sysVariationsAll,
+                                                                    sysFilter=scaleSystematics,
                                                                     bTagger=bTagger
                 )
                 #Actually flatten variables, and store in a dict various info for those variables flattened, already flat, final ntuple vars, etc.
@@ -5311,7 +5316,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     sysVariationsForHistos = sysVariationsAll
                     skipNominalHistos = False
                 if doHistos:
-                    if True:
+                    if False:
+                        print("\n\nDOING NDIM HISTOGRAMS")
                         fill_histos_ndim(prePackedNodes, 
                                          splitProcess=splitProcessConfig, 
                                          sampleName=name, 
