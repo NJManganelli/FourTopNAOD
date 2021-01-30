@@ -634,11 +634,10 @@ def getNtupleVariables(vals, isData=True, sysVariations=None, sysFilter=["$NOMIN
             "MTofElandMu{bpf}"            
         ]
     if isData:
-        branchPostFixes = ["$NOMINAL".replace("$NOMINAL", "nom")]
+        branchPostFixes = ["__$NOMINAL".replace("$NOMINAL", "nom")]
     else:
         branchPostFixes = ["__" + sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era) 
                            for sysVarRaw, sysDict in sysVariations.items() if sysVarRaw in sysFilter and sysDict.get("weightVariation", True) is False]
-        # branchPostFixes = ["__" + sysV[0].replace("$NOMINAL", "nom") for sysV in sysVariations.items() if sysV[1].get("weightVariation", True) is False]
     for branchpostfix in branchPostFixes:
         varsToFlattenOrSave += [
             "nFTAJet{bpf}".format(bpf=branchpostfix),
@@ -1215,7 +1214,7 @@ def testVariableProcessing(inputDForNodes, nodes=False, searchMode=True, skipCol
                 print(SV[1].GetValue(), end='\n')
     return safes
 
-def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=None, useDeltaR=True, isData=True,
+def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoice=None, useDeltaR=True, isData=True,
                nJetsToHisto=10, bTagger="DeepCSV", verbose=False,
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "lep_postfix": "", 
@@ -1274,12 +1273,13 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUId=Non
         postfix = "__" + sysVar
         
         #Fill lists
-        if jetPUId:
-            if jetPUId == 'L':
+        jetPUId = ""
+        if jetPUIdChoice:
+            if jetPUIdChoice == 'L':
                 jetPUId = " && ({jpt} >= 50 || Jet_puId >= 4)".format(jpt=jetPt) #pass Loose Id, >=6 pass Medium, ==7 pass Tight
-            elif jetPUId == 'M':
+            elif jetPUIdChoice == 'M':
                 jetPUId = " && ({jpt} >= 50 || Jet_puId >= 6)".format(jpt=jetPt) #pass Loose Id, >=6 pass Medium, ==7 pass Tight
-            elif jetPUId == 'T':
+            elif jetPUIdChoice == 'T':
                 jetPUId = " && ({jpt} >= 50 || Jet_puId == 7)".format(jpt=jetPt) #pass Loose Id, >=6 pass Medium, ==7 pass Tight
             else:
                 raise ValueError("Invalid Jet PU Id selected")
@@ -1512,8 +1512,17 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                     raise RuntimeError("Unhandled era '{}' in method defineWeights()".format(era))
                 if "ttother" not in eraAndSampleName.lower() and "ttnobb" not in eraAndSampleName.lower():
                     defFuncModulated = defFuncModulated.replace("pwgt_top_pT_data_nlo", "1.0").replace("pwgt_top_pT_nnlo_nlo", "1.0")
+                else:
+                    if verbose:
+                        print("Top pt reweighting function applied to eraAndSample {}: {} = {}".format(eraAndSampleName, defName, defFuncModulated))
                 if "ttother" not in eraAndSampleName.lower() and "ttnobb" not in eraAndSampleName.lower() and "ttbb" not in eraAndSampleName.lower():
-                    defFuncModulated = defFuncModulated.replace("pwgt_ttbar_njet_multiplicity___$SYSTEMATIC".replace("$SYSTEMATIC", sysVar), "1.0").replace("pwgt_ttbar_njet_multiplicity___$NOMINAL".replace("$NOMINAL", "nom"), "1.0")
+                    if defName.startswith("pwgt_ttbar_njet_multiplicity"):
+                        defFuncModulated = "return 1.0;"
+                        if verbose:
+                            print("Not applying ttbar jet multiplicity corrections to eraAndSample {}".format(eraAndSampleName))
+                    # defFuncModulated = defFuncModulated.replace("pwgt_ttbar_njet_multiplicity___$SYSTEMATIC".replace("$SYSTEMATIC", sysVar), "1.0").replace("pwgt_ttbar_njet_multiplicity___$NOMINAL".replace("$NOMINAL", "nom"), "1.0")
+                else:
+                    print("ttbar jet multiplicity corrections applied to eraAndSample {}: {} = {}".format(eraAndSampleName, defName, defFuncModulated))
                 if defName in listOfColumns:
                     if verbose:
                         print("{} already defined, skipping".format(defName))
@@ -5212,7 +5221,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                sysVariations=sysVariationsAll, 
                                                sysFilter=scaleSystematics,
                                                jetPtMin=jetPtMin,
-                                               jetPUId=jetPUId,
+                                               jetPUIdChoice=jetPUId,
                                                useDeltaR=useDeltaR,
                                                verbose=verbose,
                                               )
