@@ -1522,7 +1522,8 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                             print("Not applying ttbar jet multiplicity corrections to eraAndSample {}".format(eraAndSampleName))
                     # defFuncModulated = defFuncModulated.replace("pwgt_ttbar_njet_multiplicity___$SYSTEMATIC".replace("$SYSTEMATIC", sysVar), "1.0").replace("pwgt_ttbar_njet_multiplicity___$NOMINAL".replace("$NOMINAL", "nom"), "1.0")
                 else:
-                    print("ttbar jet multiplicity corrections applied to eraAndSample {}: {} = {}".format(eraAndSampleName, defName, defFuncModulated))
+                    if verbose:
+                        print("ttbar jet multiplicity corrections applied to eraAndSample {}: {} = {}".format(eraAndSampleName, defName, defFuncModulated))
                 if defName in listOfColumns:
                     if verbose:
                         print("{} already defined, skipping".format(defName))
