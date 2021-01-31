@@ -1670,7 +1670,7 @@ def addHists(inputHists, name, scaleArray = None, blind=False):
     return retHist
 
 def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, rebin=None, projection=None, 
-                      separator="___", nominalPostfix="nom", verbose=False, debug=False, pn=None):
+                      separator="___", nominalPostfix="nom", verbose=False, debug=False, pn=None, zeroingThreshold=50, differentialScale=False):
     """Function tailored to using a legendConfig to create histograms.
     
     The legendConfig contains the sampleNames to prefix for the rest of the histogram name.
@@ -1761,9 +1761,10 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
             # or a list containing the axis and projection bins
             if projection == None:
                 pass
-            elif type(projection) == str:
+            elif isinstance(projection, str):
                 pre_projection_name = retHists[sampleCat].GetName()
-                if "ROOT.TH2" in str(type(retHists[sampleCat])):
+                # if "ROOT.TH2" in str(type(retHists[sampleCat])):
+                if isinstance(retHists[sampleCat], ROOT.TH2):
                     retHists[sampleCat].SetName(pre_projection_name + "_preProjection")
                     if projection == "X":
                         retHists[sampleCat] = retHists[sampleCat].ProjectionX(pre_projection_name)
@@ -1771,7 +1772,8 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
                         retHists[sampleCat] = retHists[sampleCat].ProjectionY(pre_projection_name)
                     else:
                         print("Error, {} is not a valid projection axis for TH2".format(projection))
-                elif "ROOT.TH3" in str(type(retHists[sampleCat])):
+                # elif "ROOT.TH3" in str(type(retHists[sampleCat])):
+                elif isinstance(retHists[sampleCat], ROOT.TH3):
                     retHists[sampleCat].SetName(pre_projection_name + "_preProjection")
                     if projection in ["X", "Y", "Z", "XY", "XZ", "YZ", "YX", "ZX", "ZY"]:
                         retHists[sampleCat] = retHists[sampleCat].Project3D(projection)
@@ -1779,7 +1781,7 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
                         print("Error, {} is not a valid projection axis/axes for TH3".format(projection))
                 else:
                     print("Error, projection not possible for input type in [histo_category: {} ]: {}".format(addHistoName, type(rebin)))
-            elif type(projection) == list and type(projection[0]) == str:
+            elif isinstance(projection, list) and isinstance(projection[0], str):
                 pre_projection_name = retHists[sampleCat].GetName()
                 if "ROOT.TH2" in str(type(retHists[sampleCat])):
                     retHists[sampleCat].SetName(pre_projection_name + "_preProjection")
@@ -1804,12 +1806,19 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
                         print("Error, {} is not a valid projection list for TH3".format(projection))
                 else:
                     print("Error, projection not possible for input type in [histo_category: {} ]: {}".format(addHistoName, type(rebin)))
+
+            #Zero templates that are below the threshold for entries
+            if 0 < retHists[sampleCat].GetEntries() < zeroingThreshold and "data" not in sampleCat.lower():
+                if systematic is None:
+                    print("Zeroing template: {} ({} entries)".format(sampleCat, retHists[sampleCat].GetEntries()))
+                retHists[sampleCat].Reset("ICESM") #Reset Integral, Contents, Errors, Statistics, Minimum/Maximum (I, C, E, S, M). Last 1 or 2 may be omitted if desired
+
             #execute rebinning based on type: int or list for variable width binning
             if rebin == None:
                 pass
-            elif type(rebin) == int:
+            elif isinstance(rebin, int):
                 retHists[sampleCat].Rebin(rebin)
-            elif type(rebin) == list:
+            elif isinstance(rebin, list):
                 rebin_groups = len(rebin) - 1
                 rebin_array = array.array('d', rebin)
                 original_name = retHists[sampleCat].GetName()
@@ -1819,6 +1828,11 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
                 print("Unsupported rebin input type in [histo_category: {} ]: {}".format(addHistoName, type(rebin)))
             if debug:
                 print("the retHists for category '{}' is {}".format(cat, retHists))
+
+            #Do differential counts, i.e. <Events / GeV> instead of Events / bin, using the scaling function optional parameter "width"
+            if differentialScale:
+                retHists[sampleCat].Scale(1.0, "width") #Scales contents and errors to the bin width
+
             #Modify the histogram with style and color information, where appropriate
             if config["Style"] == "Fill":
                 retHists[sampleCat].SetFillColor(int(config["Color"]))
@@ -1843,7 +1857,7 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
 
 def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None, nominalPostfix="nom", 
                         separator="___", orderByIntegral=True, rebin=None, projection=None, 
-                        verbose=False, debug=False, pn=None):
+                        verbose=False, debug=False, pn=None, zeroingThreshold=50, differentialScale=False):
     """histFile is an open ROOT file containing histograms without subdirectories, legendConfig contains 'Categories'
     with key: value pairs of sample categories (like ttbar or Drell-Yan) and corresponding list of histogram sample names
     (like tt_SL, tt_SL-GF, tt_DL, etc.) that are subcomponents of the sample)
@@ -1876,9 +1890,10 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
     #Create dictionary to return one level up, calling makeCategoryHists to combine subsamples together 
     #and do color, style configuration for them. Pass through the rebin parameter
     retDict["Categories/hists"], retDict["Categories/theUnfound"] = makeCategoryHists(histFile, legendConfig, histNameCommon,
-                                                    systematic=systematic, rebin=rebin, projection=projection,
-                                                    nominalPostfix=nominalPostfix, separator=separator,
-                                                    verbose=verbose, debug=debug, pn=pn)
+                                                                                      systematic=systematic, rebin=rebin, projection=projection,
+                                                                                      nominalPostfix=nominalPostfix, separator=separator,
+                                                                                      verbose=verbose, debug=debug, pn=pn,
+                                                                                      zeroingThreshold=zeroingThreshold, differentialScale=differentialScale)
     #If empty because of a failure in opening some file, early return the dictionary
     #if len(retDict["Categories/hists"]) == 0:
     #    return retDict
@@ -1998,6 +2013,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                      combineOutput=None, combineInput=None, combineCards=False,
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
                      debug=False, nDivisions=105, lumi="N/A", drawYields=False,
+                     zeroingThreshold=0, differentialScale=False,
                      removeNegativeBins=True, normalizeUncertainties=['ttmuRNomFDown', 'ttmuRNomFUp', 'ttmuFNomRDown', 'ttmuFNomRUp', 
                                                                    'ttmuRFcorrdNewDown', 'ttmuRFcorrdNewUp', 
                                                                    'ttVJetsmuRNomFDown', 'ttVJetsmuRNomFUp', 'ttVJetsmuFNomRDown', 'ttVJetsmuFNomRUp', 
@@ -2167,9 +2183,10 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             CanCache["subplots/integrals"].append(collections.OrderedDict())
             #Call makeSuperCategories with the very same file [pn] referenced, plus the legendConfig
             CanCache["subplots/supercategories"].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, nice_name, 
-                                systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
-                                projection=CanCache["subplots/projections"][pn], 
-                                nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn))
+                                                                            systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
+                                                                            projection=CanCache["subplots/projections"][pn], 
+                                                                            nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn,
+                                                                            zeroingThreshold=zeroingThreshold, differentialScale=differentialScale))
             #This is not sufficient for skipping undone histograms
             # if len(list(CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values())) == 0:
             #     print("No histograms found for '{}', skipping".format(nice_name))
@@ -2241,32 +2258,15 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             continue
                     sD[syst] = nSyst
                     CanCache["subplots/supercategories/systematics"][syst].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, 
-                                nice_name,
-                                systematic=syst, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
-                                projection=CanCache["subplots/projections"][pn], 
-                                nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn))
+                                                                                                      nice_name,
+                                                                                                      systematic=syst, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
+                                                                                                      projection=CanCache["subplots/projections"][pn], 
+                                                                                                      nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn,
+                                                                                                      zeroingThreshold=zeroingThreshold, differentialScale=differentialScale))
                     for supercategory, scHisto in CanCache["subplots/supercategories/systematics"][syst][pn]['Supercategories/hists'].items():
                         if "data" in supercategory.lower(): continue                        
                         # npValues[pn][supercategory][nSyst, :] = np.asarray(map(lambda l: l[0].GetBinContent(l[1]), [(scHisto, x) for x in range(nBins + 2)]))
                         npValues[pn][supercategory][nSyst, :] = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=False)
-                        npDifferences[pn][supercategory] = npValues[pn][supercategory] - npNominal[pn][supercategory]
-                        npStatSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
-                                                                                                2, 
-                                                                                                out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                                                                                where=npDifferences[pn][supercategory] > 0), axis=0))
-                        npStatSystematicErrorsDown[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
-                                                                                                2, 
-                                                                                                out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                                                                                where=npDifferences[pn][supercategory] < 0), axis=0))
-                        # npStatSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
-                        #                                                                         2, 
-                        #                                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                        #                                                                         where=npDifferences[pn][supercategory] > 0 & (np.divide(np.abs(npDifferences[pn][supercategory], np.broadcast_to(npNominal[pn][supercategory], (nSysts+2, nBins+2)))) < 3)), axis=0))
-                        # npStatSystematicErrorsDown[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
-                        #                                                                         2, 
-                        #                                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                        #                                                                         where=npDifferences[pn][supercategory] < 0 & (np.divide(np.abs(npDifferences[pn][supercategory], np.broadcast_to(npNominal[pn][supercategory], (nSysts+2, nBins+2)))) < 3)), axis=0))
-                        #HERE
                         if drawSystematic == syst.replace("Up", ""):
                             histDrawSystematicUp[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematic_" + syst)
                             histDrawSystematicUpRatio[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematicRatio_" + syst)
@@ -2291,6 +2291,25 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             histDrawSystematicDownRatio[pn][supercategory].SetFillColor(0)
                             histDrawSystematicDownRatio[pn][supercategory].SetLineWidth(1)
                             histDrawSystematicDownRatio[pn][supercategory].SetLineStyle(2)
+                #Only calculate the differences once all values are populated for every systematic (and supercategory, since it's nested one level deeper still)
+                for supercategory in npValues[pn].keys():
+                    npDifferences[pn][supercategory] = npValues[pn][supercategory] - npNominal[pn][supercategory]
+                    npStatSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                                                          2, 
+                                                                                          out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                                                                          where=npDifferences[pn][supercategory] > 0), axis=0))
+                    npStatSystematicErrorsDown[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                                                            2, 
+                                                                                            out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                                                                            where=npDifferences[pn][supercategory] < 0), axis=0))
+                    # npStatSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                    #                                                                         2, 
+                    #                                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                    #                                                                         where=npDifferences[pn][supercategory] > 0 & (np.divide(np.abs(npDifferences[pn][supercategory], np.broadcast_to(npNominal[pn][supercategory], (nSysts+2, nBins+2)))) < 3)), axis=0))
+                    # npStatSystematicErrorsDown[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                    #                                                                         2, 
+                    #                                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                    #                                                                         where=npDifferences[pn][supercategory] < 0 & (np.divide(np.abs(npDifferences[pn][supercategory], np.broadcast_to(npNominal[pn][supercategory], (nSysts+2, nBins+2)))) < 3)), axis=0))
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'] = dict()
@@ -2409,8 +2428,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 #Don't draw blinded data...
                 if "data" in super_cat_name.lower() and "blind" in drawable.GetName().lower() and subplot_dict.get("Unblind", False) == False:
                     if isinstance(drawable, ROOT.TH1):
-                        for binnumber in range(drawable.GetNbinsX()+2):
-                            drawable.SetBinContent(binnumber, 0); drawable.SetBinError(binnumber, 0)
+                        drawable.Reset("ICESM")
+                        # for binnumber in range(drawable.GetNbinsX()+2):
+                        #     drawable.SetBinContent(binnumber, 0); drawable.SetBinError(binnumber, 0)
                     else: #handle TH2, graphs?
                         pass
                 #Draw SAME if not the first item, using options present in legend configuration
@@ -2425,20 +2445,23 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 
                 #Because these are stacks, don't bother with getting axes and setting titles, just choose whether
                 #it needs both the x and y axes or just y axis (to avoid many x axis titles being drawn)
-                if pn == (len(CanCache["subplots"]) - 1):
-                    if xAxisTitle != None and yAxisTitle != None:
-                        drawable.SetTitle(";{};{}".format(xAxisTitle, yAxisTitle))
-                    elif xAxisTitle != None:
-                        drawable.SetTitle(";{};{}".format(xAxisTitle, ""))
-                    elif yAxisTitle != None:
-                        drawable.SetTitle(";{};{}".format("", yAxisTitle))
-                    else:
-                        drawable.SetTitle(";{};{}".format("", ""))
-                else:
-                    if yAxisTitle != None:
-                        drawable.SetTitle(";;{}".format(yAxisTitle))
-                    else:
-                        drawable.SetTitle(";;{}".format(""))
+                # if pn == (len(CanCache["subplots"]) - 1):
+                #     if xAxisTitle != None and yAxisTitle != None:
+                #         drawable.SetTitle(";{};{}".format(xAxisTitle, yAxisTitle))
+                #     elif xAxisTitle != None:
+                #         drawable.SetTitle(";{};{}".format(xAxisTitle, ""))
+                #     elif yAxisTitle != None:
+                #         drawable.SetTitle(";{};{}".format("", yAxisTitle))
+                #     else:
+                #         drawable.SetTitle(";{};{}".format("", ""))
+                # else:
+                #     if yAxisTitle != None:
+                #         drawable.SetTitle(";;{}".format(yAxisTitle))
+                #     else:
+                #         drawable.SetTitle(";;{}".format(""))
+
+                #Give up on setting the titles here... draw them 'by hand'
+                drawable.SetTitle(";;{}".format(""))
 
                 #increment our counter
                 if "data" in super_cat_name.lower() and "blind" in drawable.GetName().lower() and subplot_dict.get("Unblind", False) == False:
@@ -2728,6 +2751,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         normalizationDict[combHist.GetName()] = combHist.Integral()
                     combHistograms[processName].append(combHist)
             for syst in CanCache["subplots/supercategories/systematics"].keys():
+                print(syst)
                 for i in range(len(CanCache["subplots/supercategories/systematics"][syst])):
                     for preProcessName, hist in CanCache["subplots/supercategories/systematics"][syst][i]['Categories/hists'].items():
                         processName = preProcessName.replace("BLIND", "").replace("Data", "data_obs")
@@ -2746,32 +2770,18 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         #Remap systematic names for decorrelation in Higgs Combine
                         #Decorrelated systematics: mu(Factorization/Renormalization) scale and ISR, FSR usually correlated (qcd vs ewk like ttbar vs singletop) unless
                         # " the analysis is too sensitive to off-shell effects" https://twiki.cern.ch/twiki/bin/viewauth/CMS/TopSystematics#Factorization_and_renormalizatio
-                        if processName in  ["ttbb", "ttother", "ttnobb"]:
-                            if combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp", "muRNomFDown", "muRNomFUp", 
-                                                  "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp", "FSRDown", "FSRUp"]:
-                                combSystematic = "tt" + combSystematic
-                            # elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
-                            #     combSystematic = combSystematic.replace("muRFcorrelated", "ttmuRFcorrdNew")
-                        elif processName in ["DY"]:
-                            if combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp", "muRNomFDown", "muRNomFUp", 
-                                                  "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp", "FSRDown", "FSRUp"]: 
-                                combSystematic = "ewk" + combSystematic
-                            # elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
-                            #     combSystematic = combSystematic.replace("muRFcorrelated", "ewkmuRFcorrdNew")
-                        else:
-                            if combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp", "muRNomFDown", "muRNomFUp", 
-                                                  "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp", "FSRDown", "FSRUp"]: 
-                                combSystematic = processName + combSystematic
-                            # elif combSystematic in ["muRFcorrelatedDown", "muRFcorrelatedUp",]:
-                            #     combSystematic = combSystematic.replace("muRFcorrelated", processName + "muRFcorrdNew")
-                        if combSystematic in ['ewkmuRFcorrelatedDown', 'ewkmuRFcorrelatedUp', 
-                                              'ttmuRFcorrelatedDown', 'ttmuRFcorrelatedUp', 
-                                              'ttVJetsmuRFcorrelatedDown', 'ttVJetsmuRFcorrelatedUp', 
-                                              'singletopmuRFcorrelatedDown', 'singletopmuRFcorrelatedUp', 
-                                              'ttultrararemuRFcorrelatedDown', 'ttultrararemuRFcorrelatedUp', 
-                                              'ttHmuRFcorrelatedDown', 'ttHmuRFcorrelatedUp', 
-                                              'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp',]:
-                            combSystematic = combSystematic.replace("muRFcorrelated", "muRFcorrdNew")
+                        #Systematic renaming now occurs in the FTAnalyzer...
+                        # if any([substr in combSystematic 
+                        #         for substr in ["muRFcorrelatedDown", "muRFcorrelatedUp", "muRNomFDown", "muRNomFUp",
+                        #                        "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp", "FSRDown", "FSRUp"]]):
+                        #     pdb.set_trace()
+
+                        #     if processName in  ["ttbb", "ttother", "ttnobb"]:
+                        #         combSystematic = "tt" + combSystematic
+                        #     elif processName in ["DY"]:
+                        #         combSystematic = "ewk" + combSystematic
+                        #     else:
+                        #         combSystematic = processName + combSystematic
                         for iName, oName in [("ttother", "ttnobb")]:
                             combProcess = combProcess.replace(iName, oName)                            
                         combSystematics[processName].append(combSystematic)
@@ -3012,6 +3022,10 @@ if __name__ == '__main__':
                         help='List of systematics to skip')
     parser.add_argument('--drawSystematic', dest='drawSystematic', action='store', default=None, type=str,
                         help='Single systematic name to be drawn on plots, besides the total statistical and systematic + statistical errors')
+    parser.add_argument('--zeroingThreshold', dest='zeroingThreshold', action='store', type=int, default=50,
+                        help='Threshold for Entries in grouped histograms, below which the contents will be reset. To disable, set equal or less than 0')
+    parser.add_argument('--differentialScale', dest='differentialScale', action='store_true',
+                        help='For variable width binning, set the bin errors and contents equal to the average over the bin width. Not compatible with --combineInput option')
     
 
     #Parse the arguments
@@ -3033,6 +3047,12 @@ if __name__ == '__main__':
     useCanvasMax = args.useCanvasMax
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHANNEL", channel)
     skipSystematics = args.skipSystematics
+    zeroingThreshold=args.zeroingThreshold
+    differentialScale = False
+    if combineInput is None:
+        differentialScale=args.differentialScale
+    elif args.differentialScale:
+        print("differentialScale will set bin contents to the average over the bin width. This is not compatible with the combineInput option, as the templates will no longer be absolute in scale. Disabled")
 
     lumiDict = {"2017": 41.53,
                 "2018": 59.97}
@@ -3116,7 +3136,8 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                                        analysisDirectory=analysisDir, tag=tag, plotCard=plotCard, macroOutput=macroOutput, pngOutput=pngOutput,
                                        pdfOutput=pdfOutput, combineOutput=combineOut, combineInput=combineInput, combineCards=combineCards,
                                        lumi=lumi, useCanvasMax=useCanvasMax, 
-                                       skipSystematics=skipSystematics, verbose=verb);
+                                       skipSystematics=skipSystematics, verbose=verb,
+                                       zeroingThreshold=zeroingThreshold, differentialScale=differentialScale);
     else:
         raise RuntimeError("The loading of the plot or legend cards failed. They are of type {} and {}, respectively".format(type(loadedPlotConfig),type(loadedLegendConfig)))
 
