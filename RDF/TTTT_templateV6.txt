@@ -25,7 +25,7 @@ OSDL_$ERA_ttVJets_xsec           lnN     -               -               -      
 OSDL_$ERA_ttultrarare_xsec       lnN     -               -               -               -               -               1.50            -               -
 OSDL_$ERA_ewk_xsec               lnN     -               -               -               -               -               -               1.04            -
 OSDL_$ERA_tttt_xsec              lnN     -               -               -               -               -               -               -               0.94/1.05
-OSDL_$ERA_jes                    shape   1               1               1               1               1               1               1               1
+OSDL_$ERA_jesTotal               shape   1               1               1               1               1               1               1               1
 OSDL_$ERA_jer                    shape   1               1               1               1               1               1               1               1
 OSDL_$ERA_pileup                 shape   1               1               1               1               1               1               1               1
 OSDL_$ERA_prefire                shape   1               1               1               1               1               1               1               1
@@ -72,7 +72,7 @@ OSDL_$ERA_btagSF_shape_lfstats1 shape   1               1               1       
 OSDL_$ERA_btagSF_shape_lfstats2 shape   1               1               1               1               1               1               1               1
 OSDL_RunII_btagSF_shape_cferr1    shape   1               1               1               1               1               1               1               1
 OSDL_RunII_btagSF_shape_cferr2    shape   1               1               1               1               1               1               1               1  
-OSDL_RunII_pdf                    shape   1               1               1               1               1               1               1               1  
+# OSDL_RunII_pdf                    shape   1               1               1               1               1               1               1               1  #pdf broken in test instances, due to NaN entries for Max(pdfWeight)/pdfWeight.at(0)
 # OSDL_RunII_hdamp                  shape   1               1               -               -               -               -               -               - #low impact, low stats, forces very coarse binning
 # OSDL_RunII_ue                     shape   1               1               -               -               -               -               -               - #low impact, low stats, forces very coarse binning
 * autoMCStats 1.
