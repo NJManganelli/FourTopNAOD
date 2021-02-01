@@ -31,37 +31,37 @@ OSDL_$ERA_pileup                 shape   1               1               1      
 OSDL_$ERA_prefire                shape   1               1               1               1               1               1               1               1
 ttmuRNomF                        shape   1               1               -               -               -               -               -               -
 ttmuFNomR                        shape   1               1               -               -               -               -               -               -
-ttmuRFcorrdNew                   shape   1               1               -               -               -               -               -               -
+ttmuRFcorrelated                 shape   1               1               -               -               -               -               -               -
 ttISR                            shape   1               1               -               -               -               -               -               -
 ttFSR                            shape   1               1               -               -               -               -               -               -
 singletopmuRNomF                 shape   -               -               1               -               -               -               -               -
 singletopmuFNomR                 shape   -               -               1               -               -               -               -               -
-singletopmuRFcorrdNew            shape   -               -               1               -               -               -               -               -
+singletopmuRFcorrelated          shape   -               -               1               -               -               -               -               -
 singletopISR                     shape   -               -               1               -               -               -               -               -
 singletopFSR                     shape   -               -               1               -               -               -               -               -
 ttHmuRNomF                       shape   -               -               -               1               -               -               -               -
 ttHmuFNomR                       shape   -               -               -               1               -               -               -               -
-ttHmuRFcorrdNew                  shape   -               -               -               1               -               -               -               -
+ttHmuRFcorrelated                shape   -               -               -               1               -               -               -               -
 # ttHISR                           shape   -               -               -               1               -               -               -               - #No PSWeights
 # ttHFSR                           shape   -               -               -               1               -               -               -               -
 ttVJetsmuRNomF                   shape   -               -               -               -               1               -               -               -
 ttVJetsmuFNomR                   shape   -               -               -               -               1               -               -               -
-ttVJetsmuRFcorrdNew              shape   -               -               -               -               1               -               -               -
+ttVJetsmuRFcorrelated            shape   -               -               -               -               1               -               -               -
 # ttVJetsISR                       shape   -               -               -               -               1               -               -               - #No PSWeights
 # ttVJetsFSR                       shape   -               -               -               -               1               -               -               -
 ttultrararemuRNomF               shape   -               -               -               -               -               1               -               -
 ttultrararemuFNomR               shape   -               -               -               -               -               1               -               -
-ttultrararemuRFcorrdNew          shape   -               -               -               -               -               1               -               -
+ttultrararemuRFcorrelated        shape   -               -               -               -               -               1               -               -
 # ttultrarareISR                   shape   -               -               -               -               -               1               -               - #PSWeights bugged in NanoAODv5
 # ttultrarareFSR                   shape   -               -               -               -               -               1               -               -
 ewkmuRNomF                       shape   -               -               -               -               -               -               1               - #No entries, but probably nothing
 ewkmuFNomR                       shape   -               -               -               -               -               -               1               -
-ewkmuRFcorrdNew                  shape   -               -               -               -               -               -               1               -
+ewkmuRFcorrelated                shape   -               -               -               -               -               -               1               -
 # ewkISR                           shape   -               -               -               -               -               -               1               - #No PSWeights
 # ewkFSR                           shape   -               -               -               -               -               -               1               -
 ttttmuRNomF                      shape   -               -               -               -               -               -               -               1
 ttttmuFNomR                      shape   -               -               -               -               -               -               -               1
-ttttmuRFcorrdNew                 shape   -               -               -               -               -               -               -               1
+ttttmuRFcorrelated               shape   -               -               -               -               -               -               -               1
 # ttttISR                          shape   -               -               -               -               -               -               -               1 #Low stats gave vastly overestimated impact, ergo removed, may work with 2018 and 2017nCorrectPartonInBorn samples
 # ttttFSR                          shape   -               -               -               -               -               -               -               1
 OSDL_RunII_btagSF_shape_hf    	 shape   1               1               1               1               1               1               1               1
