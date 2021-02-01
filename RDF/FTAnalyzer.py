@@ -5208,8 +5208,22 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                   rdfLeptonSelection=doLeptonSelection,
                                                   verbose=verbose,
                                                  )
-                print("Introducing early cut on lepton number: 2 required")
-                the_df[name][lvl] = the_df[name][lvl].Filter("nFTALepton > 1")
+
+                if True:
+                    print("Introducing early cut on lepton number: 2 required")
+                    leptoncutstring = "nFTALepton > 1"
+                elif "elel" in lvl.lower():
+                    print("Doing two tight leptons early cut...")
+                    leptoncutstring = "nTightFTAElectron == 2 && nLooseFTAMuon == 0"
+                elif "elmu" in lvl.lower():
+                    print("Doing two tight leptons early cut...")
+                    leptoncutstring = "nTightFTAElectron == 1 && nTightFTAMuon == 1"
+                elif "mumu" in lvl.lower():
+                    print("Doing two tight leptons early cut...")
+                    leptoncutstring = "nLooseFTAElectron == 0 && nTightFTAMuon == 2"
+                else:
+                    raise RuntimeError("Unhandled logic at early lepton cut location")
+                the_df[name][lvl] = the_df[name][lvl].Filter(leptoncutstring, "Early lepton filter {}".format(leptoncutstring))
                 if testVariables:
                     skipTestVariables = testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=[],
                                                                allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
