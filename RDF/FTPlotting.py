@@ -2751,7 +2751,6 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         normalizationDict[combHist.GetName()] = combHist.Integral()
                     combHistograms[processName].append(combHist)
             for syst in CanCache["subplots/supercategories/systematics"].keys():
-                print(syst)
                 for i in range(len(CanCache["subplots/supercategories/systematics"][syst])):
                     for preProcessName, hist in CanCache["subplots/supercategories/systematics"][syst][i]['Categories/hists'].items():
                         processName = preProcessName.replace("BLIND", "").replace("Data", "data_obs")
