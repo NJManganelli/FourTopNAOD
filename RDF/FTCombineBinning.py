@@ -18,7 +18,7 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 ROOT.gROOT.SetBatch(True)
 
-def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outDir, sourceVariable = "HT", merge="", verbose=False):
+def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outDir, sourceVariable = "HT", merge="", tagger="DeepJet", verbose=False):
     varsOfInterest = [sourceVariable + "Unweighted"]
     erasOfInterest = [era]
     channelsOfInterest = [channel]
@@ -32,17 +32,18 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outD
         ]
     elif merge.lower() == "jets":
         histogramFile = "$ADIR/Combine/All/$ERA___MergedChannelsJets_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", sourceVariable).replace("//", "/") # 
-        categoriesOfInterest = ['MergedChannelsJets_nMediumDeepJetB2', 'MergedChannelsJets_nMediumDeepJetB3', 'MergedChannelsJets_nMediumDeepJetB4+',
+        categoriesOfInterest = ['MergedChannelsJets_nMedium{tagger}B2', 'MergedChannelsJets_nMedium{tagger}B3', 'MergedChannelsJets_nMedium{tagger}B4+',
         ]
     else:
         histogramFile = "$ADIR/Combine/All/$ERA___Combined.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", sourceVariable).replace("//", "/") # 
-        categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4', 'HT500_nMediumDeepJetB2_nJet5', 'HT500_nMediumDeepJetB2_nJet6',
-                                'HT500_nMediumDeepJetB2_nJet7', 'HT500_nMediumDeepJetB2_nJet8+',
-                                'HT500_nMediumDeepJetB3_nJet4', 'HT500_nMediumDeepJetB3_nJet5', 'HT500_nMediumDeepJetB3_nJet6',
-                                'HT500_nMediumDeepJetB3_nJet7', 'HT500_nMediumDeepJetB3_nJet8+',
-                                'HT500_nMediumDeepJetB4+_nJet4', 'HT500_nMediumDeepJetB4+_nJet5', 'HT500_nMediumDeepJetB4+_nJet6',
-                                'HT500_nMediumDeepJetB4+_nJet7', 'HT500_nMediumDeepJetB4+_nJet8+',
+        categoriesOfInterest = ['HT500_nMedium{tagger}B2_nJet4', 'HT500_nMedium{tagger}B2_nJet5', 'HT500_nMedium{tagger}B2_nJet6',
+                                'HT500_nMedium{tagger}B2_nJet7', 'HT500_nMedium{tagger}B2_nJet8+',
+                                'HT500_nMedium{tagger}B3_nJet4', 'HT500_nMedium{tagger}B3_nJet5', 'HT500_nMedium{tagger}B3_nJet6',
+                                'HT500_nMedium{tagger}B3_nJet7', 'HT500_nMedium{tagger}B3_nJet8+',
+                                'HT500_nMedium{tagger}B4+_nJet4', 'HT500_nMedium{tagger}B4+_nJet5', 'HT500_nMedium{tagger}B4+_nJet6',
+                                'HT500_nMedium{tagger}B4+_nJet7', 'HT500_nMedium{tagger}B4+_nJet8+',
         ]
+    categoriesOfInterest = [cat.format(tagger=tagger) for cat in categoriesOfInterest]
     f = ROOT.TFile.Open(histogramFile, "read")
     keys = [k.GetName() for k in f.GetListOfKeys()]
     keys = [k for k in keys if k.split("___")[0] in erasOfInterest and k.split("___")[1] in samplesOfInterest]
@@ -189,6 +190,8 @@ if __name__ == '__main__':
                         help='path to json file plotcard to overwrite "Rebin" categories with those determined here. Output determined by --out argument')
     parser.add_argument('--merge', dest='merge', action='store', type=str, nargs='?', const="btags", default="", choices = ["BTags", "Jets"],
                         help='Check for the $ERA___MergedChannels$MERGE_$VAR.root file in the Combine/All subdirectory, a product of FTMergeChannels$MERGE.py for systematic studies, where $MERGE = BTags, Jets')
+    parser.add_argument('--bTagger', dest='bTagger', action='store', type=str, choices = ["DeepJet", "DeepCSV"],
+                        help='b tagging algorithm to be used')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
     # parser.add_argument('--era', dest='era', action='store', type=str, default="2017", choices=['2016', '2017', '2018'],
@@ -206,4 +209,4 @@ if __name__ == '__main__':
     channel = args.channel
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel)
     verbose = args.verbose
-    main(stage, analysisDir, channel, args.era, args.relUncertainty, args.json, ".", args.variable, args.merge, verbose=verbose)
+    main(stage, analysisDir, channel, args.era, args.relUncertainty, args.json, ".", args.variable, args.merge, args.bTagger, verbose=verbose)
