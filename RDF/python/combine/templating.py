@@ -26,6 +26,8 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
                     continue
                 if "leptonSFMu" in line and channel == "ElEl":
                     continue
+                if "OSDL_RunII_nJet" in line and "Mult" in line and category.split("_")[-1] not in line:
+                    continue
                 outFile.write(line\
                               .replace("$ERA", era)\
                               .replace("$CHANNEL", channel)\

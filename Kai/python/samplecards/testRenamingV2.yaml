@@ -225,7 +225,7 @@ OSDL_$ERA_btagSF_shape_hfstats2Down:
     prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_RunII_btagSF_shape_cferr1Up:
+OSDL_$ERA_btagSF_shape_cferr1Up:
   jet_mask: jet_mask
   lep_postfix: ''
   jet_pt_var: Jet_pt_nom
@@ -241,7 +241,7 @@ OSDL_RunII_btagSF_shape_cferr1Up:
     prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_RunII_btagSF_shape_cferr1Down:
+OSDL_$ERA_btagSF_shape_cferr1Down:
   jet_mask: jet_mask
   lep_postfix: ''
   jet_pt_var: Jet_pt_nom
@@ -257,7 +257,7 @@ OSDL_RunII_btagSF_shape_cferr1Down:
     prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_RunII_btagSF_shape_cferr2Up:
+OSDL_$ERA_btagSF_shape_cferr2Up:
   jet_mask: jet_mask
   lep_postfix: ''
   jet_pt_var: Jet_pt_nom
@@ -273,7 +273,7 @@ OSDL_RunII_btagSF_shape_cferr2Up:
     prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_RunII_btagSF_shape_cferr2Down:
+OSDL_$ERA_btagSF_shape_cferr2Down:
   jet_mask: jet_mask
   lep_postfix: ''
   jet_pt_var: Jet_pt_nom
@@ -1183,7 +1183,7 @@ OSDL_RunII_pdfUp:
   systematicSet:
   - pdf
   preWeights:
-    prewgt___$SYSTEMATIC: "prewgt___nom * (Max(LHEPdfWeight/LHEPdfWeight.at(0)) - 1.0)"
+    prewgt___$SYSTEMATIC: "prewgt___nom * (Max(LHEPdfWeight)/Mean(LHEPdfWeight) - 1.0;)"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
 OSDL_RunII_pdfDown:
@@ -1198,7 +1198,7 @@ OSDL_RunII_pdfDown:
   systematicSet:
   - pdf
   preWeights:
-    prewgt___$SYSTEMATIC: "prewgt___nom * (Min(LHEPdfWeight/LHEPdfWeight.at(0)) - 1.0)"
+    prewgt___$SYSTEMATIC: "prewgt___nom * (Min(LHEPdfWeight)/Mean(LHEPdfWeight) - 1.0;)"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC" 
 # OSDL_RunII_top_pTUp:

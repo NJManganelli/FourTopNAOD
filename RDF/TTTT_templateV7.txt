@@ -14,6 +14,11 @@ process                                          ttnobb          ttbb           
 process                                          1               2               3               4               5               6               7               0
 rate                                             $R_TTNOBB       $R_TTBB         $R_ST           $R_TTH          $R_TTV          $R_TTRARE       $R_EWK          $R_TTTT
 --------------------------------------------------------------------------------
+OSDL_RunII_nJet4Mult                     lnN     1.01            1.01            -               1.01            1.01            1.01            -               -
+OSDL_RunII_nJet5Mult                     lnN     1.01            1.01            -               1.01            1.01            1.01            -               -
+OSDL_RunII_nJet6Mult                     lnN     1.02            1.02            -               1.02            1.02            1.02            -               -
+OSDL_RunII_nJet7Mult                     lnN     1.03            1.03            -               1.03            1.03            1.03            -               -
+OSDL_RunII_nJet8pMult                    lnN     1.05            1.05            -               1.05            1.05            1.05            -               -
 OSDL_$ERA_leptonSFEl                     lnN     1.03            1.03            1.03            1.03            1.03            1.03            1.03            1.03
 OSDL_$ERA_leptonSFMu                     lnN     1.03            1.03            1.03            1.03            1.03            1.03            1.03            1.03
 OSDL_$ERA_lumi                           lnN     $LUMI           $LUMI           $LUMI           $LUMI           $LUMI           $LUMI           $LUMI           $LUMI
@@ -70,8 +75,8 @@ OSDL_$ERA_btagSF_shape_hfstats2          shape   1               1              
 OSDL_RunII_btagSF_shape_lf                 shape   1               1               1               1               1               1               1               1
 OSDL_$ERA_btagSF_shape_lfstats1          shape   1               1               1               1               1               1               1               1
 OSDL_$ERA_btagSF_shape_lfstats2          shape   1               1               1               1               1               1               1               1
-OSDL_RunII_btagSF_shape_cferr1           shape   1               1               1               1               1               1               1               1
-OSDL_RunII_btagSF_shape_cferr2           shape   1               1               1               1               1               1               1               1  
+OSDL_$ERA_btagSF_shape_cferr1           shape   1               1               1               1               1               1               1               1
+OSDL_$ERA_btagSF_shape_cferr2           shape   1               1               1               1               1               1               1               1  
 OSDL_RunII_pdf                           shape   1               1               1               1               1               1               1               1  
 # OSDL_RunII_hdamp                         shape   1               1               -               -               -               -               -               - #low impact, low stats, forces very coarse binning
 # OSDL_RunII_ue                            shape   1               1               -               -               -               -               -               - #low impact, low stats, forces very coarse binning
