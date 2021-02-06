@@ -1275,7 +1275,9 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
         #Fill lists
         jetPUId = ""
         if jetPUIdChoice:
-            if jetPUIdChoice == 'L':
+            if jetPUIdChoice == 'N':
+                jetPUId = ""
+            elif jetPUIdChoice == 'L':
                 jetPUId = " && ({jpt} >= 50 || Jet_puId >= 4)".format(jpt=jetPt) #pass Loose Id, >=6 pass Medium, ==7 pass Tight
             elif jetPUIdChoice == 'M':
                 jetPUId = " && ({jpt} >= 50 || Jet_puId >= 6)".format(jpt=jetPt) #pass Loose Id, >=6 pass Medium, ==7 pass Tight
@@ -1409,7 +1411,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
     return rdf
 
 
-def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbose=False, final=False, sysVariations={"$NOMINAL":"ValueNeeded"}, sysFilter=["$NOMINAL"]):
+def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbose=False, final=False, disableNjetMultiplicityCorrection=False, sysVariations={"$NOMINAL":"ValueNeeded"}, sysFilter=["$NOMINAL"]):
     """Define all the pre-final or final weights and the variations, to be referened by the sysVariations dictionaries as wgt_final.
     if final=False, do the pre-final weights for BTaggingYields calculations.
     
@@ -1515,11 +1517,16 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                 else:
                     if verbose:
                         print("Top pt reweighting function applied to eraAndSample {}: {} = {}".format(eraAndSampleName, defName, defFuncModulated))
-                if "ttother" not in eraAndSampleName.lower() and "ttnobb" not in eraAndSampleName.lower() and "ttbb" not in eraAndSampleName.lower():
+                # if "ttother" not in eraAndSampleName.lower() and "ttnobb" not in eraAndSampleName.lower() and "ttbb" not in eraAndSampleName.lower():
+                if disableNjetMultiplicityCorrection or eraAndSampleName.split("___")[-1] in ["DYJets_DL", "DYJets_DL-HT100", "DYJets_DL-HT200", "DYJets_DL-HT400", 
+                                                                                              "DYJets_DL-HT600", "DYJets_DL-HT800", "DYJets_DL-HT1200", "DYJets_DL-HT2500", 
+                                                                                              "ST_s-channel", "ST_tW", "ST_tW-NoFHad", "ST_t_t-channel", 
+                                                                                              "ST_tbarW", "ST_tbarW-NoFHad", "ST_tbar_t-channel", "tttt"]:
                     if defName.startswith("pwgt_ttbar_njet_multiplicity"):
                         defFuncModulated = "return 1.0;"
                         if verbose:
                             print("Not applying ttbar jet multiplicity corrections to eraAndSample {}".format(eraAndSampleName))
+                            if disableNjetMultiplicityCorrection: print("disableNjetMultiplicityCorrection = True")
                     # defFuncModulated = defFuncModulated.replace("pwgt_ttbar_njet_multiplicity___$SYSTEMATIC".replace("$SYSTEMATIC", sysVar), "1.0").replace("pwgt_ttbar_njet_multiplicity___$NOMINAL".replace("$NOMINAL", "nom"), "1.0")
                 else:
                     if verbose:
@@ -2451,21 +2458,42 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     combineHistoTemplate = []    
     #Variables to save for Combine when doCombineHistosOnly=True
     # combineHistoTemplate = ["HT{bpf}"]
-    # combineHistoTemplate = ["HT{bpf}", "ST{bpf}", "HTH{bpf}", "HTRat{bpf}", "HTb{bpf}", "HT2M{bpf}", "H{bpf}", "H2M{bpf}", "dRbb{bpf}", 
-    #                          # "FTALepton_dRll", 
-    #                          "FTALepton1_pt", "FTALepton1_eta",
-    #                          "FTALepton2_pt", "FTALepton2_eta", 
-    #                          "FTAMuon_InvariantMass", "FTAElectron_InvariantMass",
-    #                          "MTofMETandMu{bpf}", "MTofMETandEl{bpf}", "MTofElandMu{bpf}"
-    #                          "nFTAJet{bpf}", 
-    #                          "FTAJet1{bpf}_pt", "FTAJet1{bpf}_eta", "FTAJet1{bpf}_DeepJetB", 
-    #                          "FTAJet2{bpf}_pt", "FTAJet2{bpf}_eta", "FTAJet2{bpf}_DeepJetB", 
-    #                          "FTAJet3{bpf}_pt", "FTAJet3{bpf}_eta", "FTAJet3{bpf}_DeepJetB", 
-    #                          "FTAJet4{bpf}_pt", "FTAJet4{bpf}_eta", "FTAJet4{bpf}_DeepJetB",
-    #                          # "nLooseFTAMuon", "nMediumFTAMuon", "nTightFTAMuon",
-    #                          # "nLooseFTAElectron", "nMediumFTAElectron", "nTightFTAElectron",
-    #                          # "nLooseFTALepton", "nMediumFTALepton", "nTightFTALepton",
-    #                      ]
+    combineHistoTemplate = ["HT{bpf}",
+                            "ST{bpf}",
+                            "HTH{bpf}",
+                            "HTRat{bpf}",
+                            "HTb{bpf}",
+                            "HT2M{bpf}",
+                            "H{bpf}",
+                            "H2M{bpf}",
+                            "dRbb{bpf}",
+                            # "FTALepton_dRll",
+                            "FTALepton1_pt",
+                            "FTALepton1_eta",
+                            "FTALepton2_pt",
+                            "FTALepton2_eta",
+                            "FTAMuon_InvariantMass",
+                            "FTAElectron_InvariantMass",
+                            "MTofMETandMu{bpf}",
+                            "MTofMETandEl{bpf}",
+                            "MTofElandMu{bpf}"
+                            "nFTAJet{bpf}", 
+                            "FTAJet1{bpf}_pt", 
+                            "FTAJet2{bpf}_pt",
+                            "FTAJet3{bpf}_pt",
+                            "FTAJet4{bpf}_pt",
+                            "FTAJet1{bpf}_eta",
+                            "FTAJet2{bpf}_eta",
+                            "FTAJet3{bpf}_eta",
+                            "FTAJet4{bpf}_eta",
+                            "FTAJet1{bpf}_DeepJetB",
+                            "FTAJet2{bpf}_DeepJetB",
+                            "FTAJet3{bpf}_DeepJetB",
+                            "FTAJet4{bpf}_DeepJetB",
+                            # "nLooseFTAMuon", "nMediumFTAMuon", "nTightFTAMuon",
+                            # "nLooseFTAElectron", "nMediumFTAElectron", "nTightFTAElectron",
+                            # "nLooseFTALepton", "nMediumFTALepton", "nTightFTALepton",
+                         ]
     if bTagger.lower() == "deepjet":
         combineHistoTemplate += ["nLooseDeepJetB{bpf}", "nMediumDeepJetB{bpf}", "nTightDeepJetB{bpf}",]
     elif bTagger.lower() == "deepcsv":
@@ -2473,8 +2501,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     elif bTagger.lower() == "csvv2":
         combineHistoTemplate += ["nLooseCSVv2B{bpf}", "nMediumCSVv2B{bpf}", "nTightCSVv2B{bpf}",]
 
-    print("\n\nDisabled histo templates except HT!!!!!\n\n")
-    combineHistoTemplate = ["HT{bpf}",]
+    # print("\n\nDisabled histo templates except HT!!!!!\n\n")
+    # combineHistoTemplate = ["HT{bpf}",]
 
     #Fill this list with variables for each branchpostfix
     combineHistoVariables = [] 
@@ -4628,6 +4656,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
          BTaggingYieldsAggregate=False, useHTOnly=False, useNJetOnly=False, 
          printBookkeeping=False, triggers=[], includeSampleNames=None, 
          useDeltaR=False, jetPtMin=30.0, jetPUId=None, 
+         disableNjetMultiplicityCorrection=False,
          excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True,
          testVariables=False, systematicSet="All", nThreads=8,
          redirector=None, recreateFileList=False, doRDFReport=False
@@ -5294,6 +5323,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                era=vals["era"],
                                                isData=vals["isData"],
                                                final=False,
+                                               disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
                                                sysVariations=sysVariationsAll, 
                                                sysFilter=allSystematics,
                                                verbose=verbose,
@@ -5321,6 +5351,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                    era = vals["era"],
                                                    isData = vals["isData"],
                                                    final=True,
+                                                   disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
                                                    sysVariations=sysVariationsAll,
                                                    sysFilter=allSystematics,
                                                    verbose=verbose,
@@ -5571,7 +5602,7 @@ if __name__ == '__main__':
                         help='analysis stage to be produced')
     parser.add_argument('--systematicSet', dest='systematicSet', action='store', nargs='*',
                         type=str, choices=['ALL', 'nominal', 'pu', 'pf', 'btag', 'jerc', 'ps', 'rf',
-                                           'btag_hf', 'btag_lf', 'btag_other', 'test'], default='All',
+                                           'btag_hf', 'btag_lf', 'btag_other', 'pdf', 'test'], default='All',
                         help='Systematic set to include in running, defaulting to "All"')
     # parser.add_argument('--systematics', dest='systematics', action='store', default=None, type=str, nargs='*',
     #                     help='List of systematic variations to compute (if not called, defaults to None and only nominal is run. Call with list of systematic names or "All"')
@@ -5586,12 +5617,14 @@ if __name__ == '__main__':
                         help='Disable progress bars')
     parser.add_argument('--jetPtMin', dest='jetPtMin', action='store', default=30.0, type=float,
                         help='Float value for the minimum Jet pt in GeV, defaulting to 30.0')
-    parser.add_argument('--jetPUId', dest='jetPUId', action='store', default=None, nargs='?', const='L', type=str, choices=['L', 'M', 'T'],
-                        help='Optionally apply Jet PU Id to the selected jets, with choices of Loose ("L"), Medium ("M"), or Tight ("T") using the 80X training.')
+    parser.add_argument('--jetPUId', dest='jetPUId', action='store', default=None, nargs='?', const='L', type=str, choices=['N', 'L', 'M', 'T'],
+                        help='Optionally apply Jet PU Id to the selected jets, with choices of None ("N"), Loose ("L"), Medium ("M"), or Tight ("T") using the 80X training.')
     parser.add_argument('--useDeltaR', dest='useDeltaR', action='store', type=float, default=0.4, #nargs='?', const=0.4,
                         help='Default distance parameter 0.4, use to set alternative float value for Lepton-Jet cross-cleaning')
     parser.add_argument('--usePFMatching', dest='usePFMatching', action='store_true', 
                         help='Enable usage of PFMatching for Lepton-Jet cross-cleaning')
+    parser.add_argument('--disableNjetMultiplicityCorrection', '--noNjetMult', dest='disableNjetMultiplicityCorrection', action='store_true',
+                        help='Disable the ttbar jet multiplicity correction on tt(+ X(Y)) processes besides the signal')
     parser.add_argument('--bTagger', dest='bTagger', action='store', default='DeepJet', type=str, choices=['DeepCSV', 'DeepJet'],
                         help='bTagger algorithm to be used, default DeepJet')
     parser.add_argument('--doNtuples', dest='doNtuples', action='store_true',
@@ -5650,6 +5683,7 @@ if __name__ == '__main__':
         doNtuples = True
     jetPtMin=args.jetPtMin
     jetPUId=args.jetPUId
+    disableNjetMultiplicityCorrection = args.disableNjetMultiplicityCorrection
     useDeltaR = args.useDeltaR
     bTagger = args.bTagger
     includeSampleNames = args.include
@@ -5684,6 +5718,7 @@ if __name__ == '__main__':
     print("Channel to be analyzed: {chan}".format(chan=channel))
     print("Algorithm for Lepton-Jet crosscleaning: {}".format("PFMatching" if not useDeltaR else "DeltaR < {}".format(useDeltaR)))
     print("Jet selection is using these parameters: Minimum Pt: {} PU Id: {}".format(jetPtMin, jetPUId))
+    print("ttbar njet multiplicity correction is disabled for tt (+ X(Y)): {}".format(disableNjetMultiplicityCorrection))
     print("BTagger algorithm to be used: {tag}".format(tag=bTagger))
     print("BTagging aggregate Yields/Efficiencies will be used ({uAgg}) and depend on HT only ({uHT}) or nJet only ({uNJ})"\
           .format(uAgg=useAggregate, uHT=useHTOnly, uNJ=useNJetOnly))
@@ -5706,7 +5741,7 @@ if __name__ == '__main__':
         print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
         # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
+                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
                       printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
         #      verbose=False)
@@ -5749,20 +5784,20 @@ if __name__ == '__main__':
     elif stage == 'lepton-selection':
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
                       BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, 
-                      useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
+                      useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList,  disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
-                      useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
+                      useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList,  disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, sampleCards, source, "BOOKKEEPING", bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
-                      useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList, 
+                      useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList,  disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'fill-histograms':
@@ -5771,6 +5806,7 @@ if __name__ == '__main__':
                       doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=False,
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
@@ -5780,6 +5816,7 @@ if __name__ == '__main__':
                       doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=True,
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
@@ -5810,6 +5847,7 @@ if __name__ == '__main__':
                       doNtuples=doNtuples, 
                       doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, 
                       quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
