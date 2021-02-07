@@ -1,6 +1,6 @@
  {   
      "DefaultLegend": {
-	"Header": "#sqrt{{s}} = 13 TeV, L_{{int}} = {lumi} fb^{{-1}}",
+	"Header": "{lumi} fb^{{-1}} (13 TeV)",
 	"HeaderPosition": 0.25,
         "Supercategories": {
             "Signal": {
@@ -52,7 +52,7 @@
         ], 
         "Categories": {
             "ttH": {
-                "Color": 616, 
+                "Color": "#00A88F", 
                 "Style": "Fill", 
                 "Names": [
                     "2017___ttH___All___ZWindow",
@@ -68,7 +68,7 @@
                 ]
             }, 
             "ttVJets": {
-                "Color": 880, 
+                "Color": [155, 152, 204], 
                 "Style": "Fill", 
                 "Names": [
                     "2017___ttWJets___All___ZWindow", 
@@ -78,7 +78,7 @@
                 ]
             }, 
             "DY": {
-                "Color": 416, 
+                "Color": [222, 90, 106], 
                 "Style": "Fill", 
                 "Names": [
                     "2017___DYJets_DL___All___ZWindow",
@@ -138,7 +138,7 @@
                 ]
             }, 
             "ttbb": {
-                "Color": 38, 
+                "Color": [100, 192, 232], 
                 "Style": "Fill", 
                 "Names": [
                     "2017___ttbb_DL_fr___All___ZWindow", 
@@ -158,7 +158,7 @@
                 ]
             }, 
             "ttother": {
-                "Color": 632, 
+                "Color": "#BF2229", 
                 "Style": "Fill", 
                 "Names": [
                     "2017___ttother_DL_fr___All___ZWindow",
@@ -198,7 +198,7 @@
                 ]
             }, 
             "singletop": {
-                "Color": 400, 
+                "Color": [250, 202, 255], 
                 "Style": "Fill", 
                 "Names": [
                     "2017___ST_tW___All___ZWindow", 
@@ -208,7 +208,7 @@
                 ]
             }, 
             "ttultrarare": {
-                "Color": 432, 
+                "Color": [248, 206, 104], 
                 "Style": "Fill", 
                 "Names": [
                     "2017___ttWW___All___ZWindow", 
