@@ -1834,19 +1834,34 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
                 retHists[sampleCat].Scale(1.0, "width") #Scales contents and errors to the bin width
 
             #Modify the histogram with style and color information, where appropriate
+            if isinstance(config["Color"], int): 
+                thisFillColor = ROOT.TColor.GetColor(int(config["Color"]))
+                thisLineColor = ROOT.TColor.GetColorDark(thisFillColor)
+            elif isinstance(config["Color"], str): 
+                thisFillColor = ROOT.TColor.GetColor(config["Color"])
+                thisLineColor = ROOT.TColor.GetColorDark(thisFillColor)
+            elif isinstance(config["Color"], list):
+                thisFillColor = ROOT.TColor.GetColor(*config["Color"])
+                thisLineColor = ROOT.TColor.GetColorDark(thisFillColor)
+            else:
+                raise ValueError("Unhandled process color encoding: type {}, value {}".format(type(config["Color"]), config["Color"]))
             if config["Style"] == "Fill":
-                retHists[sampleCat].SetFillColor(int(config["Color"]))
-                retHists[sampleCat].SetLineColor(int(config["Color"]))
+                retHists[sampleCat].SetFillColor(thisFillColor)
+                retHists[sampleCat].SetLineColor(thisLineColor)
             elif config["Style"] == "FillAlpha":
-                retHists[sampleCat].SetFillColorAlpha(config["Color"], config.get("Alpha", 0.5))
-                retHists[sampleCat].SetLineColor(config["Color"])
+                retHists[sampleCat].SetFillColorAlpha(thisFillColor, config.get("Alpha", 0.5))
+                retHists[sampleCat].SetLineColor(thisLineColor)
             elif config["Style"] == "Line":     
-                retHists[sampleCat].SetLineColor(config["Color"])
+                # retHists[sampleCat].SetLineColor(config["Color"])
+                retHists[sampleCat].SetFillColor(0)
+                retHists[sampleCat].SetLineColor(thisFillColor)
             elif config["Style"] == "Marker":   
                 retHists[sampleCat].SetMarkerStyle(config.get("MarkerStyle", 0))
-                retHists[sampleCat].SetMarkerSize(1.0)
-                retHists[sampleCat].SetMarkerColor(config["Color"])
-                retHists[sampleCat].SetLineColor(config["Color"])
+                retHists[sampleCat].SetMarkerSize(0.5)
+                retHists[sampleCat].SetMarkerColor(thisFillColor)
+                retHists[sampleCat].SetLineColor(thisLineColor)
+                # retHists[sampleCat].SetMarkerColor(config["Color"])
+                # retHists[sampleCat].SetLineColor(config["Color"])
                 #Styles kFullCircle (20), kFullSquare (21), kFullTriangleUp (22), kFullTriangleDown (23), kOpenCircle (24)
             else:
                 pass
@@ -1872,21 +1887,28 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
     #Get coordinates for the legend, create it, store the pointer in the dictionary (so it isn't deleted, to hammer the point over and over)
     coord = legendConfig.get("Coordinates")
     nColumns = legendConfig.get("nColumns")
-    leg = ROOT.TLegend(coord[0], coord[1], coord[2], coord[3])
+    # leg = ROOT.TLegend(coord[0], coord[1], coord[2], coord[3])
+    # leg_width = 0.8
+    # leg_height = 0.6
+    # #Don't forget ROOT's dipshit-level coordinate reversals. BuildLegend is (x1, x2, y1, y2) but TLegend is (x1, y1, x2, y2)
+    # leg = ROOT.TLegend(leg_width, leg_height, leg_width, leg_height) #Trigger automatic placement of the legend by 'reducing to a point', and x1 = x2 = width, y1 = y2 = height
+    leg = ROOT.TLegend(0.1, 0.3, 1.0, 0.7)
+    leg.SetBorderSize(0)
+    leg.SetTextFont(43)
+    leg.SetTextSize(20)
+    leg2 = ROOT.TLegend(0.1, 0.3, 1.0, 0.7)
+    leg2.SetBorderSize(0)
+    leg2.SetTextFont(43)
+    leg2.SetTextSize(20)
     #From other plotting scripts:
-    # leg.SetBorderSize(0)
     # leg.SetFillStyle(0)
-    # leg.SetTextFont(43)
-    # leg.SetTextSize(16)
 
-    #leg.SetBorderSize(0)
     #nColumns = math.floor(math.sqrt(len(legendConfig.get("Categories"))))
-    leg.SetNColumns(nColumns)
-    if debug:
-        print("nColumns = {} generated from {}".format(nColumns, len(legendConfig.get("Categories"))))
-    leg.SetTextSize(0.03)
+    # leg.SetNColumns(nColumns)
+    # if debug:
+    #     print("nColumns = {} generated from {}".format(nColumns, len(legendConfig.get("Categories"))))
     retDict["Legend"] = leg
-    
+    retDict["Legend2"] = leg2
     #Create dictionary to return one level up, calling makeCategoryHists to combine subsamples together 
     #and do color, style configuration for them. Pass through the rebin parameter
     retDict["Categories/hists"], retDict["Categories/theUnfound"] = makeCategoryHists(histFile, legendConfig, histNameCommon,
@@ -1938,7 +1960,7 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
                                                                                                            spf="" if systematic == None else systematic),
                                                                       ""
                                                                      )
-            for tup in tmpList:
+            for ntup, tup in enumerate(tmpList):
                 legendCode = legendConfig["Categories"][tup[1]]["Style"]
                 if legendCode == "Fill" or legendCode == "FillAlpha":
                     legendCode = "F"
@@ -1948,7 +1970,10 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
                     #Assume Marker style
                     legendCode = "P"
                 #Add the legend entry
-                leg.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
+                if (ntup % 2) == 0:
+                    leg.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
+                else:
+                    leg2.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
                 #Add the category histogram to the stack
                 retDict["Supercategories"][super_cat_name].Add(tup[2])
             #Acquire the stats for the finished stack and store it in the dictionary, but we only half-prepare this, since the histogram must be 'drawn' before a stats object is created
@@ -1975,8 +2000,8 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
                 #Assume Marker style
                 legendCode = "P"
             #Add the legend entry, but instead of the tup[2] histogram, the overall added hist.
-            legendLabel = tup[1] + " (partially/blind)" if any(["blind" in tup[2].GetName().lower() for tup in tmpList]) else tup[1]
-            leg.AddEntry(retDict["Supercategories"][super_cat_name], legendLabel, legendCode)
+            legendLabel = tup[1] #+ " (partially/blind)" if any(["blind" in tup[2].GetName().lower() for tup in tmpList]) else tup[1]
+            leg2.AddEntry(retDict["Supercategories"][super_cat_name], legendLabel, legendCode)
             retDict["Supercategories/hists"][super_cat_name] = retDict["Supercategories"][super_cat_name]#.GetListOfFunctions().FindObject("stats")
             #retDict["Supercategories/xAxis"][super_cat_name] = retDict["Supercategories"][super_cat_name].GetXaxis()
             #retDict["Supercategories/yAxis"][super_cat_name] = retDict["Supercategories"][super_cat_name].GetYaxis()
@@ -2484,7 +2509,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 #             CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name].Draw("2")
             if pn == 0:
                 #Draw the legend in the first category for now...
-                CanCache["subplots/supercategories"][pn]["Legend"].Draw()
+                # CanCache["subplots/supercategories"][pn]["Legend"].Draw()
                 scaleText = 1.3
                 offsetText = CanCache["canvas/marginL"]
                 #Draw the label on the leftmost top pad
@@ -2492,11 +2517,11 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 #Set the y axis title
                 #####drawable.SetTitle(yAxisTitle)
                 pass
-            elif pn == len(CanCache["subplots"]):
-                scaleText = 2.0
-                #scaleText = (1-CanCache["canvas/marginR"])
-                offsetText = 0
-                #####drawable.SetTitle(yAxisTitle)
+            elif pn == len(CanCache["subplots"]) - 2:
+                CanCache["subplots/supercategories"][pn]["Legend"].Draw()
+                pass
+            elif pn == len(CanCache["subplots"]) - 1:
+                CanCache["subplots/supercategories"][pn]["Legend2"].Draw()
                 pass
             else:
                 scaleText = 2.0
@@ -2649,9 +2674,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["canvas_upper_yaxis"].SetNDC(True)
         CanCache["canvas_upper_yaxis"].SetTextFont(43)
         CanCache["canvas_upper_yaxis"].SetTextSize(35)
-        CanCache["canvas_upper_yaxis"].SetTextAlign(13)
+        CanCache["canvas_upper_yaxis"].SetTextAlign(33)
         CanCache["canvas_upper_yaxis"].SetTextAngle(90)
-        CanCache["canvas_upper_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 0.75, "< " + str(yAxisTitle).replace("bin", "GeV") + " >" if differentialScale else str(yAxisTitle))
+        CanCache["canvas_upper_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 1-0.550*CanCache["canvas/marginT"], "< " + str(yAxisTitle).replace("bin", "GeV") + " >" if differentialScale else str(yAxisTitle))
         CanCache["canvas_upper_yaxis"].Draw()        
 
         # CanCache["canvas_lower_yaxis"] = ROOT.TLatex()
@@ -2873,7 +2898,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         combFile.Close()
         print("Wrote file for combine input templates")
         if combineCards:
-            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV6.txt", counts=combCounts)
+            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV7.txt", counts=combCounts)
             print("Wrote combine cards")
         # cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
         # # print(cmd)
@@ -3146,10 +3171,16 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                 pdfOutput = pdfOutput.replace(".pdf", ".{}.pdf".format(args.drawSystematic))
             if verb:
                 print("pdfOutput = {}".format(pdfOutput))
+        else:
+            pdfOutput = False
         if 'C' in args.formats:
             macroOutput = True
+        else:
+            macroOutput = False
         if 'png' in args.formats:
             pngOutput = True
+        else:
+            pngOutput = False
         if combineInput is not None:
             combineOut = "$ADIR/Combine/CI_$ERA_$CHANNEL_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", combineInput).replace("$TAG", tag).replace("$PLOTCARD", plotCard).replace("$CHANNEL", channel).replace("//", "/")
             if verb:
