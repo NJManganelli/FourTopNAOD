@@ -1884,31 +1884,37 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
     
     #Prepare a counter so we know how many categories are actuallly filled, whatever the legendConfig has as default
     nFilledCategories = 0
-    #Get coordinates for the legend, create it, store the pointer in the dictionary (so it isn't deleted, to hammer the point over and over)
-    coord = legendConfig.get("Coordinates")
-    nColumns = legendConfig.get("nColumns")
-    # leg = ROOT.TLegend(coord[0], coord[1], coord[2], coord[3])
-    # leg_width = 0.8
-    # leg_height = 0.6
-    # #Don't forget ROOT's dipshit-level coordinate reversals. BuildLegend is (x1, x2, y1, y2) but TLegend is (x1, y1, x2, y2)
-    # leg = ROOT.TLegend(leg_width, leg_height, leg_width, leg_height) #Trigger automatic placement of the legend by 'reducing to a point', and x1 = x2 = width, y1 = y2 = height
-    leg = ROOT.TLegend(0.1, 0.3, 1.0, 0.7)
-    leg.SetBorderSize(0)
-    leg.SetTextFont(43)
-    leg.SetTextSize(20)
-    leg2 = ROOT.TLegend(0.1, 0.3, 1.0, 0.7)
-    leg2.SetBorderSize(0)
-    leg2.SetTextFont(43)
-    leg2.SetTextSize(20)
-    #From other plotting scripts:
-    # leg.SetFillStyle(0)
-
-    #nColumns = math.floor(math.sqrt(len(legendConfig.get("Categories"))))
-    # leg.SetNColumns(nColumns)
-    # if debug:
-    #     print("nColumns = {} generated from {}".format(nColumns, len(legendConfig.get("Categories"))))
-    retDict["Legend"] = leg
-    retDict["Legend2"] = leg2
+    if systematic is None and pn == 0:
+        #Get coordinates for the legend, create it, store the pointer in the dictionary (so it isn't deleted, to hammer the point over and over)
+        coord = legendConfig.get("Coordinates")
+        nColumns = legendConfig.get("nColumns")
+        # leg = ROOT.TLegend(coord[0], coord[1], coord[2], coord[3])
+        # leg_width = 0.8
+        # leg_height = 0.6
+        # #Don't forget ROOT's dipshit-level coordinate reversals. BuildLegend is (x1, x2, y1, y2) but TLegend is (x1, y1, x2, y2)
+        # leg = ROOT.TLegend(leg_width, leg_height, leg_width, leg_height) #Trigger automatic placement of the legend by 'reducing to a point', and x1 = x2 = width, y1 = y2 = height
+        leg_left = 0.1
+        leg_right = 1.0
+        leg_top = 0.7
+        leg1_bottom = leg_top - 4 * 0.08 #4 = number of samples in this legend
+        leg2_bottom = leg_top - 5 * 0.08 #5 = rest of stack + signal + data, usually
+        leg = ROOT.TLegend(leg_left, leg1_bottom, leg_right, leg_top)
+        leg.SetBorderSize(0)
+        leg.SetTextFont(43)
+        leg.SetTextSize(20)
+        leg2 = ROOT.TLegend(leg_left, leg2_bottom, leg_right, leg_top)
+        leg2.SetBorderSize(0)
+        leg2.SetTextFont(43)
+        leg2.SetTextSize(20)
+        #From other plotting scripts:
+        # leg.SetFillStyle(0)
+    
+        #nColumns = math.floor(math.sqrt(len(legendConfig.get("Categories"))))
+        # leg.SetNColumns(nColumns)
+        # if debug:
+        #     print("nColumns = {} generated from {}".format(nColumns, len(legendConfig.get("Categories"))))
+        retDict["Legend"] = leg
+        retDict["Legend2"] = leg2
     #Create dictionary to return one level up, calling makeCategoryHists to combine subsamples together 
     #and do color, style configuration for them. Pass through the rebin parameter
     retDict["Categories/hists"], retDict["Categories/theUnfound"] = makeCategoryHists(histFile, legendConfig, histNameCommon,
@@ -1961,19 +1967,20 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
                                                                       ""
                                                                      )
             for ntup, tup in enumerate(tmpList):
-                legendCode = legendConfig["Categories"][tup[1]]["Style"]
-                if legendCode == "Fill" or legendCode == "FillAlpha":
-                    legendCode = "F"
-                elif legendCode == "Line":
-                    legendCode = "L"
-                else:
-                    #Assume Marker style
-                    legendCode = "P"
-                #Add the legend entry
-                if (ntup % 2) == 0:
-                    leg.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
-                else:
-                    leg2.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
+                if systematic is None and pn == 0:
+                    legendCode = legendConfig["Categories"][tup[1]]["Style"]
+                    if legendCode == "Fill" or legendCode == "FillAlpha":
+                        legendCode = "F"
+                    elif legendCode == "Line":
+                        legendCode = "L"
+                    else:
+                        #Assume Marker style
+                        legendCode = "P"
+                    #Add the legend entry
+                    if (ntup % 2) == 0:
+                        leg.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
+                    else:
+                        leg2.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
                 #Add the category histogram to the stack
                 retDict["Supercategories"][super_cat_name].Add(tup[2])
             #Acquire the stats for the finished stack and store it in the dictionary, but we only half-prepare this, since the histogram must be 'drawn' before a stats object is created
@@ -1991,17 +1998,18 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
                                                                   scaleArray = None)
             #We need the tuple, which one? Choose the last/most significant one...
             tup = tmpList[-1]
-            legendCode = legendConfig["Categories"][tup[1]]["Style"]
-            if legendCode == "Fill" or legendCode == "FillAlpha":
-                legendCode = "F"
-            elif legendCode == "Line":
-                legendCode = "L"
-            else:
-                #Assume Marker style
-                legendCode = "P"
-            #Add the legend entry, but instead of the tup[2] histogram, the overall added hist.
-            legendLabel = tup[1] #+ " (partially/blind)" if any(["blind" in tup[2].GetName().lower() for tup in tmpList]) else tup[1]
-            leg2.AddEntry(retDict["Supercategories"][super_cat_name], legendLabel, legendCode)
+            if systematic is None and pn == 0:
+                legendCode = legendConfig["Categories"][tup[1]]["Style"]
+                if legendCode == "Fill" or legendCode == "FillAlpha":
+                    legendCode = "F"
+                elif legendCode == "Line":
+                    legendCode = "L"
+                else:
+                    #Assume Marker style
+                    legendCode = "P"
+                #Add the legend entry, but instead of the tup[2] histogram, the overall added hist.
+                legendLabel = tup[1] #+ " (partially/blind)" if any(["blind" in tup[2].GetName().lower() for tup in tmpList]) else tup[1]
+                leg2.AddEntry(retDict["Supercategories"][super_cat_name], legendLabel, legendCode)
             retDict["Supercategories/hists"][super_cat_name] = retDict["Supercategories"][super_cat_name]#.GetListOfFunctions().FindObject("stats")
             #retDict["Supercategories/xAxis"][super_cat_name] = retDict["Supercategories"][super_cat_name].GetXaxis()
             #retDict["Supercategories/yAxis"][super_cat_name] = retDict["Supercategories"][super_cat_name].GetYaxis()
@@ -2518,10 +2526,11 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 #####drawable.SetTitle(yAxisTitle)
                 pass
             elif pn == len(CanCache["subplots"]) - 2:
-                CanCache["subplots/supercategories"][pn]["Legend"].Draw()
+                #Legends are only created in the dictionary for pad 0, so do not lookup pn but [0]
+                CanCache["subplots/supercategories"][0]["Legend"].Draw()
                 pass
             elif pn == len(CanCache["subplots"]) - 1:
-                CanCache["subplots/supercategories"][pn]["Legend2"].Draw()
+                CanCache["subplots/supercategories"][0]["Legend2"].Draw()
                 pass
             else:
                 scaleText = 2.0
