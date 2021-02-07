@@ -2149,7 +2149,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         
         
         #generate the header and label for the canvas, adding them in the cache as 'cms_label' and 'cms_header'
-        header = can_dict.get("Header", legendConfig.get("Header", "#sqrt{{s}} = 13 TeV, L_{{int}} = {lumi} fb^{{-1}}"))
+        header = can_dict.get("Header", legendConfig.get("Header", "{lumi} fb^{{-1}} (13 TeV)"))
         header_position = can_dict.get("HeaderPosition", legendConfig.get("HeaderPosition", 0.063))
         label = can_dict.get("Label", legendConfig.get("Label", "#bf{CMS} #it{Preliminary}"))
         label_position = can_dict.get("LabelPosition", legendConfig.get("LabelPosition", 0.05))        
@@ -2597,9 +2597,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         histDrawSystematicUpRatio[pn][supercategory].Draw("HIST SAME")
 
                     #Set the x axis title if it's the last drawable item
-                    if pn == (len(CanCache["subplots"]) - 1):
-                        if xAxisTitle != None:
-                            CanCache["subplots/ratios"][-1][aRatioName]["ratio_Xaxis"].SetTitle(xAxisTitle)
+                    # if pn == (len(CanCache["subplots"]) - 1):
+                    #     if xAxisTitle != None:
+                    #         CanCache["subplots/ratios"][-1][aRatioName]["ratio_Xaxis"].SetTitle(xAxisTitle)
                     #increment our counter for ratios
                     rdn += 1
                 #FIXME: better would be to make the Supercategory "blindable" instead of assuming 'data' is in the name
@@ -2644,6 +2644,32 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         ROOT.gStyle.SetOptTitle(1);
         #CanCache["canvas_title"] = ROOT.TPaveLabel(.25,.95,.6,.99, canTitle,"trndc");
         canTitlePerc = 0.2
+
+        CanCache["canvas_upper_yaxis"] = ROOT.TLatex()
+        CanCache["canvas_upper_yaxis"].SetNDC(True)
+        CanCache["canvas_upper_yaxis"].SetTextFont(43)
+        CanCache["canvas_upper_yaxis"].SetTextSize(35)
+        CanCache["canvas_upper_yaxis"].SetTextAlign(13)
+        CanCache["canvas_upper_yaxis"].SetTextAngle(90)
+        CanCache["canvas_upper_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 0.75, "< " + str(yAxisTitle).replace("bin", "GeV") + " >" if differentialScale else str(yAxisTitle))
+        CanCache["canvas_upper_yaxis"].Draw()        
+
+        # CanCache["canvas_lower_yaxis"] = ROOT.TLatex()
+        # CanCache["canvas_lower_yaxis"].SetNDC(True)
+        # CanCache["canvas_lower_yaxis"].SetTextFont(43)
+        # CanCache["canvas_lower_yaxis"].SetTextSize(35)
+        # CanCache["canvas_lower_yaxis"].SetTextAlign(13)
+        # CanCache["canvas_lower_yaxis"].SetTextAngle(90)
+        # CanCache["canvas_lower_yaxis"].DrawLatexNDC(0.33*CanCache["canvas/marginL"], 1-0.40*CanCache["canvas/marginT"], str(yAxisTitle))
+        # CanCache["canvas_lower_yaxis"].Draw()        
+
+        CanCache["canvas_xaxis"] = ROOT.TLatex()
+        CanCache["canvas_xaxis"].SetNDC(True)
+        CanCache["canvas_xaxis"].SetTextFont(43)
+        CanCache["canvas_xaxis"].SetTextSize(35)
+        CanCache["canvas_xaxis"].SetTextAlign(33)
+        CanCache["canvas_xaxis"].DrawLatexNDC(1 - 0.17 * CanCache["canvas/marginR"], 0.22 * CanCache["canvas/marginB"], str(xAxisTitle))
+        CanCache["canvas_xaxis"].Draw()        
 
         CanCache["canvas_label"] = ROOT.TLatex()
         CanCache["canvas_label"].SetNDC(True)
