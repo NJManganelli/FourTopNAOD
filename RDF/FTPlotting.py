@@ -1584,6 +1584,8 @@ def createRatio(h1, h2, Cache=None, ratioTitle="input 0 vs input 1", ratioColor 
     # h3.Sumw2() #Not necesary if set globally already
     h3.SetStats(0)
     if str(h2.ClassName()) in ["TH1I", "TH1F", "TH1D"]:
+        # if h3.GetNbinsX() != h2.GetNbinsX():
+        #     pdb.set_trace()
         h3.Divide(h2)
     else:
         raise NotImplementedError("Unhandled class type for histogram division: {}".format(str(h2.ClassName())))
@@ -1819,10 +1821,10 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
     #Particular details like title, axes, etc. are left to the higher level function to change.
     if type(legendConfig) != dict or "Categories" not in legendConfig.keys():
         raise ValueError("legendConfig passed to makeCategoryHists contains no 'Categories' key")
-    histKeys = set([hist.GetName() for hist in histFile.GetListOfKeys()])
+    # histKeys = set([hist.GetName() for hist in histFile.GetListOfKeys()])
     unblindedKeys = dict([(histKey.replace("blind_", "").replace("BLIND", ""), histKey) for histKey in histKeys])
     if debug:
-        print("The histKeys are: {}".format(histKeys))
+        print("The histKeys are: {}".format(" ".join(histKeys)))
     #Create dictionary of histograms to be returned by the function
     retHists = {}
     #Create a baseName using the passed rootPrefixName and systematic, if non-None. Will be combined with category information
@@ -2047,7 +2049,7 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
         retDict["Legend2"] = leg2
     #Create dictionary to return one level up, calling makeCategoryHists to combine subsamples together 
     #and do color, style configuration for them. Pass through the rebin parameter
-    filteredHistKeys = [fkey for fkey in histKeys if histNameCommon in fkey]
+    filteredHistKeys = histKeys #[fkey for fkey in histKeys if histNameCommon in fkey]
     retDict["Categories/hists"], retDict["Categories/theUnfound"] = makeCategoryHists(histFile, filteredHistKeys, legendConfig, histNameCommon,
                                                                                       systematic=systematic, rebin=rebin, projection=projection,
                                                                                       nominalPostfix=nominalPostfix, separator=separator,
@@ -2278,7 +2280,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         legendConfig = legends.get(can_dict.get("Legend", "FallbackToDefault"), defaults["DefaultLegend"])
         sysVariationsYaml, sysVariationCardDict = load_yaml_cards(systematicCards)
         systematics = configure_template_systematics(sysVariationsYaml, era, channel, include_nominal=False)
-        print(" ".join(systematics))
+        # print(" ".join(systematics))
         #Load the LegendConfig which denotes which samples to use, colors to assign, etc.
         
         #Call createCanvasPads with our Can(vas)Cache passed to it, which will be subsequently filled,
@@ -2327,6 +2329,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         npStatErrorsDown = [] # n-vector
         npStatSystematicErrorsUp = [] # n-vector
         npStatSystematicErrorsDown = [] # n-vector
+        
+        #Get the variables that will go into the plots, prefilter the histogram keys
+        subplot_variables = [subplot_name.split(separator)[-1] for subplot_name in CanCache["subplots"]]
         for pn, subplot_name in enumerate(CanCache["subplots"]):
             subplot_dict = plots["{}".format(subplot_name)]
             nice_name = subplot_name.replace("Plot_", "").replace("Plot", "").replace("blind_", "").replace("BLIND", "")
@@ -2335,15 +2340,15 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             plotFileName = "{}/{}".format(histogramDirectory, subplot_dict["Files"])
             if plotFileName in fileDict:
                 CanCache["subplots/files"].append(fileDict[plotFileName])
-                CanCache["subplots/files/keys"].append(fileDictKeys[plotFileName])
+                CanCache["subplots/files/keys"].append([fkey for fkey in fileDictKeys[plotFileName] if subplot_variables[pn] in fkey and fkey.split(separator)[-2] == subplot_variables[pn]])
             else:
                 raise RuntimeError("File not available, was it stored in a list or something?")
             CanCache["subplots/rebins"].append(subplot_dict.get("Rebin"))
             CanCache["subplots/projections"].append(subplot_dict.get("Projection"))
             CanCache["subplots/integrals"].append(collections.OrderedDict())
             #Call makeSuperCategories with the very same file [pn] referenced, plus the legendConfig
-            filteredHistKeys = [fkey for fkey in CanCache["subplots/files/keys"][pn] if fkey.split(separator)[-1] in ["$NOMINAL", "nom"]]
-            CanCache["subplots/supercategories"].append(makeSuperCategories(CanCache["subplots/files"][pn], filteredHistKeys, legendConfig, nice_name, 
+            # filteredHistKeys = [fkey for fkey in CanCache["subplots/files/keys"][pn] if fkey.split(separator)[-1] in ["$NOMINAL", "nom"]]
+            CanCache["subplots/supercategories"].append(makeSuperCategories(CanCache["subplots/files"][pn], CanCache["subplots/files/keys"][pn], legendConfig, nice_name, 
                                                                             systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
                                                                             projection=CanCache["subplots/projections"][pn], 
                                                                             nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn,
@@ -2418,8 +2423,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         if syst in skipSystematics: 
                             continue
                     sD[syst] = nSyst
-                    filteredSystHistKeys = filteredHistKeys + [fkey for fkey in CanCache["subplots/files/keys"][pn] if fkey.split(separator)[-1] == syst]
-                    CanCache["subplots/supercategories/systematics"][syst].append(makeSuperCategories(CanCache["subplots/files"][pn], filteredSystHistKeys, legendConfig, 
+                    # filteredSystHistKeys = CanCache["subplots/files/keys"][pn]
+                    # filteredSystHistKeys = filteredHistKeys + [fkey for fkey in CanCache["subplots/files/keys"][pn] if syst in fkey and fkey.split(separator)[-1] == syst]
+                    CanCache["subplots/supercategories/systematics"][syst].append(makeSuperCategories(CanCache["subplots/files"][pn], CanCache["subplots/files/keys"][pn], legendConfig, 
                                                                                                       nice_name,
                                                                                                       systematic=syst, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
                                                                                                       projection=CanCache["subplots/projections"][pn], 
@@ -2731,6 +2737,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     if num_hist is None or den_hist is None:
                         isBlinded=True
                     #Give it the dictionary we just appended when creating the ratio and storing the axes/other root memory objects
+                    #HERE HERE
                     _ = createRatio(num_hist, den_hist, Cache = CanCache["subplots/ratios"][-1][aRatioName], ratioTitle = aRatioName, 
                                     ratioColor = color, ratioStyle = style, ratioMarkerStyle = markerStyle, ratioAlpha = alpha,
                                     yMin = ratioYMin, yMax = ratioYMax, isBlinded=isBlinded, scaleText=scaleText, nDivisions=nDivisions)
