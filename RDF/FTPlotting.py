@@ -842,9 +842,9 @@ def generateJSON(model, variables, categories_dict={"nJet":["nJet4", "nJet5", "b
             lht, lbtag, ljet = lcat.replace("blind_", "").split("_")
             thislabel = ""
             if len(lbtag.split("B")) > 1:
-                thislabel += ",nB\\geq" + lbtag.split("B")[-1].replace("+", "").replace("p", "") if "+" in lbtag.split("B")[-1] or "p" in lbtag.split("B")[-1] else ",nB=" + lbtag.split("B")[-1]
+                thislabel += ",nB\\geq" + lbtag.split("B")[-1].replace("+", "").replace("p", "") if "+" in lbtag.split("B")[-1] or "p" in lbtag.split("B")[-1] else "\,nB=" + lbtag.split("B")[-1]
             if len(ljet.split("nJet")) > 1:
-                thislabel += ",nJ\\geq" + ljet.split("nJet")[-1].replace("+", "").replace("p", "") if "+" in ljet.split("nJet")[-1] or "p" in ljet.split("nJet")[-1] else ",nJ=" + ljet.split("nJet")[-1]
+                thislabel += ",nJ\\geq" + ljet.split("nJet")[-1].replace("+", "").replace("p", "") if "+" in ljet.split("nJet")[-1] or "p" in ljet.split("nJet")[-1] else "\,nJ=" + ljet.split("nJet")[-1]
             categories_labels.append(thislabel)
         prettycategorization = "PLACEHOLDER PRETTY CATEGORIZATION"
         if categorization.startswith("nMedium"):
@@ -1807,6 +1807,7 @@ def addHists(inputHists, name, scaleArray = None, blind=False):
                 retHist.Add(hist)
     return retHist
 
+# @profile(output_file="makeCategoryHists_profile.txt", sort_by="cumulative", lines_to_print=500, strip_dirs=True)
 def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systematic=None, rebin=None, projection=None, 
                       separator="___", nominalPostfix="nom", verbose=False, debug=False, pn=None, zeroingThreshold=50, differentialScale=False):
     """Function tailored to using a legendConfig to create histograms.
@@ -1822,7 +1823,9 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
     if type(legendConfig) != dict or "Categories" not in legendConfig.keys():
         raise ValueError("legendConfig passed to makeCategoryHists contains no 'Categories' key")
     # histKeys = set([hist.GetName() for hist in histFile.GetListOfKeys()])
-    unblindedKeys = dict([(histKey.replace("blind_", "").replace("BLIND", ""), histKey) for histKey in histKeys])
+    # pdb.set_trace()
+    # unblindedKeys = dict([(histKey.replace("blind_", "").replace("BLIND", ""), histKey) for histKey in histKeys]) #Don't use "blind_" anywhere, get rid of this function call..
+    unblindedKeys = dict([(histKey.replace("BLIND", "") if "BLIND" in histKey else histKey, histKey) for histKey in histKeys])
     if debug:
         print("The histKeys are: {}".format(" ".join(histKeys)))
     #Create dictionary of histograms to be returned by the function
@@ -2332,6 +2335,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         
         #Get the variables that will go into the plots, prefilter the histogram keys
         subplot_variables = [subplot_name.split(separator)[-1] for subplot_name in CanCache["subplots"]]
+        subplot_categories = [subplot_name.split(separator)[0].replace("Plot_", "", 1).replace("blind_", "") for subplot_name in CanCache["subplots"]]
         for pn, subplot_name in enumerate(CanCache["subplots"]):
             subplot_dict = plots["{}".format(subplot_name)]
             nice_name = subplot_name.replace("Plot_", "").replace("Plot", "").replace("blind_", "").replace("BLIND", "")
@@ -2340,7 +2344,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             plotFileName = "{}/{}".format(histogramDirectory, subplot_dict["Files"])
             if plotFileName in fileDict:
                 CanCache["subplots/files"].append(fileDict[plotFileName])
-                CanCache["subplots/files/keys"].append([fkey for fkey in fileDictKeys[plotFileName] if subplot_variables[pn] in fkey and fkey.split(separator)[-2] == subplot_variables[pn]])
+                # CanCache["subplots/files/keys"].append([fkey for fkey in fileDictKeys[plotFileName] if subplot_variables[pn] in fkey and fkey.split(separator)[-2] == subplot_variables[pn]])
+                CanCache["subplots/files/keys"].append([fkey for fkey in fileDictKeys[plotFileName] if subplot_variables[pn] in fkey and subplot_categories[pn] in fkey])
             else:
                 raise RuntimeError("File not available, was it stored in a list or something?")
             CanCache["subplots/rebins"].append(subplot_dict.get("Rebin"))
@@ -2423,8 +2428,6 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         if syst in skipSystematics: 
                             continue
                     sD[syst] = nSyst
-                    # filteredSystHistKeys = CanCache["subplots/files/keys"][pn]
-                    # filteredSystHistKeys = filteredHistKeys + [fkey for fkey in CanCache["subplots/files/keys"][pn] if syst in fkey and fkey.split(separator)[-1] == syst]
                     CanCache["subplots/supercategories/systematics"][syst].append(makeSuperCategories(CanCache["subplots/files"][pn], CanCache["subplots/files/keys"][pn], legendConfig, 
                                                                                                       nice_name,
                                                                                                       systematic=syst, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
