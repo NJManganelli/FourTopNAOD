@@ -842,9 +842,9 @@ def generateJSON(model, variables, categories_dict={"nJet":["nJet4", "nJet5", "b
             lht, lbtag, ljet = lcat.replace("blind_", "").split("_")
             thislabel = ""
             if len(lbtag.split("B")) > 1:
-                thislabel += ",nB\\geq" + lbtag.split("B")[-1].replace("+", "").replace("p", "") if "+" in lbtag.split("B")[-1] or "p" in lbtag.split("B")[-1] else "\,nB=" + lbtag.split("B")[-1]
+                thislabel += "\\{}nB\\geq" + lbtag.split("B")[-1].replace("+", "").replace("p", "") if "+" in lbtag.split("B")[-1] or "p" in lbtag.split("B")[-1] else "\\{}nB=" + lbtag.split("B")[-1]
             if len(ljet.split("nJet")) > 1:
-                thislabel += ",nJ\\geq" + ljet.split("nJet")[-1].replace("+", "").replace("p", "") if "+" in ljet.split("nJet")[-1] or "p" in ljet.split("nJet")[-1] else "\,nJ=" + ljet.split("nJet")[-1]
+                thislabel += "\\{}nJ\\geq" + ljet.split("nJet")[-1].replace("+", "").replace("p", "") if "+" in ljet.split("nJet")[-1] or "p" in ljet.split("nJet")[-1] else "\\{}nJ=" + ljet.split("nJet")[-1]
             categories_labels.append(thislabel)
         prettycategorization = "PLACEHOLDER PRETTY CATEGORIZATION"
         if categorization.startswith("nMedium"):
@@ -2281,8 +2281,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         #The legend, a name understating its importance, determines groupings of MC/data to merge, stack, draw,
         #create ratios of, and draw systematics for. Each 'Supercategory' defined here gets a legend entry,
         legendConfig = legends.get(can_dict.get("Legend", "FallbackToDefault"), defaults["DefaultLegend"])
-        sysVariationsYaml, sysVariationCardDict = load_yaml_cards(systematicCards)
-        systematics = configure_template_systematics(sysVariationsYaml, era, channel, include_nominal=False)
+        sysVariationsYaml, sysVariationCardDict = load_yaml_cards(systematicCards) if systematicCards is not None else ([], {})
+        systematics = configure_template_systematics(sysVariationsYaml, era, channel, include_nominal=False) if len(sysVariationsYaml) > 0 else []
         # print(" ".join(systematics))
         #Load the LegendConfig which denotes which samples to use, colors to assign, etc.
         
