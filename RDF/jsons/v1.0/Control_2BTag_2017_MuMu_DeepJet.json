@@ -1,0 +1,1896 @@
+{
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet1_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet1_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet1_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet1_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet1_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_Jet1_pt": {
+        "Type": "CanvasConfig",
+        "Title": "Leading jet p_{T} (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet1_pt",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet1_pt",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet1_pt",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet1_pt",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet1_pt"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "\\normalsize p_{T} (GeV)",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet2_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet2_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet2_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet2_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet2_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_Jet2_pt": {
+        "Type": "CanvasConfig",
+        "Title": "Subleading jet p_{T} (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet2_pt",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet2_pt",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet2_pt",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet2_pt",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet2_pt"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "\\normalsize p_{T} (GeV)",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet3_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet3_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet3_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet3_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet3_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_Jet3_pt": {
+        "Type": "CanvasConfig",
+        "Title": "3rd jet p_{T} (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet3_pt",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet3_pt",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet3_pt",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet3_pt",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet3_pt"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "\\normalsize p_{T} (GeV)",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet4_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet4_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet4_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet4_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet4_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_Jet4_pt": {
+        "Type": "CanvasConfig",
+        "Title": "4th jet p_{T} (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet4_pt",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet4_pt",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet4_pt",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet4_pt",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet4_pt"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "\\normalsize p_{T} (GeV)",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet1_eta": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet1_eta": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet1_eta": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet1_eta": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet1_eta": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_Jet1_eta": {
+        "Type": "CanvasConfig",
+        "Title": "Leading jet #eta (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet1_eta",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet1_eta",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet1_eta",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet1_eta",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet1_eta"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "\\eta",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet2_eta": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet2_eta": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet2_eta": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet2_eta": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet2_eta": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_Jet2_eta": {
+        "Type": "CanvasConfig",
+        "Title": "Subleading jet #eta (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet2_eta",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet2_eta",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet2_eta",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet2_eta",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet2_eta"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "\\eta",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet1_DeepJetB": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.93, 0.96, 0.98, 1.0],
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet1_DeepJetB": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.93, 0.96, 0.98, 1.0],
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet1_DeepJetB": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.93, 0.96, 0.98, 1.0],
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet1_DeepJetB": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.93, 0.96, 0.98, 1.0],
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet1_DeepJetB": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.93, 0.96, 0.98, 1.0],
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_Jet1_DeepJetB": {
+        "Type": "CanvasConfig",
+        "Title": "Leading jet b tag discriminant (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet1_DeepJetB",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet1_DeepJetB",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet1_DeepJetB",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet1_DeepJetB",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet1_DeepJetB"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "DeepJet Discriminant",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Jet2_DeepJetB": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.93, 0.96, 0.98, 1.0],
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Jet2_DeepJetB": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.93, 0.96, 0.98, 1.0],
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Jet2_DeepJetB": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.93, 0.96, 0.98, 1.0],
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet2_DeepJetB": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.93, 0.96, 0.98, 1.0],
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet2_DeepJetB": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.93, 0.96, 0.98, 1.0],
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_Jet2_DeepJetB": {
+        "Type": "CanvasConfig",
+        "Title": "Subleading jet b tag discriminant (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Jet2_DeepJetB",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Jet2_DeepJetB",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Jet2_DeepJetB",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Jet2_DeepJetB",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Jet2_DeepJetB"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "DeepJet discriminant",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___HT": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___HT": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___HT": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___HT": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___HT": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_HT": {
+        "Type": "CanvasConfig",
+        "Title": "\\normalsize H_{T} (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___HT",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___HT",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___HT",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___HT",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___HT"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "\\normalsize H_{T}",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___H2M": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___H2M": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___H2M": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___H2M": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___H2M": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_H2M": {
+        "Type": "CanvasConfig",
+        "Title": "H2M (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___H2M",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___H2M",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___H2M",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___H2M",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___H2M"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "H2M",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___HTb": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___HTb": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___HTb": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___HTb": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___HTb": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_HTb": {
+        "Type": "CanvasConfig",
+        "Title": "\\normalsize H_{T}^{b} (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___HTb",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___HTb",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___HTb",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___HTb",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___HTb"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "\\normalsize H_{T}^{b}",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___HT2M": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___HT2M": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___HT2M": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___HT2M": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___HT2M": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_HT2M": {
+        "Type": "CanvasConfig",
+        "Title": "\\normalsize H_{T}^{2M} (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___HT2M",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___HT2M",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___HT2M",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___HT2M",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___HT2M"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "\\normalsize H_{T}^{2M}",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___H": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___H": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___H": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___H": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___H": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_H": {
+        "Type": "CanvasConfig",
+        "Title": "H (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___H",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___H",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___H",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___H",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___H"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "H",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___HTUnweighted": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___HTUnweighted": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___HTUnweighted": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___HTUnweighted": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___HTUnweighted": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_HTUnweighted": {
+        "Type": "CanvasConfig",
+        "Title": "HTUnweighted (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___HTUnweighted",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___HTUnweighted",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___HTUnweighted",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___HTUnweighted",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___HTUnweighted"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "HTUnweighted",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___HTRat": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___HTRat": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___HTRat": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___HTRat": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___HTRat": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_HTRat": {
+        "Type": "CanvasConfig",
+        "Title": "HTRat (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___HTRat",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___HTRat",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___HTRat",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___HTRat",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___HTRat"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "HTRat",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___HTH": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___HTH": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___HTH": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___HTH": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___HTH": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_HTH": {
+        "Type": "CanvasConfig",
+        "Title": "HTH (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___HTH",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___HTH",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___HTH",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___HTH",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___HTH"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "HTH",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___ST": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___ST": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___ST": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___ST": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___ST": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_ST": {
+        "Type": "CanvasConfig",
+        "Title": "ST (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___ST",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___ST",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___ST",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___ST",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___ST"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "ST",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___dRbb": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___dRbb": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___dRbb": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___dRbb": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___dRbb": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_dRbb": {
+        "Type": "CanvasConfig",
+        "Title": "#DeltaR_{bb} (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___dRbb",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___dRbb",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___dRbb",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___dRbb",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___dRbb"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "#DeltaR_{bb}",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___MTofMETandEl": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___MTofMETandEl": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___MTofMETandEl": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___MTofMETandEl": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___MTofMETandEl": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_MTofMETandEl": {
+        "Type": "CanvasConfig",
+        "Title": "MT(MET,#it{e}) (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___MTofMETandEl",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___MTofMETandEl",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___MTofMETandEl",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___MTofMETandEl",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___MTofMETandEl"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "MT(MET, #it{e})",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___MTofMETandMu": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___MTofMETandMu": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___MTofMETandMu": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___MTofMETandMu": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___MTofMETandMu": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_MTofMETandMu": {
+        "Type": "CanvasConfig",
+        "Title": "MT(MET,#mu) (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___MTofMETandMu",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___MTofMETandMu",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___MTofMETandMu",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___MTofMETandMu",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___MTofMETandMu"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "MT(MET,#mu)",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Electron_InvMass": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Electron_InvMass": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Electron_InvMass": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Electron_InvMass": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Electron_InvMass": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_Electron_InvMass": {
+        "Type": "CanvasConfig",
+        "Title": "m_{#it{ee}} (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Electron_InvMass",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Electron_InvMass",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Electron_InvMass",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Electron_InvMass",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Electron_InvMass"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "m_{#it{ee}}",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_InvMass": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_InvMass": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_InvMass": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_InvMass": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_InvMass": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Combined.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2_Muon_InvMass": {
+        "Type": "CanvasConfig",
+        "Title": "m_{#mu#mu} (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4___Muon_InvMass",
+            "Plot_HT500_nMediumDeepJetB2_nJet5___Muon_InvMass",
+            "Plot_HT500_nMediumDeepJetB2_nJet6___Muon_InvMass",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet7___Muon_InvMass",
+            "Plot_blind_HT500_nMediumDeepJetB2_nJet8+___Muon_InvMass"
+        ],
+        "Labels": [
+            "\\mu\\mu\\ nB=2\\ nJ=4",
+            "\\mu\\mu\\ nB=2\\ nJ=5",
+            "\\mu\\mu\\ nB=2\\ nJ=6",
+            "\\mu\\mu\\ nB=2\\ nJ=7",
+            "\\mu\\mu\\ nB=2\\ nJ\\geq8"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "m_{#mu#mu}",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "DefaultPlot": {
+        "Type": "DefaultPlot",
+        "Title": "DefaultPlotTitle",
+        "Rebin": null,
+        "Files": null,
+        "Unblind": false,
+        "RatioYMin": 0.5,
+        "RatioYMax": 1.5
+    },
+    "DefaultCanvas": {
+        "Type": "DefaultCanvas",
+        "Title": "DefaultCanvasTitle",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Plots": null,
+        "XPixels": 800,
+        "YPixels": 800,
+        "DoRatio": false,
+        "DoMountainrange": false
+    }
+}
