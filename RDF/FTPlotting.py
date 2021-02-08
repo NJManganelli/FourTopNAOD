@@ -16,11 +16,70 @@ import json
 import copy
 import argparse
 import uuid
-import pdb
 from FourTopNAOD.RDF.tools.toolbox import load_yaml_cards, write_yaml_cards, configure_template_systematics
 from FourTopNAOD.RDF.combine.templating import write_combine_cards
 # from ruamel.yaml import YAML
 from IPython.display import Image, display, SVG
+
+#Debugging and profiling
+import pdb
+import cProfile
+import pstats
+from functools import wraps
+def profile(output_file=None, sort_by='cumulative', lines_to_print=None, strip_dirs=False):
+    """A time profiler decorator.
+
+    Inspired by and modified the profile decorator of Giampaolo Rodola:
+    http://code.activestate.com/recipes/577817-profile-decorator/
+
+    Args:
+        output_file: str or None. Default is None
+            Path of the output file. If only name of the file is given, it's
+            saved in the current directory.
+            If it's None, the name of the decorated function is used.
+        sort_by: str or SortKey enum or tuple/list of str/SortKey enum
+            Sorting criteria for the Stats object.
+            For a list of valid string and SortKey refer to:
+            https://docs.python.org/3/library/profile.html#pstats.Stats.sort_stats
+        lines_to_print: int or None
+            Number of lines to print. Default (None) is for all the lines.
+            This is useful in reducing the size of the printout, especially
+            that sorting by 'cumulative', the time consuming operations
+            are printed toward the top of the file.
+        strip_dirs: bool
+            Whether to remove the leading path info from file names.
+            This is also useful in reducing the size of the printout
+
+    Returns:
+        Profile of the decorated function
+    """
+
+    def inner(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            _output_file = output_file or func.__name__ + '.prof'
+            pr = cProfile.Profile()
+            pr.enable()
+            retval = func(*args, **kwargs)
+            pr.disable()
+            pr.dump_stats(_output_file)
+
+            with open(_output_file, 'w') as f:
+                ps = pstats.Stats(pr, stream=f)
+                if strip_dirs:
+                    ps.strip_dirs()
+                if isinstance(sort_by, (tuple, list)):
+                    ps.sort_stats(*sort_by)
+                else:
+                    ps.sort_stats(sort_by)
+                ps.print_stats(lines_to_print)
+            return retval
+
+        return wrapper
+
+    return inner
+
+
 #import graphviz
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 models = {}
@@ -48,6 +107,36 @@ models["v0.8"] = {
         "YPixels": 1000, 
         "XAxisTitle": "$VAR", 
         "YAxisTitle": "Events/bin", 
+        "Projection": None, 
+        "DoRatio": True, 
+        "doLogY": False,
+        "DoMountainrange": True, 
+    }, 
+}
+models["v1.0"] = {
+    "Plot_$CAT___$VAR": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle", 
+        "Xaxis": None, 
+        "Yaxis": None, 
+        "Rebin": 5, 
+        "Files": "$ERA___Combined.root", 
+        "Projection": None, 
+        "Unblind": False, 
+    },
+    "Canvas_$CATEGORIZATION_$VAR": {
+        "Type": "CanvasConfig", 
+        "Title": "$PRETTYVAR ($PRETTYCATEGORIZATION)", 
+        "Margins": [0.1, 0.1, 0.1, 0.1], 
+        "Coordinates": [], 
+        "Plots": [],
+        "Labels": [], 
+        "Legend": "DefaultLegend", 
+        "Rebin": None, 
+        "XPixels": 1200, 
+        "YPixels": 1000, 
+        "XAxisTitle": "$PRETTYVAR", 
+        "YAxisTitle": "Events / bin", 
         "Projection": None, 
         "DoRatio": True, 
         "doLogY": False,
@@ -731,32 +820,69 @@ modelPlotJSON_nMediumDeepCSV2_nJet = {
 #    if "_LogY_" in k: continue
 #    modelPlotJSON_nJet_noLogY[k] = v
 def generateJSON(model, variables, categories_dict={"nJet":["nJet4", "nJet5", "blind_nJet6", "blind_nJet7", "blind_nJet8"]},
-                 channel="No Channel", name_format="Plot_{chan}___{cat}___{var}", rebin=None, projection=None, force=False):
+                 era="RunII",channel="No Channel", name_format="Plot_{chan}___{cat}___{var}", rebin=None, projection=None, force=False):
     if channel == "ElMu":
-        nice_channel = "#it{e}#mu"
+        # nice_channel = "#it{e}#mu"
+        nice_channel = "\\mathscr{e}\\mu"
     elif channel == "MuMu":
-        nice_channel = "#mu#mu"
+        # nice_channel = "#mu#mu"
+        nice_channel = "\\mu\\mu"
     elif channel == "ElEl":
-        nice_channel = "#it{e}#it{e}"
+        # nice_channel = "#it{e}#it{e}"
+        nice_channel = "#\\mathscr{ee}"
+    elif channel.lower() in ["all", "dilepton"]:
+        # nice_channel = "#it{l}#it{l}"
+        nice_channel = "\\mathscr{ll}"
     else:
         nice_channel = channel
     theDict = {}
     for categorization, categories in categories_dict.items():
+        categories_labels = []
+        for lcat in categories:
+            lht, lbtag, ljet = lcat.replace("blind_", "").split("_")
+            thislabel = ""
+            if len(lbtag.split("B")) > 1:
+                thislabel += ",nB\\geq" + lbtag.split("B")[-1].replace("+", "").replace("p", "") if "+" in lbtag.split("B")[-1] or "p" in lbtag.split("B")[-1] else ",nB=" + lbtag.split("B")[-1]
+            if len(ljet.split("nJet")) > 1:
+                thislabel += ",nJ\\geq" + ljet.split("nJet")[-1].replace("+", "").replace("p", "") if "+" in ljet.split("nJet")[-1] or "p" in ljet.split("nJet")[-1] else ",nJ=" + ljet.split("nJet")[-1]
+            categories_labels.append(thislabel)
+        prettycategorization = "PLACEHOLDER PRETTY CATEGORIZATION"
+        if categorization.startswith("nMedium"):
+            prettycategorization = "{} {} b tags".format(categorization.split("B")[1], categorization.split("B")[0].replace("nMedium", ""))
+        elif categorization.startswith("nJet"):
+            prettycategorization = "{} jets".format(categorization.split("nJet")[1])
+        else:
+            prettycategorization = ""
         for variable in variables:
+            prettyvariable = variable.replace("FTA", "").replace("Electron", "\\mathscr{e}").replace("electron", "\\mathscr{e}").replace("Muon", "\\mu").replace("muon", "\\mu").replace("_", "")
+            # if prettyvariable == "HT":
+            #     prettyvariable = "H\_{T}"
             for k, v in model.items():
-                newKey = k.replace("$VAR", variable).replace("$CATEGORIZATION", categorization)
+                newKey = k.replace("$VAR", variable).replace("$CATEGORIZATION", categorization).replace("$ERA", era)
                 if "$CAT" in newKey:
                     for cat in categories:
                         theDict[newKey.replace("$CAT", cat)] = {}
                         for vk, vv in v.items():
                             #newSubkey = vk.replace("$VAR", variable)
                             if type(vv) == str:
-                                newSubvalue = vv.replace("$VAR", variable).replace("$CATEGORIZATION", categorization).replace("$CAT", cat).replace("$CHANNEL", nice_channel)
+                                newSubvalue = vv.replace("$VAR", variable)\
+                                                .replace("$ERA", era)\
+                                                .replace("$CATEGORIZATION", categorization)\
+                                                .replace("$CAT", cat)\
+                                                .replace("$CHANNEL", nice_channel)\
+                                                .replace("$PRETTYVAR", prettyvariable)\
+                                                .replace("$PRETTYCATEGORIZATION", prettycategorization)
                             elif type(vv) == list:
                                 newSubvalue = []
                                 for l in vv:
                                     if type(l) == str:
-                                        newSubvalue.append(l.replace("$VAR", variable).replace("$CATEGORIZATION", category).replace("$CAT", cat).replace("$CHANNEL", nice_channel))
+                                        newSubvalue.append(l.replace("$VAR", variable)\
+                                                           .replace("$ERA", era)\
+                                                           .replace("$CATEGORIZATION", category)\
+                                                           .replace("$CAT", cat)\
+                                                           .replace("$CHANNEL", nice_channel)\
+                                                           .replace("$PRETTYVAR", prettyvariable)\
+                                                           .replace("$PRETTYCATEGORIZATION", prettycategorization))
                                     else:
                                         newSubvalue.append(l)
                             else:
@@ -777,7 +903,12 @@ def generateJSON(model, variables, categories_dict={"nJet":["nJet4", "nJet5", "b
                     for vk, vv in v.items():
                         #newSubkey = vk.replace("$VAR", variable)
                         if type(vv) == str:
-                            newSubvalue = vv.replace("$VAR", variable).replace("$CATEGORIZATION", categorization).replace("$CHANNEL", nice_channel)
+                            newSubvalue = vv.replace("$VAR", variable)\
+                                            .replace("$ERA", era)\
+                                            .replace("$CATEGORIZATION", categorization)\
+                                            .replace("$CHANNEL", nice_channel)\
+                                            .replace("$PRETTYVAR", prettyvariable)\
+                                            .replace("$PRETTYCATEGORIZATION", prettycategorization)
                         elif type(vv) == list:
                             #Canvas specialization
                             if vk == "Plots":
@@ -785,12 +916,17 @@ def generateJSON(model, variables, categories_dict={"nJet":["nJet4", "nJet5", "b
                                 newSubvalue = [copy.copy(name_format).format(chan=channel, cat=cat, var=variable) for cat in categories]
                             #Canvas specialization
                             elif vk == "Labels":
-                                newSubvalue = ["{} {}".format(nice_channel, cat.replace("blind_", "").replace("_", " ")) for cat in categories]
+                                newSubvalue = ["{}{}".format(nice_channel, lcat) for lcat in categories_labels]
                             else:
                                 newSubvalue = []
                                 for l in vv:
                                     if type(l) == str:
-                                        newSubvalue.append(l.replace("$VAR", variable).replace("$CATEGORIZATION", category).replace("$CHANNEL", nice_channel))
+                                        newSubvalue.append(l.replace("$VAR", variable)\
+                                                           .replace("$ERA", era)\
+                                                           .replace("$CATEGORIZATION", category)\
+                                                           .replace("$CHANNEL", nice_channel)\
+                                                           .replace("$PRETTYVAR", prettyvariable)\
+                                                           .replace("$PRETTYCATEGORIZATION", prettycategorization))
                                     else:
                                         newSubvalue.append(l)
                         else:
@@ -1669,7 +1805,7 @@ def addHists(inputHists, name, scaleArray = None, blind=False):
                 retHist.Add(hist)
     return retHist
 
-def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, rebin=None, projection=None, 
+def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systematic=None, rebin=None, projection=None, 
                       separator="___", nominalPostfix="nom", verbose=False, debug=False, pn=None, zeroingThreshold=50, differentialScale=False):
     """Function tailored to using a legendConfig to create histograms.
     
@@ -1685,12 +1821,6 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
         raise ValueError("legendConfig passed to makeCategoryHists contains no 'Categories' key")
     histKeys = set([hist.GetName() for hist in histFile.GetListOfKeys()])
     unblindedKeys = dict([(histKey.replace("blind_", "").replace("BLIND", ""), histKey) for histKey in histKeys])
-    #try:
-    #    #histFile = ROOT.TFile.Open(histFileName)
-    #    histKeys = set([hist.GetName() for hist in histFile.GetListOfKeys()])
-    #except:
-    #    print("GetListOfKeys() fails in file {}".format(histFile.GetName()))
-    #    return {}
     if debug:
         print("The histKeys are: {}".format(histKeys))
     #Create dictionary of histograms to be returned by the function
@@ -1870,7 +2000,7 @@ def makeCategoryHists(histFile, legendConfig, histNameCommon, systematic=None, r
     return retHists, theUnfound
 
 
-def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None, nominalPostfix="nom", 
+def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, systematic=None, nominalPostfix="nom", 
                         separator="___", orderByIntegral=True, rebin=None, projection=None, 
                         verbose=False, debug=False, pn=None, zeroingThreshold=50, differentialScale=False):
     """histFile is an open ROOT file containing histograms without subdirectories, legendConfig contains 'Categories'
@@ -1917,7 +2047,8 @@ def makeSuperCategories(histFile, legendConfig, histNameCommon, systematic=None,
         retDict["Legend2"] = leg2
     #Create dictionary to return one level up, calling makeCategoryHists to combine subsamples together 
     #and do color, style configuration for them. Pass through the rebin parameter
-    retDict["Categories/hists"], retDict["Categories/theUnfound"] = makeCategoryHists(histFile, legendConfig, histNameCommon,
+    filteredHistKeys = [fkey for fkey in histKeys if histNameCommon in fkey]
+    retDict["Categories/hists"], retDict["Categories/theUnfound"] = makeCategoryHists(histFile, filteredHistKeys, legendConfig, histNameCommon,
                                                                                       systematic=systematic, rebin=rebin, projection=projection,
                                                                                       nominalPostfix=nominalPostfix, separator=separator,
                                                                                       verbose=verbose, debug=debug, pn=pn,
@@ -2039,7 +2170,8 @@ def makeStack_Prototype(histFile, histList=None, legendConfig=None, rootName=Non
     hists_nominal = [inclusion for inclusion in hists_nominal_set]
     print(hists_systematic)
     print(hists_nominal)
-    
+
+@profile(output_file="function_profile.txt", sort_by="cumulative", lines_to_print=500, strip_dirs=True)
 def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Cache=None, histogramDirectory = ".", batchOutput=False, closeFiles=True, 
                      analysisDirectory=None, tag=None, plotCard=None, drawSystematic=None,
                      plotDir=None, pdfOutput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
@@ -2088,12 +2220,17 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
     plots = dict([(i, j) for i, j in inputJSON.items() if j.get("Type") == "PlotConfig"])
     fileList = set([plot.get("Files") for plot in plots.values() if (type(plot.get("Files")) == str) and plot.get("Files") != None])
     fileDict = {}
+    fileDictKeys = {}
+    fileDictRawKeys = {}
     for fn in fileList:
         if fn == "NON-STRING FILES VALUE": continue
         fileToBeOpened = "{}/{}".format(histogramDirectory, fn)
         if not os.path.isfile(fileToBeOpened):
             raise RuntimeError("File does not exist: {}".format(fileToBeOpened))
         fileDict[fileToBeOpened] = ROOT.TFile.Open(fileToBeOpened, "read")
+        fileDictRawKeys[fileToBeOpened] = fileDict[fileToBeOpened].GetListOfKeys()
+        fileDictKeys[fileToBeOpened] = [kk.GetName() for kk in fileDictRawKeys[fileToBeOpened]]
+                                        
     defaults = dict([(i, j) for i, j in inputJSON.items() if j.get("Type") in ["DefaultPlot", "DefaultCanvas", "DefaultLegend"]])
 
     #Save histograms for Combine
@@ -2139,21 +2276,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         #The legend, a name understating its importance, determines groupings of MC/data to merge, stack, draw,
         #create ratios of, and draw systematics for. Each 'Supercategory' defined here gets a legend entry,
         legendConfig = legends.get(can_dict.get("Legend", "FallbackToDefault"), defaults["DefaultLegend"])
-        # systematics = legendConfig["Systematics"]
         sysVariationsYaml, sysVariationCardDict = load_yaml_cards(systematicCards)
         systematics = configure_template_systematics(sysVariationsYaml, era, channel, include_nominal=False)
-        # print("Making reduced systematic set for testing!")
-        # systematics = ['jec_13TeV_R2017Down', 'jec_13TeV_R2017Up', 
-        #                'btagSF_shape_hfDown', 'btagSF_shape_hfUp', 
-        #                'ttFSRDown', 'ttFSRUp', 'ttISRDown', 'ttISRUp', 
-        #                'ttmuRFcorrelatedDown', 'ttmuRFcorrelatedUp', 
-        #                'ttttmuRFcorrelatedDown', 'ttttmuRFcorrelatedUp', 
-        # ]
-        # systematics = ['btagSF_shape_hfDown', 'btagSF_shape_hfUp',
-        # ]
-        # print("Removing systematics")
-        # systematics = []
-
+        print(" ".join(systematics))
         #Load the LegendConfig which denotes which samples to use, colors to assign, etc.
         
         #Call createCanvasPads with our Can(vas)Cache passed to it, which will be subsequently filled,
@@ -2163,6 +2288,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                              setYGrid=False, nXPads=nXPads, topFraction=0.7, bordersLRTB = canCoordinates, 
                              xPixels=xPixels, yPixels=yPixels)
         CanCache["subplots/files"] = []
+        CanCache["subplots/files/keys"] = []
         CanCache["subplots/supercategories"] = []
         CanCache["subplots/firstdrawn"] = []
         CanCache["subplots/supercategories/systematics"] = {}
@@ -2209,13 +2335,15 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             plotFileName = "{}/{}".format(histogramDirectory, subplot_dict["Files"])
             if plotFileName in fileDict:
                 CanCache["subplots/files"].append(fileDict[plotFileName])
+                CanCache["subplots/files/keys"].append(fileDictKeys[plotFileName])
             else:
                 raise RuntimeError("File not available, was it stored in a list or something?")
             CanCache["subplots/rebins"].append(subplot_dict.get("Rebin"))
             CanCache["subplots/projections"].append(subplot_dict.get("Projection"))
             CanCache["subplots/integrals"].append(collections.OrderedDict())
             #Call makeSuperCategories with the very same file [pn] referenced, plus the legendConfig
-            CanCache["subplots/supercategories"].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, nice_name, 
+            filteredHistKeys = [fkey for fkey in CanCache["subplots/files/keys"][pn] if fkey.split(separator)[-1] in ["$NOMINAL", "nom"]]
+            CanCache["subplots/supercategories"].append(makeSuperCategories(CanCache["subplots/files"][pn], filteredHistKeys, legendConfig, nice_name, 
                                                                             systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
                                                                             projection=CanCache["subplots/projections"][pn], 
                                                                             nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn,
@@ -2290,7 +2418,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         if syst in skipSystematics: 
                             continue
                     sD[syst] = nSyst
-                    CanCache["subplots/supercategories/systematics"][syst].append(makeSuperCategories(CanCache["subplots/files"][pn], legendConfig, 
+                    filteredSystHistKeys = filteredHistKeys + [fkey for fkey in CanCache["subplots/files/keys"][pn] if fkey.split(separator)[-1] == syst]
+                    CanCache["subplots/supercategories/systematics"][syst].append(makeSuperCategories(CanCache["subplots/files"][pn], filteredSystHistKeys, legendConfig, 
                                                                                                       nice_name,
                                                                                                       systematic=syst, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
                                                                                                       projection=CanCache["subplots/projections"][pn], 
@@ -2922,120 +3051,120 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
 
 #DrawFrame is TH1/THStack/TPad method to just draw the axes
 
-catsForSplitStitching={"nocat":[""]}
-varsForSplitStitching=['el_eta', 'GenHT', 'nGenJet', 'jet5_eta', 'mu_eta', 'jet1_pt', 
-                       'mu_pt', 'el_pt', 'HT', 'jet1_eta', 'jet5_pt', 'nGenLep', 'nJet']
-nSplit=generateJSON(modelPlotJSON_SPLITSTITCH, varsForSplitStitching, 
-                    categories_dict=catsForSplitStitching, name_format="Plot_diagnostic___{var}", 
-                    channel="")
-nSplit.update(defaultNoLegend)
-if False:
-    # with open("/eos/user/n/nmangane/analysis/Nominal_Zvtx/Diagnostics/NoChannel/plots.json", "w") as jo:
-    with open("/eos/user/n/nmangane/analysis/SplitProcessTest/Diagnostics/NoChannel/plots.json", "w") as jo:
-        jo.write(json.dumps(nSplit, indent=4))
+# catsForSplitStitching={"nocat":[""]}
+# varsForSplitStitching=['el_eta', 'GenHT', 'nGenJet', 'jet5_eta', 'mu_eta', 'jet1_pt', 
+#                        'mu_pt', 'el_pt', 'HT', 'jet1_eta', 'jet5_pt', 'nGenLep', 'nJet']
+# nSplit=generateJSON(modelPlotJSON_SPLITSTITCH, varsForSplitStitching, 
+#                     categories_dict=catsForSplitStitching, name_format="Plot_diagnostic___{var}", 
+#                     channel="")
+# nSplit.update(defaultNoLegend)
+# if False:
+#     # with open("/eos/user/n/nmangane/analysis/Nominal_Zvtx/Diagnostics/NoChannel/plots.json", "w") as jo:
+#     with open("/eos/user/n/nmangane/analysis/SplitProcessTest/Diagnostics/NoChannel/plots.json", "w") as jo:
+#         jo.write(json.dumps(nSplit, indent=4))
 
 
-replacementLegend1=None
-replacementLegend2=None
-replacementLegend3=None
-replacementLegend4=None
-replacementLegend5=None
-resultsS_DL = None
-resultsMS_DL = None
-resultsRS_DL = None
-resultsS_SL = None
-resultsMS_SL = None
-resultsRS_SL = None
-# base="/eos/user/n/nmangane/analysis/Nominal_Zvtx/Diagnostics/NoChannel"
-base="/eos/user/n/nmangane/analysis/SplitProcessTest/Diagnostics/NoChannel"
-with open("{}/stitchedDL.json".format(base), "r") as jlegend1:
-    replacementLegend1 = copy.copy(json_load_byteified(jlegend1))
-with open("{}/multistitchedDL.json".format(base), "r") as jlegend2:
-    replacementLegend2 = copy.copy(json_load_byteified(jlegend2))
-# with open("{}/restitchedDL.json".format(base), "r") as jlegend3:
-#     replacementLegend3 = copy.copy(json_load_byteified(jlegend3))
-with open("{}/multistitchedSL.json".format(base), "r") as jlegend4:
-    replacementLegend4 = copy.copy(json_load_byteified(jlegend4))
-with open("{}/multistitchedSL.json".format(base), "r") as jlegend5:
-    replacementLegend5 = copy.copy(json_load_byteified(jlegend5))
-# with open("{}/restitchedSL.json".format(base), "r") as jlegend6:
-#     replacementLegend6 = copy.copy(json_load_byteified(jlegend6))
-with open("{}/plots.json".format(base), "r") as j1:
-    loadedJSON1 = json_load_byteified(j1)
-    loadedJSON2 = copy.copy(loadedJSON1)
-    loadedJSON3 = copy.copy(loadedJSON1)
-    loadedJSON4 = copy.copy(loadedJSON1)
-    loadedJSON5 = copy.copy(loadedJSON1)
-    loadedJSON6 = copy.copy(loadedJSON1)
-    loadedJSON1.update(replacementLegend1)
-    loadedJSON2.update(replacementLegend2)
-    # loadedJSON3.update(replacementLegend3)
-    loadedJSON4.update(replacementLegend4)
-    loadedJSON5.update(replacementLegend5)
-    # loadedJSON3.update(replacementLegend6)
-    #Plot results stitching unfiltered + filtered, using filtered sample exclusively in its phase space
-    # resultsS_SL = loopPlottingJSON(loadedJSON1, Cache=None, directory="{}".format(base), batchOutput=True, 
-    #                             pdfOutput="{}/stitchedDL.pdf".format(base), verbose=False, nominalPostfix=None)
-    #Plot results stitching unfiltered + filtered, using both nominal and filtered samples weighted proportional to their number of net simulated events (N_+ - N_-)
-    # resultsMS_SL= loopPlottingJSON(loadedJSON2, Cache=None, directory="{}".format(base), batchOutput=True,
-    #                            pdfOutput="{}/multistitchedDL.pdf".format(base), verbose=False, nominalPostfix=None)
-    #Plot results stitching unfiltered only back together, to ensure perfect agreement with the nominal sample when not split
-    # resultsRS_SL = loopPlottingJSON(loadedJSON3, Cache=None, directory="{}".format(base), batchOutput=True, 
-    #                             pdfOutput="{}/restitchedDL.pdf".format(base), verbose=False, nominalPostfix=None)
-    #Plot results stitching unfiltered + filtered, using filtered sample exclusively in its phase space
-    # resultsS_SL = loopPlottingJSON(loadedJSON4, Cache=None, directory="{}".format(base), batchOutput=True, 
-    #                             pdfOutput="{}/stitchedSL.pdf".format(base), verbose=False, nominalPostfix=None)
-    #Plot results stitching unfiltered + filtered, using both nominal and filtered samples weighted proportional to their number of net simulated events (N_+ - N_-)
-    # resultsMS_SL= loopPlottingJSON(loadedJSON5, Cache=None, directory="{}".format(base), batchOutput=True,
-    #                            pdfOutput="{}/multistitchedSL.pdf".format(base), verbose=False, nominalPostfix=None)
+# replacementLegend1=None
+# replacementLegend2=None
+# replacementLegend3=None
+# replacementLegend4=None
+# replacementLegend5=None
+# resultsS_DL = None
+# resultsMS_DL = None
+# resultsRS_DL = None
+# resultsS_SL = None
+# resultsMS_SL = None
+# resultsRS_SL = None
+# # base="/eos/user/n/nmangane/analysis/Nominal_Zvtx/Diagnostics/NoChannel"
+# base="/eos/user/n/nmangane/analysis/SplitProcessTest/Diagnostics/NoChannel"
+# with open("{}/stitchedDL.json".format(base), "r") as jlegend1:
+#     replacementLegend1 = copy.copy(json_load_byteified(jlegend1))
+# with open("{}/multistitchedDL.json".format(base), "r") as jlegend2:
+#     replacementLegend2 = copy.copy(json_load_byteified(jlegend2))
+# # with open("{}/restitchedDL.json".format(base), "r") as jlegend3:
+# #     replacementLegend3 = copy.copy(json_load_byteified(jlegend3))
+# with open("{}/multistitchedSL.json".format(base), "r") as jlegend4:
+#     replacementLegend4 = copy.copy(json_load_byteified(jlegend4))
+# with open("{}/multistitchedSL.json".format(base), "r") as jlegend5:
+#     replacementLegend5 = copy.copy(json_load_byteified(jlegend5))
+# # with open("{}/restitchedSL.json".format(base), "r") as jlegend6:
+# #     replacementLegend6 = copy.copy(json_load_byteified(jlegend6))
+# with open("{}/plots.json".format(base), "r") as j1:
+#     loadedJSON1 = json_load_byteified(j1)
+#     loadedJSON2 = copy.copy(loadedJSON1)
+#     loadedJSON3 = copy.copy(loadedJSON1)
+#     loadedJSON4 = copy.copy(loadedJSON1)
+#     loadedJSON5 = copy.copy(loadedJSON1)
+#     loadedJSON6 = copy.copy(loadedJSON1)
+#     loadedJSON1.update(replacementLegend1)
+#     loadedJSON2.update(replacementLegend2)
+#     # loadedJSON3.update(replacementLegend3)
+#     loadedJSON4.update(replacementLegend4)
+#     loadedJSON5.update(replacementLegend5)
+#     # loadedJSON3.update(replacementLegend6)
+#     #Plot results stitching unfiltered + filtered, using filtered sample exclusively in its phase space
+#     # resultsS_SL = loopPlottingJSON(loadedJSON1, Cache=None, directory="{}".format(base), batchOutput=True, 
+#     #                             pdfOutput="{}/stitchedDL.pdf".format(base), verbose=False, nominalPostfix=None)
+#     #Plot results stitching unfiltered + filtered, using both nominal and filtered samples weighted proportional to their number of net simulated events (N_+ - N_-)
+#     # resultsMS_SL= loopPlottingJSON(loadedJSON2, Cache=None, directory="{}".format(base), batchOutput=True,
+#     #                            pdfOutput="{}/multistitchedDL.pdf".format(base), verbose=False, nominalPostfix=None)
+#     #Plot results stitching unfiltered only back together, to ensure perfect agreement with the nominal sample when not split
+#     # resultsRS_SL = loopPlottingJSON(loadedJSON3, Cache=None, directory="{}".format(base), batchOutput=True, 
+#     #                             pdfOutput="{}/restitchedDL.pdf".format(base), verbose=False, nominalPostfix=None)
+#     #Plot results stitching unfiltered + filtered, using filtered sample exclusively in its phase space
+#     # resultsS_SL = loopPlottingJSON(loadedJSON4, Cache=None, directory="{}".format(base), batchOutput=True, 
+#     #                             pdfOutput="{}/stitchedSL.pdf".format(base), verbose=False, nominalPostfix=None)
+#     #Plot results stitching unfiltered + filtered, using both nominal and filtered samples weighted proportional to their number of net simulated events (N_+ - N_-)
+#     # resultsMS_SL= loopPlottingJSON(loadedJSON5, Cache=None, directory="{}".format(base), batchOutput=True,
+#     #                            pdfOutput="{}/multistitchedSL.pdf".format(base), verbose=False, nominalPostfix=None)
 
 
 
-new_test_dict = {"nJet_nBtag2":["HT500_ZWindowMET0Width0_nMediumDeepCSVB2_nJet4", "HT500_ZWindowMET0Width0_nMediumDeepCSVB2_nJet5", "HT500_ZWindowMET0Width0_nMediumDeepCSVB2_nJet6", "blind_HT500_ZWindowMET0Width0_nMediumDeepCSVB2_nJet7", "blind_HT500_ZWindowMET0Width0_nMediumDeepCSVB2_nJet8+"],
-}
-#newTestVars=["MET_pt", "MET_uncorr_pt", "MET_phi", "MET_uncorr_phi", "Jet_DeepCSVB_jet1", "MTofMETandEl", "MTofMETandMu", "MTofElandMu"]
-newVarsMu=['Muon_phi_LeadLep', 'Muon_pfRelIso03_all', 'Muon_pfRelIso04_all', 'Muon_pt', 'Muon_eta_LeadLep', 
-           'nLooseFTAMuon', 'Muon_InvMass', 'Muon_pt_SubleadLep', 'Muon_eta_SubleadLep', 
-           'Muon_pfRelIso03_chg', 'Muon_phi_SubleadLep', 'nTightFTAMuon', 
-           'nMediumFTAMuon', 'Muon_pt_LeadLep']
-newVarsEl=['nMediumFTAElectron', 'Electron_InvMass', 'Electron_eta_SubleadLep', 'nTightFTAElectron', 
-           'Electron_eta_LeadLep', 'Electron_phi_LeadLep', 'Electron_pt_SubleadLep', 'nLooseFTAElectron', 
-           'Electron_phi_SubleadLep', 'Electron_pt', 'Electron_pt_LeadLep', 'Electron_pfRelIso03_all', 
-           'Electron_pfRelIso03_chg']
-newVarsMET=['MTofMETandEl', 'MTofMETandMu', 'MET_phi', 'MET_uncorr_pt', 'Muon_InvMass_v_MET', 'MET_uncorr_phi', 
-            'MET_pt', 'Electron_InvMass_v_MET']
-newVarsJet=['Jet_phi_jet5', 'Jet_phi_jet4', 'Jet_phi_jet3', 'Jet_phi_jet2', 'Jet_phi_jet1', 'nJet_LooseDeepCSV', 'Jet_DeepCSVB_sortedjet3', 'nJet_TightDeepCSV', 
-            'Jet_DeepJetB_sortedjet1', 'Jet_DeepJetB_sortedjet3', 'Jet_DeepJetB_sortedjet2', 'Jet_DeepJetB_sortedjet5', 'Jet_DeepJetB_sortedjet4', 
-            'Jet_pt_jet3', 'Jet_pt_jet2', 'Jet_pt_jet1', 'Jet_pt_jet5', 'Jet_pt_jet4', 'Jet_DeepCSVB_jet1', 'Jet_DeepCSVB_jet3', 'Jet_DeepCSVB_jet2', 
-            'Jet_DeepCSVB_jet5', 'Jet_DeepCSVB_jet4', 'Jet_eta_jet1', 'Jet_eta_jet2', 'Jet_eta_jet3', 'Jet_eta_jet4', 'Jet_eta_jet5', 
-            'Jet_DeepCSVB_sortedjet4', 'Jet_DeepCSVB_sortedjet5', 'Jet_DeepCSVB_sortedjet1', 'Jet_DeepCSVB_sortedjet2', 'Jet_DeepJetB_jet4', 
-            'Jet_DeepJetB_jet5', 'Jet_DeepJetB_jet1', 'Jet_DeepJetB_jet2', 'Jet_DeepJetB_jet3', 'nJet', 'nJet_MediumDeepCSV']
-newVarsEvent=["HT", "H", "HT2M", "H2M", "HTb", "HTH", "HTRat", "dRbb", "dPhibb", "dEtabb"]
+# new_test_dict = {"nJet_nBtag2":["HT500_ZWindowMET0Width0_nMediumDeepCSVB2_nJet4", "HT500_ZWindowMET0Width0_nMediumDeepCSVB2_nJet5", "HT500_ZWindowMET0Width0_nMediumDeepCSVB2_nJet6", "blind_HT500_ZWindowMET0Width0_nMediumDeepCSVB2_nJet7", "blind_HT500_ZWindowMET0Width0_nMediumDeepCSVB2_nJet8+"],
+# }
+# #newTestVars=["MET_pt", "MET_uncorr_pt", "MET_phi", "MET_uncorr_phi", "Jet_DeepCSVB_jet1", "MTofMETandEl", "MTofMETandMu", "MTofElandMu"]
+# newVarsMu=['Muon_phi_LeadLep', 'Muon_pfRelIso03_all', 'Muon_pfRelIso04_all', 'Muon_pt', 'Muon_eta_LeadLep', 
+#            'nLooseFTAMuon', 'Muon_InvMass', 'Muon_pt_SubleadLep', 'Muon_eta_SubleadLep', 
+#            'Muon_pfRelIso03_chg', 'Muon_phi_SubleadLep', 'nTightFTAMuon', 
+#            'nMediumFTAMuon', 'Muon_pt_LeadLep']
+# newVarsEl=['nMediumFTAElectron', 'Electron_InvMass', 'Electron_eta_SubleadLep', 'nTightFTAElectron', 
+#            'Electron_eta_LeadLep', 'Electron_phi_LeadLep', 'Electron_pt_SubleadLep', 'nLooseFTAElectron', 
+#            'Electron_phi_SubleadLep', 'Electron_pt', 'Electron_pt_LeadLep', 'Electron_pfRelIso03_all', 
+#            'Electron_pfRelIso03_chg']
+# newVarsMET=['MTofMETandEl', 'MTofMETandMu', 'MET_phi', 'MET_uncorr_pt', 'Muon_InvMass_v_MET', 'MET_uncorr_phi', 
+#             'MET_pt', 'Electron_InvMass_v_MET']
+# newVarsJet=['Jet_phi_jet5', 'Jet_phi_jet4', 'Jet_phi_jet3', 'Jet_phi_jet2', 'Jet_phi_jet1', 'nJet_LooseDeepCSV', 'Jet_DeepCSVB_sortedjet3', 'nJet_TightDeepCSV', 
+#             'Jet_DeepJetB_sortedjet1', 'Jet_DeepJetB_sortedjet3', 'Jet_DeepJetB_sortedjet2', 'Jet_DeepJetB_sortedjet5', 'Jet_DeepJetB_sortedjet4', 
+#             'Jet_pt_jet3', 'Jet_pt_jet2', 'Jet_pt_jet1', 'Jet_pt_jet5', 'Jet_pt_jet4', 'Jet_DeepCSVB_jet1', 'Jet_DeepCSVB_jet3', 'Jet_DeepCSVB_jet2', 
+#             'Jet_DeepCSVB_jet5', 'Jet_DeepCSVB_jet4', 'Jet_eta_jet1', 'Jet_eta_jet2', 'Jet_eta_jet3', 'Jet_eta_jet4', 'Jet_eta_jet5', 
+#             'Jet_DeepCSVB_sortedjet4', 'Jet_DeepCSVB_sortedjet5', 'Jet_DeepCSVB_sortedjet1', 'Jet_DeepCSVB_sortedjet2', 'Jet_DeepJetB_jet4', 
+#             'Jet_DeepJetB_jet5', 'Jet_DeepJetB_jet1', 'Jet_DeepJetB_jet2', 'Jet_DeepJetB_jet3', 'nJet', 'nJet_MediumDeepCSV']
+# newVarsEvent=["HT", "H", "HT2M", "H2M", "HTb", "HTH", "HTRat", "dRbb", "dPhibb", "dEtabb"]
 
-nMu = generateJSON(modelPlotJSON_CAT, newVarsMu, categories_dict=new_test_dict, channel="ElMu")
-nEl = generateJSON(modelPlotJSON_CAT, newVarsEl, categories_dict=new_test_dict, channel="ElMu")
-nMET = generateJSON(modelPlotJSON_CAT, newVarsMET, categories_dict=new_test_dict, channel="ElMu")
-nJet = generateJSON(modelPlotJSON_CAT, newVarsJet, categories_dict=new_test_dict, channel="ElMu")
-nEvent = generateJSON(modelPlotJSON_CAT, newVarsEvent, categories_dict=new_test_dict, channel="ElMu")
-nMu.update(defaultAndLegends)
-nEl.update(defaultAndLegends)
-nMET.update(defaultAndLegends)
-nJet.update(defaultAndLegends)
-nEvent.update(defaultAndLegends)
-# folder="/eos/user/n/nmangane/analysis/Apr-22-2020/Histograms/ElMu"
-# folder="/eos/user/n/nmangane/analysis/SplitProcessTest/Diagnostics/All"
-folder="/eos/user/n/nmangane/analysis/July2/Histograms"
-if False:
-    with open("{}/newMu.json".format(folder), "w") as jo:
-        jo.write(json.dumps(nMu, indent=4))
-    with open("{}/newEl.json".format(folder), "w") as jo:
-        jo.write(json.dumps(nEl, indent=4))
-    with open("{}/newMET.json".format(folder), "w") as jo:
-        jo.write(json.dumps(nMET, indent=4))
-    with open("{}/newJet.json".format(folder), "w") as jo:
-        jo.write(json.dumps(nJet, indent=4))
-    with open("{}/newEvent.json".format(folder), "w") as jo:
-        jo.write(json.dumps(nEvent, indent=4))
+# nMu = generateJSON(modelPlotJSON_CAT, newVarsMu, categories_dict=new_test_dict, channel="ElMu")
+# nEl = generateJSON(modelPlotJSON_CAT, newVarsEl, categories_dict=new_test_dict, channel="ElMu")
+# nMET = generateJSON(modelPlotJSON_CAT, newVarsMET, categories_dict=new_test_dict, channel="ElMu")
+# nJet = generateJSON(modelPlotJSON_CAT, newVarsJet, categories_dict=new_test_dict, channel="ElMu")
+# nEvent = generateJSON(modelPlotJSON_CAT, newVarsEvent, categories_dict=new_test_dict, channel="ElMu")
+# nMu.update(defaultAndLegends)
+# nEl.update(defaultAndLegends)
+# nMET.update(defaultAndLegends)
+# nJet.update(defaultAndLegends)
+# nEvent.update(defaultAndLegends)
+# # folder="/eos/user/n/nmangane/analysis/Apr-22-2020/Histograms/ElMu"
+# # folder="/eos/user/n/nmangane/analysis/SplitProcessTest/Diagnostics/All"
+# folder="/eos/user/n/nmangane/analysis/July2/Histograms"
+# if False:
+#     with open("{}/newMu.json".format(folder), "w") as jo:
+#         jo.write(json.dumps(nMu, indent=4))
+#     with open("{}/newEl.json".format(folder), "w") as jo:
+#         jo.write(json.dumps(nEl, indent=4))
+#     with open("{}/newMET.json".format(folder), "w") as jo:
+#         jo.write(json.dumps(nMET, indent=4))
+#     with open("{}/newJet.json".format(folder), "w") as jo:
+#         jo.write(json.dumps(nJet, indent=4))
+#     with open("{}/newEvent.json".format(folder), "w") as jo:
+#         jo.write(json.dumps(nEvent, indent=4))
 
 
 if __name__ == '__main__':
@@ -3062,7 +3191,7 @@ if __name__ == '__main__':
                         help='input plotting configuration, defaulting to "$ADIR/Histograms/All/plots.json"')
     parser.add_argument('-l', '--legendCard', dest='legendCard', action='store', type=str, default="$ADIR/Histograms/All/legend.json",
                         help='input legend configuration, defaulting to "$ADIR/Histograms/All/legend.json". This card controls the grouping of histograms into categories and supercategories, colors, stacking, sample-scaling, etc.')
-    parser.add_argument('--era', dest='era', type=str, default="2001", choices=["2017", "2018"],
+    parser.add_argument('--era', dest='era', type=str, default="NOERA", choices=["2017", "2018"],
                         help='era for plotting, lumi, systematics deduction')
     parser.add_argument('--vars', '--variables', dest='variables', action='store', default=None, type=str, nargs='*',
                         help='List of variables for generating a plotCard')
@@ -3220,7 +3349,7 @@ elif stage == 'generate-plotCard':
         for j in nJets:
             categories_dict[b].append("{blind}HT500_{nB}_{nJ}".format(blind="" if "B2" in b and ("4" in j or "5" in j or "6" in j) else "blind_", nB=b, nJ=j))
     
-    thePlotCard = generateJSON(models["v0.8"], variables, categories_dict=categories_dict,channel=channel, 
+    thePlotCard = generateJSON(models["v1.0"], variables, categories_dict=categories_dict,era=era,channel=channel,
                                name_format="Plot_{cat}___{var}", rebin=None, projection=None, force=False)
     thePlotCard.update(defaultNoLegend)
     with open("testPlotCard.json", "w") as jo:
