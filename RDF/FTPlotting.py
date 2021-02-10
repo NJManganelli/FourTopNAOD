@@ -823,13 +823,13 @@ def generateJSON(model, variables, categories_dict={"nJet":["nJet4", "nJet5", "b
                  era="RunII",channel="No Channel", name_format="Plot_{chan}___{cat}___{var}", rebin=None, projection=None, force=False):
     if channel == "ElMu":
         # nice_channel = "#it{e}#mu"
-        nice_channel = "\\mathscr{e}\\mu"
+        nice_channel = "e#mu"
     elif channel == "MuMu":
         # nice_channel = "#mu#mu"
-        nice_channel = "\\mu\\mu"
+        nice_channel = "#mu#mu"
     elif channel == "ElEl":
         # nice_channel = "#it{e}#it{e}"
-        nice_channel = "#\\mathscr{ee}"
+        nice_channel = "ee"
     elif channel.lower() in ["all", "dilepton"]:
         # nice_channel = "#it{l}#it{l}"
         nice_channel = "\\mathscr{ll}"
@@ -842,9 +842,9 @@ def generateJSON(model, variables, categories_dict={"nJet":["nJet4", "nJet5", "b
             lht, lbtag, ljet = lcat.replace("blind_", "").split("_")
             thislabel = ""
             if len(lbtag.split("B")) > 1:
-                thislabel += "\\{}nB\\geq" + lbtag.split("B")[-1].replace("+", "").replace("p", "") if "+" in lbtag.split("B")[-1] or "p" in lbtag.split("B")[-1] else "\\{}nB=" + lbtag.split("B")[-1]
+                thislabel += " nB#geq" + lbtag.split("B")[-1].replace("+", "").replace("p", "") if "+" in lbtag.split("B")[-1] or "p" in lbtag.split("B")[-1] else " nB=" + lbtag.split("B")[-1]
             if len(ljet.split("nJet")) > 1:
-                thislabel += "\\{}nJ\\geq" + ljet.split("nJet")[-1].replace("+", "").replace("p", "") if "+" in ljet.split("nJet")[-1] or "p" in ljet.split("nJet")[-1] else "\\{}nJ=" + ljet.split("nJet")[-1]
+                thislabel += " nJ#geq" + ljet.split("nJet")[-1].replace("+", "").replace("p", "") if "+" in ljet.split("nJet")[-1] or "p" in ljet.split("nJet")[-1] else " nJ=" + ljet.split("nJet")[-1]
             categories_labels.append(thislabel)
         prettycategorization = "PLACEHOLDER PRETTY CATEGORIZATION"
         if categorization.startswith("nMedium"):
@@ -854,7 +854,7 @@ def generateJSON(model, variables, categories_dict={"nJet":["nJet4", "nJet5", "b
         else:
             prettycategorization = ""
         for variable in variables:
-            prettyvariable = variable.replace("FTA", "").replace("Electron", "\\mathscr{e}").replace("electron", "\\mathscr{e}").replace("Muon", "\\mu").replace("muon", "\\mu").replace("_", "")
+            prettyvariable = variable.replace("FTA", "").replace("_", "") #.replace("Electron", "\\mathscr{e}").replace("electron", "\\mathscr{e}").replace("Muon", "\\mu").replace("muon", "\\mu").replace("_", " ")
             # if prettyvariable == "HT":
             #     prettyvariable = "H\_{T}"
             for k, v in model.items():
@@ -943,37 +943,7 @@ def generateJSON(model, variables, categories_dict={"nJet":["nJet4", "nJet5", "b
                     else:
                         theDict[newKey]["Projection"] = projection
     return theDict
-# pprint.pprint(generateJSON(modelPlotJSON_CAT, ["HT"], rebin=7, projection=["X", 2, 4], force=True))
 
-#1180, 1185, 1179, 1181, 1183, 1182, 1184
-colors = {
-        "ggH": ROOT.TColor.GetColor("#BF2229"),
-        "qqH": ROOT.TColor.GetColor("#00A88F"),
-        "TT": ROOT.TColor.GetColor(155, 152, 204),
-        "W": ROOT.TColor.GetColor(222, 90, 106),
-        "QCD":  ROOT.TColor.GetColor(250, 202, 255),
-        "ZLL": ROOT.TColor.GetColor(100, 192, 232),
-        "ZTT": ROOT.TColor.GetColor(248, 206, 104),
-        }
-colortest = {}
-# cc = ROOT.TCanvas()
-# tl = ROOT.TLegend()
-# mx = 1
-# for kn, k in enumerate(colors):
-#     colortest[k] = ROOT.TH1F(k, k, 10,0,10)
-#     colortest[k].Fill(kn, 1+math.sqrt(kn))
-#     mx = max(mx, colortest[k].GetMaximum())
-#     colortest[k].SetFillColor(colors[k])
-#     tl.AddEntry(colortest[k], k, "f")
-#     if kn == 0:
-#         colortest[k].Draw("FILL")
-#     else:
-#         colortest[k].Draw("FILL SAME")
-# mx *= 1.1
-# for k in colortest:
-#     colortest[k].SetMaximum(mx)
-# tl.Draw()
-# cc.Draw()
 defaultNoLegend = {
     "DefaultPlot":{
         "Type": "DefaultPlot",
