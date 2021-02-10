@@ -67,8 +67,8 @@ OSDL_RunII_ewkFSR                        shape   -               -              
 OSDL_RunII_ttttmuRNomF                   shape   -               -               -               -               -               -               -               1
 OSDL_RunII_ttttmuFNomR                   shape   -               -               -               -               -               -               -               1
 OSDL_RunII_ttttmuRFcorrelated            shape   -               -               -               -               -               -               -               1
-OSDL_RunII_ttttISR                       shape   -               -               -               -               -               -               -               1 #Low stats gave vastly overestimated impact, ergo removed, may work with 2018 and 2017nCorrectPartonInBorn samples
-OSDL_RunII_ttttFSR                       shape   -               -               -               -               -               -               -               1
+# OSDL_RunII_ttttISR                       shape   -               -               -               -               -               -               -               1 #Low stats gave vastly overestimated impact, ergo removed, may work with 2018 and 2017nCorrectPartonInBorn samples
+# OSDL_RunII_ttttFSR                       shape   -               -               -               -               -               -               -               1
 OSDL_RunII_btagSF_shape_hf    	         shape   1               1               1               1               1               1               1               1
 OSDL_$ERA_btagSF_shape_hfstats1          shape   1               1               1               1               1               1               1               1
 OSDL_$ERA_btagSF_shape_hfstats2          shape   1               1               1               1               1               1               1               1
@@ -77,7 +77,7 @@ OSDL_$ERA_btagSF_shape_lfstats1          shape   1               1              
 OSDL_$ERA_btagSF_shape_lfstats2          shape   1               1               1               1               1               1               1               1
 OSDL_$ERA_btagSF_shape_cferr1           shape   1               1               1               1               1               1               1               1
 OSDL_$ERA_btagSF_shape_cferr2           shape   1               1               1               1               1               1               1               1  
-OSDL_RunII_pdf                           shape   1               1               1               1               1               1               1               1  
+# OSDL_RunII_pdf                           shape   1               1               1               1               1               1               1               1  
 # OSDL_RunII_hdamp                         shape   1               1               -               -               -               -               -               - #low impact, low stats, forces very coarse binning
 # OSDL_RunII_ue                            shape   1               1               -               -               -               -               -               - #low impact, low stats, forces very coarse binning
 * autoMCStats 1.
