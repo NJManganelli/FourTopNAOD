@@ -2469,9 +2469,9 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                             # "dRbb{bpf}",
                             # ## "FTALepton_dRll",
                             "FTALepton1_pt",
-                            "FTALepton1_eta",
+                            # "FTALepton1_eta",
                             "FTALepton2_pt",
-                            "FTALepton2_eta",
+                            # "FTALepton2_eta",
                             # "FTAMuon_InvariantMass",
                             # "FTAElectron_InvariantMass",
                             # "MTofMETandMu{bpf}",
@@ -2490,22 +2490,22 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                             # "FTAJet2{bpf}_DeepJetB",
                             "FTAJet1{bpf}_DeepJetB_sorted",
                             "FTAJet2{bpf}_DeepJetB_sorted",
-                            "FTAMuon_dz",
-                            "FTAMuon_ip3d",
-                            "FTAElectron_dz",
-                            "FTAElectron_ip3d",
+                            # "FTAMuon_dz",
+                            # "FTAMuon_ip3d",
+                            # "FTAElectron_dz",
+                            # "FTAElectron_ip3d",
                             ## "FTAJet3{bpf}_DeepJetB",
                             ## "FTAJet4{bpf}_DeepJetB",
                             ## "nLooseFTAMuon", "nMediumFTAMuon", "nTightFTAMuon",
                             ## "nLooseFTAElectron", "nMediumFTAElectron", "nTightFTAElectron",
                             ## "nLooseFTALepton", "nMediumFTALepton", "nTightFTALepton",
                          ]
-    if bTagger.lower() == "deepjet":
-        combineHistoTemplate += ["nLooseDeepJetB{bpf}", "nMediumDeepJetB{bpf}", "nTightDeepJetB{bpf}",]
-    elif bTagger.lower() == "deepcsv":
-        combineHistoTemplate += ["nLooseDeepCSVB{bpf}", "nMediumDeepCSVB{bpf}", "nTightDeepCSVB{bpf}",]
-    elif bTagger.lower() == "csvv2":
-        combineHistoTemplate += ["nLooseCSVv2B{bpf}", "nMediumCSVv2B{bpf}", "nTightCSVv2B{bpf}",]
+    # if bTagger.lower() == "deepjet":
+    #     combineHistoTemplate += ["nLooseDeepJetB{bpf}", "nMediumDeepJetB{bpf}", "nTightDeepJetB{bpf}",]
+    # elif bTagger.lower() == "deepcsv":
+    #     combineHistoTemplate += ["nLooseDeepCSVB{bpf}", "nMediumDeepCSVB{bpf}", "nTightDeepCSVB{bpf}",]
+    # elif bTagger.lower() == "csvv2":
+    #     combineHistoTemplate += ["nLooseCSVv2B{bpf}", "nMediumCSVv2B{bpf}", "nTightCSVv2B{bpf}",]
 
     # print("\n\nDisabled histo templates except HT!!!!!\n\n")
     # combineHistoTemplate = ["HT{bpf}",]
