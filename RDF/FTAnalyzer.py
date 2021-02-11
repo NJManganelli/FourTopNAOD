@@ -1334,12 +1334,12 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
             z.append(("nFTAJet{pf}_genMatched_puIdLoose".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_genJetIdx[FTAJet{pf}_genJetIdx >= 0 && (FTAJet{pf}_puId >= 4 || FTAJet{pf}_pt >= 50)].size())".format(pf=postfix)))
         z.append(("FTAJet{pf}_DeepCSVB".format(pf=postfix), "Jet_btagDeepB[{jm}]".format(jm=jetMask)))
         z.append(("FTAJet{pf}_DeepCSVB_sorted".format(pf=postfix), "Take(FTAJet{pf}_DeepCSVB, FTAJet{pf}_deepcsvsort)".format(pf=postfix)))
-        z.append(("FTAJet{pf}_DeepCSVB_sorted_LeadtagJet".format(pf=postfix), "FTAJet{pf}_DeepCSVB_sorted.size() > 0 ? FTAJet{pf}_DeepCSVB_sorted.at(0) : -9999".format(pf=postfix)))
-        z.append(("FTAJet{pf}_DeepCSVB_sorted_SubleadtagJet".format(pf=postfix), "FTAJet{pf}_DeepCSVB_sorted.size() > 1 ? FTAJet{pf}_DeepCSVB_sorted.at(1) : -9999".format(pf=postfix)))
+        z.append(("FTAJet{pf}_DeepCSVB_sorted_LeadtagJet".format(pf=postfix), "FTAJet{pf}_DeepCSVB_sorted.at(0, -0.10)".format(pf=postfix)))
+        z.append(("FTAJet{pf}_DeepCSVB_sorted_SubleadtagJet".format(pf=postfix), "FTAJet{pf}_DeepCSVB_sorted.at(1, -0.10)".format(pf=postfix)))
         z.append(("FTAJet{pf}_DeepJetB".format(pf=postfix), "Jet_btagDeepFlavB[{jm}]".format(jm=jetMask)))
         z.append(("FTAJet{pf}_DeepJetB_sorted".format(pf=postfix), "Take(FTAJet{pf}_DeepJetB, FTAJet{pf}_deepjetsort)".format(pf=postfix)))
-        z.append(("FTAJet{pf}_DeepJetB_sorted_LeadtagJet".format(pf=postfix), "FTAJet{pf}_DeepJetB_sorted.size() > 0 ? FTAJet{pf}_DeepJetB_sorted.at(0) : -9999".format(pf=postfix)))
-        z.append(("FTAJet{pf}_DeepJetB_sorted_SubleadtagJet".format(pf=postfix), "FTAJet{pf}_DeepJetB_sorted.size() > 1 ? FTAJet{pf}_DeepJetB_sorted.at(1) : -9999".format(pf=postfix)))
+        z.append(("FTAJet{pf}_DeepJetB_sorted_LeadtagJet".format(pf=postfix), "FTAJet{pf}_DeepJetB_sorted.at(0, -0.10)".format(pf=postfix)))
+        z.append(("FTAJet{pf}_DeepJetB_sorted_SubleadtagJet".format(pf=postfix), "FTAJet{pf}_DeepJetB_sorted.at(1, -0.10)".format(pf=postfix)))
         #Deprecating these, taken care of within the delegateFlattening method if the variables are added in the getNtuple...() functions
         # for x in range(nJetsToHisto):
         #     z.append(("FTAJet{pf}_pt_jet{n}".format(pf=postfix, n=x+1), "FTAJet{pf}_pt.size() > {n} ? FTAJet{pf}_pt.at({n}) : -9999".format(pf=postfix, n=x)))
@@ -2459,40 +2459,46 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     #Variables to save for Combine when doCombineHistosOnly=True
     # combineHistoTemplate = ["HT{bpf}"]
     combineHistoTemplate = ["HT{bpf}",
-                            "ST{bpf}",
-                            "HTH{bpf}",
-                            "HTRat{bpf}",
-                            "HTb{bpf}",
-                            "HT2M{bpf}",
-                            "H{bpf}",
-                            "H2M{bpf}",
-                            "dRbb{bpf}",
-                            # "FTALepton_dRll",
+                            # "ST{bpf}",
+                            # "HTH{bpf}",
+                            # "HTRat{bpf}",
+                            # "HTb{bpf}",
+                            # "HT2M{bpf}",
+                            # "H{bpf}",
+                            # "H2M{bpf}",
+                            # "dRbb{bpf}",
+                            # ## "FTALepton_dRll",
                             "FTALepton1_pt",
                             "FTALepton1_eta",
                             "FTALepton2_pt",
                             "FTALepton2_eta",
-                            "FTAMuon_InvariantMass",
-                            "FTAElectron_InvariantMass",
-                            "MTofMETandMu{bpf}",
-                            "MTofMETandEl{bpf}",
-                            "MTofElandMu{bpf}"
-                            "nFTAJet{bpf}", 
-                            "FTAJet1{bpf}_pt", 
-                            "FTAJet2{bpf}_pt",
-                            "FTAJet3{bpf}_pt",
-                            "FTAJet4{bpf}_pt",
-                            "FTAJet1{bpf}_eta",
-                            "FTAJet2{bpf}_eta",
-                            "FTAJet3{bpf}_eta",
-                            "FTAJet4{bpf}_eta",
-                            "FTAJet1{bpf}_DeepJetB",
-                            "FTAJet2{bpf}_DeepJetB",
-                            "FTAJet3{bpf}_DeepJetB",
-                            "FTAJet4{bpf}_DeepJetB",
-                            # "nLooseFTAMuon", "nMediumFTAMuon", "nTightFTAMuon",
-                            # "nLooseFTAElectron", "nMediumFTAElectron", "nTightFTAElectron",
-                            # "nLooseFTALepton", "nMediumFTALepton", "nTightFTALepton",
+                            # "FTAMuon_InvariantMass",
+                            # "FTAElectron_InvariantMass",
+                            # "MTofMETandMu{bpf}",
+                            # "MTofMETandEl{bpf}",
+                            # "MTofElandMu{bpf}"
+                            # "nFTAJet{bpf}", 
+                            # "FTAJet1{bpf}_pt", 
+                            # "FTAJet2{bpf}_pt",
+                            # "FTAJet3{bpf}_pt",
+                            # "FTAJet4{bpf}_pt",
+                            # "FTAJet1{bpf}_eta",
+                            # "FTAJet2{bpf}_eta",
+                            # "FTAJet3{bpf}_eta",
+                            # "FTAJet4{bpf}_eta",
+                            # "FTAJet1{bpf}_DeepJetB",
+                            # "FTAJet2{bpf}_DeepJetB",
+                            "FTAJet1{bpf}_DeepJetB_sorted",
+                            "FTAJet2{bpf}_DeepJetB_sorted",
+                            "FTAMuon_dz",
+                            "FTAMuon_ip3d",
+                            "FTAElectron_dz",
+                            "FTAElectron_ip3d",
+                            ## "FTAJet3{bpf}_DeepJetB",
+                            ## "FTAJet4{bpf}_DeepJetB",
+                            ## "nLooseFTAMuon", "nMediumFTAMuon", "nTightFTAMuon",
+                            ## "nLooseFTAElectron", "nMediumFTAElectron", "nTightFTAElectron",
+                            ## "nLooseFTALepton", "nMediumFTALepton", "nTightFTALepton",
                          ]
     if bTagger.lower() == "deepjet":
         combineHistoTemplate += ["nLooseDeepJetB{bpf}", "nMediumDeepJetB{bpf}", "nTightDeepJetB{bpf}",]
@@ -2984,7 +2990,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Jet{n}_pt{hpf}"\
                                                                         .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                         "Jet_{n} p_{{T}} ({hpf}); p_{{T}}; Events"\
-                                                                        .format(n=x+1, hpf=histopostfix.replace("__", "")), 100, 0, 500),
+                                                                        .format(n=x+1, hpf=histopostfix.replace("__", "")), 140, 0, 700),
                                                                        "{tfj}_pt".format(tfj=thisFillJet, n=x+1), wgtVar))
                         defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Jet{n}_eta{hpf}"\
                                                                         .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
@@ -2997,27 +3003,27 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                                                        "{tfj}_phi".format(tfj=thisFillJet, n=x+1), wgtVar))
                         if bTagger.lower() == "deepcsv":
                             defineNodes[eraAndSampleName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet{n}_DeepCSVB{hpf}"\
-                                                                             .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix),
-                                                                             "Jet_{n} (p_{{T}} sorted) DeepCSV B Discriminant ({hpf}); Discriminant; Events"\
-                                                                             .format(n=x+1, hpf=histopostfix.replace("__", "")), 100, 0.0, 1.0),
-                                                                            "{tfj}_DeepCSVB".format(tfj=thisFillJet, n=x+1), wgtVar))
+                                                                                  .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix),
+                                                                                  "Jet_{n} (p_{{T}} sorted) DeepCSV B Discriminant ({hpf}); Discriminant; Events"\
+                                                                                  .format(n=x+1, hpf=histopostfix.replace("__", "")), 120, -0.1, 1.1),
+                                                                                 "{tfj}_DeepCSVB".format(tfj=thisFillJet, n=x+1), wgtVar))
                             defineNodes[eraAndSampleName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet{n}_DeepCSVB_sorted{hpf}"\
-                                                                             .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix),
-                                                                             "Jet_{n} (DeepCSVB sorted) DeepCSV B Discriminant ({hpf}); Discriminant; Events"\
-                                                                             .format(n=x+1, hpf=histopostfix.replace("__", "")), 100, 0.0, 1.0),
-                                                                            "{tfj}_DeepCSVB_sorted".format(tfj=thisFillJet, n=x+1), wgtVar))
+                                                                                  .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix),
+                                                                                  "Jet_{n} (DeepCSVB sorted) DeepCSV B Discriminant ({hpf}); Discriminant; Events"\
+                                                                                  .format(n=x+1, hpf=histopostfix.replace("__", "")), 120, -0.1, 1.1),
+                                                                                 "{tfj}_DeepCSVB_sorted".format(tfj=thisFillJet, n=x+1), wgtVar))
                         if bTagger.lower() == "deepjet":
                             defineNodes[eraAndSampleName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet{n}_DeepJetB{hpf}"\
-                                                                             .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix),
-                                                                             "Jet_{n} (p_{{T}} sorted) DeepJet B Discriminant ({hpf}); Discriminant; Events"\
-                                                                             .format(n=x+1, hpf=histopostfix.replace("__", "")), 100, 0.0, 1.0),
-                                                                            "{tfj}_DeepJetB".format(tfj=thisFillJet, n=x+1), wgtVar))
+                                                                                  .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix),
+                                                                                  "Jet_{n} (p_{{T}} sorted) DeepJet B Discriminant ({hpf}); Discriminant; Events"\
+                                                                                  .format(n=x+1, hpf=histopostfix.replace("__", "")), 120, -0.1, 1.1),
+                                                                                 "{tfj}_DeepJetB".format(tfj=thisFillJet, n=x+1), wgtVar))
 
                             defineNodes[eraAndSampleName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet{n}_DeepJetB_sortedjet{hpf}"\
-                                                                             .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
-                                                                             "Jet_{n} (DeepJetB sorted) DeepJet B Discriminant ({hpf}); Discriminant; Events"\
-                                                                             .format(n=x+1, hpf=histopostfix.replace("__", "")), 100, 0.0, 1.0),
-                                                                            "{tfj}_DeepJetB_sorted".format(tfj=thisFillJet, n=x+1), wgtVar))
+                                                                                  .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                                  "Jet_{n} (DeepJetB sorted) DeepJet B Discriminant ({hpf}); Discriminant; Events"\
+                                                                                  .format(n=x+1, hpf=histopostfix.replace("__", "")), 120, -0.1, 1.1),
+                                                                                 "{tfj}_DeepJetB_sorted".format(tfj=thisFillJet, n=x+1), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___MET_pt{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "MET ({hpf}); Magnitude (GeV); Events".format(hpf=histopostfix.replace("__", "")), 
@@ -3032,6 +3038,12 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___MET_uncorr_phi{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "", 100,-pi,pi), fillMET_uncorr_phi, wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_dz{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                    "", 500, -0.25, 0.25), "FTAMuon{lpf}_dz".format(lpf=leppostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_ip3d{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                    "", 300, -0.1, 0.2), "FTAMuon{lpf}_ip3d".format(lpf=leppostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar))
@@ -3059,6 +3071,12 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix),
                                                                     "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso04_all".format(lpf=leppostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_dz{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                    "", 500, -0.25, 0.25), "FTAElectron{lpf}_dz".format(lpf=leppostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_ip3d{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                    "", 300, -0.1, 0.2), "FTAElectron{lpf}_ip3d".format(lpf=leppostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_LeadLep{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix, lpf=leppostfix), 
                                                                     "", 100, 10, 510), "FTAElectron{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar))
@@ -3098,19 +3116,19 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                                                         "", 100,400,2000), "HT{bpf}".format(bpf=branchpostfix)))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___H{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
-                                                                    "", 100,400,2000), "H{bpf}".format(bpf=branchpostfix), wgtVar))
+                                                                    "", 130,400,3000), "H{bpf}".format(bpf=branchpostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HT2M{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "", 100,0,1000), "HT2M{bpf}".format(bpf=branchpostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___H2M{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
-                                                                    "", 100,0,1500), "H2M{bpf}".format(bpf=branchpostfix), wgtVar))
+                                                                    "", 110,0,2200), "H2M{bpf}".format(bpf=branchpostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HTb{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "", 100,0,1000), "HTb{bpf}".format(bpf=branchpostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HTH{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
-                                                                    "", 100,0,1), "HTH{bpf}".format(bpf=branchpostfix), wgtVar))
+                                                                    "", 110,0.1,1.2), "HTH{bpf}".format(bpf=branchpostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HTRat{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "", 100,0,1), "HTRat{bpf}".format(bpf=branchpostfix), wgtVar))
@@ -3151,13 +3169,13 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), "", 100,0,5), 
                                                                    "FTALepton{lpf}_dEtall".format(lpf=leppostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___MTofMETandEl{hpf}"\
-                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), "", 100, 0, 200), 
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), "", 140, 0, 280), 
                                                                    "MTofMETandEl{bpf}".format(bpf=branchpostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___MTofMETandMu{hpf}"\
-                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), "", 100, 0, 200), 
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), "", 140, 0, 280), 
                                                                    "MTofMETandMu{bpf}".format(bpf=branchpostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___MTofElandMu{hpf}"\
-                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), "", 100, 0, 200), 
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), "", 140, 0, 280), 
                                                                    "MTofElandMu{bpf}".format(bpf=branchpostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___nJet{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), "", 14, 0, 14), 
