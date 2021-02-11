@@ -4,7 +4,10 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
     with open(template, "r") as inFile:
         for line in inFile:
             outputLines.append(line)
+    keymapping = {"DATA": "data_obs", "TTNOBB", "ttnobb", "TTBB": "ttbb", "ST": "singletop", "TTV": "ttVJets", "TTRARE": "ttultrarare", "EWK": "DY", "TTTT": "tttt"}
     for category in categories:
+        Rate = {}
+        Active_uncertainty = {}
         if category in counts:
             R_DATA =   "{:.5f}".format(counts.get(category).get("data_obs", -1).get("nom", -1))
             R_TTNOBB = "{:.5f}".format(counts.get(category).get("ttnobb", -1).get("nom", -1))
@@ -15,6 +18,11 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
             R_TTRARE = "{:.5f}".format(counts.get(category).get("ttultrarare", -1).get("nom", -1))
             R_EWK =    "{:.5f}".format(counts.get(category).get("DY", -1).get("nom", -1))
             R_TTTT =   "{:.5f}".format(counts.get(category).get("tttt", -1).get("nom", -1))
+            for kword, kproc in keymapping.items():
+                Rate[kword] = "{:.5f}".format(counts.get(category).get(kproc, -1).get("nom", -1))
+                Active_uncertainty[kword] = dict()
+                for ksyst, ksystrate in counts.get(category).get(kproc, {}).items():
+                    Active_uncertainty[kword][ksyst] = "1.0" if counts.get(category).get(kproc, -1).get(ksyst, -1)) > 0 else "-  "
         else:
             print("Category not found in counts dict")
             R_DATA = R_TTNOBB = R_TTBB = R_ST = R_TTH = R_TTV = R_TTRARE = R_EWK = R_TTTT = str(-1)
