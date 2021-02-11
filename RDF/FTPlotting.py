@@ -1778,7 +1778,7 @@ def addHists(inputHists, name, scaleArray = None, blind=False):
     return retHist
 
 # @profile(output_file="makeCategoryHists_profile.txt", sort_by="cumulative", lines_to_print=500, strip_dirs=True)
-def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systematic=None, rebin=None, projection=None, 
+def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systematic=None, rebin=None, setRangeUser=None, projection=None, 
                       separator="___", nominalPostfix="nom", verbose=False, debug=False, pn=None, zeroingThreshold=50, differentialScale=False):
     """Function tailored to using a legendConfig to create histograms.
     
@@ -1938,6 +1938,12 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
             if differentialScale:
                 retHists[sampleCat].Scale(1.0, "width") #Scales contents and errors to the bin width
 
+            #Set the axis ranges according to setRangeUser
+            if setRangeUser:
+                if len(setRangeUser) != 2:
+                    raise ValueError("SetRangeUser must be a list or tuple with 2 values, floats equal to x-axis minimum and maximum in real units.")
+                retHists[sampleCat].GetXaxis().SetRangeUser(setRangeUser[0], setRangeUser[1])
+
             #Modify the histogram with style and color information, where appropriate
             if isinstance(config["Color"], int): 
                 thisFillColor = ROOT.TColor.GetColor(int(config["Color"]))
@@ -1976,8 +1982,8 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
 
 
 def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, systematic=None, nominalPostfix="nom", 
-                        separator="___", orderByIntegral=True, rebin=None, projection=None, 
-                        verbose=False, debug=False, pn=None, zeroingThreshold=50, differentialScale=False):
+                        separator="___", orderByIntegral=True, rebin=None, setRangeUser=None, projection=None, 
+                        verbose=False, debug=False, pn=None, doLogY=False, zeroingThreshold=50, differentialScale=False):
     """histFile is an open ROOT file containing histograms without subdirectories, legendConfig contains 'Categories'
     with key: value pairs of sample categories (like ttbar or Drell-Yan) and corresponding list of histogram sample names
     (like tt_SL, tt_SL-GF, tt_DL, etc.) that are subcomponents of the sample)
@@ -1998,19 +2004,26 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
         # leg_height = 0.6
         # #Don't forget ROOT's dipshit-level coordinate reversals. BuildLegend is (x1, x2, y1, y2) but TLegend is (x1, y1, x2, y2)
         # leg = ROOT.TLegend(leg_width, leg_height, leg_width, leg_height) #Trigger automatic placement of the legend by 'reducing to a point', and x1 = x2 = width, y1 = y2 = height
+        if doLogY:
+            #Plan to paint it in the leftmost pads, in the bulk of the histogram
+            leg_top = 0.45
+        else:
+            #plan to paint it above the lower yield histograms of the rightmost pads
+            leg_top = 0.7
+        leg1_bottom = leg_top - 4 * 0.07 #4 = number of samples in this legend
+        leg2_bottom = leg_top - 5 * 0.07 #5 = rest of stack + signal + data, usually
         leg_left = 0.1
-        leg_right = 1.0
-        leg_top = 0.7
-        leg1_bottom = leg_top - 4 * 0.08 #4 = number of samples in this legend
-        leg2_bottom = leg_top - 5 * 0.08 #5 = rest of stack + signal + data, usually
-        leg = ROOT.TLegend(leg_left, leg1_bottom, leg_right, leg_top)
-        leg.SetBorderSize(0)
-        leg.SetTextFont(43)
-        leg.SetTextSize(20)
+        leg_right = 0.9
+        leg1 = ROOT.TLegend(leg_left, leg1_bottom, leg_right, leg_top)
+        leg1.SetBorderSize(0)
+        leg1.SetTextFont(43)
+        leg1.SetTextSize(20)
+        leg1.SetFillColorAlpha(0, 0) #Transparent
         leg2 = ROOT.TLegend(leg_left, leg2_bottom, leg_right, leg_top)
         leg2.SetBorderSize(0)
         leg2.SetTextFont(43)
         leg2.SetTextSize(20)
+        leg2.SetFillColorAlpha(0, 0) #Transparent
         #From other plotting scripts:
         # leg.SetFillStyle(0)
     
@@ -2018,13 +2031,13 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
         # leg.SetNColumns(nColumns)
         # if debug:
         #     print("nColumns = {} generated from {}".format(nColumns, len(legendConfig.get("Categories"))))
-        retDict["Legend"] = leg
+        retDict["Legend"] = leg1
         retDict["Legend2"] = leg2
     #Create dictionary to return one level up, calling makeCategoryHists to combine subsamples together 
     #and do color, style configuration for them. Pass through the rebin parameter
     filteredHistKeys = histKeys #[fkey for fkey in histKeys if histNameCommon in fkey]
     retDict["Categories/hists"], retDict["Categories/theUnfound"] = makeCategoryHists(histFile, filteredHistKeys, legendConfig, histNameCommon,
-                                                                                      systematic=systematic, rebin=rebin, projection=projection,
+                                                                                      systematic=systematic, rebin=rebin, setRangeUser=setRangeUser, projection=projection,
                                                                                       nominalPostfix=nominalPostfix, separator=separator,
                                                                                       verbose=verbose, debug=debug, pn=pn,
                                                                                       zeroingThreshold=zeroingThreshold, differentialScale=differentialScale)
@@ -2071,7 +2084,7 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
                                                                                                            com=histNameCommon,
                                                                                                            spf="" if systematic == None else systematic),
                                                                       ""
-                                                                     )
+                                                                     )                
             for ntup, tup in enumerate(tmpList):
                 if systematic is None and pn == 0:
                     legendCode = legendConfig["Categories"][tup[1]]["Style"]
@@ -2084,7 +2097,7 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
                         legendCode = "P"
                     #Add the legend entry
                     if (ntup % 2) == 0:
-                        leg.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
+                        leg1.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
                     else:
                         leg2.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
                 #Add the category histogram to the stack
@@ -2274,6 +2287,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["subplots/histograms"] = []
         CanCache["subplots/stats"] = []
         CanCache["subplots/rebins"] = []
+        CanCache["subplots/setrangeuser"] = []
         CanCache["subplots/projections"] = []
         CanCache["subplots/labels"] = []
         CanCache["subplots/maxima"] = []
@@ -2319,14 +2333,15 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             else:
                 raise RuntimeError("File not available, was it stored in a list or something?")
             CanCache["subplots/rebins"].append(subplot_dict.get("Rebin"))
+            CanCache["subplots/setrangeuser"].append(subplot_dict.get("SetRangeUser", can_dict.get("SetRangeUser", None)))
             CanCache["subplots/projections"].append(subplot_dict.get("Projection"))
             CanCache["subplots/integrals"].append(collections.OrderedDict())
             #Call makeSuperCategories with the very same file [pn] referenced, plus the legendConfig
             # filteredHistKeys = [fkey for fkey in CanCache["subplots/files/keys"][pn] if fkey.split(separator)[-1] in ["$NOMINAL", "nom"]]
             CanCache["subplots/supercategories"].append(makeSuperCategories(CanCache["subplots/files"][pn], CanCache["subplots/files/keys"][pn], legendConfig, nice_name, 
-                                                                            systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
+                                                                            systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], setRangeUser=CanCache["subplots/setrangeuser"][pn],
                                                                             projection=CanCache["subplots/projections"][pn], 
-                                                                            nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn,
+                                                                            nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn, doLogY=doLogY,
                                                                             zeroingThreshold=zeroingThreshold, differentialScale=differentialScale))
             #This is not sufficient for skipping undone histograms
             # if len(list(CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values())) == 0:
@@ -2400,9 +2415,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     sD[syst] = nSyst
                     CanCache["subplots/supercategories/systematics"][syst].append(makeSuperCategories(CanCache["subplots/files"][pn], CanCache["subplots/files/keys"][pn], legendConfig, 
                                                                                                       nice_name,
-                                                                                                      systematic=syst, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
+                                                                                                      systematic=syst, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], setRangeUser=CanCache["subplots/setrangeuser"][pn],
                                                                                                       projection=CanCache["subplots/projections"][pn], 
-                                                                                                      nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn,
+                                                                                                      nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn, doLogY=doLogY,
                                                                                                       zeroingThreshold=zeroingThreshold, differentialScale=differentialScale))
                     for supercategory, scHisto in CanCache["subplots/supercategories/systematics"][syst][pn]['Supercategories/hists'].items():
                         if "data" in supercategory.lower(): continue                        
@@ -2609,6 +2624,11 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     pass
                 else:
                     drawable.Draw(draw_command)
+                    if CanCache["subplots/setrangeuser"][pn]:
+                        if len(CanCache["subplots/setrangeuser"][pn]) != 2:
+                            raise ValueError("SetRangeUser must be a list or tuple with 2 values, floats equal to x-axis minimum and maximum in real units.")
+                        drawable.GetXaxis().SetRangeUser(CanCache["subplots/setrangeuser"][pn][0], CanCache["subplots/setrangeuser"][pn][1])
+
                     dn += 1
                 #Turn off the uncertainties in the main plot for now...
                 # if "Supercategories/statErrors" in CanCache["subplots/supercategories"][pn].keys():
@@ -2624,25 +2644,22 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 #         if isinstance(CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name], (ROOT.TGraphAsymmErrors)):
                 #             CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name].Draw("2")
             if pn == 0:
-                #Draw the legend in the first category for now...
-                # CanCache["subplots/supercategories"][pn]["Legend"].Draw()
                 scaleText = 1.3
                 offsetText = CanCache["canvas/marginL"]
-                #Draw the label on the leftmost top pad
-                #CanCache["cms_label"].Draw()
-                #Set the y axis title
-                #####drawable.SetTitle(yAxisTitle)
-                pass
-            elif pn == len(CanCache["subplots"]) - 2:
-                #Legends are only created in the dictionary for pad 0, so do not lookup pn but [0]
-                CanCache["subplots/supercategories"][0]["Legend"].Draw()
-                pass
-            elif pn == len(CanCache["subplots"]) - 1:
-                CanCache["subplots/supercategories"][0]["Legend2"].Draw()
-                pass
             else:
                 scaleText = 2.0
                 offsetText = 0
+            #Legends are only created in the dictionary for pad 0, so do not lookup pn but [0]
+            if doLogY:
+                if pn == 0:
+                    CanCache["subplots/supercategories"][0]["Legend2"].Draw()
+                elif pn == 1:
+                    CanCache["subplots/supercategories"][0]["Legend"].Draw()
+            else:
+                if pn == len(CanCache["subplots"]) - 2:
+                    CanCache["subplots/supercategories"][0]["Legend"].Draw()
+                elif pn == len(CanCache["subplots"]) - 1 and not doLogY:
+                    CanCache["subplots/supercategories"][0]["Legend2"].Draw()
                 
             #Create the subpad label, to be drawn. Text stored in CanCache["sublabels"] which should be a list, possibly a list of tuples in the future
             CanCache["subplots/labels"].append(ROOT.TLatex())
@@ -2710,7 +2727,6 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     if num_hist is None or den_hist is None:
                         isBlinded=True
                     #Give it the dictionary we just appended when creating the ratio and storing the axes/other root memory objects
-                    #HERE HERE
                     _ = createRatio(num_hist, den_hist, Cache = CanCache["subplots/ratios"][-1][aRatioName], ratioTitle = aRatioName, 
                                     ratioColor = color, ratioStyle = style, ratioMarkerStyle = markerStyle, ratioAlpha = alpha,
                                     yMin = ratioYMin, yMax = ratioYMax, isBlinded=isBlinded, scaleText=scaleText, nDivisions=nDivisions)
