@@ -1,13 +1,16 @@
-def write_combine_cards(analysisDirectory, era, channel, variable, categories, template="TTTT_templateV6.txt", counts = {}):
+import pdb
+def write_combine_cards(analysisDirectory, era, channel, variable, categories, template="TTTT_templateV8.txt", counts = {}):
     lumistr = {"2017": "1.023", "2018": "1.025"}[era] #Uncertainty per year
     outputLines = []
     with open(template, "r") as inFile:
         for line in inFile:
             outputLines.append(line)
-    keymapping = {"DATA": "data_obs", "TTNOBB", "ttnobb", "TTBB": "ttbb", "ST": "singletop", "TTV": "ttVJets", "TTRARE": "ttultrarare", "EWK": "DY", "TTTT": "tttt"}
+    keymapping = {"DATA": "data_obs", "TTNOBB": "ttnobb", "TTBB": "ttbb", "ST": "singletop", "TTV": "ttVJets", "TTRARE": "ttultrarare", "TTH": "ttH", "EWK": "DY", "TTTT": "tttt"}
     for category in categories:
-        Rate = {}
-        Active_uncertainty = {}
+        rate = {}
+        activeUncertainty = {}
+        twoSidedSystematics = set()
+        oneSidedSystematics = set()
         if category in counts:
             R_DATA =   "{:.5f}".format(counts.get(category).get("data_obs", -1).get("nom", -1))
             R_TTNOBB = "{:.5f}".format(counts.get(category).get("ttnobb", -1).get("nom", -1))
@@ -19,13 +22,21 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
             R_EWK =    "{:.5f}".format(counts.get(category).get("DY", -1).get("nom", -1))
             R_TTTT =   "{:.5f}".format(counts.get(category).get("tttt", -1).get("nom", -1))
             for kword, kproc in keymapping.items():
-                Rate[kword] = "{:.5f}".format(counts.get(category).get(kproc, -1).get("nom", -1))
-                Active_uncertainty[kword] = dict()
+                twoSidedSystematics = twoSidedSystematics.union(set([syst.replace("Up", "").replace("Down", "") for syst in 
+                                                                     counts.get(category).get(kproc, {}).keys() if syst.endswith("Up") or syst.endswith("Down")]))
+                oneSidedSystematics = oneSidedSystematics.union(set([syst for syst in counts.get(category).get(kproc, {}).keys() if not (syst.endswith("Up") or syst.endswith("Down"))]))
+                rate[kword] = "{:.5f}".format(counts.get(category).get(kproc, -1).get("nom", -1))
+                if kword == "DATA": 
+                    continue
+                activeUncertainty[kword] = dict()
                 for ksyst, ksystrate in counts.get(category).get(kproc, {}).items():
-                    Active_uncertainty[kword][ksyst] = "1.0" if counts.get(category).get(kproc, -1).get(ksyst, -1)) > 0 else "-  "
+                    activeUncertainty[kword][ksyst] = "1.0" if counts.get(category).get(kproc, {ksyst: -1}).get(ksyst, -1) > 0 else "-  "
         else:
             print("Category not found in counts dict")
-            R_DATA = R_TTNOBB = R_TTBB = R_ST = R_TTH = R_TTV = R_TTRARE = R_EWK = R_TTTT = str(-1)
+            for kword in keymapping.items():
+                rate[kword] = str(-1)
+                activeUncertainty[kword] = dict()
+                activeUncertainty[kword]["ALLACTIVE"] = "{:16s}".format("1.0")
         with open("{}/TTTT_{}_{}_{}_{}.txt".format(analysisDirectory, era, channel, category, variable).replace("//", "/"), "w") as outFile:
             for line in outputLines:
                 if "prefire" in line and era == "2018":
@@ -36,19 +47,30 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
                     continue
                 if "OSDL_RunII_nJet" in line and "Mult" in line and category.split("_")[-1] not in line:
                     continue
-                outFile.write(line\
-                              .replace("$ERA", era)\
-                              .replace("$CHANNEL", channel)\
-                              .replace("$CATEGORY", category)\
-                              .replace("$VAR", variable)\
-                              .replace("$LUMI", lumistr)\
-                              .replace("$R_DATA",          "{:16s}".format(R_DATA))\
-                              .replace("$R_TTNOBB       ", "{:16s}".format(R_TTNOBB))\
-                              .replace("$R_TTBB         ", "{:16s}".format(R_TTBB))\
-                              .replace("$R_ST           ", "{:16s}".format(R_ST))\
-                              .replace("$R_TTH          ", "{:16s}".format(R_TTH))\
-                              .replace("$R_TTV          ", "{:16s}".format(R_TTV))\
-                              .replace("$R_TTRARE       ", "{:16s}".format(R_TTRARE))\
-                              .replace("$R_EWK          ", "{:16s}".format(R_EWK))\
-                              .replace("$R_TTTT",          "{:16s}".format(R_TTTT)))
+                outputline = line.replace("$ERA", era)\
+                                 .replace("$CHANNEL", channel)\
+                                 .replace("$CATEGORY", category)\
+                                 .replace("$VAR", variable)\
+                                 .replace("$LUMI", lumistr)
+                for kword in rate.keys():
+                    if "$R_" + kword in outputline:
+                        outputline = outputline.replace("$R_" + kword, "{:16s}".format(rate[kword]))
+                lsplit = outputline.split(" ")
+                if len(lsplit) > 0:
+                    if lsplit[0] in oneSidedSystematics:
+                        for kword in activeUncertainty.keys():
+                            active = "{:16s}".format(activeUncertainty[kword][lsplit[0]])
+                            if "$ACT_"+kword in outputline:
+                                outputline = outputline.replace("{:16s}".format("$ACT_"+kword), active)
+                                if "$ACT_"+kword in outputline:
+                                    outputline = outputline.replace("$ACT_"+kword, active)
+                    elif lsplit[0] in twoSidedSystematics:
+                        for kword in activeUncertainty.keys():
+                            active = "{:16s}".format("1.0") if activeUncertainty[kword][lsplit[0] + "Up"] == "1.0"\
+                                     and activeUncertainty[kword][lsplit[0] + "Down"] == "1.0" else "{:16s}".format("-")
+                            if "$ACT_"+kword in outputline:
+                                outputline = outputline.replace("{:16s}".format("$ACT_"+kword), active)
+                                if "$ACT_"+kword in outputline:
+                                    outputline = outputline.replace("$ACT_"+kword, active)
+                outFile.write(outputline)
             print("Finished writing output for category {}".format(category))
