@@ -181,26 +181,40 @@ processGroups["Data"] = {
 # f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Jan25_2017/Combine/All/2017___Combined.root", "read")
 # f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Jan25_2018/Combine/All/2018___Combined.root", "read")
 # f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/testPUID_2018/Combine/All/2018___Combined.root", "read")
-f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Feb5_PUID_nonJetMult2017/Combine/All/2017___Combined.root", "read")
+# f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Feb5_PUID_nonJetMult2017/Combine/All/2017___Combined.root", "read")
 # f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Feb5_PUID_nonJetMult2018/Combine/All/2018___Combined.root", "read")
+# f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Feb12_Baseline_2018/Combine/All/2018___Combined.root", "read")
+# f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Feb12_TightPUID_2018/Combine/All/2018___Combined.root", "read")
+# f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Feb12_TightLeptonIDandSFs_2018/Combine/All/2018___Combined.root", "read")
+# f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Feb12_DeepCSV_2018/Combine/All/2018___Combined.root", "read")
+# f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Feb12_TopPtReweighting_2018/Combine/All/2018___Combined.root", "read")
+# f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Feb12_5BTagCats_2018/Combine/All/2018___Combined.root", "read")
+f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Feb12_HT350_2018/Combine/All/2018___Combined.root", "read")
 fkeys = [kk.GetName() for kk in f.GetListOfKeys()]
 histos = dict()
 name_format="$ERA___$PROCESS___$CHANNEL___$WINDOW___$CATEGORY$BLIND___$VARIABLE___$SYSTEMATIC"
 erasDict = {"2018": ["2018"], "2017": ["2017"], "RunII": ["2017", "2018"]}
-era = "2017"
-# era = "2018"
+# era = "2017"
+era = "2018"
 channels = ["ElMu", "MuMu", "ElEl"]
 var = "HT"
 # syst = "OSDL_2018_top_pTDown"
 syst = "nom"
+# tagger="DeepCSV"
+tagger="DeepJet"
+# htcut="500"
+htcut="350"
+btagcat="2"
+# btagcat="1"
+# btagcat="0"
 for k, v in processGroups.items():
     print(k)
     keys = dict()
     histos[k] = dict()
     for n in ["4", "5", "6", "7", "8+"]:
-        name = name_format.replace("$ERA", era).replace("$PROCESS", k).replace("$WINDOW", "ZMETWindow").replace("$CATEGORY", "HT500_nMediumDeepJetB2_nJet{njet}".format(njet=n)).replace("$VARIABLE", var).replace("$SYSTEMATIC", syst).replace("$BLIND", "")
+        name = name_format.replace("$ERA", era).replace("$PROCESS", k).replace("$WINDOW", "ZMETWindow").replace("$CATEGORY", "HT{htcut}_nMedium{tagger}B{nbtag}_nJet{njet}".format(htcut=htcut, njet=n, nbtag=btagcat, tagger=tagger)).replace("$VARIABLE", var).replace("$SYSTEMATIC", syst).replace("$BLIND", "")
         histos[k][n] = None
-        keys[n], blind, fails = group(fkeys, erasDict[era], v.get("Names"), channels=channels, categories=["HT500_nMediumDeepJetB2_nJet{njet}".format(njet=n)], variable=var, systematic=syst, input_format=name_format)
+        keys[n], blind, fails = group(fkeys, erasDict[era], v.get("Names"), channels=channels, categories=["HT{htcut}_nMedium{tagger}B{nbtag}_nJet{njet}".format(htcut=htcut, njet=n, nbtag=btagcat, tagger=tagger)], variable=var, systematic=syst, input_format=name_format)
         assert len(list(set(keys[n]))) == len(keys[n]), "Duplicate keys detected"
         # if len(list(set(keys[n]))) != len(keys[n]):
         #     print("\n\n\n\n\n\n", keys[n], "\n\n\n")
@@ -217,7 +231,7 @@ for k, v in processGroups.items():
         print(k, " Blind: ", blind, " Succeeded/Failed to find match: ", len(keys[n]), len(fails))
 
 print("\neras = ", erasDict[era], " channels = ", channels, " syst = ", syst)
-print("nBTag, Data-nonttXBkg/ttXBkg, Data/Bkg, Data/(Sgnl+Bkg), ", ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','DY', 'tttt'])
+print("nJet, Data, Data-nonttXBkg/ttXBkg, Data/Bkg, Data/(Sgnl+Bkg), ", ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','DY', 'tttt'])
 for n in ['4', '5', '6', '7', '8+']:
     print("{}j,{},{:.4f},{:.4f},{:s}".format(n, 
                                              histos['Data'][n].Integral(),
