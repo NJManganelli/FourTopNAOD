@@ -1411,7 +1411,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
     return rdf
 
 
-def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbose=False, final=False, disableNjetMultiplicityCorrection=False, sysVariations={"$NOMINAL":"ValueNeeded"}, sysFilter=["$NOMINAL"]):
+def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbose=False, final=False, disableNjetMultiplicityCorrection=False, enableTopPtReweighting=False, sysVariations={"$NOMINAL":"ValueNeeded"}, sysFilter=["$NOMINAL"]):
     """Define all the pre-final or final weights and the variations, to be referened by the sysVariations dictionaries as wgt_final.
     if final=False, do the pre-final weights for BTaggingYields calculations.
     
@@ -1512,12 +1512,11 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
                                               .replace("L1PreFiringWeight_Up", "1.0")
                 else:
                     raise RuntimeError("Unhandled era '{}' in method defineWeights()".format(era))
-                if "ttother" not in eraAndSampleName.lower() and "ttnobb" not in eraAndSampleName.lower():
-                    defFuncModulated = defFuncModulated.replace("pwgt_top_pT_data_nlo", "1.0").replace("pwgt_top_pT_nnlo_nlo", "1.0")
-                else:
+                if enableTopPtReweighting and ("ttother" in eraAndSampleName.lower() or "ttnobb" in eraAndSampleName.lower()):
                     if verbose:
                         print("Top pt reweighting function applied to eraAndSample {}: {} = {}".format(eraAndSampleName, defName, defFuncModulated))
-                # if "ttother" not in eraAndSampleName.lower() and "ttnobb" not in eraAndSampleName.lower() and "ttbb" not in eraAndSampleName.lower():
+                else:
+                    defFuncModulated = defFuncModulated.replace("pwgt_top_pT_data_nlo", "1.0").replace("pwgt_top_pT_nnlo_nlo", "1.0")
                 if disableNjetMultiplicityCorrection or eraAndSampleName.split("___")[-1] in ["DYJets_DL", "DYJets_DL-HT100", "DYJets_DL-HT200", "DYJets_DL-HT400", 
                                                                                               "DYJets_DL-HT600", "DYJets_DL-HT800", "DYJets_DL-HT1200", "DYJets_DL-HT2500", 
                                                                                               "ST_s-channel", "ST_tW", "ST_tW-NoFHad", "ST_t_t-channel", 
@@ -2765,12 +2764,12 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     #     ("nMedium{tag}{bpf} >= 1".format(tag=tagger, bpf=branchpostfix), "1+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}1+".format(tag=tagger, bpf=branchpostfix), None))
                     # filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                     #     ("nMedium{tag}{bpf} >= 2".format(tag=tagger, bpf=branchpostfix), "2+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}2+".format(tag=tagger, bpf=branchpostfix), None))
-                    # filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
-                    #     ("nMedium{tag}{bpf} == 0".format(tag=tagger, bpf=branchpostfix), "0 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
-                    #      eraAndSampleName, decayChannel, None, "nMedium{tag}0".format(tag=tagger, bpf=branchpostfix), None))
-                    # filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
-                    #     ("nMedium{tag}{bpf} == 1".format(tag=tagger, bpf=branchpostfix), "1 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
-                    #      eraAndSampleName, decayChannel, None, "nMedium{tag}1".format(tag=tagger, bpf=branchpostfix), None))
+                    filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                        ("nMedium{tag}{bpf} == 0".format(tag=tagger, bpf=branchpostfix), "0 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                         eraAndSampleName, decayChannel, None, "nMedium{tag}0".format(tag=tagger, bpf=branchpostfix), None))
+                    filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                        ("nMedium{tag}{bpf} == 1".format(tag=tagger, bpf=branchpostfix), "1 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                         eraAndSampleName, decayChannel, None, "nMedium{tag}1".format(tag=tagger, bpf=branchpostfix), None))
                     filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                         ("nMedium{tag}{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
                          eraAndSampleName, decayChannel, None, "nMedium{tag}2".format(tag=tagger, bpf=branchpostfix), None))
@@ -4674,7 +4673,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
          BTaggingYieldsAggregate=False, useHTOnly=False, useNJetOnly=False, 
          printBookkeeping=False, triggers=[], includeSampleNames=None, 
          useDeltaR=False, jetPtMin=30.0, jetPUId=None, 
-         disableNjetMultiplicityCorrection=False,
+         disableNjetMultiplicityCorrection=False, enableTopPtReweighting=False,
          excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True,
          testVariables=False, systematicSet="All", nThreads=8,
          redirector=None, recreateFileList=False, doRDFReport=False
@@ -5342,6 +5341,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                isData=vals["isData"],
                                                final=False,
                                                disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
+                                               enableTopPtReweighting=enableTopPtReweighting,
                                                sysVariations=sysVariationsAll, 
                                                sysFilter=allSystematics,
                                                verbose=verbose,
@@ -5370,6 +5370,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                    isData = vals["isData"],
                                                    final=True,
                                                    disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
+                                                   enableTopPtReweighting=enableTopPtReweighting,
                                                    sysVariations=sysVariationsAll,
                                                    sysFilter=allSystematics,
                                                    verbose=verbose,
@@ -5635,14 +5636,16 @@ if __name__ == '__main__':
                         help='Disable progress bars')
     parser.add_argument('--jetPtMin', dest='jetPtMin', action='store', default=30.0, type=float,
                         help='Float value for the minimum Jet pt in GeV, defaulting to 30.0')
-    parser.add_argument('--jetPUId', dest='jetPUId', action='store', default=None, nargs='?', const='L', type=str, choices=['N', 'L', 'M', 'T'],
-                        help='Optionally apply Jet PU Id to the selected jets, with choices of None ("N"), Loose ("L"), Medium ("M"), or Tight ("T") using the 80X training.')
+    parser.add_argument('--jetPUId', dest='jetPUId', action='store', default='L', nargs='?', const='L', type=str, choices=['N', 'L', 'M', 'T'],
+                        help='Apply Jet PU Id to the selected jets, with choices of None ("N"), Loose ("L"), Medium ("M"), or Tight ("T") using the 94X and 102X training in NanoAODv7.')
     parser.add_argument('--useDeltaR', dest='useDeltaR', action='store', type=float, default=0.4, #nargs='?', const=0.4,
                         help='Default distance parameter 0.4, use to set alternative float value for Lepton-Jet cross-cleaning')
     parser.add_argument('--usePFMatching', dest='usePFMatching', action='store_true', 
                         help='Enable usage of PFMatching for Lepton-Jet cross-cleaning')
     parser.add_argument('--disableNjetMultiplicityCorrection', '--noNjetMult', dest='disableNjetMultiplicityCorrection', action='store_true',
                         help='Disable the ttbar jet multiplicity correction on tt(+ X(Y)) processes besides the signal')
+    parser.add_argument('--enableTopPtReweighting', dest='enableTopPtReweighting', action='store_true',
+                        help='Enable the nnlo+nlo/powheg+pythia8 top pT reweighting on ttbar (non-ttbb) process')
     parser.add_argument('--bTagger', dest='bTagger', action='store', default='DeepJet', type=str, choices=['DeepCSV', 'DeepJet'],
                         help='bTagger algorithm to be used, default DeepJet')
     parser.add_argument('--doNtuples', dest='doNtuples', action='store_true',
@@ -5702,6 +5705,7 @@ if __name__ == '__main__':
     jetPtMin=args.jetPtMin
     jetPUId=args.jetPUId
     disableNjetMultiplicityCorrection = args.disableNjetMultiplicityCorrection
+    enableTopPtReweighting = args.enableTopPtReweighting
     useDeltaR = args.useDeltaR
     bTagger = args.bTagger
     includeSampleNames = args.include
@@ -5759,7 +5763,8 @@ if __name__ == '__main__':
         print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
         # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
+                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
+                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
         #      verbose=False)
@@ -5802,20 +5807,23 @@ if __name__ == '__main__':
     elif stage == 'lepton-selection':
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
                       BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, 
-                      useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList,  disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
+                      useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList,  
+                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
-                      useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList,  disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
+                      useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList,  
+                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, sampleCards, source, "BOOKKEEPING", bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
-                      useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList,  disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
+                      useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList,  
+                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'fill-histograms':
@@ -5824,7 +5832,7 @@ if __name__ == '__main__':
                       doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=False,
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
-                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
+                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
@@ -5834,7 +5842,7 @@ if __name__ == '__main__':
                       doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=True,
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
-                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
+                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
@@ -5865,7 +5873,7 @@ if __name__ == '__main__':
                       doNtuples=doNtuples, 
                       doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
                       jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
-                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection,
+                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, 
                       quiet=quiet, testVariables=test, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
