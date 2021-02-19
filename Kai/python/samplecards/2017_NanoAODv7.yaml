@@ -2060,6 +2060,9 @@
       NANOv7: dbs:/TTTo2L2Nu_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8_ext2-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_DL-TuneCP5down/*Skim.root
       NANOv7_CorrNov: dbs:/TTTo2L2Nu_TuneCP5down_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-fc4b5ef607cdf59e3094639f00680ca7/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-TuneCP5down/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-TuneCP5down/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-TuneCP5down/MuMu/*Skim.root
     doFilter: true
     splitProcess:
       ID:
@@ -2204,6 +2207,9 @@
       NANOv7: dbs:/TTTo2L2Nu_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8_ext2-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_DL-TuneCP5up/*Skim.root
       NANOv7_CorrNov: dbs:/TTTo2L2Nu_TuneCP5up_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-fc4b5ef607cdf59e3094639f00680ca7/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-TuneCP5up/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-TuneCP5up/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-TuneCP5up/MuMu/*Skim.root
     doFilter: true
     splitProcess:
       ID:
@@ -2353,6 +2359,9 @@
       NANOv7: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_DL-GF/*Skim.root
       NANOv7_CorrNov: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF/MuMu/*Skim.root
     Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
       the XS matches Brown's lower BR calculation
     doFilter: true
@@ -2456,6 +2465,9 @@
       NANOv7: dbs:/TTTo2L2Nu_HT500Njet7_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_DL-GF-HDAMPdown/*Skim.root
       NANOv7_CorrNov: dbs:/TTTo2L2Nu_HT500Njet7_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF-HDAMPdown/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF-HDAMPdown/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF-HDAMPdown/MuMu/*Skim.root
     Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
       the XS matches Brown's lower BR calculation
     doFilter: true
@@ -2559,6 +2571,9 @@
       NANOv7: dbs:/TTTo2L2Nu_HT500Njet7_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_DL-GF-HDAMPup/*Skim.root
       NANOv7_CorrNov: dbs:/TTTo2L2Nu_HT500Njet7_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF-HDAMPup/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF-HDAMPup/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF-HDAMPup/MuMu/*Skim.root
     Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
       the XS matches Brown's lower BR calculation
     doFilter: true
@@ -2653,6 +2668,9 @@
       NANOv7: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_DL-GF-TuneCP5down/*Skim.root
       NANOv7_CorrNov: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5down_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF-TuneCP5down/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF-TuneCP5down/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF-TuneCP5down/MuMu/*Skim.root
     Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
       the XS matches Brown's lower BR calculation
     doFilter: true
@@ -2756,6 +2774,9 @@
       NANOv7: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_DL-GF-TuneCP5up/*Skim.root
       NANOv7_CorrNov: dbs:/TTTo2L2Nu_HT500Njet7_TuneCP5up_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF-TuneCP5up/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF-TuneCP5up/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_DL-GF-TuneCP5up/MuMu/*Skim.root
     Notes: 1.4815 was the old XS * BR * stitching factor, now scaled down so that
       the XS matches Brown's lower BR calculation
     doFilter: true
@@ -2860,6 +2881,9 @@
       NANOv7: dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_SL/*Skim.root
       NANOv7_CorrNov: dbs:/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL/MuMu/*Skim.root
     doFilter: true
     splitProcess:
       ID:
@@ -2995,6 +3019,9 @@
       NANOv7: dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_SL-CR1-QCD/*Skim.root
       NANOv7_CorrNov: dbs:/TTToSemiLeptonic_TuneCP5CR1_QCDbased_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-CR1-QCD/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-CR1-QCD/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-CR1-QCD/MuMu/*Skim.root
     splitProcess:
       ID:
         nFTAGenJet/FTAGenHT: false
@@ -3068,6 +3095,9 @@
       NANOv7: dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_SL-CR2-GluonMove/*Skim.root
       NANOv7_CorrNov: dbs:/TTToSemiLeptonic_TuneCP5CR2_GluonMove_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-CR2-GluonMove/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-CR2-GluonMove/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-CR2-GluonMove/MuMu/*Skim.root
     splitProcess:
       ID:
         nFTAGenJet/FTAGenHT: false
@@ -3142,6 +3172,9 @@
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_SL-HDAMPdown/*Skim.root
       NANOv7Ext: dbs:/TTToSemiLeptonic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_EXT_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/TTToSemiLeptonic_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-HDAMPdown/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-HDAMPdown/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-HDAMPdown/MuMu/*Skim.root
     doFilter: true
     splitProcess:
       ID:
@@ -3286,6 +3319,9 @@
       NANOv7: dbs:/TTToSemiLeptonic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_new_pmx_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_SL-HDAMPup/*Skim.root
       NANOv7_CorrNov: dbs:/TTToSemiLeptonic_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-HDAMPup/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-HDAMPup/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-HDAMPup/MuMu/*Skim.root
     doFilter: true
     splitProcess:
       ID:
@@ -3431,6 +3467,9 @@
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_SL-TuneCP5down/*Skim.root
       NANOv7Ext: dbs:/TTToSemiLeptonic_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_new_pmx_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/TTToSemiLeptonic_TuneCP5down_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-TuneCP5down/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-TuneCP5down/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-TuneCP5down/MuMu/*Skim.root
     doFilter: true
     splitProcess:
       ID:
@@ -3575,6 +3614,9 @@
       NANOv7: dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_new_pmx_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_SL-TuneCP5up/*Skim.root
       NANOv7_CorrNov: dbs:/TTToSemiLeptonic_TuneCP5up_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-TuneCP5up/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-TuneCP5up/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-TuneCP5up/MuMu/*Skim.root
     doFilter: true
     splitProcess:
       ID:
@@ -3723,6 +3765,9 @@
       NANOv7: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_SL-GF/*Skim.root
       NANOv7_CorrNov: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF/MuMu/*Skim.root
     doFilter: true
     splitProcess:
       ID:
@@ -3826,6 +3871,9 @@
       NANOv7: dbs:/TTToSemiLepton_HT500Njet9_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_SL-GF-HDAMPdown/*Skim.root
       NANOv7_CorrNov: dbs:/TTToSemiLepton_HT500Njet9_hdampDOWN_TuneCP5_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF-HDAMPdown/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF-HDAMPdown/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF-HDAMPdown/MuMu/*Skim.root
     doFilter: true
     splitProcess:
       ID:
@@ -3929,6 +3977,9 @@
       NANOv7: dbs:/TTToSemiLepton_HT500Njet9_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_SL-GF-HDAMPup/*Skim.root
       NANOv7_CorrNov: dbs:/TTToSemiLepton_HT500Njet9_hdampUP_TuneCP5_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF-HDAMPup/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF-HDAMPup/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF-HDAMPup/MuMu/*Skim.root
     doFilter: true
     splitProcess:
       ID:
@@ -4032,6 +4083,9 @@
       NANOv7: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5down_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_SL-GF-TuneCP5down/*Skim.root
       NANOv7_CorrNov: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5down_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF-TuneCP5down/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF-TuneCP5down/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF-TuneCP5down/MuMu/*Skim.root
     doFilter: true
     splitProcess:
       ID:
@@ -4135,6 +4189,9 @@
       NANOv7: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5up_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2017/tt_SL-GF-TuneCP5up/*Skim.root
       NANOv7_CorrNov: dbs:/TTToSemiLepton_HT500Njet9_TuneCP5up_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF-TuneCP5up/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF-TuneCP5up/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tt_SL-GF-TuneCP5up/MuMu/*Skim.root
     doFilter: true
     splitProcess:
       ID:
@@ -4232,6 +4289,9 @@
       NANOv6: dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
       NANOv7: dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_new_pmx_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/TTTJ_TuneCP5_13TeV-madgraph-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tttJ/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tttJ/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tttJ/MuMu/*Skim.root
     run: 2.0
     genEventCount: 200000.0
     genEventSumw: 198394.87849136745
@@ -4258,6 +4318,9 @@
       NANOv6: dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv6-PU2017_12Apr2018_Nano25Oct2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM
       NANOv7: dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_new_pmx_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/TTTW_TuneCP5_13TeV-madgraph-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tttW/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tttW/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tttW/MuMu/*Skim.root
     run: 1.0
     genEventCount: 200000.0
     genEventSumw: 199552.18737700998
