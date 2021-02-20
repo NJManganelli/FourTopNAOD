@@ -12,15 +12,6 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
         twoSidedSystematics = set()
         oneSidedSystematics = set()
         if category in counts:
-            R_DATA =   "{:.5f}".format(counts.get(category).get("data_obs", -1).get("nom", -1))
-            R_TTNOBB = "{:.5f}".format(counts.get(category).get("ttnobb", -1).get("nom", -1))
-            R_TTBB =   "{:.5f}".format(counts.get(category).get("ttbb", -1).get("nom", -1))
-            R_ST =     "{:.5f}".format(counts.get(category).get("singletop", -1).get("nom", -1))
-            R_TTH =    "{:.5f}".format(counts.get(category).get("ttH", -1).get("nom", -1))
-            R_TTV =    "{:.5f}".format(counts.get(category).get("ttVJets", -1).get("nom", -1))
-            R_TTRARE = "{:.5f}".format(counts.get(category).get("ttultrarare", -1).get("nom", -1))
-            R_EWK =    "{:.5f}".format(counts.get(category).get("DY", -1).get("nom", -1))
-            R_TTTT =   "{:.5f}".format(counts.get(category).get("tttt", -1).get("nom", -1))
             for kword, kproc in keymapping.items():
                 twoSidedSystematics = twoSidedSystematics.union(set([syst.replace("Up", "").replace("Down", "") for syst in 
                                                                      counts.get(category).get(kproc, {}).keys() if syst.endswith("Up") or syst.endswith("Down")]))
@@ -38,15 +29,8 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
                 activeUncertainty[kword] = dict()
                 activeUncertainty[kword]["ALLACTIVE"] = "{:16s}".format("1.0")
         with open("{}/TTTT_{}_{}_{}_{}.txt".format(analysisDirectory, era, channel, category, variable).replace("//", "/"), "w") as outFile:
+            disabledSystematics = []
             for line in outputLines:
-                if "prefire" in line and era == "2018":
-                    continue
-                if "leptonSFEl" in line and channel == "MuMu":
-                    continue
-                if "leptonSFMu" in line and channel == "ElEl":
-                    continue
-                if "OSDL_RunII_nJet" in line and "Mult" in line and category.split("_")[-1] not in line:
-                    continue
                 outputline = line.replace("$ERA", era)\
                                  .replace("$CHANNEL", channel)\
                                  .replace("$CATEGORY", category)\
@@ -72,5 +56,20 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
                                 outputline = outputline.replace("{:16s}".format("$ACT_"+kword), active)
                                 if "$ACT_"+kword in outputline:
                                     outputline = outputline.replace("$ACT_"+kword, active)
+                if "prefire" in outputline and era == "2018":
+                    disabledSystematics.append("prefire")
+                    continue
+                if "leptonSFEl" in outputline and channel == "MuMu":
+                    disabledSystematics.append("leptonSFEl")
+                    continue
+                if "leptonSFMu" in outputline and channel == "ElEl":
+                    disabledSystematics.append("leptonSFMu")
+                    continue
+                if "OSDL_RunII_nJet" in outputline and "Mult" in outputline and category.split("_")[-1] not in outputline:
+                    continue
+                if "ttVJetsISR" in outputline or "ttVJetsFSR" in outputline or "ttHISR" in outputline or "ttHFSR" in outputline or "ttttISR" in outputline or "ttttFSR" in outputline:
+                    disabledSystematics.append("ISR/FSR for ttVJets, ttH, tttt")
+                    outputline = "# " + outputline
                 outFile.write(outputline)
             print("Finished writing output for category {}".format(category))
+            print("Disabled systematics:", set(disabledSystematics))
