@@ -1779,7 +1779,8 @@ def addHists(inputHists, name, scaleArray = None, blind=False):
 
 # @profile(output_file="makeCategoryHists_profile.txt", sort_by="cumulative", lines_to_print=500, strip_dirs=True)
 def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systematic=None, rebin=None, setRangeUser=None, projection=None, 
-                      separator="___", nominalPostfix="nom", verbose=False, debug=False, pn=None, zeroingThreshold=50, differentialScale=False):
+                      separator="___", nominalPostfix="nom", verbose=False, debug=False, pn=None, 
+                      normalizeToNominal=False, smoothing=0, zeroingThreshold=50, differentialScale=False):
     """Function tailored to using a legendConfig to create histograms.
     
     The legendConfig contains the sampleNames to prefix for the rest of the histogram name.
@@ -1815,6 +1816,7 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
     for sampleCat, config in legendConfig["Categories"].items():
         theUnfound[sampleCat] = collections.OrderedDict()    
         histoList = []
+        nominalList = []
         addHistoName = sampleCat + separator + expectedBaseName
         #print(addHistoName)
         scaleArray = config.get("ScaleArray", None)
@@ -1822,25 +1824,20 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
         for nn, subCatName in enumerate(config["Names"]):
             expectedName = subCatName + separator + expectedBaseName
             fallbackName = subCatName + separator + fallbackBaseName
-            fallbackName2 = subCatName + separator + fallbackBaseName
-            if fallbackName2[-6:] == "___nom": fallbackName2 = fallbackName2[:-6]
             if debug: print("Creating addHistoName {}".format(addHistoName))
             #Skip plots that contain neither the systematic requested nor the nominal histogram
             # if expectedName in histKeys:
             if expectedName in unblindedKeys:
                 #Append the histo to a list which will be added using a dedicated function
                 histoList.append(histFile.Get(unblindedKeys[expectedName]))
+                nominalList.append(histFile.Get(unblindedKeys[fallbackName]))
                 if scaleList != None:
                     scaleList.append(scaleArray[nn])
             # elif fallbackName in histKeys:
             elif fallbackName in unblindedKeys:
                 #Append the histo to a list which will be added using a dedicated function
                 histoList.append(histFile.Get(unblindedKeys[fallbackName]))
-                if scaleList != None:
-                    scaleList.append(scaleArray[nn])
-            elif fallbackName2 in unblindedKeys:
-                #Append the histo to a list which will be added using a dedicated function
-                histoList.append(histFile.Get(unblindedKeys[fallbackName2]))
+                nominalList.append(None)
                 if scaleList != None:
                     scaleList.append(scaleArray[nn])
             else:
@@ -1849,6 +1846,16 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
                     print("for {} and histNameCommon {}, makeCombinationHists failed to find a histogram (systematic or nominal) corresponding to {}\n\t{}\n\t{}"\
                           .format(histFile.GetName(), histNameCommon, subCatName, expectedName, fallbackName))
                 continue
+
+        for nHist, hist in enumerate(histoList):
+            #Normalize to the nominal, if applicable
+            if normalizeToNominal and isinstance(nominalList[nHist], (ROOT.TH1, ROOT.TH2, ROOT.TH3)):
+                if abs(nominalList[nHist].Integral()) > 1e-7:
+                    hist.Scale(nominalList[nHist].Integral()/hist.Integral())
+            if isinstance(smoothing, int) and smoothing > 0 and isinstance(nominalList[nHist], (ROOT.TH1, ROOT.TH2, ROOT.TH3)):
+                hist.Add(nominalList[nHist], -1)
+                hist.Smooth(smoothing, "")
+                hist.Add(nominalList[nHist], 1)        
 
         #Make the new histogram with addHistoName, optionally with per-histogram scaling factors
         if debug:
@@ -1983,7 +1990,8 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
 
 def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, systematic=None, nominalPostfix="nom", 
                         separator="___", orderByIntegral=True, rebin=None, setRangeUser=None, projection=None, 
-                        verbose=False, debug=False, pn=None, doLogY=False, zeroingThreshold=50, differentialScale=False):
+                        verbose=False, debug=False, pn=None, doLogY=False, smoothing=0, 
+                        normalizeToNominal=False, zeroingThreshold=50, differentialScale=False):
     """histFile is an open ROOT file containing histograms without subdirectories, legendConfig contains 'Categories'
     with key: value pairs of sample categories (like ttbar or Drell-Yan) and corresponding list of histogram sample names
     (like tt_SL, tt_SL-GF, tt_DL, etc.) that are subcomponents of the sample)
@@ -2039,8 +2047,8 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
     retDict["Categories/hists"], retDict["Categories/theUnfound"] = makeCategoryHists(histFile, filteredHistKeys, legendConfig, histNameCommon,
                                                                                       systematic=systematic, rebin=rebin, setRangeUser=setRangeUser, projection=projection,
                                                                                       nominalPostfix=nominalPostfix, separator=separator,
-                                                                                      verbose=verbose, debug=debug, pn=pn,
-                                                                                      zeroingThreshold=zeroingThreshold, differentialScale=differentialScale)
+                                                                                      verbose=verbose, debug=debug, pn=pn, normalizeToNominal=normalizeToNominal, 
+                                                                                      smoothing=smoothing, zeroingThreshold=zeroingThreshold, differentialScale=differentialScale)
     #If empty because of a failure in opening some file, early return the dictionary
     #if len(retDict["Categories/hists"]) == 0:
     #    return retDict
@@ -2167,18 +2175,23 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
                      debug=False, nDivisions=105, lumi="N/A", drawYields=False,
                      zeroingThreshold=0, differentialScale=False,
-                     removeNegativeBins=True, normalizeUncertainties=['ttmuRNomFDown', 'ttmuRNomFUp', 'ttmuFNomRDown', 'ttmuFNomRUp', 
-                                                                   'ttmuRFcorrdNewDown', 'ttmuRFcorrdNewUp', 
-                                                                   'ttVJetsmuRNomFDown', 'ttVJetsmuRNomFUp', 'ttVJetsmuFNomRDown', 'ttVJetsmuFNomRUp', 
-                                                                   'ttVJetsmuRFcorrdNewDown', 'ttVJetsmuRFcorrdNewUp', 
-                                                                   'singletopmuRNomFDown', 'singletopmuRNomFUp', 'singletopmuFNomRDown', 'singletopmuFNomRUp', 
-                                                                   'singletopmuRFcorrdNewDown', 'singletopmuRFcorrdNewUp', 
-                                                                   'ttultrararemuRNomFDown', 'ttultrararemuRNomFUp', 'ttultrararemuFNomRDown', 'ttultrararemuFNomRUp', 
-                                                                   'ttultrararemuRFcorrdNewDown', 'ttultrararemuRFcorrdNewUp', 
-                                                                   'ttHmuRNomFDown', 'ttHmuRNomFUp', 'ttHmuFNomRDown', 'ttHmuFNomRUp', 
-                                                                   'ttHmuRFcorrdNewDown', 'ttHmuRFcorrdNewUp', 
-                                                                   'ttttmuRNomFDown', 'ttttmuRNomFUp', 'ttttmuFNomRDown', 'ttttmuFNomRUp', 
-                                                                   'ttttmuRFcorrdNewDown', 'ttttmuRFcorrdNewUp', ],
+                     removeNegativeBins=True, 
+                     normalizeUncertainties=['OSDL_RunII_ttmuRNomFDown', 'OSDL_RunII_ttmuRNomFUp', 'OSDL_RunII_ttmuFNomRDown', 'OSDL_RunII_ttmuFNomRUp', 
+                                             'OSDL_RunII_ttmuRFcorrelatedDown', 'OSDL_RunII_ttmuRFcorrelatedUp', 
+                                             'OSDL_RunII_ttVJetsmuRNomFDown', 'OSDL_RunII_ttVJetsmuRNomFUp', 'OSDL_RunII_ttVJetsmuFNomRDown', 'OSDL_RunII_ttVJetsmuFNomRUp', 
+                                             'OSDL_RunII_ttVJetsmuRFcorrelatedDown', 'OSDL_RunII_ttVJetsmuRFcorrelatedUp', 
+                                             'OSDL_RunII_singletopmuRNomFDown', 'OSDL_RunII_singletopmuRNomFUp', 'OSDL_RunII_singletopmuFNomRDown', 'OSDL_RunII_singletopmuFNomRUp', 
+                                             'OSDL_RunII_singletopmuRFcorrelatedDown', 'OSDL_RunII_singletopmuRFcorrelatedUp', 
+                                             'OSDL_RunII_ttultrararemuRNomFDown', 'OSDL_RunII_ttultrararemuRNomFUp', 'OSDL_RunII_ttultrararemuFNomRDown', 'OSDL_RunII_ttultrararemuFNomRUp', 
+                                             'OSDL_RunII_ttultrararemuRFcorrelatedDown', 'OSDL_RunII_ttultrararemuRFcorrelatedUp', 
+                                             'OSDL_RunII_ttHmuRNomFDown', 'OSDL_RunII_ttHmuRNomFUp', 'OSDL_RunII_ttHmuFNomRDown', 'OSDL_RunII_ttHmuFNomRUp', 
+                                             'OSDL_RunII_ttHmuRFcorrelatedDown', 'OSDL_RunII_ttHmuRFcorrelatedUp', 
+                                             'OSDL_RunII_ttttmuRNomFDown', 'OSDL_RunII_ttttmuRNomFUp', 'OSDL_RunII_ttttmuFNomRDown', 'OSDL_RunII_ttttmuFNomRUp', 
+                                             'OSDL_RunII_ttttmuRFcorrelatedDown', 'OSDL_RunII_ttttmuRFcorrelatedUp', ],
+                     smootheUncertainties=['OSDL_2016_jesTotalUp', 'OSDL_2016_jerUp', 'OSDL_2016_jesTotalDown', 'OSDL_2016_jerDown',
+                                           'OSDL_2016APV_jesTotalUp', 'OSDL_2016APV_jerUp', 'OSDL_2016APV_jesTotalDown', 'OSDL_2016APV_jerDown',
+                                           'OSDL_2017_jesTotalUp', 'OSDL_2017_jerUp', 'OSDL_2017_jesTotalDown', 'OSDL_2017_jerDown',
+                                           'OSDL_2018_jesTotalUp', 'OSDL_2018_jerUp', 'OSDL_2018_jesTotalDown', 'OSDL_2018_jerDown'],
                      normalizeAllUncertaintiesForProcess=['tttt'],
 ):
     """Loop through a JSON encoded plotCard to draw plots based on root files containing histograms.
@@ -2342,7 +2355,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                             systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], setRangeUser=CanCache["subplots/setrangeuser"][pn],
                                                                             projection=CanCache["subplots/projections"][pn], 
                                                                             nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn, doLogY=doLogY,
-                                                                            zeroingThreshold=zeroingThreshold, differentialScale=differentialScale))
+                                                                            normalizeToNominal=False, smoothing=0, zeroingThreshold=zeroingThreshold, differentialScale=differentialScale))
             #This is not sufficient for skipping undone histograms
             # if len(list(CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values())) == 0:
             #     print("No histograms found for '{}', skipping".format(nice_name))
@@ -2413,12 +2426,18 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         if syst in skipSystematics: 
                             continue
                     sD[syst] = nSyst
+                    normalizeToNominal = False
+                    smoothing = 0
+                    if syst in normalizeUncertainties:
+                        normalizeToNominal = True
+                    if syst in smootheUncertainties:
+                        smoothing = 5
                     CanCache["subplots/supercategories/systematics"][syst].append(makeSuperCategories(CanCache["subplots/files"][pn], CanCache["subplots/files/keys"][pn], legendConfig, 
                                                                                                       nice_name,
                                                                                                       systematic=syst, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], setRangeUser=CanCache["subplots/setrangeuser"][pn],
                                                                                                       projection=CanCache["subplots/projections"][pn], 
                                                                                                       nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn, doLogY=doLogY,
-                                                                                                      zeroingThreshold=zeroingThreshold, differentialScale=differentialScale))
+                                                                                                      normalizeToNominal=normalizeToNominal, smoothing=smoothing, zeroingThreshold=zeroingThreshold, differentialScale=differentialScale))
                     for supercategory, scHisto in CanCache["subplots/supercategories/systematics"][syst][pn]['Supercategories/hists'].items():
                         if "data" in supercategory.lower(): continue                        
                         # npValues[pn][supercategory][nSyst, :] = np.asarray(map(lambda l: l[0].GetBinContent(l[1]), [(scHisto, x) for x in range(nBins + 2)]))
