@@ -610,7 +610,7 @@ def bookSnapshot(input_df, filename, columnList, lazy=True, treename="Events", m
 
     return handle
 
-def getNtupleVariables(vals, isData=True, sysVariations=None, sysFilter=["$NOMINAL"],bTagger="DeepJet"):
+def getNtupleVariables(vals, isData=True, channel="all", sysVariations=None, sysFilter=["$NOMINAL"],bTagger="DeepJet"):
     varsToFlattenOrSave = []
     varsToFlattenOrSave += ["run", 
                             "luminosityBlock", 
@@ -627,7 +627,11 @@ def getNtupleVariables(vals, isData=True, sysVariations=None, sysFilter=["$NOMIN
             # "FTALepton{lpf}_dRll".format(lpf=leppostfix),
             # "FTALepton{lpf}_dPhill".format(lpf=leppostfix),
             # "FTALepton{lpf}_dEtall".format(lpf=leppostfix),
+            "FTAMuon{lpf}_pt".format(lpf=leppostfix), 
+            "FTAMuon{lpf}_eta".format(lpf=leppostfix),
             "FTAMuon{lpf}_InvariantMass",
+            "FTAElectron{lpf}_pt".format(lpf=leppostfix), 
+            "FTAElectron{lpf}_eta".format(lpf=leppostfix),
             "FTAElectron{lpf}_InvariantMass",
             "MTofMETandMu{bpf}",
             "MTofMETandEl{bpf}",
@@ -2459,46 +2463,63 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     # combineHistoTemplate = ["HT{bpf}"]
     combineHistoTemplate = ["HT{bpf}",
                             # "ST{bpf}",
-                            # "HTH{bpf}",
-                            # "HTRat{bpf}",
-                            # "HTb{bpf}",
-                            # "HT2M{bpf}",
-                            # "H{bpf}",
-                            # "H2M{bpf}",
-                            # "dRbb{bpf}",
-                            # ## "FTALepton_dRll",
-                            "FTALepton1_pt",
+                            "HTH{bpf}",
+                            "HTRat{bpf}",
+                            "HTb{bpf}",
+                            "HT2M{bpf}",
+                            "H{bpf}",
+                            "H2M{bpf}",
+                            "dRbb{bpf}",
+                            "FTALepton_dRll",
+                            # "FTALepton1_pt",
                             # "FTALepton1_eta",
-                            "FTALepton2_pt",
+                            # "FTALepton2_pt",
                             # "FTALepton2_eta",
+                            "FTAMET{bpf}_pt",
+                            "FTAMET{bpf}_phi",
                             # "FTAMuon_InvariantMass",
                             # "FTAElectron_InvariantMass",
-                            # "MTofMETandMu{bpf}",
-                            # "MTofMETandEl{bpf}",
-                            # "MTofElandMu{bpf}"
-                            # "nFTAJet{bpf}", 
-                            # "FTAJet1{bpf}_pt", 
-                            # "FTAJet2{bpf}_pt",
-                            # "FTAJet3{bpf}_pt",
-                            # "FTAJet4{bpf}_pt",
-                            # "FTAJet1{bpf}_eta",
-                            # "FTAJet2{bpf}_eta",
-                            # "FTAJet3{bpf}_eta",
-                            # "FTAJet4{bpf}_eta",
-                            # "FTAJet1{bpf}_DeepJetB",
-                            # "FTAJet2{bpf}_DeepJetB",
+                            "MTofMETandMu{bpf}",
+                            "MTofMETandEl{bpf}",
+                            "MTofElandMu{bpf}"
+                            "nFTAJet{bpf}", 
+                            "nMedium{tag}{bpf}",
+                            "FTAJet1{bpf}_pt", 
+                            "FTAJet2{bpf}_pt",
+                            "FTAJet3{bpf}_pt",
+                            "FTAJet4{bpf}_pt",
+                            "FTAJet1{bpf}_eta",
+                            "FTAJet2{bpf}_eta",
+                            "FTAJet3{bpf}_eta",
+                            "FTAJet4{bpf}_eta",
+                            "FTAJet1{bpf}_DeepJetB",
+                            "FTAJet2{bpf}_DeepJetB",
                             "FTAJet1{bpf}_DeepJetB_sorted",
                             "FTAJet2{bpf}_DeepJetB_sorted",
-                            # "FTAMuon_dz",
-                            # "FTAMuon_ip3d",
-                            # "FTAElectron_dz",
-                            # "FTAElectron_ip3d",
-                            ## "FTAJet3{bpf}_DeepJetB",
-                            ## "FTAJet4{bpf}_DeepJetB",
-                            ## "nLooseFTAMuon", "nMediumFTAMuon", "nTightFTAMuon",
-                            ## "nLooseFTAElectron", "nMediumFTAElectron", "nTightFTAElectron",
-                            ## "nLooseFTALepton", "nMediumFTALepton", "nTightFTALepton",
+                            "FTAJet3{bpf}_DeepJetB_sorted",
+                            "FTAJet4{bpf}_DeepJetB_sorted",
+                            "FTAMuon_dz",
+                            "FTAMuon_ip3d",
+                            "FTAElectron_dz",
+                            "FTAElectron_ip3d",
+                            "FTAJet3{bpf}_DeepJetB",
+                            "FTAJet4{bpf}_DeepJetB",
+                            "nLooseFTAMuon", "nMediumFTAMuon", "nTightFTAMuon",
+                            "nLooseFTAElectron", "nMediumFTAElectron", "nTightFTAElectron",
+                            "nLooseFTALepton", "nMediumFTALepton", "nTightFTALepton",
                          ]
+    if channel == "MuMu":
+        combineHistoTemplate += ["FTAMuon1_pt",
+                                 "FTAMuon2_pt",
+        ]
+    elif channel == "ElMu":
+        combineHistoTemplate += ["FTAMuon1_pt",
+                                 "FTAElectron1_pt",
+        ]
+    elif channel == "ElEl":
+        combineHistoTemplate += ["FTAElectron1_pt",
+                                 "FTAElectron2_pt",
+        ]
     # if bTagger.lower() == "deepjet":
     #     combineHistoTemplate += ["nLooseDeepJetB{bpf}", "nMediumDeepJetB{bpf}", "nTightDeepJetB{bpf}",]
     # elif bTagger.lower() == "deepcsv":
@@ -2568,7 +2589,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         else:
             branchpostfix = "__" + sysVar
         leppostfix = sysDict.get("lep_postfix", "") #No variation on this yet, but just in case
-        combineHistoVariables += [templateVar.format(bpf=branchpostfix) for templateVar in combineHistoTemplate]
+        combineHistoVariables += [templateVar.format(bpf=branchpostfix, tag=tagger) for templateVar in combineHistoTemplate]
 
         
         fillJet = "FTAJet{bpf}".format(bpf=branchpostfix)
@@ -2762,39 +2783,42 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     #     ("return true;".format(tag=tagger, bpf=branchpostfix), "0+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),eraAndSampleName, decayChannel, None, "nMedium{tag}0+".format(tag=tagger, bpf=branchpostfix), None))
                     # filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                     #     ("nMedium{tag}{bpf} >= 1".format(tag=tagger, bpf=branchpostfix), "1+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}1+".format(tag=tagger, bpf=branchpostfix), None))
+                    filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                        ("nMedium{tag}{bpf} >= 2".format(tag=tagger, bpf=branchpostfix), "2+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}2+".format(tag=tagger, bpf=branchpostfix), None))
                     # filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
-                    #     ("nMedium{tag}{bpf} >= 2".format(tag=tagger, bpf=branchpostfix), "2+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}2+".format(tag=tagger, bpf=branchpostfix), None))
-                    filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
-                        ("nMedium{tag}{bpf} == 0".format(tag=tagger, bpf=branchpostfix), "0 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
-                         eraAndSampleName, decayChannel, None, "nMedium{tag}0".format(tag=tagger, bpf=branchpostfix), None))
-                    filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
-                        ("nMedium{tag}{bpf} == 1".format(tag=tagger, bpf=branchpostfix), "1 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
-                         eraAndSampleName, decayChannel, None, "nMedium{tag}1".format(tag=tagger, bpf=branchpostfix), None))
-                    filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
-                        ("nMedium{tag}{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
-                         eraAndSampleName, decayChannel, None, "nMedium{tag}2".format(tag=tagger, bpf=branchpostfix), None))
-                    filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
-                        ("nMedium{tag}{bpf} == 3".format(tag=tagger, bpf=branchpostfix), "3 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
-                         eraAndSampleName, decayChannel, None, "nMedium{tag}3".format(tag=tagger, bpf=branchpostfix), None))
-                    filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
-                        ("nMedium{tag}{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
-                         eraAndSampleName, decayChannel, None, "nMedium{tag}4+".format(tag=tagger, bpf=branchpostfix), None))
+                    #     ("nMedium{tag}{bpf} == 0".format(tag=tagger, bpf=branchpostfix), "0 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                    #      eraAndSampleName, decayChannel, None, "nMedium{tag}0".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                    #     ("nMedium{tag}{bpf} == 1".format(tag=tagger, bpf=branchpostfix), "1 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                    #      eraAndSampleName, decayChannel, None, "nMedium{tag}1".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                    #     ("nMedium{tag}{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                    #      eraAndSampleName, decayChannel, None, "nMedium{tag}2".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                    #     ("nMedium{tag}{bpf} == 3".format(tag=tagger, bpf=branchpostfix), "3 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                    #      eraAndSampleName, decayChannel, None, "nMedium{tag}3".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                    #     ("nMedium{tag}{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                    #      eraAndSampleName, decayChannel, None, "nMedium{tag}4+".format(tag=tagger, bpf=branchpostfix), None))
                     #These filters should apply to all L1Nodes
                     filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
-                        ("nFTAJet{bpf} == 4".format(bpf=branchpostfix), "4 Jets ({bpf})".format(bpf=branchpostfix),
-                         eraAndSampleName, decayChannel, None, None, "nJet4".format(bpf=branchpostfix)))
-                    filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
-                        ("nFTAJet{bpf} == 5".format(bpf=branchpostfix), "5 Jets ({bpf})".format(bpf=branchpostfix),
-                         eraAndSampleName, decayChannel, None, None, "nJet5".format(bpf=branchpostfix)))
-                    filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
-                        ("nFTAJet{bpf} == 6".format(bpf=branchpostfix), "6 Jets ({bpf})".format(bpf=branchpostfix),
-                         eraAndSampleName, decayChannel, None, None, "nJet6".format(bpf=branchpostfix)))
-                    filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
-                        ("nFTAJet{bpf} == 7".format(bpf=branchpostfix), "7 Jets ({bpf})".format(bpf=branchpostfix),
-                         eraAndSampleName, decayChannel, None, None, "nJet7".format(bpf=branchpostfix)))
-                    filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
-                        ("nFTAJet{bpf} >= 8".format(bpf=branchpostfix), "8+ Jets ({bpf})".format(bpf=branchpostfix),
-                         eraAndSampleName, decayChannel, None, None, "nJet8+".format(bpf=branchpostfix)))
+                        ("nFTAJet{bpf} >= 4".format(bpf=branchpostfix), "4+ Jets ({bpf})".format(bpf=branchpostfix),
+                         eraAndSampleName, decayChannel, None, None, "nJet4+".format(bpf=branchpostfix)))
+                    # filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                    #     ("nFTAJet{bpf} == 4".format(bpf=branchpostfix), "4 Jets ({bpf})".format(bpf=branchpostfix),
+                    #      eraAndSampleName, decayChannel, None, None, "nJet4".format(bpf=branchpostfix)))
+                    # filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                    #     ("nFTAJet{bpf} == 5".format(bpf=branchpostfix), "5 Jets ({bpf})".format(bpf=branchpostfix),
+                    #      eraAndSampleName, decayChannel, None, None, "nJet5".format(bpf=branchpostfix)))
+                    # filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                    #     ("nFTAJet{bpf} == 6".format(bpf=branchpostfix), "6 Jets ({bpf})".format(bpf=branchpostfix),
+                    #      eraAndSampleName, decayChannel, None, None, "nJet6".format(bpf=branchpostfix)))
+                    # filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                    #     ("nFTAJet{bpf} == 7".format(bpf=branchpostfix), "7 Jets ({bpf})".format(bpf=branchpostfix),
+                    #      eraAndSampleName, decayChannel, None, None, "nJet7".format(bpf=branchpostfix)))
+                    # filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                    #     ("nFTAJet{bpf} >= 8".format(bpf=branchpostfix), "8+ Jets ({bpf})".format(bpf=branchpostfix),
+                    #      eraAndSampleName, decayChannel, None, None, "nJet8+".format(bpf=branchpostfix)))
 
                     #We need some indices to be able to sub-select the filter nodes we need to apply, this makes it more automated when we add different nodes
                     #These indicate the end for slicing
@@ -3155,9 +3179,21 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
                                                                     "", 100,0,500), "FTAMuon{lpf}_pt".format(lpf=leppostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon1{lpf}_pt{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
+                                                                    "", 100,0,500), "FTAMuon1{lpf}_pt".format(lpf=leppostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon2{lpf}_pt{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
+                                                                    "", 100,0,500), "FTAMuon2{lpf}_pt".format(lpf=leppostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
                                                                     "", 100,0,500), "FTAElectron{lpf}_pt".format(lpf=leppostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron1{lpf}_pt{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
+                                                                    "", 100,0,500), "FTAElectron1{lpf}_pt".format(lpf=leppostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron2{lpf}_pt{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
+                                                                    "", 100,0,500), "FTAElectron2{lpf}_pt".format(lpf=leppostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___dRll{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), "", 100,0,2*pi), 
                                                                    "FTALepton{lpf}_dRll".format(lpf=leppostfix), wgtVar))
@@ -4777,8 +4813,9 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
         if channel == "BOOKKEEPING":
             levelsOfInterest=set(["BOOKKEEPING"])
             theSampleDict = inputSampleCardYaml.keys()
-            # theSampleDict = bookerV2_SplitData.copy()
-            # theSampleDict.update(bookerV2_MC)
+        elif channel == "PILEUP":
+            levelsOfInterest=set(["PILEUP"])
+            theSampleDict = inputSampleCardYaml.keys()
         elif channel == "ElMu":
             levelsOfInterest = set(["ElMu",])
             theSampleDict = [nn for nn in inputSampleCardYaml.keys() if not inputSampleCardYaml[nn]["isData"] or (inputSampleCardYaml[nn]["isData"] and inputSampleCardYaml[nn]["channel"] == channel)]
@@ -4936,7 +4973,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     
         print("FIXME: hardcoded incorrect btagging top path for the corrector map")
         print("FIXME: hardcoded non-UL/UL and no VFP handling in the corrector map retrieval")
-        BTaggingYieldsTopPath = BTaggingYieldsFile.replace("BTaggingYields.root", "") if BTaggingYieldsFile is not None and channel not in ["BOOKKEEPING"] else "" #Trigger the null set of correctors for btagging if there's no yields file we're pointing to...
+        BTaggingYieldsTopPath = BTaggingYieldsFile.replace("BTaggingYields.root", "") if BTaggingYieldsFile is not None and channel not in ["BOOKKEEPING", "PILEUP"] else "" #Trigger the null set of correctors for btagging if there's no yields file we're pointing to...
         # BTaggingYieldsTopPath = ""
         correctorMap = ROOT.FTA.GetCorrectorMap(era, #2017 or 2018 or 2016, as string
                                                 globalisUL, #UL or non_UL
@@ -4974,7 +5011,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 continue
             vals = inputSampleCardYaml[name]
             if name not in valid_samples: 
-                print("Skipping sample {}".format(name))
+                # print("Skipping sample {}".format(name))
                 continue
             #Deduce filters for scale calculations (MET, defineLeptons, defineJets) and where all are needed (defineWeights, BTaggingYields, fillHistos...)
             scaleSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=False)
@@ -5091,8 +5128,46 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                                             "snapshotPriority": -1,
                                                                   }}}
                 pprint.pprint(inclusiveProcessConfig)
-                
-                if lvl == "BOOKKEEPING":
+                if lvl == "PILEUP":
+                    #~/Work/CMSSW_10_2_24_patch1/src/PhysicsTools/NanoAODTools/python/postprocessing/data/pileup
+                    #mcPileup2017.root  pileup_Cert_294927-306462_13TeV_PromptReco_Collisions17_withVar.root  PileupHistogram-goldenJSON-13tev-2017-99bins_withVar.root   PileupHistogram-goldenJSON-13tev-2018-99bins_withVar.root
+                    #mcPileup2018.root  PileupData_GoldenJSON_Full2016.root                                   PileupHistogram-goldenJSON-13tev-2018-100bins_withVar.root
+                    vals = inputSampleCardYaml[name]
+                    if vals.get("isData", True):
+                        print("Halting execution on real data")
+                        continue
+                    if quiet:
+                        print("Going Quiet")
+                        booktrigger = base[name].Count()
+                    else:
+                        print("Booking progress bar")
+                        booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(base[name]), 
+                                                          2000, int(metainfo[name]["totalEvents"]))
+                    baseWithWeight = base[name]\
+                        .Define("NormWgt", "return 1.0/{nEvents:f};".format(nEvents = metainfo[name]["genEventCount"]))\
+                        .Define("NormGenWgt", "return genWeight/{sW:f};".format(sW = metainfo[name]["genEventSumw"]))
+                    #prepare the nested histo structure expected by writeHistos
+                    pileupHistos = dict()
+                    eraAndSampleName = vals.get("era", "Unknown") + "___" + name
+                    pileupHistos[eraAndSampleName] = dict()
+                    pileupHistos[eraAndSampleName]["NoChannel"] = dict()
+                    pileupHistos[eraAndSampleName]["NoChannel"]["unsignedPileup"] = baseWithWeight.Histo1D(("{proc}___unsigned___diagnostic___pileup".format(proc=eraAndSampleName),
+                                                                                                            "unsigned;Pileup_nTrueInt; dEvents/dbin", 99, 0, 99), "Pileup_nTrueInt", "NormWgt")
+                    pileupHistos[eraAndSampleName]["NoChannel"]["genWeightPileup"] = baseWithWeight.Histo1D(("{proc}___genWeight___diagnostic___pileup".format(proc=eraAndSampleName),
+                                                                                                             "genWeight;Pileup_nTrueInt; dEvents/dbin", 99, 0, 99), "Pileup_nTrueInt", "NormGenWgt")
+                    _ = booktrigger.GetValue()
+                    print("Finished processing pileup profiling")
+                    print("Writing histos to {}".format(analysisDir + "/Pileup"))
+                    writeHistos(pileupHistos, 
+                                analysisDir + "/Pileup",
+                                channelsOfInterest="All",
+                                samplesOfInterest="All",
+                                dict_keys="All",
+                                mode="RECREATE"
+                    )                    
+                    #skip any further calculations for bookkeeping
+                    continue                    
+                elif lvl == "BOOKKEEPING":
                     #We just need the info printed on this one... book a Count node with progress bar if not quiet
                     if quiet:
                         print("Going Quiet")
@@ -5615,7 +5690,7 @@ def otherFuncs():
     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
-    parser.add_argument('stage', action='store', type=str, choices=['bookkeeping', 'fill-yields', 'combine-yields', 'lepton-selection', 'fill-diagnostics', 
+    parser.add_argument('stage', action='store', type=str, choices=['bookkeeping', 'pileup', 'fill-yields', 'combine-yields', 'lepton-selection', 'fill-diagnostics', 
                                                                     'fill-histograms', 'hadd-histograms', 'fill-ntuples', 'fill-combine',
                                                                     'hadd-combine'],
                         help='analysis stage to be produced')
@@ -5821,6 +5896,13 @@ if __name__ == '__main__':
                       systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, sampleCards, source, "BOOKKEEPING", bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList,  
+                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
+                      systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
+    elif stage == 'pileup':
+        packed = main(analysisDir, sampleCards, source, "PILEUP", bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList,  
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
