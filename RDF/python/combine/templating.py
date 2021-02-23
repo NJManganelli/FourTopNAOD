@@ -67,8 +67,11 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
                     continue
                 if "OSDL_RunII_nJet" in outputline and "Mult" in outputline and category.split("_")[-1] not in outputline:
                     continue
-                if "ttVJetsISR" in outputline or "ttVJetsFSR" in outputline or "ttHISR" in outputline or "ttHFSR" in outputline or "ttttISR" in outputline or "ttttFSR" in outputline:
-                    disabledSystematics.append("ISR/FSR for ttVJets, ttH, tttt")
+                # if "ttttISR" in outputline or "ttttFSR" in outputline:
+                #     disabledSystematics.append("ISR/FSR for tttt")
+                #     outputline = "# " + outputline
+                if era == "2017" and "ttVJetsISR" in outputline or "ttVJetsFSR" in outputline or "ttHISR" in outputline or "ttHFSR" in outputline:
+                    disabledSystematics.append("ISR/FSR for 2017 ttVJets, ttH (inclusive samples assumed!)")
                     outputline = "# " + outputline
                 outFile.write(outputline)
             print("Finished writing output for category {}".format(category))
