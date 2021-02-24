@@ -2178,7 +2178,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                      combineOutput=None, combineInput=None, combineCards=False,
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
                      debug=False, nDivisions=105, lumi="N/A", drawYields=False,
-                     zeroingThreshold=0, differentialScale=False,
+                     zeroingThreshold=0, differentialScale=False, histogramUncertainties=False,
                      removeNegativeBins=True, 
                      normalizeUncertainties=['OSDL_RunII_ttmuRNomFDown', 'OSDL_RunII_ttmuRNomFUp', 'OSDL_RunII_ttmuFNomRDown', 'OSDL_RunII_ttmuFNomRUp', 
                                              'OSDL_RunII_ttmuRFcorrelatedDown', 'OSDL_RunII_ttmuRFcorrelatedUp', 
@@ -2195,7 +2195,15 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                      smootheUncertainties=['OSDL_2016_jesTotalUp', 'OSDL_2016_jerUp', 'OSDL_2016_jesTotalDown', 'OSDL_2016_jerDown',
                                            'OSDL_2016APV_jesTotalUp', 'OSDL_2016APV_jerUp', 'OSDL_2016APV_jesTotalDown', 'OSDL_2016APV_jerDown',
                                            'OSDL_2017_jesTotalUp', 'OSDL_2017_jerUp', 'OSDL_2017_jesTotalDown', 'OSDL_2017_jerDown',
-                                           'OSDL_2018_jesTotalUp', 'OSDL_2018_jerUp', 'OSDL_2018_jesTotalDown', 'OSDL_2018_jerDown'],
+                                           'OSDL_2018_jesTotalUp', 'OSDL_2018_jerUp', 'OSDL_2018_jesTotalDown', 'OSDL_2018_jerDown',
+                                           'OSDL_RunII_ewkISRUp', 'OSDL_RunII_ewkISRDown', 'OSDL_RunII_ewkFSRUp', 'OSDL_RunII_ewkFSRDown', 
+                                           'OSDL_RunII_singletopISRUp', 'OSDL_RunII_singletopISRDown', 'OSDL_RunII_singletopFSRUp', 'OSDL_RunII_singletopFSRDown', 
+                                           'OSDL_RunII_ttVJetsISRUp', 'OSDL_RunII_ttVJetsISRDown', 'OSDL_RunII_ttVJetsFSRUp', 'OSDL_RunII_ttVJetsFSRDown', 
+                                           'OSDL_RunII_ttHISRUp', 'OSDL_RunII_ttHISRDown', 'OSDL_RunII_ttHFSRUp', 'OSDL_RunII_ttHFSRDown', 
+                                           'OSDL_RunII_ttultrarareISRUp', 'OSDL_RunII_ttultrarareISRDown', 'OSDL_RunII_ttultrarareFSRUp', 'OSDL_RunII_ttultrarareFSRDown', 
+                                           'OSDL_RunII_ttISRUp', 'OSDL_RunII_ttISRDown', 'OSDL_RunII_ttFSRUp', 'OSDL_RunII_ttFSRDown', 
+                                           'OSDL_RunII_ttttISRUp', 'OSDL_RunII_ttttISRDown', 'OSDL_RunII_ttttFSRUp', 'OSDL_RunII_ttttFSRDown', 
+                                       ],
                      normalizeAllUncertaintiesForProcess=['tttt'],
 ):
     """Loop through a JSON encoded plotCard to draw plots based on root files containing histograms.
@@ -2653,19 +2661,26 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         drawable.GetXaxis().SetRangeUser(CanCache["subplots/setrangeuser"][pn][0], CanCache["subplots/setrangeuser"][pn][1])
 
                     dn += 1
-                #Turn off the uncertainties in the main plot for now...
-                # if "Supercategories/statErrors" in CanCache["subplots/supercategories"][pn].keys():
-                #     if super_cat_name not in ["Background"]: 
-                #         pass
-                #     else:
-                #         if isinstance(CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'][super_cat_name], (ROOT.TGraphAsymmErrors)):
-                #             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'][super_cat_name].Draw("2")
-                # if "Supercategories/statSystematicErrors" in CanCache["subplots/supercategories"][pn].keys():
-                #     if super_cat_name not in ["Background"]: 
-                #         pass
-                #     else:
-                #         if isinstance(CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name], (ROOT.TGraphAsymmErrors)):
-                #             CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name].Draw("2")
+                if histogramUncertainties:
+                    if "Supercategories/statErrors" in CanCache["subplots/supercategories"][pn].keys():
+                        if super_cat_name not in ["Background"]: 
+                            pass
+                        else:
+                            if isinstance(CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'][super_cat_name], (ROOT.TGraphAsymmErrors)):
+                                CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'][super_cat_name].Draw("2")
+                    if "Supercategories/statSystematicErrors" in CanCache["subplots/supercategories"][pn].keys():
+                        if super_cat_name not in ["Background"]: 
+                            pass
+                        else:
+                            if isinstance(CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name], (ROOT.TGraphAsymmErrors)):
+                                CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name].Draw("2")
+                #Eliminate bin labels if there's a ratio plot just below
+                if doRatio and "SAME" not in draw_command:
+                    for bin in range(drawable.GetXaxis().GetNbins()):
+                        # TAxis::ChangeLabel ( Int_t  labNum = 0, Double_t  labAngle = -1., Double_t  labSize = -1.,
+                        #                      Int_t  labAlign = -1, Int_t  labColor = -1, Int_t  labFont = -1, TString  labText = "" 
+                        #                  ) 
+                        drawable.GetXaxis().ChangeLabel(bin, -1, 0, -1, -1, -1, "")
             if pn == 0:
                 scaleText = 1.3
                 offsetText = CanCache["canvas/marginL"]
@@ -3251,6 +3266,8 @@ if __name__ == '__main__':
                         help='Threshold for Entries in grouped histograms, below which the contents will be reset. To disable, set equal or less than 0')
     parser.add_argument('--differentialScale', dest='differentialScale', action='store_true',
                         help='For variable width binning, set the bin errors and contents equal to the average over the bin width. Not compatible with --combineInput option')
+    parser.add_argument('--histogramUncertainties', dest='histogramUncertainties', action='store_true',
+                        help='For drawing the MC stat + systematic uncertainties on the main histogram plot (always on for ratio plot)')
     
 
     #Parse the arguments
@@ -3368,7 +3385,7 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                                        pdfOutput=pdfOutput, combineOutput=combineOut, combineInput=combineInput, combineCards=combineCards,
                                        lumi=lumi, useCanvasMax=useCanvasMax, 
                                        skipSystematics=skipSystematics, verbose=verb,
-                                       zeroingThreshold=zeroingThreshold, differentialScale=differentialScale);
+                                       zeroingThreshold=zeroingThreshold, differentialScale=differentialScale, histogramUncertainties=args.histogramUncertainties);
     else:
         raise RuntimeError("The loading of the plot or legend cards failed. They are of type {} and {}, respectively".format(type(loadedPlotConfig),type(loadedLegendConfig)))
 
