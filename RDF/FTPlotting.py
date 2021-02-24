@@ -2007,11 +2007,12 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
         #Get coordinates for the legend, create it, store the pointer in the dictionary (so it isn't deleted, to hammer the point over and over)
         coord = legendConfig.get("Coordinates")
         nColumns = legendConfig.get("nColumns")
-        # leg = ROOT.TLegend(coord[0], coord[1], coord[2], coord[3])
-        # leg_width = 0.8
-        # leg_height = 0.6
-        # #Don't forget ROOT's dipshit-level coordinate reversals. BuildLegend is (x1, x2, y1, y2) but TLegend is (x1, y1, x2, y2)
-        # leg = ROOT.TLegend(leg_width, leg_height, leg_width, leg_height) #Trigger automatic placement of the legend by 'reducing to a point', and x1 = x2 = width, y1 = y2 = height
+        leg = ROOT.TLegend(coord[0], coord[1], coord[2], coord[3])
+        leg.SetNColumns(nColumns)
+        leg.SetBorderSize(0)
+        leg.SetTextFont(43)
+        leg.SetTextSize(20)
+        leg.SetFillColorAlpha(0, 0) #Transparent
         if doLogY:
             #Plan to paint it in the leftmost pads, in the bulk of the histogram
             leg_top = 0.45
@@ -2039,7 +2040,8 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
         # leg.SetNColumns(nColumns)
         # if debug:
         #     print("nColumns = {} generated from {}".format(nColumns, len(legendConfig.get("Categories"))))
-        retDict["Legend"] = leg1
+        retDict["Legend"] = leg
+        retDict["Legend1"] = leg1
         retDict["Legend2"] = leg2
     #Create dictionary to return one level up, calling makeCategoryHists to combine subsamples together 
     #and do color, style configuration for them. Pass through the rebin parameter
@@ -2104,6 +2106,7 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
                         #Assume Marker style
                         legendCode = "P"
                     #Add the legend entry
+                    leg.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
                     if (ntup % 2) == 0:
                         leg1.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
                     else:
@@ -2136,6 +2139,7 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
                     legendCode = "P"
                 #Add the legend entry, but instead of the tup[2] histogram, the overall added hist.
                 legendLabel = tup[1] #+ " (partially/blind)" if any(["blind" in tup[2].GetName().lower() for tup in tmpList]) else tup[1]
+                leg.AddEntry(retDict["Supercategories"][super_cat_name], legendLabel, legendCode)
                 leg2.AddEntry(retDict["Supercategories"][super_cat_name], legendLabel, legendCode)
             retDict["Supercategories/hists"][super_cat_name] = retDict["Supercategories"][super_cat_name]#.GetListOfFunctions().FindObject("stats")
             #retDict["Supercategories/xAxis"][super_cat_name] = retDict["Supercategories"][super_cat_name].GetXaxis()
@@ -2670,15 +2674,21 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 offsetText = 0
             #Legends are only created in the dictionary for pad 0, so do not lookup pn but [0]
             if doLogY:
-                if pn == 0:
-                    CanCache["subplots/supercategories"][0]["Legend2"].Draw()
-                elif pn == 1:
+                if nXPads == 1:
                     CanCache["subplots/supercategories"][0]["Legend"].Draw()
+                else:
+                    if pn == 0:    
+                        CanCache["subplots/supercategories"][0]["Legend2"].Draw()
+                    elif pn == 1:
+                        CanCache["subplots/supercategories"][0]["Legend1"].Draw()
             else:
-                if pn == len(CanCache["subplots"]) - 2:
+                if nXPads == 1:
                     CanCache["subplots/supercategories"][0]["Legend"].Draw()
-                elif pn == len(CanCache["subplots"]) - 1 and not doLogY:
-                    CanCache["subplots/supercategories"][0]["Legend2"].Draw()
+                else:
+                    if pn == nXPads - 2:
+                        CanCache["subplots/supercategories"][0]["Legend1"].Draw()
+                    elif pn == nXPads - 1:
+                        CanCache["subplots/supercategories"][0]["Legend2"].Draw()
                 
             #Create the subpad label, to be drawn. Text stored in CanCache["sublabels"] which should be a list, possibly a list of tuples in the future
             CanCache["subplots/labels"].append(ROOT.TLatex())
@@ -2775,7 +2785,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         histDrawSystematicUpRatio[pn][supercategory].Draw("HIST SAME")
 
                     #Set the x axis title if it's the last drawable item
-                    # if pn == (len(CanCache["subplots"]) - 1):
+                    # if pn == (nXPads - 1):
                     #     if xAxisTitle != None:
                     #         CanCache["subplots/ratios"][-1][aRatioName]["ratio_Xaxis"].SetTitle(xAxisTitle)
                     #increment our counter for ratios
@@ -2846,7 +2856,10 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["canvas_xaxis"].SetTextFont(43)
         CanCache["canvas_xaxis"].SetTextSize(35)
         CanCache["canvas_xaxis"].SetTextAlign(33)
-        CanCache["canvas_xaxis"].DrawLatexNDC(1 - 0.17 * CanCache["canvas/marginR"], 0.22 * CanCache["canvas/marginB"], str(xAxisTitle))
+        if nXPads > 1:
+            CanCache["canvas_xaxis"].DrawLatexNDC(1 - 0.17*CanCache["canvas/marginR"], 0.22*CanCache["canvas/marginB"], str(xAxisTitle))
+        else:
+            CanCache["canvas_xaxis"].DrawLatexNDC(1 - 1.0*CanCache["canvas/marginR"], 0.22*CanCache["canvas/marginB"], str(xAxisTitle))
         CanCache["canvas_xaxis"].Draw()        
 
         CanCache["canvas_label"] = ROOT.TLatex()
@@ -2854,7 +2867,10 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["canvas_label"].SetTextFont(43)
         CanCache["canvas_label"].SetTextSize(35)
         CanCache["canvas_label"].SetTextAlign(13)
-        CanCache["canvas_label"].DrawLatexNDC(0.33*CanCache["canvas/marginL"], 1-0.40*CanCache["canvas/marginT"], str(label))
+        if nXPads > 1:
+            CanCache["canvas_label"].DrawLatexNDC(0.33*CanCache["canvas/marginL"], 1-0.40*CanCache["canvas/marginT"], str(label))
+        else:
+            CanCache["canvas_label"].DrawLatexNDC(1.0*CanCache["canvas/marginL"], 1-0.40*CanCache["canvas/marginT"], str(label))
         CanCache["canvas_label"].Draw()
 
         CanCache["canvas_title"] = ROOT.TLatex()
@@ -2862,7 +2878,10 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["canvas_title"].SetTextFont(43) #Includes precision 3, which locks text size so that it stops fucking scaling according to pad size
         CanCache["canvas_title"].SetTextSize(40)
         CanCache["canvas_title"].SetTextAlign(22)
-        CanCache["canvas_title"].DrawLatexNDC(0.5, 1-0.2*CanCache["canvas/marginT"], str(canTitle) + "[{}]".format(drawSystematic) if isinstance(drawSystematic, str) else str(canTitle))
+        if nXPads > 1:
+            CanCache["canvas_title"].DrawLatexNDC(0.5, 1-0.2*CanCache["canvas/marginT"], str(canTitle) + "[{}]".format(drawSystematic) if isinstance(drawSystematic, str) else str(canTitle))
+        else:
+            CanCache["canvas_title"].DrawLatexNDC(0.5, 1-0.2*CanCache["canvas/marginT"], str(canTitle) + "[{}]".format(drawSystematic) if isinstance(drawSystematic, str) else str(canTitle))
         CanCache["canvas_title"].Draw()
 
         CanCache["canvas_header"] = ROOT.TLatex()
@@ -2870,7 +2889,10 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["canvas_header"].SetTextFont(43)
         CanCache["canvas_header"].SetTextSize(30)
         CanCache["canvas_header"].SetTextAlign(33) #Lumi and sqrt(s)
-        CanCache["canvas_header"].DrawLatexNDC(1.0-0.2*CanCache["canvas/marginR"], 1-0.40*CanCache["canvas/marginT"], str(header.format(lumi=lumi)))
+        if nXPads > 1:
+            CanCache["canvas_header"].DrawLatexNDC(1.0-0.2*CanCache["canvas/marginR"], 1-0.40*CanCache["canvas/marginT"], str(header.format(lumi=lumi)))
+        else:
+            CanCache["canvas_header"].DrawLatexNDC(1.0-1.0*CanCache["canvas/marginR"], 1-0.40*CanCache["canvas/marginT"], str(header.format(lumi=lumi)))
         CanCache["canvas_header"].Draw()
 
         CanCache["canvas"].Draw()
