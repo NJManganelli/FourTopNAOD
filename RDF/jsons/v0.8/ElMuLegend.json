@@ -32,7 +32,7 @@
                 "Stack": true
             }
         }, 
-        "nColumns": 1, 
+        "nColumns": 2, 
         "Ratios": {
             "Data/MC": {
                 "Style": "Marker", 
@@ -45,10 +45,10 @@
         "Systematics": [], 
         "Type": "DefaultLegend", 
         "Coordinates": [
-            0.0, 
-            0.1, 
-            0.25, 
-            0.60
+            0.75, 
+            0.5, 
+            1.0, 
+            0.8
         ], 
         "Categories": {
             "ttH": {
