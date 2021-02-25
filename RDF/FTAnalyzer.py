@@ -2829,7 +2829,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                             ("return true;", "2+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}2+".format(tag=tagger, bpf=branchpostfix), None))
 
                         filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
-                            ("nFTAJet{bpf} >= 4 && ( (nMedium{tag}{bpf} == 3 && nFTAJet{bpf} < 7) || (nMedium{tag}{bpf} >= 4 && nFTAJet{bpf} < 6))".format(tag=tagger, bpf=branchpostfix), 
+                            ("nFTAJet{bpf} >= 4 && ( nMedium{tag}{bpf} == 2 || (nMedium{tag}{bpf} == 3 && nFTAJet{bpf} < 7) || (nMedium{tag}{bpf} >= 4 && nFTAJet{bpf} < 6))".format(tag=tagger, bpf=branchpostfix), 
                              "4+ Jets ({bpf})".format(bpf=branchpostfix), eraAndSampleName, decayChannel, None, None, "nJet4+".format(bpf=branchpostfix)))
                     if categorySet == "5x5":
                         #Add the 0 and 1 b tag categories
