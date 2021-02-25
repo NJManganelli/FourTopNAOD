@@ -2824,6 +2824,13 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
                             ("nFTAJet{bpf} >= 4".format(bpf=branchpostfix), "4+ Jets ({bpf})".format(bpf=branchpostfix),
                              eraAndSampleName, decayChannel, None, None, "nJet4+".format(bpf=branchpostfix)))
+                    if categorySet == "BackgroundDominant":
+                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                            ("return true;", "2+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}2+".format(tag=tagger, bpf=branchpostfix), None))
+
+                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                            ("nFTAJet{bpf} >= 4 && ( (nMedium{tag}{bpf} == 3 && nFTAJet{bpf} < 7) || (nMedium{tag}{bpf} >= 4 && nFTAJet{bpf} < 6))".format(tag=tagger, bpf=branchpostfix), 
+                             "4+ Jets ({bpf})".format(bpf=branchpostfix), eraAndSampleName, decayChannel, None, None, "nJet4+".format(bpf=branchpostfix)))
                     if categorySet == "5x5":
                         #Add the 0 and 1 b tag categories
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
@@ -5738,7 +5745,7 @@ if __name__ == '__main__':
                         type=str, choices=['HTOnly', 'MVAInput', 'Control'], default='HTOnly',
                         help='Variable set to include in filling templates')
     parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
-                        type=str, choices=['5x5', '5x3', 'FullyInclusive'], default='5x3',
+                        type=str, choices=['5x5', '5x3', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
                         help='Variable set to include in filling templates')
     parser.add_argument('--systematicSet', dest='systematicSet', action='store', nargs='*',
                         type=str, choices=['ALL', 'nominal', 'pu', 'pf', 'btag', 'jerc', 'ps', 'rf',
