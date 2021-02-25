@@ -1579,7 +1579,7 @@ def createRatio(h1, h2, Cache=None, ratioTitle="input 0 vs input 1", ratioColor 
     #FIXME#x.SetTitleFont(43)
     #FIXME#x.SetTitleOffset(4.0)
     #x.SetLabelFont(43*nPads)
-    x.SetLabelSize(x.GetLabelSize()*scaleText)
+    x.SetLabelSize(x.GetLabelSize()*2*scaleText)
 
     #Do blinding
     if isBlinded:
@@ -2514,7 +2514,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                              npStatErrorsUp[pn][supercategory]
                                                                                          )
                 handle['Supercategories/statErrors'][supercategory].SetName(handle['Supercategories'][supercategory].GetName().replace("s_", "statError_"))
-                handle['Supercategories/statErrors'][supercategory].SetFillStyle(3004)
+                handle['Supercategories/statErrors'][supercategory].SetFillStyle(3005)
                 handle['Supercategories/statErrors'][supercategory].SetFillColor(ROOT.kBlue)
                 handle['Supercategories/statErrors/ratio'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                                    npBinCenters[pn][supercategory],
@@ -2535,7 +2535,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                          )
                 handle['Supercategories/statErrors/ratio'][supercategory].SetName(
                     handle['Supercategories'][supercategory].GetName().replace("s_", "statErrorRatio_"))
-                handle['Supercategories/statErrors/ratio'][supercategory].SetFillStyle(3004)
+                handle['Supercategories/statErrors/ratio'][supercategory].SetFillStyle(3005)
                 handle['Supercategories/statErrors/ratio'][supercategory].SetFillColor(ROOT.kBlue)
                 handle['Supercategories/statSystematicErrors'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                              npBinCenters[pn][supercategory],
@@ -2547,7 +2547,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                          )
                 handle['Supercategories/statErrors'][supercategory].SetName(
                     handle['Supercategories'][supercategory].GetName().replace("s_", "statSystematicError_"))
-                handle['Supercategories/statSystematicErrors'][supercategory].SetFillStyle(3001)
+                handle['Supercategories/statSystematicErrors'][supercategory].SetFillStyle(3002)
                 handle['Supercategories/statSystematicErrors'][supercategory].SetFillColor(ROOT.kGreen)
                 handle['Supercategories/statSystematicErrors/ratio'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                                              npBinCenters[pn][supercategory],
@@ -2569,7 +2569,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                          )
                 handle['Supercategories/statErrors/ratio'][supercategory].SetName(
                     handle['Supercategories'][supercategory].GetName().replace("s_", "statSystematicErrorRatio_"))
-                handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillStyle(3001)
+                handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillStyle(3002)
                 handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillColor(ROOT.kGreen)
             #access the list of upperPads created by createCanvasPads(...)
             #if len(CanCache["subplots/supercategories"][-1]["Categories/hists"]) == 0:
@@ -2667,13 +2667,13 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             pass
                         else:
                             if isinstance(CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'][super_cat_name], (ROOT.TGraphAsymmErrors)):
-                                CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'][super_cat_name].Draw("2")
+                                CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'][super_cat_name].Draw("5") #2 does fill rectangle, 5 adds the line around it
                     if "Supercategories/statSystematicErrors" in CanCache["subplots/supercategories"][pn].keys():
                         if super_cat_name not in ["Background"]: 
                             pass
                         else:
                             if isinstance(CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name], (ROOT.TGraphAsymmErrors)):
-                                CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name].Draw("2")
+                                CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name].Draw("5")
                 #Eliminate bin labels if there's a ratio plot just below
                 if doRatio and "SAME" not in draw_command:
                     for bin in range(drawable.GetXaxis().GetNbins()):
@@ -2771,7 +2771,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     if num_hist is None or den_hist is None:
                         isBlinded=True
                     #Give it the dictionary we just appended when creating the ratio and storing the axes/other root memory objects
-                    _ = createRatio(num_hist, den_hist, Cache = CanCache["subplots/ratios"][-1][aRatioName], ratioTitle = aRatioName, 
+                    # _ = createRatio(num_hist, den_hist, Cache = CanCache["subplots/ratios"][-1][aRatioName], ratioTitle = aRatioName, 
+                    _ = createRatio(num_hist, den_hist, Cache = CanCache["subplots/ratios"][-1][aRatioName], ratioTitle = "", 
                                     ratioColor = color, ratioStyle = style, ratioMarkerStyle = markerStyle, ratioAlpha = alpha,
                                     yMin = ratioYMin, yMax = ratioYMax, isBlinded=isBlinded, scaleText=scaleText, nDivisions=nDivisions)
                     #ratio_draw_command = legendConfig["Supercategories"][num]["Draw"]
@@ -2779,12 +2780,19 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     if rdn > 0:
                         ratio_draw_command += " SAME"
                     CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].Draw(ratio_draw_command)
+                    #Fix label sizes
+                    if "SAME" not in ratio_draw_command:
+                        for bin in range(CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].GetXaxis().GetNbins()):
+                            # TAxis::ChangeLabel ( Int_t  labNum = 0, Double_t  labAngle = -1., Double_t  labSize = -1.,
+                            #                      Int_t  labAlign = -1, Int_t  labColor = -1, Int_t  labFont = -1, TString  labText = "" 
+                            #                  ) 
+                            CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].GetXaxis().ChangeLabel(bin, -1, 0.08, -1, -1, -1, "")
                     #Draw ratio graph errors...
                     redraw = False
                     if den in CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'].keys():
                         scGraph = CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'][den]
                         if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
-                            scGraph.Draw("2")
+                            scGraph.Draw("2") #2 does fill rectangle, 5 adds the line around it
                             redraw = True
                     if den in CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'].keys():
                         scGraph = CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'][den]
@@ -2854,17 +2862,18 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["canvas_upper_yaxis"].SetTextSize(35)
         CanCache["canvas_upper_yaxis"].SetTextAlign(33)
         CanCache["canvas_upper_yaxis"].SetTextAngle(90)
-        CanCache["canvas_upper_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 1-0.550*CanCache["canvas/marginT"], "< " + str(yAxisTitle).replace("bin", "GeV") + " >" if differentialScale else str(yAxisTitle))
+        CanCache["canvas_upper_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 1-0.550*CanCache["canvas/marginT"], 
+                                                    "< " + str(yAxisTitle).replace("bin", "GeV") + " >" if differentialScale else str(yAxisTitle))
         CanCache["canvas_upper_yaxis"].Draw()        
 
-        # CanCache["canvas_lower_yaxis"] = ROOT.TLatex()
-        # CanCache["canvas_lower_yaxis"].SetNDC(True)
-        # CanCache["canvas_lower_yaxis"].SetTextFont(43)
-        # CanCache["canvas_lower_yaxis"].SetTextSize(35)
-        # CanCache["canvas_lower_yaxis"].SetTextAlign(13)
-        # CanCache["canvas_lower_yaxis"].SetTextAngle(90)
-        # CanCache["canvas_lower_yaxis"].DrawLatexNDC(0.33*CanCache["canvas/marginL"], 1-0.40*CanCache["canvas/marginT"], str(yAxisTitle))
-        # CanCache["canvas_lower_yaxis"].Draw()        
+        CanCache["canvas_lower_yaxis"] = ROOT.TLatex()
+        CanCache["canvas_lower_yaxis"].SetNDC(True)
+        CanCache["canvas_lower_yaxis"].SetTextFont(43)
+        CanCache["canvas_lower_yaxis"].SetTextSize(35)
+        CanCache["canvas_lower_yaxis"].SetTextAlign(33)
+        CanCache["canvas_lower_yaxis"].SetTextAngle(90)
+        CanCache["canvas_lower_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 0+1.0*CanCache["canvas/marginB"], str("#frac{Data}{Simulation}"))
+        CanCache["canvas_lower_yaxis"].Draw()        
 
         CanCache["canvas_xaxis"] = ROOT.TLatex()
         CanCache["canvas_xaxis"].SetNDC(True)
