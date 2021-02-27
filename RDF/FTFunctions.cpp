@@ -14,6 +14,7 @@
 #include <TFile.h>
 #include <TUUID.h>
 #include "ROOT/RVec.hxx"
+#include "LHAPDF/LHAPDF.h"
 
 typedef ROOT::VecOps::RVec<Float_t>                        RVec_f;
 typedef ROOT::VecOps::RVec<Float_t>::const_iterator        RVec_f_iter;
