@@ -1485,8 +1485,8 @@ def setGStyle(nDivisions=105):
     ROOT.gStyle.SetPadTickY(1)
 
     ROOT.gStyle.SetPaperSize(20., 20.)
-    ROOT.gStyle.SetHatchesLineWidth(5)
-    ROOT.gStyle.SetHatchesSpacing(0.05)
+    ROOT.gStyle.SetHatchesLineWidth(1)
+    ROOT.gStyle.SetHatchesSpacing(1)
 
     ROOT.TGaxis.SetExponentOffset(-0.08, 0.01, "Y")
     #Improve png resolution 
@@ -2509,7 +2509,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 if "data" in supercategory.lower(): continue
                 if supercategory not in npDifferences[pn].keys(): continue #More hacks, because my time has been stolen...
                 handle = CanCache["subplots/supercategories"][pn]
-                #Full path CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'][supercategory]
+                #For fill stye, see https://root.cern.ch/doc/master/classTAttFill.html
                 #Stat error
                 handle['Supercategories/statErrors'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                              npBinCenters[pn][supercategory],
@@ -2520,8 +2520,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                              npStatErrorsUp[pn][supercategory]
                                                                                          )
                 handle['Supercategories/statErrors'][supercategory].SetName(handle['Supercategories'][supercategory].GetName().replace("s_", "statError_"))
-                handle['Supercategories/statErrors'][supercategory].SetFillStyle(3005)
-                handle['Supercategories/statErrors'][supercategory].SetFillColor(ROOT.kBlue)
+                handle['Supercategories/statErrors'][supercategory].SetFillStyle(3245)
+                handle['Supercategories/statErrors'][supercategory].SetFillColorAlpha(ROOT.kBlue, 0.5)
+                handle['Supercategories/statErrors'][supercategory].SetLineColorAlpha(ROOT.kBlue, 0.5)
                 handle['Supercategories/statErrors/ratio'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                                    npBinCenters[pn][supercategory],
                                                                                                    np.divide(npNominal[pn][supercategory],
@@ -2541,8 +2542,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                          )
                 handle['Supercategories/statErrors/ratio'][supercategory].SetName(
                     handle['Supercategories'][supercategory].GetName().replace("s_", "statErrorRatio_"))
-                handle['Supercategories/statErrors/ratio'][supercategory].SetFillStyle(3005)
-                handle['Supercategories/statErrors/ratio'][supercategory].SetFillColor(ROOT.kBlue)
+                handle['Supercategories/statErrors/ratio'][supercategory].SetFillStyle(3245)
+                handle['Supercategories/statErrors/ratio'][supercategory].SetFillColorAlpha(ROOT.kBlue, 0.5)
+                handle['Supercategories/statErrors/ratio'][supercategory].SetLineColorAlpha(ROOT.kBlue, 0.5)
                 #Syst error
                 handle['Supercategories/systematicErrors'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                                    npBinCenters[pn][supercategory],
@@ -2554,8 +2556,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                                )
                 handle['Supercategories/systematicErrors'][supercategory].SetName(
                     handle['Supercategories'][supercategory].GetName().replace("s_", "systematicError_"))
-                handle['Supercategories/systematicErrors'][supercategory].SetFillStyle(3002)
-                handle['Supercategories/systematicErrors'][supercategory].SetFillColor(ROOT.kGray)
+                handle['Supercategories/systematicErrors'][supercategory].SetFillStyle(3154)
+                handle['Supercategories/systematicErrors'][supercategory].SetFillColorAlpha(ROOT.kRed, 0.5)
+                handle['Supercategories/systematicErrors'][supercategory].SetLineColorAlpha(ROOT.kRed, 0.5)
                 handle['Supercategories/systematicErrors/ratio'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                                              npBinCenters[pn][supercategory],
                                                                                                              np.divide(npNominal[pn][supercategory],
@@ -2576,8 +2579,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                          )
                 handle['Supercategories/systematicErrors/ratio'][supercategory].SetName(
                     handle['Supercategories'][supercategory].GetName().replace("s_", "systematicErrorRatio_"))
-                handle['Supercategories/systematicErrors/ratio'][supercategory].SetFillStyle(3002)
-                handle['Supercategories/systematicErrors/ratio'][supercategory].SetFillColor(ROOT.kGray)
+                handle['Supercategories/systematicErrors/ratio'][supercategory].SetFillStyle(3154)
+                handle['Supercategories/systematicErrors/ratio'][supercategory].SetFillColorAlpha(ROOT.kRed, 0.5)
+                handle['Supercategories/systematicErrors/ratio'][supercategory].SetLineColorAlpha(ROOT.kRed, 0.5)
                 #Stat + Syst errors
                 handle['Supercategories/statSystematicErrors'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                              npBinCenters[pn][supercategory],
@@ -2589,9 +2593,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                          )
                 handle['Supercategories/statSystematicErrors'][supercategory].SetName(
                     handle['Supercategories'][supercategory].GetName().replace("s_", "statSystematicError_"))
-                handle['Supercategories/statSystematicErrors'][supercategory].SetFillStyle(3002)
-                handle['Supercategories/statSystematicErrors'][supercategory].SetFillColor(ROOT.kGreen)
-
+                handle['Supercategories/statSystematicErrors'][supercategory].SetFillStyle(3144)
+                handle['Supercategories/statSystematicErrors'][supercategory].SetFillColorAlpha(ROOT.kBlack, 0.5)
+                handle['Supercategories/statSystematicErrors'][supercategory].SetLineColorAlpha(ROOT.kBlack, 0.5)
                 handle['Supercategories/statSystematicErrors/ratio'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                                              npBinCenters[pn][supercategory],
                                                                                                              np.divide(npNominal[pn][supercategory],
@@ -2612,8 +2616,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                          )
                 handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetName(
                     handle['Supercategories'][supercategory].GetName().replace("s_", "statSystematicErrorRatio_"))
-                handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillStyle(3002)
-                handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillColor(ROOT.kGreen)
+                handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillStyle(3144)
+                handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillColorAlpha(ROOT.kBlack, 0.5)
+                handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetLineColorAlpha(ROOT.kBlack, 0.5)
                 if "tttt" in supercategory.lower() or "signal" in supercategory.lower(): continue
                 if pn == 0:
                     CanCache["subplots/supercategories"][0]["Legend"].AddEntry(handle['Supercategories/statErrors'][supercategory], "stat err", "F")
@@ -2962,7 +2967,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         formattedCanvasPath, _ = os.path.split(formattedCanvasName)
         if not os.path.isdir(formattedCanvasPath):
             os.makedirs(formattedCanvasPath)
-        if pdfOutput != None:
+        if pdfOutput:
             if can_num == 1 and can_num != can_max: #count from 1 since we increment at the beginning of the loop on this one
                 #print(CanCache["canvas"])
                 CanCache["canvas"].SaveAs("{}(".format(pdfOutput))
@@ -2971,11 +2976,12 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 CanCache["canvas"].SaveAs("{})".format(pdfOutput))
             else:
                 CanCache["canvas"].SaveAs("{}".format(pdfOutput))
+            CanCache["canvas"].SaveAs("{}".format(formattedCanvasName + ".pdf"))
         if isinstance(drawSystematic, str):
             formattedCanvasName += "." + drawSystematic
-        if macroOutput != None:
+        if macroOutput:
             CanCache["canvas"].SaveAs("{}".format(formattedCanvasName + ".C"))
-        if pngOutput != None:
+        if pngOutput:
             CanCache["canvas"].SaveAs("{}".format(formattedCanvasName + ".png"))
         if pdfOutput or macroOutput or pngOutput:
             print("\tDrew {}".format(can_name))
