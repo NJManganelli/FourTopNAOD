@@ -518,13 +518,14 @@ doEOSHOME will override the redir string with the one formatted based on your us
                 fileList.append(line.rstrip("\s\n\t"))
     elif "glob:" in query:
         query_stripped = query.replace("glob:","")
-        fileList = glob(query_stripped)
+        fileList = sorted(glob(query_stripped))
     elif "list:" in query:
         query_stripped = query.replace("list:","")
         fileList = []
         with open(query_stripped) as in_f:
             for line in in_f:
                 fileList.append(line.rstrip("\s\n\t"))
+            fileList = sorted(fileList)
     else:
         print("No query passed to getFiles(), exiting")
         sys.exit(9001)
