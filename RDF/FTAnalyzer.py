@@ -815,7 +815,7 @@ def flattenVariable(input_df, var, depth, static_cast=None, fallback=None, debug
 
     return rdf, flats
 
-def writeNtuples(packedNodes, ntupledir, nJetMin=4, HTMin=450, bTagger="DeepJet"):
+def writeNtuples(packedNodes, ntupledir, nJetMin=4, HTMin=350, bTagger="DeepJet"):
     # Use reversed order to cycle from highest priority level to lowest, finally calling snapshot on lowest priority level greater than 0
     snapshotTrigger = sorted([p for p in packedNodes["snapshotPriority"].values() if p > 0])
     if len(snapshotTrigger) > 0:
@@ -2396,7 +2396,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
 
 def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="All", isData=True, era="2017", categorySet="5x3", histosDict=None,
                doCategorized=False, doDiagnostics=True, doCombineHistosOnly=False, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
-               HTCut=500, ZMassMETWindow=[15.0, 0.0], verbose=False,
+               HTCut=500, METCut=0.0, ZMassMETWindow=[15.0, 10000.0], verbose=False,
                triggers=[],
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "lep_postfix": "",
@@ -2416,8 +2416,10 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     value to that histosXX_dict variable. Internally stored with structure separating the categories of histos,
     with 'Muons,' 'Electrons,' 'Leptons,' 'Jets,' 'EventVars,' 'Weights' subcategories.
     
-    ZMassMETWindow = [<invariant mass halfwidth>, <METCut>] - If in the same-flavor dilepton channel, require 
-    abs(DileptonInvMass - ZMass) < ZWindowHalfWidth and MET >= METCut
+    ZMassMETWindow = [<invariant mass halfwidth>, <METWindowCut>] - If in the same-flavor dilepton channel, require 
+    abs(DileptonInvMass - ZMass) > ZWindowHalfWidth or MET >= METCut
+
+    METCut = cut on MET everywhere outside the ZWindow
     """
     
 
@@ -2529,6 +2531,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     if channel == "MuMu":
         ControlTemplates += ["FTAMuon1_pt",
                              "FTAMuon2_pt",
+                             "FTAMuon1_eta",
+                             "FTAMuon2_eta",
         ]
         MVAInputTemplates += ["FTAMuon1_pt",
                               "FTAMuon2_pt",
@@ -2536,6 +2540,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     elif channel == "ElMu":
         ControlTemplates += ["FTAMuon1_pt",
                              "FTAElectron1_pt",
+                             "FTAMuon1_eta",
+                             "FTAElectron1_eta",
         ]
         MVAInputTemplates += ["FTAMuon1_pt",
                               "FTAElectron1_pt",
@@ -2543,6 +2549,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     elif channel == "ElEl":
         ControlTemplates += ["FTAElectron1_pt",
                              "FTAElectron2_pt",
+                             "FTAElectron1_eta",
+                             "FTAElectron2_eta",
         ]
         MVAInputTemplates += ["FTAElectron1_pt",
                               "FTAElectron2_pt",
@@ -2699,72 +2707,79 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     if decayChannel == "ElMu{lpf}".format(lpf=leppostfix):
                         channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 1 && nFTAElectron{lpf}== 1".format(lpf=leppostfix)
                         channelFiltName = "1 el, 1 mu ({lpf})".format(lpf=leppostfix)
-                        L0String = "HT{bpf} >= {htc}".format(bpf=branchpostfix, htc=HTCut)
+                        L0String = "HT{bpf} >= {htc} && {met} >= {metcut}".format(bpf=branchpostfix, htc=HTCut, met=fillMET_pt, metcut=METCut)
                         L0Name = "HT{bpf} >= {htc}"\
                             .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), metcut=str(0).replace(".", "p"), 
-                                                                                 zwidth=0)
+                        L0Key = "ZWindowMET{metwindow}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                                                                                      metwindow=str("0"),
+                                                                                      # metwindow=str(0).replace(".", "p"), 
+                                                                                      zwidth=0)
                         # L0String = "ST{bpf} >= {htc}".format(bpf=branchpostfix, htc=HTCut)
                         # L0Name = "ST{bpf} >= {htc}"\
-                        #     .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        # L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), metcut=str(0).replace(".", "p"), 
+                        #     .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        # L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), metwindow=str(0).replace(".", "p"), 
                         #                                                          zwidth=0)
                     elif decayChannel == "MuMu{lpf}".format(lpf=leppostfix):
                         channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 2".format(lpf=leppostfix)
                         channelFiltName = "2 mu ({lpf})".format(lpf=leppostfix)
-                        L0String = "HT{bpf} >= {htc} && {met} >= {metcut} && FTAMuon{lpf}_InvariantMass > 20 && abs(FTAMuon{lpf}_InvariantMass - 91.2) > {zwidth}"\
-                            .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
-                        L0Name = "HT{bpf} >= {htc}, {met} >= {metcut}, Di-Muon Resonance > 20GeV and outside {zwidth}GeV Z Window"\
-                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
-                                                                                 metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
-                                                                                 zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
-                        # L0String = "ST{bpf} >= {htc} && {met} >= {metcut} && FTAMuon{lpf}_InvariantMass > 20 && abs(FTAMuon{lpf}_InvariantMass - 91.2) > {zwidth}"\
-                        #     .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
-                        # L0Name = "ST{bpf} >= {htc}, {met} >= {metcut}, Di-Muon Resonance > 20GeV and outside {zwidth}GeV Z Window"\
-                        #     .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        L0String = "HT{bpf} >= {htc} && FTAMuon{lpf}_InvariantMass > 20 && ( ({met} >= {metcut} && abs(FTAMuon{lpf}_InvariantMass - 91.2) > {zwidth})"\
+                                   " || ({met} >= {metwindow} && abs(FTAMuon{lpf}_InvariantMass - 91.2) <= {zwidth}))"\
+                            .format(lpf=leppostfix, met=fillMET_pt, metcut=METCut, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                        L0Name = "HT{bpf} >= {htc}, {met} >= {metcut}, Di-Muon Resonance > 20GeV and outside {zwidth}GeV Z Window or inside with {met} >= {metwindow}"\
+                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=METCut, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        L0Key = "ZWindowMET{metwindow}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                                                                                   metwindow=str("0p0"),
+                                                                                   # metwindow=str(ZMassMETWindow[1]).replace(".", "p"), 
+                                                                                   zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
+                        # L0String = "ST{bpf} >= {htc} && {met} >= {metwindow} && FTAMuon{lpf}_InvariantMass > 20 && abs(FTAMuon{lpf}_InvariantMass - 91.2) > {zwidth}"\
+                        #     .format(lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                        # L0Name = "ST{bpf} >= {htc}, {met} >= {metwindow}, Di-Muon Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                        #     .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
                         # L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
-                        #                                                          metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
+                        #                                                          metwindow=str(ZMassMETWindow[1]).replace(".", "p"), 
                         #                                                          zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
                     elif decayChannel == "ElEl{lpf}".format(lpf=leppostfix):
                         channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
                         # print("\n\n2MediumElectron test in ElEl Channel\n\n")
                         # channelFilter = "nFTALepton{lpf} == 2 && nMediumFTAElectron{lpf}== 2".format(lpf=leppostfix)
                         channelFiltName = "2 el ({lpf})".format(lpf=leppostfix)
-                        L0String = "HT{bpf} >= {htc} && {met} >= {metcut} && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
-                            .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                        L0String = "HT{bpf} >= {htc} && FTAElectron{lpf}_InvariantMass > 20 && ( ({met} >= {metcut} && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth})"\
+                                   " || ({met} >= {metwindow} && abs(FTAElectron{lpf}_InvariantMass - 91.2) <= {zwidth}))"\
+                            .format(lpf=leppostfix, met=fillMET_pt, metcut=METCut, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
                         L0Name = "HT{bpf} >= {htc}, {met} >= {metcut}, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
-                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
-                                                                                 metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
-                                                                                 zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
-                        # L0String = "ST{bpf} >= {htc} && {met} >= {metcut} && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
-                        #     .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
-                        # L0Name = "ST{bpf} >= {htc}, {met} >= {metcut}, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
-                        #     .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=METCut, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        L0Key = "ZWindowMET{metwindow}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                                                                                      metwindow=str("0p0"),
+                                                                                      # metcut=str(METCut).replace(".", "p"), 
+                                                                                      zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
+                        # L0String = "ST{bpf} >= {htc} && {met} >= {metwindow} && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
+                        #     .format(lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                        # L0Name = "ST{bpf} >= {htc}, {met} >= {metwindow}, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                        #     .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
                         # L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
-                        #                                                          metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
+                        #                                                          metcut=str(METCut).replace(".", "p"), 
                         #                                                          zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
-                    elif decayChannel == "ElEl_LowMET{lpf}".format(lpf=leppostfix):
-                        channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
-                        channelFiltName = "2 el, Low MET ({lpf})".format(lpf=leppostfix)
-                        L0String = "HT{bpf} >= {htc} && {met} < 50 && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
-                            .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
-                        L0Name = "HT{bpf} >= {htc}, {met} < 50, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
-                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        L0Key = "ZWindowMET0to50Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
-                                                                                 metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
-                                                                                 zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
-                    elif decayChannel == "ElEl_HighMET{lpf}".format(lpf=leppostfix):
-                        channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
-                        channelFiltName = "2 el, High MET ({lpf})".format(lpf=leppostfix)
-                        L0String = "HT{bpf} >= {htc} && {met} >= 50 && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
-                            .format(lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
-                        L0Name = "HT{bpf} >= {htc}, {met} >= 50, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
-                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
-                        L0Key = "ZWindowMET50Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
-                                                                                 metcut=str(ZMassMETWindow[1]).replace(".", "p"), 
-                                                                                 zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
+                    #THESE NEED THE MET CUT/WINDOW DIVISION INTRODUCED, DON'T REENABLE OTHERWISE
+                    # elif decayChannel == "ElEl_LowMET{lpf}".format(lpf=leppostfix):
+                    #     channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
+                    #     channelFiltName = "2 el, Low MET ({lpf})".format(lpf=leppostfix)
+                    #     L0String = "HT{bpf} >= {htc} && {met} < 50 && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
+                    #         .format(lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                    #     L0Name = "HT{bpf} >= {htc}, {met} < 50, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                    #         .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                    #     L0Key = "ZWindowMET0to50Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                    #                                                              metwindow=str(ZMassMETWindow[1]).replace(".", "p"), 
+                    #                                                              zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
+                    # elif decayChannel == "ElEl_HighMET{lpf}".format(lpf=leppostfix):
+                    #     channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
+                    #     channelFiltName = "2 el, High MET ({lpf})".format(lpf=leppostfix)
+                    #     L0String = "HT{bpf} >= {htc} && {met} >= 50 && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
+                    #         .format(lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                    #     L0Name = "HT{bpf} >= {htc}, {met} >= 50, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                    #         .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                    #     L0Key = "ZWindowMET50Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                    #                                                              metwindow=str(ZMassMETWindow[1]).replace(".", "p"), 
+                    #                                                              zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
                     else:
                         raise NotImplementedError("No definition for decayChannel = {} yet".format(decayChannel))
                     #filter define, filter name, process, channel, L0 (HT/ZWindow <cross> SCALE variations), L1 (nBTags), L2 (nJet)
@@ -4756,6 +4771,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
          BTaggingYieldsAggregate=False, useHTOnly=False, useNJetOnly=False, 
          printBookkeeping=False, triggers=[], includeSampleNames=None, 
          useDeltaR=False, jetPtMin=30.0, jetPUId=None, 
+         HTCut=500, METCut=0.0, ZMassMETWindow=[15.0, 10000.0],
          disableNjetMultiplicityCorrection=False, enableTopPtReweighting=False,
          excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True,
          testVariables=False, categorySet="5x3", variableSet="HTOnly", systematicSet="All", nThreads=8,
@@ -5525,20 +5541,34 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                          doCombineHistosOnly=doCombineHistosOnly, 
                                          nJetsToHisto=10, 
                                          bTagger=bTagger,
-                                         HTCut=500, 
-                                         ZMassMETWindow=[15.0, 0.0], 
+                                         HTCut=HTCut, 
+                                         ZMassMETWindow=ZMassMETWindow, 
                                          sysVariations=sysVariationsForHistos, 
                                          sysFilter=allSystematics,
                                          skipNominalHistos=skipNominalHistos,
                                          verbose=verb,
                         )
                     else:
-                        packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
-                                                            era = vals["era"], triggers = triggers, categorySet=categorySet, 
-                                                            sampleName=name, channel=lvl.replace("_selection", "").replace("_baseline", ""), 
-                                                            histosDict=histos, sysVariations=sysVariationsForHistos, sysFilter=allSystematics, 
-                                                            doCategorized=True, doDiagnostics=False, doCombineHistosOnly=doCombineHistosOnly, bTagger=bTagger, 
-                                                            skipNominalHistos=skipNominalHistos, verbose=verb)
+                        packedNodes[name][lvl] = fillHistos(prePackedNodes, 
+                                                            splitProcess=splitProcessConfig, 
+                                                            isData = vals["isData"], 
+                                                            era = vals["era"], 
+                                                            triggers = triggers, 
+                                                            categorySet=categorySet, 
+                                                            sampleName=name, 
+                                                            channel=lvl.replace("_selection", "").replace("_baseline", ""), 
+                                                            histosDict=histos, 
+                                                            sysVariations=sysVariationsForHistos, 
+                                                            sysFilter=allSystematics, 
+                                                            doCategorized=True, 
+                                                            doDiagnostics=False, 
+                                                            doCombineHistosOnly=doCombineHistosOnly, 
+                                                            bTagger=bTagger, 
+                                                            HTCut=HTCut,
+                                                            METCut=METCut,
+                                                            ZMassMETWindow=ZMassMETWindow,
+                                                            skipNominalHistos=skipNominalHistos, 
+                                                            verbose=verb)
                 if doDiagnostics:
                     packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
                                                         era = vals["era"], triggers = triggers, categorySet=categorySet, 
@@ -5764,6 +5794,14 @@ if __name__ == '__main__':
                         help='Float value for the minimum Jet pt in GeV, defaulting to 30.0')
     parser.add_argument('--jetPUId', dest='jetPUId', action='store', default='L', nargs='?', const='L', type=str, choices=['N', 'L', 'M', 'T'],
                         help='Apply Jet PU Id to the selected jets, with choices of None ("N"), Loose ("L"), Medium ("M"), or Tight ("T") using the 94X and 102X training in NanoAODv7.')
+    parser.add_argument('--HTCut', dest='HTCut', action='store', default=500, type=float,
+                        help='Float value for the HT cut for filled histograms in GeV, defaulting to 500')
+    parser.add_argument('--METCut', dest='METCut', action='store', default=0.0, type=float,
+                        help='Float value for the MET cut (outside Z window) for filled histograms in GeV, defaulting to 0.0')
+    parser.add_argument('--ZWindowMET', dest='ZWindowMET', action='store', default=10000.0, type=float,
+                        help='Float value for the MET cut (inside Z window) for filled histograms in GeV, defaulting to 10000.0')
+    parser.add_argument('--ZWindowWidth', dest='ZWindowWidth', action='store', default=15.0, type=float,
+                        help='Float value for the Z Boson Width (same-flavor invariant lepton mass) for filled histograms in GeV, defaulting to 15.0')
     parser.add_argument('--useDeltaR', dest='useDeltaR', action='store', type=float, default=0.4, #nargs='?', const=0.4,
                         help='Default distance parameter 0.4, use to set alternative float value for Lepton-Jet cross-cleaning')
     parser.add_argument('--usePFMatching', dest='usePFMatching', action='store_true', 
@@ -5832,6 +5870,10 @@ if __name__ == '__main__':
         doNtuples = True
     jetPtMin=args.jetPtMin
     jetPUId=args.jetPUId
+    HTCut=args.HTCut
+    METCut=args.METCut
+    ZWindowWidth=args.ZWindowWidth
+    ZWindowMET=args.ZWindowMET
     disableNjetMultiplicityCorrection = args.disableNjetMultiplicityCorrection
     enableTopPtReweighting = args.enableTopPtReweighting
     useDeltaR = args.useDeltaR
@@ -5868,6 +5910,10 @@ if __name__ == '__main__':
     print("Channel to be analyzed: {chan}".format(chan=channel))
     print("Algorithm for Lepton-Jet crosscleaning: {}".format("PFMatching" if not useDeltaR else "DeltaR < {}".format(useDeltaR)))
     print("Jet selection is using these parameters: Minimum Pt: {} PU Id: {}".format(jetPtMin, jetPUId))
+    print("HTCut: {htc}      METCut: {metcut}     ZMassMETWindow: [{zwidth}, {metwindow}]".format(htc=HTCut,
+                                                                                                  metcut=METCut,
+                                                                                                  zwidth=ZWindowWidth,
+                                                                                                  metwindow=ZWindowMET))
     print("ttbar njet multiplicity correction is disabled for tt (+ X(Y)): {}".format(disableNjetMultiplicityCorrection))
     print("BTagger algorithm to be used: {tag}".format(tag=bTagger))
     print("BTagging aggregate Yields/Efficiencies will be used ({uAgg}) and depend on HT only ({uHT}) or nJet only ({uNJ})"\
@@ -5893,7 +5939,8 @@ if __name__ == '__main__':
         print("Filling BTagging sum of weights (yields) before and after applying shape-correction scale factors for the jets")
         # print('main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, verbose=False)')
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=True, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
+                      BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, 
+                      HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, 
                       testVariables=test, categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
@@ -5938,7 +5985,8 @@ if __name__ == '__main__':
                            )
     elif stage == 'lepton-selection':
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doLeptonSelection=True, doBTaggingYields=False, 
-                      BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, 
+                      BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, 
+                      HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useDeltaR=useDeltaR, 
                       useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList,  
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
@@ -5947,7 +5995,8 @@ if __name__ == '__main__':
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, 
+                      HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList,  
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
@@ -5955,7 +6004,8 @@ if __name__ == '__main__':
                       recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, sampleCards, source, "BOOKKEEPING", bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, 
+                      HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList,  
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
@@ -5963,7 +6013,8 @@ if __name__ == '__main__':
                       recreateFileList=args.recreateFileList, doRDFReport=args.report)
     elif stage == 'pileup':
         packed = main(analysisDir, sampleCards, source, "PILEUP", bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
-                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, 
+                      HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList,  
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
@@ -5974,7 +6025,7 @@ if __name__ == '__main__':
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, 
                       doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=False,
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
-                      jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      jetPtMin=jetPtMin, jetPUId=jetPUId, HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
@@ -5985,7 +6036,7 @@ if __name__ == '__main__':
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, 
                       doNtuples=doNtuples, doHistos=True, doCombineHistosOnly=True,
                       doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
-                      jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      jetPtMin=jetPtMin, jetPUId=jetPUId, HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
