@@ -16,6 +16,7 @@ import array
 import pprint
 import re
 import pdb
+import psutil #psutil.Process().memory_info() for info...
 import ROOT
 import ruamel.yaml as yaml
 from FourTopNAOD.RDF.tools.toolbox import getFiles, load_yaml_cards, write_yaml_cards, filter_systematics
@@ -2145,6 +2146,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
             nodes["BaseNode"] = df_with_IDs #Always store the base node we'll build upon in the next level
             for preProcessName, processDict in list(splitProcs.items()) + list(inclusiveProc.items()):
                 eraAndSampleName = era + "___" + preProcessName
+                eraAndProcessName = eraAndSampleName.replace("-HDAMPdown", "").replace("-HDAMPup", "").replace("-TuneCP5down", "").replace("-TuneCP5up", "")
                 filterString = processDict.get("filter")
                 snapshotPriority[eraAndSampleName] = processDict.get("snapshotPriority", 0)
                 filterName = "{} :: {}".format(eraAndSampleName, filterString.replace(" && ", " and ").replace(" || ", " or ")\
@@ -5158,6 +5160,10 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                   }
                 for mk, mv in metainfo[name].items():
                     metainfo[name][mk] = mv.GetValue()
+                    if mk == "genEventSumw":
+                        if 1 - vals.get("sumWeights")/metainfo[name]["genEventSumw"] > 1e-4:
+                            print("\n\n\nWARNING: Large weight discrepancy detected! name={} sumWeights={} genEventSumw={}\n\n\n"\
+                                  .format(name, vals.get("sumWeights"), metainfo[name]["genEventSumw"]))
             metainfo[name]["totalEvents"] = tcmain.GetEntries()
             print("\n{}".format(name))
             pprint.pprint(metainfo[name])
