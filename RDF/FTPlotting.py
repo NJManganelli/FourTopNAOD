@@ -1794,7 +1794,6 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
     if type(legendConfig) != dict or "Categories" not in legendConfig.keys():
         raise ValueError("legendConfig passed to makeCategoryHists contains no 'Categories' key")
     # histKeys = set([hist.GetName() for hist in histFile.GetListOfKeys()])
-    # pdb.set_trace()
     # unblindedKeys = dict([(histKey.replace("blind_", "").replace("BLIND", ""), histKey) for histKey in histKeys]) #Don't use "blind_" anywhere, get rid of this function call..
     unblindedKeys = dict([(histKey.replace("BLIND", "") if "BLIND" in histKey else histKey, histKey) for histKey in histKeys])
     if debug:
@@ -1989,7 +1988,7 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
 
 
 def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, systematic=None, nominalPostfix="nom", 
-                        separator="___", orderByIntegral=True, rebin=None, setRangeUser=None, projection=None, 
+                        separator="___", orderByIntegral=True, orderReverse=False, rebin=None, setRangeUser=None, projection=None, 
                         verbose=False, debug=False, pn=None, doLogY=False, smoothing=0, 
                         normalizeToNominal=False, zeroingThreshold=50, differentialScale=False,
                         nominalCache=None,):
@@ -2069,9 +2068,9 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
                 cat_hist.Add(nominal_hist, 1)
         orderingList.append((cat_hist.GetSumOfWeights(), cat_name, cat_hist, ))
     if orderByIntegral:
-        orderingList.sort(key=lambda j: j[0], reverse=False)
+        orderingList.sort(key=lambda j: j[0], reverse=orderReverse)
     else:
-        orderingList.sort(key=lambda j: j[1], reverse=False)
+        orderingList.sort(key=lambda j: j[1], reverse=orderReverse)
     #Create dictionary of supercategory items
     retDict["Supercategories"] = {}
     retDict["Supercategories/stats"] = {}
@@ -2182,7 +2181,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
                      debug=False, nDivisions=105, lumi="N/A", drawYields=False,
                      zeroingThreshold=0, differentialScale=False, histogramUncertainties=False,
-                     removeNegativeBins=True, 
+                     removeNegativeBins=True, orderReverse=False,
                      normalizeUncertainties=['OSDL_RunII_ttmuRNomFDown', 'OSDL_RunII_ttmuRNomFUp', 'OSDL_RunII_ttmuFNomRDown', 'OSDL_RunII_ttmuFNomRUp', 
                                              'OSDL_RunII_ttmuRFcorrelatedDown', 'OSDL_RunII_ttmuRFcorrelatedUp', 
                                              'OSDL_RunII_ttVJetsmuRNomFDown', 'OSDL_RunII_ttVJetsmuRNomFUp', 'OSDL_RunII_ttVJetsmuFNomRDown', 'OSDL_RunII_ttVJetsmuFNomRUp', 
@@ -2367,7 +2366,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             #Call makeSuperCategories with the very same file [pn] referenced, plus the legendConfig
             # filteredHistKeys = [fkey for fkey in CanCache["subplots/files/keys"][pn] if fkey.split(separator)[-1] in ["$NOMINAL", "nom"]]
             CanCache["subplots/supercategories"].append(makeSuperCategories(CanCache["subplots/files"][pn], CanCache["subplots/files/keys"][pn], legendConfig, nice_name, 
-                                                                            systematic=None, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], setRangeUser=CanCache["subplots/setrangeuser"][pn],
+                                                                            systematic=None, orderByIntegral=True, orderReverse=orderReverse, 
+                                                                            rebin=CanCache["subplots/rebins"][pn], setRangeUser=CanCache["subplots/setrangeuser"][pn],
                                                                             projection=CanCache["subplots/projections"][pn], 
                                                                             nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn, doLogY=doLogY,
                                                                             normalizeToNominal=False, smoothing=0, zeroingThreshold=zeroingThreshold, differentialScale=differentialScale))
@@ -2443,7 +2443,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         smoothing = 5
                     CanCache["subplots/supercategories/systematics"][syst].append(makeSuperCategories(CanCache["subplots/files"][pn], CanCache["subplots/files/keys"][pn], legendConfig, 
                                                                                                       nice_name,
-                                                                                                      systematic=syst, orderByIntegral=True, rebin=CanCache["subplots/rebins"][pn], 
+                                                                                                      systematic=syst, orderByIntegral=True, 
+                                                                                                      orderReverse=orderReverse,
+                                                                                                      rebin=CanCache["subplots/rebins"][pn], 
                                                                                                       setRangeUser=CanCache["subplots/setrangeuser"][pn],
                                                                                                       projection=CanCache["subplots/projections"][pn], 
                                                                                                       nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, 
@@ -3059,7 +3061,6 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         # if any([substr in combSystematic 
                         #         for substr in ["muRFcorrelatedDown", "muRFcorrelatedUp", "muRNomFDown", "muRNomFUp",
                         #                        "muFNomRDown", "muFNomRUp", "ISRDown", "ISRUp", "FSRDown", "FSRUp"]]):
-                        #     pdb.set_trace()
 
                         #     if processName in  ["ttbb", "ttother", "ttnobb"]:
                         #         combSystematic = "tt" + combSystematic
@@ -3313,6 +3314,14 @@ if __name__ == '__main__':
                         help='For variable width binning, set the bin errors and contents equal to the average over the bin width. Not compatible with --combineInput option')
     parser.add_argument('--histogramUncertainties', dest='histogramUncertainties', action='store_true',
                         help='For drawing the MC stat + systematic uncertainties on the main histogram plot (always on for ratio plot)')
+    parser.add_argument('--orderReverse', dest='orderReverse', action='store_true',
+                        help='For reversing the order of samples in the THStacks')
+    parser.add_argument('--forceIntegerBinning', dest='forceBinning', action='store', type=int,
+                        help='int or list to force rebinning on histograms')
+    parser.add_argument('--forceArrayBinning', dest='forceBinning', action='store', type=list, nargs='*',
+                        help='int or list to force rebinning on histograms')
+    parser.add_argument('--forceLogY', dest='forceLogY', action='store_true',
+                        help='Force LogY axis plotting')
     
 
     #Parse the arguments
@@ -3424,13 +3433,25 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                 print("pdfOutput = {}".format(pdfOutput))
         else:
             combineOut = None
+        if args.forceBinning:
+            print("Enforcing new binning: {}".format(args.forceBinning))
+            for k, v in loadedPlotConfig.items():
+                if "Rebin" in v.keys():
+                    v["Rebin"] = args.forceBinning
+        if args.forceLogY:
+            print("Enforcing LogY")
+            for k, v in loadedPlotConfig.items():
+                if "doLogY" in v.keys():
+                    v["doLogY"] = True
         resultsDict = loopPlottingJSON(loadedPlotConfig, era=args.era, channel=args.channel, systematicCards=args.systematics_cards,
                                        Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, drawSystematic=args.drawSystematic,
                                        analysisDirectory=analysisDir, tag=tag, plotCard=plotCard, macroOutput=macroOutput, pngOutput=pngOutput,
                                        pdfOutput=pdfOutput, combineOutput=combineOut, combineInput=combineInput, combineCards=combineCards,
                                        lumi=lumi, useCanvasMax=useCanvasMax, 
                                        skipSystematics=skipSystematics, verbose=verb,
-                                       zeroingThreshold=zeroingThreshold, differentialScale=differentialScale, histogramUncertainties=args.histogramUncertainties);
+                                       zeroingThreshold=zeroingThreshold, differentialScale=differentialScale, histogramUncertainties=args.histogramUncertainties,
+                                       orderReverse=args.orderReverse
+        );
     else:
         raise RuntimeError("The loading of the plot or legend cards failed. They are of type {} and {}, respectively".format(type(loadedPlotConfig),type(loadedLegendConfig)))
 
