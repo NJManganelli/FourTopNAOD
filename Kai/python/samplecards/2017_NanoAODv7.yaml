@@ -2522,7 +2522,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_DL-GF
-    crossSection: 1.4567346170014
+    crossSection: 1.33860656052
     crossSectionGenHT500-550nJet7Matching: 1.4529
     sumWeights: 144842769.8404722
     sumWeights2: 10769902719.502201
@@ -2629,7 +2629,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_DL-GF
-    crossSection: 1.4567346170014
+    crossSection: 1.57982051526
     crossSectionGenHT500-550nJet7Matching: 1.4529
     sumWeights: 151661000.53675056
     sumWeights2: 11061528529.582743
@@ -2736,7 +2736,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_DL-GF
-    crossSection: 1.4567346170014
+    crossSection: 1.4505224732
     crossSectionGenHT500-550nJet7Matching: 1.4529
     sumWeights: 157517119.5475001
     sumWeights2: 11561617001.345049
@@ -2843,7 +2843,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_DL-GF
-    crossSection: 1.4567346170014
+    crossSection: 1.46640499893
     crossSectionGenHT500-550nJet7Matching: 1.4529
     sumWeights: 149191987.8821451
     sumWeights2: 10950713750.193361
@@ -3961,7 +3961,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_SL-GF
-    crossSection: 2.2689516478593
+    crossSection: 2.05659697645
     sumWeights: 551254800.7275307
     sumWeights2: 170879388254.5313
     nEvents: 1827776
@@ -4068,7 +4068,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_SL-GF
-    crossSection: 2.2689516478593
+    crossSection: 2.44501732476
     sumWeights: 701460630.4837703
     sumWeights2: 213433403955.97888
     nEvents: 2338708
@@ -4175,7 +4175,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_SL-GF
-    crossSection: 2.2689516478593
+    crossSection: 2.22543797782
     sumWeights: 619798448.2927065
     sumWeights2: 189743221676.08914
     nEvents: 2064430
@@ -4282,7 +4282,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_SL-GF
-    crossSection: 2.2689516478593
+    crossSection: 2.2691633533
     sumWeights: 516166259.0265638
     sumWeights2: 157985246952.61914
     nEvents: 1718893
