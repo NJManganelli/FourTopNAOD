@@ -1473,7 +1473,7 @@
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
             < 500)
           fractionalContribution: 1
-          effectiveCrossSection: 0.32262107 #1.22 x nominalXS
+          effectiveCrossSection: 0.359643285591 #1.36 x nominalXS
           snapshotPriority: 4
           nEventsPositive: 194003
           nEventsNegative: 839
@@ -1495,7 +1495,7 @@
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
             >= 500
           fractionalContribution: 0.105768081648
-          effectiveCrossSection: 0.05911815 #1.22 x nominalXS
+          effectiveCrossSection: 0.0659588897972 #nominalXS x 1.36
           snapshotPriority: 3
           nEventsPositive: 35574
           nEventsNegative: 173
@@ -1517,7 +1517,7 @@
           filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
             >= 500
           fractionalContribution: 0.105852117693
-          effectiveCrossSection: 1.39803035 #nominalXS - 0.22 x nominalXS_ttbb_DL_fr
+          effectiveCrossSection: 1.3911901673 #nominalXS - 0.36 x nominalXS_ttbb_DL_fr
           snapshotPriority: 1
           nEventsPositive: 1034325
           nEventsNegative: 5169
@@ -1539,7 +1539,7 @@
           filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && (nFTAGenJet < 7 || FTAGenHT
             < 500)
           fractionalContribution: 1
-          effectiveCrossSection: 85.5550338 #nominalXS - 0.22 * nominalXS_ttbb_DL_nr
+          effectiveCrossSection: 85.5180117243 #nominalXS - 0.36 * nominalXS_ttbb_DL_nr
           snapshotPriority: 2
           nEventsPositive: 62786840
           nEventsNegative: 253077
@@ -1793,7 +1793,7 @@
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
             >= 500
           fractionalContribution: 0.182786669508
-          effectiveCrossSection: 0.053894
+          effectiveCrossSection: 0.0657046445609
           snapshotPriority: 3
           nEventsPositive: 14682
           nEventsNegative: 98
@@ -1815,7 +1815,7 @@
           filter: nAdditionalBJets < 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
             >= 500
           fractionalContribution: 0.183285362504
-          effectiveCrossSection: 1.282814
+          effectiveCrossSection: 1.39144441664
           snapshotPriority: 1
           nEventsPositive: 429764
           nEventsNegative: 3048
@@ -2433,7 +2433,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_DL-GF
-    crossSection: 1.45714855
+    crossSection: 1.33670983685
     crossSectionGenHT500-550nJet7Matching: 1.4529
     sumWeights: 144110285.2217288
     sumWeights2: 10714715986.770523
@@ -2539,7 +2539,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_DL-GF
-    crossSection: 1.45714855
+    crossSection: 1.58346730969
     crossSectionGenHT500-550nJet7Matching: 1.4529
     sumWeights: 167781848.74368203
     sumWeights2: 12237139614.453009
@@ -2645,7 +2645,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_DL-GF
-    crossSection: 1.45714855
+    crossSection: 1.44964308526
     crossSectionGenHT500-550nJet7Matching: 1.4529
     sumWeights: 154292870.4020065
     sumWeights2: 11325447332.437656
@@ -2751,7 +2751,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_DL-GF
-    crossSection: 1.45714855
+    crossSection: 1.46836671845
     crossSectionGenHT500-550nJet7Matching: 1.4529
     sumWeights: 152890537.9266991
     sumWeights2: 11221748170.85526
@@ -3846,7 +3846,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_SL-GF
-    crossSection: 2.246079
+    crossSection: 2.06710707892
     sumWeights: 557420459.7925783
     sumWeights2: 172768208141.47415
     nEvents: 1847960
@@ -3951,7 +3951,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_SL-GF
-    crossSection: 2.246079
+    crossSection: 2.45173391068
     sumWeights: 671389685.0929762
     sumWeights2: 204276768015.38904
     nEvents: 2238392
@@ -4056,7 +4056,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_SL-GF
-    crossSection: 2.246079
+    crossSection: 2.23161128511
     sumWeights: 578002883.4930297
     sumWeights2: 176890416924.32733
     nEvents: 1924586
@@ -4161,7 +4161,7 @@
     isData: false
     isSignal: false
     isSystematicSampleFor: tt_SL-GF
-    crossSection: 2.246079
+    crossSection: 2.27027615753
     sumWeights: 617782190.2084124
     sumWeights2: 189098386991.58563
     nEvents: 2057416
