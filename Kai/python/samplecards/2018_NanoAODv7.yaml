@@ -1478,11 +1478,11 @@
           nEventsPositive: 194003
           nEventsNegative: 839
           sumWeights: 14036781.404953003
-          sumWeights2: 1028885477.2991275
-          nominalXS: 0.2644435923466694
-          nominalXS2: 3.6517249625210112e-07
-          effectiveXS: 0.32262099999997507
-          effectiveXS2: 5.435221279536524e-07
+          sumWeights2: 1028885477.2991273
+          nominalXS: 0.2644435923466695
+          nominalXS2: 3.651724962521047e-07
+          effectiveXS: 0.35964300000005184
+          effectiveXS2: 6.754219763660064e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -1501,16 +1501,16 @@
           nEventsNegative: 173
           sumWeights: 2572146.3593292236
           sumWeights2: 188712959.36787593
-          nominalXS: 0.04845752054403079
-          nominalXS2: 6.697808839556496e-08
-          effectiveXS: 0.006252851742000527
-          effectiveXS2: 1.1152356252535496e-09
+          nominalXS: 0.04845752054403071
+          nominalXS2: 6.697808839556497e-08
+          effectiveXS: 0.006976351512000802
+          effectiveXS2: 1.3882480785687554e-09
           nLep2nJet7GenHT500-550-nominalXS: 0.004450297088033333
-          nLep2nJet7pGenHT500p-nominalXS: 0.04845752054403079
+          nLep2nJet7pGenHT500p-nominalXS: 0.04845752054403071
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.000574256536176761
-          nLep2nJet7pGenHT500p-effectiveXS: 0.006252851742000527
+          nLep2nJet7GenHT500-550-effectiveXS: 0.000640702133959637
+          nLep2nJet7pGenHT500p-effectiveXS: 0.006976351512000802
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttother_DL_fr:
@@ -1522,17 +1522,17 @@
           nEventsPositive: 1034325
           nEventsNegative: 5169
           sumWeights: 74773935.49643898
-          sumWeights2: 5487361238.8099785
-          nominalXS: 1.4086910343698968
-          nominalXS2: 1.9475767183305734e-06
-          effectiveXS: 0.147984271559811
-          effectiveXS2: 2.149285908543225e-08
-          nLep2nJet7GenHT500-550-nominalXS: 0.17750311898806476
-          nLep2nJet7pGenHT500p-nominalXS: 1.4086910343698968
+          sumWeights2: 5487361238.809981
+          nominalXS: 1.4086910343698271
+          nominalXS2: 1.9475767183306526e-06
+          effectiveXS: 0.14726024387989345
+          effectiveXS2: 2.1283061695027133e-08
+          nLep2nJet7GenHT500-550-nominalXS: 0.1775031189880648
+          nLep2nJet7pGenHT500p-nominalXS: 1.4086910343698271
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.01864686373532528
-          nLep2nJet7pGenHT500p-effectiveXS: 0.147984271559811
+          nLep2nJet7GenHT500-550-effectiveXS: 0.018555632110858897
+          nLep2nJet7pGenHT500p-effectiveXS: 0.14726024387989345
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttother_DL_nr:
@@ -1544,11 +1544,11 @@
           nEventsPositive: 62786840
           nEventsNegative: 253077
           sumWeights: 4544386662.93966
-          sumWeights2: 332919390165.1105
-          nominalXS: 85.61321141757139
-          nominalXS2: 0.00011815989965284795
-          effectiveXS: 85.55503399349922
-          effectiveXS2: 0.00011799936595553127
+          sumWeights2: 332919390165.8739
+          nominalXS: 85.6132114174083
+          nominalXS2: 0.0001181598996531603
+          effectiveXS: 85.51801199452389
+          effectiveXS2: 0.00011789726492710747
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -1565,27 +1565,27 @@
           nEventsPositive: 64050742
           nEventsNegative: 259258
           sumWeights: 4635769526.200381
-          sumWeights2: 339624349842.4217
-          nominalXS: 87.33480356442197
-          nominalXS2: 0.00012053962695647493
-          effectiveXS: 87.33480356442197
-          effectiveXS2: 0.00012053962695647493
-          nLep2nJet7GenHT500-550-nominalXS: 0.18195341607609694
-          nLep2nJet7pGenHT500p-nominalXS: 1.4571485549140184
+          sumWeights2: 339624349843.2006
+          nominalXS: 87.33480356425542
+          nominalXS2: 0.00012053962695679395
+          effectiveXS: 87.33480356425542
+          effectiveXS2: 0.00012053962695679395
+          nLep2nJet7GenHT500-550-nominalXS: 0.1819534160760969
+          nLep2nJet7pGenHT500p-nominalXS: 1.457148554913992
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.18195341607609694
-          nLep2nJet7pGenHT500p-effectiveXS: 1.4571485549140184
+          nLep2nJet7GenHT500-550-effectiveXS: 0.1819534160760969
+          nLep2nJet7pGenHT500p-effectiveXS: 1.457148554913992
     run: 60.0
     genEventCount: 64310000.0
     genEventSumw: 4635769336.539396
     genEventSumw2: 339624321999.9279
     nLHEScaleSumw: 540.0
-    LHEScaleSumw: 542.3822119757667
+    LHEScaleSumw: 542.3822119757668
     nLHEPdfSumw: 1980.0
-    LHEPdfSumw: 2002.51927527318
+    LHEPdfSumw: 2002.519275273179
     totalEvents: 64310000
 - tt_DL-CR1-QCD:
     era: '2018'
@@ -1593,7 +1593,7 @@
     isSignal: false
     isSystematicSampleFor: tt_DL
     crossSection: 87.3348
-    sumWeights: 2112342041.5661092
+    sumWeights: 2112342041.566109
     sumWeights2: 154754776954.4541
     nEvents: 29304000
     nEventsPositive: 29185720
@@ -1625,9 +1625,9 @@
           sumWeights: 7545011.587005615
           sumWeights2: 552981491.941052
           nominalXS: 0.31194856939948684
-          nominalXS2: 9.452719489385481e-07
-          effectiveXS: 0.3805760000000294
-          effectiveXS2: 1.406933492144181e-06
+          nominalXS2: 9.452719489385494e-07
+          effectiveXS: 0.42424999999994645
+          effectiveXS2: 1.7483745485198875e-06
         ttother_DL-CR1-QCD:
           filter: nAdditionalBJets < 2
           fractionalContribution: 1
@@ -1635,12 +1635,12 @@
           snapshotPriority: 1
           nEventsPositive: 29081440
           nEventsNegative: 117833
-          sumWeights: 2104797116.3351972
-          sumWeights2: 154201808120.34445
-          nominalXS: 87.02285499957348
-          nominalXS2: 0.00026359407289611126
-          effectiveXS: 86.99673099774105
-          effectiveXS2: 0.0002634358363429247
+          sumWeights: 2104797116.335197
+          sumWeights2: 154201808120.3441
+          nominalXS: 87.02285499957239
+          nominalXS2: 0.00026359407289611137
+          effectiveXS: 86.91055400131778
+          effectiveXS2: 0.00026291418764968686
       inclusiveProcess:
         tt_DL-CR1-QCD_inclusive:
           filter: return true;
@@ -1648,18 +1648,18 @@
           effectiveCrossSection: 87.3348035714
           nEventsPositive: 29185720
           nEventsNegative: 118280
-          sumWeights: 2112342127.9222028
-          sumWeights2: 154754789612.2459
-          nominalXS: 87.33480356896668
-          nominalXS2: 0.0002645393448449516
-          effectiveXS: 87.33480356896668
-          effectiveXS2: 0.0002645393448449516
+          sumWeights: 2112342127.9222026
+          sumWeights2: 154754789612.24545
+          nominalXS: 87.33480356896561
+          nominalXS2: 0.00026453934484495164
+          effectiveXS: 87.33480356896561
+          effectiveXS2: 0.00026453934484495164
     run: 52.0
     genEventCount: 29304000.0
-    genEventSumw: 2112342041.5661092
+    genEventSumw: 2112342041.566109
     genEventSumw2: 154754776954.4541
     nLHEScaleSumw: 468.0
-    LHEScaleSumw: 470.0790910246663
+    LHEScaleSumw: 470.07909102466635
     nLHEPdfSumw: 1716.0
     LHEPdfSumw: 1735.515957966864
     totalEvents: 29304000
@@ -1699,11 +1699,11 @@
           nEventsPositive: 106381
           nEventsNegative: 430
           sumWeights: 7699013.370315552
-          sumWeights2: 564001281.0155814
+          sumWeights2: 564001281.0155811
           nominalXS: 0.31279823812569224
-          nominalXS2: 9.309761153350784e-07
-          effectiveXS: 0.38161300000006293
-          effectiveXS2: 1.3856586735321508e-06
+          nominalXS2: 9.309761153350783e-07
+          effectiveXS: 0.42540599999992795
+          effectiveXS2: 1.721936629945132e-06
         ttother_DL-CR2-GluonMove:
           filter: nAdditionalBJets < 2
           fractionalContribution: 1
@@ -1712,11 +1712,11 @@
           nEventsPositive: 29593661
           nEventsNegative: 119528
           sumWeights: 2141903313.1254814
-          sumWeights2: 156916658208.09247
-          nominalXS: 87.0220053305603
-          nominalXS2: 0.0002590165409511468
-          effectiveXS: 86.95318900115562
-          effectiveXS2: 0.000258607046341878
+          sumWeights2: 156916658208.0928
+          nominalXS: 87.02200533090344
+          nominalXS2: 0.00025901654095114796
+          effectiveXS: 86.90939800130056
+          effectiveXS2: 0.00025834663473670835
       inclusiveProcess:
         tt_DL-CR2-GluonMove_inclusive:
           filter: return true;
@@ -1725,17 +1725,17 @@
           nEventsPositive: 29700042
           nEventsNegative: 119958
           sumWeights: 2149602326.495797
-          sumWeights2: 157480659489.06775
-          nominalXS: 87.33480356865643
-          nominalXS2: 0.00025994751706662987
-          effectiveXS: 87.33480356865643
-          effectiveXS2: 0.00025994751706662987
+          sumWeights2: 157480659489.06805
+          nominalXS: 87.33480356901799
+          nominalXS2: 0.0002599475170666309
+          effectiveXS: 87.33480356901799
+          effectiveXS2: 0.0002599475170666309
     run: 42.0
     genEventCount: 29820000.0
     genEventSumw: 2149602238.5635357
     genEventSumw2: 157480646600.9632
     nLHEScaleSumw: 378.0
-    LHEScaleSumw: 379.67730893660985
+    LHEScaleSumw: 379.67730893660996
     nLHEPdfSumw: 1386.0
     LHEPdfSumw: 1401.7292279231847
     totalEvents: 29820000
@@ -1745,7 +1745,7 @@
     isSignal: false
     isSystematicSampleFor: tt_DL
     crossSection: 87.3348
-    sumWeights: 2112770962.0244012
+    sumWeights: 2112770962.024401
     sumWeights2: 157460252262.1438
     nEvents: 29312000
     nEventsPositive: 29069210
@@ -1776,11 +1776,11 @@
           nEventsPositive: 83461
           nEventsNegative: 650
           sumWeights: 6069188.074855804
-          sumWeights2: 451794220.8771555
-          nominalXS: 0.25087969127142995
-          nominalXS2: 7.719878991211835e-07
-          effectiveXS: 0.30607200000000606
-          effectiveXS2: 1.1490176039267992e-06
+          sumWeights2: 451794220.8771554
+          nominalXS: 0.2508796912714288
+          nominalXS2: 7.719878991211883e-07
+          effectiveXS: 0.34119600000003014
+          effectiveXS2: 1.4278656366201831e-06
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -1798,17 +1798,17 @@
           nEventsPositive: 14682
           nEventsNegative: 98
           sumWeights: 1068695.7137756348
-          sumWeights2: 79365425.81518842
+          sumWeights2: 79365425.81518844
           nominalXS: 0.04417626335323186
-          nominalXS2: 1.3561295277079746e-07
-          effectiveXS: 0.009851122577996613
-          effectiveXS2: 6.7436444043416094e-09
+          nominalXS2: 1.3561295277079743e-07
+          effectiveXS: 0.01101730363799632
+          effectiveXS2: 8.434781817052372e-09
           nLep2nJet7GenHT500-550-nominalXS: 0.0040357208673868165
           nLep2nJet7pGenHT500p-nominalXS: 0.04417626335323186
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.0008999489304316014
-          nLep2nJet7pGenHT500p-effectiveXS: 0.009851122577996613
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0010064853570496588
+          nLep2nJet7pGenHT500p-effectiveXS: 0.01101730363799632
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttother_DL-HDAMPdown_fr:
@@ -1820,17 +1820,17 @@
           nEventsPositive: 429764
           nEventsNegative: 3048
           sumWeights: 31268490.92835354
-          sumWeights2: 2324039034.4823074
-          nominalXS: 1.2925335734983756
-          nominalXS2: 3.97112209231967e-06
-          effectiveXS: 0.23512056399007228
-          effectiveXS2: 1.3140467121265318e-07
-          nLep2nJet7GenHT500-550-nominalXS: 0.1611060014885729
-          nLep2nJet7pGenHT500p-nominalXS: 1.2925335734983756
+          sumWeights2: 2324039034.482307
+          nominalXS: 1.2925335734983758
+          nominalXS2: 3.971122092319787e-06
+          effectiveXS: 0.23395157226006935
+          effectiveXS2: 1.30101262412349e-07
+          nLep2nJet7GenHT500-550-nominalXS: 0.16110600148857293
+          nLep2nJet7pGenHT500p-nominalXS: 1.2925335734983758
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.029306266938684614
-          nLep2nJet7pGenHT500p-effectiveXS: 0.23512056399007228
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0291605596338553
+          nLep2nJet7pGenHT500p-effectiveXS: 0.23395157226006935
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttother_DL-HDAMPdown_nr:
@@ -1841,12 +1841,12 @@
           snapshotPriority: 2
           nEventsPositive: 28541303
           nEventsNegative: 238994
-          sumWeights: 2074364677.6238775
-          sumWeights2: 154605067044.07483
-          nominalXS: 85.74721420700247
-          nominalXS2: 0.00026417611245024305
-          effectiveXS: 85.6920200031817
-          effectiveXS2: 0.0002638361294628465
+          sumWeights: 2074364677.6238778
+          sumWeights2: 154605067044.06595
+          nominalXS: 85.74721420704363
+          nominalXS2: 0.0002641761124498325
+          effectiveXS: 85.65689799771481
+          effectiveXS2: 0.00026361990037162625
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -1861,29 +1861,29 @@
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
           effectiveCrossSection: 87.3348
-          nominalXS2: 0.0002690548353936954
-          effectiveXS: 87.33480373525306
-          nLep2nJet7GenHT500-550-effectiveXS: 0.16514172235596072
+          nominalXS2: 0.00026905483539327725
+          effectiveXS: 87.33480373528448
+          nLep2nJet7GenHT500-550-effectiveXS: 0.16514172235596075
           nEventsNegative: 242790
-          sumWeights: 2112771052.3408623
+          sumWeights: 2112771052.3408625
           nEventsPositive: 29069210
           filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 1.3367098368515966
-          sumWeights2: 157460265725.15973
-          nominalXS: 87.33480373525306
+          sumWeights2: 157460265725.1507
+          nominalXS: 87.33480373528448
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           fractionalContribution: 1
-          effectiveXS2: 0.0002690548353936954
-          nLep2nJet7GenHT500-550-nominalXS: 0.16514172235596072
+          effectiveXS2: 0.00026905483539327725
+          nLep2nJet7GenHT500-550-nominalXS: 0.16514172235596075
           nLep1nJet9pGenHT500p-nominalXS: 0.0
     run: 38.0
     genEventCount: 29312000.0
-    genEventSumw: 2112770962.0244012
+    genEventSumw: 2112770962.024401
     genEventSumw2: 157460252262.1438
     nLHEScaleSumw: 342.0
     LHEScaleSumw: 343.4982663153617
     nLHEPdfSumw: 1254.0
-    LHEPdfSumw: 1268.1485719712389
+    LHEPdfSumw: 1268.148571971239
     totalEvents: 29312000
 - tt_DL-HDAMPup:
     era: '2018'
@@ -1891,8 +1891,8 @@
     isSignal: false
     isSystematicSampleFor: tt_DL
     crossSection: 87.3348
-    sumWeights: 713867654.7181449
-    sumWeights2: 51928200943.60942
+    sumWeights: 713867654.7181448
+    sumWeights2: 51928200943.60941
     nEvents: 9903000
     nEventsPositive: 9880633
     nEventsNegative: 22367
@@ -1923,10 +1923,10 @@
           nEventsNegative: 81
           sumWeights: 2262665.27507782
           sumWeights2: 164690029.77933896
-          nominalXS: 0.27681520231349305
-          nominalXS2: 2.464941172638792e-06
-          effectiveXS: 0.3313469999999895
-          effectiveXS2: 3.5317729028154402e-06
+          nominalXS: 0.276815202313493
+          nominalXS2: 2.4649411726387934e-06
+          effectiveXS: 0.37646899999996286
+          effectiveXS2: 4.559163061076956e-06
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -1944,17 +1944,17 @@
           nEventsPositive: 6038
           nEventsNegative: 21
           sumWeights: 435611.9917831421
-          sumWeights2: 31757123.246513955
+          sumWeights2: 31757123.24651395
           nominalXS: 0.053292912108481486
           nominalXS2: 4.753137801953094e-07
-          effectiveXS: 0.004389247902001458
-          effectiveXS2: 3.2241981274796293e-09
+          effectiveXS: 0.0051880930400017055
+          effectiveXS2: 4.504608092137451e-09
           nLep2nJet7GenHT500-550-nominalXS: 0.004969167024392261
           nLep2nJet7pGenHT500p-nominalXS: 0.053292912108481486
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.0004092646671683192
-          nLep2nJet7pGenHT500p-effectiveXS: 0.004389247902001458
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0004837510249276122
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0051880930400017055
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttother_DL-HDAMPup_fr:
@@ -1966,17 +1966,17 @@
           nEventsPositive: 173412
           nEventsNegative: 651
           sumWeights: 12507522.871877193
-          sumWeights2: 912355571.8857412
-          nominalXS: 1.5301743975812718
-          nominalXS2: 1.3655367093202226e-05
-          effectiveXS: 0.09994697668800283
-          effectiveXS2: 5.8258706843769194e-08
-          nLep2nJet7GenHT500-550-nominalXS: 0.1903806451868364
-          nLep2nJet7pGenHT500p-nominalXS: 1.5301743975812718
+          sumWeights2: 912355571.8857704
+          nominalXS: 1.530174397581272
+          nominalXS2: 1.365536709320258e-05
+          effectiveXS: 0.10822827674701821
+          effectiveXS2: 6.831294435010814e-08
+          nLep2nJet7GenHT500-550-nominalXS: 0.19038064518683642
+          nLep2nJet7pGenHT500p-nominalXS: 1.530174397581272
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.012435164211620622
-          nLep2nJet7pGenHT500p-effectiveXS: 0.09994697668800283
+          nLep2nJet7GenHT500-550-effectiveXS: 0.013465503792985303
+          nLep2nJet7pGenHT500p-effectiveXS: 0.10822827674701821
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttother_DL-HDAMPup_nr:
@@ -1988,11 +1988,11 @@
           nEventsPositive: 9669854
           nEventsNegative: 21614
           sumWeights: 698661888.2550306
-          sumWeights2: 50819403119.80406
-          nominalXS: 85.47452160738199
-          nominalXS2: 0.000760621874231757
-          effectiveXS: 85.54672199867117
-          effectiveXS2: 0.0007619074126733156
+          sumWeights2: 50819403119.86574
+          nominalXS: 85.47452160736876
+          nominalXS2: 0.0007606218742305302
+          effectiveXS: 85.37486799880915
+          effectiveXS2: 0.0007588493102957536
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -2003,31 +2003,31 @@
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
       inclusiveProcess:
         tt_DL-HDAMPup_inclusive:
-          nLep2nJet7pGenHT500p-nominalXS: 1.5834673096897713
+          nLep2nJet7pGenHT500p-nominalXS: 1.5834673096897716
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
           effectiveCrossSection: 87.3348
-          nominalXS2: 0.0007772174962789151
-          effectiveXS: 87.33480411938835
+          nominalXS2: 0.0007772174962775503
+          effectiveXS: 87.33480411935759
           nLep2nJet7GenHT500-550-effectiveXS: 0.19534981221122857
           nEventsNegative: 22367
           sumWeights: 713867688.3937688
           nEventsPositive: 9880633
           filter: return true;
-          nLep2nJet7pGenHT500p-effectiveXS: 1.5834673096897713
-          sumWeights2: 51928205844.67128
-          nominalXS: 87.33480411938835
+          nLep2nJet7pGenHT500p-effectiveXS: 1.5834673096897716
+          sumWeights2: 51928205844.74437
+          nominalXS: 87.33480411935759
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           fractionalContribution: 1
-          effectiveXS2: 0.0007772174962789151
+          effectiveXS2: 0.0007772174962775503
           nLep2nJet7GenHT500-550-nominalXS: 0.19534981221122857
           nLep1nJet9pGenHT500p-nominalXS: 0.0
     run: 14.0
     genEventCount: 9903000.0
-    genEventSumw: 713867654.7181449
-    genEventSumw2: 51928200943.60942
+    genEventSumw: 713867654.7181448
+    genEventSumw2: 51928200943.60941
     nLHEScaleSumw: 126.0
-    LHEScaleSumw: 126.55554410001967
+    LHEScaleSumw: 126.55554410001965
     nLHEPdfSumw: 462.0
     LHEPdfSumw: 467.24081566756405
     totalEvents: 9903000
@@ -2038,7 +2038,7 @@
     isSystematicSampleFor: tt_DL
     crossSection: 87.3348
     sumWeights: 707559889.519118
-    sumWeights2: 51838837785.121124
+    sumWeights2: 51838837785.12112
     nEvents: 9816000
     nEventsPositive: 9776260
     nEventsNegative: 39740
@@ -2069,10 +2069,10 @@
           nEventsNegative: 126
           sumWeights: 2123239.226928711
           sumWeights2: 155619378.39642397
-          nominalXS: 0.26207346682978333
+          nominalXS: 0.26207346682978383
           nominalXS2: 2.3708928416528034e-06
-          effectiveXS: 0.33134699999996214
-          effectiveXS2: 3.789936239043596e-06
+          effectiveXS: 0.3564199999999647
+          effectiveXS2: 4.385205494254063e-06
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -2091,16 +2091,16 @@
           nEventsNegative: 29
           sumWeights: 394326.5650177002
           sumWeights2: 28958086.209443845
-          nominalXS: 0.04867210846832108
-          nominalXS2: 4.4118232580930684e-07
-          effectiveXS: 0.004365883037996663
-          effectiveXS2: 3.549784420155576e-09
+          nominalXS: 0.048672108468321075
+          nominalXS2: 4.411823258093065e-07
+          effectiveXS: 0.004676860539996431
+          effectiveXS2: 4.073489723636016e-09
           nLep2nJet7GenHT500-550-nominalXS: 0.00479852092809579
-          nLep2nJet7pGenHT500p-nominalXS: 0.04867210846832108
+          nLep2nJet7pGenHT500p-nominalXS: 0.048672108468321075
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.0004304268252747031
-          nLep2nJet7pGenHT500p-effectiveXS: 0.004365883037996663
+          nLep2nJet7GenHT500-550-effectiveXS: 0.00046108569949388867
+          nLep2nJet7pGenHT500p-effectiveXS: 0.004676860539996431
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttother_DL-TuneCP5down_fr:
@@ -2113,16 +2113,16 @@
           nEventsNegative: 804
           sumWeights: 11350239.189378738
           sumWeights2: 833157649.2961721
-          nominalXS: 1.4009709767892167
-          nominalXS2: 1.2693326030727785e-05
-          effectiveXS: 0.09868788571200066
-          effectiveXS2: 6.298611880399836e-08
-          nLep2nJet7GenHT500-550-nominalXS: 0.17565110250115343
-          nLep2nJet7pGenHT500p-nominalXS: 1.4009709767892167
+          nominalXS: 1.4009709767892156
+          nominalXS2: 1.2693326030728117e-05
+          effectiveXS: 0.0978800789380016
+          effectiveXS2: 6.195919696463312e-08
+          nLep2nJet7GenHT500-550-nominalXS: 0.1756511025011538
+          nLep2nJet7pGenHT500p-nominalXS: 1.4009709767892156
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.012373301243217949
-          nLep2nJet7pGenHT500p-effectiveXS: 0.09868788571200066
+          nLep2nJet7GenHT500-550-effectiveXS: 0.01227201995130562
+          nLep2nJet7pGenHT500p-effectiveXS: 0.0978800789380016
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttother_DL-TuneCP5down_nr:
@@ -2134,11 +2134,11 @@
           nEventsPositive: 9584436
           nEventsNegative: 38781
           sumWeights: 693692113.4871814
-          sumWeights2: 50821106917.10492
-          nominalXS: 85.62308702054997
-          nominalXS2: 0.0007742698874324864
-          effectiveXS: 85.54672199859824
-          effectiveXS2: 0.0007728894006612002
+          sumWeights2: 50821106917.15338
+          nominalXS: 85.62308702054995
+          nominalXS2: 0.0007742698874315663
+          effectiveXS: 85.52874100035856
+          effectiveXS2: 0.0007725645287468154
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -2149,33 +2149,33 @@
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
       inclusiveProcess:
         tt_DL-TuneCP5down_inclusive:
-          nLep2nJet7pGenHT500p-nominalXS: 1.4496430852575333
+          nLep2nJet7pGenHT500p-nominalXS: 1.4496430852575322
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
           effectiveCrossSection: 87.3348
-          nominalXS2: 0.0007897752886312415
+          nominalXS2: 0.0007897752886301138
           effectiveXS: 87.33480357261665
-          nLep2nJet7GenHT500-550-effectiveXS: 0.18044962342924928
+          nLep2nJet7GenHT500-550-effectiveXS: 0.1804496234292496
           nEventsNegative: 39740
           sumWeights: 707559918.4685066
           nEventsPositive: 9776260
           filter: return true;
-          nLep2nJet7pGenHT500p-effectiveXS: 1.4496430852575333
-          sumWeights2: 51838842030.98025
+          nLep2nJet7pGenHT500p-effectiveXS: 1.4496430852575322
+          sumWeights2: 51838842031.02939
           nominalXS: 87.33480357261665
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           fractionalContribution: 1
-          effectiveXS2: 0.0007897752886312415
-          nLep2nJet7GenHT500-550-nominalXS: 0.18044962342924928
+          effectiveXS2: 0.0007897752886301138
+          nLep2nJet7GenHT500-550-nominalXS: 0.1804496234292496
           nLep1nJet9pGenHT500p-nominalXS: 0.0
     run: 12.0
     genEventCount: 9816000.0
     genEventSumw: 707559889.519118
-    genEventSumw2: 51838837785.121124
+    genEventSumw2: 51838837785.12112
     nLHEScaleSumw: 108.0
-    LHEScaleSumw: 108.47713021329872
+    LHEScaleSumw: 108.47713021329874
     nLHEPdfSumw: 396.0
-    LHEPdfSumw: 400.5128706326578
+    LHEPdfSumw: 400.5128706326577
     totalEvents: 9816000
 - tt_DL-TuneCP5up:
     era: '2018'
@@ -2184,7 +2184,7 @@
     isSystematicSampleFor: tt_DL
     crossSection: 87.3348
     sumWeights: 718500136.0131245
-    sumWeights2: 52641440456.23044
+    sumWeights2: 52641440456.230446
     nEvents: 9968000
     nEventsPositive: 9927540
     nEventsNegative: 40460
@@ -2215,10 +2215,10 @@
           nEventsNegative: 116
           sumWeights: 2199830.582885742
           sumWeights2: 161085470.7895662
-          nominalXS: 0.26739280114304936
+          nominalXS: 0.2673928011430494
           nominalXS2: 2.3800019967148823e-06
-          effectiveXS: 0.33134699999995304
-          effectiveXS2: 3.6546348012505214e-06
+          effectiveXS: 0.36365399999996734
+          effectiveXS2: 4.402046619788542e-06
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -2238,15 +2238,15 @@
           sumWeights: 400484.1619644165
           sumWeights2: 29319613.612682726
           nominalXS: 0.04867946773456312
-          nominalXS2: 4.3319076884503904e-07
-          effectiveXS: 0.004456847808004665
-          effectiveXS2: 3.6311413879062707e-09
+          nominalXS2: 4.331907688450387e-07
+          effectiveXS: 0.004847772384005081
+          effectiveXS2: 4.296076360465870e-09
           nLep2nJet7GenHT500-550-nominalXS: 0.0045488127697963406
           nLep2nJet7pGenHT500p-nominalXS: 0.04867946773456312
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.0004164664727362254
-          nLep2nJet7pGenHT500p-effectiveXS: 0.004456847808004665
+          nLep2nJet7GenHT500-550-effectiveXS: 0.0004529960977730927
+          nLep2nJet7pGenHT500p-effectiveXS: 0.004847772384005081
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttother_DL-TuneCP5up_fr:
@@ -2258,17 +2258,17 @@
           nEventsPositive: 161561
           nEventsNegative: 804
           sumWeights: 11679713.959784312
-          sumWeights2: 857088677.5069691
-          nominalXS: 1.4196872507152904
-          nominalXS2: 1.2663294546869761e-05
-          effectiveXS: 0.10221669057603408
-          effectiveXS2: 6.564550232582392e-08
-          nLep2nJet7GenHT500-550-nominalXS: 0.1796564082049584
-          nLep2nJet7pGenHT500p-nominalXS: 1.4196872507152904
+          sumWeights2: 857088677.5069687
+          nominalXS: 1.4196872507152833
+          nominalXS2: 1.2663294546869756e-05
+          effectiveXS: 0.10267765454097852
+          effectiveXS2: 6.623891701593977e-08
+          nLep2nJet7GenHT500-550-nominalXS: 0.17965640820495843
+          nLep2nJet7pGenHT500p-nominalXS: 1.4196872507152833
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.012935161232328055
-          nLep2nJet7pGenHT500p-effectiveXS: 0.10221669057603408
+          nLep2nJet7GenHT500-550-effectiveXS: 0.012993494594287114
+          nLep2nJet7pGenHT500p-effectiveXS: 0.10267765454097852
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttother_DL-TuneCP5up_nr:
@@ -2279,12 +2279,12 @@
           snapshotPriority: 2
           nEventsPositive: 9730058
           nEventsNegative: 39519
-          sumWeights: 704220136.702045
-          sumWeights2: 51593951005.545204
-          nominalXS: 85.59904405411886
-          nominalXS2: 0.0007622891487848464
-          effectiveXS: 85.54672199974576
-          effectiveXS2: 0.0007613575415693477
+          sumWeights: 704220136.7020451
+          sumWeights2: 51593951005.4932
+          nominalXS: 85.5990440541186
+          nominalXS2: 0.0007622891487848221
+          effectiveXS: 85.50278299940439
+          effectiveXS2: 0.0007605756367381933
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -2295,29 +2295,29 @@
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
       inclusiveProcess:
         tt_DL-TuneCP5up_inclusive:
-          nLep2nJet7pGenHT500p-nominalXS: 1.4683667184498488
+          nLep2nJet7pGenHT500p-nominalXS: 1.4683667184498304
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
           effectiveCrossSection: 87.3348
-          nominalXS2: 0.0007777656360972061
-          effectiveXS: 87.33480357370769
-          nLep2nJet7GenHT500-550-effectiveXS: 0.18420522097475478
+          nominalXS2: 0.0007777656360971841
+          effectiveXS: 87.33480357370014
+          nLep2nJet7GenHT500-550-effectiveXS: 0.1842052209747548
           nEventsNegative: 40460
           sumWeights: 718500165.4066795
           nEventsPositive: 9927540
           filter: return true;
-          nLep2nJet7pGenHT500p-effectiveXS: 1.4683667184498488
-          sumWeights2: 52641444767.421
-          nominalXS: 87.33480357370769
+          nLep2nJet7pGenHT500p-effectiveXS: 1.4683667184498304
+          sumWeights2: 52641444767.36759
+          nominalXS: 87.33480357370014
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           fractionalContribution: 1
-          effectiveXS2: 0.0007777656360972061
-          nLep2nJet7GenHT500-550-nominalXS: 0.18420522097475478
+          effectiveXS2: 0.0007777656360971841
+          nLep2nJet7GenHT500-550-nominalXS: 0.1842052209747548
           nLep1nJet9pGenHT500p-nominalXS: 0.0
     run: 13.0
     genEventCount: 9968000.0
     genEventSumw: 718500136.0131245
-    genEventSumw2: 52641440456.23044
+    genEventSumw2: 52641440456.230446
     nLHEScaleSumw: 117.0
     LHEScaleSumw: 117.51590874831442
     nLHEPdfSumw: 429.0
@@ -2472,17 +2472,17 @@
           nEventsPositive: 1915403
           nEventsNegative: 13968
           sumWeights: 139332268.92289287
-          sumWeights2: 10360040752.88723
-          nominalXS: 1.2923910108494112
-          nominalXS2: 8.913451431709621e-07
-          effectiveXS: 1.1364131864615477
-          effectiveXS2: 6.891766806683638e-07
-          nLep2nJet7GenHT500-550-nominalXS: 0.161519298317564
-          nLep2nJet7pGenHT500p-nominalXS: 1.2923910108494112
+          sumWeights2: 10360040752.885048
+          nominalXS: 1.2923910108491194
+          nominalXS2: 8.913451431708536e-07
+          effectiveXS: 1.0424844277423522
+          effectiveXS2: 5.799588737798266e-07
+          nLep2nJet7GenHT500-550-nominalXS: 0.16151929831755993
+          nLep2nJet7pGenHT500p-nominalXS: 1.2923910108491194
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.1420256400227144
-          nLep2nJet7pGenHT500p-effectiveXS: 1.1364131864615477
+          nLep2nJet7GenHT500-550-effectiveXS: 0.13028669486379874
+          nLep2nJet7pGenHT500p-effectiveXS: 1.0424844277423522
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttbb_DL-GF-HDAMPdown_fr:
@@ -2494,43 +2494,43 @@
           nEventsPositive: 65626
           nEventsNegative: 423
           sumWeights: 4778022.351333618
-          sumWeights2: 354676134.4081569
-          nominalXS: 0.04431904528829925
+          sumWeights2: 354676134.40815663
+          nominalXS: 0.04431904528829926
           nominalXS2: 3.051521295552401e-08
-          effectiveXS: 0.05369498016499361
-          effectiveXS2: 4.479226099045544e-08
-          nLep2nJet7GenHT500-550-nominalXS: 0.003992222097620637
-          nLep2nJet7pGenHT500p-nominalXS: 0.04431904528829925
+          effectiveXS: 0.04925669636199372
+          effectiveXS2: 3.76934746462083e-08
+          nLep2nJet7GenHT500-550-nominalXS: 0.003992222097620636
+          nLep2nJet7pGenHT500p-nominalXS: 0.04431904528829926
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.0048367983775725815
-          nLep2nJet7pGenHT500p-effectiveXS: 0.05369498016499361
+          nLep2nJet7GenHT500-550-effectiveXS: 0.004437001528191271
+          nLep2nJet7pGenHT500p-effectiveXS: 0.04925669636199372
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
       inclusiveProcess:
         tt_DL-GF-HDAMPdown_inclusive:
-          nLep2nJet7pGenHT500p-nominalXS: 1.3367100561376368
-          nLep2nJet7pGenHT500p-effectiveXS: 1.3367100561376368
+          nLep2nJet7pGenHT500p-nominalXS: 1.3367100561373393
+          nLep2nJet7pGenHT500p-effectiveXS: 1.3367100561373393
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
-          nominalXS2: 9.218603561267743e-07
-          effectiveXS: 1.3367100561376368
-          nLep2nJet7GenHT500-550-effectiveXS: 0.16551152041518347
+          nominalXS2: 9.218603561266625e-07
+          effectiveXS: 1.3367100561373393
+          nLep2nJet7GenHT500-550-effectiveXS: 0.1655115204151792
           nEventsNegative: 14391
           sumWeights: 144110291.2742265
           nEventsPositive: 1981029
           nLep1nJet9GenHT500-550-nominalXS: 0.0
-          sumWeights2: 10714716887.295675
-          nominalXS: 1.3367100561376368
+          sumWeights2: 10714716887.293238
+          nominalXS: 1.3367100561373393
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
-          effectiveXS2: 9.218603561267743e-07
-          nLep2nJet7GenHT500-550-nominalXS: 0.16551152041518347
+          effectiveXS2: 9.218603561266625e-07
+          nLep2nJet7GenHT500-550-nominalXS: 0.1655115204151792
           nLep1nJet9pGenHT500p-nominalXS: 0.0
     run: 21.0
     genEventCount: 1995420.0
     genEventSumw: 144110285.22172877
     genEventSumw2: 10714715986.770523
     nLHEScaleSumw: 189.0
-    LHEScaleSumw: 193.27169666507862
+    LHEScaleSumw: 193.27169666507865
     nLHEPdfSumw: 693.0
     LHEPdfSumw: 715.8070093288701
     totalEvents: 1995420
@@ -2578,17 +2578,17 @@
           nEventsPositive: 2248388
           nEventsNegative: 8304
           sumWeights: 162178531.86432672
-          sumWeights2: 11828624019.15446
-          nominalXS: 1.530584835233672
-          nominalXS2: 1.0535673675959324e-06
-          effectiveXS: 1.2913714434359775
-          effectiveXS2: 7.499802993051826e-07
+          sumWeights2: 11828624019.154398
+          nominalXS: 1.530584835233671
+          nominalXS2: 1.0535673675958047e-06
+          effectiveXS: 1.403318723255127
+          effectiveXS2: 8.85645943459233e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.18903666287768855
-          nLep2nJet7pGenHT500p-nominalXS: 1.530584835233672
+          nLep2nJet7pGenHT500p-nominalXS: 1.530584835233671
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.1594923342906251
-          nLep2nJet7pGenHT500p-effectiveXS: 1.2913714434359775
+          nLep2nJet7GenHT500-550-effectiveXS: 0.17331851347914712
+          nLep2nJet7pGenHT500p-effectiveXS: 1.403318723255127
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttbb_DL-GF-HDAMPup_fr:
@@ -2600,36 +2600,36 @@
           nEventsPositive: 77664
           nEventsNegative: 270
           sumWeights: 5603324.667102814
-          sumWeights2: 408516731.85452384
-          nominalXS: 0.052882238258076864
-          nominalXS2: 3.6386303014021114e-08
-          effectiveXS: 0.061408756928992225
-          effectiveXS2: 4.9065800343304623e-08
-          nLep2nJet7GenHT500-550-nominalXS: 0.0048359832585199046
-          nLep2nJet7pGenHT500p-nominalXS: 0.052882238258076864
+          sumWeights2: 408516731.85452396
+          nominalXS: 0.05288223825807706
+          nominalXS2: 3.6386303014020936e-08
+          effectiveXS: 0.06673190695999963
+          effectiveXS2: 5.794091456961208e-08
+          nLep2nJet7GenHT500-550-nominalXS: 0.004835983258519904
+          nLep2nJet7pGenHT500p-nominalXS: 0.05288223825807706
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.005615717681726959
-          nLep2nJet7pGenHT500p-effectiveXS: 0.061408756928992225
+          nLep2nJet7GenHT500-550-effectiveXS: 0.006102509944695719
+          nLep2nJet7pGenHT500p-effectiveXS: 0.06673190695999963
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
       inclusiveProcess:
         tt_DL-GF-HDAMPup_inclusive:
-          nLep2nJet7pGenHT500p-nominalXS: 1.5834670734912795
-          nLep2nJet7pGenHT500p-effectiveXS: 1.5834670734912795
+          nLep2nJet7pGenHT500p-nominalXS: 1.5834670734912788
+          nLep2nJet7pGenHT500p-effectiveXS: 1.5834670734912788
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
-          nominalXS2: 1.0899536706099677e-06
-          effectiveXS: 1.5834670734912795
-          nLep2nJet7GenHT500-550-effectiveXS: 0.19387264613621283
+          nominalXS2: 1.089953670609834e-06
+          effectiveXS: 1.5834670734912788
+          nLep2nJet7GenHT500-550-effectiveXS: 0.1938726461362129
           nEventsNegative: 8574
           sumWeights: 167781856.53142953
           nEventsPositive: 2326052
           nLep1nJet9GenHT500-550-nominalXS: 0.0
-          sumWeights2: 12237140751.012955
-          nominalXS: 1.5834670734912795
+          sumWeights2: 12237140751.012926
+          nominalXS: 1.5834670734912788
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
-          effectiveXS2: 1.0899536706099677e-06
-          nLep2nJet7GenHT500-550-nominalXS: 0.19387264613621283
+          effectiveXS2: 1.089953670609834e-06
+          nLep2nJet7GenHT500-550-nominalXS: 0.1938726461362129
           nLep1nJet9pGenHT500p-nominalXS: 0.0
     run: 21.0
     genEventCount: 2334626.0
@@ -2638,7 +2638,7 @@
     nLHEScaleSumw: 189.0
     LHEScaleSumw: 190.98848074392643
     nLHEPdfSumw: 693.0
-    LHEPdfSumw: 708.7684591487694
+    LHEPdfSumw: 708.7684591487696
     totalEvents: 2334626
 - tt_DL-GF-TuneCP5down:
     era: '2018'
@@ -2648,7 +2648,7 @@
     crossSection: 1.44964308526
     crossSectionGenHT500-550nJet7Matching: 1.4529
     sumWeights: 154292870.4020065
-    sumWeights2: 11325447332.437658
+    sumWeights2: 11325447332.437656
     nEvents: 2145417
     nEventsPositive: 2134517
     nEventsNegative: 10900
@@ -2684,17 +2684,17 @@
           nEventsPositive: 2063990
           nEventsNegative: 10581
           sumWeights: 149191727.08805627
-          sumWeights2: 10951438756.432425
-          nominalXS: 1.4017157258672834
-          nominalXS2: 9.667219669679992e-07
-          effectiveXS: 1.29324407992772
-          effectiveXS2: 8.228917226461116e-07
-          nLep2nJet7GenHT500-550-nominalXS: 0.17646125947396818
-          nLep2nJet7pGenHT500p-nominalXS: 1.4017157258672834
+          sumWeights2: 10951438756.43263
+          nominalXS: 1.4017157258672845
+          nominalXS2: 9.667219669679867e-07
+          effectiveXS: 1.2865819210619798
+          effectiveXS2: 8.14435291909356e-07
+          nLep2nJet7GenHT500-550-nominalXS: 0.17646125947396862
+          nLep2nJet7pGenHT500p-nominalXS: 1.4017157258672845
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.16280582071051938
-          nLep2nJet7pGenHT500p-effectiveXS: 1.29324407992772
+          nLep2nJet7GenHT500-550-effectiveXS: 0.16196712501546673
+          nLep2nJet7pGenHT500p-effectiveXS: 1.2865819210619798
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttbb_DL-GF-TuneCP5down_fr:
@@ -2706,41 +2706,41 @@
           nEventsPositive: 70526
           nEventsNegative: 319
           sumWeights: 5101076.66053772
-          sumWeights2: 374004179.5059449
-          nominalXS: 0.047926647901131374
-          nominalXS2: 3.3014662649043303e-08
-          effectiveXS: 0.060816886946000945
-          effectiveXS2: 5.316197745145916e-08
-          nLep2nJet7GenHT500-550-nominalXS: 0.004388362650662024
-          nLep2nJet7pGenHT500p-nominalXS: 0.047926647901131374
+          sumWeights2: 374004179.505946
+          nominalXS: 0.04792664790113123
+          nominalXS2: 3.301466264904334e-08
+          effectiveXS: 0.06050313945999335
+          effectiveXS2: 5.2614878974648366e-08
+          nLep2nJet7GenHT500-550-nominalXS: 0.004388362650662025
+          nLep2nJet7pGenHT500p-nominalXS: 0.04792664790113123
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.005568646398010338
-          nLep2nJet7pGenHT500p-effectiveXS: 0.060816886946000945
+          nLep2nJet7GenHT500-550-effectiveXS: 0.005539918376970041
+          nLep2nJet7pGenHT500p-effectiveXS: 0.06050313945999335
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
       inclusiveProcess:
         tt_DL-GF-TuneCP5down_inclusive:
-          nLep2nJet7pGenHT500p-nominalXS: 1.4496423737685933
-          nLep2nJet7pGenHT500p-effectiveXS: 1.4496423737685933
+          nLep2nJet7pGenHT500p-nominalXS: 1.4496423737685953
+          nLep2nJet7pGenHT500p-effectiveXS: 1.4496423737685953
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
-          nominalXS2: 9.997370961467088e-07
-          effectiveXS: 1.4496430567981209
-          nLep2nJet7GenHT500-550-effectiveXS: 0.18084962212462682
+          nominalXS2: 9.997370961466951e-07
+          effectiveXS: 1.4496430567981229
+          nLep2nJet7GenHT500-550-effectiveXS: 0.18084962212462727
           nEventsNegative: 10900
           sumWeights: 154292876.4468972
           nEventsPositive: 2134517
           nLep1nJet9GenHT500-550-nominalXS: 0.0
-          sumWeights2: 11325448220.982382
-          nominalXS: 1.4496430567981209
+          sumWeights2: 11325448220.982712
+          nominalXS: 1.4496430567981229
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
-          effectiveXS2: 9.997370961467088e-07
-          nLep2nJet7GenHT500-550-nominalXS: 0.18084962212462682
+          effectiveXS2: 9.997370961466951e-07
+          nLep2nJet7GenHT500-550-nominalXS: 0.18084962212462727
           nLep1nJet9pGenHT500p-nominalXS: 0.0
     run: 13.0
     genEventCount: 2145417.0
     genEventSumw: 154292870.4020065
-    genEventSumw2: 11325447332.437658
+    genEventSumw2: 11325447332.437656
     nLHEScaleSumw: 117.0
     LHEScaleSumw: 118.89818782205079
     nLHEPdfSumw: 429.0
@@ -2790,17 +2790,17 @@
           nEventsPositive: 2044970
           nEventsNegative: 10391
           sumWeights: 147823404.4532668
-          sumWeights2: 10850023196.487253
-          nominalXS: 1.4197020421918456
-          nominalXS2: 1.0007801450292649e-06
-          effectiveXS: 1.2895777530875165
-          effectiveXS2: 8.257324104520397e-07
-          nLep2nJet7GenHT500-550-nominalXS: 0.17885485851229949
-          nLep2nJet7pGenHT500p-nominalXS: 1.4197020421918456
+          sumWeights2: 10850023196.492569
+          nominalXS: 1.4197020421917896
+          nominalXS2: 1.0007801450294978e-06
+          effectiveXS: 1.2995053454565626
+          effectiveXS2: 8.384948645455542e-07
+          nLep2nJet7GenHT500-550-nominalXS: 0.17885485851231545
+          nLep2nJet7pGenHT500p-nominalXS: 1.4197020421917896
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.16246172768170025
-          nLep2nJet7pGenHT500p-effectiveXS: 1.2895777530875165
+          nLep2nJet7GenHT500-550-effectiveXS: 0.16371241133020645
+          nLep2nJet7pGenHT500p-effectiveXS: 1.2995053454565626
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
         ttbb_DL-GF-TuneCP5up_fr:
@@ -2812,36 +2812,36 @@
           nEventsPositive: 70076
           nEventsNegative: 337
           sumWeights: 5067066.765678406
-          sumWeights2: 371720569.80721694
-          nominalXS: 0.04866431714097905
-          nominalXS2: 3.4286614786415045e-08
-          effectiveXS: 0.06086721785600852
-          effectiveXS2: 5.3637711900798057e-08
-          nLep2nJet7GenHT500-550-nominalXS: 0.004503171853641087
-          nLep2nJet7pGenHT500p-nominalXS: 0.04866431714097905
+          sumWeights2: 371720569.8072082
+          nominalXS: 0.04866431714097911
+          nominalXS2: 3.428661478641505e-08
+          effectiveXS: 0.06133522761600008
+          effectiveXS2: 5.446572679271527e-08
+          nLep2nJet7GenHT500-550-nominalXS: 0.004503171853641085
+          nLep2nJet7pGenHT500p-nominalXS: 0.04866431714097911
           nLep1nJet9GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 0.0
-          nLep2nJet7GenHT500-550-effectiveXS: 0.005632372102635041
-          nLep2nJet7pGenHT500p-effectiveXS: 0.06086721785600852
+          nLep2nJet7GenHT500-550-effectiveXS: 0.005675679571069459
+          nLep2nJet7pGenHT500p-effectiveXS: 0.06133522761600008
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
       inclusiveProcess:
         tt_DL-GF-TuneCP5up_inclusive:
-          nLep2nJet7pGenHT500p-nominalXS: 1.4683663593326375
-          nLep2nJet7pGenHT500p-effectiveXS: 1.4683663593326375
+          nLep2nJet7pGenHT500p-nominalXS: 1.468366359332582
+          nLep2nJet7pGenHT500p-effectiveXS: 1.468366359332582
           nLep1nJet9pGenHT500p-effectiveXS: 0.0
-          nominalXS2: 1.0350672472956326e-06
-          effectiveXS: 1.4683670575301246
-          nLep2nJet7GenHT500-550-effectiveXS: 0.18335803036594245
+          nominalXS2: 1.035067247295875e-06
+          effectiveXS: 1.4683670575300691
+          nLep2nJet7GenHT500-550-effectiveXS: 0.18335803036595838
           nEventsNegative: 10728
           sumWeights: 152890543.91724843
           nEventsPositive: 2115047
           nLep1nJet9GenHT500-550-nominalXS: 0.0
-          sumWeights2: 11221749051.339283
-          nominalXS: 1.4683670575301246
+          sumWeights2: 11221749051.345716
+          nominalXS: 1.4683670575300691
           nLep1nJet9GenHT500-550-effectiveXS: 0.0
-          effectiveXS2: 1.0350672472956326e-06
-          nLep2nJet7GenHT500-550-nominalXS: 0.18335803036594245
+          effectiveXS2: 1.035067247295875e-06
+          nLep2nJet7GenHT500-550-nominalXS: 0.18335803036595838
           nLep1nJet9pGenHT500p-nominalXS: 0.0
     run: 24.0
     genEventCount: 2125775.0
@@ -2850,14 +2850,14 @@
     nLHEScaleSumw: 216.0
     LHEScaleSumw: 219.49432386681332
     nLHEPdfSumw: 792.0
-    LHEPdfSumw: 813.5128589492657
+    LHEPdfSumw: 813.5128589492653
     totalEvents: 2125775
 - tt_SL:
     era: '2018'
     isData: false
     isSignal: false
     crossSection: 364.3109
-    sumWeights: 60108152131.41419
+    sumWeights: 60108152131.4142
     sumWeights2: 18375661319032.125
     nEvents: 199829998
     nEventsPositive: 199024042
@@ -2894,11 +2894,11 @@
           nEventsPositive: 726503
           nEventsNegative: 3013
           sumWeights: 219382411.16551208
-          sumWeights2: 67077337631.131134
-          nominalXS: 1.3296599682719472
+          sumWeights2: 67077337631.130745
+          nominalXS: 1.3296599682719548
           nominalXS2: 2.46407199845003e-06
-          effectiveXS: 15.744499490771581
-          effectiveXS2: 0.000345485579195583
+          effectiveXS: 1.8083379999991538
+          effectiveXS2: 4.557549802080112e-06
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -2916,11 +2916,11 @@
           nEventsPositive: 197069307
           nEventsNegative: 797093
           sumWeights: 59518186351.01408
-          sumWeights2: 18195159199929.78
-          nominalXS: 360.7351627543973
-          nominalXS2: 0.0006683953758891507
-          effectiveXS: 3579.97390303138
-          effectiveXS2: 0.0658288402237171
+          sumWeights2: 18195159199929.35
+          nominalXS: 360.73516277518445
+          nominalXS2: 0.0006683953758617517
+          effectiveXS: 360.25648516031765
+          effectiveXS2: 0.00066662269777708
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -2938,19 +2938,19 @@
           nEventsPositive: 1173284
           nEventsNegative: 5593
           sumWeights: 354002396.45715344
-          sumWeights2: 108350574819.1942
-          nominalXS: 2.1455813742803693
+          sumWeights2: 108350574819.19165
+          nominalXS: 2.145581374280351
           nominalXS2: 3.980235752593010e-06
-          effectiveXS: 0.29599296646747064
-          effectiveXS2: 7.57498187661992e-08
+          effectiveXS: 0.26685736943981625
+          effectiveXS2: 6.157114314084325e-08
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.1843158119774481
-          nLep1nJet9pGenHT500p-nominalXS: 2.1455813742803693
+          nLep1nJet9GenHT500-550-nominalXS: 0.18431581197745134
+          nLep1nJet9pGenHT500p-nominalXS: 2.145581374280351
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.02542722667525066
-          nLep1nJet9pGenHT500p-effectiveXS: 0.29599296646747064
+          nLep1nJet9GenHT500-550-effectiveXS: 0.02292433804662321
+          nLep1nJet9pGenHT500p-effectiveXS: 0.26685736943981625
         ttbb_SL_fr:
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
             >= 500
@@ -2960,19 +2960,19 @@
           nEventsPositive: 54948
           nEventsNegative: 257
           sumWeights: 16581387.199432373
-          sumWeights2: 5074453510.783313
-          nominalXS: 0.10049851608591366
-          nominalXS2: 1.8640899065081167e-07
-          effectiveXS: 0.01646963896381098
-          effectiveXS2: 5.006286668068704e-09
+          sumWeights2: 5074453510.7833395
+          nominalXS: 0.10049851608591404
+          nominalXS2: 1.8640899065081162e-07
+          effectiveXS: 0.017281455282001736
+          effectiveXS2: 5.511986944328872e-09
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.00625751911930127
-          nLep1nJet9pGenHT500p-nominalXS: 0.10049851608591366
+          nLep1nJet9GenHT500-550-nominalXS: 0.006257519119301272
+          nLep1nJet9pGenHT500p-nominalXS: 0.10049851608591404
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.0010254786311066383
-          nLep1nJet9pGenHT500p-effectiveXS: 0.01646963896381098
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0010760262046458384
+          nLep1nJet9pGenHT500p-effectiveXS: 0.017281455282001736
       inclusiveProcess:
         tt_SL_inclusive:
           filter: return true;
@@ -2981,27 +2981,27 @@
           nEventsPositive: 199024042
           nEventsNegative: 805956
           sumWeights: 60108152545.83617
-          sumWeights2: 18375661565789.88
-          nominalXS: 364.3109026120385
-          nominalXS2: 0.0006750260926326207
-          effectiveXS: 364.3109026120385
-          effectiveXS2: 0.0006750260926326207
+          sumWeights2: 18375661565789.465
+          nominalXS: 364.31090263420856
+          nominalXS2: 0.000675026092601449
+          effectiveXS: 364.31090263420856
+          effectiveXS2: 0.000675026092601449
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.19057333109674757
-          nLep1nJet9pGenHT500p-effectiveXS: 2.2460798903663743
+          nLep1nJet9GenHT500-550-nominalXS: 0.1905733310967491
+          nLep1nJet9pGenHT500p-effectiveXS: 2.246079890366357
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.19057333109674757
-          nLep1nJet9pGenHT500p-nominalXS: 2.2460798903663743
+          nLep1nJet9GenHT500-550-effectiveXS: 0.1905733310967491
+          nLep1nJet9pGenHT500p-nominalXS: 2.246079890366357
     run: 151.0
     genEventCount: 199829998.0
-    genEventSumw: 60108152131.41419
+    genEventSumw: 60108152131.4142
     genEventSumw2: 18375661319032.125
     nLHEScaleSumw: 1359.0
-    LHEScaleSumw: 1365.0025945890184
+    LHEScaleSumw: 1365.0025945890181
     nLHEPdfSumw: 4983.0
-    LHEPdfSumw: 5039.558756737244
+    LHEPdfSumw: 5039.558756737245
     totalEvents: 199829998
 - tt_SL-CR1-QCD:
     era: '2018'
@@ -3009,8 +3009,8 @@
     isSignal: false
     isSystematicSampleFor: tt_SL
     crossSection: 364.3109
-    sumWeights: 8028466248.751033
-    sumWeights2: 2454485069084.2603
+    sumWeights: 8028466248.751032
+    sumWeights2: 2454485069084.26
     nEvents: 26692000
     nEventsPositive: 26583744
     nEventsNegative: 108256
@@ -3039,10 +3039,10 @@
           nEventsNegative: 452
           sumWeights: 31582659.635986328
           sumWeights2: 9659715751.040733
-          nominalXS: 1.4331388835530576
+          nominalXS: 1.4331388835530352
           nominalXS2: 1.9890399482154693e-05
-          effectiveXS: 1.7075089999998858
-          effectiveXS2: 2.8235335330897137e-05
+          effectiveXS: 1.9490690000002284
+          effectiveXS2: 3.678928735065091e-05
         ttother_SL-CR1-QCD:
           filter: nAdditionalBJets < 2
           fractionalContribution: 1
@@ -3051,11 +3051,11 @@
           nEventsPositive: 26479135
           nEventsNegative: 107804
           sumWeights: 7996883644.552861
-          sumWeights2: 2444825387189.0044
-          nominalXS: 362.8777636430454
-          nominalXS2: 0.00503415989324085
-          effectiveXS: 362.6033929893913
-          effectiveXS2: 0.005026550149420928
+          sumWeights2: 2444825387189.0156
+          nominalXS: 362.8777636444937
+          nominalXS2: 0.005034159893239489
+          effectiveXS: 362.3618339927847
+          effectiveXS2: 0.005019855208951506
       inclusiveProcess:
         tt_SL-CR1-QCD_inclusive:
           filter: return true;
@@ -3064,19 +3064,19 @@
           nEventsPositive: 26583744
           nEventsNegative: 108256
           sumWeights: 8028466304.188848
-          sumWeights2: 2454485102940.909
-          nominalXS: 364.3109025265702
-          nominalXS2: 0.0050540502927219014
-          effectiveXS: 364.3109025265702
-          effectiveXS2: 0.0050540502927219014
+          sumWeights2: 2454485102940.919
+          nominalXS: 364.3109025280238
+          nominalXS2: 0.005054050292719976
+          effectiveXS: 364.3109025280238
+          effectiveXS2: 0.005054050292719976
     run: 32.0
     genEventCount: 26692000.0
-    genEventSumw: 8028466248.751033
-    genEventSumw2: 2454485069084.2603
+    genEventSumw: 8028466248.751032
+    genEventSumw2: 2454485069084.26
     nLHEScaleSumw: 288.0
-    LHEScaleSumw: 289.270323243964
+    LHEScaleSumw: 289.27032324396407
     nLHEPdfSumw: 1056.0
-    LHEPdfSumw: 1067.9757701776098
+    LHEPdfSumw: 1067.9757701776095
     totalEvents: 26692000
 - tt_SL-CR2-GluonMove:
     era: '2018'
@@ -3084,7 +3084,7 @@
     isSignal: false
     isSystematicSampleFor: tt_SL
     crossSection: 364.3109
-    sumWeights: 8271549636.10028
+    sumWeights: 8271549636.100279
     sumWeights2: 2528799802517.891
     nEvents: 27500000
     nEventsPositive: 27388515
@@ -3113,11 +3113,11 @@
           nEventsPositive: 107220
           nEventsNegative: 448
           sumWeights: 32375635.976276398
-          sumWeights2: 9899510348.242538
+          sumWeights2: 9899510348.242535
           nominalXS: 1.4259476880983726
           nominalXS2: 1.9203672202170827e-05
-          effectiveXS: 1.707509000000149
-          effectiveXS2: 2.7536142485925736e-05
+          effectiveXS: 1.9392889999998868
+          effectiveXS2: 3.5519117386818205e-05
         ttother_SL-CR2-GluonMove:
           filter: nAdditionalBJets < 2
           fractionalContribution: 1
@@ -3125,12 +3125,12 @@
           snapshotPriority: 1
           nEventsPositive: 27281295
           nEventsNegative: 111037
-          sumWeights: 8239174057.171197
-          sumWeights2: 2518900327015.859
-          nominalXS: 362.8849548302479
-          nominalXS2: 0.004886316038476127
-          effectiveXS: 362.6033930151818
-          effectiveXS2: 0.004878736411623389
+          sumWeights: 8239174057.171196
+          sumWeights2: 2518900327015.8555
+          nominalXS: 362.8849548302584
+          nominalXS2: 0.004886316038476135
+          effectiveXS: 362.37161401309345
+          effectiveXS2: 0.00487250135012662
       inclusiveProcess:
         tt_SL-CR2-GluonMove_inclusive:
           filter: return true;
@@ -3138,18 +3138,18 @@
           effectiveCrossSection: 364.3109
           nEventsPositive: 27388515
           nEventsNegative: 111485
-          sumWeights: 8271549693.147473
-          sumWeights2: 2528799837364.987
-          nominalXS: 364.31090251828505
-          nominalXS2: 0.004905519710677254
-          effectiveXS: 364.31090251828505
-          effectiveXS2: 0.004905519710677254
+          sumWeights: 8271549693.147472
+          sumWeights2: 2528799837364.9834
+          nominalXS: 364.3109025182873
+          nominalXS2: 0.004905519710677265
+          effectiveXS: 364.3109025182873
+          effectiveXS2: 0.004905519710677265
     run: 28.0
     genEventCount: 27500000.0
-    genEventSumw: 8271549636.10028
+    genEventSumw: 8271549636.100279
     genEventSumw2: 2528799802517.891
     nLHEScaleSumw: 252.0
-    LHEScaleSumw: 253.11012976999
+    LHEScaleSumw: 253.11012976999007
     nLHEPdfSumw: 924.0
     LHEPdfSumw: 934.496751063386
     totalEvents: 27500000
@@ -3190,11 +3190,11 @@
           nEventsPositive: 88575
           nEventsNegative: 660
           sumWeights: 26886644.271240234
-          sumWeights2: 8346135979.444138
-          nominalXS: 1.2571121084823946
+          sumWeights2: 8346135979.444137
+          nominalXS: 1.2571121084823944
           nominalXS2: 1.824568920319581e-05
-          effectiveXS: 1.588601999999996
-          effectiveXS2: 2.9136840980063352e-05
+          effectiveXS: 1.7096720000000394
+          effectiveXS2: 3.374720829284487e-05
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -3212,11 +3212,11 @@
           nEventsPositive: 25456163
           nEventsNegative: 212072
           sumWeights: 7720647975.681374
-          sumWeights2: 2400966730727.043
-          nominalXS: 360.9866652729897
-          nominalXS2: 0.005248811290319474
-          effectiveXS: 360.4533489978825
-          effectiveXS2: 0.005233313716838654
+          sumWeights2: 2400966730727.9355
+          nominalXS: 360.9866652725178
+          nominalXS2: 0.005248811290319483
+          effectiveXS: 360.5341049947365
+          effectiveXS2: 0.005235658923697506
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -3234,19 +3234,19 @@
           nEventsPositive: 139240
           nEventsNegative: 932
           sumWeights: 42289679.514678955
-          sumWeights2: 13105021809.549984
-          nominalXS: 1.9772965211066067
-          nominalXS2: 2.8649204317662946e-05
-          effectiveXS: 0.1581616102900217
-          effectiveXS2: 1.8330365140984974e-07
+          sumWeights2: 13105021809.550184
+          nominalXS: 1.9772965211065918
+          nominalXS2: 2.8649204317663224e-05
+          effectiveXS: 0.14284710532002903
+          effectiveXS2: 1.4952432431267677e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.16836603698462274
-          nLep1nJet9pGenHT500p-nominalXS: 1.9772965211066067
+          nLep1nJet9GenHT500-550-nominalXS: 0.16836603698462277
+          nLep1nJet9pGenHT500p-nominalXS: 1.9772965211065918
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.013467400181705592
-          nLep1nJet9pGenHT500p-effectiveXS: 0.1581616102900217
+          nLep1nJet9GenHT500-550-effectiveXS: 0.01216337598368762
+          nLep1nJet9pGenHT500p-effectiveXS: 0.14284710532002903
         ttbb_SL-HDAMPdown_fr:
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
             >= 500
@@ -3258,46 +3258,46 @@
           sumWeights: 1920834.6681518555
           sumWeights2: 594447603.8924617
           nominalXS: 0.08981055781325431
-          nominalXS2: 1.2995362470631631e-06
-          effectiveXS: 0.008536809157999354
-          effectiveXS2: 1.1741531713802838e-08
+          nominalXS2: 1.2995362470631633e-06
+          effectiveXS: 0.008991983117999286
+          effectiveXS2: 1.302700487295391e-08
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.005576752147294016
           nLep1nJet9pGenHT500p-nominalXS: 0.08981055781325431
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.0005300898910115218
-          nLep1nJet9pGenHT500p-effectiveXS: 0.008536809157999354
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0005583537435098019
+          nLep1nJet9pGenHT500p-effectiveXS: 0.008991983117999286
       inclusiveProcess:
         tt_SL-HDAMPdown_inclusive:
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.17394278913191666
-          nLep1nJet9pGenHT500p-effectiveXS: 2.0671070789199275
+          nLep1nJet9GenHT500-550-nominalXS: 0.17394278913191685
+          nLep1nJet9pGenHT500p-effectiveXS: 2.0671070789199177
           effectiveCrossSection: 364.3109
-          nominalXS2: 0.005297005720093343
-          effectiveXS: 364.31088446033107
+          nominalXS2: 0.0052970057200933535
+          effectiveXS: 364.310884459727
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nEventsNegative: 213702
           sumWeights: 7791745134.135445
           nEventsPositive: 25690298
           filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          sumWeights2: 2423012336117.33
-          nominalXS: 364.31088446033107
-          nLep1nJet9GenHT500-550-effectiveXS: 0.17394278913191666
+          sumWeights2: 2423012336118.0317
+          nominalXS: 364.310884459727
+          nLep1nJet9GenHT500-550-effectiveXS: 0.17394278913191685
           fractionalContribution: 1
-          effectiveXS2: 0.005297005720093343
+          effectiveXS2: 0.0052970057200933535
           nLep2nJet7GenHT500-550-nominalXS: 0.0
-          nLep1nJet9pGenHT500p-nominalXS: 2.0671070789199275
+          nLep1nJet9pGenHT500p-nominalXS: 2.0671070789199177
     run: 29.0
     genEventCount: 25904000.0
     genEventSumw: 7791745466.726479
     genEventSumw2: 2423012543091.5337
     nLHEScaleSumw: 261.0
-    LHEScaleSumw: 262.1568768602548
+    LHEScaleSumw: 262.15687686025484
     nLHEPdfSumw: 957.0
-    LHEPdfSumw: 967.8273807597361
+    LHEPdfSumw: 967.8273807597362
     totalEvents: 25904000
 - tt_SL-HDAMPup:
     era: '2018'
@@ -3305,8 +3305,8 @@
     isSignal: false
     isSystematicSampleFor: tt_SL
     crossSection: 364.3109
-    sumWeights: 8110739651.700869
-    sumWeights2: 2461979544241.1104
+    sumWeights: 8110739651.7008705
+    sumWeights2: 2461979544241.111
     nEvents: 26964000
     nEventsPositive: 26902895
     nEventsNegative: 61105
@@ -3336,11 +3336,11 @@
           nEventsPositive: 101806
           nEventsNegative: 275
           sumWeights: 30678225.26211548
-          sumWeights2: 9319858457.983646
-          nominalXS: 1.3779768967555757
-          nominalXS2: 1.8803241549471613e-05
-          effectiveXS: 1.5886019999999421
-          effectiveXS2: 2.4990736915990878e-05
+          sumWeights2: 9319858457.98364
+          nominalXS: 1.3779768967555737
+          nominalXS2: 1.8803241549471616e-05
+          effectiveXS: 1.874048999999757
+          effectiveXS2: 3.477849117388446e-05
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -3358,11 +3358,11 @@
           nEventsPositive: 26619756
           nEventsNegative: 60183
           sumWeights: 8025477816.137135
-          sumWeights2: 2436052100948.025
-          nominalXS: 360.4811856413347
-          nominalXS2: 0.004914846753136863
-          effectiveXS: 360.4533490096228
-          effectiveXS2: 0.004914087725309087
+          sumWeights2: 2436052100948.0215
+          nominalXS: 360.48118564133455
+          nominalXS2: 0.004914846753136842
+          effectiveXS: 359.9851139940771
+          effectiveXS2: 0.004901329051631977
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -3380,19 +3380,19 @@
           nEventsPositive: 173378
           nEventsNegative: 623
           sumWeights: 52187516.47564888
-          sumWeights2: 15879299448.744377
-          nominalXS: 2.3441118704909254
-          nominalXS2: 3.2037214354406625e-05
-          effectiveXS: 0.16177583593496678
-          effectiveXS2: 1.5258975790062785e-07
+          sumWeights2: 15879299448.744387
+          nominalXS: 2.344111870490927
+          nominalXS2: 3.203721435440665e-05
+          effectiveXS: 0.173270633802058
+          effectiveXS2: 1.7504431347195552e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.19444630414533529
-          nLep1nJet9pGenHT500p-nominalXS: 2.3441118704909254
+          nLep1nJet9pGenHT500p-nominalXS: 2.344111870490927
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.013419459110969504
-          nLep1nJet9pGenHT500p-effectiveXS: 0.16177583593496678
+          nLep1nJet9GenHT500-550-effectiveXS: 0.01437296350223708
+          nLep1nJet9pGenHT500p-effectiveXS: 0.173270633802058
         ttbb_SL-HDAMPup_fr:
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
             >= 500
@@ -3402,46 +3402,46 @@
           nEventsPositive: 7955
           nEventsNegative: 24
           sumWeights: 2396014.9112854004
-          sumWeights2: 728237451.3836762
-          nominalXS: 0.10762204018726564
-          nominalXS2: 1.4692524318338988e-06
-          effectiveXS: 0.00879804783700156
-          effectiveXS2: 9.818985412767136e-09
+          sumWeights2: 728237451.3836763
+          nominalXS: 0.10762204018726562
+          nominalXS2: 1.469252431833899e-06
+          effectiveXS: 0.011018665729001701
+          effectiveXS2: 1.5401108950118204e-08
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.006649940326553718
-          nLep1nJet9pGenHT500p-nominalXS: 0.10762204018726564
+          nLep1nJet9GenHT500-550-nominalXS: 0.006649940326553717
+          nLep1nJet9pGenHT500p-nominalXS: 0.10762204018726562
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.0005436292882426441
-          nLep1nJet9pGenHT500p-effectiveXS: 0.00879804783700156
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0006808407408799007
+          nLep1nJet9pGenHT500p-effectiveXS: 0.011018665729001701
       inclusiveProcess:
         tt_SL-HDAMPup_inclusive:
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.2010962444718886
-          nLep1nJet9pGenHT500p-effectiveXS: 2.45173391067828
+          nLep1nJet9GenHT500-550-nominalXS: 0.2010962444718885
+          nLep1nJet9pGenHT500p-effectiveXS: 2.4517339106782807
           effectiveCrossSection: 364.3109
-          nominalXS2: 0.004967156461475232
-          effectiveXS: 364.310896448517
+          nominalXS2: 0.004967156461475206
+          effectiveXS: 364.3108964485159
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nEventsNegative: 61105
           sumWeights: 8110739572.786184
           nEventsPositive: 26902895
           filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          sumWeights2: 2461979496307.154
-          nominalXS: 364.310896448517
-          nLep1nJet9GenHT500-550-effectiveXS: 0.2010962444718886
+          sumWeights2: 2461979496307.1514
+          nominalXS: 364.3108964485159
+          nLep1nJet9GenHT500-550-effectiveXS: 0.2010962444718885
           fractionalContribution: 1
-          effectiveXS2: 0.004967156461475232
+          effectiveXS2: 0.004967156461475206
           nLep2nJet7GenHT500-550-nominalXS: 0.0
-          nLep1nJet9pGenHT500p-nominalXS: 2.45173391067828
+          nLep1nJet9pGenHT500p-nominalXS: 2.4517339106782807
     run: 28.0
     genEventCount: 26964000.0
-    genEventSumw: 8110739651.700869
-    genEventSumw2: 2461979544241.1104
+    genEventSumw: 8110739651.7008705
+    genEventSumw2: 2461979544241.111
     nLHEScaleSumw: 252.0
-    LHEScaleSumw: 253.1141680721881
+    LHEScaleSumw: 253.11416807218814
     nLHEPdfSumw: 924.0
     LHEPdfSumw: 934.4749466811295
     totalEvents: 26964000
@@ -3451,8 +3451,8 @@
     isSignal: false
     isSystematicSampleFor: tt_SL
     crossSection: 364.3109
-    sumWeights: 6160758124.112902
-    sumWeights2: 1883547048628.1191
+    sumWeights: 6160758124.112903
+    sumWeights2: 1883547048628.1194
     nEvents: 20483000
     nEventsPositive: 20399631
     nEventsNegative: 83369
@@ -3482,11 +3482,11 @@
           nEventsPositive: 73963
           nEventsNegative: 301
           sumWeights: 22336430.3170166
-          sumWeights2: 6828430460.023897
-          nominalXS: 1.3208447511891506
-          nominalXS2: 2.3877942649421917e-05
-          effectiveXS: 1.5886019999997898
-          effectiveXS2: 3.454009798649662e-05
+          sumWeights2: 6828430460.0239
+          nominalXS: 1.3208447511891503
+          nominalXS2: 2.3877942649421653e-05
+          effectiveXS: 1.7963490000001414
+          effectiveXS2: 4.416464952888105e-05
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -3503,12 +3503,12 @@
           snapshotPriority: 2
           nEventsPositive: 20200619
           nEventsNegative: 82498
-          sumWeights: 6100683591.851454
-          sumWeights2: 1865172738263.1484
-          nominalXS: 360.7584464844448
-          nominalXS2: 0.006522214429391923
-          effectiveXS: 360.4533489911608
-          effectiveXS2: 0.006511187274228181
+          sumWeights: 6100683591.851453
+          sumWeights2: 1865172738261.5022
+          nominalXS: 360.75844648463004
+          nominalXS2: 0.006522214429400279
+          effectiveXS: 360.28294200935187
+          effectiveXS2: 0.00650503230497308
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -3526,19 +3526,19 @@
           nEventsPositive: 119464
           nEventsNegative: 547
           sumWeights: 36051776.8520813
-          sumWeights2: 11030379763.423767
-          nominalXS: 2.131889453698308
-          nominalXS2: 3.857149559248594e-05
-          effectiveXS: 0.13174615742002443
-          effectiveXS2: 1.4730348806615478e-07
+          sumWeights2: 11030379763.42377
+          nominalXS: 2.1318894536983084
+          nominalXS2: 3.8571495592485934e-05
+          effectiveXS: 0.12847144542800104
+          effectiveXS2: 1.400716798825015e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.18089743041243062
-          nLep1nJet9pGenHT500p-nominalXS: 2.131889453698308
+          nLep1nJet9GenHT500-550-nominalXS: 0.18089743041243056
+          nLep1nJet9pGenHT500p-nominalXS: 2.1318894536983084
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.011179069957238838
-          nLep1nJet9pGenHT500p-effectiveXS: 0.13174615742002443
+          nLep1nJet9GenHT500-550-effectiveXS: 0.01090120049094631
+          nLep1nJet9pGenHT500p-effectiveXS: 0.12847144542800104
         ttbb_SL-TuneCP5down_fr:
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
             >= 500
@@ -3548,48 +3548,48 @@
           nEventsPositive: 5585
           nEventsNegative: 23
           sumWeights: 1686367.5587158203
-          sumWeights2: 515526031.18493885
-          nominalXS: 0.09972183141584195
-          nominalXS2: 1.8027130947566765e-06
-          effectiveXS: 0.007318250221999136
-          effectiveXS2: 9.708689926684892e-09
+          sumWeights2: 515526031.1849387
+          nominalXS: 0.09972183141584205
+          nominalXS2: 1.8027130947566485e-06
+          effectiveXS: 0.00830920236799908
+          effectiveXS2: 1.2515978088676498e-08
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.006275172706788012
-          nLep1nJet9pGenHT500p-nominalXS: 0.09972183141584195
+          nLep1nJet9GenHT500-550-nominalXS: 0.006275172706788011
+          nLep1nJet9pGenHT500p-nominalXS: 0.09972183141584205
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.00046051384538892
-          nLep1nJet9pGenHT500p-effectiveXS: 0.007318250221999136
+          nLep1nJet9GenHT500-550-effectiveXS: 0.00052287126273699
+          nLep1nJet9pGenHT500p-effectiveXS: 0.00830920236799908
       inclusiveProcess:
         tt_SL-TuneCP5down_inclusive:
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.1871726031192184
+          nLep1nJet9GenHT500-550-nominalXS: 0.18717260311921838
           nLep1nJet9pGenHT500p-effectiveXS: 2.2316112851141647
           effectiveCrossSection: 364.3109
-          nominalXS2: 0.006586466580721615
-          effectiveXS: 364.3109025208511
+          nominalXS2: 0.006586466580728501
+          effectiveXS: 364.31090252107816
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nEventsNegative: 83369
-          sumWeights: 6160758166.5792675
+          sumWeights: 6160758166.579267
           nEventsPositive: 20399631
           filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          sumWeights2: 1883547074519.0146
-          nominalXS: 364.3109025208511
-          nLep1nJet9GenHT500-550-effectiveXS: 0.1871726031192184
+          sumWeights2: 1883547074517.7812
+          nominalXS: 364.31090252107816
+          nLep1nJet9GenHT500-550-effectiveXS: 0.18717260311921838
           fractionalContribution: 1
-          effectiveXS2: 0.006586466580721615
+          effectiveXS2: 0.006586466580728501
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.2316112851141647
     run: 19.0
     genEventCount: 20483000.0
-    genEventSumw: 6160758124.112902
-    genEventSumw2: 1883547048628.1191
+    genEventSumw: 6160758124.112903
+    genEventSumw2: 1883547048628.1194
     nLHEScaleSumw: 171.0
-    LHEScaleSumw: 171.7568052786467
+    LHEScaleSumw: 171.75680527864668
     nLHEPdfSumw: 627.0
-    LHEPdfSumw: 634.1441052689739
+    LHEPdfSumw: 634.1441052689742
     totalEvents: 20483000
 - tt_SL-TuneCP5up:
     era: '2018'
@@ -3597,8 +3597,8 @@
     isSignal: false
     isSystematicSampleFor: tt_SL
     crossSection: 364.3109
-    sumWeights: 8105653276.330719
-    sumWeights2: 2478044961356.284
+    sumWeights: 8105653276.33072
+    sumWeights2: 2478044961356.2847
     nEvents: 26948000
     nEventsPositive: 26838962
     nEventsNegative: 109038
@@ -3628,11 +3628,11 @@
           nEventsPositive: 98149
           nEventsNegative: 403
           sumWeights: 29639435.609558105
-          sumWeights2: 9061667702.899948
-          nominalXS: 1.3321528930851856
+          sumWeights2: 9061667702.899946
+          nominalXS: 1.3321528930851851
           nominalXS2: 1.8305281743293214e-05
-          effectiveXS: 1.5886019999997947
-          effectiveXS2: 2.6031457386672958e-05
+          effectiveXS: 1.8117280000000517
+          effectiveXS2: 3.385745155693608e-05
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -3650,11 +3650,11 @@
           nEventsPositive: 26573381
           nEventsNegative: 107818
           sumWeights: 8025501898.805729
-          sumWeights2: 2453519518370.839
-          nominalXS: 360.7084734482366
+          sumWeights2: 2453519518370.838
+          nominalXS: 360.70847344810954
           nominalXS2: 0.004956302472890138
-          effectiveXS: 360.45334898453933
-          effectiveXS2: 0.004949293894335733
+          effectiveXS: 360.22889801277387
+          effectiveXS2: 0.004943132053947926
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -3672,19 +3672,19 @@
           nEventsPositive: 159937
           nEventsNegative: 784
           sumWeights: 48249660.96248627
-          sumWeights2: 14771848223.883343
-          nominalXS: 2.16859478325712
-          nominalXS2: 2.98402956798838e-05
-          effectiveXS: 0.16248535078501222
-          effectiveXS2: 1.6752311095290614e-07
+          sumWeights2: 14771848223.883347
+          nominalXS: 2.1685947832571233
+          nominalXS2: 2.9840295679883642e-05
+          effectiveXS: 0.1611557194229813
+          effectiveXS2: 1.647926172229315e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.18578840072770805
-          nLep1nJet9pGenHT500p-nominalXS: 2.16859478325712
+          nLep1nJet9GenHT500-550-nominalXS: 0.18578840072770827
+          nLep1nJet9pGenHT500p-nominalXS: 2.1685947832571233
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.013920486066415256
-          nLep1nJet9pGenHT500p-effectiveXS: 0.16248535078501222
+          nLep1nJet9GenHT500-550-effectiveXS: 0.013806573552094848
+          nLep1nJet9pGenHT500p-effectiveXS: 0.1611557194229813
         ttbb_SL-TuneCP5up_fr:
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
             >= 500
@@ -3694,48 +3694,48 @@
           nEventsPositive: 7495
           nEventsNegative: 33
           sumWeights: 2262336.8242492676
-          sumWeights2: 691961181.5837514
+          sumWeights2: 691961181.5837513
           nominalXS: 0.10168137427641158
           nominalXS2: 1.3978160311773837e-06
-          effectiveXS: 0.009015053112000997
-          effectiveXS2: 1.0987623809533423e-08
+          effectiveXS: 0.010449340200001324
+          effectiveXS2: 1.476199112561543e-08
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.006186797525272689
+          nLep1nJet9GenHT500-550-nominalXS: 0.006186797525272687
           nLep1nJet9pGenHT500p-nominalXS: 0.10168137427641158
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.0005485204018969453
-          nLep1nJet9pGenHT500p-effectiveXS: 0.009015053112000997
+          nLep1nJet9GenHT500-550-effectiveXS: 0.0006357895194685467
+          nLep1nJet9pGenHT500p-effectiveXS: 0.010449340200001324
       inclusiveProcess:
         tt_SL-TuneCP5up_inclusive:
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.19197519825298048
-          nLep1nJet9pGenHT500p-effectiveXS: 2.270276157533613
+          nLep1nJet9GenHT500-550-nominalXS: 0.19197519825298076
+          nLep1nJet9pGenHT500p-effectiveXS: 2.270276157533616
           effectiveCrossSection: 364.3109
-          nominalXS2: 0.005005845866341513
-          effectiveXS: 364.31090249887166
+          nominalXS2: 0.005005845866341512
+          effectiveXS: 364.3109024985744
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nEventsNegative: 109038
           sumWeights: 8105653332.202023
           nEventsPositive: 26838962
           filter: return true;
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          sumWeights2: 2478044995481.3936
-          nominalXS: 364.31090249887166
-          nLep1nJet9GenHT500-550-effectiveXS: 0.19197519825298048
+          sumWeights2: 2478044995481.3926
+          nominalXS: 364.3109024985744
+          nLep1nJet9GenHT500-550-effectiveXS: 0.19197519825298076
           fractionalContribution: 1
-          effectiveXS2: 0.005005845866341513
+          effectiveXS2: 0.005005845866341512
           nLep2nJet7GenHT500-550-nominalXS: 0.0
-          nLep1nJet9pGenHT500p-nominalXS: 2.270276157533613
+          nLep1nJet9pGenHT500p-nominalXS: 2.270276157533616
     run: 31.0
     genEventCount: 26948000.0
-    genEventSumw: 8105653276.330719
-    genEventSumw2: 2478044961356.284
+    genEventSumw: 8105653276.33072
+    genEventSumw2: 2478044961356.2847
     nLHEScaleSumw: 279.0
-    LHEScaleSumw: 280.2271281120005
+    LHEScaleSumw: 280.22712811200046
     nLHEPdfSumw: 1023.0
-    LHEPdfSumw: 1035.199554870907
+    LHEPdfSumw: 1035.1995548709071
     totalEvents: 26948000
 - tt_SL-GF:
     era: '2018'
@@ -3743,7 +3743,7 @@
     isSignal: false
     crossSection: 2.246079 #Sum of nominalXS of ttbb_SL_fr and ttother_SL_fr
     sumWeights: 2558971192.9444675
-    sumWeights2: 783335681712.4751
+    sumWeights2: 783335681712.4752
     nEvents: 8522800
     nEventsPositive: 8481822
     nEventsNegative: 40978
@@ -3777,19 +3777,19 @@
           nEventsPositive: 8103731
           nEventsNegative: 39235
           sumWeights: 2444872089.663615
-          sumWeights2: 748422970032.8519
+          sumWeights2: 748422970032.3853
           nominalXS: 2.1459310965949867
-          nominalXS2: 5.765890214449341e-07
-          effectiveXS: 1.843020630564726
-          effectiveXS2: 4.2529983674165973e-07
+          nominalXS2: 5.765890214449342e-07
+          effectiveXS: 1.8430206305643784
+          effectiveXS2: 4.2529983674180616e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.1834405189632385
+          nLep1nJet9GenHT500-550-nominalXS: 0.18344051896323854
           nLep1nJet9pGenHT500p-nominalXS: 2.1459310965949867
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.15754683897511967
-          nLep1nJet9pGenHT500p-effectiveXS: 1.843020630564726
+          nLep1nJet9GenHT500-550-effectiveXS: 0.1575468389751193
+          nLep1nJet9pGenHT500p-effectiveXS: 1.8430206305643784
         ttbb_SL-GF_fr:
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
             >= 500
@@ -3800,46 +3800,46 @@
           nEventsNegative: 1743
           sumWeights: 114099122.77899551
           sumWeights2: 34912723590.78343
-          nominalXS: 0.1001479204998176
-          nominalXS2: 2.6896947230876662e-08
-          effectiveXS: 0.11891954471802624
-          effectiveXS2: 3.792500046689777e-08
+          nominalXS: 0.1001479204998181
+          nominalXS2: 2.6896947230877046e-08
+          effectiveXS: 0.11891954471802565
+          effectiveXS2: 3.792500046689836e-08
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.00633564210367016
-          nLep1nJet9pGenHT500p-nominalXS: 0.1001479204998176
+          nLep1nJet9GenHT500-550-nominalXS: 0.006335642103670159
+          nLep1nJet9pGenHT500p-nominalXS: 0.1001479204998181
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.007523188406753174
-          nLep1nJet9pGenHT500p-effectiveXS: 0.11891954471802624
+          nLep1nJet9GenHT500-550-effectiveXS: 0.007523188406753173
+          nLep1nJet9pGenHT500p-effectiveXS: 0.11891954471802565
       inclusiveProcess:
         tt_SL-GF_inclusive:
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
           nLep1nJet9pGenHT500p-effectiveXS: 2.246079017093207
           effectiveCrossSection: 2.246079
-          nominalXS2: 6.034859686752030e-07
+          nominalXS2: 6.034859686751935e-07
           effectiveXS: 2.246079017093207
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nEventsNegative: 40978
           sumWeights: 2558971212.4426107
           nEventsPositive: 8481822
-          nLep1nJet9GenHT500-550-nominalXS: 0.18977616106689046
-          sumWeights2: 783335693622.962
+          nLep1nJet9GenHT500-550-nominalXS: 0.1897761610668905
+          sumWeights2: 783335693622.6508
           nominalXS: 2.246079017093207
-          nLep1nJet9GenHT500-550-effectiveXS: 0.18977616106689046
+          nLep1nJet9GenHT500-550-effectiveXS: 0.1897761610668905
           fractionalContribution: 1
-          effectiveXS2: 6.034859686752030e-07
+          effectiveXS2: 6.034859686751935e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep1nJet9pGenHT500p-nominalXS: 2.246079017093207
     run: 33.0
     genEventCount: 8522800.0
     genEventSumw: 2558971192.9444675
-    genEventSumw2: 783335681712.4751
+    genEventSumw2: 783335681712.4752
     nLHEScaleSumw: 297.0
     LHEScaleSumw: 301.83572841887155
     nLHEPdfSumw: 1089.0
-    LHEPdfSumw: 1121.0345508097332
+    LHEPdfSumw: 1121.034550809733
     totalEvents: 8522800
 - tt_SL-GF-HDAMPdown:
     era: '2018'
@@ -3847,7 +3847,7 @@
     isSignal: false
     isSystematicSampleFor: tt_SL-GF
     crossSection: 2.06710707892
-    sumWeights: 557420459.7925783
+    sumWeights: 557420459.7925781
     sumWeights2: 172768208141.47415
     nEvents: 1847960
     nEventsPositive: 1835509
@@ -3882,19 +3882,19 @@
           nEventsPositive: 1753828
           nEventsNegative: 11988
           sumWeights: 532586428.1043707
-          sumWeights2: 165088007930.3154
-          nominalXS: 1.975013859460553
-          nominalXS2: 2.270260181253992e-06
-          effectiveXS: 1.9547730627466178
-          effectiveXS2: 2.223965409936344e-06
+          sumWeights2: 165088007930.32764
+          nominalXS: 1.9750138594606945
+          nominalXS2: 2.2702601812533267e-06
+          effectiveXS: 1.7990128946835644
+          effectiveXS2: 1.883665958312960e-06
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.16929034777598706
-          nLep1nJet9pGenHT500p-nominalXS: 1.975013859460553
+          nLep1nJet9GenHT500-550-nominalXS: 0.1692903477759905
+          nLep1nJet9pGenHT500p-nominalXS: 1.9750138594606945
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.16755538703145323
-          nLep1nJet9pGenHT500p-effectiveXS: 1.9547730627466178
+          nLep1nJet9GenHT500-550-effectiveXS: 0.15420424374965142
+          nLep1nJet9pGenHT500p-effectiveXS: 1.7990128946835644
         ttbb_SL-GF-HDAMPdown_fr:
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
             >= 500
@@ -3904,47 +3904,47 @@
           nEventsPositive: 81681
           nEventsNegative: 463
           sumWeights: 24834008.30495453
-          sumWeights2: 7680185709.047812
-          nominalXS: 0.09209305382212558
-          nominalXS2: 1.0561651338831397e-07
-          effectiveXS: 0.12632048274598548
-          effectiveXS2: 1.9871270298948336e-07
+          sumWeights2: 7680185709.047814
+          nominalXS: 0.09209305382212458
+          nominalXS2: 1.0561651338831396e-07
+          effectiveXS: 0.11625501688197913
+          effectiveXS2: 1.6830673091112753e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.005802684416518488
-          nLep1nJet9pGenHT500p-nominalXS: 0.09209305382212558
+          nLep1nJet9GenHT500-550-nominalXS: 0.005802684416518483
+          nLep1nJet9pGenHT500p-nominalXS: 0.09209305382212458
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.00795931795391519
-          nLep1nJet9pGenHT500p-effectiveXS: 0.12632048274598548
+          nLep1nJet9GenHT500-550-effectiveXS: 0.007325103759793215
+          nLep1nJet9pGenHT500p-effectiveXS: 0.11625501688197913
       inclusiveProcess:
         tt_SL-GF-HDAMPdown_inclusive:
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9pGenHT500p-effectiveXS: 2.067106913281887
+          nLep1nJet9pGenHT500p-effectiveXS: 2.0671069132820232
           effectiveCrossSection: 2.246079
-          nominalXS2: 2.3758766946424574e-06
-          effectiveXS: 2.067106913281887
+          nominalXS2: 2.3758766946419776e-06
+          effectiveXS: 2.0671069132820232
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nEventsNegative: 12451
           sumWeights: 557420436.4093252
           nEventsPositive: 1835509
-          nLep1nJet9GenHT500-550-nominalXS: 0.1750930321925066
-          sumWeights2: 172768193639.32153
-          nominalXS: 2.067106913281887
-          nLep1nJet9GenHT500-550-effectiveXS: 0.1750930321925066
+          nLep1nJet9GenHT500-550-nominalXS: 0.17509303219251046
+          sumWeights2: 172768193639.33005
+          nominalXS: 2.0671069132820232
+          nLep1nJet9GenHT500-550-effectiveXS: 0.17509303219251046
           fractionalContribution: 1
-          effectiveXS2: 2.3758766946424574e-06
+          effectiveXS2: 2.3758766946419776e-06
           nLep2nJet7GenHT500-550-nominalXS: 0.0
-          nLep1nJet9pGenHT500p-nominalXS: 2.067106913281887
+          nLep1nJet9pGenHT500p-nominalXS: 2.0671069132820232
     run: 40.0
     genEventCount: 1847960.0
-    genEventSumw: 557420459.7925783
+    genEventSumw: 557420459.7925781
     genEventSumw2: 172768208141.47415
     nLHEScaleSumw: 360.0
-    LHEScaleSumw: 368.2337185479989
+    LHEScaleSumw: 368.23371854799893
     nLHEPdfSumw: 1320.0
-    LHEPdfSumw: 1366.4290222473344
+    LHEPdfSumw: 1366.4290222473342
     totalEvents: 1847960
 - tt_SL-GF-HDAMPup:
     era: '2018'
@@ -3987,19 +3987,19 @@
           nEventsPositive: 2130805
           nEventsNegative: 7589
           sumWeights: 641403776.855724
-          sumWeights2: 195150317392.1691
-          nominalXS: 2.342233552834016
-          nominalXS2: 2.6023555492421686e-06
-          effectiveXS: 1.9509136050472866
-          effectiveXS2: 1.8054368851796886e-06
+          sumWeights2: 195150317392.16846
+          nominalXS: 2.3422335528346188
+          nominalXS2: 2.6023555492421695e-06
+          effectiveXS: 2.1295433662014758
+          effectiveXS2: 2.1511921932676757e-06
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.19556274678030594
-          nLep1nJet9pGenHT500p-nominalXS: 2.342233552834016
+          nLep1nJet9GenHT500-550-nominalXS: 0.195562746780306
+          nLep1nJet9pGenHT500p-nominalXS: 2.3422335528346188
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.16288982918657954
-          nLep1nJet9pGenHT500p-effectiveXS: 1.9509136050472866
+          nLep1nJet9GenHT500-550-effectiveXS: 0.177804365230449
+          nLep1nJet9pGenHT500p-effectiveXS: 2.1295433662014758
         ttbb_SL-GF-HDAMPup_fr:
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
             >= 500
@@ -4009,39 +4009,39 @@
           nEventsPositive: 99627
           nEventsNegative: 370
           sumWeights: 29985600.07324457
-          sumWeights2: 9126355659.477726
-          nominalXS: 0.10949932184287293
-          nominalXS2: 1.2170117175391472e-07
-          effectiveXS: 0.12633355585199008
-          effectiveXS2: 1.619978837164775e-07
+          sumWeights2: 9126355659.477798
+          nominalXS: 0.10949932184287413
+          nominalXS2: 1.2170117175391474e-07
+          effectiveXS: 0.1379003342709815
+          effectiveXS2: 1.9302010099851304e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.006708763167486078
-          nLep1nJet9pGenHT500p-nominalXS: 0.10949932184287293
+          nLep1nJet9GenHT500-550-nominalXS: 0.0067087631674860775
+          nLep1nJet9pGenHT500p-nominalXS: 0.10949932184287413
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.007740156669953494
-          nLep1nJet9pGenHT500p-effectiveXS: 0.12633355585199008
+          nLep1nJet9GenHT500-550-effectiveXS: 0.008448825689248478
+          nLep1nJet9pGenHT500p-effectiveXS: 0.1379003342709815
       inclusiveProcess:
         tt_SL-GF-HDAMPup_inclusive:
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9pGenHT500p-effectiveXS: 2.4517328746774956
+          nLep1nJet9pGenHT500p-effectiveXS: 2.4517328746786298
           effectiveCrossSection: 2.246079
-          nominalXS2: 2.7240579395024594e-06
-          effectiveXS: 2.4517339785370997
+          nominalXS2: 2.724057939502458e-06
+          effectiveXS: 2.4517339785382344
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nEventsNegative: 7959
           sumWeights: 671389679.2129651
           nEventsPositive: 2230433
-          nLep1nJet9GenHT500-550-nominalXS: 0.2022715099477892
-          sumWeights2: 204276764427.27148
-          nominalXS: 2.4517339785370997
-          nLep1nJet9GenHT500-550-effectiveXS: 0.2022715099477892
+          nLep1nJet9GenHT500-550-nominalXS: 0.20227150994778928
+          sumWeights2: 204276764427.27115
+          nominalXS: 2.4517339785382344
+          nLep1nJet9GenHT500-550-effectiveXS: 0.20227150994778928
           fractionalContribution: 1
-          effectiveXS2: 2.7240579395024594e-06
+          effectiveXS2: 2.724057939502458e-06
           nLep2nJet7GenHT500-550-nominalXS: 0.0
-          nLep1nJet9pGenHT500p-nominalXS: 2.4517328746774956
+          nLep1nJet9pGenHT500p-nominalXS: 2.4517328746786298
     run: 25.0
     genEventCount: 2238392.0
     genEventSumw: 671389685.0929763
@@ -4049,7 +4049,7 @@
     nLHEScaleSumw: 225.0
     LHEScaleSumw: 227.38572570987543
     nLHEPdfSumw: 825.0
-    LHEPdfSumw: 844.8891361737471
+    LHEPdfSumw: 844.889136173747
     totalEvents: 2238392
 - tt_SL-GF-TuneCP5down:
     era: '2018'
@@ -4057,7 +4057,7 @@
     isSignal: false
     isSystematicSampleFor: tt_SL-GF
     crossSection: 2.23161128511
-    sumWeights: 578002883.4930296
+    sumWeights: 578002883.4930297
     sumWeights2: 176890416924.32733
     nEvents: 1924586
     nEventsPositive: 1915572
@@ -4092,19 +4092,19 @@
           nEventsPositive: 1830360
           nEventsNegative: 8612
           sumWeights: 552291127.0809438
-          sumWeights2: 169021325381.25894
-          nominalXS: 2.1323404944715083
-          nominalXS2: 2.5195238850895024e-06
-          effectiveXS: 1.980891629899856
-          effectiveXS2: 2.174336741997038e-06
+          sumWeights2: 169021325381.29114
+          nominalXS: 2.132340494471499
+          nominalXS2: 2.519523885089485e-06
+          effectiveXS: 1.9681315545713185
+          effectiveXS2: 2.1464146282165456e-06
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.18213393604344902
-          nLep1nJet9pGenHT500p-nominalXS: 2.1323404944715083
+          nLep1nJet9GenHT500-550-nominalXS: 0.18213393604344888
+          nLep1nJet9pGenHT500p-nominalXS: 2.132340494471499
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.16919792611192208
-          nLep1nJet9pGenHT500p-effectiveXS: 1.980891629899856
+          nLep1nJet9GenHT500-550-effectiveXS: 0.16810802384241288
+          nLep1nJet9pGenHT500p-effectiveXS: 1.9681315545713185
         ttbb_SL-GF-TuneCP5down_fr:
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
             >= 500
@@ -4114,47 +4114,47 @@
           nEventsPositive: 85212
           nEventsNegative: 402
           sumWeights: 25711760.81134963
-          sumWeights2: 7869094229.0945015
-          nominalXS: 0.0992705225088528
+          sumWeights2: 7869094229.094502
+          nominalXS: 0.09927052250885278
           nominalXS2: 1.1730100222205537e-07
-          effectiveXS: 0.1275199448819996
-          effectiveXS2: 1.9356076944387041e-07
+          effectiveXS: 0.126698797631992
+          effectiveXS2: 1.9107597929770255e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.00633300770327911
-          nLep1nJet9pGenHT500p-nominalXS: 0.0992705225088528
+          nLep1nJet9pGenHT500p-nominalXS: 0.09927052250885278
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.008135192329499346
-          nLep1nJet9pGenHT500p-effectiveXS: 0.1275199448819996
+          nLep1nJet9GenHT500-550-effectiveXS: 0.008082806870771545
+          nLep1nJet9pGenHT500p-effectiveXS: 0.126698797631992
       inclusiveProcess:
         tt_SL-GF-TuneCP5down_inclusive:
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9pGenHT500p-effectiveXS: 2.2316110169800756
+          nLep1nJet9pGenHT500p-effectiveXS: 2.231611016980059
           effectiveCrossSection: 2.246079
-          nominalXS2: 2.6368248873117696e-06
-          effectiveXS: 2.2316110169800756
+          nominalXS2: 2.6368248873117712e-06
+          effectiveXS: 2.231611016980059
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nEventsNegative: 9014
           sumWeights: 578002887.8922933
           nEventsPositive: 1915572
-          nLep1nJet9GenHT500-550-nominalXS: 0.18846694374672837
-          sumWeights2: 176890419610.33276
-          nominalXS: 2.2316110169800756
-          nLep1nJet9GenHT500-550-effectiveXS: 0.18846694374672837
+          nLep1nJet9GenHT500-550-nominalXS: 0.18846694374672823
+          sumWeights2: 176890419610.35663
+          nominalXS: 2.231611016980059
+          nLep1nJet9GenHT500-550-effectiveXS: 0.18846694374672823
           fractionalContribution: 1
-          effectiveXS2: 2.6368248873117696e-06
+          effectiveXS2: 2.6368248873117712e-06
           nLep2nJet7GenHT500-550-nominalXS: 0.0
-          nLep1nJet9pGenHT500p-nominalXS: 2.2316110169800756
+          nLep1nJet9pGenHT500p-nominalXS: 2.231611016980059
     run: 34.0
     genEventCount: 1924586.0
-    genEventSumw: 578002883.4930296
+    genEventSumw: 578002883.4930297
     genEventSumw2: 176890416924.32733
     nLHEScaleSumw: 306.0
-    LHEScaleSumw: 311.01866881289664
+    LHEScaleSumw: 311.0186688128966
     nLHEPdfSumw: 1122.0
-    LHEPdfSumw: 1154.910789678819
+    LHEPdfSumw: 1154.9107896788194
     totalEvents: 1924586
 - tt_SL-GF-TuneCP5up:
     era: '2018'
@@ -4162,8 +4162,8 @@
     isSignal: false
     isSystematicSampleFor: tt_SL-GF
     crossSection: 2.27027615753
-    sumWeights: 617782190.2084125
-    sumWeights2: 189098386991.5856
+    sumWeights: 617782190.2084124
+    sumWeights2: 189098386991.58563
     nEvents: 2057416
     nEventsPositive: 2047594
     nEventsNegative: 9822
@@ -4197,19 +4197,19 @@
           nEventsPositive: 1956203
           nEventsNegative: 9392
           sumWeights: 590205322.6464314
-          sumWeights2: 180658700310.61655
-          nominalXS: 2.168934294829311
-          nominalXS2: 2.439750578025488e-06
-          effectiveXS: 1.9502849037213756
-          effectiveXS2: 1.972644182960312e-06
+          sumWeights2: 180658700310.63086
+          nominalXS: 2.1689342948293437
+          nominalXS2: 2.4397505780258137e-06
+          effectiveXS: 1.9712952805789927
+          effectiveXS2: 2.0153756280158377e-06
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.18614968916815297
-          nLep1nJet9pGenHT500p-nominalXS: 2.168934294829311
+          nLep1nJet9GenHT500-550-nominalXS: 0.186149689168152
+          nLep1nJet9pGenHT500p-nominalXS: 2.1689342948293437
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.16738401411368817
-          nLep1nJet9pGenHT500p-effectiveXS: 1.9502849037213756
+          nLep1nJet9GenHT500-550-effectiveXS: 0.16918723845774736
+          nLep1nJet9pGenHT500p-effectiveXS: 1.9712952805789927
         ttbb_SL-GF-TuneCP5up_fr:
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 1 && nFTAGenJet >= 9 && FTAGenHT
             >= 500
@@ -4219,45 +4219,45 @@
           nEventsPositive: 91391
           nEventsNegative: 430
           sumWeights: 27576872.27294922
-          sumWeights2: 8439689556.91081
-          nominalXS: 0.10134172248509554
-          nominalXS2: 1.1397589731015585e-07
-          effectiveXS: 0.1260180335040071
-          effectiveXS2: 1.7623893233636661e-07
+          sumWeights2: 8439689556.910804
+          nominalXS: 0.10134172248509556
+          nominalXS2: 1.1397589731015654e-07
+          effectiveXS: 0.1273756598000116
+          effectiveXS2: 1.8005672641101582e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
-          nLep1nJet9GenHT500-550-nominalXS: 0.006421141391285168
-          nLep1nJet9pGenHT500p-nominalXS: 0.10134172248509554
+          nLep1nJet9GenHT500-550-nominalXS: 0.006421141391285169
+          nLep1nJet9pGenHT500p-nominalXS: 0.10134172248509556
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9GenHT500-550-effectiveXS: 0.007984664076533955
-          nLep1nJet9pGenHT500p-effectiveXS: 0.1260180335040071
+          nLep1nJet9GenHT500-550-effectiveXS: 0.008070685018248456
+          nLep1nJet9pGenHT500p-effectiveXS: 0.1273756598000116
       inclusiveProcess:
         tt_SL-GF-TuneCP5up_inclusive:
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep2nJet7pGenHT500p-effectiveXS: 0.0
-          nLep1nJet9pGenHT500p-effectiveXS: 2.2702760173151395
+          nLep1nJet9pGenHT500p-effectiveXS: 2.270276017315176
           effectiveCrossSection: 2.246079
-          nominalXS2: 2.5537264753364065e-06
-          effectiveXS: 2.2702760173151395
+          nominalXS2: 2.5537264753364387e-06
+          effectiveXS: 2.270276017315176
           nLep2nJet7GenHT500-550-effectiveXS: 0.0
           nEventsNegative: 9822
           sumWeights: 617782194.9193807
           nEventsPositive: 2047594
-          nLep1nJet9GenHT500-550-nominalXS: 0.19257083055944166
-          sumWeights2: 189098389867.53
-          nominalXS: 2.2702760173151395
-          nLep1nJet9GenHT500-550-effectiveXS: 0.19257083055944166
+          nLep1nJet9GenHT500-550-nominalXS: 0.19257083055944071
+          sumWeights2: 189098389867.52515
+          nominalXS: 2.270276017315176
+          nLep1nJet9GenHT500-550-effectiveXS: 0.19257083055944071
           fractionalContribution: 1
-          effectiveXS2: 2.5537264753364065e-06
+          effectiveXS2: 2.5537264753364387e-06
           nLep2nJet7GenHT500-550-nominalXS: 0.0
-          nLep1nJet9pGenHT500p-nominalXS: 2.2702760173151395
+          nLep1nJet9pGenHT500p-nominalXS: 2.270276017315176
     run: 71.0
     genEventCount: 2057416.0
-    genEventSumw: 617782190.2084125
-    genEventSumw2: 189098386991.5856
+    genEventSumw: 617782190.2084124
+    genEventSumw2: 189098386991.58563
     nLHEScaleSumw: 639.0
-    LHEScaleSumw: 649.362090753445
+    LHEScaleSumw: 649.3620907534452
     nLHEPdfSumw: 2343.0
     LHEPdfSumw: 2411.6249507299026
     totalEvents: 2057416
