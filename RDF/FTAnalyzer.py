@@ -2231,7 +2231,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     countNodes[eraAndSampleName] = dict()
                     countNodes[eraAndSampleName]["BaseNode"] = nodes[eraAndSampleName]["BaseNode"].Count()
                     diagnosticNodes[eraAndSampleName] = collections.OrderedDict()
-                    diagnosticHistos[eraAndSampleName] = collections.OrderedDict()
+                    diagnosticHistos[eraAndSampleName] = dict()
                     defineNodes[eraAndSampleName] = collections.OrderedDict()
                 if not isData:
                     #Need to gather those bookkeeping stats from the original source rather than the ones after event selection...
@@ -2244,6 +2244,17 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     diagnosticNodes[eraAndSampleName]["effectiveXS2::Sum"] = nodes[eraAndSampleName]["BaseNode"].Sum("effectiveXS2")
                     diagnosticNodes[eraAndSampleName]["nEventsPositive::Count"] = nodes[eraAndSampleName]["BaseNode"].Filter("genWeight >= 0", "genWeight >= 0").Count()
                     diagnosticNodes[eraAndSampleName]["nEventsNegative::Count"] = nodes[eraAndSampleName]["BaseNode"].Filter("genWeight < 0", "genWeight < 0").Count()
+                    if fillDiagnosticHistos == True:
+                        if "NoChannel" not in diagnosticHistos[eraAndSampleName].keys():
+                            diagnosticHistos[eraAndSampleName]["NoChannel"] = dict()
+                        diagnosticHistos[eraAndSampleName]["NoChannel"]["XS-nominalXS::Histo"] = nodes[eraAndSampleName]["BaseNode"]\
+                            .Define("Unity", "return static_cast<int>(1);")\
+                            .Histo1D(("{proc}___nominalXS___diagnostic___XS".format(proc=eraAndProcessName), 
+                                      "#sigma;;#sigma", 1, 0, 2), "Unity", "nominalXS")
+                        diagnosticHistos[eraAndSampleName]["NoChannel"]["XS-effectiveXS::Histo"] = nodes[eraAndSampleName]["BaseNode"]\
+                            .Define("Unity", "return static_cast<int>(1);")\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___XS".format(proc=eraAndProcessName), 
+                                      "#sigma;;#sigma", 1, 0, 2), "Unity", "effectiveXS")
                 if "nFTAGenJet/FTAGenHT" in IDs and IDs["nFTAGenJet/FTAGenHT"]:
                     if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
                         diagnosticNodes[eraAndSampleName]["nLep2nJet7GenHT500-550-nominalXS::Sum"] = nodes[eraAndSampleName]["BaseNode"]\
@@ -2255,7 +2266,8 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                         diagnosticNodes[eraAndSampleName]["nLep1nJet9pGenHT500p-nominalXS::Sum"] = nodes[eraAndSampleName]["BaseNode"]\
                             .Filter("nFTAGenLep == 1 && nFTAGenJet >= 9 && 500 <= FTAGenHT", "nFTAGenLep 1, nFTAGenJet 9+, FTAGenHT 500+").Sum("nominalXS")
                     if fillDiagnosticHistos == True:
-                        diagnosticHistos[eraAndSampleName]["NoChannel"] = collections.OrderedDict()
+                        if "NoChannel" not in diagnosticHistos[eraAndSampleName].keys():
+                            diagnosticHistos[eraAndSampleName]["NoChannel"] = dict()
                         diagnosticHistos[eraAndSampleName]["NoChannel"]["GenHT-nominalXS::Histo"] = nodes[eraAndSampleName]["BaseNode"]\
                             .Histo1D(("{proc}___nominalXS___diagnostic___GenHT".format(proc=eraAndProcessName), 
                                       "GenHT;GenHT;#sigma/GeV", 200, 0, 2000), "FTAGenHT", "nominalXS")
@@ -4951,26 +4963,26 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                }
         
         
-        filtered = {}
-        base = {}
-        metanode = {}
-        metainfo = {}
-        reports = {}
-        samples = {}
-        counts = {}
-        histos = {}
-        packedNodes = {}
-        varsToFlattenOrSave = {} #Variables that will be saved to ntuples (completely flat)
-        flatteningDict = {} #Dict breaking down variables that have been flattened, were already flat, were skipped due to function rules, etc.
-        the_df = {}
-        stats = {} #Stats for HLT branches
-        effic = {} #Stats for jet matching efficiencies
-        btagging = {} #For btagging efficiencies
-        cat_df = {} #Categorization node dictionary, returned by fillHistos method
+        filtered = dict()
+        base = dict()
+        metanode = dict()
+        metainfo = dict()
+        reports = dict()
+        samples = dict()
+        counts = dict()
+        histos = dict()
+        packedNodes = dict()
+        varsToFlattenOrSave = dict() #Variables that will be saved to ntuples (completely flat)
+        flatteningDict = dict() #Dict breaking down variables that have been flattened, were already flat, were skipped due to function rules, etc.
+        the_df = dict()
+        stats = dict() #Stats for HLT branches
+        effic = dict() #Stats for jet matching efficiencies
+        btagging = dict() #For btagging efficiencies
+        cat_df = dict() #Categorization node dictionary, returned by fillHistos method
         masterstart = time.perf_counter()#Timers...
-        substart = {}
-        subfinish = {}
-        processed = {}
+        substart = dict()
+        subfinish = dict()
+        processed = dict()
         processedSampleList = []
     
         if not os.path.isdir(analysisDir):
@@ -5142,7 +5154,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             # print("Initializing RDataFrame\n\t{} - {}".format(name, vals["source"][source_level]))
             # print("Initializing RDataFrame\n\t{} - {}".format(name, len(transformedFileList)))
             print("Initializing RDataFrame with TChain")
-            filtered[name] = {}
+            filtered[name] = dict()
             base[name] = RDF(tcmain)
             if checkMeta:
                 metanode[name] = RDF(tcmeta) #meta tree
@@ -5153,11 +5165,15 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                       "genEventCount": metanode[name].Sum("genEventCount"), 
                                       "genEventSumw": metanode[name].Sum("genEventSumw"), 
                                       "genEventSumw2": metanode[name].Sum("genEventSumw2"), 
-                                      "nLHEScaleSumw": metanode[name].Sum("nLHEScaleSumw"), 
-                                      "LHEScaleSumw": metanode[name].Sum("LHEScaleSumw"), 
-                                      "nLHEPdfSumw": metanode[name].Sum("nLHEPdfSumw"), 
-                                      "LHEPdfSumw": metanode[name].Sum("LHEPdfSumw")
+                                      "nLHEScaleSumw": metanode[name].Mean("nLHEScaleSumw"), 
+                                      "nLHEPdfSumw": metanode[name].Mean("nLHEPdfSumw"), 
                                   }
+                    for nScale in range(9):
+                        metanode[name] = metanode[name].Define("LHEScaleSumw_{nscale}".format(nscale=nScale), "LHEScaleSumw.at({nscale}, 0)".format(nscale=nScale))
+                        metainfo[name]["LHEScaleSumw_{nscale}".format(nscale=nScale)] = metanode[name].Sum("LHEScaleSumw_{nscale}".format(nscale=nScale))
+                    for nPDF in range(33):
+                        metanode[name] = metanode[name].Define("LHEPdfSumw_{npdf}".format(npdf=nPDF), "LHEPdfSumw.at({npdf}, 0)".format(npdf=nPDF))
+                        metainfo[name]["LHEPdfSumw_{npdf}".format(npdf=nPDF)] = metanode[name].Sum("LHEPdfSumw_{npdf}".format(npdf=nPDF))
                 for mk, mv in metainfo[name].items():
                     metainfo[name][mk] = mv.GetValue()
                     if mk == "genEventSumw":
@@ -5168,19 +5184,19 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             print("\n{}".format(name))
             pprint.pprint(metainfo[name])
             reports[name] = base[name].Report()
-            counts[name] = {}
-            # histos[name] = {}
-            packedNodes[name] = {}
-            the_df[name] = {}
-            stats[name] = {}
-            effic[name] = {}
-            varsToFlattenOrSave[name] = {}
-            flatteningDict[name] = {}
-            # btagging[name] = {}
-            cat_df[name] = {}
-            substart[name] = {}
-            subfinish[name] = {}
-            processed[name] = {}
+            counts[name] = dict()
+            # histos[name] = dict()
+            packedNodes[name] = dict()
+            the_df[name] = dict()
+            stats[name] = dict()
+            effic[name] = dict()
+            varsToFlattenOrSave[name] = dict()
+            flatteningDict[name] = dict()
+            # btagging[name] = dict()
+            cat_df[name] = dict()
+            substart[name] = dict()
+            subfinish[name] = dict()
+            processed[name] = dict()
             #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
             for lvl in levelsOfInterest:
                 #########################
@@ -5245,21 +5261,17 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                         print("Booking progress bar")
                         booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(base[name]), 
                                                           2000, int(metainfo[name]["totalEvents"]))
-                    updatedMeta = False
+                    updatedMeta = True
                     for mk, mv in metainfo[name].items():
                         if mk == "genEventSumw":
-                            updatedMeta = True
                             print(inputSampleCardYaml[name]["sumWeights"], mv)
                             inputSampleCardYaml[name]["sumWeights"] = mv
                         elif mk == "genEventSumw2":
-                            updatedMeta = True
                             print(inputSampleCardYaml[name]["sumWeights2"], mv)
                             inputSampleCardYaml[name]["sumWeights2"] = mv
                         if mk == "genEventCount":
-                            updatedMeta = True
                             print(inputSampleCardYaml[name]["nEvents"], mv)
                             inputSampleCardYaml[name]["nEvents"] = int(mv)
-                        updatedMeta = True
                         inputSampleCardYaml[name][mk] = metainfo[name][mk]
                     if updatedMeta == True:
                         #Reloading the vals and split/inclusive ProcessConfigs
@@ -5314,7 +5326,6 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     #but require the channel matching for BOTH instead of only data... now we filter out the MC that belongs to other channels, 
                     #instead of accepting all inclusively (skimming-appropriate)
                     triggers = [trig for trig in eraTriggers if (vals.get("isData", None) == False or vals.get("subera", "NOSUBERA") in trig.subera) and lvl == trig.channel]
-                    print("This will break if BOOKKEEPING is requested <-- FIXME")
                     #Create list of veto triggers for data, where explicit tiers are expected (calculating the tier first)
                     tier = [trig.tier for trig in triggers]
                     tier.sort(key=lambda i: i, reverse=False)
@@ -5328,11 +5339,11 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     # Fired = [trig for trig in triggers if hasattr(event, trig.trigger) and getattr(event, trig.trigger, False)]
                     # Vetoed = [trig for trig in vetoTriggers if hasattr(event, trig.trigger) and getattr(event, trig.trigger, False)]
                     triggerBitSum = sum([pow(2, t.uniqueEraBit) for t in eraTriggers if t.channel == lvl])
-                    tieredTriggerBitSums = {}
-                    channelToTierDict = {}
-                    vetoChannelCode = {}
-                    passChannelCode = {}
-                    channelFilterCode = {}
+                    tieredTriggerBitSums = dict()
+                    channelToTierDict = dict()
+                    vetoChannelCode = dict()
+                    passChannelCode = dict()
+                    channelFilterCode = dict()
                     for trig_channel, tier in [(trig.channel, trig.tier) for trig in sorted(eraTriggers, key=lambda nTup: nTup.tier, reverse=False)]:
                         if trig_channel in tieredTriggerBitSums.keys(): continue
                         channelToTierDict[trig_channel] = min([trig.tier for trig in eraTriggers if trig.channel == trig_channel])
@@ -5441,9 +5452,9 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     counts[name][lvl] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(the_df[name][lvl]), 
                                                             min(5000, max(1000, int(metainfo[name]["totalEvents"]/5000))), int(metainfo[name]["totalEvents"]))
                 packedNodes[name][lvl] = None
-                stats[name][lvl] = {}
-                effic[name][lvl] = {}
-                # btagging[name][lvl] = {}
+                stats[name][lvl] = dict()
+                effic[name][lvl] = dict()
+                # btagging[name][lvl] = dict()
                 cat_df[name][lvl] = {'fillHistos(...)':'NotRunOrFailed'} #will be a dictionary returned by fillHistos, so empty histo if fillHistos not run or fails
                 #Get the variables to save using a function that takes the processDict as input (for special sample-specific variables to add)
                 #Variable which are NOT flat will be subsequently flattened by delegateFlattening(which calls flattenVariable with some hints)
@@ -5611,7 +5622,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     print("Writing outputs...")
                     processesOfInterest = []
                     if splitProcessConfig != None:
-                        for thisProc in splitProcessConfig.get("processes", {}).keys():
+                        for thisProc in splitProcessConfig.get("processes", dict()).keys():
                             processesOfInterest.append(vals.get("era") + "___" + thisProc)
                     else:
                         processesOfInterest.append(vals.get("era") + "___" + name)
@@ -5674,8 +5685,8 @@ def otherFuncs():
     print("Warning: if filtered[name][lvl] RDFs are not reset, then calling Define(*) on them will cause the error"      " with 'program state reset' due to multiple definitions for the same variable")
     loopcounter = 0
     masterstart = time.perf_counter()
-    substart = {}
-    subfinish = {}
+    substart = dict()
+    subfinish = dict()
     for name, cnt in counts.items():
         #if name in ["MuMu", "ElMu", "ElEl"]: continue
         substart[name] = time.perf_counter()
