@@ -2766,7 +2766,7 @@
           filter: nAdditionalBJets >= 2 && nFTAGenLep == 2 && nFTAGenJet >= 7 && FTAGenHT
             >= 500
           fractionalContribution: 0.880702392411
-          effectiveCrossSection: 0660612554375
+          effectiveCrossSection: 0.0660612554375
           snapshotPriority: 4
           nEventsPositive: 282130
           nEventsNegative: 1215
