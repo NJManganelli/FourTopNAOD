@@ -1070,7 +1070,7 @@
         ttbb_AH-CR1-QCD:
           filter: nAdditionalBJets >= 2
           fractionalContribution: 1
-          effectiveCrossSection: 380.1143
+          effectiveCrossSection: 2.21580931867
           snapshotPriority: 2
           nEventsPositive: 116745
           nEventsNegative: 493
@@ -1083,7 +1083,7 @@
         ttother_AH-CR1-QCD:
           filter: nAdditionalBJets < 2
           fractionalContribution: 1
-          effectiveCrossSection: 380.1143
+          effectiveCrossSection: 377.898494251
           snapshotPriority: 1
           nEventsPositive: 27113880
           nEventsNegative: 109882
@@ -1147,7 +1147,7 @@
         ttbb_AH-CR2-GluonMove:
           filter: nAdditionalBJets >= 2
           fractionalContribution: 1
-          effectiveCrossSection: 380.1143
+          effectiveCrossSection: 2.21513189034
           snapshotPriority: 2
           nEventsPositive: 117258
           nEventsNegative: 499
@@ -1160,7 +1160,7 @@
         ttother_AH-CR2-GluonMove:
           filter: nAdditionalBJets < 2
           fractionalContribution: 1
-          effectiveCrossSection: 380.1143
+          effectiveCrossSection: 377.899171661
           snapshotPriority: 1
           nEventsPositive: 27240721
           nEventsNegative: 110522
@@ -1224,7 +1224,7 @@
         ttbb_AH-HDAMPdown:
           filter: nAdditionalBJets >= 2
           fractionalContribution: 1
-          effectiveCrossSection: 380.1143
+          effectiveCrossSection: 2.10165583111
           snapshotPriority: 2
           nEventsPositive: 109233
           nEventsNegative: 797
@@ -1237,7 +1237,7 @@
         ttother_AH-HDAMPdown:
           filter: nAdditionalBJets < 2
           fractionalContribution: 1
-          effectiveCrossSection: 380.1143
+          effectiveCrossSection: 378.012629978
           snapshotPriority: 1
           nEventsPositive: 26785292
           nEventsNegative: 222660
@@ -1301,7 +1301,7 @@
         ttbb_AH-HDAMPup:
           filter: nAdditionalBJets >= 2
           fractionalContribution: 1
-          effectiveCrossSection: 380.1143
+          effectiveCrossSection: 2.31304430752
           snapshotPriority: 2
           nEventsPositive: 121470
           nEventsNegative: 293
@@ -1314,7 +1314,7 @@
         ttother_AH-HDAMPup:
           filter: nAdditionalBJets < 2
           fractionalContribution: 1
-          effectiveCrossSection: 380.1143
+          effectiveCrossSection: 377.801257506
           snapshotPriority: 1
           nEventsPositive: 27020928
           nEventsNegative: 61229
@@ -1378,7 +1378,7 @@
         ttbb_AH-TuneCP5down:
           filter: nAdditionalBJets >= 2
           fractionalContribution: 1
-          effectiveCrossSection: 380.1143
+          effectiveCrossSection: 2.22380637765
           snapshotPriority: 2
           nEventsPositive: 116775
           nEventsNegative: 481
@@ -1391,7 +1391,7 @@
         ttother_AH-TuneCP5down:
           filter: nAdditionalBJets < 2
           fractionalContribution: 1
-          effectiveCrossSection: 380.1143
+          effectiveCrossSection: 377.890497187
           snapshotPriority: 1
           nEventsPositive: 27026030
           nEventsNegative: 109522
@@ -1455,7 +1455,7 @@
         ttbb_AH-TuneCP5up:
           filter: nAdditionalBJets >= 2
           fractionalContribution: 1
-          effectiveCrossSection: 380.1143
+          effectiveCrossSection: 2.2243588449
           snapshotPriority: 2
           nEventsPositive: 116192
           nEventsNegative: 484
@@ -1468,7 +1468,7 @@
         ttother_AH-TuneCP5up:
           filter: nAdditionalBJets < 2
           fractionalContribution: 1
-          effectiveCrossSection: 380.1143
+          effectiveCrossSection: 377.889944698
           snapshotPriority: 1
           nEventsPositive: 26883152
           nEventsNegative: 108964
