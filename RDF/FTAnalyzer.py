@@ -2090,7 +2090,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                 IDs = splitProcess.get("ID")  
             else:
                 splitProcs = collections.OrderedDict()
-                IDs = {}
+                IDs = dict()
             if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
                 inclusiveProc = inclusiveProcess.get("processes")
                 inclusiveDict = list(inclusiveProc.values())[0]
@@ -2242,6 +2242,9 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                             .Define("Unity", "return static_cast<int>(1);")\
                             .Histo1D(("{proc}___effectiveXS___diagnostic___XS".format(proc=eraAndProcessName), 
                                       "#sigma;;#sigma", 1, 0, 2), "Unity", "effectiveXS")
+                        diagnosticHistos[eraAndSampleName]["NoChannel"]["LHE_HT-effectiveXS::Histo"] = nodes[eraAndSampleName]["BaseNode"]\
+                            .Histo1D(("{proc}___effectiveXS___diagnostic___LHE_HT".format(proc=eraAndProcessName), 
+                                      "#sigma;;#sigma", 600, 0, 3000), "LHE_HT", "effectiveXS")
                 if "nFTAGenJet/FTAGenHT" in IDs and IDs["nFTAGenJet/FTAGenHT"]:
                     if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
                         diagnosticNodes[eraAndSampleName]["nLep2nJet7GenHT500-550-nominalXS::Sum"] = nodes[eraAndSampleName]["BaseNode"]\
@@ -2395,7 +2398,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
     return prePackedNodes
 
 
-def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="All", isData=True, era="2017", categorySet="5x3", histosDict=None,
+def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="All", isData=True, era="2017", variableSet="HTOnly", categorySet="5x3", histosDict=None,
                doCategorized=False, doDiagnostics=True, doCombineHistosOnly=False, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
                HTCut=500, METCut=0.0, ZMassMETWindow=[15.0, 10000.0], verbose=False,
                triggers=[],
@@ -3667,8 +3670,8 @@ def writeHistosV1(histDict, directory, levelsOfInterest="All", samplesOfInterest
     for f in rootDict.values():
         f.Close()
 
-def writeHistos(histDict, directory, samplesOfInterest="All", systematicsOfInterest="All",
-                channelsOfInterest="All", dict_keys="All", mode="RECREATE"):
+def writeHistos(histDict, directory, variableSet="NA", categorySet="NA", samplesOfInterest="All", systematicsOfInterest="All",
+                channelsOfInterest="All", dict_keys="All", mode="RECREATE", compatibility=False):
     rootDict = {}
     if not os.path.isdir(directory):
         os.makedirs(directory)
@@ -3696,15 +3699,20 @@ def writeHistos(histDict, directory, samplesOfInterest="All", systematicsOfInter
                 continue
             #Cute way to format the name as 'blah.root' or 'blah.nominal.ps.rf.root'
             if isinstance(systematicsOfInterest, str) and systematicsOfInterest.lower() == "all":
-                systematicsAndRoot = ["", "root"]
+                systematicsDescriptors = ["all"]
             elif isinstance(systematicsOfInterest, list) and len(systematicsOfInterest) == 1 and systematicsOfInterest[0].lower() == "all": #Handle case of passing the systematicsSet the option 'ALL'
-                systematicsAndRoot = ["", "root"]
+                systematicsDescriptors = ["all"]
             else:
-                systematicsAndRoot = [""] + systematicsOfInterest + ["root"]
+                systematicsDescriptors = ["__".join(systematicsOfInterest)]
+            if compatibility:
+                formattedFileName = directory + "/" + channel + "/" + name + ".root"
+            else:
+                formattedFileName = directory + "/" + channel + "/" + name + "___".join(["", str(variableSet),str(categorySet)]+systematicsDescriptors) + ".root"
             if not os.path.isdir(directory + "/" + channel):
                 os.makedirs(directory + "/" + channel)
-            rootFileName = "{}{}".format(directory + "/" + channel + "/"+ name, ".".join(systematicsAndRoot))
-            rootDict[name] = ROOT.TFile.Open("{}".format(rootFileName), mode)
+            # rootFileName = "{}{}".format(directory + "/" + channel + "/"+ name, ".".join(systematicsAndRoot))
+            # rootDict[name] = ROOT.TFile.Open("{}".format(rootFileName), mode)
+            rootDict[name] = ROOT.TFile.Open("{}".format(formattedFileName), mode)
             # for dict_key in objDict.keys():
             #     if dict_keys == "All": pass
             #     elif dict_key not in dict_keys: continue
@@ -3724,7 +3732,7 @@ def writeHistos(histDict, directory, samplesOfInterest="All", systematicsOfInter
                     hptr = obj
                 hptr.Write()
                 counter += 1
-            print("Wrote {} histograms into file for {}::{} - {}".format(counter, name, channel, rootFileName))
+            print("Wrote {} histograms into file for {}::{} - {}".format(counter, name, channel, formattedFileName))
             rootDict[name].Close()
     print("samples skipped/cycled: {}/{}\tchannels skipped/cycled: {}/{}\tobjects cycled: {}".format(nameCounterSkipped,
                                                                                                      nameCounter, 
@@ -5558,6 +5566,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                             isData = vals["isData"], 
                                                             era = vals["era"], 
                                                             triggers = triggers, 
+                                                            variableSet=variableSet,
                                                             categorySet=categorySet, 
                                                             sampleName=name, 
                                                             channel=lvl.replace("_selection", "").replace("_baseline", ""), 
@@ -5618,19 +5627,25 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     if doCombineHistosOnly:
                         writeDir = analysisDir + "/Combine"
                         writeDict = histos
+                        compatibility = False
                     elif doHistos:
                         writeDir = analysisDir + "/Histograms"
                         writeDict = histos
+                        compatibility = False
                     if doBTaggingYields:
                         writeDir = analysisDir + "/BTaggingYields"
                         writeDict = btagging
+                        compatibility = True
                     writeHistos(writeDict, 
                                 writeDir,
+                                variableSet=variableSet,
+                                categorySet=categorySet,
                                 channelsOfInterest="All",
                                 samplesOfInterest=processesOfInterest,
                                 systematicsOfInterest=systematicSet,
                                 dict_keys="All",
-                                mode="RECREATE"
+                                mode="RECREATE",
+                                compatibility= compatibility
                             )
                     print("Wrote Histograms for {} to this directory:\n{}".format(name, writeDir))
                 processedSampleList.append(name)
