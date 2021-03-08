@@ -5,7 +5,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -23,7 +23,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet1_pt"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -42,7 +42,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -60,7 +60,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet1_eta"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -79,7 +79,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -97,7 +97,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet1_DeepJetB"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -116,7 +116,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -134,7 +134,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet1_DeepJetB_sortedjet"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -153,7 +153,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -171,7 +171,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet2_pt"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -190,7 +190,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -208,7 +208,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet2_eta"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -227,7 +227,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -245,7 +245,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet2_DeepJetB"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -264,7 +264,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -282,7 +282,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet2_DeepJetB_sortedjet"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -301,7 +301,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -319,7 +319,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet3_pt"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -338,7 +338,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -356,7 +356,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet3_eta"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -375,7 +375,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -393,7 +393,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet3_DeepJetB"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -412,7 +412,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
 	"SetRangeUser": [-0.05, 0.30],
         "Projection": null,
         "Unblind": false
@@ -431,7 +431,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet3_DeepJetB_sortedjet"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -450,7 +450,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -468,7 +468,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet4_pt"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -487,7 +487,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -505,7 +505,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet4_eta"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -524,7 +524,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -542,7 +542,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet4_DeepJetB"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -561,7 +561,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
 	"SetRangeUser": [-0.05, 0.30],
         "Projection": null,
         "Unblind": false
@@ -580,7 +580,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Jet4_DeepJetB_sortedjet"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -599,7 +599,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -617,7 +617,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___nJet"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -636,7 +636,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -654,7 +654,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___nJet_MediumDeepJet"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -673,7 +673,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -691,7 +691,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___MET_pt"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -710,7 +710,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -728,7 +728,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___MET_phi"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -747,7 +747,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -765,44 +765,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Muon1_pt"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
-        ],
-        "Legend": "DefaultLegend",
-        "Rebin": null,
-        "XPixels": 1200,
-        "YPixels": 1000,
-        "XAxisTitle": "p_{T} (GeV)",
-        "YAxisTitle": "Events / bin",
-        "Projection": null,
-        "DoRatio": true,
-        "doLogY": false,
-        "DoMountainrange": true
-    },
-    "Plot_HT500_nMediumDeepJetB2+_nJet4+___Muon2_pt": {
-        "Type": "PlotConfig",
-        "Title": "DefaultPlotTitle",
-        "Xaxis": null,
-        "Yaxis": null,
-        "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
-        "Projection": null,
-        "Unblind": false
-    },
-    "Canvas_nMediumDeepJetB2p_Muon2_pt": {
-        "Type": "CanvasConfig",
-        "Title": "Subleading Muon p_{T} (2+ DeepJet b tags)",
-        "Margins": [
-            0.1,
-            0.1,
-            0.1,
-            0.1
-        ],
-        "Coordinates": [],
-        "Plots": [
-            "Plot_HT500_nMediumDeepJetB2+_nJet4+___Muon2_pt"
-        ],
-        "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -821,7 +784,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
 	"SetRangeUser": [-0.03, 0.03],
         "Unblind": false
@@ -840,7 +803,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Muon_dz"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -859,7 +822,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
 	"SetRangeUser": [-0.005, 0.05],
         "Projection": null,
         "Unblind": false
@@ -878,7 +841,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___Muon_ip3d"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -897,7 +860,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -915,7 +878,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___MTofMETandMu"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -928,13 +891,163 @@
         "doLogY": false,
         "DoMountainrange": true
     },
+    "Plot_HT500_nMediumDeepJetB2+_nJet4+___Electron1_pt": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Control___BackgroundDominant.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_Electron1_pt": {
+        "Type": "CanvasConfig",
+        "Title": "Leading Electron p_{T} (2+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2+_nJet4+___Electron1_pt"
+        ],
+        "Labels": [
+            "e#mu Bkgd Dominant"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "p_{T} (GeV)",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2+_nJet4+___Electron_dz": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "2017___Control___BackgroundDominant.root",
+	"SetRangeUser": [-0.03, 0.03],
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_Electron_dz": {
+        "Type": "CanvasConfig",
+        "Title": "Electron dz (2+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2+_nJet4+___Electron_dz"
+        ],
+        "Labels": [
+            "e#mu Bkgd Dominant"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "Electron dz",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2+_nJet4+___Electron_ip3d": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "2017___Control___BackgroundDominant.root",
+	"SetRangeUser": [-0.005, 0.05],
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_Electron_ip3d": {
+        "Type": "CanvasConfig",
+        "Title": "Electron ip3d (2+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2+_nJet4+___Electron_ip3d"
+        ],
+        "Labels": [
+            "e#mu Bkgd Dominant"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "ip3d",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2+_nJet4+___MTofMETandEl": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "2017___Control___BackgroundDominant.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_MTofMETandEl": {
+        "Type": "CanvasConfig",
+        "Title": "MT(MET,e) (2+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2+_nJet4+___MTofMETandEl"
+        ],
+        "Labels": [
+            "e#mu Bkgd Dominant"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "MT(MET,e) (GeV)",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
     "Plot_HT500_nMediumDeepJetB2+_nJet4+___HT": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -952,7 +1065,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___HT"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -971,7 +1084,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -989,7 +1102,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___H"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1008,7 +1121,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1026,7 +1139,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___HT2M"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1045,7 +1158,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1063,7 +1176,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___H2M"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1082,7 +1195,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1100,7 +1213,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___HTb"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1119,7 +1232,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1137,7 +1250,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___HTH"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1156,7 +1269,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1174,7 +1287,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___HTRat"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1193,7 +1306,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1211,7 +1324,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___dRbb"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1230,7 +1343,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1248,7 +1361,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___dRll"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1267,7 +1380,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1285,7 +1398,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___nLooseFTAMuon"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1304,7 +1417,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1322,7 +1435,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___nMediumFTAMuon"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1341,7 +1454,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1359,7 +1472,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___nTightFTAMuon"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1378,7 +1491,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1396,7 +1509,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___nLooseFTAElectron"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1415,7 +1528,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1433,7 +1546,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___nMediumFTAElectron"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1452,7 +1565,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1470,7 +1583,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___nTightFTAElectron"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1489,7 +1602,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1507,7 +1620,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___nLooseFTALepton"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1526,7 +1639,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1544,7 +1657,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___nMediumFTALepton"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1563,7 +1676,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2018___Control___BackgroundDominant.root",
+        "Files": "2017___Control___BackgroundDominant.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1581,7 +1694,7 @@
             "Plot_HT500_nMediumDeepJetB2+_nJet4+___nTightFTALepton"
         ],
         "Labels": [
-            "#mu#mu Bkgd Dominant"
+            "e#mu Bkgd Dominant"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
