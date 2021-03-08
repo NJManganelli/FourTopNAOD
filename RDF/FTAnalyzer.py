@@ -6073,13 +6073,19 @@ if __name__ == '__main__':
             raise RuntimeError("hadd stage not properly configured with histDir and writeDir")
         if not os.path.isdir(writeDir):
             os.makedirs(writeDir)
-        globKey = "**/*.root"
-        print("Looking for histogram files to combine inside {hdir}".format(hdir=histDir))
+        
+        globKey = "**/*" + args.variableSet + "*" + args.categorySet + "*.root"
+        print("Looking for histogram files to combine inside {hdir}, with key {glk}".format(hdir=histDir, glk=globKey))
         f = glob.glob("{}/{}".format(histDir, globKey))
+        f = [ff for ff in f if histDir+"/All" not in ff]
+        fexcluded = [ff for ff in f if histDir+"/All" in ff]
+        if len(fexcluded) > 0:
+            print("Excluded these files: ")
+            for fiter in fexcluded: print("\t\t{}".format(fiter))
         if verb:
             print("\nFound these files: ")
             for fiter in f: print("\t\t{}".format(fiter))
-        cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
+        cmd = "hadd -f {wdir}/{era}___{vS}___{cS}.root {ins}".format(wdir=writeDir, era=era, vS=args.variableSet, cS=args.categorySet, ins=" ".join(f)) 
         # print(cmd)
         spo = subprocess.Popen(args="{}".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))
         spo.communicate()
