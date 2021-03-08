@@ -21,7 +21,7 @@ $NOMINAL:
     top_parton_pt_nnlo_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
     top_parton_sf_nnlo_nlo: "sqrt(0.103*exp(-0.0118 * top_parton_pt_nnlo_nlo) - 0.000134 * top_parton_pt_nnlo_nlo + 0.973)"
     pwgt_top_pT_nnlo_nlo: "top_parton_sf_nnlo_nlo.at(0, 1.0) * top_parton_sf_nnlo_nlo.at(1, 1.0)"
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.98 : nFTAJet__$SYSTEMATIC == 7 ? 0.86 : nFTAJet__$SYSTEMATIC == 6 ? 0.80 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8750161228 * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
     prewgt___nom: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo" #Used as base for many other weights, e.g. btag variation, take care modifying this one
     pwgt_btagSF_common: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
@@ -42,7 +42,7 @@ OSDL_$ERA_jesTotalUp:
   - jerc
   notes: Corresponds to jec_13TeV_R2017Up most likely...
   preWeights:
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.98 : nFTAJet__$SYSTEMATIC == 7 ? 0.86 : nFTAJet__$SYSTEMATIC == 6 ? 0.80 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8750161228 * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
@@ -62,7 +62,7 @@ OSDL_$ERA_jesTotalDown:
   - jerc
   notes: Corresponds to jec_13TeV_R2017Down most likely...
   preWeights:
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.98 : nFTAJet__$SYSTEMATIC == 7 ? 0.86 : nFTAJet__$SYSTEMATIC == 6 ? 0.80 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8750161228 * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
@@ -141,7 +141,7 @@ OSDL_$ERA_jerUp:
   systematicSet:
   - jerc
   preWeights:
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.98 : nFTAJet__$SYSTEMATIC == 7 ? 0.86 : nFTAJet__$SYSTEMATIC == 6 ? 0.80 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8750161228 * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
@@ -160,7 +160,7 @@ OSDL_$ERA_jerDown:
   systematicSet:
   - jerc
   preWeights:
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.98 : nFTAJet__$SYSTEMATIC == 7 ? 0.86 : nFTAJet__$SYSTEMATIC == 6 ? 0.80 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8750161228 * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
@@ -1119,7 +1119,7 @@ OSDL_RunII_ueUp:
     top_parton_pt_nnlo_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
     top_parton_sf_nnlo_nlo: "sqrt(0.103*exp(-0.0118 * top_parton_pt_nnlo_nlo) - 0.000134 * top_parton_pt_nnlo_nlo + 0.973)"
     pwgt_top_pT_nnlo_nlo: "top_parton_sf_nnlo_nlo.at(0, 1.0) * top_parton_sf_nnlo_nlo.at(1, 1.0)"
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.98 : nFTAJet__$SYSTEMATIC == 7 ? 0.86 : nFTAJet__$SYSTEMATIC == 6 ? 0.80 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8750161228 * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
     pwgt_btagSF_common: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
@@ -1153,7 +1153,7 @@ OSDL_RunII_ueDown:
     top_parton_pt_nnlo_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
     top_parton_sf_nnlo_nlo: "sqrt(0.103*exp(-0.0118 * top_parton_pt_nnlo_nlo) - 0.000134 * top_parton_pt_nnlo_nlo + 0.973)"
     pwgt_top_pT_nnlo_nlo: "top_parton_sf_nnlo_nlo.at(0, 1.0) * top_parton_sf_nnlo_nlo.at(1, 1.0)"
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.98 : nFTAJet__$SYSTEMATIC == 7 ? 0.86 : nFTAJet__$SYSTEMATIC == 6 ? 0.80 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8750161228 * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
     pwgt_btagSF_common: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
@@ -1187,7 +1187,7 @@ OSDL_RunII_hdampUp:
     top_parton_pt_nnlo_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
     top_parton_sf_nnlo_nlo: "sqrt(0.103*exp(-0.0118 * top_parton_pt_nnlo_nlo) - 0.000134 * top_parton_pt_nnlo_nlo + 0.973)"
     pwgt_top_pT_nnlo_nlo: "top_parton_sf_nnlo_nlo.at(0, 1.0) * top_parton_sf_nnlo_nlo.at(1, 1.0)"
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.98 : nFTAJet__$SYSTEMATIC == 7 ? 0.86 : nFTAJet__$SYSTEMATIC == 6 ? 0.80 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8750161228 * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
     pwgt_btagSF_common: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
@@ -1221,7 +1221,7 @@ OSDL_RunII_hdampDown:
     top_parton_pt_nnlo_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
     top_parton_sf_nnlo_nlo: "sqrt(0.103*exp(-0.0118 * top_parton_pt_nnlo_nlo) - 0.000134 * top_parton_pt_nnlo_nlo + 0.973)"
     pwgt_top_pT_nnlo_nlo: "top_parton_sf_nnlo_nlo.at(0, 1.0) * top_parton_sf_nnlo_nlo.at(1, 1.0)"
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.98 : nFTAJet__$SYSTEMATIC == 7 ? 0.86 : nFTAJet__$SYSTEMATIC == 6 ? 0.80 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8750161228 * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
     pwgt_btagSF_common: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
