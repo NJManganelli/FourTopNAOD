@@ -4,7 +4,7 @@
     isData: false
     isSignal: false
     crossSection: 6077.22
-    sumWeights: 100108281.94794682
+    sumWeights: 100108281.94794683
     sumWeights2: 100182008.66172644
     nEvents: 100194597
     nEventsPositive: 100154500
@@ -18,22 +18,65 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL/MuMu/*Skim.root
+      NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2018/DYJets_DL/*_Skim.root
     run: 57.0
     genEventCount: 100194597.0
-    genEventSumw: 100108281.94794682
+    genEventSumw: 100108281.94794683
     genEventSumw2: 100182008.66172644
-    nLHEScaleSumw: 513.0
+    nLHEScaleSumw: 9.0
     LHEScaleSumw: 510.90601157549946
-    nLHEPdfSumw: 1881.0
+    nLHEPdfSumw: 33.0
     LHEPdfSumw: 1849.1330510672105
     totalEvents: 100194597
+    LHEScaleSumw_0: 50.496410274018935
+    LHEScaleSumw_1: 57.25192953017299
+    LHEScaleSumw_2: 63.260287906394424
+    LHEScaleSumw_3: 50.254848232927884
+    LHEScaleSumw_4: 56.99999992359023
+    LHEScaleSumw_5: 63.00189300945202
+    LHEScaleSumw_6: 50.056934288765035
+    LHEScaleSumw_7: 56.79356510588839
+    LHEScaleSumw_8: 62.790143304289565
+    LHEPdfSumw_0: 56.02962217307907
+    LHEPdfSumw_1: 56.53533772579942
+    LHEPdfSumw_2: 56.29308329479986
+    LHEPdfSumw_3: 56.01117403392957
+    LHEPdfSumw_4: 55.79668033371162
+    LHEPdfSumw_5: 55.67575078714733
+    LHEPdfSumw_6: 56.05722569836003
+    LHEPdfSumw_7: 56.0136869446523
+    LHEPdfSumw_8: 56.10822263444927
+    LHEPdfSumw_9: 56.11598279776133
+    LHEPdfSumw_10: 56.334550216120654
+    LHEPdfSumw_11: 55.93709206029017
+    LHEPdfSumw_12: 55.99703300675067
+    LHEPdfSumw_13: 56.02411507235176
+    LHEPdfSumw_14: 56.06128676852546
+    LHEPdfSumw_15: 56.116523834333165
+    LHEPdfSumw_16: 56.01782653411901
+    LHEPdfSumw_17: 56.03049636442697
+    LHEPdfSumw_18: 56.05480172968601
+    LHEPdfSumw_19: 56.10301178282683
+    LHEPdfSumw_20: 55.79230733076845
+    LHEPdfSumw_21: 55.930305451627724
+    LHEPdfSumw_22: 56.063539272900385
+    LHEPdfSumw_23: 56.016981197264776
+    LHEPdfSumw_24: 55.96071577870117
+    LHEPdfSumw_25: 56.15647749835193
+    LHEPdfSumw_26: 56.04986419223793
+    LHEPdfSumw_27: 55.882252767452876
+    LHEPdfSumw_28: 55.91983563364451
+    LHEPdfSumw_29: 56.12691951730927
+    LHEPdfSumw_30: 56.01092614760841
+    LHEPdfSumw_31: 55.219466056348566
+    LHEPdfSumw_32: 56.68995642987365
 - DYJets_DL-HT100:
     era: '2018'
     isData: false
     isSignal: false
     crossSection: 181.302
-    sumWeights: 11516745.853159329
-    sumWeights2: 11527616.335991548
+    sumWeights: 11516745.853159327
+    sumWeights2: 11527616.335991547
     nEventsPositive: 11524320
     nEventsNegative: 6190
     channels:
@@ -46,21 +89,64 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT100/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT100/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT100/MuMu/*Skim.root
+      NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2018/DYJets_DL-HT100/*_Skim.root
     run: 12.0
     genEventCount: 11530510.0
-    genEventSumw: 11516745.853159329
-    genEventSumw2: 11527616.335991548
-    nLHEScaleSumw: 108.0
+    genEventSumw: 11516745.853159327
+    genEventSumw2: 11527616.335991547
+    nLHEScaleSumw: 9.0
     LHEScaleSumw: 107.66235462262323
-    nLHEPdfSumw: 396.0
+    nLHEPdfSumw: 33.0
     LHEPdfSumw: 391.6842624538266
     totalEvents: 11530510
+    LHEScaleSumw_0: 12.16259581662997
+    LHEScaleSumw_1: 12.434386864979862
+    LHEScaleSumw_2: 12.51202443942341
+    LHEScaleSumw_3: 11.73512798020463
+    LHEScaleSumw_4: 12.000000017086267
+    LHEScaleSumw_5: 12.076950731886544
+    LHEScaleSumw_6: 11.382190985132755
+    LHEScaleSumw_7: 11.641347628803892
+    LHEScaleSumw_8: 11.717730158475895
+    LHEPdfSumw_0: 11.869601091577813
+    LHEPdfSumw_1: 11.894542175590168
+    LHEPdfSumw_2: 11.895340662903557
+    LHEPdfSumw_3: 11.865258966897398
+    LHEPdfSumw_4: 11.870480549509832
+    LHEPdfSumw_5: 11.820085430824754
+    LHEPdfSumw_6: 11.873408044424679
+    LHEPdfSumw_7: 11.862635459894388
+    LHEPdfSumw_8: 11.886548322644138
+    LHEPdfSumw_9: 11.868873765769088
+    LHEPdfSumw_10: 11.856689189470238
+    LHEPdfSumw_11: 11.853246310672787
+    LHEPdfSumw_12: 11.868277606837653
+    LHEPdfSumw_13: 11.889071188317327
+    LHEPdfSumw_14: 11.86975941249311
+    LHEPdfSumw_15: 11.880309919012504
+    LHEPdfSumw_16: 11.868730322940008
+    LHEPdfSumw_17: 11.879718380376124
+    LHEPdfSumw_18: 11.873450902502316
+    LHEPdfSumw_19: 11.871488821452504
+    LHEPdfSumw_20: 11.849834644206394
+    LHEPdfSumw_21: 11.864811226789417
+    LHEPdfSumw_22: 11.913889174492358
+    LHEPdfSumw_23: 11.867740840437396
+    LHEPdfSumw_24: 11.863318132854015
+    LHEPdfSumw_25: 11.871097431932789
+    LHEPdfSumw_26: 11.87075598964291
+    LHEPdfSumw_27: 11.848209786047201
+    LHEPdfSumw_28: 11.853069761432852
+    LHEPdfSumw_29: 11.869121405555735
+    LHEPdfSumw_30: 11.870585986208527
+    LHEPdfSumw_31: 11.446227581751886
+    LHEPdfSumw_32: 12.27808396836467
 - DYJets_DL-HT200:
     era: '2018'
     isData: false
     isSignal: false
     crossSection: 50.4177
-    sumWeights: 10840078.364005698
+    sumWeights: 10840078.364005696
     sumWeights2: 10856902.968035076
     nEvents: 10860690
     nEventsPositive: 10851288
@@ -74,22 +160,65 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT200/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT200/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT200/MuMu/*Skim.root
+      NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2018/DYJets_DL-HT200/*_Skim.root
     run: 11.0
     genEventCount: 10860690.0
-    genEventSumw: 10840078.364005698
+    genEventSumw: 10840078.364005696
     genEventSumw2: 10856902.968035076
-    nLHEScaleSumw: 99.0
+    nLHEScaleSumw: 9.0
     LHEScaleSumw: 99.23808535276312
-    nLHEPdfSumw: 363.0
+    nLHEPdfSumw: 33.0
     LHEPdfSumw: 361.69646130567565
     totalEvents: 10860690
+    LHEScaleSumw_0: 12.038079649587631
+    LHEScaleSumw_1: 11.615616127806202
+    LHEScaleSumw_2: 11.154717259066308
+    LHEScaleSumw_3: 11.39909976033724
+    LHEScaleSumw_4: 11.0
+    LHEScaleSumw_5: 10.563965101869519
+    LHEScaleSumw_6: 10.880925541192632
+    LHEScaleSumw_7: 10.5007714921381
+    LHEScaleSumw_8: 10.084910420765482
+    LHEPdfSumw_0: 10.961543931923991
+    LHEPdfSumw_1: 10.964185078382975
+    LHEPdfSumw_2: 10.982356116948774
+    LHEPdfSumw_3: 10.959600021945924
+    LHEPdfSumw_4: 10.958663858115536
+    LHEPdfSumw_5: 10.956430801174681
+    LHEPdfSumw_6: 10.964561491303922
+    LHEPdfSumw_7: 10.957688148107257
+    LHEPdfSumw_8: 10.988316382219459
+    LHEPdfSumw_9: 10.962070994097688
+    LHEPdfSumw_10: 10.921374048368378
+    LHEPdfSumw_11: 10.956304940019937
+    LHEPdfSumw_12: 10.960414612423735
+    LHEPdfSumw_13: 10.976353596465819
+    LHEPdfSumw_14: 10.96514561404381
+    LHEPdfSumw_15: 10.975203044922628
+    LHEPdfSumw_16: 10.965273487814532
+    LHEPdfSumw_17: 10.952216697994198
+    LHEPdfSumw_18: 10.964413498821456
+    LHEPdfSumw_19: 10.958726439905442
+    LHEPdfSumw_20: 10.946969465568802
+    LHEPdfSumw_21: 10.953180910423882
+    LHEPdfSumw_22: 10.978101969674624
+    LHEPdfSumw_23: 10.960213088763556
+    LHEPdfSumw_24: 10.960973641026792
+    LHEPdfSumw_25: 10.961917680341362
+    LHEPdfSumw_26: 10.959191514588577
+    LHEPdfSumw_27: 10.943502992403282
+    LHEPdfSumw_28: 10.945315081703479
+    LHEPdfSumw_29: 10.951327407298946
+    LHEPdfSumw_30: 10.963868876886158
+    LHEPdfSumw_31: 10.479680881370857
+    LHEPdfSumw_32: 11.441374990625148
 - DYJets_DL-HT400:
     era: '2018'
     isData: false
     isSignal: false
     crossSection: 6.98394
     sumWeights: 9810917.568167498
-    sumWeights2: 9835666.778738566
+    sumWeights2: 9835666.778738564
     nEvents: 9840466
     nEventsPositive: 9826793
     nEventsNegative: 13673
@@ -106,22 +235,65 @@
       NANOv7Ext2: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21_ext2-v1/NANOAODSIM
       NANOv7EXT1: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_EXT1_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
       NANOv7EXT: dbs:/DYJetsToLL_M-50_HT-400to600_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_EXT_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+      NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2018/DYJets_DL-HT400/*_Skim.root
     run: 16.0
     genEventCount: 9840466.0
     genEventSumw: 9810917.568167498
-    genEventSumw2: 9835666.778738566
-    nLHEScaleSumw: 144.0
+    genEventSumw2: 9835666.778738564
+    nLHEScaleSumw: 9.0
     LHEScaleSumw: 145.36993866744302
-    nLHEPdfSumw: 528.0
+    nLHEPdfSumw: 33.0
     LHEPdfSumw: 530.1227930243888
     totalEvents: 9840466
+    LHEScaleSumw_0: 18.955454819231672
+    LHEScaleSumw_1: 17.52924613840068
+    LHEScaleSumw_2: 16.259278220922816
+    LHEScaleSumw_3: 17.30661707183686
+    LHEScaleSumw_4: 15.999999984492682
+    LHEScaleSumw_5: 14.837105390559994
+    LHEScaleSumw_6: 15.994185419031382
+    LHEScaleSumw_7: 14.7828313174814
+    LHEScaleSumw_8: 13.705220305485534
+    LHEPdfSumw_0: 16.066220917852295
+    LHEPdfSumw_1: 16.053694213513328
+    LHEPdfSumw_2: 16.091100574130728
+    LHEPdfSumw_3: 16.06388652367511
+    LHEPdfSumw_4: 16.05848068116994
+    LHEPdfSumw_5: 16.126410796051154
+    LHEPdfSumw_6: 16.068535982381583
+    LHEPdfSumw_7: 16.065272046961148
+    LHEPdfSumw_8: 16.121679710343596
+    LHEPdfSumw_9: 16.067469651669896
+    LHEPdfSumw_10: 15.99110726381162
+    LHEPdfSumw_11: 16.07752138213796
+    LHEPdfSumw_12: 16.06419695179681
+    LHEPdfSumw_13: 16.08337695026832
+    LHEPdfSumw_14: 16.079458072193724
+    LHEPdfSumw_15: 16.093246646623946
+    LHEPdfSumw_16: 16.078877977784774
+    LHEPdfSumw_17: 16.016278778605376
+    LHEPdfSumw_18: 16.069199307990946
+    LHEPdfSumw_19: 16.05464707746746
+    LHEPdfSumw_20: 16.04763931434737
+    LHEPdfSumw_21: 16.045965458412756
+    LHEPdfSumw_22: 16.043339875064632
+    LHEPdfSumw_23: 16.06260143685335
+    LHEPdfSumw_24: 16.07718438698212
+    LHEPdfSumw_25: 16.064845227849663
+    LHEPdfSumw_26: 16.057795823072688
+    LHEPdfSumw_27: 16.04448247610015
+    LHEPdfSumw_28: 16.041882149719218
+    LHEPdfSumw_29: 16.033002882184835
+    LHEPdfSumw_30: 16.071553051429778
+    LHEPdfSumw_31: 15.314598999936207
+    LHEPdfSumw_32: 16.827240436006235
 - DYJets_DL-HT600:
     era: '2018'
     isData: false
     isSignal: false
     crossSection: 1.68141
-    sumWeights: 8826238.14914645
-    sumWeights2: 8856857.210492017
+    sumWeights: 8826238.149146453
+    sumWeights2: 8856857.210492015
     nEvents: 8862104
     nEventsPositive: 8845363
     nEventsNegative: 16741
@@ -134,15 +306,58 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT600/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT600/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT600/MuMu/*Skim.root
+      NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2018/DYJets_DL-HT600/*_Skim.root
     run: 12.0
     genEventCount: 8862104.0
-    genEventSumw: 8826238.14914645
-    genEventSumw2: 8856857.210492017
-    nLHEScaleSumw: 108.0
+    genEventSumw: 8826238.149146453
+    genEventSumw2: 8856857.210492015
+    nLHEScaleSumw: 9.0
     LHEScaleSumw: 109.40854911141706
-    nLHEPdfSumw: 396.0
+    nLHEPdfSumw: 33.0
     LHEPdfSumw: 399.5090916257379
     totalEvents: 8862104
+    LHEScaleSumw_0: 14.736208124370604
+    LHEScaleSumw_1: 13.333641156721459
+    LHEScaleSumw_2: 12.145515330169731
+    LHEScaleSumw_3: 13.266562015960321
+    LHEScaleSumw_4: 12.0
+    LHEScaleSumw_5: 10.927721113170492
+    LHEScaleSumw_6: 12.098649121236267
+    LHEScaleSumw_7: 10.94021835163769
+    LHEScaleSumw_8: 9.960033898150499
+    LHEPdfSumw_0: 12.107388935935733
+    LHEPdfSumw_1: 12.097747500327623
+    LHEPdfSumw_2: 12.122260820167444
+    LHEPdfSumw_3: 12.106488480647268
+    LHEPdfSumw_4: 12.102055219447523
+    LHEPdfSumw_5: 12.189162847958972
+    LHEPdfSumw_6: 12.106479149384425
+    LHEPdfSumw_7: 12.109175017744818
+    LHEPdfSumw_8: 12.157337093631744
+    LHEPdfSumw_9: 12.107873695459856
+    LHEPdfSumw_10: 12.051021542916867
+    LHEPdfSumw_11: 12.125997433391191
+    LHEPdfSumw_12: 12.106805381243326
+    LHEPdfSumw_13: 12.118779727566086
+    LHEPdfSumw_14: 12.12189597107735
+    LHEPdfSumw_15: 12.131887230625086
+    LHEPdfSumw_16: 12.121003294410723
+    LHEPdfSumw_17: 12.049470255396825
+    LHEPdfSumw_18: 12.108791009587257
+    LHEPdfSumw_19: 12.094686220455756
+    LHEPdfSumw_20: 12.093879121098741
+    LHEPdfSumw_21: 12.088607217266084
+    LHEPdfSumw_22: 12.065603184739826
+    LHEPdfSumw_23: 12.103607791528091
+    LHEPdfSumw_24: 12.123481776892525
+    LHEPdfSumw_25: 12.104314776563943
+    LHEPdfSumw_26: 12.098749536590246
+    LHEPdfSumw_27: 12.094241554184993
+    LHEPdfSumw_28: 12.08855218868172
+    LHEPdfSumw_29: 12.071914493587375
+    LHEPdfSumw_30: 12.112389357687713
+    LHEPdfSumw_31: 11.537564003626382
+    LHEPdfSumw_32: 12.689879795914365
 - DYJets_DL-HT800:
     era: '2018'
     isData: false
@@ -162,15 +377,58 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT800/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT800/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT800/MuMu/*Skim.root
+      NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2018/DYJets_DL-HT800/*_Skim.root
     run: 5.0
     genEventCount: 3138129.0
     genEventSumw: 3120982.106065329
     genEventSumw2: 3135895.8171117683
-    nLHEScaleSumw: 45.0
+    nLHEScaleSumw: 9.0
     LHEScaleSumw: 45.70350636845321
-    nLHEPdfSumw: 165.0
+    nLHEPdfSumw: 33.0
     LHEPdfSumw: 167.39891794558122
     totalEvents: 3138129
+    LHEScaleSumw_0: 6.293737889108117
+    LHEScaleSumw_1: 5.5919178513446735
+    LHEScaleSumw_2: 5.015957736915909
+    LHEScaleSumw_3: 5.629092957374946
+    LHEScaleSumw_4: 5.0
+    LHEScaleSumw_5: 4.483991997554028
+    LHEScaleSumw_6: 5.0997904905553
+    LHEScaleSumw_7: 4.528635608734365
+    LHEScaleSumw_8: 4.060381836865872
+    LHEPdfSumw_0: 5.072814138339437
+    LHEPdfSumw_1: 5.070151324772961
+    LHEPdfSumw_2: 5.077045068315434
+    LHEPdfSumw_3: 5.0723118598851435
+    LHEPdfSumw_4: 5.071574656707262
+    LHEPdfSumw_5: 5.124076073554129
+    LHEPdfSumw_6: 5.0709509706276945
+    LHEPdfSumw_7: 5.074634506608282
+    LHEPdfSumw_8: 5.09693887584678
+    LHEPdfSumw_9: 5.072194283181306
+    LHEPdfSumw_10: 5.050789786827046
+    LHEPdfSumw_11: 5.084584233866769
+    LHEPdfSumw_12: 5.0727973624966
+    LHEPdfSumw_13: 5.0771604425418335
+    LHEPdfSumw_14: 5.080293927653937
+    LHEPdfSumw_15: 5.084307211508777
+    LHEPdfSumw_16: 5.080271778147923
+    LHEPdfSumw_17: 5.040830480122601
+    LHEPdfSumw_18: 5.072967262773977
+    LHEPdfSumw_19: 5.065812901610446
+    LHEPdfSumw_20: 5.067591560600322
+    LHEPdfSumw_21: 5.064388327999425
+    LHEPdfSumw_22: 5.046799618811045
+    LHEPdfSumw_23: 5.070573811220794
+    LHEPdfSumw_24: 5.083253062018393
+    LHEPdfSumw_25: 5.07028512051838
+    LHEPdfSumw_26: 5.068613811831917
+    LHEPdfSumw_27: 5.069244977194052
+    LHEPdfSumw_28: 5.065115345069063
+    LHEPdfSumw_29: 5.0521515440647216
+    LHEPdfSumw_30: 5.075255123486743
+    LHEPdfSumw_31: 4.835650682273306
+    LHEPdfSumw_32: 5.317487815104732
 - DYJets_DL-HT1200:
     era: '2018'
     isData: false
@@ -190,15 +448,58 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT1200/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT1200/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT1200/MuMu/*Skim.root
+      NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2018/DYJets_DL-HT1200/*_Skim.root
     run: 2.0
     genEventCount: 536416.0
     genEventSumw: 531566.8627523624
     genEventSumw2: 535932.69985633
-    nLHEScaleSumw: 18.0
+    nLHEScaleSumw: 9.0
     LHEScaleSumw: 18.337566550015318
-    nLHEPdfSumw: 66.0
+    nLHEPdfSumw: 33.0
     LHEPdfSumw: 67.54656857012561
     totalEvents: 536416
+    LHEScaleSumw_0: 2.58733532062086
+    LHEScaleSumw_1: 2.2434083789466377
+    LHEScaleSumw_2: 1.9707463621024521
+    LHEScaleSumw_3: 2.307065686755373
+    LHEScaleSumw_4: 2.0
+    LHEScaleSumw_5: 1.7566578507141928
+    LHEScaleSumw_6: 2.082395151071626
+    LHEScaleSumw_7: 1.8048946123707978
+    LHEScaleSumw_8: 1.585063187433381
+    LHEPdfSumw_0: 2.0464028362215747
+    LHEPdfSumw_1: 2.048674210525456
+    LHEPdfSumw_2: 2.047350068442376
+    LHEPdfSumw_3: 2.0459957538785587
+    LHEPdfSumw_4: 2.0481479377536465
+    LHEPdfSumw_5: 2.0791175627078164
+    LHEPdfSumw_6: 2.0438307435352594
+    LHEPdfSumw_7: 2.047383742132501
+    LHEPdfSumw_8: 2.057786628340728
+    LHEPdfSumw_9: 2.0447275606807946
+    LHEPdfSumw_10: 2.03911161495259
+    LHEPdfSumw_11: 2.053457665151159
+    LHEPdfSumw_12: 2.047433324612957
+    LHEPdfSumw_13: 2.048258063327176
+    LHEPdfSumw_14: 2.0502405090825477
+    LHEPdfSumw_15: 2.0518985257264832
+    LHEPdfSumw_16: 2.0511350963943378
+    LHEPdfSumw_17: 2.0290323473195935
+    LHEPdfSumw_18: 2.046008106371844
+    LHEPdfSumw_19: 2.042397532837247
+    LHEPdfSumw_20: 2.044891419693652
+    LHEPdfSumw_21: 2.0432004207727115
+    LHEPdfSumw_22: 2.0326147979260867
+    LHEPdfSumw_23: 2.044448282779581
+    LHEPdfSumw_24: 2.0539844305444848
+    LHEPdfSumw_25: 2.0446684392347354
+    LHEPdfSumw_26: 2.0444413458002506
+    LHEPdfSumw_27: 2.0464930357260984
+    LHEPdfSumw_28: 2.0434413069315647
+    LHEPdfSumw_29: 2.034715687810123
+    LHEPdfSumw_30: 2.047582451763252
+    LHEPdfSumw_31: 1.9522415023113437
+    LHEPdfSumw_32: 2.145455618837083
 - DYJets_DL-HT2500:
     era: '2018'
     isData: false
@@ -218,15 +519,58 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT2500/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT2500/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/DYJets_DL-HT2500/MuMu/*Skim.root
+      NANOv7_BOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_bookkeeping/skims/2018/DYJets_DL-HT2500/*_Skim.root
     run: 2.0
     genEventCount: 427051.0
     genEventSumw: 415517.0219344225
     genEventSumw2: 426446.0761159745
-    nLHEScaleSumw: 18.0
+    nLHEScaleSumw: 9.0
     LHEScaleSumw: 18.416771648633425
-    nLHEPdfSumw: 66.0
+    nLHEPdfSumw: 33.0
     LHEPdfSumw: 68.36180201250647
     totalEvents: 427051
+    LHEScaleSumw_0: 2.6754228516519314
+    LHEScaleSumw_1: 2.231684416282193
+    LHEScaleSumw_2: 1.8944280755111125
+    LHEScaleSumw_3: 2.397694517703744
+    LHEScaleSumw_4: 2.0
+    LHEScaleSumw_5: 1.6977767709796427
+    LHEScaleSumw_6: 2.171242601573531
+    LHEScaleSumw_7: 1.811092003487305
+    LHEScaleSumw_8: 1.5374304114439639
+    LHEPdfSumw_0: 2.0685286380063106
+    LHEPdfSumw_1: 2.079625391323214
+    LHEPdfSumw_2: 2.071648441603135
+    LHEPdfSumw_3: 2.066263736246982
+    LHEPdfSumw_4: 2.0845025770942804
+    LHEPdfSumw_5: 2.130893408287293
+    LHEPdfSumw_6: 2.0588822009871226
+    LHEPdfSumw_7: 2.0690102471651084
+    LHEPdfSumw_8: 2.083841020406589
+    LHEPdfSumw_9: 2.0610291893054815
+    LHEPdfSumw_10: 2.066257130164728
+    LHEPdfSumw_11: 2.081617492274398
+    LHEPdfSumw_12: 2.0744471042379633
+    LHEPdfSumw_13: 2.071123759264297
+    LHEPdfSumw_14: 2.0736645242139264
+    LHEPdfSumw_15: 2.0761589061527257
+    LHEPdfSumw_16: 2.075898741843011
+    LHEPdfSumw_17: 2.0447642952270204
+    LHEPdfSumw_18: 2.0656488571258302
+    LHEPdfSumw_19: 2.060893092716495
+    LHEPdfSumw_20: 2.0711690409601418
+    LHEPdfSumw_21: 2.0682002927750083
+    LHEPdfSumw_22: 2.0565746001384344
+    LHEPdfSumw_23: 2.0641877897591248
+    LHEPdfSumw_24: 2.090573518434166
+    LHEPdfSumw_25: 2.066449558471586
+    LHEPdfSumw_26: 2.0663178092299948
+    LHEPdfSumw_27: 2.071376109990273
+    LHEPdfSumw_28: 2.067467673278749
+    LHEPdfSumw_29: 2.056877364748608
+    LHEPdfSumw_30: 2.0697946835147394
+    LHEPdfSumw_31: 1.9766445328596665
+    LHEPdfSumw_32: 2.171470284700063
 - ST_tW:
     era: '2018'
     isData: false
@@ -1482,7 +1826,7 @@
           nominalXS: 0.2644435923466695
           nominalXS2: 3.6517249625210525e-07
           effectiveXS: 0.3596430000000521
-          effectiveXS2: 6.754219763659867e-07
+          effectiveXS2: 6.754219763659866e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.0
           nLep2nJet7pGenHT500p-nominalXS: 0.0
           nLep1nJet9GenHT500-550-nominalXS: 0.0
@@ -2810,7 +3154,7 @@
           sumWeights: 139332268.92289287
           sumWeights2: 10360040752.882109
           nominalXS: 1.2923910108486005
-          nominalXS2: 8.913451431707241e-07
+          nominalXS2: 8.913451431707240e-07
           effectiveXS: 1.0424844277423564
           effectiveXS2: 5.799588737800023e-07
           nLep2nJet7GenHT500-550-nominalXS: 0.1615192983175528
