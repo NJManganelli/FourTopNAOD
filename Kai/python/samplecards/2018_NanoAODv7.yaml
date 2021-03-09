@@ -74,7 +74,8 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 181.302
+    crossSection: 185.649300712
+    crossSectionBrown: 181.302
     sumWeights: 11516745.853159327
     sumWeights2: 11527616.335991547
     nEventsPositive: 11524320
@@ -145,7 +146,8 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 50.4177
+    crossSection: 54.95152163
+    crossSectionBrown: 50.4177
     sumWeights: 10840078.364005696
     sumWeights2: 10856902.968035076
     nEvents: 10860690
@@ -216,7 +218,8 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 6.98394
+    crossSection: 7.86299764077
+    crossSectionBrown: 6.98394
     sumWeights: 9810917.568167498
     sumWeights2: 9835666.778738564
     nEvents: 9840466
@@ -291,7 +294,8 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 1.68141
+    crossSection: 1.97734004835
+    crossSectionBrown: 1.68141
     sumWeights: 8826238.149146453
     sumWeights2: 8856857.210492015
     nEvents: 8862104
@@ -362,7 +366,8 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 0.775392
+    crossSection: 0.858339978131
+    crossSectionBrown: 0.775392
     sumWeights: 3120982.106065329
     sumWeights2: 3135895.8171117683
     nEvents: 3138129
@@ -433,7 +438,8 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 0.186222
+    crossSection: 0.191384404622
+    crossSectionBrown: 0.186222
     sumWeights: 531566.8627523624
     sumWeights2: 535932.69985633
     nEvents: 536416
@@ -504,7 +510,8 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 0.00438495
+    crossSection: 0.0045065086029 #1.4434248816308983 ratio is large, but cannot trust inclusive sample in this range... would best be fitted by smoothness at boundary
+    crossSectionBrown: 0.00438495
     sumWeights: 415517.0219344225
     sumWeights2: 426446.0761159745
     nEvents: 427051
