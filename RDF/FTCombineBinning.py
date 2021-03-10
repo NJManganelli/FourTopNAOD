@@ -35,7 +35,7 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outD
         categoriesOfInterest = ['MergedChannelsJets_nMedium{tagger}B2', 'MergedChannelsJets_nMedium{tagger}B3', 'MergedChannelsJets_nMedium{tagger}B4+',
         ]
     else:
-        histogramFile = "$ADIR/Combine/All/$ERA___Combined.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", sourceVariable).replace("//", "/") # 
+        histogramFile = "$ADIR/Combine/All/$ERA___HTOnly___5x3.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", sourceVariable).replace("//", "/") # 
         categoriesOfInterest = ['HT{htcut}_nMedium{tagger}B0_nJet4', 'HT{htcut}_nMedium{tagger}B0_nJet5', 'HT{htcut}_nMedium{tagger}B0_nJet6',
                                 'HT{htcut}_nMedium{tagger}B0_nJet7', 'HT{htcut}_nMedium{tagger}B0_nJet8+',
                                 'HT{htcut}_nMedium{tagger}B1_nJet4', 'HT{htcut}_nMedium{tagger}B1_nJet5', 'HT{htcut}_nMedium{tagger}B1_nJet6',
