@@ -408,6 +408,13 @@ OSDL_RunII_ISRDown:
   sampleRemapping:
     OSDL_RunII_ewkISRDown:
     - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
     OSDL_RunII_ttISRDown:
     - tt_AH
     - tt_SL
@@ -480,6 +487,13 @@ OSDL_RunII_ISRUp:
   sampleRemapping:
     OSDL_RunII_ewkISRUp:
     - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
     OSDL_RunII_ttISRUp:
     - tt_AH
     - tt_SL
@@ -547,6 +561,13 @@ OSDL_RunII_FSRDown:
   sampleRemapping:
     OSDL_RunII_ewkFSRDown:
     - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
     OSDL_RunII_ttFSRDown:
     - tt_AH
     - tt_SL
@@ -614,6 +635,13 @@ OSDL_RunII_FSRUp:
   sampleRemapping:
     OSDL_RunII_ewkFSRUp:
     - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
     OSDL_RunII_ttFSRUp:
     - tt_AH
     - tt_SL
@@ -681,6 +709,13 @@ OSDL_RunII_muFNomRDown:
   sampleRemapping:
     OSDL_RunII_ewkmuFNomRDown:
     - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
     OSDL_RunII_ttmuFNomRDown:
     - tt_AH
     - tt_SL
@@ -748,6 +783,13 @@ OSDL_RunII_muFNomRUp:
   sampleRemapping:
     OSDL_RunII_ewkmuFNomRUp:
     - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
     OSDL_RunII_ttmuFNomRUp:
     - tt_AH
     - tt_SL
@@ -815,6 +857,13 @@ OSDL_RunII_muRNomFDown:
   sampleRemapping:
     OSDL_RunII_ewkmuRNomFDown:
     - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
     OSDL_RunII_ttmuRNomFDown:
     - tt_AH
     - tt_SL
@@ -882,6 +931,13 @@ OSDL_RunII_muRNomFUp:
   sampleRemapping:
     OSDL_RunII_ewkmuRNomFUp:
     - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
     OSDL_RunII_ttmuRNomFUp:
     - tt_AH
     - tt_SL
@@ -949,6 +1005,13 @@ OSDL_RunII_muRFcorrelatedUp:
   sampleRemapping:
     OSDL_RunII_ewkmuRFcorrelatedUp:
     - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
     OSDL_RunII_ttmuRFcorrelatedUp:
     - tt_AH
     - tt_SL
@@ -1016,6 +1079,13 @@ OSDL_RunII_muRFcorrelatedDown:
   sampleRemapping:
     OSDL_RunII_ewkmuRFcorrelatedDown:
     - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
     OSDL_RunII_ttmuRFcorrelatedDown:
     - tt_AH
     - tt_SL
