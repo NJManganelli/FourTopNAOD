@@ -74,170 +74,6 @@ ROOT.gInterpreter.Declare("""
     }
 """)
 
-#Systematics now implemented from yaml files, below have not been duplicated or stored yet
-systematics_to_be_integrated = {
-                        "jes_btagSF_correlatedUp": {"jet_mask": "jet_mask_jec_13TeV_R2017Up",
-                                                    "lep_postfix": "",
-                                                    "jet_pt_var": "Jet_pt_jesTotalUp",
-                                                    "jet_mass_var": "Jet_mass_jesTotalUp",
-                                                    "met_pt_var": "METFixEE2017_pt_jesTotalUp",
-                                                    "met_phi_var": "METFixEE2017_phi_jesTotalUp",
-                                                    "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_jes",
-                                                               "DeepCSV": "Jet_btagSF_deepcsv_shape_up_jes",
-                                                               "DeepJet": "Jet_btagSF_deepjet_shape_up_jes",
-                                                           },
-                                                    "weightVariation": False,
-                                                    "systematicSet": ["test"],
-                                                },
-                        "jes_btagSF_correlatedDown": {"jet_mask": "jet_mask_jec_13TeV_R2017Down",
-                                                      "lep_postfix": "",
-                                                      "jet_pt_var": "Jet_pt_jesTotalDown",
-                                                      "jet_mass_var": "Jet_mass_jesTotalDown",
-                                                      "met_pt_var": "METFixEE2017_pt_jesTotalDown",
-                                                      "met_phi_var": "METFixEE2017_phi_jesTotalDown",
-                                                      "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_jes",
-                                                                 "DeepCSV": "Jet_btagSF_deepcsv_shape_down_jes",
-                                                                 "DeepJet": "Jet_btagSF_deepjet_shape_down_jes",
-                                                             },
-                                                      "weightVariation": False,
-                                                      "systematicSet": ["test"],
-                                                  },
-}
-deprecatedSystematics = {"muRFanticorrelatedUp": {"jet_mask": "jet_mask",
-                                                  "lep_postfix": "",
-                                                  "jet_pt_var": "Jet_pt",
-                                                  "jet_mass_var": "Jet_mass",
-                                                  "met_pt_var": "METFixEE2017_pt",
-                                                  "met_phi_var": "METFixEE2017_phi",
-                                                  "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape",
-                                                             "DeepCSV": "Jet_btagSF_deepcsv_shape",
-                                                             "DeepJet": "Jet_btagSF_deepjet_shape",
-                                                         },
-                                                  "weightVariation": True,
-                                                  "systematicSet": ["test"],},
-                         "muRFanticorrelatedDown": {"jet_mask": "jet_mask",
-                                                    "lep_postfix": "",
-                                                    "jet_pt_var": "Jet_pt",
-                                                    "jet_mass_var": "Jet_mass",
-                                                    "met_pt_var": "METFixEE2017_pt",
-                                                    "met_phi_var": "METFixEE2017_phi",
-                                                    "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape",
-                                                               "DeepCSV": "Jet_btagSF_deepcsv_shape",
-                                                               "DeepJet": "Jet_btagSF_deepjet_shape",
-                                                           },
-                                                    "weightVariation": True,
-                                                    "systematicSet": ["test"],},
-                         "btagSF_deepcsv_shape_up_hf": {"jet_mask": "jet_mask",
-                                                        "lep_postfix": "", 
-                                                        "jet_pt_var": "Jet_pt",
-                                                        "btagSF":{"CSVv2": "Jet_btagSF_csvv2_shape_up_hf",
-                                                                  "DeepCSV": "Jet_btagSF_deepcsv_shape_up_hf",
-                                                                  "DeepJet": "Jet_btagSF_deepjet_shape_up_hf",
-                                                              },
-                                                        "weightVariation": True,
-                                                        "systematicSet": ["test"],},
-                         "btagSF_deepcsv_shape_down_hf": {"jet_mask": "jet_mask",
-                                                          "lep_postfix": "", 
-                                                          "jet_pt_var": "Jet_pt",
-                                                          "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_hf",
-                                                                     "DeepCSV": "Jet_btagSF_deepcsv_shape_down_hf",
-                                                                     "DeepJet": "Jet_btagSF_deepjet_shape_down_hf",
-                                                                 },
-                                                          "weightVariation": True,
-                                                          "systematicSet": ["test"],},
-                         "btagSF_deepcsv_shape_up_lf": {"jet_mask": "jet_mask",
-                                                        "lep_postfix": "", 
-                                                        "jet_pt_var": "Jet_pt",
-                                                        "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_up_lf",
-                                                                   "DeepCSV": "Jet_btagSF_deepcsv_shape_up_lf",
-                                                                   "DeepJet": "Jet_btagSF_deepjet_shape_up_lf",
-                                                               },
-                                                        "weightVariation": True,
-                                                        "systematicSet": ["test"],},
-                         "btagSF_deepcsv_shape_down_lf": {"jet_mask": "jet_mask",
-                                                          "lep_postfix": "", 
-                                                          "jet_pt_var": "Jet_pt",
-                                                          "btagSF": {"CSVv2": "Jet_btagSF_csvv2_shape_down_lf",
-                                                                     "DeepCSV": "Jet_btagSF_deepcsv_shape_down_lf",
-                                                                     "DeepJet": "Jet_btagSF_deepjet_shape_down_lf",
-                                                                 },
-                                                          "weightVariation": True,
-                                                          "systematicSet": ["test"],},
-                     }
-btagWPsystematics = {"btagSF_L": {"jet_mask": "jet_mask",
-                                  "lep_postfix": "", 
-                                  "jet_pt_var": "Jet_pt",
-                                  "btagSF": {"CSVv2": "Jet_btagSF_csvv2_L",
-                                             "DeepCSV": "Jet_btagSF_deepcsv_L",
-                                             "DeepJet": "Jet_btagSF_deepjet_L",
-                                         },
-                                  "weightVariation": True},
-                     "btagSF_LUp": {"jet_mask": "jet_mask",
-                                    "lep_postfix": "", 
-                                    "jet_pt_var": "Jet_pt",
-                                    "btagSF": {"CSVv2": "Jet_btagSF_csvv2_L_up",
-                                               "DeepCSV": "Jet_btagSF_deepcsv_L_up",
-                                               "DeepJet": "Jet_btagSF_deepjet_L_up",
-                                           },
-                                    "weightVariation": True},
-                     "btagSF_LDown": {"jet_mask": "jet_mask",
-                                      "lep_postfix": "", 
-                                      "jet_pt_var": "Jet_pt",
-                                      "btagSF": {"CSVv2": "Jet_btagSF_csvv2_L_down",
-                                                 "DeepCSV": "Jet_btagSF_deepcsv_L_down",
-                                                 "DeepJet": "Jet_btagSF_deepjet_L_down",
-                                             },
-                                      "weightVariation": True},
-                     "btagSF_M": {"jet_mask": "jet_mask",
-                                  "lep_postfix": "", 
-                                  "jet_pt_var": "Jet_pt",
-                                  "btagSF": {"CSVv2": "Jet_btagSF_csvv2_M",
-                                             "DeepCSV": "Jet_btagSF_deepcsv_M",
-                                             "DeepJet": "Jet_btagSF_deepjet_M",
-                                         },
-                                  "weightVariation": True},
-                     "btagSF_MUp": {"jet_mask": "jet_mask",
-                                    "lep_postfix": "", 
-                                    "jet_pt_var": "Jet_pt",
-                                    "btagSF": {"CSVv2": "Jet_btagSF_csvv2_M_up",
-                                               "DeepCSV": "Jet_btagSF_deepcsv_M_up",
-                                               "DeepJet": "Jet_btagSF_deepjet_M_up",
-                                           },
-                                    "weightVariation": True},
-                     "btagSF_MDown": {"jet_mask": "jet_mask",
-                                      "lep_postfix": "", 
-                                      "jet_pt_var": "Jet_pt",
-                                      "btagSF": {"CSVv2": "Jet_btagSF_csvv2_M_down",
-                                                 "DeepCSV": "Jet_btagSF_deepcsv_M_down",
-                                                 "DeepJet": "Jet_btagSF_deepjet_M_down",
-                                             },
-                                      "weightVariation": True},
-                     "btagSF_T": {"jet_mask": "jet_mask",
-                                  "lep_postfix": "", 
-                                  "jet_pt_var": "Jet_pt",
-                                  "btagSF": {"CSVv2": "Jet_btagSF_csvv2_T",
-                                             "DeepCSV": "Jet_btagSF_deepcsv_T",
-                                             "DeepJet": "Jet_btagSF_deepjet_T",
-                                         },
-                                  "weightVariation": True},
-                     "btagSF_TUp": {"jet_mask": "jet_mask",
-                                    "lep_postfix": "", 
-                                    "jet_pt_var": "Jet_pt",
-                                    "btagSF": {"CSVv2": "Jet_btagSF_csvv2_T_up",
-                                               "DeepCSV": "Jet_btagSF_deepcsv_T_up",
-                                               "DeepJet": "Jet_btagSF_deepjet_T_up",
-                                           },
-                                    "weightVariation": True},
-                     "btagSF_TDown": {"jet_mask": "jet_mask",
-                                      "lep_postfix": "", 
-                                      "jet_pt_var": "Jet_pt",
-                                      "btagSF": {"CSVv2": "Jet_btagSF_csvv2_T_down",
-                                                 "DeepCSV": "Jet_btagSF_deepcsv_T_down",
-                                                 "DeepJet": "Jet_btagSF_deepjet_T_down",
-                                             },
-                                      "weightVariation": True},
-}
-
 #Add lumi to the trigger tuple?
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
 TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
@@ -1309,6 +1145,13 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
         z.append(("FTACrossCleanedJet{pf}_diffptrawinverted".format(pf=postfix), "FTALepton{lpf}_jetIdx.at(0) < 0 ? ROOT::VecOps::RVec<Float_t>(-1.0 * (Jet_rawFactor * {jpt})[pre{jm}]) : ROOT::VecOps::RVec<Float_t> {{-9999.0}}".format(jm=jetMask, lpf=leppostfix, pf=postfix, jpt=jetPt)))
         z.append(("nFTAJet{pf}".format(pf=postfix), "static_cast<Int_t>({jm}[{jm}].size())".format(jm=jetMask)))
         z.append(("FTAJet{pf}_ptsort".format(pf=postfix), "Reverse(Argsort({jpt}[{jm}]))".format(jpt=jetPt, jm=jetMask)))
+        z.append(("take_{jm}".format(jm=jetMask), "ROOT::VecOps::Reverse(ROOT::VecOps::Argsort({jpt}[{jm}]))".format(jpt=jetPt, jm=jetMask)))
+        z.append(("take_noleadingpair_{jm}".format(jm=jetMask), "ROOT::VecOps::Take(take_{jm}, take_{jm}.size() - 2)".format(jm=jetMask)))
+        z.append(("FTAScalarRecoilTotal{pf}_pt".format(pf=postfix), "Sum(ROOT::VecOps::Take({jpt}, take_noleadingpair_{jm}))".format(jm=jetMask, jpt=jetPt)))
+        z.append(("FTAScalarRecoilAverage{pf}_pt".format(pf=postfix), "FTAScalarRecoilTotal{pf}_pt / take_noleadingpair_{jm}.size()".format(pf=postfix, jm=jetMask)))
+        z.append(("FTAVectorRecoil{pf}_px".format(pf=postfix), "ROOT::VecOps::Take({jpt} * cos(Jet_phi), take_noleadingpair_{jm})".format(jm=jetMask, jpt=jetPt)))
+        z.append(("FTAVectorRecoil{pf}_py".format(pf=postfix), "ROOT::VecOps::Take({jpt} * sin(Jet_phi), take_noleadingpair_{jm})".format(jm=jetMask, jpt=jetPt)))
+        z.append(("FTAVectorRecoil{pf}_pt".format(pf=postfix), "sqrt(pow(FTAVectorRecoil{pf}_px, 2) + pow(FTAVectorRecoil{pf}_py, 2))".format(pf=postfix)))
         z.append(("FTAJet{pf}_deepcsvsort".format(pf=postfix), "Reverse(Argsort(Jet_{btv}[{jm}]))".format(btv=bTagWorkingPointDict[era]["DeepCSV"]["Var"], jm=jetMask)))
         z.append(("FTAJet{pf}_deepjetsort".format(pf=postfix), "Reverse(Argsort(Jet_{btv}[{jm}]))".format(btv=bTagWorkingPointDict[era]["DeepJet"]["Var"], jm=jetMask)))
         print("FIXME: To be pt-sorted, all corresponding values should be converted from Variable[mask] to Take(Variable, FTAJet{pf}_ptsort)...\".format(pf=postfix)")
@@ -1403,7 +1246,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
     return rdf
 
 
-def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbose=False, final=False, disableNjetMultiplicityCorrection=False, enableTopPtReweighting=False, sysVariations={"$NOMINAL":"ValueNeeded"}, sysFilter=["$NOMINAL"]):
+def defineWeights(name, input_df_or_nodes, era, splitProcess=None, isData=False, isSignal=False, verbose=False, final=False, disableNjetMultiplicityCorrection=False, enableTopPtReweighting=False, sysVariations={"$NOMINAL":"ValueNeeded"}, sysFilter=["$NOMINAL"]):
     """Define all the pre-final or final weights and the variations, to be referened by the sysVariations dictionaries as wgt_final.
     if final=False, do the pre-final weights for BTaggingYields calculations.
     
@@ -1425,29 +1268,6 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
     #There's only one lepton branch variation (nominal), but if it ever changes, this will serve as sign it's referenced here and made need to be varied
     leppostfix = ""
 
-    #Lepton ScaleFactor variations
-    #To be done, still...
-    
-    #HLT SF variations
-    #To be done, still...
-
-    #Unused weight
-    # zPre.append(("pwgt_RenormalizationNominalFactorizationNominal", "nLHEScaleWeight == 9 ? LHEScaleWeight.at(4) : 0"))
-
-    #Special variations for testing central components
-    if "no_btag_shape_reweight" in sysVariations.keys():
-        zFin.append(("wgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___no_btag_shape_reweight", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-    if "no_LSF" in sysVariations.keys():
-        zFin.append(("wgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___no_LSF", "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_Z_vtx___nom"))
-    if "no_puWeight" in sysVariations.keys():
-        zFin.append(("wgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___no_puWeight", "pwgt___LumiXS * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-    if "no_L1PreFiringWeight" in sysVariations.keys():
-        zFin.append(("wgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-        zPre.append(("prewgt___no_L1PreFiringWeight", "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom"))
-
     #Start the new implementatino
     zPre = []
     zFin = []
@@ -1461,14 +1281,14 @@ def defineWeights(input_df_or_nodes, era, splitProcess=None, isData=False, verbo
         sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
         if sysDict.get("isNominal", False) or sysDict.get("isSystematicForSample", False): 
             for wgtKey, wgtDef in sysDict.get("commonWeights", {}).items():
-                zPre.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix),
-                             wgtDef.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix)))
+                zPre.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix).replace("$SAMPLE", make_cpp_safe_name(name)),
+                             wgtDef.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix).replace("$SAMPLE", make_cpp_safe_name(name))))
         for wgtKey, wgtDef in sysDict.get("preWeights", {}).items():
-            zPre.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix),
-                         wgtDef.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix)))
+            zPre.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix).replace("$SAMPLE", make_cpp_safe_name(name)),
+                         wgtDef.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix).replace("$SAMPLE", make_cpp_safe_name(name))))
         for wgtKey, wgtDef in sysDict.get("finalWeights", {}).items():
-            zFin.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix),
-                         wgtDef.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix)))
+            zFin.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix).replace("$SAMPLE", make_cpp_safe_name(name)),
+                         wgtDef.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix).replace("$SAMPLE", make_cpp_safe_name(name))))
     
     #Load the initial or final definitions
     if final:
@@ -2467,6 +2287,15 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     combineHistoTemplate = []    
     #Variables to save for Combine when doCombineHistosOnly=True
     # combineHistoTemplate = ["HT{bpf}"]
+    StudyTemplates = ["FTAScalarRecoilTotal{bpf}_pt",
+                      "FTAScalarRecoilAverage{bpf}_pt",
+                      "FTAVectorRecoil{bpf}_pt",
+                      "FTAJet5{bpf}_pt", 
+                      "FTAJet6{bpf}_pt", 
+                      "FTAJet7{bpf}_pt", 
+                      "FTAJet8{bpf}_pt", 
+                      "FTAJet9{bpf}_pt", 
+                  ]
     ControlTemplates = ["HT{bpf}",
                         "HTH{bpf}",
                         "HTRat{bpf}",
@@ -2573,6 +2402,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         combineHistoTemplate = MVAInputTemplates
     elif variableSet == "Control":
         combineHistoTemplate = ControlTemplates
+    elif variableSet == "Study":
+        combineHistoTemplate = StudyTemplates
     else:
         raise RuntimeError("Unrecognized variableSet {}".format(variableSet))
 
@@ -2858,6 +2689,27 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                             ("nMedium{tag}{bpf} == 1".format(tag=tagger, bpf=branchpostfix), "1 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
                              eraAndSampleName, decayChannel, None, "nMedium{tag}1".format(tag=tagger, bpf=branchpostfix), None))
+                    if categorySet == "5x1":
+                        #add the 2, 3, and 4+ b tag categories
+                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                            ("nMedium{tag}{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                             eraAndSampleName, decayChannel, None, "nMedium{tag}2".format(tag=tagger, bpf=branchpostfix), None))
+                        #Add the 5 usual jet categories, 4, 5, 6, 7, 8+
+                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                            ("nFTAJet{bpf} == 4".format(bpf=branchpostfix), "4 Jets ({bpf})".format(bpf=branchpostfix),
+                             eraAndSampleName, decayChannel, None, None, "nJet4".format(bpf=branchpostfix)))
+                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                            ("nFTAJet{bpf} == 5".format(bpf=branchpostfix), "5 Jets ({bpf})".format(bpf=branchpostfix),
+                             eraAndSampleName, decayChannel, None, None, "nJet5".format(bpf=branchpostfix)))
+                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                            ("nFTAJet{bpf} == 6".format(bpf=branchpostfix), "6 Jets ({bpf})".format(bpf=branchpostfix),
+                             eraAndSampleName, decayChannel, None, None, "nJet6".format(bpf=branchpostfix)))
+                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                            ("nFTAJet{bpf} == 7".format(bpf=branchpostfix), "7 Jets ({bpf})".format(bpf=branchpostfix),
+                             eraAndSampleName, decayChannel, None, None, "nJet7".format(bpf=branchpostfix)))
+                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                            ("nFTAJet{bpf} >= 8".format(bpf=branchpostfix), "8+ Jets ({bpf})".format(bpf=branchpostfix),
+                             eraAndSampleName, decayChannel, None, None, "nJet8+".format(bpf=branchpostfix)))
                     if categorySet == "5x3" or categorySet == "5x5":
                         #add the 2, 3, and 4+ b tag categories
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
@@ -3193,6 +3045,15 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_HT{hpf}"\
                     #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                     #                                                 ";npvsGood;HT", 100, 400, 2000, 20, 0, 100), "PV_npvsGood", "HT{bpf}".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___ScalarRecoilTotal{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                    "", 100,0,3000), "FTAScalarRecoilTotal{bpf}_pt".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___ScalarRecoilAverage{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                    "", 100,0,3000), "FTAScalarRecoilAverage{bpf}_pt".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___VectorRecoilTotal{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                    "", 100,0,3000), "FTAScalarRecoilAverage{bpf}_pt".format(bpf=branchpostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___ST{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "", 100,400,2000), "ST{bpf}".format(bpf=branchpostfix), wgtVar))
@@ -4772,7 +4633,38 @@ def getTriggerCutString(passTriggers, vetoTriggers):
 
     return retString
 
+def declare_cpp_constants(name, isData, constants_dict, nLHEScaleSumw=9, nLHEPdfSumw=33, normalizeScale=False, normalizePdf=False):
+    """Declare constants via ROOT.gInterpreter.ProcessLine, such as renormalization factors from the sample meta Runs tree"""
+    if isData:
+        print("Finished declaring Data constants")
+        return
+    cpp_code_scale = "ROOT::VecOps::RVec<Double_t> $SAMPLE_LHESCaleSumw = {".replace("$SAMPLE", make_cpp_safe_name(name))
+    for nScale in range(nLHEScaleSumw):
+        if nScale > 0: cpp_code_scale += ", "
+        if normalizeScale:
+            cpp_code_scale += str(constants_dict["LHEScaleSumw_{nscale}".format(nscale=nScale)])
+        else:
+            cpp_code_scale += "1.0000"
+    cpp_code_scale += "};"
+    ROOT.gInterpreter.ProcessLine(cpp_code_scale)
 
+    cpp_code_pdf = "ROOT::VecOps::RVec<Double_t> $SAMPLE_LHEPdfSumw = {".replace("$SAMPLE", make_cpp_safe_name(name))
+    for nPDF in range(nLHEPdfSumw):
+        if nPDF > 0: cpp_code_pdf += ", "
+        if normalizePdf:
+            cpp_code_pdf += str(constants_dict["LHEPdfSumw_{npdf}".format(npdf=nPDF)])
+        else:
+            cpp_code_pdf += "1.0000"    
+    cpp_code_pdf += "};"
+    ROOT.gInterpreter.ProcessLine(cpp_code_pdf)
+
+    print("Finished declaring Monte Carlo constants")
+    print(cpp_code_scale)
+    print(cpp_code_pdf)
+    return
+
+def make_cpp_safe_name(name):
+    return name.replace("-", "_")
             
 def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList,
          doDiagnostics=False, doNtuples=False, doHistos=False, doCombineHistosOnly=False,
@@ -4932,31 +4824,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             # theSampleDict.update(bookerV2_MC)
         elif channel == "test":
             print("More work to be done, exiting")
-            sys.exit(2)
-        
-        stitchDict = {'2016': {'SL': {'nGenJets': None,
-                                                   'nGenLeps': None,
-                                                   'GenHT': None},
-                                            'DL': {'nGenJets': None,
-                                                   'nGenLeps': None,
-                                                   'GenHT': None}
-                                        },
-                                   '2017': {'SL': {'nGenJets': 9,
-                                                   'nGenLeps': 1,
-                                                   'GenHT': 500},
-                                            'DL': {'nGenJets': 7,
-                                                   'nGenLeps': 2,
-                                                   'GenHT': 500}
-                                        },
-                                   '2018': {'SL': {'nGenJets': 9,
-                                                   'nGenLeps': 1,
-                                                   'GenHT': 500},
-                                            'DL': {'nGenJets': 7,
-                                                   'nGenLeps': 2,
-                                                   'GenHT': 500}
-                                        }
-                               }
-        
+            sys.exit(2)                
         
         filtered = dict()
         base = dict()
@@ -4998,6 +4866,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
         for name in sorted(theSampleDict, key=lambda n: n):
             if name not in inputSampleCardYaml.keys():
                 continue
+            cppsafename = make_cpp_safe_name(name)
             vals = inputSampleCardYaml[name]
             if name not in valid_samples or vals["isData"]:
                 continue
@@ -5164,17 +5033,29 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                       "nLHEPdfSumw": metanode[name].Mean("nLHEPdfSumw"), 
                                   }
                     for nScale in range(9):
-                        metanode[name] = metanode[name].Define("LHEScaleSumw_{nscale}".format(nscale=nScale), "LHEScaleSumw.at({nscale}, 0)".format(nscale=nScale))
+                        metanode[name] = metanode[name].Define("LHEScaleSumw_{nscale}".format(nscale=nScale), "genEventSumw * LHEScaleSumw.at({nscale}, 0)".format(nscale=nScale))
                         metainfo[name]["LHEScaleSumw_{nscale}".format(nscale=nScale)] = metanode[name].Sum("LHEScaleSumw_{nscale}".format(nscale=nScale))
                     for nPDF in range(33):
-                        metanode[name] = metanode[name].Define("LHEPdfSumw_{npdf}".format(npdf=nPDF), "LHEPdfSumw.at({npdf}, 0)".format(npdf=nPDF))
+                        metanode[name] = metanode[name].Define("LHEPdfSumw_{npdf}".format(npdf=nPDF), "genEventSumw * LHEPdfSumw.at({npdf}, 0)".format(npdf=nPDF))
                         metainfo[name]["LHEPdfSumw_{npdf}".format(npdf=nPDF)] = metanode[name].Sum("LHEPdfSumw_{npdf}".format(npdf=nPDF))
                 for mk, mv in metainfo[name].items():
                     metainfo[name][mk] = mv.GetValue()
+                    if mk.startswith("nLHEScaleSumw") or mk.startswith("nLHEPdfSumw") or mk.startswith("genEventCount"):
+                        metainfo[name][mk] = int(round(metainfo[name][mk]))
                     if mk == "genEventSumw":
                         if 1 - vals.get("sumWeights")/metainfo[name]["genEventSumw"] > 1e-4:
                             print("\n\n\nWARNING: Large weight discrepancy detected! name={} sumWeights={} genEventSumw={}\n\n\n"\
                                   .format(name, vals.get("sumWeights"), metainfo[name]["genEventSumw"]))
+                    if mk.startswith("LHEPdfSumw") or mk.startswith("LHEScaleSumw"):
+                        metainfo[name][mk] /= metainfo[name]["genEventSumw"]
+                declare_cpp_constants(name, 
+                                      isData=vals.get("isData", True),
+                                      constants_dict=metainfo[name], 
+                                      nLHEScaleSumw=int(round(metainfo[name].get("nLHEScaleSumw", 0))),
+                                      nLHEPdfSumw=int(round(metainfo[name].get("nLHEPdfSumw", 0))),
+                                      normalizeScale = vals.get("isSignal", False),
+                                      normalizePdf = vals.get("isSignal", False)
+                                  )
             metainfo[name]["totalEvents"] = tcmain.GetEntries()
             print("\n{}".format(name))
             pprint.pprint(metainfo[name])
@@ -5485,7 +5366,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                            allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
                 #Do initial round of weights, preparation for btagging yields to be calculated
                 print("\n\nFIXME: defineWeights needs input normalization for PS and potentially other systematic variations\n")
-                prePackedNodes = defineWeights(prePackedNodes,
+                prePackedNodes = defineWeights(name,
+                                               prePackedNodes,
                                                splitProcess = splitProcessConfig,
                                                era=vals["era"],
                                                isData=vals["isData"],
@@ -5513,7 +5395,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 # testnode = prePackedNodes["nodes"]['2017___ttbb_SL_nr']['BaseNode']
                 #Use the fact we have a yields file as the flag for being in the "final" mode for weights, so do final=True variant
                 if BTaggingYieldsFile:
-                    prePackedNodes = defineWeights(prePackedNodes,
+                    prePackedNodes = defineWeights(name,
+                                                   prePackedNodes,
                                                    splitProcess = splitProcessConfig,
                                                    # inclusiveProcess = inclusiveProcessConfig,
                                                    era = vals["era"],
@@ -5791,10 +5674,10 @@ if __name__ == '__main__':
                                                                     'hadd-combine'],
                         help='analysis stage to be produced')
     parser.add_argument('--varSet', '--variableSet', dest='variableSet', action='store',
-                        type=str, choices=['HTOnly', 'MVAInput', 'Control'], default='HTOnly',
+                        type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study'], default='HTOnly',
                         help='Variable set to include in filling templates')
     parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
-                        type=str, choices=['5x5', '5x3', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
+                        type=str, choices=['5x5', '5x3', '5x1', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
                         help='Variable set to include in filling templates')
     parser.add_argument('--systematicSet', dest='systematicSet', action='store', nargs='*',
                         type=str, choices=['ALL', 'nominal', 'pu', 'pf', 'btag', 'jerc', 'ps', 'rf',
