@@ -2366,8 +2366,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                              "FTAMuon2_pt",
                              "FTAMuon1_eta",
                              "FTAMuon2_eta",
-                             "FTAMuon{lpf}_pfRelIso03_chg",
-                             "FTAMuon{lpf}_pfRelIso03_all",
+                             "FTAMuon_pfRelIso03_chg",
+                             "FTAMuon_pfRelIso03_all",
         ]
         MVAInputTemplates += ["FTAMuon1_pt",
                               "FTAMuon2_pt",
@@ -2377,10 +2377,10 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                              "FTAElectron1_pt",
                              "FTAMuon1_eta",
                              "FTAElectron1_eta",
-                             "FTAMuon{lpf}_pfRelIso03_chg",
-                             "FTAMuon{lpf}_pfRelIso03_all",
-                             "FTAElectron{lpf}_pfRelIso03_chg",
-                             "FTAElectron{lpf}_pfRelIso03_all",
+                             "FTAMuon_pfRelIso03_chg",
+                             "FTAMuon_pfRelIso03_all",
+                             "FTAElectron_pfRelIso03_chg",
+                             "FTAElectron_pfRelIso03_all",
         ]
         MVAInputTemplates += ["FTAMuon1_pt",
                               "FTAElectron1_pt",
@@ -2390,8 +2390,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                              "FTAElectron2_pt",
                              "FTAElectron1_eta",
                              "FTAElectron2_eta",
-                             "FTAElectron{lpf}_pfRelIso03_chg",
-                             "FTAElectron{lpf}_pfRelIso03_all",
+                             "FTAElectron_pfRelIso03_chg",
+                             "FTAElectron_pfRelIso03_all",
         ]
         MVAInputTemplates += ["FTAElectron1_pt",
                               "FTAElectron2_pt",
@@ -2677,11 +2677,23 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
 
                     if categorySet == "2BnJet4p":
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
-                            ("nMedium{tag}{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}2+".format(tag=tagger, bpf=branchpostfix), None))
+                            ("nMedium{tag}{bpf} == 2".format(tag=tagger, bpf=branchpostfix), 
+                             "2 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                             eraAndSampleName, 
+                             decayChannel, 
+                             None, 
+                             "nMedium{tag}2".format(tag=tagger, bpf=branchpostfix), 
+                             None)
+                        )
 
                         filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
-                            ("nFTAJet{bpf} >= 4".format(bpf=branchpostfix), "4+ Jets ({bpf})".format(bpf=branchpostfix),
-                             eraAndSampleName, decayChannel, None, None, "nJet4+".format(bpf=branchpostfix)))
+                            ("nFTAJet{bpf} >= 4".format(bpf=branchpostfix), 
+                             "4+ Jets ({bpf})".format(bpf=branchpostfix),
+                             eraAndSampleName, 
+                             decayChannel, 
+                             None, 
+                             None, 
+                             "nJet4+".format(bpf=branchpostfix)))
                     if categorySet == "FullyInclusive":
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                             ("nMedium{tag}{bpf} >= 2".format(tag=tagger, bpf=branchpostfix), "2+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}2+".format(tag=tagger, bpf=branchpostfix), None))
@@ -3112,6 +3124,15 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon2{lpf}_pt{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
                                                                     "", 100,0,500), "FTAMuon2{lpf}_pt".format(lpf=leppostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_eta{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
+                                                                    "", 100,-2.5,2.5), "FTAMuon{lpf}_eta".format(lpf=leppostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon1{lpf}_eta{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
+                                                                    "", 100,-2.5,2.5), "FTAMuon1{lpf}_eta".format(lpf=leppostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon2{lpf}_eta{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
+                                                                    "", 100,-2.5,2.5), "FTAMuon2{lpf}_eta".format(lpf=leppostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
                                                                     "", 100,0,500), "FTAElectron{lpf}_pt".format(lpf=leppostfix), wgtVar))
@@ -3121,6 +3142,15 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron2{lpf}_pt{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
                                                                     "", 100,0,500), "FTAElectron2{lpf}_pt".format(lpf=leppostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_eta{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
+                                                                    "", 100,-2.5,2.5), "FTAElectron{lpf}_eta".format(lpf=leppostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron1{lpf}_eta{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
+                                                                    "", 100,-2.5,2.5), "FTAElectron1{lpf}_eta".format(lpf=leppostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron2{lpf}_eta{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  lpf=leppostfix, hpf=histopostfix), 
+                                                                    "", 100,-2.5,2.5), "FTAElectron2{lpf}_eta".format(lpf=leppostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___dRll{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), "", 100,0,2*pi), 
                                                                    "FTALepton{lpf}_dRll".format(lpf=leppostfix), wgtVar))
