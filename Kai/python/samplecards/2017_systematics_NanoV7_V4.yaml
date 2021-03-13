@@ -732,7 +732,7 @@ OSDL_RunII_muFNomRDown:
   - rf
   preWeights:
     pwgt_RenormalizationDownFactorizationNominal: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(1) : 0"
-    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationNominal * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationNominal / $SAMPLE_LHESCaleSumw.at(1, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
   sampleRemapping:
@@ -806,7 +806,7 @@ OSDL_RunII_muFNomRUp:
   - rf
   preWeights:
     pwgt_RenormalizationUpFactorizationNominal: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(7) : 0"
-    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationNominal * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationNominal / $SAMPLE_LHESCaleSumw.at(7, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
   sampleRemapping:
@@ -880,7 +880,7 @@ OSDL_RunII_muRNomFDown:
   - rf
   preWeights:
     pwgt_RenormalizationNominalFactorizationDown: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(3) : 0"
-    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationNominalFactorizationDown * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationNominalFactorizationDown / $SAMPLE_LHESCaleSumw.at(3, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
   sampleRemapping:
@@ -954,7 +954,7 @@ OSDL_RunII_muRNomFUp:
   - rf
   preWeights:
     pwgt_RenormalizationNominalFactorizationUp: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(5) : 0"
-    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationNominalFactorizationUp * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationNominalFactorizationUp / $SAMPLE_LHESCaleSumw.at(5, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
   sampleRemapping:
@@ -1028,7 +1028,7 @@ OSDL_RunII_muRFcorrelatedUp:
   - rf
   preWeights:
     pwgt_RenormalizationUpFactorizationUp: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(8) : 0"
-    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationUp * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationUp / $SAMPLE_LHESCaleSumw.at(8, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
   sampleRemapping:
@@ -1102,7 +1102,7 @@ OSDL_RunII_muRFcorrelatedDown:
   - rf
   preWeights:
     pwgt_RenormalizationDownFactorizationDown: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(0) : 0"
-    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationDown * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationDown / $SAMPLE_LHESCaleSumw.at(0, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
   sampleRemapping:

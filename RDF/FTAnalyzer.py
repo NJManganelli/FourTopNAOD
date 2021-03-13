@@ -2366,6 +2366,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                              "FTAMuon2_pt",
                              "FTAMuon1_eta",
                              "FTAMuon2_eta",
+                             "FTAMuon{lpf}_pfRelIso03_chg",
+                             "FTAMuon{lpf}_pfRelIso03_all",
         ]
         MVAInputTemplates += ["FTAMuon1_pt",
                               "FTAMuon2_pt",
@@ -2375,6 +2377,10 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                              "FTAElectron1_pt",
                              "FTAMuon1_eta",
                              "FTAElectron1_eta",
+                             "FTAMuon{lpf}_pfRelIso03_chg",
+                             "FTAMuon{lpf}_pfRelIso03_all",
+                             "FTAElectron{lpf}_pfRelIso03_chg",
+                             "FTAElectron{lpf}_pfRelIso03_all",
         ]
         MVAInputTemplates += ["FTAMuon1_pt",
                               "FTAElectron1_pt",
@@ -2384,6 +2390,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                              "FTAElectron2_pt",
                              "FTAElectron1_eta",
                              "FTAElectron2_eta",
+                             "FTAElectron{lpf}_pfRelIso03_chg",
+                             "FTAElectron{lpf}_pfRelIso03_all",
         ]
         MVAInputTemplates += ["FTAElectron1_pt",
                               "FTAElectron2_pt",
@@ -2667,6 +2675,13 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     # filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                     #     ("nMedium{tag}{bpf} >= 1".format(tag=tagger, bpf=branchpostfix), "1+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}1+".format(tag=tagger, bpf=branchpostfix), None))
 
+                    if categorySet == "2BnJet4p":
+                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                            ("nMedium{tag}{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}2+".format(tag=tagger, bpf=branchpostfix), None))
+
+                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                            ("nFTAJet{bpf} >= 4".format(bpf=branchpostfix), "4+ Jets ({bpf})".format(bpf=branchpostfix),
+                             eraAndSampleName, decayChannel, None, None, "nJet4+".format(bpf=branchpostfix)))
                     if categorySet == "FullyInclusive":
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                             ("nMedium{tag}{bpf} >= 2".format(tag=tagger, bpf=branchpostfix), "2+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}2+".format(tag=tagger, bpf=branchpostfix), None))
@@ -2681,6 +2696,11 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
                             ("nFTAJet{bpf} >= 4 && ( nMedium{tag}{bpf} == 2 || (nMedium{tag}{bpf} == 3 && nFTAJet{bpf} < 7) || (nMedium{tag}{bpf} >= 4 && nFTAJet{bpf} < 6))".format(tag=tagger, bpf=branchpostfix), 
                              "4+ Jets ({bpf})".format(bpf=branchpostfix), eraAndSampleName, decayChannel, None, None, "nJet4+".format(bpf=branchpostfix)))
+                    if categorySet == "5x1":
+                        #add the 2 b tag categorie
+                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                            ("nMedium{tag}{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                             eraAndSampleName, decayChannel, None, "nMedium{tag}2".format(tag=tagger, bpf=branchpostfix), None))
                     if categorySet == "5x5":
                         #Add the 0 and 1 b tag categories
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
@@ -2689,28 +2709,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                             ("nMedium{tag}{bpf} == 1".format(tag=tagger, bpf=branchpostfix), "1 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
                              eraAndSampleName, decayChannel, None, "nMedium{tag}1".format(tag=tagger, bpf=branchpostfix), None))
-                    if categorySet == "5x1":
-                        #add the 2, 3, and 4+ b tag categories
-                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
-                            ("nMedium{tag}{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
-                             eraAndSampleName, decayChannel, None, "nMedium{tag}2".format(tag=tagger, bpf=branchpostfix), None))
-                        #Add the 5 usual jet categories, 4, 5, 6, 7, 8+
-                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
-                            ("nFTAJet{bpf} == 4".format(bpf=branchpostfix), "4 Jets ({bpf})".format(bpf=branchpostfix),
-                             eraAndSampleName, decayChannel, None, None, "nJet4".format(bpf=branchpostfix)))
-                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
-                            ("nFTAJet{bpf} == 5".format(bpf=branchpostfix), "5 Jets ({bpf})".format(bpf=branchpostfix),
-                             eraAndSampleName, decayChannel, None, None, "nJet5".format(bpf=branchpostfix)))
-                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
-                            ("nFTAJet{bpf} == 6".format(bpf=branchpostfix), "6 Jets ({bpf})".format(bpf=branchpostfix),
-                             eraAndSampleName, decayChannel, None, None, "nJet6".format(bpf=branchpostfix)))
-                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
-                            ("nFTAJet{bpf} == 7".format(bpf=branchpostfix), "7 Jets ({bpf})".format(bpf=branchpostfix),
-                             eraAndSampleName, decayChannel, None, None, "nJet7".format(bpf=branchpostfix)))
-                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
-                            ("nFTAJet{bpf} >= 8".format(bpf=branchpostfix), "8+ Jets ({bpf})".format(bpf=branchpostfix),
-                             eraAndSampleName, decayChannel, None, None, "nJet8+".format(bpf=branchpostfix)))
-                    if categorySet == "5x3" or categorySet == "5x5":
+                    if categorySet == ["5x3", "5x5"]:
                         #add the 2, 3, and 4+ b tag categories
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                             ("nMedium{tag}{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
@@ -2721,6 +2720,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                             ("nMedium{tag}{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
                              eraAndSampleName, decayChannel, None, "nMedium{tag}4+".format(tag=tagger, bpf=branchpostfix), None))
+                    if categorySet in ["5x1", "5x3", "5x5"]:
                         #Add the 5 usual jet categories, 4, 5, 6, 7, 8+
                         filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
                             ("nFTAJet{bpf} == 4".format(bpf=branchpostfix), "4 Jets ({bpf})".format(bpf=branchpostfix),
@@ -5388,8 +5388,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                 correctorMap=correctorMap,
                                                 bTagger=bTagger,
                                                 calculateYields=calculateTheYields,
-                                                HTArray=[500, 650, 800, 1000, 1200, 10000], 
-                                                nJetArray=[4,5,6,7,8,20],
+                                                HTArray=[500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 10000], 
+                                                nJetArray=[4,5,6,7,8,9,10,20],
                                                 verbose=verbose,
                 )
                 # testnode = prePackedNodes["nodes"]['2017___ttbb_SL_nr']['BaseNode']
@@ -5677,7 +5677,7 @@ if __name__ == '__main__':
                         type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study'], default='HTOnly',
                         help='Variable set to include in filling templates')
     parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
-                        type=str, choices=['5x5', '5x3', '5x1', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
+                        type=str, choices=['5x5', '5x3', '5x1', '2BnJet4p', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
                         help='Variable set to include in filling templates')
     parser.add_argument('--systematicSet', dest='systematicSet', action='store', nargs='*',
                         type=str, choices=['ALL', 'nominal', 'pu', 'pf', 'btag', 'jerc', 'ps', 'rf',
