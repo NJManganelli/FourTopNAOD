@@ -2597,8 +2597,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 handle['Supercategories/statSystematicErrors'][supercategory].SetName(
                     handle['Supercategories'][supercategory].GetName().replace("s_", "statSystematicError_"))
                 handle['Supercategories/statSystematicErrors'][supercategory].SetFillStyle(3144)
-                handle['Supercategories/statSystematicErrors'][supercategory].SetFillColorAlpha(ROOT.kBlack, 0.5)
-                handle['Supercategories/statSystematicErrors'][supercategory].SetLineColorAlpha(ROOT.kBlack, 0.5)
+                handle['Supercategories/statSystematicErrors'][supercategory].SetFillColorAlpha(ROOT.kGray, 0.5)
+                handle['Supercategories/statSystematicErrors'][supercategory].SetLineColorAlpha(ROOT.kGray, 0.5)
                 handle['Supercategories/statSystematicErrors/ratio'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                                              npBinCenters[pn][supercategory],
                                                                                                              np.divide(npNominal[pn][supercategory],
@@ -2620,8 +2620,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetName(
                     handle['Supercategories'][supercategory].GetName().replace("s_", "statSystematicErrorRatio_"))
                 handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillStyle(3144)
-                handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillColorAlpha(ROOT.kBlack, 0.5)
-                handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetLineColorAlpha(ROOT.kBlack, 0.5)
+                handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetFillColorAlpha(ROOT.kGray, 0.5)
+                handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetLineColorAlpha(ROOT.kGray, 0.5)
                 if "tttt" in supercategory.lower() or "signal" in supercategory.lower(): continue
                 if pn == 0:
                     CanCache["subplots/supercategories"][0]["Legend"].AddEntry(handle['Supercategories/statErrors'][supercategory], "stat err", "F")
