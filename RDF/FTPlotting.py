@@ -2358,6 +2358,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 CanCache["subplots/files"].append(fileDict[plotFileName])
                 # CanCache["subplots/files/keys"].append([fkey for fkey in fileDictKeys[plotFileName] if subplot_variables[pn] in fkey and fkey.split(separator)[-2] == subplot_variables[pn]])
                 CanCache["subplots/files/keys"].append([fkey for fkey in fileDictKeys[plotFileName] if subplot_variables[pn] in fkey and subplot_categories[pn] in fkey])
+                if len(CanCache["subplots/files/keys"][-1]) < 1:
+                    raise RuntimeError("No matching keys found for subplot variables {} and categories {}".format(subplot_variables[pn], subplot_categories[pn]))
             else:
                 raise RuntimeError("File not available, was it stored in a list or something?")
             CanCache["subplots/rebins"].append(subplot_dict.get("Rebin"))
@@ -2383,7 +2385,10 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             if combineOutput is not None or (pdfOutput is not None and len(blindSupercategories) < 1):
                 nSysts = len(systematics)
                 print(" {} unskipped systematics: ".format(nSystsEnd + 1), end="")
-                nBins = list(CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values())[0].GetNbinsX()
+                try:
+                    nBins = list(CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values())[0].GetNbinsX()
+                except:
+                    pdb.set_trace()
                 sD = dict() #systematic dictionary for lookup into numpy array
                 sD['statisticsUp'] = nSysts + 0
                 sD['statisticsDown'] = nSysts + 1
@@ -3135,7 +3140,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         combFile.Close()
         print("Wrote file for combine input templates")
         if combineCards:
-            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV8.txt", counts=combCounts)
+            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV9.txt", counts=combCounts)
             print("Wrote combine cards")
         # cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
         # # print(cmd)
