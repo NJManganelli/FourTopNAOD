@@ -1,5 +1,5 @@
 import pdb
-def write_combine_cards(analysisDirectory, era, channel, variable, categories, template="TTTT_templateV8.txt", counts = {}):
+def write_combine_cards(analysisDirectory, era, channel, variable, categories, template="TTTT_templateV9.txt", counts = {}):
     lumistr = {"2017": "1.023", "2018": "1.025"}[era] #Uncertainty per year
     outputLines = []
     with open(template, "r") as inFile:

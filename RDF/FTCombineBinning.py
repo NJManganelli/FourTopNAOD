@@ -18,7 +18,8 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 ROOT.gROOT.SetBatch(True)
 
-def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outDir, sourceVariable = "HT", HTCut="500", merge="", tagger="DeepJet", verbose=False):
+def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outDir, sourceVariable = "HT", HTCut="500", 
+         variableSet="HTOnly", categorySet="5x5", merge="", tagger="DeepJet", verbose=False):
     varsOfInterest = [sourceVariable + "Unweighted"]
     erasOfInterest = [era]
     channelsOfInterest = [channel]
@@ -35,7 +36,12 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outD
         categoriesOfInterest = ['MergedChannelsJets_nMedium{tagger}B2', 'MergedChannelsJets_nMedium{tagger}B3', 'MergedChannelsJets_nMedium{tagger}B4+',
         ]
     else:
-        histogramFile = "$ADIR/Combine/All/$ERA___HTOnly___5x3.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", sourceVariable).replace("//", "/") # 
+        histogramFile = "$ADIR/Combine/All/$ERA___$VARSET___$CATSET.root".replace("$ADIR", analysisDir)\
+                                                                         .replace("$VARSET", variableSet)\
+                                                                         .replace("$CATSET", categorySet)\
+                                                                         .replace("$ERA", era)\
+                                                                         .replace("$VAR", sourceVariable)\
+                                                                         .replace("//", "/") # 
         categoriesOfInterest = ['HT{htcut}_nMedium{tagger}B0_nJet4', 'HT{htcut}_nMedium{tagger}B0_nJet5', 'HT{htcut}_nMedium{tagger}B0_nJet6',
                                 'HT{htcut}_nMedium{tagger}B0_nJet7', 'HT{htcut}_nMedium{tagger}B0_nJet8+',
                                 'HT{htcut}_nMedium{tagger}B1_nJet4', 'HT{htcut}_nMedium{tagger}B1_nJet5', 'HT{htcut}_nMedium{tagger}B1_nJet6',
@@ -198,6 +204,12 @@ if __name__ == '__main__':
                         help='b tagging algorithm to be used')
     parser.add_argument('--HTCut', dest='HTCut', action='store', type=str, default="500",
                         help='HT Cut value for categprization as a string, i.e. "500" if HT500_nMedium... ')
+    parser.add_argument('--varSet', '--variableSet', dest='variableSet', action='store',
+                        type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study'], default='HTOnly',
+                        help='Variable set to include in filling templates')
+    parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
+                        type=str, choices=['5x5', '5x3', '5x1', '2BnJet4p', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
+                        help='Variable set to include in filling templates')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
     # parser.add_argument('--era', dest='era', action='store', type=str, default="2017", choices=['2016', '2017', '2018'],
@@ -215,4 +227,4 @@ if __name__ == '__main__':
     channel = args.channel
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel)
     verbose = args.verbose
-    main(stage, analysisDir, channel, args.era, args.relUncertainty, args.json, ".", args.variable, args.HTCut, args.merge, args.bTagger, verbose=verbose)
+    main(stage, analysisDir, channel, args.era, args.relUncertainty, args.json, ".", args.variable, args.HTCut, args.variableSet, args.categorySet, args.merge, args.bTagger, verbose=verbose)
