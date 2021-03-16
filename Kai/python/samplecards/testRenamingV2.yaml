@@ -16,11 +16,11 @@ $NOMINAL:
   commonWeights:
     pwgt_LSF___nom: "(FTALepton$LEP_POSTFIX_SF_nom.size() > 1 ? FTALepton$LEP_POSTFIX_SF_nom.at(0) * FTALepton$LEP_POSTFIX_SF_nom.at(1) : FTALepton$LEP_POSTFIX_SF_nom.at(0))"
     pwgt_Z_vtx___nom: "(Int_t)1;"
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.94 : nFTAJet__$SYSTEMATIC == 7 ? 0.85 : nFTAJet__$SYSTEMATIC == 6 ? 0.79 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
     prewgt___nom: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC" #Used as base for many other weights, e.g. btag variation, take care modifying this one
     pwgt_btagSF_common: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC"
   finalWeights:
-    wgt___nom: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_btag___nom"
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
 OSDL_$ERA_jesTotalUp:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
@@ -37,7 +37,7 @@ OSDL_$ERA_jesTotalUp:
   - jerc
   notes: Corresponds to jec_13TeV_R2017Up most likely...
   preWeights:
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.94 : nFTAJet__$SYSTEMATIC == 7 ? 0.85 : nFTAJet__$SYSTEMATIC == 6 ? 0.79 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
@@ -57,7 +57,7 @@ OSDL_$ERA_jesTotalDown:
   - jerc
   notes: Corresponds to jec_13TeV_R2017Down most likely...
   preWeights:
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.94 : nFTAJet__$SYSTEMATIC == 7 ? 0.85 : nFTAJet__$SYSTEMATIC == 6 ? 0.79 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
@@ -106,7 +106,7 @@ OSDL_$ERA_jerUp:
   systematicSet:
   - jerc
   preWeights:
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.94 : nFTAJet__$SYSTEMATIC == 7 ? 0.85 : nFTAJet__$SYSTEMATIC == 6 ? 0.79 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
@@ -125,7 +125,7 @@ OSDL_$ERA_jerDown:
   systematicSet:
   - jerc
   preWeights:
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.94 : nFTAJet__$SYSTEMATIC == 7 ? 0.85 : nFTAJet__$SYSTEMATIC == 6 ? 0.79 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
@@ -1079,7 +1079,7 @@ OSDL_RunII_ueUp:
   commonWeights:
     pwgt_LSF___nom: "(FTALepton$LEP_POSTFIX_SF_nom.size() > 1 ? FTALepton$LEP_POSTFIX_SF_nom.at(0) * FTALepton$LEP_POSTFIX_SF_nom.at(1) : FTALepton$LEP_POSTFIX_SF_nom.at(0))"
     pwgt_Z_vtx___nom: "(Int_t)1;"
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.94 : nFTAJet__$SYSTEMATIC == 7 ? 0.85 : nFTAJet__$SYSTEMATIC == 6 ? 0.79 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC"
     pwgt_btagSF_common: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC"
   finalWeights:
@@ -1108,7 +1108,7 @@ OSDL_RunII_ueDown:
   commonWeights:
     pwgt_LSF___nom: "(FTALepton$LEP_POSTFIX_SF_nom.size() > 1 ? FTALepton$LEP_POSTFIX_SF_nom.at(0) * FTALepton$LEP_POSTFIX_SF_nom.at(1) : FTALepton$LEP_POSTFIX_SF_nom.at(0))"
     pwgt_Z_vtx___nom: "(Int_t)1;"
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.94 : nFTAJet__$SYSTEMATIC == 7 ? 0.85 : nFTAJet__$SYSTEMATIC == 6 ? 0.79 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC"
     pwgt_btagSF_common: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC"
   finalWeights:
@@ -1137,7 +1137,7 @@ OSDL_RunII_hdampUp:
   commonWeights:
     pwgt_LSF___nom: "(FTALepton$LEP_POSTFIX_SF_nom.size() > 1 ? FTALepton$LEP_POSTFIX_SF_nom.at(0) * FTALepton$LEP_POSTFIX_SF_nom.at(1) : FTALepton$LEP_POSTFIX_SF_nom.at(0))"
     pwgt_Z_vtx___nom: "(Int_t)1;"
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.94 : nFTAJet__$SYSTEMATIC == 7 ? 0.85 : nFTAJet__$SYSTEMATIC == 6 ? 0.79 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC"
     pwgt_btagSF_common: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC"
   finalWeights:
@@ -1166,7 +1166,7 @@ OSDL_RunII_hdampDown:
   commonWeights:
     pwgt_LSF___nom: "(FTALepton$LEP_POSTFIX_SF_nom.size() > 1 ? FTALepton$LEP_POSTFIX_SF_nom.at(0) * FTALepton$LEP_POSTFIX_SF_nom.at(1) : FTALepton$LEP_POSTFIX_SF_nom.at(0))"
     pwgt_Z_vtx___nom: "(Int_t)1;"
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 1.0;"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return nFTAJet__$SYSTEMATIC >= 8 ? 0.94 : nFTAJet__$SYSTEMATIC == 7 ? 0.85 : nFTAJet__$SYSTEMATIC == 6 ? 0.79 : nFTAJet__$SYSTEMATIC == 5 ? 0.81 : nFTAJet__$SYSTEMATIC == 4 ? 0.83 : 1.0;"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC"
     pwgt_btagSF_common: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC"
   finalWeights:
@@ -1183,7 +1183,7 @@ OSDL_RunII_pdfUp:
   systematicSet:
   - pdf
   preWeights:
-    prewgt___$SYSTEMATIC: "prewgt___nom * (Max(LHEPdfWeight)/Mean(LHEPdfWeight) - 1.0;)"
+    prewgt___$SYSTEMATIC: "prewgt___$NOMINAL * (Max(LHEPdfWeight)/Mean(LHEPdfWeight) - 1.0);"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
 OSDL_RunII_pdfDown:
@@ -1198,7 +1198,7 @@ OSDL_RunII_pdfDown:
   systematicSet:
   - pdf
   preWeights:
-    prewgt___$SYSTEMATIC: "prewgt___nom * (Min(LHEPdfWeight)/Mean(LHEPdfWeight) - 1.0;)"
+    prewgt___$SYSTEMATIC: "prewgt___$NOMINAL * (Min(LHEPdfWeight)/Mean(LHEPdfWeight) - 1.0);"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC" 
 # OSDL_RunII_top_pTUp:
@@ -1216,7 +1216,7 @@ OSDL_RunII_pdfDown:
 #     top_parton_pt_data_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
 #     top_parton_sf_data_nlo: "sqrt(exp(0.0615-0.0005 * Where(top_parton_pt_data_nlo < 500.0, top_parton_pt_data_nlo, static_cast<float>(500.0))))"
 #     pwgt_top_pT_data_nlo: "top_parton_sf_data_nlo.at(0, 1.0) * top_parton_sf_data_nlo.at(1, 1.0)"
-#     prewgt___$SYSTEMATIC: "prewgt___nom * pwgt_top_pT_data_nlo"
+#     prewgt___$SYSTEMATIC: "prewgt___$NOMINAL * pwgt_top_pT_data_nlo"
 #   finalWeights:
 #     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC" 
 # OSDL_RunII_top_pTDown:
@@ -1234,7 +1234,7 @@ OSDL_RunII_pdfDown:
 #     top_parton_pt_nnlo_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
 #     top_parton_sf_nnlo_nlo: "sqrt(0.103*exp(-0.0118 * top_parton_pt_nnlo_nlo) - 0.000134 * top_parton_pt_nnlo_nlo + 0.973)"
 #     pwgt_top_pT_nnlo_nlo: "top_parton_sf_nnlo_nlo.at(0, 1.0) * top_parton_sf_nnlo_nlo.at(1, 1.0)"
-#     prewgt___$SYSTEMATIC: "prewgt___nom * pwgt_top_pT_nnlo_nlo"
+#     prewgt___$SYSTEMATIC: "prewgt___$NOMINAL * pwgt_top_pT_nnlo_nlo"
 #   finalWeights:
 #     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC" 
 # if "muRFanticorrelatedUp" in sysVariations.keys():
