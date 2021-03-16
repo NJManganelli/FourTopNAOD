@@ -2721,7 +2721,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                             ("nMedium{tag}{bpf} == 1".format(tag=tagger, bpf=branchpostfix), "1 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
                              eraAndSampleName, decayChannel, None, "nMedium{tag}1".format(tag=tagger, bpf=branchpostfix), None))
-                    if categorySet == ["5x3", "5x5"]:
+                    if categorySet in ["5x3", "5x5"]:
                         #add the 2, 3, and 4+ b tag categories
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                             ("nMedium{tag}{bpf} == 2".format(tag=tagger, bpf=branchpostfix), "2 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
