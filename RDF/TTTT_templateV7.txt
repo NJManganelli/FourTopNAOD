@@ -30,45 +30,45 @@ OSDL_RunII_ttVJets_xsec                  lnN     -               -              
 OSDL_RunII_ttultrarare_xsec              lnN     -               -               -               -               -               1.50            -               -
 OSDL_RunII_ewk_xsec                      lnN     -               -               -               -               -               -               1.04            -
 OSDL_RunII_tttt_xsec                     lnN     -               -               -               -               -               -               -               0.94/1.05
-OSDL_$ERA_jesTotal                       shape   1               1               1               1               1               1               1               1
-OSDL_$ERA_jer                            shape   1               1               1               1               1               1               1               1
+OSDL_$ERA_jesTotal                       shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_ST         $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_$ERA_jer                            shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_ST         $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
 OSDL_$ERA_pileup                         shape   1               1               1               1               1               1               1               1
 OSDL_$ERA_prefire                        shape   1               1               1               1               1               1               1               1
 OSDL_RunII_ttmuRNomF                     shape   1               1               -               -               -               -               -               -
 OSDL_RunII_ttmuFNomR                     shape   1               1               -               -               -               -               -               -
 OSDL_RunII_ttmuRFcorrelated              shape   1               1               -               -               -               -               -               -
 OSDL_RunII_ttISR                         shape   1               1               -               -               -               -               -               -
-OSDL_RunII_ttFSR                         shape   1               1               -               -               -               -               -               -
+ttFSR                                    shape   1               1               -               -               -               -               -               -
 OSDL_RunII_singletopmuRNomF              shape   -               -               1               -               -               -               -               -
 OSDL_RunII_singletopmuFNomR              shape   -               -               1               -               -               -               -               -
 OSDL_RunII_singletopmuRFcorrelated       shape   -               -               1               -               -               -               -               -
 OSDL_RunII_singletopISR                  shape   -               -               1               -               -               -               -               -
-OSDL_RunII_singletopFSR                  shape   -               -               1               -               -               -               -               -
+singletopFSR                             shape   -               -               1               -               -               -               -               -
 OSDL_RunII_ttHmuRNomF                    shape   -               -               -               1               -               -               -               -
 OSDL_RunII_ttHmuFNomR                    shape   -               -               -               1               -               -               -               -
 OSDL_RunII_ttHmuRFcorrelated             shape   -               -               -               1               -               -               -               -
 OSDL_RunII_ttHISR                        shape   -               -               -               1               -               -               -               - #No PSWeights
-OSDL_RunII_ttHFSR                        shape   -               -               -               1               -               -               -               -
+ttHFSR                                   shape   -               -               -               1               -               -               -               -
 OSDL_RunII_ttVJetsmuRNomF                shape   -               -               -               -               1               -               -               -
 OSDL_RunII_ttVJetsmuFNomR                shape   -               -               -               -               1               -               -               -
 OSDL_RunII_ttVJetsmuRFcorrelated         shape   -               -               -               -               1               -               -               -
 OSDL_RunII_ttVJetsISR                    shape   -               -               -               -               1               -               -               - #No PSWeights
-OSDL_RunII_ttVJetsFSR                    shape   -               -               -               -               1               -               -               -
+ttVJetsFSR                               shape   -               -               -               -               1               -               -               -
 OSDL_RunII_ttultrararemuRNomF            shape   -               -               -               -               -               1               -               -
 OSDL_RunII_ttultrararemuFNomR            shape   -               -               -               -               -               1               -               -
 OSDL_RunII_ttultrararemuRFcorrelated     shape   -               -               -               -               -               1               -               -
 OSDL_RunII_ttultrarareISR                shape   -               -               -               -               -               1               -               - #PSWeights bugged in NanoAODv5
-OSDL_RunII_ttultrarareFSR                shape   -               -               -               -               -               1               -               -
+ttultrarareFSR                           shape   -               -               -               -               -               1               -               -
 OSDL_RunII_ewkmuRNomF                    shape   -               -               -               -               -               -               1               - #No entries, but probably nothing
 OSDL_RunII_ewkmuFNomR                    shape   -               -               -               -               -               -               1               -
 OSDL_RunII_ewkmuRFcorrelated             shape   -               -               -               -               -               -               1               -
 OSDL_RunII_ewkISR                        shape   -               -               -               -               -               -               1               - #No PSWeights
-OSDL_RunII_ewkFSR                        shape   -               -               -               -               -               -               1               -
+ewkFSR                                   shape   -               -               -               -               -               -               1               -
 OSDL_RunII_ttttmuRNomF                   shape   -               -               -               -               -               -               -               1
 OSDL_RunII_ttttmuFNomR                   shape   -               -               -               -               -               -               -               1
 OSDL_RunII_ttttmuRFcorrelated            shape   -               -               -               -               -               -               -               1
 # OSDL_RunII_ttttISR                       shape   -               -               -               -               -               -               -               1 #Low stats gave vastly overestimated impact, ergo removed, may work with 2018 and 2017nCorrectPartonInBorn samples
-# OSDL_RunII_ttttFSR                       shape   -               -               -               -               -               -               -               1
+# ttttFSR                                  shape   -               -               -               -               -               -               -               1
 OSDL_RunII_btagSF_shape_hf    	         shape   1               1               1               1               1               1               1               1
 OSDL_$ERA_btagSF_shape_hfstats1          shape   1               1               1               1               1               1               1               1
 OSDL_$ERA_btagSF_shape_hfstats2          shape   1               1               1               1               1               1               1               1
@@ -78,6 +78,6 @@ OSDL_$ERA_btagSF_shape_lfstats2          shape   1               1              
 OSDL_$ERA_btagSF_shape_cferr1           shape   1               1               1               1               1               1               1               1
 OSDL_$ERA_btagSF_shape_cferr2           shape   1               1               1               1               1               1               1               1  
 # OSDL_RunII_pdf                           shape   1               1               1               1               1               1               1               1  
-# OSDL_RunII_hdamp                         shape   1               1               -               -               -               -               -               - #low impact, low stats, forces very coarse binning
-# OSDL_RunII_ue                            shape   1               1               -               -               -               -               -               - #low impact, low stats, forces very coarse binning
+# OSDL_RunII_hdamp                         shape   $ACT_TTNOBB     $ACT_TTBB       -               -               -               -               -               - 
+# OSDL_RunII_ue                            shape   $ACT_TTNOBB     $ACT_TTBB       -               -               -               -               -               - 
 * autoMCStats 1.
