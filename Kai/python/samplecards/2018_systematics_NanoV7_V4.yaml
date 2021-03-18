@@ -452,12 +452,24 @@ OSDL_RunII_ISRDown:
     - ttHH
     OSDL_RunII_ttVJetsISRDown:
     - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
     - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
     OSDL_RunII_ttHISRDown:
     - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
     OSDL_RunII_singletopISRDown:
     - ST_tW
     - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
     OSDL_RunII_ttttISRDown:
     - tttt
   preWeights:
@@ -531,12 +543,24 @@ OSDL_RunII_ISRUp:
     - ttHH
     OSDL_RunII_ttVJetsISRUp:
     - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
     - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
     OSDL_RunII_ttHISRUp:
     - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
     OSDL_RunII_singletopISRUp:
     - ST_tW
     - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
     OSDL_RunII_ttttISRUp:
     - tttt
 OSDL_RunII_FSRDown:
@@ -605,12 +629,24 @@ OSDL_RunII_FSRDown:
     - ttHH
     OSDL_RunII_ttVJetsFSRDown:
     - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
     - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
     OSDL_RunII_ttHFSRDown:
     - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
     OSDL_RunII_singletopFSRDown:
     - ST_tW
     - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
     OSDL_RunII_ttttFSRDown:
     - tttt
 OSDL_RunII_FSRUp:
@@ -679,12 +715,24 @@ OSDL_RunII_FSRUp:
     - ttHH
     OSDL_RunII_ttVJetsFSRUp:
     - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
     - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
     OSDL_RunII_ttHFSRUp:
     - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
     OSDL_RunII_singletopFSRUp:
     - ST_tW
     - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
     OSDL_RunII_ttttFSRUp:
     - tttt
 OSDL_RunII_muFNomRDown:
@@ -753,12 +801,24 @@ OSDL_RunII_muFNomRDown:
     - ttHH
     OSDL_RunII_ttVJetsmuFNomRDown:
     - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
     - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
     OSDL_RunII_ttHmuFNomRDown:
     - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
     OSDL_RunII_singletopmuFNomRDown:
     - ST_tW
     - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
     OSDL_RunII_ttttmuFNomRDown:
     - tttt
 OSDL_RunII_muFNomRUp:
@@ -827,12 +887,24 @@ OSDL_RunII_muFNomRUp:
     - ttHH
     OSDL_RunII_ttVJetsmuFNomRUp:
     - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
     - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
     OSDL_RunII_ttHmuFNomRUp:
     - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
     OSDL_RunII_singletopmuFNomRUp:
     - ST_tW
     - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
     OSDL_RunII_ttttmuFNomRUp:
     - tttt
 OSDL_RunII_muRNomFDown:
@@ -901,12 +973,24 @@ OSDL_RunII_muRNomFDown:
     - ttHH
     OSDL_RunII_ttVJetsmuRNomFDown:
     - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
     - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
     OSDL_RunII_ttHmuRNomFDown:
     - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
     OSDL_RunII_singletopmuRNomFDown:
     - ST_tW
     - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
     OSDL_RunII_ttttmuRNomFDown:
     - tttt
 OSDL_RunII_muRNomFUp:
@@ -975,12 +1059,24 @@ OSDL_RunII_muRNomFUp:
     - ttHH
     OSDL_RunII_ttVJetsmuRNomFUp:
     - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
     - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
     OSDL_RunII_ttHmuRNomFUp:
     - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
     OSDL_RunII_singletopmuRNomFUp:
     - ST_tW
     - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
     OSDL_RunII_ttttmuRNomFUp:
     - tttt
 OSDL_RunII_muRFcorrelatedUp:
@@ -1049,12 +1145,24 @@ OSDL_RunII_muRFcorrelatedUp:
     - ttHH
     OSDL_RunII_ttVJetsmuRFcorrelatedUp:
     - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
     - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
     OSDL_RunII_ttHmuRFcorrelatedUp:
     - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
     OSDL_RunII_singletopmuRFcorrelatedUp:
     - ST_tW
     - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
     OSDL_RunII_ttttmuRFcorrelatedUp:
     - tttt
 OSDL_RunII_muRFcorrelatedDown:
@@ -1123,12 +1231,24 @@ OSDL_RunII_muRFcorrelatedDown:
     - ttHH
     OSDL_RunII_ttVJetsmuRFcorrelatedDown:
     - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
     - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
     OSDL_RunII_ttHmuRFcorrelatedDown:
     - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
     OSDL_RunII_singletopmuRFcorrelatedDown:
     - ST_tW
     - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
     OSDL_RunII_ttttmuRFcorrelatedDown:
     - tttt
 OSDL_RunII_ueUp:
