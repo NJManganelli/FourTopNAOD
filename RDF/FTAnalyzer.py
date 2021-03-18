@@ -677,24 +677,19 @@ def writeNtuples(packedNodes, ntupledir, nJetMin=4, HTMin=350, bTagger="DeepJet"
         if snapshotPriority > snapshotTrigger:
             print("NEED TO FILTER NODES BY THIS POINT TO MAINTAIN SMALL SNAPSHOT AND CACHE SIZES! Temp in place")
             #cache and book snapshot (assuming it will not be written due to the RDF bugs) #FILTER HERE
-            packedNodes["cacheNodes"][eraAndSampleName] = packedNodes["nodes"][eraAndSampleName]["BaseNode"]\
-                .Filter("HT__nom > {htmin} && nFTAJet__nom > {njetmin} && nFTALepton == 2 && nMediumDeepJetB__nom >= 2".format(htmin=HTMin, njetmin=nJetMin))\
-                .Cache(packedNodes["ntupleVariables"][eraAndSampleName])
-            handles[eraAndSampleName] = bookSnapshot(packedNodes["cacheNodes"][eraAndSampleName], "{}/{}.root".format(ntupledir, eraAndSampleName), lazy=True, 
-                                                columnList=packedNodes["ntupleVariables"][eraAndSampleName], treename="Events", 
-                                                mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
-            
+            handles[eraAndSampleName] = bookSnapshot(packedNodes["nodes"][eraAndSampleName]["BaseNode"]\
+                                                     .Filter("HT__nom > {htmin} && nFTAJet__nom > {njetmin} && nFTALepton == 2 && nMediumDeepJetB__nom >= 2"\
+                                                             .format(htmin=HTMin, njetmin=nJetMin)),
+                                                     "{}/{}.root".format(ntupledir, eraAndSampleName), lazy=True,
+                                                     columnList=packedNodes["ntupleVariables"][eraAndSampleName], treename="Events", 
+                                                     mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)            
         else:
-            # don't make handle for uncached snapshot, execute immediately
-            _ = bookSnapshot(packedNodes["nodes"][eraAndSampleName]["BaseNode"]\
-                             .Filter("HT__nom > 450 && nFTAJet__nom > 3 && nFTALepton == 2 && nMediumDeepJetB__nom >= 2"), 
-                             "{}/{}.root".format(ntupledir, eraAndSampleName), lazy=False, 
-                             columnList=packedNodes["ntupleVariables"][eraAndSampleName], 
-                             treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
-    #Process remaining snapshots one-by-one
-    print("Executing event loop for writeNtuples()")
-    for eraAndSampleName, handle in handles.items():
-        _ = handle.GetValue()
+            print("Executing event loop for writeNtuples()")
+            handles[eraAndSampleName] = bookSnapshot(packedNodes["nodes"][eraAndSampleName]["BaseNode"]\
+                                                     .Filter("HT__nom > 450 && nFTAJet__nom > 3 && nFTALepton == 2 && nMediumDeepJetB__nom >= 2"), 
+                                                     "{}/{}.root".format(ntupledir, eraAndSampleName), lazy=False, 
+                                                     columnList=packedNodes["ntupleVariables"][eraAndSampleName], 
+                                                     treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
     print("Finished executing event loop for writeNtuples()")
 
 def METXYCorr(input_df, run_branch = "run", era = "2017", isData = True, npv_branch = "PV_npvs",
@@ -4028,7 +4023,7 @@ def BTaggingEfficienciesAnalyzer(directory, outDirectory="{}/BTaggingEfficiencie
         #hist names
         keysDict[name] = [hist.GetName() for hist in fileDict[name].GetListOfKeys() if "BTagging*" in hist.GetName()]
         #Skip files without BTagging 
-        if len(keysDict[name]) is 0: 
+        if len(keysDict[name]) == 0: 
             print("Skipping sample {} whose file contains no histograms containing 'BTagging*'".format(name))
             fileDict[name].Close()
             continue
@@ -4310,7 +4305,7 @@ def rebin2D(hist, name, xbins, ybins, return_numpy_arrays=False):
         #ybinset is an range object, so iterate through it for each ybin to be added in this slice
         for bn, ybin in enumerate(ybinset):
             #Create hist for this slice if it's the first bin being combined
-            if bn is 0:
+            if bn == 0:
                 slice_dict[str(sn)]["hist"] = hist.ProjectionX("{}_Yslice{}".format(hist.GetName(), sn), ybin, ybin)
             #THAdd the rest of the bins being combined into this slice
             else:
@@ -4507,7 +4502,7 @@ def rootToPDF(directory, outDirectory="{}/PDF", globKey="*.root", stripKey=".roo
         #hist names
         keysDict[name] = [hist.GetName() for hist in fileDict[name].GetListOfKeys()]
         #Skip empty files
-        if len(keysDict[name]) is 0: 
+        if len(keysDict[name]) == 0: 
             print("Skipping sample {} whose file contains no histograms".format(name))
             fileDict[name].Close()
             continue
@@ -4559,7 +4554,7 @@ def makeJetEfficiencyReport(input_stats_dict, directory, levelsOfInterest="All")
                 stats_dict[level] = dict()
             if name not in stats_dict[level].keys():
                 stats_dict[level][name] = dict()
-            if levelsOfInterest is not "All" and level not in levelsOfInterest: continue
+            if levelsOfInterest != "All" and level not in levelsOfInterest: continue
             for category, category_dict in level_dict.items():
                 if category not in stats_dict[level].keys():
                     stats_dict[level][name][category] = dict()
@@ -4593,9 +4588,9 @@ def makeHLTReport(stats_dict, directory, levelsOfInterest="All"):
                 path_dict[level] = dict()
             if level not in count_dict.keys():
                 count_dict[level] = dict()
-            if levelsOfInterest is not "All" and level not in levelsOfInterest: continue
+            if levelsOfInterest != "All" and level not in levelsOfInterest: continue
             for stat_category, stat_category_dict in level_dict.items():
-                if stat_category is "counts":
+                if stat_category == "counts":
                     for category, counter in stat_category_dict.items():
                         count_dict[level][category] = str(counter.GetValue())
                 elif stat_category in ["weighted", "unweighted"]:
