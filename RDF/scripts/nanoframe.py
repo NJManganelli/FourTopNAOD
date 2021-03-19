@@ -113,9 +113,9 @@ parser.add_argument('--nThreads', dest='nThreads', action='store', type=int, def
 parser.add_argument('--simultaneous', dest='simultaneous', action='store', type=int, default=1, #nargs='?', const=0.4,
                     help='simultaneous graphs to process (recommendation for network-accessed files: 3 or less)')
 parser.add_argument('--define', dest='defines', action='append', type=str, #nargs='*'
-                    help='list of new variables with syntax variable_name>==>variable_definition, where both are valid C++ variable names and code, respectively')
+                    help='list of new variables with syntax variable_name=variable_definition, where both are valid C++ variable names and code, respectively. Wrap each individual define in single quotes to prevent shell parsing them as commands, i.e. nGoodMuons=return Sum(Muon_pt > 30 && Muon_looseId == true);')
 parser.add_argument('--filter', dest='filters', action='append', type=str, #nargs='*', 
-                    help='list of filters with syntax filter_name>==>filter_cut, where the former is any text and the latter is valid C++ code')
+                    help='list of filters with syntax filter_name=filter_cut, where the former is any text and the latter is valid C++ code. Wrap each individual filter in single quotes to prevent shell parsing them as commands')
 parser.add_argument('--keep', dest='keep', action='store', nargs='*', type=str, default=None,
                     help='list of branch names to keep in output files, does not accept wildcards')
 parser.add_argument('--postfix', dest='postfix', action='store', type=str, default="_Skim",
@@ -202,11 +202,21 @@ for x in range(0, len(fileList), args.simultaneous):
         rdfFinal = rdf_bases[fn] #Placeholder
         if args.defines is not None:
             for define in args.defines:
-                var, defn = define.split(">==>")
+                if len(define.split(">==>")) == 2:
+                    #backwards-compatibility!
+                    var, defn = define.split(">==>")
+                else:
+                    var = define[:define.index("=")]
+                    defn = define[define.index("=")+1:]
                 rdfFinal = rdfFinal.Define(var, defn)
         if args.filters is not None:
-            for cut in args.filters:
-                name, defn = cut.split(">==>")
+            for ncut, cut in enumerate(args.filters):
+                if len(cut.split(">==>")) == 2:
+                    #backwards-compatibility!
+                    name, defn = cut.split(">==>")
+                else:
+                    name = cut[:cut.index("=")]
+                    defn = cut[cut.index("=")+1:]
                 rdfFinal = rdfFinal.Filter(defn, name)
         rdf_finals[fn] = rdfFinal
         columnList = [str(c) for c in rdf_finals[fn].GetColumnNames() if str(c) in args.keep] if args.keep is not None else None
