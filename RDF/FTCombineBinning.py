@@ -19,7 +19,7 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 ROOT.gROOT.SetBatch(True)
 
 def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outDir, sourceVariable = "HT", HTCut="500", 
-         variableSet="HTOnly", categorySet="5x5", merge="", tagger="DeepJet", verbose=False):
+         variableSet="HTOnly", categorySet="5x5", merge="", tagger="DeepJet", systematicsToExclude=[], verbose=False):
     varsOfInterest = [sourceVariable + "Unweighted"]
     erasOfInterest = [era]
     channelsOfInterest = [channel]
@@ -65,7 +65,7 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outD
     channelWindows = list(set(["___".join(k.split("___")[2:4]) for k in keys]))
     categories = sorted(sorted(list(set([k.split("___")[4] for k in keys])), key=lambda j : j.split("nJet")[-1]), key=lambda j: j.split("nMediumDeep")[-1])
     variables = list(set([k.split("___")[5] for k in keys]))
-    systematics = list(set([k.split("___")[6] for k in keys]))
+    systematics = list(set([k.split("___")[6] for k in keys]) - set(systematicsToExclude))
     if verbose:
         print("Eras: {}".format(eras))
         print("Samples: {}".format(samples))
@@ -210,6 +210,9 @@ if __name__ == '__main__':
     parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
                         type=str, choices=['5x5', '5x3', '5x1', '2BnJet4p', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
                         help='Variable set to include in filling templates')
+    parser.add_argument('--excludeSystematics', '--systematicsToExclude', dest='systematicsToExclude', action='append',
+                        default=["OSDL_RunII_hdampUp", "OSDL_RunII_hdampDown", "OSDL_RunII_ueUp", "OSDL_RunII_ueDown"],
+                        help='List of systematics to not consider when rebinning, scale variations only, e.g. OSDL_RunII_hdampDown')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
     # parser.add_argument('--era', dest='era', action='store', type=str, default="2017", choices=['2016', '2017', '2018'],
@@ -227,4 +230,4 @@ if __name__ == '__main__':
     channel = args.channel
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel)
     verbose = args.verbose
-    main(stage, analysisDir, channel, args.era, args.relUncertainty, args.json, ".", args.variable, args.HTCut, args.variableSet, args.categorySet, args.merge, args.bTagger, verbose=verbose)
+    main(stage, analysisDir, channel, args.era, args.relUncertainty, args.json, ".", args.variable, args.HTCut, args.variableSet, args.categorySet, args.merge, args.bTagger, args.systematicsToExclude, verbose=verbose)
