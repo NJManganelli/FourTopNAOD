@@ -42,7 +42,7 @@ ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way #Extra note, this
 print("FIXME? Consider removing even unitary weight from data histogram filling, due to the bug in ROOT where Sumw2 is impossible to disable using the documented method")
 print("FIXME: Hardcoded FTFunctions.cpp path, needs fixin'...")
 ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
-print("To compile the loaded file, append a '+' to the '.L <file_name>+' line, and to specify gcc as the compile, also add 'g' after that")
+# print("To compile the loaded file, append a '+' to the '.L <file_name>+' line, and to specify gcc as the compile, also add 'g' after that")
 #https://root-forum.cern.ch/t/saving-root-numba-declare-callables-in-python/44020/2
 #Alternate formulations of loading the functions:
 #1 compile externally and then load it
@@ -50,8 +50,13 @@ print("To compile the loaded file, append a '+' to the '.L <file_name>+' line, a
 # ROOT.gInterpreter.Declare('#include "FTFunctions.cpp"')
 # ROOT.gSystem.Load("FTFunctions.so")
 #2 compile in ROOT from python, with the first part optionally done externally or previously (it shouldn't recompile if it already exists?), and option 'k' keeps the .so persistent
+# print("Compiling")
 # ROOT.gSystem.CompileMacro("FTFunctions.cpp", "kO")
-# ROOT.gInterpreter.Load("FTFunctions_cpp.so")\
+# print("Declaring")
+# ROOT.gInterpreter.Declare('#include "FTFunctions.cpp"')
+# print("Loading")
+# ROOT.gInterpreter.Load("FTFunctions_cpp.so")
+# print("Done")
 
 # David Ren-Hwa Yu
 # 22:43
