@@ -55,8 +55,10 @@
                 "Color": "#00A88F", 
                 "Style": "Fill", 
                 "Names": [
-                    "2017___ttH___MuMu___ZWindowMET0p0Width15p0",
-                    "2018___ttH___MuMu___ZWindowMET0p0Width15p0"
+                    "2017___ttH_SL-bb___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___ttH_DL-bb___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___ttH_SL-bb___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___ttH_DL-bb___MuMu___ZWindowMET0p0Width15p0"
                 ]
             }, 
             "tttt": {
@@ -81,8 +83,20 @@
                 "Color": [222, 90, 106], 
                 "Style": "Fill", 
                 "Names": [
-                    "2017___DYJets_DL___ElEl___ZWindowMET0p0Width15p0",
-                    "2018___DYJets_DL___ElEl___ZWindowMET0p0Width15p0"
+                    "2017___DYJets_DL-HT100___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT200___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT400___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT600___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT800___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT1200___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT2500___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT100___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT200___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT400___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT600___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT800___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT1200___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT2500___MuMu___ZWindowMET0p0Width15p0"
                 ]
             }, 
             "Data": {
@@ -201,10 +215,10 @@
                 "Color": [250, 202, 255], 
                 "Style": "Fill", 
                 "Names": [
-                    "2017___ST_tW___MuMu___ZWindowMET0p0Width15p0", 
-                    "2017___ST_tbarW___MuMu___ZWindowMET0p0Width15p0",
-                    "2018___ST_tW___MuMu___ZWindowMET0p0Width15p0", 
-                    "2018___ST_tbarW___MuMu___ZWindowMET0p0Width15p0"
+                    "2017___ST_tW-NoFHad___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ST_tbarW-NoFHad___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___ST_tW-NoFHad___MuMu___ZWindowMET0p0Width15p0", 
+                    "2018___ST_tbarW-NoFHad___MuMu___ZWindowMET0p0Width15p0"
                 ]
             }, 
             "ttultrarare": {

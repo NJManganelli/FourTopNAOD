@@ -55,8 +55,10 @@
                 "Color": "#00A88F", 
                 "Style": "Fill", 
                 "Names": [
-                    "2017___ttH___ElMu___ZWindowMET0Width0",
-                    "2018___ttH___ElMu___ZWindowMET0Width0"
+                    "2017___ttH_SL-bb___ElMu___ZWindowMET0Width0",
+                    "2017___ttH_DL-bb___ElMu___ZWindowMET0Width0",
+                    "2018___ttH_SL-bb___ElMu___ZWindowMET0Width0",
+                    "2018___ttH_DL-bb___ElMu___ZWindowMET0Width0"
                 ]
             }, 
             "tttt": {
@@ -81,8 +83,20 @@
                 "Color": [222, 90, 106], 
                 "Style": "Fill", 
                 "Names": [
-                    "2017___DYJets_DL___ElMu___ZWindowMET0Width0",
-                    "2018___DYJets_DL___ElMu___ZWindowMET0Width0"
+                    "2017___DYJets_DL-HT100___ElMu___ZWindowMET0Width0",
+                    "2017___DYJets_DL-HT200___ElMu___ZWindowMET0Width0",
+                    "2017___DYJets_DL-HT400___ElMu___ZWindowMET0Width0",
+                    "2017___DYJets_DL-HT600___ElMu___ZWindowMET0Width0",
+                    "2017___DYJets_DL-HT800___ElMu___ZWindowMET0Width0",
+                    "2017___DYJets_DL-HT1200___ElMu___ZWindowMET0Width0",
+                    "2017___DYJets_DL-HT2500___ElMu___ZWindowMET0Width0",
+                    "2018___DYJets_DL-HT100___ElMu___ZWindowMET0Width0",
+                    "2018___DYJets_DL-HT200___ElMu___ZWindowMET0Width0",
+                    "2018___DYJets_DL-HT400___ElMu___ZWindowMET0Width0",
+                    "2018___DYJets_DL-HT600___ElMu___ZWindowMET0Width0",
+                    "2018___DYJets_DL-HT800___ElMu___ZWindowMET0Width0",
+                    "2018___DYJets_DL-HT1200___ElMu___ZWindowMET0Width0",
+                    "2018___DYJets_DL-HT2500___ElMu___ZWindowMET0Width0"
                 ]
             },
             "Data": {
@@ -201,10 +215,10 @@
                 "Color": [250, 202, 255], 
                 "Style": "Fill", 
                 "Names": [
-                    "2017___ST_tW___ElMu___ZWindowMET0Width0", 
-                    "2017___ST_tbarW___ElMu___ZWindowMET0Width0",
-                    "2018___ST_tW___ElMu___ZWindowMET0Width0", 
-                    "2018___ST_tbarW___ElMu___ZWindowMET0Width0"
+                    "2017___ST_tW-NoFHad___ElMu___ZWindowMET0Width0", 
+                    "2017___ST_tbarW-NoFHad___ElMu___ZWindowMET0Width0",
+                    "2018___ST_tW-NoFHad___ElMu___ZWindowMET0Width0", 
+                    "2018___ST_tbarW-NoFHad___ElMu___ZWindowMET0Width0"
                 ]
             }, 
             "ttultrarare": {
