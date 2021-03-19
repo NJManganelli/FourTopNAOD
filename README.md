@@ -1,6 +1,34 @@
 # FourTopNAOD
 UC Riverside Four Top Analysis in NanoAOD format (2016 validation, 2017 and 2018 data analysis)
 
+## RDataFrame Skimming code
+### Initial setup (do once from an area where you have access to /cvmfs)
+~~~~~~~~~~~~~{sh}
+export SCRAM_ARCH=slc7_amd64_gcc830
+cmsrel CMSSW_10_2_26
+cd CMSSW_10_2_26/src
+cmsenv
+git clone https://github.com/cms-nanoAOD/nanoAOD-tools.git PhysicsTools/NanoAODTools
+git clone https://github.com/NJManganelli/FourTopNAOD.git FourTopNAOD
+scram b -j4
+source FourTopNAOD/Kai/standalone/env_standalone.sh build
+source FourTopNAOD/RDF/standalone/env_standalone.sh build
+~~~~~~~~~~~~~
+### RDF Usage (do every time when using anything in the FourTopNAOD/RDF directory; recommend a .bashrc function)
+~~~~~~~~~~~~~{sh}
+source /cvmfs/cms.cern.ch/cmsset_default.sh
+export SCRAM_ARCH=slc7_amd64_gcc830
+source /cvmfs/sft.cern.ch/lcg/views/LCG_99/x86_64-centos7-gcc8-opt/setup.sh
+#Get authentication tokens where necessary, e.g. voms and kerberos
+voms-proxy-init -voms cms --valid 192:00
+kinit
+cd CMSSW_10_2_26/src/FourTopNAOD/RDF
+source standalone/env_standalone.sh
+cd skimming
+#Run a script that uses the FourTopNAOD/RDF/scripts/nanoframe.py skimming code.
+python ../scripts/nanoframe.py --help
+sh skimming_example.sh
+~~~~~~~~~~~~~
 ## PostProcessor code
 ~~~~~~~~~~~~~{sh}
 export SCRAM_ARCH=slc7_amd64_gcc700
