@@ -1,0 +1,2 @@
+echo skimming TTToHadronic to folder ~/Skims/NANOv8/UL18/TTToHadronic_TuneCP5_13TeV-powheg-pythia8
+python ../scripts/nanoframe.py --input 'dbs:/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv2-106X_upgrade2018_realistic_v15_L1v1-v1/NANOAODSIM' --write --nThreads 8 --simultaneous 8 --prefetch --define 'skim_mu_mask=Muon_pt >= 25 && abs(Muon_eta) <= 2.4 && Muon_looseId == true && Muon_pfIsoId >= 1;' --filter 'OneIsoMuon=return HLT_IsoMu24 == true && Sum(skim_mu_mask) > 0;' --redir --outdir ~/Skims/NANOv8/UL18/TTToHadronic_TuneCP5_13TeV-powheg-pythia8
