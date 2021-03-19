@@ -2,6 +2,8 @@
 #define FOURTOP_FUNCTIONS
 
 //#include <boost>
+#include <cstring>
+#include <stdio.h>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -12,7 +14,9 @@
 #include <TH2.h>
 #include <TH3.h>
 #include <TFile.h>
+#include <TMath.h>
 #include <TUUID.h>
+#include "ROOT/RDF/RInterface.hxx"
 #include "ROOT/RVec.hxx"
 #include "LHAPDF/LHAPDF.h"
 
@@ -95,7 +99,7 @@ LUT::LUT(const LUT &lut) {
     _LUT_MAP_TH3[th3_iter->first]->SetDirectory(0);
   }
 }  
-void LUT::Add(std::string file, std::string path, std::string handle = "") {
+void LUT::Add(std::string file, std::string path, std::string handle) {
   TUUID uuid = TUUID();
   TFile *f = TFile::Open(file.c_str(), "read");
   if(f) {
@@ -369,7 +373,7 @@ private:
   std::shared_ptr< std::vector<LUT*> > lut_vector; // = std::make_shared< std::vector<LUT*> >();
   LUT *origin;
 };
-void LUTManager::Add(std::map< std::string, std::vector<std::string> > idmap, bool verbose = false) {
+void LUTManager::Add(std::map< std::string, std::vector<std::string> > idmap, bool verbose) {
   for(std::map< std::string, std::vector<std::string> >::iterator id_iter = idmap.begin(); id_iter != idmap.end(); ++id_iter){
     // std::cout << "Key: " << id_iter->first << std::endl;
     // std::cout << "Values: ";
@@ -455,12 +459,12 @@ baseLUT::baseLUT(std::string file, std::string path) {
   }
       
 }
-double baseLUT::TH2Lookup(double xval, double yval, bool flow = false){
+double baseLUT::TH2Lookup(double xval, double yval, bool flow){
   int binx = std::max(1, std::min(_LUT_TH2->GetNbinsX(), _LUT_TH2->GetXaxis()->FindBin(xval)));
   int biny = std::max(1, std::min(_LUT_TH2->GetNbinsY(), _LUT_TH2->GetYaxis()->FindBin(yval)));
   return _LUT_TH2->GetBinContent(binx, biny);
 }
-double baseLUT::TH2LookupErr(double xval, double yval, bool flow = false){
+double baseLUT::TH2LookupErr(double xval, double yval, bool flow){
   int binx = std::max(1, std::min(_LUT_TH2->GetNbinsX(), _LUT_TH2->GetXaxis()->FindBin(xval)));
   int biny = std::max(1, std::min(_LUT_TH2->GetNbinsY(), _LUT_TH2->GetYaxis()->FindBin(yval)));
   return _LUT_TH2->GetBinError(binx, biny);
@@ -495,7 +499,7 @@ private:
   // int *Jet_flav_;
 };
 
-TH2Lookup::TH2Lookup(std::string file, std::string slot="0", bool debug=false) {
+TH2Lookup::TH2Lookup(std::string file, std::string slot, bool debug) {
   lookupMap_.clear();
   validKeys_.clear();
   TFile *f = TFile::Open(file.c_str(),"read");
@@ -514,7 +518,7 @@ TH2Lookup::TH2Lookup(std::string file, std::string slot="0", bool debug=false) {
   f->Close();
 }
 
-TH2Lookup::TH2Lookup(std::string file, std::vector<std::string> histos, std::string slot = "0") {
+TH2Lookup::TH2Lookup(std::string file, std::vector<std::string> histos, std::string slot) {
   lookupMap_.clear();
   validKeys_.clear();
   TFile *f = TFile::Open(file.c_str(),"read");
@@ -539,7 +543,7 @@ TH2Lookup::TH2Lookup(std::string file, std::vector<std::string> histos, std::str
   nJet_ = nJet; Jet_flav_ = jetFlav; Jet_pt_ = lepPt; Jet_eta_ = lepEta;
   }*/
 
-float TH2Lookup::getLookup(std::string key, float x_val, float y_val, bool debug=false) {
+float TH2Lookup::getLookup(std::string key, float x_val, float y_val, bool debug) {
   if(debug){std::cout << "TH2Lookup::getLookup invoked " << std::endl;}
   if ( lookupMap_.find(key) == lookupMap_.end() ) {
     // not found ... not sure how intensive this lookup is, but we need to guard against bad keys
@@ -555,7 +559,7 @@ float TH2Lookup::getLookup(std::string key, float x_val, float y_val, bool debug
   }
 }
 
-float TH2Lookup::getLookupErr(std::string key, float x_val, float y_val, bool debug=false) {
+float TH2Lookup::getLookupErr(std::string key, float x_val, float y_val, bool debug) {
   int binx = std::max(1, std::min(lookupMap_[key]->GetNbinsX(), lookupMap_[key]->GetXaxis()->FindBin(x_val)));
   int biny = std::max(1, std::min(lookupMap_[key]->GetNbinsY(), lookupMap_[key]->GetYaxis()->FindBin(y_val)));
   return lookupMap_[key]->GetBinError(binx,biny);
@@ -583,7 +587,7 @@ RVec_f TH2Lookup::getJetEfficiency(std::string category, std::string tagger_wp, 
   return eff;
 }
 
-double TH2Lookup::getEventYieldRatio(std::string sample, std::string variation, int nJet, double HT, bool debug=false){
+double TH2Lookup::getEventYieldRatio(std::string sample, std::string variation, int nJet, double HT, bool debug){
   //Latest version uses keys of form "Aggregate__nom", so sample = "Aggregate_" and variation = "_nom"
   //For pseudo-1D lookups, this uses "<name>_1D<DIM>" such as "tttt_1DX" -> key = "tttt_1DY_nom" for example
   double yield = 1.0;
@@ -594,7 +598,7 @@ double TH2Lookup::getEventYieldRatio(std::string sample, std::string variation, 
   return yield;
 }
 
-double TH2Lookup::getEventYieldRatio(std::string key, int nJet, double HT, bool debug=false){
+double TH2Lookup::getEventYieldRatio(std::string key, int nJet, double HT, bool debug){
   //Latest version uses keys of form "Aggregate__nom", so sample = "Aggregate_" and variation = "_nom"
   //For pseudo-1D lookups, this uses "<name>_1D<DIM>" such as "tttt_1DX" -> key = "tttt_1DY_nom" for example
   double yield = 1.0;

@@ -43,6 +43,16 @@ print("FIXME? Consider removing even unitary weight from data histogram filling,
 print("FIXME: Hardcoded FTFunctions.cpp path, needs fixin'...")
 ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
 print("To compile the loaded file, append a '+' to the '.L <file_name>+' line, and to specify gcc as the compile, also add 'g' after that")
+#https://root-forum.cern.ch/t/saving-root-numba-declare-callables-in-python/44020/2
+#Alternate formulations of loading the functions:
+#1 compile externally and then load it
+# g++ -c -fPIC -o FTFunctions.so FTFunctions.cpp $(root-config --libs --cflags)
+# ROOT.gInterpreter.Declare('#include "FTFunctions.cpp"')
+# ROOT.gSystem.Load("FTFunctions.so")
+#2 compile in ROOT from python, with the first part optionally done externally or previously (it shouldn't recompile if it already exists?), and option 'k' keeps the .so persistent
+# ROOT.gSystem.CompileMacro("FTFunctions.cpp", "kO")
+# ROOT.gInterpreter.Load("FTFunctions_cpp.so")\
+
 # David Ren-Hwa Yu
 # 22:43
 # In older versions of ROOT, I vaguely remember that you had to load the header files for the libraries, like 
