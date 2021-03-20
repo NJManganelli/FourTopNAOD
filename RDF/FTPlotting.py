@@ -2964,26 +2964,27 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
 
         CanCache["canvas"].Draw()
 
-        formattedCanvasName = "$ADIR/Plots/$ERA/$CHANNEL/$PLOTCARD/$SYST/$CANVAS".replace("$ADIR", analysisDir)\
+        formattedCommonName = "$ADIR/Plots/$ERA/$CHANNEL/$PLOTCARD/$SYST/$CANVAS".replace("$ADIR", analysisDir)\
                                                                                  .replace("$TAG", tag)\
                                                                                  .replace("$ERA", era)\
                                                                                  .replace("$PLOTCARD", plotCard)\
                                                                                  .replace("$CHANNEL", channel)\
-                                                                                 .replace("$SYST", "nominal" if drawSystematic is None else drawSystematic)\
-                                                                                 .replace("$CANVAS", can_name.replace("___", "_").replace("Canvas_", ""))\
-                                                                                 .replace("//", "/")
+                                                                                 .replace("$SYST", "nominal" if drawSystematic is None else drawSystematic)
+
+        formattedCollectionName = formattedCommonName.replace("$CANVAS", tag + "_" + plotCard).replace("//", "/")
+        formattedCanvasName = formattedCommonName.replace("$CANVAS", can_name.replace("___", "_").replace("Canvas_", "")).replace("//", "/")
         formattedCanvasPath, _ = os.path.split(formattedCanvasName)
         if not os.path.isdir(formattedCanvasPath):
             os.makedirs(formattedCanvasPath)
         if pdfOutput:
             if can_num == 1 and can_num != can_max: #count from 1 since we increment at the beginning of the loop on this one
                 #print(CanCache["canvas"])
-                CanCache["canvas"].SaveAs("{}(".format(pdfOutput))
+                CanCache["canvas"].SaveAs("{}(".format(formattedCollectionName))
             elif can_num == can_max and can_num != 1:
-                print("Closing {}".format(pdfOutput))
-                CanCache["canvas"].SaveAs("{})".format(pdfOutput))
+                print("Closing {}".format(formattedCollectionName))
+                CanCache["canvas"].SaveAs("{})".format(formattedCollectionName))
             else:
-                CanCache["canvas"].SaveAs("{}".format(pdfOutput))
+                CanCache["canvas"].SaveAs("{}".format(formattedCollectionName))
             CanCache["canvas"].SaveAs("{}".format(formattedCanvasName + ".pdf"))
         if isinstance(drawSystematic, str):
             formattedCanvasName += "." + drawSystematic
@@ -3453,7 +3454,7 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                                        Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, drawSystematic=args.drawSystematic,
                                        analysisDirectory=analysisDir, tag=tag, plotCard=plotCard, macroOutput=macroOutput, pngOutput=pngOutput,
                                        pdfOutput=pdfOutput, combineOutput=combineOut, combineInput=combineInput, combineCards=combineCards,
-                                       lumi=lumi, useCanvasMax=useCanvasMax, 
+                                       lumi=lumi, useCanvasMax=useCanvasMax,
                                        skipSystematics=skipSystematics, verbose=verb,
                                        zeroingThreshold=zeroingThreshold, differentialScale=differentialScale, histogramUncertainties=args.histogramUncertainties,
                                        orderReverse=args.orderReverse
