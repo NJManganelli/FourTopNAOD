@@ -2204,6 +2204,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                            'OSDL_RunII_ttultrarareISRUp', 'OSDL_RunII_ttultrarareISRDown', 'OSDL_RunII_ttultrarareFSRUp', 'OSDL_RunII_ttultrarareFSRDown', 
                                            'OSDL_RunII_ttISRUp', 'OSDL_RunII_ttISRDown', 'OSDL_RunII_ttFSRUp', 'OSDL_RunII_ttFSRDown', 
                                            'OSDL_RunII_ttttISRUp', 'OSDL_RunII_ttttISRDown', 'OSDL_RunII_ttttFSRUp', 'OSDL_RunII_ttttFSRDown', 
+                                           'OSDL_RunII_hdampUp', 'OSDL_RunII_hdampDown', 'OSDL_RunII_ueUp', 'OSDL_RunII_ueDown',
                                        ],
                      normalizeAllUncertaintiesForProcess=[],
 ):
@@ -2979,12 +2980,12 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         if pdfOutput:
             if can_num == 1 and can_num != can_max: #count from 1 since we increment at the beginning of the loop on this one
                 #print(CanCache["canvas"])
-                CanCache["canvas"].SaveAs("{}(".format(formattedCollectionName))
+                CanCache["canvas"].SaveAs("{}.pdf(".format(formattedCollectionName))
             elif can_num == can_max and can_num != 1:
                 print("Closing {}".format(formattedCollectionName))
-                CanCache["canvas"].SaveAs("{})".format(formattedCollectionName))
+                CanCache["canvas"].SaveAs("{}.pdf)".format(formattedCollectionName))
             else:
-                CanCache["canvas"].SaveAs("{}".format(formattedCollectionName))
+                CanCache["canvas"].SaveAs("{}.pdf".format(formattedCollectionName))
             CanCache["canvas"].SaveAs("{}".format(formattedCanvasName + ".pdf"))
         if isinstance(drawSystematic, str):
             formattedCanvasName += "." + drawSystematic
@@ -3141,7 +3142,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         combFile.Close()
         print("Wrote file for combine input templates")
         if combineCards:
-            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV9.txt", counts=combCounts)
+            with open(os.path.join(analysisDir, "Combine", "Counts_"+era+"_"+channel+"_"+combineInput+".json"), "w") as countfile: 
+                countfile.write(json.dumps(combCounts, indent=4))
+            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV10.txt", counts=combCounts)
             print("Wrote combine cards")
         # cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
         # # print(cmd)
