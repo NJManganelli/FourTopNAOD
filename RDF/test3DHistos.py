@@ -142,17 +142,20 @@ processGroups["ttultrarare"] =  {
 processGroups["DY"] = {
     "Color": 416, 
     "Style": "Fill", 
-    "Names": ["DYJets_DL",]
+    "OldNames": ["DYJets_DL",],
+    "Names": ["DYJets_DL-HT100", "DYJets_DL-HT200", "DYJets_DL-HT400", "DYJets_DL-HT600", "DYJets_DL-HT800", "DYJets_DL-HT1200", "DYJets_DL-HT2500",]
 }
 processGroups["singletop"] = {
     "Color": 400, 
     "Style": "Fill", 
-    "Names": ["ST_tW", "ST_tbarW",]
+    "OldNames": ["ST_tW", "ST_tbarW",],
+    "Names": ["ST_tW-NoFHad", "ST_tbarW-NoFHad",]
 }
 processGroups["ttH"] = {
     "Color": 616, 
     "Style": "Fill", 
-    "Names": ["ttH",]
+    "OldNames": ["ttH",],
+    "Names": ["ttH_SL-bb", "ttH_DL-bb",]
 }
 processGroups["tttt"] = {
     "Color": 864, 
@@ -162,7 +165,8 @@ processGroups["tttt"] = {
 processGroups["ttVJets"] = {
     "Color": 880, 
     "Style": "Fill", 
-    "Names": ["ttWJets", "ttZJets",]
+    "Names": ["ttWJets", "ttZJets",],
+    "UnusableNames": ["ttWJets_QQ", "ttWJets_LNu", "ttZJets_QQ", "ttZJets_DL-M10", "ttZJets_DL-M1to10",]
 }    
 processGroups["Data"] = {
     "Color": 1, 
@@ -193,7 +197,9 @@ processGroups["Data"] = {
 # f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Feb12_HT350_2018/Combine/All/2018___Combined.root", "read")
 # f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Feb12_ZWindowMET40_2018/Combine/All/2018___Combined.root", "read")
 # f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/nJetSF_2017/Combine/All/2017___Combined.root", "read")
-f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/nJetSF_2018/Combine/All/2018___Combined.root", "read")
+# f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/nJetSF_2018/Combine/All/2018___Combined.root", "read")
+# f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Mar19_Baseline_2017/Combine/All/2017___HTOnly___5x5.root", "read")
+f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Mar19_Baseline_2018/Combine/All/2018___HTOnly___5x5.root", "read")
 fkeys = [kk.GetName() for kk in f.GetListOfKeys()]
 histos = dict()
 name_format="$ERA___$PROCESS___$CHANNEL___$WINDOW___$CATEGORY$BLIND___$VARIABLE___$SYSTEMATIC"
