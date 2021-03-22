@@ -2416,7 +2416,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     histoArrays = [(scHisto.GetBinErrorLow(x), scHisto.GetBinErrorUp(x)) for x in range(nBins + 2)]
                     histDrawSystematicNom[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematic_" + "nom")
                     npNominal[pn][supercategory], edgesTuple = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=True)
-                    npValues[pn][supercategory] = np.zeros((nSysts + 2, nBins + 2), dtype=float)
+                    # npValues[pn][supercategory] = np.zeros((nSysts + 2, nBins + 2), dtype=float)
+                    npValues[pn][supercategory] = npNominal[pn][supercategory].reshape((1,nBins+2)) * np.ones_like(1.0, shape=(nSysts + 2, nBins + 2), dtype=float)
                     #Stat errors up and down Assumes positive return value, untrue for esoteric stat options?
                     #TGraphAsymmErrors constructor requires the number of points and ALL POSITIVE arrays for the x, y, xdown, xup, ydown, yup (latter 4 RELATIVE)
                     npStatErrorsDown[pn][supercategory] = np.asarray([bt[0] for bt in histoArrays], dtype=float)
