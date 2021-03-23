@@ -18,7 +18,7 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 ROOT.gROOT.SetBatch(True)
 
-def main(analysisDirectory, era, variable, verbose=False):
+def main(analysisDirectory, era, variable, mergeCats="BTags", variableSet="HTOnly", categorySet="5x5", verbose=False):
     categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4', 'HT500_nMediumDeepJetB2_nJet5', 'HT500_nMediumDeepJetB2_nJet6',
                             'HT500_nMediumDeepJetB2_nJet7', 'HT500_nMediumDeepJetB2_nJet8+',
                             'HT500_nMediumDeepJetB3_nJet4', 'HT500_nMediumDeepJetB3_nJet5', 'HT500_nMediumDeepJetB3_nJet6',
@@ -26,7 +26,14 @@ def main(analysisDirectory, era, variable, verbose=False):
                             'HT500_nMediumDeepJetB4+_nJet4', 'HT500_nMediumDeepJetB4+_nJet5', 'HT500_nMediumDeepJetB4+_nJet6',
                             'HT500_nMediumDeepJetB4+_nJet7', 'HT500_nMediumDeepJetB4+_nJet8+',
     ]
-    histogramFile = "$ADIR/Combine/All/$ERA___Combined.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("//", "/") 
+
+    histogramFile = "$ADIR/Combine/All/$ERA___$VARSET___$CATSET.root".replace("$ADIR", analysisDir)\
+                                                                     .replace("$VARSET", variableSet)\
+                                                                     .replace("$CATSET", categorySet)\
+                                                                     .replace("$ERA", era)\
+                                                                     .replace("$VAR", variable)\
+                                                                     .replace("//", "/") # 
+
     f = ROOT.TFile.Open(histogramFile, "read")
     keys = [k.GetName() for k in f.GetListOfKeys()]
     if len(keys[0].split("___")) == 7: #format post-fill-(histograms/combine)
@@ -63,17 +70,31 @@ def main(analysisDirectory, era, variable, verbose=False):
                 merge[mera][msample][mvariable] = dict()
                 for msyst in systematics:
                     merge[mera][msample][mvariable][msyst] = dict()
-                    for mcategory in ["nMediumDeepJetB2", "nMediumDeepJetB3", "nMediumDeepJetB4+"]:
-                        merge[mera][msample][mvariable][msyst][mcategory] = []
+                    if mergeCats.lower() == "btags":
+                        for mcategory in ["nMediumDeepJetB2", "nMediumDeepJetB3", "nMediumDeepJetB4+"]:
+                            merge[mera][msample][mvariable][msyst][mcategory] = []
+                    elif mergeCats.lower() == "jets":
+                        for mcategory in ["nJet4", "nJet5", "nJet6", "nJet7", "nJet8+"]:
+                            merge[mera][msample][mvariable][msyst][mcategory] = []
 
     for key in keys:
         mera, msample, mchannel, mwindow, mcategory, mvariable, msyst = key.split("___")
-        if mvariable not in [variable, variable + "Unweighted"] or mera != era:
+        if mvariable not in [variable, variable + "Unweighted"] or mera != era or mcategory not in categoriesOfInterest:
             continue
-        mcat = mcategory.split("_")[-2].replace("BLIND", "")
+        if mergeCats.lower() == "btags":
+            mcat = mcategory.split("_")[-2].replace("BLIND", "")
+        elif mergeCats.lower() == "jets":
+            mcat = mcategory.split("_")[-1].replace("BLIND", "")
+
         merge[mera][msample][mvariable][msyst][mcat].append(key)
-    
-    outputHistogramFile = histogramFile.replace("Combined", "").replace(".root", "MergedChannelsJets_" + variable + ".root")
+
+    outputHistogramFile = "$ADIR/Combine/All/$ERA___$VARSET___$CATSET___$MERGE_$VAR.root".replace("$ADIR", analysisDir)\
+                                                                                         .replace("$VARSET", variableSet)\
+                                                                                         .replace("$CATSET", categorySet)\
+                                                                                         .replace("$MERGE", "MergedChannels"+mergeCats)\
+                                                                                         .replace("$ERA", era)\
+                                                                                         .replace("$VAR", variable)\
+                                                                                         .replace("//", "/") # 
     print("Opening {}".format(outputHistogramFile))
     of = ROOT.TFile.Open(outputHistogramFile, "recreate")
     of.cd()
@@ -84,7 +105,10 @@ def main(analysisDirectory, era, variable, verbose=False):
                 for msyst, subsubsubsubmerge in subsubsubmerge.items():
                     print("*", end="")
                     for mcat, subsubsubsubsubmerge in subsubsubsubmerge.items():
-                        mergeName = "___".join([mera, msample, "All", "ZWindow", "MergedChannelsJets_" + mcat, mvariable, msyst])
+                        if mergeCats.lower() == "btags":    
+                            mergeName = "___".join([mera, msample, "All", "ZWindow", "MergedChannelsJets_" + mcat, mvariable, msyst])
+                        elif mergeCats.lower() == "jets":
+                            mergeName = "___".join([mera, msample, "All", "ZWindow", "MergedChannelsBTags_" + mcat, mvariable, msyst])
                         hist = None
                         blind = len([hk for hk in subsubsubsubsubmerge if "blind" in hk.lower()]) > 0
                         for histKey in subsubsubsubsubmerge:
@@ -112,6 +136,14 @@ if __name__ == '__main__':
                         help='era for plotting, which deduces the lumi only for now')
     parser.add_argument('--variable', dest='variable', type=str, default="HT", required=True,
                         help='Variable to be merged across channels and BTag categories')
+    parser.add_argument('--varSet', '--variableSet', dest='variableSet', action='store',
+                        type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study'], default='HTOnly',
+                        help='Variable set to include in filling templates')
+    parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
+                        type=str, choices=['5x5', '5x3', '5x1', '2BnJet4p', 'FullyInclusive', 'BackgroundDominant'], default='5x5',
+                        help='Variable set to include in filling templates')
+    parser.add_argument('--merge', dest='merge', action='store', type=str, nargs='?', const="BTags", default="", choices = ["BTags", "Jets"],
+                        help='Produce the $ERA___MergedChannels$MERGE_$VAR.root file in Combine/All subdirectory, where $MERGE = BTags, Jets')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
 
@@ -122,4 +154,4 @@ if __name__ == '__main__':
     dateToday = datetime.date.today().strftime("%b-%d-%Y")
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday)
     verbose = args.verbose
-    main(analysisDir, era=args.era, variable=args.variable, verbose=verbose)
+    main(analysisDir, era=args.era, variable=args.variable, mergeCats=args.merge, variableSet=args.variableSet, categorySet=args.categorySet, verbose=verbose)
