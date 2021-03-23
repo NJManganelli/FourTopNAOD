@@ -3284,7 +3284,8 @@ if __name__ == '__main__':
     parser.add_argument('--relUncertainty', dest='relUncertainty', action='store', type=float, default=0.3,
                         help='maximum relative uncertainty (sqrt(N)/N) per bin used as the criteria for merging, should be on unweighted histograms')
     parser.add_argument('-c', '--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 
-                                                                                                              'ElEl_HighMET', 'MuMu_ElMu','MuMu_ElMu_ElEl', 'All'],
+                                                                                                              'ElEl_HighMET', 'MuMu_ElMu','MuMu_ElMu_ElEl', 
+                                                                                                              'All', 'Merged'],
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('--systematics_cards', dest='systematics_cards', action='store', nargs='*', type=str,
                         help='path and name of the systematics card(s) to be used')
