@@ -71,27 +71,32 @@ def main(analysisDirectory, era, variable, mergeCats="BTags", variableSet="HTOnl
                 for msyst in systematics:
                     merge[mera][msample][mvariable][msyst] = dict()
                     if mergeCats.lower() == "btags":
-                        for mcategory in ["nMediumDeepJetB2", "nMediumDeepJetB3", "nMediumDeepJetB4+"]:
-                            merge[mera][msample][mvariable][msyst][mcategory] = []
-                    elif mergeCats.lower() == "jets":
                         for mcategory in ["nJet4", "nJet5", "nJet6", "nJet7", "nJet8+"]:
                             merge[mera][msample][mvariable][msyst][mcategory] = []
+                    elif mergeCats.lower() == "jets":
+                        for mcategory in ["nMediumDeepJetB2", "nMediumDeepJetB3", "nMediumDeepJetB4+"]:
+                            merge[mera][msample][mvariable][msyst][mcategory] = []
 
+    mergingName = "FailedToParseMergingName"
     for key in keys:
         mera, msample, mchannel, mwindow, mcategory, mvariable, msyst = key.split("___")
         if mvariable not in [variable, variable + "Unweighted"] or mera != era or mcategory not in categoriesOfInterest:
             continue
         if mergeCats.lower() == "btags":
-            mcat = mcategory.split("_")[-2].replace("BLIND", "")
-        elif mergeCats.lower() == "jets":
+            #this is the category that is UNMERGED: nJet
             mcat = mcategory.split("_")[-1].replace("BLIND", "")
+            mergingName = "MergedChannelsBTags"
+        elif mergeCats.lower() == "jets":
+            #this is the category that is UNMERGED: nMedium{tagger}B
+            mcat = mcategory.split("_")[-2].replace("BLIND", "")
+            mergingName = "MergedChannelsJets"
 
         merge[mera][msample][mvariable][msyst][mcat].append(key)
 
     outputHistogramFile = "$ADIR/Combine/All/$ERA___$VARSET___$CATSET___$MERGE_$VAR.root".replace("$ADIR", analysisDir)\
                                                                                          .replace("$VARSET", variableSet)\
                                                                                          .replace("$CATSET", categorySet)\
-                                                                                         .replace("$MERGE", "MergedChannels"+mergeCats)\
+                                                                                         .replace("$MERGE", mergingName)\
                                                                                          .replace("$ERA", era)\
                                                                                          .replace("$VAR", variable)\
                                                                                          .replace("//", "/") # 
@@ -106,9 +111,9 @@ def main(analysisDirectory, era, variable, mergeCats="BTags", variableSet="HTOnl
                     print("*", end="")
                     for mcat, subsubsubsubsubmerge in subsubsubsubmerge.items():
                         if mergeCats.lower() == "btags":    
-                            mergeName = "___".join([mera, msample, "All", "ZWindow", "MergedChannelsJets_" + mcat, mvariable, msyst])
-                        elif mergeCats.lower() == "jets":
                             mergeName = "___".join([mera, msample, "All", "ZWindow", "MergedChannelsBTags_" + mcat, mvariable, msyst])
+                        elif mergeCats.lower() == "jets":
+                            mergeName = "___".join([mera, msample, "All", "ZWindow", "MergedChannelsJets_" + mcat, mvariable, msyst])
                         hist = None
                         blind = len([hk for hk in subsubsubsubsubmerge if "blind" in hk.lower()]) > 0
                         for histKey in subsubsubsubsubmerge:
