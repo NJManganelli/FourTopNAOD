@@ -1,0 +1,227 @@
+ {   
+     "DefaultLegend": {
+	"Header": "{lumi} fb^{{-1}} (13 TeV)",
+	"HeaderPosition": 0.25,
+        "Supercategories": {
+            "Signal": {
+                "Draw": "L", 
+                "Names": [
+                    "tttt"
+                ], 
+                "Stack": false
+            },
+            "Background": {
+                "Draw": "HIST", 
+                "Names": [
+                    "ttbb", 
+		    "ttother",
+                    "singletop", 
+                    "ttH", 
+                    "ttVJets", 
+                    "ttultrarare", 
+                    "DY", 
+                    "QCD"
+                ], 
+                "Stack": true
+            }
+        }, 
+        "nColumns": 1, 
+        "Ratios": {
+            "MC/MC": {
+                "Style": "Marker", 
+		"MarkerStyle": 20,
+		"Draw": "PXE1",
+                "Denominator": "Background", 
+                "Numerator": "Signal"
+            }
+        }, 
+        "Systematics": [], 
+        "Type": "DefaultLegend", 
+        "Coordinates": [
+            0.0, 
+            0.1, 
+            0.25, 
+            0.60
+        ], 
+        "Categories": {
+            "ttH": {
+                "Color": "#00A88F", 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttH___All___ZWindow",
+                    "2018___ttH___All___ZWindow"
+                ]
+            }, 
+            "tttt": {
+                "Color": 864, 
+                "Style": "Line", 
+                "Names": [
+                    "2017___tttt___All___ZWindow",
+                    "2018___tttt___All___ZWindow"
+                ]
+            }, 
+            "ttVJets": {
+                "Color": [155, 152, 204], 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttWJets___All___ZWindow", 
+                    "2017___ttZJets___All___ZWindow",
+                    "2018___ttWJets___All___ZWindow", 
+                    "2018___ttZJets___All___ZWindow"
+                ]
+            }, 
+            "DY": {
+                "Color": [222, 90, 106], 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___DYJets_DL___All___ZWindow",
+                    "2018___DYJets_DL___All___ZWindow"
+                ]
+            },
+            "Data": {
+                "Color": 1, 
+                "Style": "Marker",
+		"MarkerStyle": 20, 
+                "Names": [
+                    "2017___ElMu_B___All___ZWindow", 
+                    "2017___MuMu_B___All___ZWindow", 
+                    "2017___ElEl_B___All___ZWindow", 
+                    "2017___El_B___All___ZWindow", 
+                    "2017___Mu_B___All___ZWindow",
+                    "2017___ElMu_C___All___ZWindow", 
+                    "2017___MuMu_C___All___ZWindow", 
+                    "2017___ElEl_C___All___ZWindow", 
+                    "2017___El_C___All___ZWindow", 
+                    "2017___Mu_C___All___ZWindow",
+                    "2017___ElMu_D___All___ZWindow", 
+                    "2017___MuMu_D___All___ZWindow", 
+                    "2017___ElEl_D___All___ZWindow", 
+                    "2017___El_D___All___ZWindow", 
+                    "2017___Mu_D___All___ZWindow",
+                    "2017___ElMu_E___All___ZWindow", 
+                    "2017___MuMu_E___All___ZWindow", 
+                    "2017___ElEl_E___All___ZWindow", 
+                    "2017___El_E___All___ZWindow", 
+                    "2017___Mu_E___All___ZWindow",
+                    "2017___ElMu_F___All___ZWindow", 
+                    "2017___MuMu_F___All___ZWindow", 
+                    "2017___ElEl_F___All___ZWindow", 
+                    "2017___El_F___All___ZWindow", 
+                    "2017___Mu_F___All___ZWindow",
+                    "2018___ElMu_A___All___ZWindow", 
+                    "2018___MuMu_A___All___ZWindow", 
+                    "2018___ElEl_A___All___ZWindow", 
+                    "2018___El_A___All___ZWindow", 
+                    "2018___Mu_A___All___ZWindow",
+                    "2018___ElMu_B___All___ZWindow", 
+                    "2018___MuMu_B___All___ZWindow", 
+                    "2018___ElEl_B___All___ZWindow", 
+                    "2018___El_B___All___ZWindow", 
+                    "2018___Mu_B___All___ZWindow",
+                    "2018___ElMu_C___All___ZWindow", 
+                    "2018___MuMu_C___All___ZWindow", 
+                    "2018___ElEl_C___All___ZWindow", 
+                    "2018___El_C___All___ZWindow", 
+                    "2018___Mu_C___All___ZWindow",
+                    "2018___ElMu_D___All___ZWindow", 
+                    "2018___MuMu_D___All___ZWindow", 
+                    "2018___ElEl_D___All___ZWindow", 
+                    "2018___El_D___All___ZWindow", 
+                    "2018___Mu_D___All___ZWindow"
+                ]
+            }, 
+            "ttbb": {
+                "Color": [100, 192, 232], 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttbb_DL_fr___All___ZWindow", 
+                    "2017___ttbb_SL_fr___All___ZWindow", 
+                    "2017___ttbb_DL_nr___All___ZWindow", 
+                    "2017___ttbb_SL_nr___All___ZWindow", 
+                    "2017___ttbb_DL-GF_fr___All___ZWindow", 
+                    "2017___ttbb_SL-GF_fr___All___ZWindow",
+                    "2017___ttbb_AH___All___ZWindow",
+                    "2018___ttbb_DL_fr___All___ZWindow", 
+                    "2018___ttbb_SL_fr___All___ZWindow", 
+                    "2018___ttbb_DL_nr___All___ZWindow", 
+                    "2018___ttbb_SL_nr___All___ZWindow", 
+                    "2018___ttbb_DL-GF_fr___All___ZWindow", 
+                    "2018___ttbb_SL-GF_fr___All___ZWindow",
+                    "2018___ttbb_AH___All___ZWindow"
+                ]
+            }, 
+            "ttother": {
+                "Color": "#BF2229", 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttother_DL_fr___All___ZWindow",
+                    "2017___ttother_SL_fr___All___ZWindow", 
+                    "2017___ttother_DL_nr___All___ZWindow",
+                    "2017___ttother_SL_nr___All___ZWindow", 
+                    "2017___ttother_DL-GF_fr___All___ZWindow", 
+                    "2017___ttother_SL-GF_fr___All___ZWindow",
+                    "2017___ttother_AH___All___ZWindow",
+                    "2018___ttother_DL_fr___All___ZWindow",
+                    "2018___ttother_SL_fr___All___ZWindow", 
+                    "2018___ttother_DL_nr___All___ZWindow",
+                    "2018___ttother_SL_nr___All___ZWindow", 
+                    "2018___ttother_DL-GF_fr___All___ZWindow", 
+                    "2018___ttother_SL-GF_fr___All___ZWindow",
+                    "2018___ttother_AH___All___ZWindow"
+                ]
+            }, 
+            "QCD": {
+                "Color": 950, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___QCD_HT200___All___ZWindow", 
+                    "2017___QCD_HT300___All___ZWindow", 
+                    "2017___QCD_HT500___All___ZWindow", 
+                    "2017___QCD_HT700___All___ZWindow", 
+                    "2017___QCD_HT1000___All___ZWindow", 
+                    "2017___QCD_HT1500___All___ZWindow", 
+                    "2017___QCD_HT2000___All___ZWindow",
+                    "2018___QCD_HT200___All___ZWindow", 
+                    "2018___QCD_HT300___All___ZWindow", 
+                    "2018___QCD_HT500___All___ZWindow", 
+                    "2018___QCD_HT700___All___ZWindow", 
+                    "2018___QCD_HT1000___All___ZWindow", 
+                    "2018___QCD_HT1500___All___ZWindow", 
+                    "2018___QCD_HT2000___All___ZWindow"
+                ]
+            }, 
+            "singletop": {
+                "Color": [250, 202, 255], 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ST_tW___All___ZWindow", 
+                    "2017___ST_tbarW___All___ZWindow",
+                    "2018___ST_tW___All___ZWindow", 
+                    "2018___ST_tbarW___All___ZWindow"
+                ]
+            }, 
+            "ttultrarare": {
+                "Color": [248, 206, 104], 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttWW___All___ZWindow", 
+                    "2017___ttWH___All___ZWindow", 
+                    "2017___ttWZ___All___ZWindow", 
+                    "2017___ttZZ___All___ZWindow", 
+                    "2017___ttZH___All___ZWindow", 
+                    "2017___ttHH___All___ZWindow", 
+                    "2017___tttW___All___ZWindow",
+                    "2017___tttJ___All___ZWindow",
+                    "2018___ttWW___All___ZWindow", 
+                    "2018___ttWH___All___ZWindow", 
+                    "2018___ttWZ___All___ZWindow", 
+                    "2018___ttZZ___All___ZWindow", 
+                    "2018___ttZH___All___ZWindow", 
+                    "2018___ttHH___All___ZWindow", 
+                    "2018___tttW___All___ZWindow",
+                    "2018___tttJ___All___ZWindow"
+                ]
+            }
+        }
+    }
+}
