@@ -25,7 +25,7 @@
                 "Stack": true
             }
         }, 
-        "nColumns": 1, 
+        "nColumns": 2, 
         "Ratios": {
             "MC/MC": {
                 "Style": "Marker", 
@@ -38,18 +38,20 @@
         "Systematics": [], 
         "Type": "DefaultLegend", 
         "Coordinates": [
-            0.0, 
-            0.1, 
-            0.25, 
-            0.60
+            0.75, 
+            0.5, 
+            1.0, 
+            0.8
         ], 
         "Categories": {
             "ttH": {
                 "Color": "#00A88F", 
                 "Style": "Fill", 
                 "Names": [
-                    "2017___ttH___All___ZWindow",
-                    "2018___ttH___All___ZWindow"
+                    "2017___ttH_SL-bb___All___ZWindow",
+                    "2017___ttH_DL-bb___All___ZWindow",
+                    "2018___ttH_SL-bb___All___ZWindow",
+                    "2018___ttH_DL-bb___All___ZWindow"
                 ]
             }, 
             "tttt": {
@@ -74,8 +76,20 @@
                 "Color": [222, 90, 106], 
                 "Style": "Fill", 
                 "Names": [
-                    "2017___DYJets_DL___All___ZWindow",
-                    "2018___DYJets_DL___All___ZWindow"
+                    "2017___DYJets_DL-HT100___All___ZWindow",
+                    "2017___DYJets_DL-HT200___All___ZWindow",
+                    "2017___DYJets_DL-HT400___All___ZWindow",
+                    "2017___DYJets_DL-HT600___All___ZWindow",
+                    "2017___DYJets_DL-HT800___All___ZWindow",
+                    "2017___DYJets_DL-HT1200___All___ZWindow",
+                    "2017___DYJets_DL-HT2500___All___ZWindow",
+                    "2018___DYJets_DL-HT100___All___ZWindow",
+                    "2018___DYJets_DL-HT200___All___ZWindow",
+                    "2018___DYJets_DL-HT400___All___ZWindow",
+                    "2018___DYJets_DL-HT600___All___ZWindow",
+                    "2018___DYJets_DL-HT800___All___ZWindow",
+                    "2018___DYJets_DL-HT1200___All___ZWindow",
+                    "2018___DYJets_DL-HT2500___All___ZWindow"
                 ]
             },
             "Data": {
@@ -194,10 +208,10 @@
                 "Color": [250, 202, 255], 
                 "Style": "Fill", 
                 "Names": [
-                    "2017___ST_tW___All___ZWindow", 
-                    "2017___ST_tbarW___All___ZWindow",
-                    "2018___ST_tW___All___ZWindow", 
-                    "2018___ST_tbarW___All___ZWindow"
+                    "2017___ST_tW-NoFHad___All___ZWindow", 
+                    "2017___ST_tbarW-NoFHad___All___ZWindow",
+                    "2018___ST_tW-NoFHad___All___ZWindow", 
+                    "2018___ST_tbarW-NoFHad___All___ZWindow"
                 ]
             }, 
             "ttultrarare": {
