@@ -2,6 +2,8 @@ import pdb
 import math
 def write_combine_cards(analysisDirectory, era, channel, variable, categories, template="TTTT_templateV9.txt", counts = dict(), options = dict()):
     lumistr = {"2017": "1.023", "2018": "1.025"}[era] #Uncertainty per year
+    hdampstr = {"2017": "0.93/1.10", "2018": "0.93/1.10"}[era] #Uncertainty per year, derived from inclusive check of channels, btag and jet categories, ttbar subprocesses
+    uestr = {"2017": "0.99/1.01", "2018": "0.99/1.01"}[era] #Uncertainty per year, derived from inclusive check of channels, btag and jet categories, ttbar subprocesses
     outputLines = []
     with open(template, "r") as inFile:
         for line in inFile:
@@ -49,7 +51,9 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
                                  .replace("$CHANNEL", channel)\
                                  .replace("$CATEGORY", category)\
                                  .replace("$VAR", variable)\
-                                 .replace("$LUMI", lumistr)
+                                 .replace("$LUMI", lumistr)\
+                                 .replace("$HDAMP   ", hdampstr)\
+                                 .replace("$UE      ", uestr)
                 for kword in rate.keys():
                     if "$R_" + kword in outputline:
                         outputline = outputline.replace("{:16s}".format("$R_" + kword), "{:16s}".format(rate[kword]))
@@ -114,9 +118,9 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
                 if ("OSDL_RunII_hdamp" in outputline or "OSDL_RunII_ue" in outputline) and "shape" in outputline:
                     disabledSystematics.append("hdamp/ue shape-type")
                     outputline = "# " + outputline
-                if ("OSDL_RunII_hdamp" in outputline or "OSDL_RunII_ue" in outputline) and "lnN" in outputline:
-                    disabledSystematics.append("hdamp/ue asymmetric lnN-type")
-                    outputline = "# " + outputline
+                # if ("OSDL_RunII_hdamp" in outputline or "OSDL_RunII_ue" in outputline) and "lnN" in outputline:
+                #     disabledSystematics.append("hdamp/ue asymmetric lnN-type")
+                #     outputline = "# " + outputline
                 outFile.write(outputline)
             print("Finished writing output for category {}".format(category))
             print("Disabled systematics:", set(disabledSystematics))
