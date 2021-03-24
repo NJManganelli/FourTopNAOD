@@ -1066,7 +1066,7 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 0.01253
+    crossSection: 0.001253
     sumWeights: 199302.8336875437
     sumWeights2: 199803.58607504272
     nEvents: 200000
