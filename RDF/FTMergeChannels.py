@@ -76,6 +76,11 @@ def main(analysisDirectory, era, variable, mergeCats="BTags", variableSet="HTOnl
                     elif mergeCats.lower() == "jets":
                         for mcategory in ["nMediumDeepJetB2", "nMediumDeepJetB3", "nMediumDeepJetB4+"]:
                             merge[mera][msample][mvariable][msyst][mcategory] = []
+                    elif mergeCats.lower() == "btagsjets":
+                        for mcategory in ["Inclusive"]:
+                            merge[mera][msample][mvariable][msyst][mcategory] = []
+                    else:
+                        raise RuntimeError("Unhandled logical path")
 
     mergingName = "FailedToParseMergingName"
     for key in keys:
@@ -90,6 +95,11 @@ def main(analysisDirectory, era, variable, mergeCats="BTags", variableSet="HTOnl
             #this is the category that is UNMERGED: nMedium{tagger}B
             mcat = mcategory.split("_")[-2].replace("BLIND", "")
             mergingName = "MergedChannelsJets"
+        elif mergeCats.lower() == "btagsjets":
+            mcat = "Inclusive"
+            mergingName = "MergedChannelsBTagsJets"
+        else:
+            raise RuntimeError("Unhandled logical path")
 
         merge[mera][msample][mvariable][msyst][mcat].append(key)
 
@@ -114,6 +124,10 @@ def main(analysisDirectory, era, variable, mergeCats="BTags", variableSet="HTOnl
                             mergeName = "___".join([mera, msample, "All", "ZWindow", "MergedChannelsBTags_" + mcat, mvariable, msyst])
                         elif mergeCats.lower() == "jets":
                             mergeName = "___".join([mera, msample, "All", "ZWindow", "MergedChannelsJets_" + mcat, mvariable, msyst])
+                        elif mergeCats.lower() == "btagsjets":
+                            mergeName = "___".join([mera, msample, "All", "ZWindow", "MergedChannelsBTagsJets_" + mcat, mvariable, msyst])
+                        else:
+                            raise RuntimeError("Unhandled logical path")
                         hist = None
                         blind = len([hk for hk in subsubsubsubsubmerge if "blind" in hk.lower()]) > 0
                         for histKey in subsubsubsubsubmerge:
@@ -147,8 +161,8 @@ if __name__ == '__main__':
     parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
                         type=str, choices=['5x5', '5x3', '5x1', '2BnJet4p', 'FullyInclusive', 'BackgroundDominant'], default='5x5',
                         help='Variable set to include in filling templates')
-    parser.add_argument('--merge', dest='merge', action='store', type=str, nargs='?', const="BTags", default="", choices = ["BTags", "Jets"],
-                        help='Produce the $ERA___MergedChannels$MERGE_$VAR.root file in Combine/All subdirectory, where $MERGE = BTags, Jets')
+    parser.add_argument('--merge', dest='merge', action='store', type=str, nargs='?', const="BTags", default="", choices = ["BTags", "Jets", "BTagsJets",],
+                        help='Produce the $ERA___MergedChannels$MERGE_$VAR.root file in Combine/All subdirectory, where $MERGE = BTags, Jets, BTagsJets')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
 
