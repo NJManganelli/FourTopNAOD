@@ -864,7 +864,7 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 0.0007408
+    crossSection: 0.0007565
     sumWeights: 199173.67350704473
     sumWeights2: 199795.59243394042
     nEvents: 200000
@@ -893,7 +893,7 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 0.001572
+    crossSection: 0.001582
     sumWeights: 198923.4823714278
     sumWeights2: 199705.33156414106
     nEvents: 200000
@@ -1007,7 +1007,7 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 0.007882
+    crossSection: 0.0115
     sumWeights: 795283.7527018783
     sumWeights2: 798390.8366812823
     nEvents: 800000
@@ -1037,7 +1037,7 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 0.002974
+    crossSection: 0.003884
     sumWeights: 198618.95447194716
     sumWeights2: 199711.6485396049
     nEvents: 200000
@@ -1066,7 +1066,7 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 0.001253
+    crossSection: 0.001535
     sumWeights: 199302.8336875437
     sumWeights2: 199803.58607504272
     nEvents: 200000
@@ -1124,7 +1124,7 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 0.001572
+    crossSection: 0.001982
     sumWeights: 199270.1540918618
     sumWeights2: 199824.16934695156
     nEvents: 200000
@@ -5652,7 +5652,7 @@
     era: '2018'
     isData: false
     isSignal: false
-    crossSection: 0.007882
+    crossSection: 0.000733
     sumWeights: 199540.72431053393
     sumWeights2: 199698.53796842307
     nEvents: 200000
