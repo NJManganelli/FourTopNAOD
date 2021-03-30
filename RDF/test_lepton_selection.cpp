@@ -16,56 +16,117 @@
 //const and by reference means no copies, no pointer handling, etc.
 using VecF_t = const ROOT::RVec<float>&;
 using VecI_t = const ROOT::RVec<int>&;
-
-ROOT::RVec<int> preselectElectrons(VecF_t Electron_pt, VecF_t Electron_eta, VecF_t Electron_phi,  
-				   VecF_t Electron_ip3d, VecF_t Electron_dz,  VecI_t Electron_charge,
-				   VecI_t Electron_cutBased, int ElectronID, bool invertIsolation = false){
-  ROOT::RVec<int> Electron_premask = Electron_pt > 15 &&
-    (
-     (abs(Electron_eta) < 1.4442 && abs(Electron_ip3d) < 0.05 && abs(Electron_dz) < 0.1) 
-     || 
-     (abs(Electron_eta) > 1.5660 && abs(Electron_eta) < 2.5 && abs(Electron_ip3d) < 0.10 && abs(Electron_dz) < 0.2)
-     );
-  if(invertIsolation){
-    std::cout << "iso inversion not implemented" << std::endl;
+// class myFunctorClass
+// {
+// public:
+//   myFunctorClass (int x) : _x( x ) {}
+//   int operator() (int y) { return _x + y; }
+// private:
+//   int _id;
+//   bool _inviso
+// };
+class preselectElectrons
+{
+public:
+  preselectElectrons(int ElectronID, bool invertIsolation) : _ElectronID(ElectronID), _invertIsolation(invertIsolation) {}
+  ROOT::RVec<int> operator()(VecF_t Electron_pt, VecF_t Electron_eta, VecF_t Electron_phi,  
+			     VecF_t Electron_ip3d, VecF_t Electron_dz,  VecI_t Electron_charge,
+			     VecI_t Electron_cutBased){
+    ROOT::RVec<int> Electron_premask = Electron_pt > 15 &&
+      (
+       (abs(Electron_eta) < 1.4442 && abs(Electron_ip3d) < 0.05 && abs(Electron_dz) < 0.1) 
+       || 
+       (abs(Electron_eta) > 1.5660 && abs(Electron_eta) < 2.5 && abs(Electron_ip3d) < 0.10 && abs(Electron_dz) < 0.2)
+       );
+    if(_invertIsolation){
+      std::cout << "iso inversion not implemented" << std::endl;
+    }
+    else{
+      Electron_premask = Electron_premask && Electron_cutBased >= _ElectronID;
+    }
+    return Electron_premask;
   }
-  else{
-    Electron_premask = Electron_premask && Electron_cutBased >= ElectronID;
+private:
+  int _ElectronID;
+  bool _invertIsolation;
+};
+class preselectMuons
+{
+public:
+  preselectMuons (int MuonID, bool invertIsolation) : _MuonID(MuonID), _invertIsolation(invertIsolation) {}
+  ROOT::RVec<int> operator()(VecF_t Muon_pt, VecF_t Muon_eta, VecF_t Muon_phi, 
+			     VecF_t Muon_ip3d, VecF_t Muon_dz, VecI_t Muon_charge, 
+			     VecI_t Muon_looseId, VecI_t Muon_mediumId, VecI_t Muon_tightId, VecI_t Muon_pfIsoId){
+    ROOT::RVec<int> Muon_premask = Muon_pt > 15 && abs(Muon_eta) < 2.4 && abs(Muon_ip3d) < 0.10 && abs(Muon_dz) < 0.02;
+    if(_MuonID == 2){//loose, match Electrons for this number
+      Muon_premask = Muon_premask && Muon_looseId == true;
+    }
+    else if(_MuonID == 3){
+      Muon_premask = Muon_premask && Muon_mediumId == true;
+    }
+    else if(_MuonID == 4){
+      Muon_premask = Muon_premask && Muon_tightId == true;
+    }
+    if(_invertIsolation){
+      Muon_premask = Muon_premask && Muon_pfIsoId >= 4;
+    }
+    else{
+      Muon_premask = Muon_premask && Muon_pfIsoId < 3;
+    }
+    return Muon_premask;
   }
-  return Electron_premask;
-}
-
-ROOT::RVec<int> preselectMuons(VecF_t Muon_pt, VecF_t Muon_eta, VecF_t Muon_phi, 
-			       VecF_t Muon_ip3d, VecF_t Muon_dz, VecI_t Muon_charge, 
-			       VecI_t Muon_looseId, VecI_t Muon_mediumId, VecI_t Muon_tightId, VecI_t Muon_pfIsoId,
-			       int MuonID, bool invertIsolation = false){
-  ROOT::RVec<int> Muon_premask = Muon_pt > 15 && abs(Muon_eta) < 2.4 && abs(Muon_ip3d) < 0.10 && abs(Muon_dz) < 0.02;
-  if(MuonID == 2){//loose, match Electrons for this number
-    Muon_premask = Muon_premask && Muon_looseId == true;
-  }
-  else if(MuonID == 3){
-    Muon_premask = Muon_premask && Muon_mediumId == true;
-  }
-  else if(MuonID == 4){
-    Muon_premask = Muon_premask && Muon_tightId == true;
-  }
-  if(invertIsolation){
-    Muon_premask = Muon_premask && Muon_pfIsoId >= 4;
-  }
-  else{
-    Muon_premask = Muon_premask && Muon_pfIsoId < 3;
-  }
-  return Muon_premask;
-}
+private:
+  int _MuonID;
+  bool _invertIsolation;
+};
 
 ROOT::RDF::RNode applyTriggerSelection(ROOT::RDF::RNode df, std::string era, std::string triggerChannel, std::string decayChannel, 
 				       bool isData, std::string subera, std::string ElectronID, std::string MuonID, bool verbose=false){
   std::map< std::string, std::vector<int> > leptonIDs;
   std::map< std::string, std::vector<double> > triggers;
+  std::map< std::string, int> triggerBit;
   std::vector<std::string> vetoTriggers;
   bool cutLowMassResonances = false;
+  if(decayChannel == "ElEl" || decayChannel == "MuMu"){
+    cutLowMassResonances = true;
+  }
   if(isData){
     assert (subera == "A" || subera == "B" || subera == "C" || subera == "D" || subera == "E" || subera == "F");
+  }
+  if(era == "2017"){
+    //ElMu
+    triggerBit["HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ"] = 14;
+    triggerBit["HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ"] = 13;
+    //MuMu
+    triggerBit["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ"] = 12;
+    triggerBit["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8"] = 11;
+    //ElEl
+    triggerBit["HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL"] = 9;
+    //Mu
+    triggerBit["HLT_IsoMu27"] = 7;
+    //El
+    triggerBit["HLT_Ele35_WPTight_Gsf"] = 6;
+    //MET
+    triggerBit["HLT_PFMET200_NotCleaned"] = 3;
+    triggerBit["HLT_PFMET200_HBHECleaned"] = 2;
+    triggerBit["HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned"] = 1;
+  }
+  else if(era == "2018"){
+    //ElMu
+    triggerBit["HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ"] = 14; // why the reversal? Maa ika
+    triggerBit["HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ"] = 12;
+    //MuMu
+    triggerBit["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8"] = 11;
+    //ElEl
+    triggerBit["HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL"] = 9;
+    //Mu
+    triggerBit["HLT_IsoMu24"] = 8;
+    //El
+    triggerBit["HLT_Ele32_WPTight_Gsf"] = 4;
+    //MET
+    triggerBit["HLT_PFMET200_NotCleaned"] = 3;
+    triggerBit["HLT_PFMET200_HBHECleaned"] = 2;
+    triggerBit["HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned"] = 1;
   }
   if(decayChannel == "ElMu"){
     if(era == "2017"){
@@ -156,7 +217,6 @@ ROOT::RDF::RNode applyTriggerSelection(ROOT::RDF::RNode df, std::string era, std
     }
   }
   else if (decayChannel == "MuMu"){
-    cutLowMassResonances = true;
     if(era == "2017"){
       if(triggerChannel == "MuMu"){
 	//DONE
@@ -198,6 +258,7 @@ ROOT::RDF::RNode applyTriggerSelection(ROOT::RDF::RNode df, std::string era, std
     else if(era == "2018"){
       if(triggerChannel == "MuMu"){
 	//FIXME
+	vetoTriggers = {"HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ", "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ"}; //Mu has 4th highest trigger precedence
 	triggers["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8"] = {25.0, 15.0}; //ABCD
       }
       else if(triggerChannel == "Mu"){
@@ -225,7 +286,6 @@ ROOT::RDF::RNode applyTriggerSelection(ROOT::RDF::RNode df, std::string era, std
     }
   }
   else if (decayChannel == "ElEl"){
-    cutLowMassResonances = true;
     if(era == "2017"){
       if(triggerChannel == "ElEl"){
 	//DONE
@@ -310,25 +370,26 @@ ROOT::RDF::RNode applyTriggerSelection(ROOT::RDF::RNode df, std::string era, std
   // }
   ROOT::RDF::RNode ret = df;
 
-  std::string ElectronIDEnum;
+  int ElectronIDEnum;
   int MuonIDEnum;
 
-  if(ElectronID == "Veto") ElectronIDEnum = "1";
-  if(ElectronID == "Loose") ElectronIDEnum = "2";
-  if(ElectronID == "Medium") ElectronIDEnum = "3";
-  if(ElectronID == "Tight") ElectronIDEnum = "4";
+  if(ElectronID == "Veto") ElectronIDEnum = 1;
+  if(ElectronID == "Loose") ElectronIDEnum = 2;
+  if(ElectronID == "Medium") ElectronIDEnum = 3;
+  if(ElectronID == "Tight") ElectronIDEnum = 4;
 
   if(MuonID == "Loose") MuonIDEnum = 2;
   if(MuonID == "Medium") MuonIDEnum = 3;
   if(MuonID == "Tight") MuonIDEnum = 4;
 
-  ret = ret.Define("Electron_preselection", preselectElectrons, {"Electron_pt", "Electron_eta", "Electron_phi",
+  preselectElectrons pIsoElectrons(ElectronIDEnum, false);
+  preselectMuons pIsoMuons(MuonIDEnum, false);
+  ret = ret.Define("Electron_preselection", pIsoElectrons, {"Electron_pt", "Electron_eta", "Electron_phi",
 	"Electron_ip3d", "Electron_dz", "Electron_charge",
-	"Electron_cutBased", ElectronIDEnum, "false"});
-  ret = ret.Define("Muon_preselection", preselectMuons, {"Muon_pt", "Muon_eta", "Muon_phi", 
+	"Electron_cutBased"});
+  ret = ret.Define("Muon_preselection", pIsoMuons, {"Muon_pt", "Muon_eta", "Muon_phi", 
 	"Muon_ip3d", "Muon_dz", "Muon_charge", 
-	"Muon_looseId", "Muon_mediumId", "Muon_tightId", "Muon_pfIsoId",
-	MuonIDEnum, false});
+	"Muon_looseId", "Muon_mediumId", "Muon_tightId", "Muon_pfIsoId"});
 
   //filter out tertiary leptons
   ret = ret.Filter([](VecI_t Muon_preselection, VecI_t Electron_preselection){return Sum(Muon_preselection) + Sum(Electron_preselection) == 2;}, 
@@ -346,8 +407,37 @@ ROOT::RDF::RNode applyTriggerSelection(ROOT::RDF::RNode df, std::string era, std
 	return false;
     },
     {"Muon_charge", "Muon_preselection", "Electron_charge", "Electron_preselection"}, "Opposite charge leptons");
-
-
+  // ret = ret.Filter([](VecI_t Muon_pdgId, VecI_t Muon_pdgId, VecI_t Muon_preselection, VecI_t Electron_charge, VecI_t Electron_preselection){
+  //Goal: For events that at least have 2 isolated leptons, then check the valid trigger paths, first vetoing higher tier triggers with a filter,
+  //then only using a Define to store the concurrent trigger path decisions in an int value (-1 vetoed, 0 failed, 1 passed) and the matching lepton selection masks in two additional arrays
+  
+  //for a quick QCD test, just filter on the valid triggers from this path
+  //build the filter expression
+  std::string filter_code = "return";
+  auto v_first = vetoTriggers.begin();
+  auto v_next_to_last = vetoTriggers.empty() ? vetoTriggers.end() : std::prev(vetoTriggers.end());
+  auto v_last = vetoTriggers.end();
+  if(v_first != v_last) filter_code += " (";
+  for(std::vector<std::string>::iterator vt_iter = v_first; vt_iter != v_last; ++vt_iter){
+    filter_code += *vt_iter + " == false";
+    if(vt_iter != v_next_to_last){
+      filter_code += " && ";
+    }
+  }
+  if(v_first != v_last) filter_code += ") &&"; //We had a veto section, do an AND with the passing triggers
+  filter_code += " (";
+  auto first = triggers.begin();
+  auto next_to_last = triggers.empty() ? triggers.end() : std::prev(triggers.end()); // in case s is empty
+  auto last = triggers.end();
+  for(std::map< std::string, std::vector<double> >::iterator th_iter = first; th_iter != last; ++th_iter){
+    filter_code += th_iter->first + " == true";
+    if(th_iter != next_to_last){
+      filter_code += " || ";
+    }
+  }
+  // if(std::strncmp(filter_code, "TH1", 3) == 0);
+  filter_code += ");";
+  std::cout << filter_code << std::endl;
   return ret;
   // ROOT::Detail::RDF::ColumnNames_t flags = {};
 }
