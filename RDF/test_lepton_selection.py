@@ -18,12 +18,12 @@ for era in ["2017", "2018"]:
                 # test = ROOT.applyTriggerSelection(ROOT.RDF.AsRNode(rdf), era, triggerChannel, decayChannel, isData, subera, "Loose", "Loose", False)
 
 rdfQCD1test = ROOT.applyTriggerSelection(ROOT.RDF.AsRNode(rdfQCD1), "2018", "ElMu", "ElMu", False, "", "Loose", "Loose", False)
-# nQCD1 = rdfQCD1.Count()
-# nQCD1Cut = rdfQCD1test.Count()
-# print(nQCD1Cut.GetValue()/nQCD1.GetValue(), nQCD1Cut.GetValue())
+nQCD1 = rdfQCD1.Count()
+nQCD1Cut = rdfQCD1test.Count()
+print(nQCD1Cut.GetValue()/nQCD1.GetValue(), nQCD1Cut.GetValue())
 
 rdfQCD2test = ROOT.applyTriggerSelection(ROOT.RDF.AsRNode(rdfQCD2), "2018", "ElMu", "ElMu", False, "", "Loose", "Loose", False)
-# nQCD2 = rdfQCD2.Count()
-# nQCD2Cut = rdfQCD2test.Count()
-# print(nQCD2Cut.GetValue()/nQCD2.GetValue(), nQCD2Cut.GetValue())
+nQCD2 = rdfQCD2.Count()
+nQCD2Cut = rdfQCD2test.Count()
+print(nQCD2Cut.GetValue()/nQCD2.GetValue(), nQCD2Cut.GetValue())
 rdfQCD2test = ROOT.applyTriggerSelection(ROOT.RDF.AsRNode(rdfQCD2), "2018", "MuMu", "MuMu", False, "", "Loose", "Loose", False)
