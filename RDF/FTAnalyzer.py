@@ -2072,9 +2072,10 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                             .Define("Unity", "return static_cast<int>(1);")\
                             .Histo1D(("{proc}___effectiveXS___diagnostic___XS".format(proc=eraAndProcessName), 
                                       "#sigma;;#sigma", 1, 0, 2), "Unity", "effectiveXS")
-                        diagnosticHistos[eraAndSampleName]["NoChannel"]["LHE_HT-effectiveXS::Histo"] = nodes[eraAndSampleName]["BaseNode"]\
-                            .Histo1D(("{proc}___effectiveXS___diagnostic___LHE_HT".format(proc=eraAndProcessName), 
-                                      "#sigma;;#sigma", 600, 0, 3000), "LHE_HT", "effectiveXS")
+                        if nodes[eraAndSampleName]["BaseNode"].HasColumn("LHE_HT"):
+                            diagnosticHistos[eraAndSampleName]["NoChannel"]["LHE_HT-effectiveXS::Histo"] = nodes[eraAndSampleName]["BaseNode"]\
+                                .Histo1D(("{proc}___effectiveXS___diagnostic___LHE_HT".format(proc=eraAndProcessName), 
+                                          "#sigma;;#sigma", 600, 0, 3000), "LHE_HT", "effectiveXS")
                 if "nFTAGenJet/FTAGenHT" in IDs and IDs["nFTAGenJet/FTAGenHT"]:
                     if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
                         diagnosticNodes[eraAndSampleName]["nLep2nJet7GenHT500-550-nominalXS::Sum"] = nodes[eraAndSampleName]["BaseNode"]\
@@ -5083,9 +5084,9 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     if mk.startswith("nLHEScaleSumw") or mk.startswith("nLHEPdfSumw") or mk.startswith("genEventCount"):
                         metainfo[name][mk] = int(round(metainfo[name][mk]))
                     if mk == "genEventSumw":
-                        if 1 - vals.get("sumWeights")/metainfo[name]["genEventSumw"] > 1e-4:
+                        if 1 - vals.get("sumWeights", 0)/metainfo[name]["genEventSumw"] > 1e-4:
                             print("\n\n\nWARNING: Large weight discrepancy detected! name={} sumWeights={} genEventSumw={}\n\n\n"\
-                                  .format(name, vals.get("sumWeights"), metainfo[name]["genEventSumw"]))
+                                  .format(name, vals.get("sumWeights", 0), metainfo[name]["genEventSumw"]))
                     if mk.startswith("LHEPdfSumw") or mk.startswith("LHEScaleSumw"):
                         metainfo[name][mk] /= metainfo[name]["genEventSumw"]
                 declare_cpp_constants(name, 
@@ -5180,13 +5181,13 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     updatedMeta = True
                     for mk, mv in metainfo[name].items():
                         if mk == "genEventSumw":
-                            print(inputSampleCardYaml[name]["sumWeights"], mv)
+                            print(inputSampleCardYaml[name].get("sumWeights", -1), mv)
                             inputSampleCardYaml[name]["sumWeights"] = mv
                         elif mk == "genEventSumw2":
-                            print(inputSampleCardYaml[name]["sumWeights2"], mv)
+                            print(inputSampleCardYaml[name].get("sumWeights2", -1), mv)
                             inputSampleCardYaml[name]["sumWeights2"] = mv
                         if mk == "genEventCount":
-                            print(inputSampleCardYaml[name]["nEvents"], mv)
+                            print(inputSampleCardYaml[name].get("nEvents", -1), mv)
                             inputSampleCardYaml[name]["nEvents"] = int(mv)
                         inputSampleCardYaml[name][mk] = metainfo[name][mk]
                     if updatedMeta == True:
