@@ -2180,7 +2180,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                      combineOutput=None, combineInput=None, combineCards=False,
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
                      debug=False, nDivisions=105, lumi="N/A", drawYields=False,
-                     zeroingThreshold=0, differentialScale=False, histogramUncertainties=False,
+                     zeroingThreshold=0, differentialScale=False, histogramUncertainties=False, ratioUncertainties=False,
                      removeNegativeBins=True, orderReverse=False,
                      normalizeUncertainties=[],
                      unusedNormalizationUncertainties=['OSDL_RunII_ttmuRNomFDown', 'OSDL_RunII_ttmuRNomFUp', 'OSDL_RunII_ttmuFNomRDown', 'OSDL_RunII_ttmuFNomRUp', 
@@ -2291,6 +2291,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         #The legend, a name understating its importance, determines groupings of MC/data to merge, stack, draw,
         #create ratios of, and draw systematics for. Each 'Supercategory' defined here gets a legend entry,
         legendConfig = legends.get(can_dict.get("Legend", "FallbackToDefault"), defaults["DefaultLegend"])
+        CanCache["ratioTitle"] = legendConfig.get("ratioTitle", "#frac{Data}{Simulation}")
         sysVariationsYaml, sysVariationCardDict = load_yaml_cards(systematicCards) if systematicCards is not None else ([], {})
         systematics = configure_template_systematics(sysVariationsYaml, era, channel, include_nominal=False) if len(sysVariationsYaml) > 0 else []
         # print(" ".join(systematics))
@@ -2631,10 +2632,11 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 handle['Supercategories/statSystematicErrors/ratio'][supercategory].SetLineColorAlpha(ROOT.kGray, 0.5)
                 if "tttt" in supercategory.lower() or "signal" in supercategory.lower(): continue
                 if pn == 0:
-                    CanCache["subplots/supercategories"][0]["Legend"].AddEntry(handle['Supercategories/statErrors'][supercategory], "stat err", "F")
-                    CanCache["subplots/supercategories"][0]["Legend1"].AddEntry(handle['Supercategories/statErrors'][supercategory], "stat err", "F")
-                    CanCache["subplots/supercategories"][0]["Legend"].AddEntry(handle['Supercategories/statSystematicErrors'][supercategory], "stat+syst err", "F")
-                    CanCache["subplots/supercategories"][0]["Legend2"].AddEntry(handle['Supercategories/statSystematicErrors'][supercategory], "stat+syst err", "F")
+                    if ratioUncertainties:
+                        CanCache["subplots/supercategories"][0]["Legend"].AddEntry(handle['Supercategories/statErrors'][supercategory], "stat err", "F")
+                        CanCache["subplots/supercategories"][0]["Legend1"].AddEntry(handle['Supercategories/statErrors'][supercategory], "stat err", "F")
+                        CanCache["subplots/supercategories"][0]["Legend"].AddEntry(handle['Supercategories/statSystematicErrors'][supercategory], "stat+syst err", "F")
+                        CanCache["subplots/supercategories"][0]["Legend2"].AddEntry(handle['Supercategories/statSystematicErrors'][supercategory], "stat+syst err", "F")
                     if histogramUncertainties:
                         CanCache["subplots/supercategories"][0]["Legend"].AddEntry(handle['Supercategories/systematicErrors'][supercategory], "syst err", "F")
                         CanCache["subplots/supercategories"][0]["Legend2"].AddEntry(handle['Supercategories/systematicErrors'][supercategory], "syst err", "F")
@@ -2829,21 +2831,22 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].GetXaxis().ChangeLabel(bin, -1, 0.08, -1, -1, -1, "")
                     #Draw ratio graph errors...
                     redraw = False
-                    if den in CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'].keys():
-                        scGraph = CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'][den]
-                        if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
-                            scGraph.Draw("2") #2 does fill rectangle, 5 adds the line around it
-                            redraw = True
-                    if den in CanCache["subplots/supercategories"][pn]['Supercategories/systematicErrors/ratio'].keys():
-                        scGraph = CanCache["subplots/supercategories"][pn]['Supercategories/systematicErrors/ratio'][den]
-                        if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
-                            scGraph.Draw("2")
-                            redraw = True
-                    # if den in CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'].keys():
-                    #     scGraph = CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'][den]
-                    #     if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
-                    #         scGraph.Draw("2")
-                    #         redraw = True
+                    if ratioUncertainties:
+                        if den in CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'].keys():
+                            scGraph = CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'][den]
+                            if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
+                                scGraph.Draw("2") #2 does fill rectangle, 5 adds the line around it
+                                redraw = True
+                        if den in CanCache["subplots/supercategories"][pn]['Supercategories/systematicErrors/ratio'].keys():
+                            scGraph = CanCache["subplots/supercategories"][pn]['Supercategories/systematicErrors/ratio'][den]
+                            if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
+                                scGraph.Draw("2")
+                                redraw = True
+                        # if den in CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'].keys():
+                        #     scGraph = CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'][den]
+                        #     if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
+                        #         scGraph.Draw("2")
+                        #         redraw = True
                     if redraw:
                         CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].Draw(ratio_draw_command + "SAME")
                         
@@ -2917,7 +2920,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["canvas_lower_yaxis"].SetTextSize(35)
         CanCache["canvas_lower_yaxis"].SetTextAlign(33)
         CanCache["canvas_lower_yaxis"].SetTextAngle(90)
-        CanCache["canvas_lower_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 0+1.0*CanCache["canvas/marginB"], str("#frac{Data}{Simulation}"))
+        CanCache["canvas_lower_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 0+1.0*CanCache["canvas/marginB"], str(CanCache["ratioTitle"]))
         CanCache["canvas_lower_yaxis"].Draw()        
 
         CanCache["canvas_xaxis"] = ROOT.TLatex()
@@ -3285,7 +3288,7 @@ if __name__ == '__main__':
                         help='maximum relative uncertainty (sqrt(N)/N) per bin used as the criteria for merging, should be on unweighted histograms')
     parser.add_argument('-c', '--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 
                                                                                                               'ElEl_HighMET', 'MuMu_ElMu','MuMu_ElMu_ElEl', 
-                                                                                                              'All', 'Merged'],
+                                                                                                              'All', 'Merged', 'DL', 'SL', 'AH'],
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('--systematics_cards', dest='systematics_cards', action='store', nargs='*', type=str,
                         help='path and name of the systematics card(s) to be used')
@@ -3324,8 +3327,10 @@ if __name__ == '__main__':
                         help='Threshold for Entries in grouped histograms, below which the contents will be reset. To disable, set equal or less than 0')
     parser.add_argument('--differentialScale', dest='differentialScale', action='store_true',
                         help='For variable width binning, set the bin errors and contents equal to the average over the bin width. Not compatible with --combineInput option')
-    parser.add_argument('--histogramUncertainties', dest='histogramUncertainties', action='store_true',
-                        help='For drawing the MC stat + systematic uncertainties on the main histogram plot (always on for ratio plot)')
+    parser.add_argument('--noHistogramUncertainties', dest='histogramUncertainties', action='store_false',
+                        help='For drawing the MC stat + systematic uncertainties on the main histogram plot')
+    parser.add_argument('--noRatioUncertainties', dest='ratioUncertainties', action='store_false',
+                        help='For drawing the MC stat + systematic uncertainties on the ratio plot')
     parser.add_argument('--orderReverse', dest='orderReverse', action='store_true',
                         help='For reversing the order of samples in the THStacks')
     parser.add_argument('--forceIntegerBinning', dest='forceBinning', action='store', type=int,
@@ -3373,6 +3378,7 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
     plotCard = plotCardName.replace(".json", "")
     legendCardName = legendConfig.split("/")[-1]
     legendcard = legendCardName.replace(".json", "")
+    nominalPostfix = "nom"
 
     if os.path.isdir(analysisDir):
         jsonDir = "$ADIR/jsons".replace("$ADIR", analysisDir).replace("//", "/")
@@ -3381,6 +3387,7 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
             histogramDir = "$ADIR/Histograms/All".replace("$ADIR", analysisDir).replace("//", "/")
         elif stage == 'plot-diagnostics':
             histogramDir = "$ADIR/Diagnostics/NoChannel".replace("$ADIR", analysisDir).replace("//", "/")
+            nominalPostfix = None #Get rid of ___nom from expectedBaseName
         elif stage == 'prepare-combine':
             histogramDir = "$ADIR/Combine/All".replace("$ADIR", analysisDir).replace("//", "/")
         else:
@@ -3459,10 +3466,10 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                                        Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, drawSystematic=args.drawSystematic,
                                        analysisDirectory=analysisDir, tag=tag, plotCard=plotCard, macroOutput=macroOutput, pngOutput=pngOutput,
                                        pdfOutput=pdfOutput, combineOutput=combineOut, combineInput=combineInput, combineCards=combineCards,
-                                       lumi=lumi, useCanvasMax=useCanvasMax,
+                                       nominalPostfix=nominalPostfix, separator="___", lumi=lumi, useCanvasMax=useCanvasMax,
                                        skipSystematics=skipSystematics, verbose=verb,
                                        zeroingThreshold=zeroingThreshold, differentialScale=differentialScale, histogramUncertainties=args.histogramUncertainties,
-                                       orderReverse=args.orderReverse
+                                       ratioUncertainties=args.ratioUncertainties, orderReverse=args.orderReverse
         );
     else:
         raise RuntimeError("The loading of the plot or legend cards failed. They are of type {} and {}, respectively".format(type(loadedPlotConfig),type(loadedLegendConfig)))
