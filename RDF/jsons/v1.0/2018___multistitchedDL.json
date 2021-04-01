@@ -1,0 +1,128 @@
+ {   
+     "DefaultLegend": {
+	"Header": "#sqrt{{s}} = 13 TeV, L_{{int}} = None",
+	"HeaderPosition": 0.25,
+        "Supercategories": {
+            "tt_DL-rcomponents": {
+                "Draw": "HIST", 
+                "Names": [
+                    "ttbb_DL_FR_r",
+		    "ttbb_DL_UR_r",
+		    "ttother_DL_FR_r",
+		    "ttother_DL_UR_r"
+                ], 
+                "Stack": true
+            },
+            "tt_DL-rescaled": {
+                "Draw": "PE1", 
+                "Names": [
+		    "tt_DL-rescaled"
+                ], 
+                "Stack": false
+            },
+            "tt_DL-stitched": {
+                "Draw": "PE1", 
+                "Names": [
+		    "tt_DL-stitched"
+                ], 
+                "Stack": false
+            },
+            "tt_DL-unstitched": {
+                "Draw": "PE1", 
+                "Names": [
+		    "tt_DL"
+                ], 
+                "Stack": false
+            }
+        }, 
+        "nColumns": 1, 
+        "Ratios": {
+            "Rescaled/Stitched": {
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+		"Draw": "PXE1",
+                "Denominator": "tt_DL-stitched", 
+                "Numerator": "tt_DL-rescaled"
+            },
+            "Unstitched/Stitched": {
+                "Style": "Marker", 
+		"MarkerStyle": 20,
+		"Draw": "PXE1",
+                "Denominator": "tt_DL-stitched", 
+                "Numerator": "tt_DL-unstitched"
+            }
+        }, 
+        "Systematics": [], 
+        "OLDY-nColumns": 3, 
+        "Type": "DefaultLegend", 
+        "Coordinates": [
+            0.80, 
+            0.35, 
+            0.98, 
+            0.60
+        ], 
+        "Categories": { 
+            "ttbb_DL_FR_r": {
+                "Color": [100, 192, 232], 
+                "Style": "Fill", 
+                "Names": [
+                    "2018___ttbb_DL-GF_fr___effectiveXS",
+		    "2018___ttbb_DL_fr___effectiveXS"
+                ]
+            }, 
+            "ttbb_DL_UR_r": {
+                "Color": [155, 152, 204], 
+                "Style": "Fill", 
+                "Names": [
+                    "2018___ttbb_DL_nr___effectiveXS"
+                ]
+            }, 
+            "ttother_DL_FR_r": {
+                "Color": "#BF2229", 
+                "Style": "Fill", 
+                "Names": [
+                    "2018___ttother_DL-GF_fr___effectiveXS",
+		    "2018___ttother_DL_fr___effectiveXS"
+                ]
+            }, 
+            "ttother_DL_UR_r": {
+                "Color": "#00A88F", 
+                "Style": "Fill", 
+                "Names": [
+                    "2018___ttother_DL_nr___effectiveXS"
+                ]
+            },
+            "tt_DL-rescaled": {
+                "Color": [100, 192, 232], 
+                "Style": "Marker", 
+                "Names": [
+                    "2018___ttbb_DL-GF_fr___effectiveXS",
+		    "2018___ttbb_DL_fr___effectiveXS",
+                    "2018___ttbb_DL_nr___effectiveXS",
+                    "2018___ttother_DL-GF_fr___effectiveXS",
+		    "2018___ttother_DL_fr___effectiveXS",
+                    "2018___ttother_DL_nr___effectiveXS"
+                ]
+            },
+            "tt_DL-stitched": {
+                "Color": 416, 
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+                "Names": [
+                    "2018___ttbb_DL-GF_fr___nominalXS",
+                    "2018___ttbb_DL_nr___nominalXS",
+                    "2018___ttother_DL-GF_fr___nominalXS",
+                    "2018___ttother_DL_nr___nominalXS"
+                ]
+            }, 
+            "tt_DL": {
+                "Color": 1, 
+                "Style": "Marker", 
+		"MarkerStyle": 23,
+                "Names": [
+                    "2018___tt_DL___nominalXS"
+                ]
+            }
+        }
+    }
+}
