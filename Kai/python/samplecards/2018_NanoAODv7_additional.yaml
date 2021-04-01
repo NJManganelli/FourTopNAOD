@@ -1,0 +1,100 @@
+!!omap
+- WJets_SL:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 61526.7
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+- WJets_SL-HT100:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 1627.45
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/WJetsToLNu_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+- WJets_SL-HT200:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 435.237
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+- WJets_SL-HT400:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 59.181
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+- WJets_SL-HT600:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 16.3296
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+- WJets_SL-HT800:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 8.0005
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+- WJets_SL-HT1200:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 2.1419
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+- WJets_SL-HT2500:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 0.1634
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+- WW:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 118.7
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/WW_TuneCP5_PSweights_13TeV-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+- WZ:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 47.13
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/WZ_TuneCP5_PSweights_13TeV-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+- ZZ:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 16.523
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ZZ_TuneCP5_13TeV-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
