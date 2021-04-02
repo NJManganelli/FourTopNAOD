@@ -529,7 +529,7 @@
     source:
       NANOv7: dbs:/WW_TuneCP5_13TeV-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/WW_TuneCP5_13TeV-pythia8/nmangane-NoveCampaign_addition-31deb7c86682c648bf5094175e82e051/USER
-        instance=prod/phys03instance=prod/phys03
+        instance=prod/phys03
     run: 6.0
     nEvents: 7765828
     genEventCount: 7765828
