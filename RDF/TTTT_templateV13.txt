@@ -14,7 +14,7 @@ process                                          ttnobb          ttbb           
 process                                          1               2               3               4               5               6               7               0
 rate                                             $R_TTNOBB       $R_TTBB         $R_ST           $R_TTH          $R_TTV          $R_TTRARE       $R_EWK          $R_TTTT
 --------------------------------------------------------------------------------
-OSDL_RunII_EventActivityNorm             lnN     1.04            1.04            -               1.04            1.04            1.04            -               -
+# OSDL_RunII_EventActivityNorm             lnN     1.04            1.04            -               1.04            1.04            1.04            -               -
 OSDL_$ERA_leptonSFEl                     lnN     1.03            1.03            1.03            1.03            1.03            1.03            1.03            1.03
 OSDL_$ERA_leptonSFMu                     lnN     1.03            1.03            1.03            1.03            1.03            1.03            1.03            1.03
 OSDL_$ERA_lumi                           lnN     $LUMI           $LUMI           $LUMI           $LUMI           $LUMI           $LUMI           $LUMI           $LUMI
