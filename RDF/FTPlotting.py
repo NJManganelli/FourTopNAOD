@@ -3148,7 +3148,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         if combineCards:
             with open(os.path.join(analysisDir, "Combine", "Counts_"+era+"_"+channel+"_"+combineInput+".json"), "w") as countfile: 
                 countfile.write(json.dumps(combCounts, indent=4))
-            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV12.txt", counts=combCounts)
+            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV13.txt", counts=combCounts)
             print("Wrote combine cards")
         # cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
         # # print(cmd)
