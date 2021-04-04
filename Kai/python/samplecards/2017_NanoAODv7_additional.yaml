@@ -1,6 +1,6 @@
 !!omap
 - WJets_SL:
-    era: '2018'
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 61526.7
@@ -65,7 +65,7 @@
     nEventsPositive: 44607324
     nEventsNegative: 19876
 - WJets_SL-HT100:
-    era: '2018'
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 1627.45
@@ -130,7 +130,7 @@
     nEventsPositive: 35833758
     nEventsNegative: 29135
 - WJets_SL-HT200:
-    era: '2018'
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 435.237
@@ -195,7 +195,7 @@
     nEventsPositive: 21221364
     nEventsNegative: 29153
 - WJets_SL-HT400:
-    era: '2018'
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 59.181
@@ -260,7 +260,7 @@
     nEventsPositive: 14281694
     nEventsNegative: 31580
 - WJets_SL-HT600:
-    era: '2018'
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 16.3296
@@ -325,7 +325,7 @@
     nEventsPositive: 21645698
     nEventsNegative: 63389
 - WJets_SL-HT800:
-    era: '2018'
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 8.0005
@@ -390,7 +390,7 @@
     nEventsPositive: 20352859
     nEventsNegative: 79869
 - WJets_SL-HT1200:
-    era: '2018'
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 2.1419
@@ -455,7 +455,7 @@
     nEventsPositive: 20125258
     nEventsNegative: 133366
 - WJets_SL-HT2500:
-    era: '2018'
+    era: '2017'
     isData: false
     isSignal: false
     crossSection: 0.1634
