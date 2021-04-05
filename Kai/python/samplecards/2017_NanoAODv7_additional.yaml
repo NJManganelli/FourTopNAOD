@@ -10,6 +10,9 @@
       NANOv7: dbs:/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8_ext1-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-31deb7c86682c648bf5094175e82e051/USER
         instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL/MuMu/*Skim.root
     run: 31.0
     nEvents: 44627200
     genEventCount: 44627200
@@ -75,6 +78,9 @@
       NANOv7: dbs:/WJetsToLNu_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/WJetsToLNu_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-31deb7c86682c648bf5094175e82e051/USER
         instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT100/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT100/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT100/MuMu/*Skim.root
     run: 31.0
     nEvents: 35862893
     genEventCount: 35862893
@@ -140,6 +146,9 @@
       NANOv7: dbs:/WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-31deb7c86682c648bf5094175e82e051/USER
         instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT200/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT200/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT200/MuMu/*Skim.root
     run: 19.0
     nEvents: 21250517
     genEventCount: 21250517
@@ -205,6 +214,9 @@
       NANOv7: dbs:/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-31deb7c86682c648bf5094175e82e051/USER
         instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT400/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT400/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT400/MuMu/*Skim.root
     run: 16.0
     nEvents: 14313274
     genEventCount: 14313274
@@ -270,6 +282,9 @@
       NANOv7: dbs:/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-31deb7c86682c648bf5094175e82e051/USER
         instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT600/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT600/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT600/MuMu/*Skim.root
     run: 32.0
     nEvents: 21709087
     genEventCount: 21709087
@@ -335,6 +350,9 @@
       NANOv7: dbs:/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-31deb7c86682c648bf5094175e82e051/USER
         instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT800/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT800/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT800/MuMu/*Skim.root
     run: 26.0
     nEvents: 20432728
     genEventCount: 20432728
@@ -400,6 +418,9 @@
       NANOv7: dbs:/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-31deb7c86682c648bf5094175e82e051/USER
         instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT1200/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT1200/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT1200/MuMu/*Skim.root
     run: 32.0
     nEvents: 20258624
     genEventCount: 20258624
@@ -465,6 +486,9 @@
       NANOv7: dbs:/WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-31deb7c86682c648bf5094175e82e051/USER
         instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT2500/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT2500/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT2500/MuMu/*Skim.root
     run: 36.0
     nEvents: 21495421
     genEventCount: 21495421
@@ -530,6 +554,9 @@
       NANOv7: dbs:/WW_TuneCP5_13TeV-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/WW_TuneCP5_13TeV-pythia8/nmangane-NoveCampaign_addition-31deb7c86682c648bf5094175e82e051/USER
         instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WW/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WW/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WW/MuMu/*Skim.root
     run: 6.0
     nEvents: 7765828
     genEventCount: 7765828
@@ -595,6 +622,9 @@
       NANOv7: dbs:/WZ_TuneCP5_13TeV-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/WZ_TuneCP5_13TeV-pythia8/nmangane-NoveCampaign_addition-31deb7c86682c648bf5094175e82e051/USER
         instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WZ/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WZ/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WZ/MuMu/*Skim.root
     run: 4.0
     nEvents: 3928630
     genEventCount: 3928630
@@ -660,6 +690,9 @@
       NANOv7: dbs:/ZZ_TuneCP5_13TeV-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/ZZ_TuneCP5_13TeV-pythia8/nmangane-NoveCampaign_addition-31deb7c86682c648bf5094175e82e051/USER
         instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/ZZ/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/ZZ/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/ZZ/MuMu/*Skim.root
     run: 5.0
     nEvents: 1949768
     genEventCount: 1949768
@@ -725,6 +758,9 @@
       NANOv7: dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17NanoAODv7-PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/NANOAODSIM
       NANOv7_CorrNov: dbs:/TTTT_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/nmangane-NoveCampaign_addition-31deb7c86682c648bf5094175e82e051/USER
         instance=prod/phys03
+      NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tttt_badNPartonInBorn/ElEl/*Skim.root
+      NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tttt_badNPartonInBorn/ElMu/*Skim.root
+      NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tttt_badNPartonInBorn/MuMu/*Skim.root
     run: 21.0
     nEvents: 2273928
     genEventCount: 2273928
