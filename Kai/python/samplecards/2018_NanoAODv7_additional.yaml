@@ -8,7 +8,9 @@
     - All
     source:
       NANOv7: dbs:/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-      NANOv7_CorrNov: dbs:/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+      NANOv7_CorrNovVersion0: dbs:/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+        instance=prod/phys03
+      NANOv7_CorrNov: dbs:/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition_v2-b007c9995322e232a5f950905968126e/USER
         instance=prod/phys03
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL/ElMu/*Skim.root
@@ -76,7 +78,9 @@
     - All
     source:
       NANOv7: dbs:/WJetsToLNu_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+      NANOv7_CorrNovVersion0: dbs:/WJetsToLNu_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+        instance=prod/phys03
+      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition_v2-b007c9995322e232a5f950905968126e/USER
         instance=prod/phys03
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT100/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT100/ElMu/*Skim.root
@@ -144,7 +148,9 @@
     - All
     source:
       NANOv7: dbs:/WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+      NANOv7_CorrNovVersion0: dbs:/WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+        instance=prod/phys03
+      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition_v2-b007c9995322e232a5f950905968126e/USER
         instance=prod/phys03
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT200/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT200/ElMu/*Skim.root
@@ -212,7 +218,9 @@
     - All
     source:
       NANOv7: dbs:/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+      NANOv7_CorrNovVersion0: dbs:/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+        instance=prod/phys03
+      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition_v2-b007c9995322e232a5f950905968126e/USER
         instance=prod/phys03
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT400/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT400/ElMu/*Skim.root
@@ -280,7 +288,9 @@
     - All
     source:
       NANOv7: dbs:/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+      NANOv7_CorrNovVersion0: dbs:/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+        instance=prod/phys03
+      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition_v2-b007c9995322e232a5f950905968126e/USER
         instance=prod/phys03
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT600/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT600/ElMu/*Skim.root
@@ -348,7 +358,9 @@
     - All
     source:
       NANOv7: dbs:/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+      NANOv7_CorrNovVersion0: dbs:/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+        instance=prod/phys03
+      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition_v2-b007c9995322e232a5f950905968126e/USER
         instance=prod/phys03
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT800/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT800/ElMu/*Skim.root
@@ -416,7 +428,9 @@
     - All
     source:
       NANOv7: dbs:/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+      NANOv7_CorrNovVersion0: dbs:/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+        instance=prod/phys03
+      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition_v2-b007c9995322e232a5f950905968126e/USER
         instance=prod/phys03
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT1200/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT1200/ElMu/*Skim.root
@@ -484,7 +498,9 @@
     - All
     source:
       NANOv7: dbs:/WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+      NANOv7_CorrNovVersion0: dbs:/WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+        instance=prod/phys03
+      NANOv7_CorrNov: dbs:/WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/nmangane-NoveCampaign_addition_v2-b007c9995322e232a5f950905968126e/USER
         instance=prod/phys03
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT2500/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WJets_SL-HT2500/ElMu/*Skim.root
@@ -552,7 +568,9 @@
     - All
     source:
       NANOv7: dbs:/WW_TuneCP5_PSweights_13TeV-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-      NANOv7_CorrNov: dbs:/WW_TuneCP5_PSweights_13TeV-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+      NANOv7_CorrNovVersion0: dbs:/WW_TuneCP5_PSweights_13TeV-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+        instance=prod/phys03
+      NANOv7_CorrNov: dbs:/WW_TuneCP5_PSweights_13TeV-pythia8/nmangane-NoveCampaign_addition_v2-b007c9995322e232a5f950905968126e/USER
         instance=prod/phys03
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WW/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WW/ElMu/*Skim.root
@@ -620,7 +638,9 @@
     - All
     source:
       NANOv7: dbs:/WZ_TuneCP5_PSweights_13TeV-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-      NANOv7_CorrNov: dbs:/WZ_TuneCP5_PSweights_13TeV-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+      NANOv7_CorrNovVersion0: dbs:/WZ_TuneCP5_PSweights_13TeV-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+        instance=prod/phys03
+      NANOv7_CorrNov: dbs:/WZ_TuneCP5_PSweights_13TeV-pythia8/nmangane-NoveCampaign_addition_v2-b007c9995322e232a5f950905968126e/USER
         instance=prod/phys03
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WZ/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/WZ/ElMu/*Skim.root
@@ -688,7 +708,9 @@
     - All
     source:
       NANOv7: dbs:/ZZ_TuneCP5_13TeV-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-      NANOv7_CorrNov: dbs:/ZZ_TuneCP5_13TeV-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+      NANOv7_CorrNovVersion0: dbs:/ZZ_TuneCP5_13TeV-pythia8/nmangane-NoveCampaign_addition-b007c9995322e232a5f950905968126e/USER
+        instance=prod/phys03
+      NANOv7_CorrNov: dbs:/ZZ_TuneCP5_13TeV-pythia8/nmangane-NoveCampaign_addition_v2-b007c9995322e232a5f950905968126e/USER
         instance=prod/phys03
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/ZZ/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2018/ZZ/ElMu/*Skim.root
