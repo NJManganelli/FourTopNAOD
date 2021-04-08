@@ -1339,10 +1339,10 @@ def defineWeights(name, input_df_or_nodes, era, splitProcess=None, isData=False,
                         print("Top pt reweighting function applied to eraAndSample {}: {} = {}".format(eraAndSampleName, defName, defFuncModulated))
                 else:
                     defFuncModulated = defFuncModulated.replace("pwgt_top_pT_data_nlo", "1.0").replace("pwgt_top_pT_nnlo_nlo", "1.0")
-                if disableNjetMultiplicityCorrection or eraAndSampleName.split("___")[-1] in ["DYJets_DL", "DYJets_DL-HT100", "DYJets_DL-HT200", "DYJets_DL-HT400", 
-                                                                                              "DYJets_DL-HT600", "DYJets_DL-HT800", "DYJets_DL-HT1200", "DYJets_DL-HT2500", 
-                                                                                              "ST_s-channel", "ST_tW", "ST_tW-NoFHad", "ST_t_t-channel", 
-                                                                                              "ST_tbarW", "ST_tbarW-NoFHad", "ST_tbar_t-channel", "tttt"]:
+                #Careful... here, eraAndSampleName is actually eraAndProcessName? 
+                if disableNjetMultiplicityCorrection or ("ttother" not in eraAndSampleName.lower() and 
+                                                         "ttbb" not in eraAndSampleName.lower() and 
+                                                         "ttnobb" not in eraAndSampleName.lower()):
                     if defName.startswith("pwgt_ttbar_njet_multiplicity"):
                         defFuncModulated = "return 1.0;"
                         if verbose:
@@ -4928,9 +4928,11 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 else:
                     btaggingProcessNames.push_back(name)
     
-        ROOT.gInterpreter.Declare("std::vector<std::string> btagging_systematic_names;")
+        if not hasattr(ROOT, "btagging_systematic_names"):
+            ROOT.gInterpreter.Declare("std::vector<std::string> btagging_systematic_names;")
         btaggingSystematicNames = getattr(ROOT, "btagging_systematic_names")
-        ROOT.gInterpreter.Declare("std::vector<std::string> btag_systematic_scale_postfix;")
+        if not hasattr(ROOT, "btag_systematic_scale_postfix"):
+            ROOT.gInterpreter.Declare("std::vector<std::string> btag_systematic_scale_postfix;")
         btaggingSystematicScalePostfix = getattr(ROOT, "btag_systematic_scale_postfix")
         sysVariationsForBtagging = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"] or "ALL" in systematicSet])
         # for sysVar, sysDict in sysVariationsForBtagging.items():
