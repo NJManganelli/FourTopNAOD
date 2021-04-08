@@ -68,6 +68,8 @@ def prefetchFile(fname, longTermCache=False, verbose=True):
         return fname, False
 
 def getResults(node):
+    if isinstance(node, int):
+        return node
     return node.GetValue()
 class dummyResult:
     def __init__(self):
@@ -166,25 +168,35 @@ tchains = {}
 tcmeta = {}
 rdf_bases = {}
 rdf_finals = {}
+count_bases = {}
+count_finals = {}
 booktriggers = {}
 handles = []
 results = []
+counts_base = []
+counts_final = []
+percent_pass = []
 foNameDict = {}
 print("Processing {} files per batch".format(args.simultaneous))
 for x in range(0, len(fileList), args.simultaneous):
     print("")
-    for fnumber, fn in enumerate(fileList[x:min(x + args.simultaneous, len(fileList))]):
-        fnumber += x
+    it_begin = x
+    it_end = min(x + args.simultaneous, len(fileList))
+    for fnumber, fn in enumerate(fileList[it_begin:it_end]):
+        fnumber += it_begin
         if fn not in foNameDict.keys(): 
             foNameDict[fn] = {}
         foNameDict[fn]["final"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
         foNameDict[fn]["temp"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", "_temp" + ".root"))
         #Skip files that are finished unless overwrite is requested
         if os.path.isfile(foNameDict[fn]["final"]) and not args.overwrite:
+            print("Final file already present, skipping {}".format(foNameDict[fn]["final"]))
             #Put a dummy result in the list to keep array indexing consistent
             if args.write:
                 handles.append(dummyResult())
             foNameDict[fn]["source"] = "Done"
+            count_bases[fnumber] = 0
+            count_finals[fnumber] = 0
             continue
         foNameDict[fn]["source"], requiresDeletion = prefetchFile(fn, longTermCache=args.longTermCache, verbose=True) if (args.prefetch or args.longTermCache) else (fn, False)
         print("temp output {}: {}".format(fnumber, foNameDict[fn]["temp"]))
@@ -194,11 +206,9 @@ for x in range(0, len(fileList), args.simultaneous):
         # tcmeta[fn].Add(str(foNameDict[fn]["source"]))
         rdfEntries = tchains[fn].GetEntries()
         rdf_bases[fn] = ROOT.ROOT.RDataFrame(tchains[fn])
+        count_bases[fnumber] = rdf_bases[fn].Count()
         booktriggers[fn] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(rdf_bases[fn]), 
                                                2000, int(rdfEntries))
-        # if checkMeta:
-        #     tcmeta.Add(str(vfe))
-        # rdf = ROOT.ROOT.RDataFrame("Events", fn)
         rdfFinal = rdf_bases[fn] #Placeholder
         if args.defines is not None:
             for define in args.defines:
@@ -219,17 +229,22 @@ for x in range(0, len(fileList), args.simultaneous):
                     defn = cut[cut.index("=")+1:]
                 rdfFinal = rdfFinal.Filter(defn, name)
         rdf_finals[fn] = rdfFinal
+        count_finals[fnumber] = rdf_finals[fn].Count()
         columnList = [str(c) for c in rdf_finals[fn].GetColumnNames() if str(c) in args.keep] if args.keep is not None else None
         if args.write:
             snaphandle = bookSnapshot(rdf_finals[fn], foNameDict[fn]["temp"], columnList, lazy=True, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=9, splitLevel=99, debug=False)
             # booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(), 
             #                                   2000, int(metainfo[name]["totalEvents"]))
             handles.append(snaphandle)
-    print("Writing results for files {} through {}".format(x, min(x + args.simultaneous, len(fileList))-1))
-    results += list(map(getResults, handles[x:min(x + args.simultaneous, len(fileList))]))
-    print("\nWriting meta information to files.")
-    for fnumber, fn in enumerate(fileList[x:min(x + args.simultaneous, len(fileList))]):
-        if os.path.isfile(foNameDict[fn]["final"]) and not args.overwrite:
+    print("Writing results for files {} through {}".format(it_begin, it_end-1))
+    results += list(map(getResults, handles[it_begin:it_end]))
+    counts_base += list(map(getResults, [count_bases[it] for it in range(it_begin, it_end)]))
+    counts_final += list(map(getResults, [count_finals[it] for it in range(it_begin, it_end)]))
+    percent_pass += [100 * counts_final[xx]/counts_base[xx] if (isinstance(counts_base[xx], int) and counts_base[xx] > 0) else -1 for xx in 
+                    range(it_begin, it_end)]
+    for fnumber, fn in enumerate(fileList[it_begin:it_end]):
+        fnumber += it_begin
+        if os.path.isfile(foNameDict[fn]["final"]) and not args.overwrite:            
             continue
         if args.write:
             #Handle the rest of the trees
@@ -237,6 +252,10 @@ for x in range(0, len(fileList), args.simultaneous):
             treeNames = [str(ll.GetName()) for ll in fi.GetListOfKeys() if ll.GetClassName() in ['TTree']]
             # print("TTrees: ", treeNames)
             fo = ROOT.TFile.Open(foNameDict[fn]["temp"], "update")
+            print("\nWriting meta information to file {} [{} events passed]"\
+                  .format(foNameDict[fn]["temp"], 
+                          "{:.3f}%".format(percent_pass[fnumber]) if percent_pass[fnumber] > -1 else "Unknown")
+            )
             fo.cd()
             for treeName in treeNames:
                 if treeName != "Events": #Handle the events tree using RDataFrame
@@ -253,7 +272,8 @@ for x in range(0, len(fileList), args.simultaneous):
                 print("Rename of file {} to {} failed, continuing".format(foNameDict[fn]["temp"], foNameDict[fn]["final"]))
     #Do NOT release foNameDict entries, they are required for final meta info insertion
     # rdf_finals = {}; rdf_bases = {}; tchains = {} ; tcmeta = {} #Release pointers to objects, permit GC?
-    for fnumber, fn in enumerate(fileList[x:min(x + args.simultaneous, len(fileList))]):
+    for fnumber, fn in enumerate(fileList[it_begin:it_end]):
+        fnumber += it_begin
         if fn in booktriggers.keys():
             del booktriggers[fn]
             del rdf_bases[fn]
