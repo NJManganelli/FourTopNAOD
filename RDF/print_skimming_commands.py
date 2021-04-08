@@ -40,6 +40,8 @@ for inputSampleCardName, inputSampleCardYaml in inputSampleCardDict.items():
                   "--filter", "'{}'".format(code), "--simultaneous 4 --nThreads 8 --write --prefetch",
                   "--redir root://cms-xrd-global.cern.ch//pnfs/iihe/cms --outdir",
                   "{}".format("/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/"+era+"/"+name+"/"+channel+"/"))
+#Alternate redirector: root://maite.iihe.ac.be/pnfs/iihe/cms
+
 
 # python ~/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/RDF/scripts/nanoframe.py --input 'dbs:/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/nmangane-NoveCampaign-31deb7c86682c648bf5094175e82e051/USER instance=prod/phys03' --filter 'ElMu>==>(ESV_TriggerAndLeptonLogic_selection & 24576) > 0' --simultaneous 4 --nThreads 8 --write --prefetch --redir root://cms-xrd-global.cern.ch//pnfs/iihe/cms --outdir /eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/ST_tW/ElMu/
 
