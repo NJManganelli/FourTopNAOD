@@ -749,6 +749,8 @@ OSDL_RunII_muFNomRDown:
   weightVariation: true
   systematicSet:
   - rf
+  requires:
+  - LHEScaleWeight
   preWeights:
     pwgt_RenormalizationDownFactorizationNominal: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(1) : 0"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationNominal / $SAMPLE_LHESCaleSumw.at(1, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
@@ -835,6 +837,8 @@ OSDL_RunII_muFNomRUp:
   weightVariation: true
   systematicSet:
   - rf
+  requires:
+  - LHEScaleWeight
   preWeights:
     pwgt_RenormalizationUpFactorizationNominal: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(7) : 0"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationNominal / $SAMPLE_LHESCaleSumw.at(7, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
@@ -921,6 +925,8 @@ OSDL_RunII_muRNomFDown:
   weightVariation: true
   systematicSet:
   - rf
+  requires:
+  - LHEScaleWeight
   preWeights:
     pwgt_RenormalizationNominalFactorizationDown: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(3) : 0"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationNominalFactorizationDown / $SAMPLE_LHESCaleSumw.at(3, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
@@ -1007,6 +1013,8 @@ OSDL_RunII_muRNomFUp:
   weightVariation: true
   systematicSet:
   - rf
+  requires:
+  - LHEScaleWeight
   preWeights:
     pwgt_RenormalizationNominalFactorizationUp: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(5) : 0"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationNominalFactorizationUp / $SAMPLE_LHESCaleSumw.at(5, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
@@ -1093,6 +1101,8 @@ OSDL_RunII_muRFcorrelatedUp:
   weightVariation: true
   systematicSet:
   - rf
+  requires:
+  - LHEScaleWeight
   preWeights:
     pwgt_RenormalizationUpFactorizationUp: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(8) : 0"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationUp / $SAMPLE_LHESCaleSumw.at(8, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
@@ -1179,6 +1189,8 @@ OSDL_RunII_muRFcorrelatedDown:
   weightVariation: true
   systematicSet:
   - rf
+  requires:
+  - LHEScaleWeight
   preWeights:
     pwgt_RenormalizationDownFactorizationDown: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(0) : 0"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationDown / $SAMPLE_LHESCaleSumw.at(0, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
@@ -1390,6 +1402,8 @@ OSDL_RunII_pdfUp:
   weightVariation: true
   systematicSet:
   - pdf
+  requires:
+  - LHEPdfWeight
   preWeights:
     prewgt___$SYSTEMATIC: "prewgt___$NOMINAL * (Max(LHEPdfWeight)/Mean(LHEPdfWeight));"
   finalWeights:
@@ -1405,6 +1419,8 @@ OSDL_RunII_pdfDown:
   weightVariation: true
   systematicSet:
   - pdf
+  requires:
+  - LHEPdfWeight
   preWeights:
     prewgt___$SYSTEMATIC: "prewgt___$NOMINAL * (Min(LHEPdfWeight)/Mean(LHEPdfWeight));"
   finalWeights:
