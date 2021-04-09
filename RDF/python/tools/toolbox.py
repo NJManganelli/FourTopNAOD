@@ -99,7 +99,7 @@ def write_yaml_cards(sample_cards, postfix="_updated"):
         with open(scard.replace(".yaml", postfix+".yaml").replace(".yml", postfix+".yml"), "w") as outf:
             ruamel.yaml.dump(scontent, outf, Dumper=ruamel.yaml.RoundTripDumper)
 
-def filter_systematics(yaml_dict, era, sampleName, isSystematicSample, nominal=False, scale=False, weight=False):
+def filter_systematics(yaml_dict, era, sampleName, isSystematicSample, nominal=False, scale=False, weight=False, baseColumns=None):
                        #resolveEnsembles=False, resolveRemappings=False):
     #In general, nominal is both nominal and a scale variation, is not a weight variation, is not dedicated systematic
     #resolveEnsembles means a group of systematics for which the many are summed in quadrature, or some other process is done, to produce a single systematic.
@@ -114,6 +114,16 @@ def filter_systematics(yaml_dict, era, sampleName, isSystematicSample, nominal=F
         isWeight = sysDict.get("weightVariation", True)
         isScale = not isWeight
         isSampleSpecificSystematic = True if sysDict.get("isSystematicForSample", False) else False
+        #logic for handling systematics requiring presence of particular columns, e.g. LHEScaleWeight, in the BASE node before defines.
+        require = True
+        requiredBranches = sysDict.get("requires", [])
+        if baseColumns is not None:
+            for branch in requiredBranches:
+                if branch not in baseColumns:
+                    require = False
+            if not require:
+                print("filter_systematics has removed systematic variation '{}' due to missing branches in the base node for sample '{}'".format(sysVar, sampleName))
+                continue
         # print("{} is counted as sampleSpecificSystematic: {}".format(sysVar, isSampleSpecificSystematic))
         #Filter out systematics if they aren't matched by dedicated systematic status:
         if isSampleSpecificSystematic:

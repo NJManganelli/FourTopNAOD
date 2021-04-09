@@ -4999,19 +4999,17 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             if name not in valid_samples: 
                 # print("Skipping sample {}".format(name))
                 continue
-            #Deduce filters for scale calculations (MET, defineLeptons, defineJets) and where all are needed (defineWeights, BTaggingYields, fillHistos...)
-            scaleSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=False)
-            allSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=True)
-            print("scale systematics: {}\nall systematics: {}".format(scaleSystematics, allSystematics))
             filelistDir = analysisDir + "/Filelists"
             if not os.path.isdir(filelistDir):
                 os.makedirs(filelistDir)
             sampleOutFile = "{base}/{era}__{src}__{sample}.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
             # sampleFriendFile = "{base}/{era}__{src}__{sample}__Friend0.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
             fileList = []
+            metaList = []
             if os.path.isfile(sampleOutFile) and not recreateFileList:
                 print("Loading filelist from the cached list in this analysis directory: {}".format(sampleOutFile))
                 fileList = getFiles(query="list:{}".format(sampleOutFile), outFileName=None)
+                metaList = fileList
             else:
                 if isinstance(redirector, str):
                     redir = redirector
@@ -5026,11 +5024,15 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 print("Determining redirector...{}".format(redir))
                 # if "dbs:" in vals["source"][source_level]:
                 fileList = getFiles(query=vals["source"][source_level], redir=redir, outFileName=sampleOutFile)
-                # else:
-                #     fileList = getFiles(query=vals["source"][source_level], outFileName=sampleOutFile)
+                metaList = fileList
+                if vals["source"][source_level].startswith("glob:"):
+                    metaList += getFiles(query=vals["source"][source_level].replace(".root", ".empty"), redir=redir)
             transformedFileList = ROOT.std.vector(str)()
+            transformedMetaList = ROOT.std.vector(str)()
             for fle in fileList:
                 transformedFileList.push_back(fle)
+            for fle in metaList:
+                transformedMetaList.push_back(fle)
             if transformedFileList.size() < 1:
                 print("Filelist empty, attempting new query in case the cache file ({}) is wrong".format(sampleOutFile))
                 if isinstance(redirector, str):
@@ -5041,8 +5043,13 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     redir="root://cms-xrd-global.cern.ch/"
                 # if "dbs:" in vals["source"][source_level]:
                 fileList = getFiles(query=vals["source"][source_level], redir=redir, outFileName=sampleOutFile)
+                metaList = fileList
+                if vals["source"][source_level].startswith("glob:"):
+                    metaList +=getFiles(query=vals["source"][source_level].replace(".root", ".empty"), redir=redir)
                 for fle in fileList:
                     transformedFileList.push_back(fle)
+                for fle in metaList:
+                    transformedMetaList.push_back(fle)
                 if transformedFileList.size() < 1:
                     print("No files located... skipping sample {}".format(name))
                     continue
@@ -5054,7 +5061,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             for vfe in transformedFileList:
                 print("\t{}".format(vfe))
                 tcmain.Add(str(vfe))
-                if checkMeta:
+            if checkMeta:
+                for vfe in transformedMetaList:
                     tcmeta.Add(str(vfe))
             # tcfriend0 = ROOT.TChain("Events")
             # for vfef0 in transformedFileList_Friend0:
@@ -5065,6 +5073,11 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             print("Initializing RDataFrame with TChain")
             filtered[name] = dict()
             base[name] = RDF(tcmain)
+            baseColumns = base[name].GetColumnNames()
+            #Deduce filters for scale calculations (MET, defineLeptons, defineJets) and where all are needed (defineWeights, BTaggingYields, fillHistos...)
+            scaleSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=False, baseColumns=baseColumns)
+            allSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=True, baseColumns=baseColumns)
+            print("scale systematics: {}\nall systematics: {}".format(scaleSystematics, allSystematics))
             if checkMeta:
                 metanode[name] = RDF(tcmeta) #meta tree
                 if vals["isData"]:
