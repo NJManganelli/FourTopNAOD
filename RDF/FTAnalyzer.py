@@ -5009,7 +5009,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             if os.path.isfile(sampleOutFile) and not recreateFileList:
                 print("Loading filelist from the cached list in this analysis directory: {}".format(sampleOutFile))
                 fileList = getFiles(query="list:{}".format(sampleOutFile), outFileName=None)
-                metaList = fileList
+                metaList = copy.copy(fileList)
             else:
                 if isinstance(redirector, str):
                     redir = redirector
@@ -5024,7 +5024,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 print("Determining redirector...{}".format(redir))
                 # if "dbs:" in vals["source"][source_level]:
                 fileList = getFiles(query=vals["source"][source_level], redir=redir, outFileName=sampleOutFile)
-                metaList = fileList
+                metaList = copy.copy(fileList)
                 if vals["source"][source_level].startswith("glob:"):
                     metaList += getFiles(query=vals["source"][source_level].replace(".root", ".empty"), redir=redir)
             transformedFileList = ROOT.std.vector(str)()
@@ -5061,9 +5061,13 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             for vfe in transformedFileList:
                 print("\t{}".format(vfe))
                 tcmain.Add(str(vfe))
+                tcmeta.Add(str(vfe))
             if checkMeta:
+                print("Additional files with meta information:")
                 for vfe in transformedMetaList:
-                    tcmeta.Add(str(vfe))
+                    if vfe not in transformedFileList:
+                        print("\t{}".format(vfe))                        
+                        tcmeta.Add(str(vfe))
             # tcfriend0 = ROOT.TChain("Events")
             # for vfef0 in transformedFileList_Friend0:
             #     tcfriend0.Add(vfef0)
@@ -5071,14 +5075,10 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             # print("Initializing RDataFrame\n\t{} - {}".format(name, vals["source"][source_level]))
             # print("Initializing RDataFrame\n\t{} - {}".format(name, len(transformedFileList)))
             print("Initializing RDataFrame with TChain")
-            filtered[name] = dict()
-            base[name] = RDF(tcmain)
-            baseColumns = base[name].GetColumnNames()
-            #Deduce filters for scale calculations (MET, defineLeptons, defineJets) and where all are needed (defineWeights, BTaggingYields, fillHistos...)
-            scaleSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=False, baseColumns=baseColumns)
-            allSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=True, baseColumns=baseColumns)
-            print("scale systematics: {}\nall systematics: {}".format(scaleSystematics, allSystematics))
+            threadPoolSize = ROOT.GetThreadPoolSize()
             if checkMeta:
+                #Disable IMT, it breaks on the files with empty Events trees in them, for some strange fuckin' reason
+                ROOT.DisableImplicitMT()
                 metanode[name] = RDF(tcmeta) #meta tree
                 if vals["isData"]:
                     metainfo[name] = {"run": metanode[name].Sum("run")}
@@ -5114,6 +5114,16 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                       normalizeScale = vals.get("isSignal", False),
                                       normalizePdf = vals.get("isSignal", False)
                                   )
+            #Reenable IMT and create the 
+            if threadPoolSize != ROOT.GetThreadPoolSize():
+                ROOT.EnableImplicitMT(threadPoolSize)
+            filtered[name] = dict()
+            base[name] = RDF(tcmain)
+            baseColumns = base[name].GetColumnNames()
+            #Deduce filters for scale calculations (MET, defineLeptons, defineJets) and where all are needed (defineWeights, BTaggingYields, fillHistos...)
+            scaleSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=False, baseColumns=baseColumns)
+            allSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=True, baseColumns=baseColumns)
+            print("scale systematics: {}\nall systematics: {}".format(scaleSystematics, allSystematics))
             metainfo[name]["totalEvents"] = tcmain.GetEntries()
             print("\n{}".format(name))
             pprint.pprint(metainfo[name])
