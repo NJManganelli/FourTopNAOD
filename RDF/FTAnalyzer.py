@@ -4900,9 +4900,11 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
         globalisUL = "non-UL"
         globalVFP = "" #should be either preVFP or postVFP if era == "2016" and isUL = "UL"
         cppVerbosity = False
-        ROOT.gInterpreter.Declare("std::vector<std::string> btagging_process_names;")
+        if not hasattr(ROOT, "btagging_process_names"):
+            ROOT.gInterpreter.Declare("std::vector<std::string> btagging_process_names;")
         btaggingProcessNames = getattr(ROOT, "btagging_process_names")
-        ROOT.gInterpreter.Declare("std::vector<std::string> btagging_inclusive_process_names;")
+        if not hasattr(ROOT, "btagging_inclusive_process_names"):
+            ROOT.gInterpreter.Declare("std::vector<std::string> btagging_inclusive_process_names;")
         btaggingInclusiveProcessNames = getattr(ROOT, "btagging_inclusive_process_names")
         for name in sorted(theSampleDict, key=lambda n: n):
             if name not in inputSampleCardYaml.keys():
