@@ -187,10 +187,14 @@ for x in range(0, len(fileList), args.simultaneous):
         if fn not in foNameDict.keys(): 
             foNameDict[fn] = {}
         foNameDict[fn]["final"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
+        foNameDict[fn]["empty"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".empty"))
         foNameDict[fn]["temp"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", "_temp" + ".root"))
         #Skip files that are finished unless overwrite is requested
-        if os.path.isfile(foNameDict[fn]["final"]) and not args.overwrite:
-            print("Final file already present, skipping {}".format(foNameDict[fn]["final"]))
+        if (os.path.isfile(foNameDict[fn]["final"]) or os.path.isfile(foNameDict[fn]["empty"])) and not args.overwrite:
+            if os.path.isfile(foNameDict[fn]["final"]):
+                print("Final file already present, skipping {}".format(foNameDict[fn]["final"]))
+            elif os.path.isfile(foNameDict[fn]["empty"]):
+                print("Final EMPTY file already present, skipping {}".format(foNameDict[fn]["empty"]))
             #Put a dummy result in the list to keep array indexing consistent
             if args.write:
                 handles.append(dummyResult())
@@ -244,7 +248,7 @@ for x in range(0, len(fileList), args.simultaneous):
                     range(it_begin, it_end)]
     for fnumber, fn in enumerate(fileList[it_begin:it_end]):
         fnumber += it_begin
-        if os.path.isfile(foNameDict[fn]["final"]) and not args.overwrite:            
+        if (os.path.isfile(foNameDict[fn]["final"]) or os.path.isfile(foNameDict[fn]["empty"])) and not args.overwrite:            
             continue
         if args.write:
             #Handle the rest of the trees
@@ -256,6 +260,8 @@ for x in range(0, len(fileList), args.simultaneous):
                   .format(foNameDict[fn]["temp"], 
                           "{:.3f}%".format(percent_pass[fnumber]) if percent_pass[fnumber] > -1 else "Unknown")
             )
+            finalTreeNames =  [str(ll.GetName()) for ll in fo.GetListOfKeys() if ll.GetClassName() in ['TTree']]
+            isEmpty = "Events" not in finalTreeNames
             fo.cd()
             for treeName in treeNames:
                 if treeName != "Events": #Handle the events tree using RDataFrame
@@ -267,7 +273,11 @@ for x in range(0, len(fileList), args.simultaneous):
             fi.Close()
             fo.Close()
             try:
-                os.rename(foNameDict[fn]["temp"], foNameDict[fn]["final"])
+                if isEmpty:
+                    print("Renaming file with empty Events TTree to {}".format(foNameDict[fn]["empty"]))
+                    os.rename(foNameDict[fn]["temp"], foNameDict[fn]["empty"])
+                else:
+                    os.rename(foNameDict[fn]["temp"], foNameDict[fn]["final"])
             except:
                 print("Rename of file {} to {} failed, continuing".format(foNameDict[fn]["temp"], foNameDict[fn]["final"]))
     #Do NOT release foNameDict entries, they are required for final meta info insertion
