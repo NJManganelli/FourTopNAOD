@@ -753,10 +753,6 @@ namespace FTA{
 								    std::string electron_id = "",
 								    std::string electron_eff = "",
 								    std::string btag_top_path = "",
-								    std::vector<std::string> btag_process_names = {"tttt"},
-								    std::vector<std::string> btag_inclusive_process_names = {"tt_DL"},
-								    std::vector<std::string> btag_systematic_names = {"nom"},
-								    std::vector<std::string> btag_systematic_scale_postfix = {"nom"},
 								    std::map<std::string, std::vector< std::pair< std::string, std::string> > > btag_process_map = std::map<std::string, std::vector< std::pair< std::string, std::string> > >(),
 								    std::map<std::string, std::vector< std::pair< std::string, std::string> > > btag_inclusive_map = std::map<std::string, std::vector< std::pair< std::string, std::string> > >(),
 								    bool btag_use_aggregate = false,
@@ -1413,9 +1409,8 @@ namespace FTA{
 	std::string proc_name = bit->first;
 	for(std::vector< std::pair<std::string, std::string> >::iterator sit = (bit->second).begin(); sit != (bit->second).end(); ++sit){
 	  std::string btag_key, syst_name, branch_postfix;
-	  // syst_name = *syst_iter;
-	  syst_name = sit->first; //syst_name = btag_systematic_names.at(si);
-	  branch_postfix = sit->second; //branch_postfix = btag_systematic_scale_postfix.at(si);
+	  syst_name = sit->first; 
+	  branch_postfix = sit->second;
 	  if(strncmp(syst_name.c_str(), "$NOMINAL", 8) == 0 || strncmp(syst_name.c_str(), "nom", 3) == 0) syst_name = "nom";
 	  //Force inclusive processes to use the Aggregate method, because we don't store the maps for the inclusive processes (a previous workaround to avoid double counting in the aggregate maps)
 	  btag_key = "Aggregate";
@@ -1437,9 +1432,8 @@ namespace FTA{
 	std::string proc_name = bit->first;
 	for(std::vector< std::pair<std::string, std::string> >::iterator sit = (bit->second).begin(); sit != (bit->second).end(); ++sit){
 	  std::string btag_key, syst_name, branch_postfix;
-	  // syst_name = *syst_iter;
-	  syst_name = sit->first; //syst_name = btag_systematic_names.at(si);
-	  branch_postfix = sit->second; //branch_postfix = btag_systematic_scale_postfix.at(si);
+	  syst_name = sit->first; 
+	  branch_postfix = sit->second; 
 	  if(strncmp(syst_name.c_str(), "$NOMINAL", 8) == 0 || strncmp(syst_name.c_str(), "nom", 3) == 0) syst_name = "nom";
 	  if(btag_use_aggregate) btag_key = "Aggregate";
 	  else btag_key = era + "___" + static_cast<std::string>(proc_name) + "_";

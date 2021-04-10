@@ -4900,12 +4900,6 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
         globalisUL = "non-UL"
         globalVFP = "" #should be either preVFP or postVFP if era == "2016" and isUL = "UL"
         cppVerbosity = False
-        if not hasattr(ROOT, "btagging_process_names"):
-            ROOT.gInterpreter.Declare("std::vector<std::string> btagging_process_names;")
-        btaggingProcessNames = getattr(ROOT, "btagging_process_names")
-        if not hasattr(ROOT, "btagging_inclusive_process_names"):
-            ROOT.gInterpreter.Declare("std::vector<std::string> btagging_inclusive_process_names;")
-        btaggingInclusiveProcessNames = getattr(ROOT, "btagging_inclusive_process_names")
         btaggingProcessMap = ROOT.std.map(str, ROOT.std.vector(ROOT.std.pair(str, str)))()
         btaggingInclusiveMap = ROOT.std.map(str, ROOT.std.vector(ROOT.std.pair(str, str)))()
         for name in sorted(theSampleDict, key=lambda n: n):
@@ -4925,22 +4919,13 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     # df_with_IDs = input_df
                     splitProcs = earlySplitProcess.get("processes")
                     for preProcessName, processDict in splitProcs.items():
-                        btaggingProcessNames.push_back(preProcessName)
                         btaggingProcessMap[preProcessName] = ROOT.std.vector(ROOT.std.pair(str, str))()
                     #Get the inclusive process name for those that are also split
-                    btaggingInclusiveProcessNames.push_back(name)
                     btaggingInclusiveMap[name] = ROOT.std.vector(ROOT.std.pair(str, str))()
                 #store the names 'normally' for samples that are NOT split 
                 else:
-                    btaggingProcessNames.push_back(name)
                     btaggingProcessMap[name] = ROOT.std.vector(ROOT.std.pair(str, str))()
     
-        if not hasattr(ROOT, "btagging_systematic_names"):
-            ROOT.gInterpreter.Declare("std::vector<std::string> btagging_systematic_names;")
-        btaggingSystematicNames = getattr(ROOT, "btagging_systematic_names")
-        if not hasattr(ROOT, "btag_systematic_scale_postfix"):
-            ROOT.gInterpreter.Declare("std::vector<std::string> btag_systematic_scale_postfix;")
-        btaggingSystematicScalePostfix = getattr(ROOT, "btag_systematic_scale_postfix")
         sysVariationsForBtagging = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"] or "ALL" in systematicSet])
         # for sysVar, sysDict in sysVariationsForBtagging.items():
         if len(valid_samples) > 1:
@@ -4959,8 +4944,6 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
             isWeightVariation = sysDict.get("weightVariation")
             slimbranchpostfix = "nom" if isWeightVariation else sysVar #branch postfix for identifying input branch variation
-            btaggingSystematicNames.push_back(sysVar)
-            btaggingSystematicScalePostfix.push_back(slimbranchpostfix)
             for thisKey, _ in btaggingProcessMap:
                 btaggingProcessMap[thisKey].push_back(ROOT.std.pair(str, str)(sysVar, slimbranchpostfix))
             for thisKey, _ in btaggingInclusiveMap:
@@ -4977,19 +4960,12 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                 "../Kai/python/data/leptonSF/Muon", "LooseID", "TightRelIso_MediumID",
                                                 "../Kai/python/data/leptonSF/Electron", "Loose", "UseEfficiency",
                                                 BTaggingYieldsTopPath,
-                                                btaggingProcessNames, #std::vector<std::string> btag_process_names = {"tttt"},
-                                                btaggingInclusiveProcessNames, 
-                                                btaggingSystematicNames, #std::vector<std::string> btag_systematic_names = {"nom"},
-                                                btaggingSystematicScalePostfix,
                                                 btaggingProcessMap,
                                                 btaggingInclusiveMap,
                                                 BTaggingYieldsAggregate, #bool btag_use_aggregate = false,
                                                 useHTOnly, #bool btag_use_HT_only = false,
                                                 useNJetOnly,
                                                 cppVerbosity) #bool btag_use_nJet_only = false
-        # print("BTagging systematic and branchpostfix names:")
-        # print(btaggingSystematicNames)
-        # print(btaggingSystematicScalePostfix)
         print("testing LUTManager")
         LUTManager = ROOT.LUTManager()
         LUTManager.Add(correctorMap, cppVerbosity)
