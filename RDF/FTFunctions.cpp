@@ -746,17 +746,19 @@ namespace FTA{
   std::map< std::string, std::vector<std::string> > GetCorrectorMap(std::string era, 
 								    std::string legacy, 
 								    std::string VFP="",
-								    std::string muon_top_path = "", 
-								    std::string muon_id = "", 
-								    std::string muon_iso = "", 
-								    std::string electron_top_path = "", 
-								    std::string electron_id = "", 
+								    std::string muon_top_path = "",
+								    std::string muon_id = "",
+								    std::string muon_iso = "",
+								    std::string electron_top_path = "",
+								    std::string electron_id = "",
 								    std::string electron_eff = "",
-								    std::string btag_top_path = "", 
+								    std::string btag_top_path = "",
 								    std::vector<std::string> btag_process_names = {"tttt"},
 								    std::vector<std::string> btag_inclusive_process_names = {"tt_DL"},
 								    std::vector<std::string> btag_systematic_names = {"nom"},
 								    std::vector<std::string> btag_systematic_scale_postfix = {"nom"},
+								    std::map<std::string, std::vector< std::pair< std::string, std::string> > > btag_process_map = std::map<std::string, std::vector< std::pair< std::string, std::string> > >(),
+								    std::map<std::string, std::vector< std::pair< std::string, std::string> > > btag_inclusive_map = std::map<std::string, std::vector< std::pair< std::string, std::string> > >(),
 								    bool btag_use_aggregate = false,
 								    bool btag_use_HT_only = false,
 								    bool btag_use_nJet_only = false,
@@ -1407,52 +1409,51 @@ namespace FTA{
 
     //Load btag SFs for each process and systematic specified
     if(btag_top_path != ""){
-      for(std::vector<std::string>::iterator proc_iter = btag_process_names.begin(); proc_iter != btag_process_names.end(); ++proc_iter){
-	// for(std::vector<std::string>::iterator syst_iter = btag_systematic_names.begin(); syst_iter != btag_systematic_names.end(); ++syst_iter){
-	for(int si = 0; si < btag_systematic_names.size(); ++si){
+      for(std::map<std::string, std::vector< std::pair<std::string, std::string> > >::iterator bit = btag_inclusive_map.begin(); bit != btag_inclusive_map.end(); ++bit){
+	std::string proc_name = bit->first;
+	for(std::vector< std::pair<std::string, std::string> >::iterator sit = (bit->second).begin(); sit != (bit->second).end(); ++sit){
 	  std::string btag_key, syst_name, branch_postfix;
 	  // syst_name = *syst_iter;
-	  syst_name = btag_systematic_names.at(si);
-	  branch_postfix = btag_systematic_scale_postfix.at(si);
-	  if(strncmp(syst_name.c_str(), "$NOMINAL", 8) == 0) syst_name = "nom";
-	  if(btag_use_aggregate)btag_key = "Aggregate";
-	  else btag_key = era + "___" + static_cast<std::string>(*proc_iter) + "_";
-	  
+	  syst_name = sit->first; //syst_name = btag_systematic_names.at(si);
+	  branch_postfix = sit->second; //branch_postfix = btag_systematic_scale_postfix.at(si);
+	  if(strncmp(syst_name.c_str(), "$NOMINAL", 8) == 0 || strncmp(syst_name.c_str(), "nom", 3) == 0) syst_name = "nom";
+	  //Force inclusive processes to use the Aggregate method, because we don't store the maps for the inclusive processes (a previous workaround to avoid double counting in the aggregate maps)
+	  btag_key = "Aggregate";
 	  if(btag_use_HT_only) btag_key += "1DX";
 	  if(btag_use_nJet_only) btag_key += "1DY";
 	  btag_key += "___" + syst_name;
 	  if(verbose)
-	    std::cout << "Btag key formed for process " << static_cast<std::string>(*proc_iter) << ": " << btag_key << std::endl;
+	    std::cout << "Btag key formed for process " << static_cast<std::string>(proc_name) << ": " << btag_key << std::endl;
 	  //the branch_postfix is based on whether a systematic variations is a scale variation/central (nominal, jes, jer...) or purely a weight variation (FSR, ISR, etc...). If the latter, the branch_postfix should default to the 'nominal'
-	  ret["btag___" + era + "___" + static_cast<std::string>(*proc_iter) + "___" + syst_name] = {btag_top_path + "BTaggingYields.root", 
-												     btag_key, 
-												     "TH2LookupFlow", 
-												     "HT__" + branch_postfix, 
-												     "nFTAJet__" + branch_postfix};
+	  ret["btag___" + era + "___" + static_cast<std::string>(proc_name) + "___" + syst_name] = {btag_top_path + "BTaggingYields.root", 
+												    btag_key, 
+												    "TH2LookupFlow", 
+												    "HT__" + branch_postfix, 
+												    "nFTAJet__" + branch_postfix};
 	}
       }
-      for(std::vector<std::string>::iterator incl_iter = btag_inclusive_process_names.begin(); incl_iter != btag_inclusive_process_names.end(); ++incl_iter){
-	// for(std::vector<std::string>::iterator syst_iter = btag_systematic_names.begin(); syst_iter != btag_systematic_names.end(); ++syst_iter){
-	for(int si = 0; si < btag_systematic_names.size(); ++si){
+      //Do the non-inclusve ones now, which will over-write in case any names clash... 
+      for(std::map<std::string, std::vector< std::pair<std::string, std::string> > >::iterator bit = btag_process_map.begin(); bit != btag_process_map.end(); ++bit){
+	std::string proc_name = bit->first;
+	for(std::vector< std::pair<std::string, std::string> >::iterator sit = (bit->second).begin(); sit != (bit->second).end(); ++sit){
 	  std::string btag_key, syst_name, branch_postfix;
 	  // syst_name = *syst_iter;
-	  syst_name = btag_systematic_names.at(si);
-	  branch_postfix = btag_systematic_scale_postfix.at(si);
-	  if(strncmp(syst_name.c_str(), "$NOMINAL", 8) == 0) syst_name = "nom";
-	  //Force inclusive processes to use the Aggregate method, because we don't store the maps for the inclusive processes (a previous workaround to avoid double counting in the aggregate maps)
-	  btag_key = "Aggregate"; 
-	  // else btag_key = era + "___" + static_cast<std::string>(*incl_iter) + "_";
-	  
+	  syst_name = sit->first; //syst_name = btag_systematic_names.at(si);
+	  branch_postfix = sit->second; //branch_postfix = btag_systematic_scale_postfix.at(si);
+	  if(strncmp(syst_name.c_str(), "$NOMINAL", 8) == 0 || strncmp(syst_name.c_str(), "nom", 3) == 0) syst_name = "nom";
+	  if(btag_use_aggregate) btag_key = "Aggregate";
+	  else btag_key = era + "___" + static_cast<std::string>(proc_name) + "_";
 	  if(btag_use_HT_only) btag_key += "1DX";
 	  if(btag_use_nJet_only) btag_key += "1DY";
-	  btag_key += "___" + syst_name;
-	  std::cout << "Btag key formed for inclusive process " << static_cast<std::string>(*incl_iter) << "(default to Aggregate): " << btag_key << std::endl;
+	  btag_key += "___" + static_cast<std::string>(syst_name);
+	  if(verbose)
+	    std::cout << "Btag key formed for process " << static_cast<std::string>(proc_name) << ": " << btag_key << std::endl;
 	  //the branch_postfix is based on whether a systematic variations is a scale variation/central (nominal, jes, jer...) or purely a weight variation (FSR, ISR, etc...). If the latter, the branch_postfix should default to the 'nominal'
-	  ret["btag___" + era + "___" + static_cast<std::string>(*incl_iter) + "___" + syst_name] = {btag_top_path + "BTaggingYields.root", 
-												     btag_key, 
-												     "TH2LookupFlow", 
-												     "HT__" + branch_postfix, 
-												     "nFTAJet__" + branch_postfix};
+	  ret["btag___" + era + "___" + static_cast<std::string>(proc_name) + "___" + syst_name] = {btag_top_path + "BTaggingYields.root", 
+												    btag_key, 
+												    "TH2LookupFlow", 
+												    "HT__" + branch_postfix, 
+												    "nFTAJet__" + branch_postfix};
 	}
       }
     }

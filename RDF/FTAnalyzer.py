@@ -4906,6 +4906,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
         if not hasattr(ROOT, "btagging_inclusive_process_names"):
             ROOT.gInterpreter.Declare("std::vector<std::string> btagging_inclusive_process_names;")
         btaggingInclusiveProcessNames = getattr(ROOT, "btagging_inclusive_process_names")
+        btaggingProcessMap = ROOT.std.map(str, ROOT.std.vector(ROOT.std.pair(str, str)))()
+        btaggingInclusiveMap = ROOT.std.map(str, ROOT.std.vector(ROOT.std.pair(str, str)))()
         for name in sorted(theSampleDict, key=lambda n: n):
             if name not in inputSampleCardYaml.keys():
                 continue
@@ -4924,11 +4926,14 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     splitProcs = earlySplitProcess.get("processes")
                     for preProcessName, processDict in splitProcs.items():
                         btaggingProcessNames.push_back(preProcessName)
+                        btaggingProcessMap[preProcessName] = ROOT.std.vector(ROOT.std.pair(str, str))()
                     #Get the inclusive process name for those that are also split
                     btaggingInclusiveProcessNames.push_back(name)
+                    btaggingInclusiveMap[name] = ROOT.std.vector(ROOT.std.pair(str, str))()
                 #store the names 'normally' for samples that are NOT split 
                 else:
                     btaggingProcessNames.push_back(name)
+                    btaggingProcessMap[name] = ROOT.std.vector(ROOT.std.pair(str, str))()
     
         if not hasattr(ROOT, "btagging_systematic_names"):
             ROOT.gInterpreter.Declare("std::vector<std::string> btagging_systematic_names;")
@@ -4956,6 +4961,11 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             slimbranchpostfix = "nom" if isWeightVariation else sysVar #branch postfix for identifying input branch variation
             btaggingSystematicNames.push_back(sysVar)
             btaggingSystematicScalePostfix.push_back(slimbranchpostfix)
+            for thisKey, _ in btaggingProcessMap:
+                btaggingProcessMap[thisKey].push_back(ROOT.std.pair(str, str)(sysVar, slimbranchpostfix))
+            for thisKey, _ in btaggingInclusiveMap:
+                btaggingInclusiveMap[thisKey].push_back(ROOT.std.pair(str, str)(sysVar, slimbranchpostfix))
+        print(btaggingProcessMap)
                     
         print("FIXME: hardcoded incorrect btagging top path for the corrector map")
         print("FIXME: hardcoded non-UL/UL and no VFP handling in the corrector map retrieval")
@@ -4971,6 +4981,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                 btaggingInclusiveProcessNames, 
                                                 btaggingSystematicNames, #std::vector<std::string> btag_systematic_names = {"nom"},
                                                 btaggingSystematicScalePostfix,
+                                                btaggingProcessMap,
+                                                btaggingInclusiveMap,
                                                 BTaggingYieldsAggregate, #bool btag_use_aggregate = false,
                                                 useHTOnly, #bool btag_use_HT_only = false,
                                                 useNJetOnly,
