@@ -444,6 +444,17 @@ OSDL_RunII_ISRDown:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttISRDown:
     - tt_AH
     - tt_SL
@@ -501,6 +512,7 @@ OSDL_RunII_ISRDown:
     - ST_tbar_t-channel
     OSDL_RunII_ttttISRDown:
     - tttt
+    - tttt_badNPartonInBorn
   preWeights:
     pwgt_$SYSTEMATIC: "nPSWeight == 4 ? PSWeight.at(0) : 0"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_$SYSTEMATIC * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
@@ -535,6 +547,17 @@ OSDL_RunII_ISRUp:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttISRUp:
     - tt_AH
     - tt_SL
@@ -592,6 +615,7 @@ OSDL_RunII_ISRUp:
     - ST_tbar_t-channel
     OSDL_RunII_ttttISRUp:
     - tttt
+    - tttt_badNPartonInBorn
 OSDL_RunII_FSRDown:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -621,6 +645,17 @@ OSDL_RunII_FSRDown:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttFSRDown:
     - tt_AH
     - tt_SL
@@ -678,6 +713,7 @@ OSDL_RunII_FSRDown:
     - ST_tbar_t-channel
     OSDL_RunII_ttttFSRDown:
     - tttt
+    - tttt_badNPartonInBorn
 OSDL_RunII_FSRUp:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -707,6 +743,17 @@ OSDL_RunII_FSRUp:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttFSRUp:
     - tt_AH
     - tt_SL
@@ -764,6 +811,7 @@ OSDL_RunII_FSRUp:
     - ST_tbar_t-channel
     OSDL_RunII_ttttFSRUp:
     - tttt
+    - tttt_badNPartonInBorn
 OSDL_RunII_muFNomRDown:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -795,6 +843,17 @@ OSDL_RunII_muFNomRDown:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttmuFNomRDown:
     - tt_AH
     - tt_SL
@@ -852,6 +911,7 @@ OSDL_RunII_muFNomRDown:
     - ST_tbar_t-channel
     OSDL_RunII_ttttmuFNomRDown:
     - tttt
+    - tttt_badNPartonInBorn
 OSDL_RunII_muFNomRUp:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -883,6 +943,17 @@ OSDL_RunII_muFNomRUp:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttmuFNomRUp:
     - tt_AH
     - tt_SL
@@ -940,6 +1011,7 @@ OSDL_RunII_muFNomRUp:
     - ST_tbar_t-channel
     OSDL_RunII_ttttmuFNomRUp:
     - tttt
+    - tttt_badNPartonInBorn
 OSDL_RunII_muRNomFDown:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -971,6 +1043,17 @@ OSDL_RunII_muRNomFDown:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttmuRNomFDown:
     - tt_AH
     - tt_SL
@@ -1028,6 +1111,7 @@ OSDL_RunII_muRNomFDown:
     - ST_tbar_t-channel
     OSDL_RunII_ttttmuRNomFDown:
     - tttt
+    - tttt_badNPartonInBorn
 OSDL_RunII_muRNomFUp:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -1059,6 +1143,17 @@ OSDL_RunII_muRNomFUp:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttmuRNomFUp:
     - tt_AH
     - tt_SL
@@ -1116,6 +1211,7 @@ OSDL_RunII_muRNomFUp:
     - ST_tbar_t-channel
     OSDL_RunII_ttttmuRNomFUp:
     - tttt
+    - tttt_badNPartonInBorn
 OSDL_RunII_muRFcorrelatedUp:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -1147,6 +1243,17 @@ OSDL_RunII_muRFcorrelatedUp:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttmuRFcorrelatedUp:
     - tt_AH
     - tt_SL
@@ -1204,6 +1311,7 @@ OSDL_RunII_muRFcorrelatedUp:
     - ST_tbar_t-channel
     OSDL_RunII_ttttmuRFcorrelatedUp:
     - tttt
+    - tttt_badNPartonInBorn
 OSDL_RunII_muRFcorrelatedDown:
   jet_mask: jet_mask
   lep_postfix: ''
@@ -1235,6 +1343,17 @@ OSDL_RunII_muRFcorrelatedDown:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttmuRFcorrelatedDown:
     - tt_AH
     - tt_SL
@@ -1292,6 +1411,7 @@ OSDL_RunII_muRFcorrelatedDown:
     - ST_tbar_t-channel
     OSDL_RunII_ttttmuRFcorrelatedDown:
     - tttt
+    - tttt_badNPartonInBorn
 OSDL_RunII_ueUp:
   jet_mask: jet_mask
   lep_postfix: ''

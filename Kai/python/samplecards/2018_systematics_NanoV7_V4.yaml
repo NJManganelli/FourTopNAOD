@@ -415,6 +415,17 @@ OSDL_RunII_ISRDown:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttISRDown:
     - tt_AH
     - tt_SL
@@ -506,6 +517,17 @@ OSDL_RunII_ISRUp:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttISRUp:
     - tt_AH
     - tt_SL
@@ -592,6 +614,17 @@ OSDL_RunII_FSRDown:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttFSRDown:
     - tt_AH
     - tt_SL
@@ -678,6 +711,17 @@ OSDL_RunII_FSRUp:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttFSRUp:
     - tt_AH
     - tt_SL
@@ -766,6 +810,17 @@ OSDL_RunII_muFNomRDown:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttmuFNomRDown:
     - tt_AH
     - tt_SL
@@ -854,6 +909,17 @@ OSDL_RunII_muFNomRUp:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttmuFNomRUp:
     - tt_AH
     - tt_SL
@@ -942,6 +1008,17 @@ OSDL_RunII_muRNomFDown:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttmuRNomFDown:
     - tt_AH
     - tt_SL
@@ -1030,6 +1107,17 @@ OSDL_RunII_muRNomFUp:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttmuRNomFUp:
     - tt_AH
     - tt_SL
@@ -1118,6 +1206,17 @@ OSDL_RunII_muRFcorrelatedUp:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttmuRFcorrelatedUp:
     - tt_AH
     - tt_SL
@@ -1206,6 +1305,17 @@ OSDL_RunII_muRFcorrelatedDown:
     - DYJets_DL-HT800
     - DYJets_DL-HT1200
     - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
     OSDL_RunII_ttmuRFcorrelatedDown:
     - tt_AH
     - tt_SL
