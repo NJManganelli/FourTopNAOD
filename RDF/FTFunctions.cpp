@@ -752,12 +752,6 @@ namespace FTA{
 								    std::string electron_top_path = "",
 								    std::string electron_id = "",
 								    std::string electron_eff = "",
-								    std::string btag_top_path = "",
-								    std::map<std::string, std::vector< std::pair< std::string, std::string> > > btag_process_map = std::map<std::string, std::vector< std::pair< std::string, std::string> > >(),
-								    std::map<std::string, std::vector< std::pair< std::string, std::string> > > btag_inclusive_map = std::map<std::string, std::vector< std::pair< std::string, std::string> > >(),
-								    bool btag_use_aggregate = false,
-								    bool btag_use_HT_only = false,
-								    bool btag_use_nJet_only = false,
 								    bool verbose = false){
     //python constructor:
     //def __init__(self, muon_ID=None, muon_ISO=None, electron_ID=None, era=None, doMuonHLT=False, doElectronHLT_ZVtx=False, 
@@ -779,8 +773,7 @@ namespace FTA{
       electron_path = electron_top_path + "/" + era + "/" + legacy + "/" + VFP + "/";
     }
     
-    std::cout << "Era: " << era << "\nLegacy: " << legacy <<  "\nPreVFP: " << VFP << "\nMuon top path: " << muon_top_path << "\nElectron top path: " << electron_top_path;
-    std::cout << "\nBtag top path: " << btag_top_path << std::endl;
+    std::cout << "Era: " << era << "\nLegacy: " << legacy <<  "\nPreVFP: " << VFP << "\nMuon top path: " << muon_top_path << "\nElectron top path: " << electron_top_path << std::endl;
 
     //mu_pre = "{0:s}/src/FourTopNAOD/Kai/python/data/leptonSF/Muon/{1:s}/".format(os.environ['CMSSW_BASE'], self.era)
     //store the ID map per era, with a path being prepended to the filenames listed below at the end
@@ -1402,7 +1395,21 @@ namespace FTA{
 	ret["Electron_SF_EFF_ptAbove20_unc"][0] = electron_path + ret["Electron_SF_EFF_ptAbove20_unc"][0];
       }
     }
+    return ret;
+  }
 
+  std::map< std::string, std::vector<std::string> > GetBtaggingCorrectorMap(std::string era, 
+									    std::string legacy, 
+									    std::string VFP="",
+									    std::string btag_top_path = "",
+									    std::map<std::string, std::vector< std::pair< std::string, std::string> > > btag_process_map = std::map<std::string, std::vector< std::pair< std::string, std::string> > >(),
+									    std::map<std::string, std::vector< std::pair< std::string, std::string> > > btag_inclusive_map = std::map<std::string, std::vector< std::pair< std::string, std::string> > >(),
+									    bool btag_use_aggregate = false,
+									    bool btag_use_HT_only = false,
+									    bool btag_use_nJet_only = false,
+									    bool verbose = false){
+    std::cout << "Era: " << era << "\nLegacy: " << legacy <<  "\nPreVFP: " << VFP << "\nBtag top path: " << btag_top_path << std::endl;
+    std::map< std::string, std::vector<std::string> > ret;
     //Load btag SFs for each process and systematic specified
     if(btag_top_path != ""){
       for(std::map<std::string, std::vector< std::pair<std::string, std::string> > >::iterator bit = btag_inclusive_map.begin(); bit != btag_inclusive_map.end(); ++bit){
@@ -1453,7 +1460,6 @@ namespace FTA{
     }
     return ret;
   }
-
 
   // std::pair< ROOT::RDF::RNode, std::vector<LUT*> > AddLeptonSF(ROOT::RDF::RNode df, std::string_view era, std::map< std::string, std::vector<std::string> > idmap){
   ROOT::RDF::RNode AddLeptonSF(ROOT::RDF::RNode df, std::string era, std::string processname,

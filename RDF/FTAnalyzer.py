@@ -4948,8 +4948,6 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 btaggingProcessMap[thisKey].push_back(ROOT.std.pair(str, str)(sysVar, slimbranchpostfix))
             for thisKey, _ in btaggingInclusiveMap:
                 btaggingInclusiveMap[thisKey].push_back(ROOT.std.pair(str, str)(sysVar, slimbranchpostfix))
-        print(btaggingProcessMap)
-                    
         print("FIXME: hardcoded incorrect btagging top path for the corrector map")
         print("FIXME: hardcoded non-UL/UL and no VFP handling in the corrector map retrieval")
         BTaggingYieldsTopPath = BTaggingYieldsFile.replace("BTaggingYields.root", "") if BTaggingYieldsFile is not None and channel not in ["BOOKKEEPING", "PILEUP"] else "" #Trigger the null set of correctors for btagging if there's no yields file we're pointing to...
@@ -4959,21 +4957,26 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                 globalVFP, ##preVFP or postVFP if 2016
                                                 "../Kai/python/data/leptonSF/Muon", "LooseID", "TightRelIso_MediumID",
                                                 "../Kai/python/data/leptonSF/Electron", "Loose", "UseEfficiency",
-                                                BTaggingYieldsTopPath,
-                                                btaggingProcessMap,
-                                                btaggingInclusiveMap,
-                                                BTaggingYieldsAggregate, #bool btag_use_aggregate = false,
-                                                useHTOnly, #bool btag_use_HT_only = false,
-                                                useNJetOnly,
                                                 cppVerbosity) #bool btag_use_nJet_only = false
+        btaggingCorrectorMap = ROOT.FTA.GetBtaggingCorrectorMap(era, #2017 or 2018 or 2016, as string
+                                                                globalisUL, #UL or non_UL
+                                                                globalVFP, ##preVFP or postVFP if 2016
+                                                                BTaggingYieldsTopPath,
+                                                                btaggingProcessMap,
+                                                                btaggingInclusiveMap,
+                                                                BTaggingYieldsAggregate, #bool btag_use_aggregate = false,
+                                                                useHTOnly, #bool btag_use_HT_only = false,
+                                                                useNJetOnly,
+                                                                cppVerbosity) #bool btag_use_nJet_only = false
         print("testing LUTManager")
         LUTManager = ROOT.LUTManager()
         LUTManager.Add(correctorMap, cppVerbosity)
         LUTManager.Finalize(nThreads)
-        vectorLUTs = LUTManager.GetLUTVector()
-        # print(vectorLUTs[0].TH1Keys())
-        # print(vectorLUTs[0].TH2Keys())
-        # print(vectorLUTs[0].TH3Keys())
+        generalLUTs = LUTManager.GetLUTVector()
+        btaggingLUTManager = ROOT.LUTManager()
+        btaggingLUTManager.Add(btaggingCorrectorMap, cppVerbosity)
+        btaggingLUTManager.Finalize(nThreads)
+        btaggingLUTs = btaggingLUTManager.GetLUTVector()
     
     
         ################################
@@ -5326,7 +5329,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 the_df[name][lvl] = ROOT.FTA.AddLeptonSF(ROOT.RDF.AsRNode(the_df[name][lvl]), 
                                                          vals["era"], 
                                                          name, 
-                                                         vectorLUTs, 
+                                                         generalLUTs, 
                                                          correctorMap
                                                          )
                 #Define the leptons based on LeptonLogic bits, to be updated and replaced with code based on triggers/thresholds/leptons present (on-the-fly cuts)
@@ -5440,8 +5443,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                 useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
                                                 sysVariations=sysVariationsAll, 
                                                 sysFilter=allSystematics,
-                                                vectorLUTs=vectorLUTs,
-                                                correctorMap=correctorMap,
+                                                vectorLUTs=btaggingLUTs,
+                                                correctorMap=btaggingCorrectorMap,
                                                 bTagger=bTagger,
                                                 calculateYields=calculateTheYields,
                                                 HTArray=[500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 10000], 
