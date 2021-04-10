@@ -4958,26 +4958,14 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                 "../Kai/python/data/leptonSF/Muon", "LooseID", "TightRelIso_MediumID",
                                                 "../Kai/python/data/leptonSF/Electron", "Loose", "UseEfficiency",
                                                 cppVerbosity) #bool btag_use_nJet_only = false
-        btaggingCorrectorMap = ROOT.FTA.GetBtaggingCorrectorMap(era, #2017 or 2018 or 2016, as string
-                                                                globalisUL, #UL or non_UL
-                                                                globalVFP, ##preVFP or postVFP if 2016
-                                                                BTaggingYieldsTopPath,
-                                                                btaggingProcessMap,
-                                                                btaggingInclusiveMap,
-                                                                BTaggingYieldsAggregate, #bool btag_use_aggregate = false,
-                                                                useHTOnly, #bool btag_use_HT_only = false,
-                                                                useNJetOnly,
-                                                                cppVerbosity) #bool btag_use_nJet_only = false
         print("testing LUTManager")
         LUTManager = ROOT.LUTManager()
         LUTManager.Add(correctorMap, cppVerbosity)
         LUTManager.Finalize(nThreads)
         generalLUTs = LUTManager.GetLUTVector()
-        btaggingLUTManager = ROOT.LUTManager()
-        btaggingLUTManager.Add(btaggingCorrectorMap, cppVerbosity)
-        btaggingLUTManager.Finalize(nThreads)
-        btaggingLUTs = btaggingLUTManager.GetLUTVector()
-    
+        btaggingCorrectorMaps = dict()
+        btaggingLUTManagers = dict()
+        btaggingLUTs = dict()
     
         ################################
         #### Loop through processes ####
@@ -5118,6 +5106,24 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             metainfo[name]["totalEvents"] = tcmain.GetEntries()
             print("\n{}".format(name))
             pprint.pprint(metainfo[name])
+
+            #Now do the btagging LUTs
+            btaggingCorrectorMaps[name] = ROOT.FTA.GetBtaggingCorrectorMap(era, #2017 or 2018 or 2016, as string
+                                                                    globalisUL, #UL or non_UL
+                                                                    globalVFP, ##preVFP or postVFP if 2016
+                                                                    BTaggingYieldsTopPath,
+                                                                    btaggingProcessMap,
+                                                                    btaggingInclusiveMap,
+                                                                    BTaggingYieldsAggregate, #bool btag_use_aggregate = false,
+                                                                    useHTOnly, #bool btag_use_HT_only = false,
+                                                                    useNJetOnly,
+                                                                    cppVerbosity) #bool btag_use_nJet_only = false
+            btaggingLUTManagers[name] = ROOT.LUTManager()
+            btaggingLUTManagers[name].Add(btaggingCorrectorMaps[name], cppVerbosity)
+            btaggingLUTManagers[name].Finalize(nThreads)
+            btaggingLUTs[name] = btaggingLUTManagers[name].GetLUTVector()
+
+            #General setup of nodes, counts, reports, start times, etc.
             reports[name] = base[name].Report()
             counts[name] = dict()
             # histos[name] = dict()
@@ -5443,8 +5449,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                 useAggregate=True, useHTOnly=useHTOnly, useNJetOnly=useNJetOnly,
                                                 sysVariations=sysVariationsAll, 
                                                 sysFilter=allSystematics,
-                                                vectorLUTs=btaggingLUTs,
-                                                correctorMap=btaggingCorrectorMap,
+                                                vectorLUTs=btaggingLUTs[name],
+                                                correctorMap=btaggingCorrectorMaps[name],
                                                 bTagger=bTagger,
                                                 calculateYields=calculateTheYields,
                                                 HTArray=[500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 10000], 
