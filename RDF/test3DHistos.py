@@ -139,11 +139,13 @@ processGroups["ttultrarare"] =  {
     "Style": "Fill", 
     "Names": ["ttWW", "ttWH", "ttWZ", "ttZZ", "ttZH", "ttHH", "tttW", "tttJ",]
 }
-processGroups["DY"] = {
+processGroups["ewk"] = {
     "Color": 416, 
     "Style": "Fill", 
     "OldNames": ["DYJets_DL",],
-    "Names": ["DYJets_DL-HT100", "DYJets_DL-HT200", "DYJets_DL-HT400", "DYJets_DL-HT600", "DYJets_DL-HT800", "DYJets_DL-HT1200", "DYJets_DL-HT2500",]
+    "Names": ["DYJets_DL-HT100", "DYJets_DL-HT200", "DYJets_DL-HT400", "DYJets_DL-HT600", "DYJets_DL-HT800", "DYJets_DL-HT1200", "DYJets_DL-HT2500",
+              "WJets_SL-HT100", "WJets_SL-HT200", "WJets_SL-HT400", "WJets_SL-HT600", "WJets_SL-HT800", "WJets_SL-HT1200", "WJets_SL-HT2500",
+              "WW", "WZ", "ZZ",]
 }
 processGroups["singletop"] = {
     "Color": 400, 
@@ -162,6 +164,11 @@ processGroups["tttt"] = {
     "Style": "Line", 
     "Names": ["tttt",]
 }
+# processGroups["tttt_badNPartonInBorn"] = {
+#     "Color": 864, 
+#     "Style": "Line", 
+#     "Names": ["tttt_badNPartonInBorn",]
+# }
 processGroups["ttVJets"] = {
     "Color": 880, 
     "Style": "Fill", 
@@ -199,13 +206,15 @@ processGroups["Data"] = {
 # f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/nJetSF_2017/Combine/All/2017___Combined.root", "read")
 # f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/nJetSF_2018/Combine/All/2018___Combined.root", "read")
 # f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Mar19_Baseline_2017/Combine/All/2017___HTOnly___5x5.root", "read")
-f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Mar19_Baseline_2018/Combine/All/2018___HTOnly___5x5.root", "read")
+# f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Mar19_Baseline_2018/Combine/All/2018___HTOnly___5x5.root", "read")
+f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Apr8_nJetSF_2017/Combine/All/2017___HTOnly___5x5.root", "read")
+# f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Apr8_nJetSF_2018/Combine/All/2018___HTOnly___5x5.root", "read")
 fkeys = [kk.GetName() for kk in f.GetListOfKeys()]
 histos = dict()
 name_format="$ERA___$PROCESS___$CHANNEL___$WINDOW___$CATEGORY$BLIND___$VARIABLE___$SYSTEMATIC"
 erasDict = {"2018": ["2018"], "2017": ["2017"], "RunII": ["2017", "2018"]}
-# era = "2017"
-era = "2018"
+era = "2017"
+# era = "2018"
 channels = ["ElMu", "MuMu", "ElEl"]
 # channels = ["ElMu"]
 # channels = ["MuMu"]
@@ -217,8 +226,8 @@ syst = "nom"
 tagger="DeepJet"
 htcut="500"
 # htcut="350"
-btagcat="2"
-# btagcat="1"
+# btagcat="2"
+btagcat="1"
 # btagcat="0"
 for k, v in processGroups.items():
     print(k)
@@ -244,10 +253,23 @@ for k, v in processGroups.items():
         print(k, " Blind: ", blind, " Succeeded/Failed to find match: ", len(keys[n]), len(fails))
 
 print("\neras = ", erasDict[era], " channels = ", channels, " syst = ", syst)
-print("nJet, Data, Data-nonttXBkg/ttXBkg, Data/Bkg, Data/(Sgnl+Bkg), ", ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','DY', 'tttt'])
+print("nJet,Data,Data-nonttbar/ttbar,Data/Bkg,Data/(Sgnl+Bkg),", ",".join(['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','ewk', 'tttt']))
 for n in ['4', '5', '6', '7', '8+']:
-    print("{}j,{},{:.4f},{:.4f},{:s}".format(n, 
-                                             histos['Data'][n].Integral(),
-                                             (histos['Data'][n].Integral() - sum([histos[s][n].Integral() for s in ['singletop','DY']]))/sum([histos[s][n].Integral() for s in ['ttnobb','ttbb','ttH','ttVJets','ttultrarare']]),
-                                             histos['Data'][n].Integral()/sum([histos[s][n].Integral() for s in ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','DY', 'tttt']]),
-                                             ",".join(["{:.4f}".format(histos[s][n].Integral()) for s in ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','DY', 'tttt']])))
+    print("{}j,{},{:.4f},{:.4f},{:s}"\
+          .format(n, 
+                  histos['Data'][n].Integral(),
+                  (histos['Data'][n].Integral() - sum([histos[s][n].Integral() for s in ['singletop','ewk', 'ttH', 'ttVJets', 'ttultrarare']]))/sum([histos[s][n].Integral() for s in ['ttnobb','ttbb']]),
+                  histos['Data'][n].Integral()/sum([histos[s][n].Integral() for s in ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','ewk', 'tttt']]),
+                  ",".join(["{:.4f}".format(histos[s][n].Integral()) for s in ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','ewk', 'tttt']])
+              )
+      )
+#Unfinished...
+# print("{}j,{},{:.4f},{:.4f},{:s}"\
+#       .format("4+", 
+#               sum([histos['Data'][n].Integral() for n in ['4', '5', '6', '7', '8+']]),
+#               sum([(histos['Data'][n].Integral() - sum([histos[s][n].Integral() for s in ['singletop','ewk', 'ttH', 'ttVJets', 'ttultrarare']]))/sum([histos[s][n].Integral() for s in ['ttnobb','ttbb']]) for n in ['4', '5', '6', '7', '8+']]),
+#               sum([histos['Data'][n].Integral() for n in ['4', '5', '6', '7', '8+']])/sum([sum([histos[s][n].Integral() for s in ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','ewk', 'tttt']]) for n in ['4', '5', '6', '7', '8+']]),
+#               ",".join(["{:.4f}".format(histos[s][n].Integral()) for s in ['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','ewk', 'tttt']])
+#           )
+#   )
+    

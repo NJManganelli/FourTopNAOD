@@ -8,7 +8,7 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
     with open(template, "r") as inFile:
         for line in inFile:
             outputLines.append(line)
-    keymapping = {"DATA": "data_obs", "TTNOBB": "ttnobb", "TTBB": "ttbb", "ST": "singletop", "TTV": "ttVJets", "TTRARE": "ttultrarare", "TTH": "ttH", "EWK": "DY", "TTTT": "tttt"}
+    keymapping = {"DATA": "data_obs", "TTNOBB": "ttnobb", "TTBB": "ttbb", "ST": "singletop", "TTV": "ttVJets", "TTRARE": "ttultrarare", "TTH": "ttH", "EWK": "EWK", "TTTT": "tttt"}
     normkeys = ["OSDL_RunII_hdampUp", "OSDL_RunII_hdampDown", "OSDL_RunII_ueUp", "OSDL_RunII_ueDown"]
     for category in categories:
         rate = {}

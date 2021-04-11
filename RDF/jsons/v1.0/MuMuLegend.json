@@ -26,7 +26,7 @@
                     "ttH", 
                     "ttVJets", 
                     "ttultrarare", 
-                    "DY", 
+                    "EWK", 
                     "QCD"
                 ], 
                 "Stack": true
@@ -79,7 +79,7 @@
                     "2018___ttZJets___MuMu___ZWindowMET0p0Width15p0"
                 ]
             }, 
-            "DY": {
+            "EWK": {
                 "Color": [222, 90, 106], 
                 "Style": "Fill", 
                 "Names": [
@@ -90,13 +90,33 @@
                     "2017___DYJets_DL-HT800___MuMu___ZWindowMET0p0Width15p0",
                     "2017___DYJets_DL-HT1200___MuMu___ZWindowMET0p0Width15p0",
                     "2017___DYJets_DL-HT2500___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT100___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT200___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT400___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT600___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT800___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT1200___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT2500___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___WW___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___WZ___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___ZZ___MuMu___ZWindowMET0p0Width15p0",
                     "2018___DYJets_DL-HT100___MuMu___ZWindowMET0p0Width15p0",
                     "2018___DYJets_DL-HT200___MuMu___ZWindowMET0p0Width15p0",
                     "2018___DYJets_DL-HT400___MuMu___ZWindowMET0p0Width15p0",
                     "2018___DYJets_DL-HT600___MuMu___ZWindowMET0p0Width15p0",
                     "2018___DYJets_DL-HT800___MuMu___ZWindowMET0p0Width15p0",
                     "2018___DYJets_DL-HT1200___MuMu___ZWindowMET0p0Width15p0",
-                    "2018___DYJets_DL-HT2500___MuMu___ZWindowMET0p0Width15p0"
+                    "2018___DYJets_DL-HT2500___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT100___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT200___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT400___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT600___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT800___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT1200___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT2500___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___WW___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___WZ___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___ZZ___MuMu___ZWindowMET0p0Width15p0"
                 ]
             }, 
             "Data": {
