@@ -4937,17 +4937,6 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
         else:
             print("No valid samples found, continuing")
             continue
-        for sysVarRaw, sysDict in sysVariationsAll.items():
-            if sysVarRaw not in allSystematicsWorkaround:
-                continue
-            #get final systematic name
-            sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
-            isWeightVariation = sysDict.get("weightVariation")
-            slimbranchpostfix = "nom" if isWeightVariation else sysVar #branch postfix for identifying input branch variation
-            for thisKey, _ in btaggingProcessMap:
-                btaggingProcessMap[thisKey].push_back(ROOT.std.pair(str, str)(sysVar, slimbranchpostfix))
-            for thisKey, _ in btaggingInclusiveMap:
-                btaggingInclusiveMap[thisKey].push_back(ROOT.std.pair(str, str)(sysVar, slimbranchpostfix))
         print("FIXME: hardcoded incorrect btagging top path for the corrector map")
         print("FIXME: hardcoded non-UL/UL and no VFP handling in the corrector map retrieval")
         BTaggingYieldsTopPath = BTaggingYieldsFile.replace("BTaggingYields.root", "") if BTaggingYieldsFile is not None and channel not in ["BOOKKEEPING", "PILEUP"] else "" #Trigger the null set of correctors for btagging if there's no yields file we're pointing to...
@@ -5099,15 +5088,33 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             filtered[name] = dict()
             base[name] = RDF(tcmain)
             baseColumns = base[name].GetColumnNames()
-            #Deduce filters for scale calculations (MET, defineLeptons, defineJets) and where all are needed (defineWeights, BTaggingYields, fillHistos...)
-            scaleSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=False, baseColumns=baseColumns)
-            allSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=True, baseColumns=baseColumns)
-            print("scale systematics: {}\nall systematics: {}".format(scaleSystematics, allSystematics))
             metainfo[name]["totalEvents"] = tcmain.GetEntries()
             print("\n{}".format(name))
             pprint.pprint(metainfo[name])
 
+
+            #Deduce filters for scale calculations (MET, defineLeptons, defineJets) and where all are needed (defineWeights, BTaggingYields, fillHistos...)
+            scaleSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=False, baseColumns=baseColumns)
+            allSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=True, baseColumns=baseColumns)
+            # print("scale systematics: {}\nall systematics: {}".format(scaleSystematics, allSystematics))
             #Now do the btagging LUTs
+            for sysVarRaw, sysDict in sysVariationsAll.items():
+                if sysVarRaw not in allSystematics:
+                    print("Skipping inapplicable systematic variation for btagging LUT creation: {}".format(sysVarRaw))
+                    continue
+                #get final systematic name
+                sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
+                isWeightVariation = sysDict.get("weightVariation")
+                slimbranchpostfix = "nom" if isWeightVariation else sysVar #branch postfix for identifying input branch variation
+                earlySplitProcess = vals.get("splitProcess", None)
+                if isinstance(earlySplitProcess, (dict)):
+                    # df_with_IDs = input_df
+                    splitProcs = earlySplitProcess.get("processes")
+                    for preProcessName, processDict in splitProcs.items():
+                        btaggingProcessMap[preProcessName].push_back(ROOT.std.pair(str, str)(sysVar, slimbranchpostfix))
+                    btaggingInclusiveMap[name].push_back(ROOT.std.pair(str, str)(sysVar, slimbranchpostfix))
+                else:
+                    btaggingProcessMap[name].push_back(ROOT.std.pair(str, str)(sysVar, slimbranchpostfix))
             btaggingCorrectorMaps[name] = ROOT.FTA.GetBtaggingCorrectorMap(era, #2017 or 2018 or 2016, as string
                                                                     globalisUL, #UL or non_UL
                                                                     globalVFP, ##preVFP or postVFP if 2016
