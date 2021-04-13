@@ -5099,6 +5099,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             # print("scale systematics: {}\nall systematics: {}".format(scaleSystematics, allSystematics))
             #Now do the btagging LUTs
             for sysVarRaw, sysDict in sysVariationsAll.items():
+                if vals.get("isData", True):
+                    continue
                 if sysVarRaw not in allSystematics:
                     print("Skipping inapplicable systematic variation for btagging LUT creation: {}".format(sysVarRaw))
                     continue
