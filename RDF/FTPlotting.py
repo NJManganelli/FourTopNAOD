@@ -3339,6 +3339,8 @@ if __name__ == '__main__':
                         help='int or list to force rebinning on histograms')
     parser.add_argument('--forceLogY', dest='forceLogY', action='store_true',
                         help='Force LogY axis plotting')
+    parser.add_argument('--forceWIP', dest='forceWIP', action='store_true',
+                        help='Force Work In Progress header on plots')
     
 
     #Parse the arguments
@@ -3462,6 +3464,11 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
             for k, v in loadedPlotConfig.items():
                 if "doLogY" in v.keys():
                     v["doLogY"] = True
+        if args.forceWIP:
+            print("Enforcing Work In Progress Label")
+            for k, v in loadedPlotConfig.items():
+                if v.get("Type") == "CanvasConfig":
+                    v["Label"] = "#bf{CMS} #it{Work In Progress}"
         resultsDict = loopPlottingJSON(loadedPlotConfig, era=args.era, channel=args.channel, systematicCards=args.systematics_cards,
                                        Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, drawSystematic=args.drawSystematic,
                                        analysisDirectory=analysisDir, tag=tag, plotCard=plotCard, macroOutput=macroOutput, pngOutput=pngOutput,

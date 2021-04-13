@@ -10,7 +10,7 @@ bin          OSDL_$ERA_$CHANNEL_$CATEGORY
 observation  $R_DATA          
 --------------------------------------------------------------------------------
 bin                                              OSDL_$ERA_$CHANNEL_$CATEGORY OSDL_$ERA_$CHANNEL_$CATEGORY OSDL_$ERA_$CHANNEL_$CATEGORY OSDL_$ERA_$CHANNEL_$CATEGORY OSDL_$ERA_$CHANNEL_$CATEGORY OSDL_$ERA_$CHANNEL_$CATEGORY OSDL_$ERA_$CHANNEL_$CATEGORY OSDL_$ERA_$CHANNEL_$CATEGORY
-process                                          ttnobb          ttbb            singletop       ttH             ttVJets         ttultrarare     DY              tttt 
+process                                          ttnobb          ttbb            singletop       ttH             ttVJets         ttultrarare     EWK             tttt 
 process                                          1               2               3               4               5               6               7               0
 rate                                             $R_TTNOBB       $R_TTBB         $R_ST           $R_TTH          $R_TTV          $R_TTRARE       $R_EWK          $R_TTTT
 --------------------------------------------------------------------------------
