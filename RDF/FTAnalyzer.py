@@ -5069,9 +5069,10 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     if mk.startswith("nLHEScaleSumw") or mk.startswith("nLHEPdfSumw") or mk.startswith("genEventCount"):
                         metainfo[name][mk] = int(round(metainfo[name][mk]))
                     if mk == "genEventSumw":
-                        if 1 - vals.get("sumWeights", 0)/metainfo[name]["genEventSumw"] > 1e-4:
-                            print("\n\n\nWARNING: Large weight discrepancy detected! name={} sumWeights={} genEventSumw={}\n\n\n"\
-                                  .format(name, vals.get("sumWeights", 0), metainfo[name]["genEventSumw"]))
+                        if (abs(1 - vals.get("sumWeights", 0)/metainfo[name]["genEventSumw"]) >= 1e-4):
+                            print("Weight discrepancy found, did you mean to override and run over a subset of files? {}".format(name))
+                        if channel != "BOOKKEEPING":
+                            assert (abs(1 - vals.get("sumWeights", 0)/metainfo[name]["genEventSumw"]) < 1e-4), "Weight discrepancy found, did you mean to override and run over a subset of files? {}".format(name)
                     if mk.startswith("LHEPdfSumw") or mk.startswith("LHEScaleSumw"):
                         metainfo[name][mk] /= metainfo[name]["genEventSumw"]
                 declare_cpp_constants(name, 
