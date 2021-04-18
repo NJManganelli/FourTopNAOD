@@ -1,0 +1,63 @@
+{
+    "Plot_MergedChannelsBTagsJets_Inclusive___HT": {
+        "Files": "2018___HTOnly___5x5___MergedChannelsBTagsJets_HT.root", 
+        "Rebin": [400.0, 512.0, 528.0, 544.0, 560.0, 576.0, 592.0, 608.0, 624.0, 640.0, 656.0, 672.0, 688.0, 704.0, 720.0, 736.0, 752.0, 768.0, 784.0, 800.0, 816.0, 832.0, 848.0, 864.0, 880.0, 896.0, 912.0, 928.0, 944.0, 960.0, 976.0, 992.0, 1008.0, 1024.0, 1040.0, 1056.0, 1072.0, 1088.0, 1104.0, 1120.0, 1136.0, 1152.0, 1168.0, 1184.0, 1200.0, 1216.0, 1232.0, 1248.0, 1264.0, 1280.0, 1296.0, 1312.0, 1328.0, 1344.0, 1360.0, 1376.0, 1392.0, 1408.0, 1424.0, 1440.0, 1472.0, 1504.0, 1536.0, 1552.0, 1584.0, 1616.0, 1664.0, 1712.0, 1808.0, 2000.0],
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Canvas_Inclusive_HT": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "HT (2+ b-tagged jets, 4+ jets)", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{l}#it{l} nB#geq2 nJ#geq4"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "HT", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_MergedChannelsBTagsJets_Inclusive___HT"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "DefaultCanvas": {
+        "XPixels": 800, 
+        "Title": "DefaultCanvasTitle", 
+        "Plots": null, 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "DoRatio": false, 
+        "Type": "DefaultCanvas", 
+        "YPixels": 800, 
+        "DoMountainrange": false
+    }, 
+    "DefaultPlot": {
+        "Files": null, 
+        "Rebin": null, 
+        "RatioYMin": 0.0, 
+        "RatioYMax": 2.0, 
+        "Title": "DefaultPlotTitle", 
+        "Unblind": false, 
+        "Type": "DefaultPlot"
+    }
+}
