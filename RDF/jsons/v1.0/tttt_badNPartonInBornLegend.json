@@ -1,0 +1,60 @@
+ {   
+     "DefaultLegend": {
+	"Header": "{lumi} fb^{{-1}} (13 TeV)",
+	"HeaderPosition": 0.25,
+        "Supercategories": {
+            "Signal": {
+                "Draw": "L", 
+                "Names": [
+                    "tttt_badNPartonInBorn"
+                ], 
+                "Stack": false
+            },
+            "Background": {
+                "Draw": "HIST", 
+                "Names": [
+                    "tttt"
+                ], 
+                "Stack": true
+            }
+        }, 
+        "nColumns": 2, 
+        "Ratios": {
+            "badNPartonInBorn/tttt": {
+                "Style": "Marker", 
+		"MarkerStyle": 20,
+		"Draw": "PXE1",
+                "Denominator": "Background", 
+                "Numerator": "Signal"
+            }
+        }, 
+        "Systematics": [], 
+        "Type": "DefaultLegend", 
+        "Coordinates": [
+            0.75, 
+            0.5, 
+            1.0, 
+            0.8
+        ], 
+        "Categories": {
+            "tttt": {
+                "Color": [155, 152, 204], 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___tttt___ElMu___ZWindowMET0Width0",
+                    "2017___tttt___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___tttt___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "tttt_badNPartonInBorn": {
+                "Color": 864, 
+                "Style": "Line", 
+                "Names": [
+                    "2017___tttt_badNPartonInBorn___ElMu___ZWindowMET0Width0",
+                    "2017___tttt_badNPartonInBorn___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___tttt_badNPartonInBorn___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }
+        }
+    }
+}
