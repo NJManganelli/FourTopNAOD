@@ -2183,18 +2183,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                      zeroingThreshold=0, differentialScale=False, histogramUncertainties=False, ratioUncertainties=False,
                      removeNegativeBins=True, orderReverse=False,
                      normalizeUncertainties=[],
-                     unusedNormalizationUncertainties=['OSDL_RunII_ttmuRNomFDown', 'OSDL_RunII_ttmuRNomFUp', 'OSDL_RunII_ttmuFNomRDown', 'OSDL_RunII_ttmuFNomRUp', 
-                                                       'OSDL_RunII_ttmuRFcorrelatedDown', 'OSDL_RunII_ttmuRFcorrelatedUp', 
-                                                       'OSDL_RunII_ttVJetsmuRNomFDown', 'OSDL_RunII_ttVJetsmuRNomFUp', 'OSDL_RunII_ttVJetsmuFNomRDown', 'OSDL_RunII_ttVJetsmuFNomRUp', 
-                                                       'OSDL_RunII_ttVJetsmuRFcorrelatedDown', 'OSDL_RunII_ttVJetsmuRFcorrelatedUp', 
-                                                       'OSDL_RunII_singletopmuRNomFDown', 'OSDL_RunII_singletopmuRNomFUp', 'OSDL_RunII_singletopmuFNomRDown', 'OSDL_RunII_singletopmuFNomRUp', 
-                                                       'OSDL_RunII_singletopmuRFcorrelatedDown', 'OSDL_RunII_singletopmuRFcorrelatedUp', 
-                                                       'OSDL_RunII_ttultrararemuRNomFDown', 'OSDL_RunII_ttultrararemuRNomFUp', 'OSDL_RunII_ttultrararemuFNomRDown', 'OSDL_RunII_ttultrararemuFNomRUp', 
-                                                       'OSDL_RunII_ttultrararemuRFcorrelatedDown', 'OSDL_RunII_ttultrararemuRFcorrelatedUp', 
-                                                       'OSDL_RunII_ttHmuRNomFDown', 'OSDL_RunII_ttHmuRNomFUp', 'OSDL_RunII_ttHmuFNomRDown', 'OSDL_RunII_ttHmuFNomRUp', 
-                                                       'OSDL_RunII_ttHmuRFcorrelatedDown', 'OSDL_RunII_ttHmuRFcorrelatedUp', 
-                                                       'OSDL_RunII_ttttmuRNomFDown', 'OSDL_RunII_ttttmuRNomFUp', 'OSDL_RunII_ttttmuFNomRDown', 'OSDL_RunII_ttttmuFNomRUp', 
-                                                       'OSDL_RunII_ttttmuRFcorrelatedDown', 'OSDL_RunII_ttttmuRFcorrelatedUp', ],
+                     unusedNormalizationUncertainties=[
+                                           'OSDL_RunII_ttmuRFcorrelatedDown', 'OSDL_RunII_ttmuRFcorrelatedUp', 
+                     ],
                      smootheUncertainties=['OSDL_2016_jesTotalUp', 'OSDL_2016_jesTotalDown', 'OSDL_2016APV_jesTotalUp', 'OSDL_2016APV_jesTotalDown',
                                            'OSDL_2017_jesTotalUp', 'OSDL_2017_jesTotalDown', 'OSDL_2018_jesTotalUp', 'OSDL_2018_jesTotalDown', 
                                            'OSDL_RunII_ewkISRUp', 'OSDL_RunII_ewkISRDown', 'OSDL_RunII_ewkFSRUp', 'OSDL_RunII_ewkFSRDown', 
@@ -2217,7 +2208,25 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                            'OSDL_2018_btagSF_shape_hfstats2Up', 'OSDL_2018_btagSF_shape_hfstats2Down',
                                            'OSDL_2018_btagSF_shape_lfstats1Up', 'OSDL_2018_btagSF_shape_lfstats1Down',
                                            'OSDL_2018_btagSF_shape_lfstats2Up', 'OSDL_2018_btagSF_shape_lfstats2Down',
-                                           
+                                           'OSDL_2016_jerUp', 'OSDL_2016_jerDown', 'OSDL_2016APV_jerUp', 'OSDL_2016APV_jerDown',
+                                           'OSDL_2017_jerUp', 'OSDL_2017_jerDown', 'OSDL_2018_jerUp', 'OSDL_2018_jerDown', 
+                                           'OSDL_RunII_ttmuRNomFDown', 'OSDL_RunII_ttmuRNomFUp', 'OSDL_RunII_ttmuFNomRDown', 'OSDL_RunII_ttmuFNomRUp', 
+                                           'OSDL_RunII_ttVJetsmuRNomFDown', 'OSDL_RunII_ttVJetsmuRNomFUp', 
+                                           'OSDL_RunII_ttVJetsmuFNomRDown', 'OSDL_RunII_ttVJetsmuFNomRUp', 
+                                           'OSDL_RunII_ttVJetsmuRFcorrelatedDown', 'OSDL_RunII_ttVJetsmuRFcorrelatedUp', 
+                                           'OSDL_RunII_singletopmuRNomFDown', 'OSDL_RunII_singletopmuRNomFUp', 
+                                           'OSDL_RunII_singletopmuFNomRDown', 'OSDL_RunII_singletopmuFNomRUp', 
+                                           'OSDL_RunII_singletopmuRFcorrelatedDown', 'OSDL_RunII_singletopmuRFcorrelatedUp', 
+                                           'OSDL_RunII_ttultrararemuRNomFDown', 'OSDL_RunII_ttultrararemuRNomFUp', 
+                                           'OSDL_RunII_ttultrararemuFNomRDown', 'OSDL_RunII_ttultrararemuFNomRUp', 
+                                           'OSDL_RunII_ttultrararemuRFcorrelatedDown', 'OSDL_RunII_ttultrararemuRFcorrelatedUp', 
+                                           'OSDL_RunII_ttHmuRNomFDown', 'OSDL_RunII_ttHmuRNomFUp', 'OSDL_RunII_ttHmuFNomRDown', 'OSDL_RunII_ttHmuFNomRUp', 
+                                           'OSDL_RunII_ttHmuRFcorrelatedDown', 'OSDL_RunII_ttHmuRFcorrelatedUp', 
+                                           'OSDL_RunII_ttttmuRNomFDown', 'OSDL_RunII_ttttmuRNomFUp', 'OSDL_RunII_ttttmuFNomRDown', 'OSDL_RunII_ttttmuFNomRUp', 
+                                           'OSDL_RunII_ttttmuRFcorrelatedDown', 'OSDL_RunII_ttttmuRFcorrelatedUp', 
+                                           'OSDL_2016_pileupUp', 'OSDL_2016_pileupDown', 'OSDL_2016APV_pileupUp', 'OSDL_2016APV_pileupDown',
+                                           'OSDL_2017_pileupUp', 'OSDL_2017_pileupDown', 'OSDL_2018_pileupUp', 'OSDL_2018_pileupDown', 
+                                           'OSDL_RunII_pdfUp', 'OSDL_RunII_pdfDown',
                                        ],
                      normalizeAllUncertaintiesForProcess=[],
 ):
@@ -3161,7 +3170,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         if combineCards:
             with open(os.path.join(analysisDir, "Combine", "Counts_"+era+"_"+channel+"_"+combineInput+".json"), "w") as countfile: 
                 countfile.write(json.dumps(combCounts, indent=4))
-            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV13.txt", counts=combCounts)
+            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV14.txt", counts=combCounts)
             print("Wrote combine cards")
         # cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
         # # print(cmd)
