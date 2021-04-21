@@ -1898,9 +1898,22 @@ def insertPVandMETFilters(input_df, level, era="2017", isData=False):
 #    rdf = rdf.Define("JML_selection_pass", "(ESV_JetMETLogic_selection & {0}) >= {0}".format(0b00000000001111111111))#Only PV and MET filters required to pass
 #    return rdf
 
-def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017", inputNtupleVariables=None, printInfo=False, inclusiveProcess=None, fillDiagnosticHistos=False, inputSampleCard=None):
-    lumiDict = {"2017": 41.53,
-                "2018": 59.97}
+def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era="2017", isUL="non-UL", inputNtupleVariables=None, printInfo=False, inclusiveProcess=None, fillDiagnosticHistos=False, inputSampleCard=None):
+    if isinstance(isUL, bool):
+        if isUL:
+            isUL = "UL"
+        else:
+            isUL = "non-UL"            
+    lumi = {"2016": {"non-UL": 36.33,
+                     "UL": 36.33},
+            "2017": {"non-UL": 41.53,
+                     "UL": 41.48},
+            "2018": {"non-UL": 59.74,
+                     "UL": 59.83},
+            "RunII": {"non-UL": 137.60,
+                      "UL": 137.65}
+        }[era][isUL] #Immediately grab by era and UL status
+    lumiUncertainty = {"2016": "1.012", "2017": "1.023", "2018": "1.025", "RunII": "1.016"}[era]
     filterNodes = dict() #For storing tuples to debug and be verbose about
     defineNodes = collections.OrderedDict() #For storing all histogram tuples --> Easier debugging when printed out, can do branch checks prior to invoking HistoND, etc...
     countNodes = dict() #For storing the counts at each node
@@ -1979,7 +1992,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     print("FIXME: Need to modify fractional sample weighting to use the meta info, defaulting to 1.0 right now")
                     print("OPTIONAL: Need to take the lumi value from the actual sample card era, not the presumed one passed to analyzer")
                     wgtFormula = "{eXS:f} * {lumi:f} * 1000 * genWeight * {frSample:f} * {frCon:f} / {sW:f}".format(eXS=effectiveXS,
-                                                                                                                    lumi=lumiDict[era],
+                                                                                                                    lumi=lumi,
                                                                                                                     frSample=1.0,
                                                                                                                     frCon=fractionalContribution,
                                                                                                                     sW=sumWeights
@@ -5244,6 +5257,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                   sampleName = name, 
                                                   isData = vals["isData"], 
                                                   era = vals["era"],
+                                                  isUL = globalisUL,
                                                   printInfo = True,
                                                   fillDiagnosticHistos = True,
                                                   inputSampleCard=inputSampleCardYaml,
