@@ -226,8 +226,8 @@ syst = "nom"
 tagger="DeepJet"
 htcut="500"
 # htcut="350"
-# btagcat="2"
-btagcat="1"
+btagcat="2"
+# btagcat="1"
 # btagcat="0"
 for k, v in processGroups.items():
     print(k)
