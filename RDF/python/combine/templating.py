@@ -3,7 +3,7 @@ import math
 def write_combine_cards(analysisDirectory, era, channel, variable, categories, template="TTTT_templateV9.txt", counts = dict(), options = dict()): 
     lumistr = {"2016": "1.012", "2017": "1.023", "2018": "1.025"}[era] #Uncertainty per year with old, uncorrelated recommendation
     #For recommendations from https://twiki.cern.ch/twiki/bin/view/CMS/TopSystematics#Luminosity, applicable to TTTT_templateV14.txt and after
-    uncorrlumi = {"2016": "1.009", "2017": "1.020", "2018": "1.015"}[era] #replace $ULUM
+    uncorrlumi = {"2016": "1.010", "2017": "1.020", "2018": "1.015"}[era] #replace $ULUM
     corr161718lumi = {"2016": "1.006    ", "2017": "1.009    ", "2018": "1.020    "}[era] #replace $CL161718
     corr1718lumi = {"2016": "-      ", "2017": "1.006  ", "2018": "1.002  "}[era] #replace $CL1718
     hdampstr = {"2017": "0.93/1.10", "2018": "0.93/1.10"}[era] #Uncertainty per year, derived from inclusive check of channels, btag and jet categories, ttbar subprocesses
