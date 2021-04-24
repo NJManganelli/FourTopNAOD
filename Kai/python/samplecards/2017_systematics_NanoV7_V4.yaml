@@ -1561,6 +1561,7 @@ OSDL_RunII_pdfUp:
   - pdf
   requires:
   - LHEPdfWeight
+  prewgt___$SYSTEMATIC: "double temp = Max(LHEPdfWeight)/Mean(LHEPdfWeight); return prewgt___$NOMINAL * std::fmax(0.0, std::fmin(2.0, temp));"
   preWeights:
     prewgt___$SYSTEMATIC: "prewgt___$NOMINAL * (Max(LHEPdfWeight)/Mean(LHEPdfWeight));"
   finalWeights:
@@ -1578,6 +1579,7 @@ OSDL_RunII_pdfDown:
   - pdf
   requires:
   - LHEPdfWeight
+  prewgt___$SYSTEMATIC: "double temp = Min(LHEPdfWeight)/Mean(LHEPdfWeight); return prewgt___$NOMINAL * std::fmin(2.0, std::fmax(0.0, temp));"
   preWeights:
     prewgt___$SYSTEMATIC: "prewgt___$NOMINAL * (Min(LHEPdfWeight)/Mean(LHEPdfWeight));"
   finalWeights:
