@@ -1093,6 +1093,10 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
     leppostfix = ""
     #z will be a list of tuples to define, so that we can do cleaner error handling and checks
     z = []
+    if era == "2018":
+        z.append(("Jet_pt_hem_down", "auto hem_mask = Jet_phi > -1.57 && Jet_phi < -0.87 && Jet_eta > -2.5 && Jet_eta < -1.3;"\
+                                     "ROOT::VecOps::RVec<float> Jet_pt_hem = 0.8 * Jet_pt_nom;"\
+                                     "return ROOT::VecOps::Where(hem_mask, Jet_pt_hem, Jet_pt);"))
     for sysVarRaw, sysDict in sysVariations.items():
         #skip systematic variations on data, only do the nominal
         if isData and sysVarRaw != "$NOMINAL": 
