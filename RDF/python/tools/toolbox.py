@@ -170,3 +170,38 @@ def configure_template_systematics(yaml_dict, era, channel, include_nominal=True
                 continue
             systs.append(sysVarRaw.replace("$ERA", era).replace("$CHANNEL", channel).replace("$LEP_POSTFIX", lep_postfix).replace("$NOMINAL", "nom"))
     return systs
+
+def configure_template_systematics_dict(yaml_dict, era, channel, include_nominal=True):
+    assert isinstance(era, str)
+    assert isinstance(channel, str)
+    systs = dict()
+    for sysVarRaw, sysDictRaw in yaml_dict.items():
+        lep_postfix = sysDictRaw.get("lep_postfix", "")
+        # if sysDictRaw.get("ensembleMapping", None) is not None:
+        sampleRemappings = sysDictRaw.get("sampleRemapping", None)
+        if sampleRemappings is not None:
+            for name, samples in sampleRemappings.items():
+                systs[name.replace("$ERA", era).replace("$CHANNEL", channel).replace("$LEP_POSTFIX", lep_postfix).replace("$NOMINAL", "nom")] = sysDictRaw
+        else:
+            if not include_nominal and sysVarRaw.replace("$ERA", era).replace("$CHANNEL", channel).replace("$LEP_POSTFIX", lep_postfix) in ["$NOMINAL", "nom"]:
+                continue
+            systs[sysVarRaw.replace("$ERA", era).replace("$CHANNEL", channel).replace("$LEP_POSTFIX", lep_postfix).replace("$NOMINAL", "nom")] = sysDictRaw
+    for sysVar, sysDict in systs.items():
+        for k, v in sysDict.items():
+            if isinstance(v, str):
+                if "$" in v:
+                    v = v.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
+            else:
+                try:
+                    for kk, vv in v.items():
+                        new_kk = kk.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
+                        v[new_kk] = v.pop(kk)
+                        v[new_kk] = v[new_kk].replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
+                except:
+                    try:
+                        for vv in v:
+                            if isinstance(vv, str):
+                                vv = vv.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
+                    except:
+                        pass
+    return systs
