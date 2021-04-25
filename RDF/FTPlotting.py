@@ -16,7 +16,7 @@ import json
 import copy
 import argparse
 import uuid
-from FourTopNAOD.RDF.tools.toolbox import load_yaml_cards, write_yaml_cards, configure_template_systematics
+from FourTopNAOD.RDF.tools.toolbox import load_yaml_cards, write_yaml_cards, configure_template_systematics, configure_template_systematics_dict
 from FourTopNAOD.RDF.combine.templating import write_combine_cards
 # from ruamel.yaml import YAML
 from IPython.display import Image, display, SVG
@@ -2316,6 +2316,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["ratioTitle"] = legendConfig.get("ratioTitle", "#frac{Data}{Simulation}")
         sysVariationsYaml, sysVariationCardDict = load_yaml_cards(systematicCards) if systematicCards is not None else ([], {})
         systematics = configure_template_systematics(sysVariationsYaml, era, channel, include_nominal=False) if len(sysVariationsYaml) > 0 else []
+        systematicsDict = configure_template_systematics_dict(sysVariationsYaml, era, channel, include_nominal=False) if len(sysVariationsYaml) > 0 else []
         # print(" ".join(systematics))
         #Load the LegendConfig which denotes which samples to use, colors to assign, etc.
         
@@ -2358,6 +2359,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         histDrawSystematicDownRatio = []
         npValues = [] #npValues[padNumber][Supercategory][systematic, bin] stores the contents of each histogram of systematics, with a reverse lookup sD dictionary for mapping systematic name to number in the last array lookup
         npDifferences = []
+        npMasks = []
         npNominal = [] # n-vector
         npBinCenters = [] # n-vector
         npXErrorsUp = []
@@ -2423,6 +2425,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 histDrawSystematicDownRatio.append(dict())
                 npValues.append(dict())
                 npDifferences.append(dict())
+                npMasks.append(dict())
                 npNominal.append(dict())
                 npBinCenters.append(dict())
                 npXErrorsUp.append(dict())
@@ -2441,6 +2444,10 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     npNominal[pn][supercategory], edgesTuple = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=True)
                     # npValues[pn][supercategory] = np.zeros((nSysts + 2, nBins + 2), dtype=float)
                     npValues[pn][supercategory] = npNominal[pn][supercategory].reshape((1,nBins+2)) * np.ones_like(1.0, shape=(nSysts + 2, nBins + 2), dtype=float)
+                    #npMasks contains various arrays for only getting positive entries, negative entries, systeamtic only, those which should be added in quadrature, enveloped...
+                    npMasks[pn][supercategory] = dict()
+                    npMasks[pn][supercategory]['R_Systematic'] = np.ones_like(True, shape=(nSysts + 2, nBins + 2), dtype=bool)  
+                    npMasks[pn][supercategory]['R_Systematic'][nSysts+0:nSysts+2, :] = False #Set the two statistical dimensions to False
                     #Stat errors up and down Assumes positive return value, untrue for esoteric stat options?
                     #TGraphAsymmErrors constructor requires the number of points and ALL POSITIVE arrays for the x, y, xdown, xup, ydown, yup (latter 4 RELATIVE)
                     npStatErrorsDown[pn][supercategory] = np.asarray([bt[0] for bt in histoArrays], dtype=float)
@@ -2460,10 +2467,27 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         print("*", end="")
                     else:
                         print("*")
+                    #prepare masks for creation of systematics added in quadrature, enveloped, and so on
+                    addInQuadratureAs = systematicsDict[syst].get("addInQuadratureAs", False)
+                    envelopeAs = systematicsDict[syst].get("envelopeAs", False)
+                    if addInQuadratureAs:
+                        assert "$" not in addInQuadratureAs, "Unresolved symbol in addInQuadratureAs '{}' from '{}'".format(addInQuadratureAs, syst)
+                        if addInQuadratureAs not in npMasks[pn][supercategory]:
+                            npMasks[pn][supercategory][addInQuadratureAs] = np.ones_like(False, shape=(nSysts + 2, nBins + 2), dtype=bool)
+                        npMasks[pn][supercategory][addInQuadratureAs][nSyst, :] = True
+                    if envelopeAs:
+                        assert "$" not in envelopeAs, "Unresolved symbol in envelopeAs '{}' from '{}'".format(envelopeAs, syst)
+                        if envelopeAs not in npMasks[pn][supercategory]:
+                            npMasks[pn][supercategory][envelopeAs] = np.ones_like(False, shape=(nSysts +2, nBins + 2), dtype=bool)
+                        npMasks[pn][supercategory][envelopeAs][nSyst, :] = True
                     if skipSystematics is not None:
                         if "all" in skipSystematics or "All" in skipSystematics or "ALL" in skipSystematics:
                             continue
                         if syst in skipSystematics: 
+                            continue
+                        if isinstance(addInQuadratureAs, str) and addInQuadratureAs in skipSystematics:
+                            continue
+                        if isinstance(envelopeAs, str) and envelopeAs in skipSystematics:
                             continue
                     sD[syst] = nSyst
                     normalizeToNominal = False
@@ -2516,6 +2540,10 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 #Only calculate the differences once all values are populated for every systematic (and supercategory, since it's nested one level deeper still)
                 for supercategory in npValues[pn].keys():
                     npDifferences[pn][supercategory] = npValues[pn][supercategory] - npNominal[pn][supercategory]
+                    npDifferences[pn][supercategory][nSysts] = npStatErrorsUp[pn][supercategory]
+                    npDifferences[pn][supercategory][nSysts+1] = - np.abs(npStatErrorsDown[pn][supercategory])
+                    npMasks[pn][supercategory]['R_UpVar'] = npDifferences[pn][supercategory] >= 0
+                    npMasks[pn][supercategory]['R_DownVar'] = npDifferences[pn][supercategory] < 0
                     npStatSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
                                                                                           2, 
                                                                                           out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
@@ -2532,6 +2560,34 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                         2, 
                                                                                         out=np.zeros((nSysts + 0, nBins + 2), dtype=float),
                                                                                         where=npDifferences[pn][supercategory][:nSysts+0, :] < 0), axis=0))
+                    npTestUp = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                       2, 
+                                                       out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                                       where=npMasks[pn][supercategory]['R_Systematic'] & npMasks[pn][supercategory]['R_UpVar']), axis=0))
+                    npTestDown = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                         2, 
+                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                                         where=npMasks[pn][supercategory]['R_Systematic'] & npMasks[pn][supercategory]['R_DownVar']), axis=0))
+                    npTestUpAll = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                       2, 
+                                                       out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                                       where=npMasks[pn][supercategory]['R_UpVar']), axis=0))
+                    npTestDownAll = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                         2, 
+                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                                         where=npMasks[pn][supercategory]['R_DownVar']), axis=0))
+                    debugOrig = np.power(npDifferences[pn][supercategory], 
+                                         2, 
+                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                         where=npDifferences[pn][supercategory] < 0 & npMasks[pn][supercategory]['R_Systematic'])
+                    debugDown = np.power(npDifferences[pn][supercategory], 
+                                        2, 
+                                        out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                         where=npMasks[pn][supercategory]['R_DownVar'] & npMasks[pn][supercategory]['R_Systematic'])
+                    assert np.all(npTestUpAll == npStatSystematicErrorsUp[pn][supercategory])
+                    assert np.all(npTestDownAll == npStatSystematicErrorsDown[pn][supercategory])
+                    assert np.all(npTestUp == npSystematicErrorsUp[pn][supercategory])
+                    assert np.all(npTestDown == npSystematicErrorsDown[pn][supercategory])
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/systematicErrors'] = dict()
