@@ -2544,50 +2544,24 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     npDifferences[pn][supercategory][nSysts+1] = - np.abs(npStatErrorsDown[pn][supercategory])
                     npMasks[pn][supercategory]['R_UpVar'] = npDifferences[pn][supercategory] >= 0
                     npMasks[pn][supercategory]['R_DownVar'] = npDifferences[pn][supercategory] < 0
+                    npSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                                                      2, 
+                                                                                      out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                                                                      where=npMasks[pn][supercategory]['R_Systematic'] & 
+                                                                                      npMasks[pn][supercategory]['R_UpVar']), axis=0))
+                    npSystematicErrorsDown[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                                                        2, 
+                                                                                        out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                                                                        where=npMasks[pn][supercategory]['R_Systematic'] & 
+                                                                                        npMasks[pn][supercategory]['R_DownVar']), axis=0))
                     npStatSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
                                                                                           2, 
                                                                                           out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                                                                          where=npDifferences[pn][supercategory] > 0), axis=0))
+                                                                                          where=npMasks[pn][supercategory]['R_UpVar']), axis=0))
                     npStatSystematicErrorsDown[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
                                                                                             2, 
                                                                                             out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                                                                            where=npDifferences[pn][supercategory] < 0), axis=0))
-                    npSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory][:nSysts+0, :], 
-                                                                                      2, 
-                                                                                      out=np.zeros((nSysts + 0, nBins + 2), dtype=float),
-                                                                                      where=npDifferences[pn][supercategory][:nSysts+0, :] > 0), axis=0))
-                    npSystematicErrorsDown[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory][:nSysts+0, :], 
-                                                                                        2, 
-                                                                                        out=np.zeros((nSysts + 0, nBins + 2), dtype=float),
-                                                                                        where=npDifferences[pn][supercategory][:nSysts+0, :] < 0), axis=0))
-                    npTestUp = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
-                                                       2, 
-                                                       out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                                       where=npMasks[pn][supercategory]['R_Systematic'] & npMasks[pn][supercategory]['R_UpVar']), axis=0))
-                    npTestDown = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
-                                                         2, 
-                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                                         where=npMasks[pn][supercategory]['R_Systematic'] & npMasks[pn][supercategory]['R_DownVar']), axis=0))
-                    npTestUpAll = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
-                                                       2, 
-                                                       out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                                       where=npMasks[pn][supercategory]['R_UpVar']), axis=0))
-                    npTestDownAll = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
-                                                         2, 
-                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                                         where=npMasks[pn][supercategory]['R_DownVar']), axis=0))
-                    debugOrig = np.power(npDifferences[pn][supercategory], 
-                                         2, 
-                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                         where=npDifferences[pn][supercategory] < 0 & npMasks[pn][supercategory]['R_Systematic'])
-                    debugDown = np.power(npDifferences[pn][supercategory], 
-                                        2, 
-                                        out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                         where=npMasks[pn][supercategory]['R_DownVar'] & npMasks[pn][supercategory]['R_Systematic'])
-                    assert np.all(npTestUpAll == npStatSystematicErrorsUp[pn][supercategory])
-                    assert np.all(npTestDownAll == npStatSystematicErrorsDown[pn][supercategory])
-                    assert np.all(npTestUp == npSystematicErrorsUp[pn][supercategory])
-                    assert np.all(npTestDown == npSystematicErrorsDown[pn][supercategory])
+                                                                                            where=npMasks[pn][supercategory]['R_DownVar']), axis=0))
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/systematicErrors'] = dict()
