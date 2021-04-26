@@ -2335,7 +2335,6 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             CanCache["subplots/supercategories/systematics"][syst] = []
         CanCache["subplots/ratios"] = []
         CanCache["subplots/channels"] = []
-        CanCache["subplots/histograms"] = []
         CanCache["subplots/stats"] = []
         CanCache["subplots/rebins"] = []
         CanCache["subplots/setrangeuser"] = []
@@ -2460,6 +2459,26 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     npXErrorsDown[pn][supercategory] = np.append(np.insert(binWidths/2, 0, halfBinMin), halfBinMin)
                     npValues[pn][supercategory][nSysts + 0, :] = npNominal[pn][supercategory] + npStatErrorsUp[pn][supercategory]
                     npValues[pn][supercategory][nSysts + 1, :] = npNominal[pn][supercategory] - npStatErrorsDown[pn][supercategory]
+                for category, catHisto in CanCache["subplots/supercategories"][pn]['Categories/hists'].items():
+                    # multiprocessing.Pool.map() may be faster... but it didn't work in my first test. list comprehension better if tupled up?
+                    if "data" in category.lower(): continue
+                    histoArrays = [(catHisto.GetBinErrorLow(x), catHisto.GetBinErrorUp(x)) for x in range(nBins + 2)]
+                    #### histDrawSystematicNom[pn][category] = catHisto.Clone(catHisto.GetName() + "_drawSystematic_" + "nom")
+                    npNominal[pn][category], edgesTuple = root_numpy.hist2array(catHisto, include_overflow=True, copy=True, return_edges=True)
+                    npValues[pn][category] = npNominal[pn][category].reshape((1,nBins+2)) * np.ones_like(1.0, shape=(nSysts + 2, nBins + 2), dtype=float)
+                    npMasks[pn][category] = dict()
+                    npMasks[pn][category]['R_Systematic'] = np.ones_like(True, shape=(nSysts + 2, nBins + 2), dtype=bool)  
+                    npMasks[pn][category]['R_Systematic'][nSysts+0:nSysts+2, :] = False #Set the two statistical dimensions to False
+                    npStatErrorsDown[pn][category] = np.asarray([bt[0] for bt in histoArrays], dtype=float)
+                    npStatErrorsUp[pn][category] = np.asarray([bt[1] for bt in histoArrays], dtype=float) 
+                    binWidths = (edgesTuple[0][1:] - edgesTuple[0][:-1])
+                    halfBinMin = np.min(binWidths)/2
+                    npBinCenters[pn][category] = np.append(np.insert(edgesTuple[0][:-1] + binWidths/2, 0, 
+                                                                          edgesTuple[0][0] - halfBinMin), edgesTuple[0][-1] + halfBinMin)
+                    npXErrorsUp[pn][category] = np.append(np.insert(binWidths/2, 0, halfBinMin), halfBinMin)
+                    npXErrorsDown[pn][category] = np.append(np.insert(binWidths/2, 0, halfBinMin), halfBinMin)
+                    npValues[pn][category][nSysts + 0, :] = npNominal[pn][category] + npStatErrorsUp[pn][category]
+                    npValues[pn][category][nSysts + 1, :] = npNominal[pn][category] - npStatErrorsDown[pn][category]
                 for nSyst, syst in enumerate(sorted(sorted(systematics, key = lambda l: l[-2:] == "Up", reverse=True), 
                                                     key = lambda l: l.replace("Down", "").replace("Up", "")
                                                 )):
@@ -2470,16 +2489,6 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     #prepare masks for creation of systematics added in quadrature, enveloped, and so on
                     addInQuadratureAs = systematicsDict[syst].get("addInQuadratureAs", False)
                     envelopeAs = systematicsDict[syst].get("envelopeAs", False)
-                    if addInQuadratureAs:
-                        assert "$" not in addInQuadratureAs, "Unresolved symbol in addInQuadratureAs '{}' from '{}'".format(addInQuadratureAs, syst)
-                        if addInQuadratureAs not in npMasks[pn][supercategory]:
-                            npMasks[pn][supercategory][addInQuadratureAs] = np.ones_like(False, shape=(nSysts + 2, nBins + 2), dtype=bool)
-                        npMasks[pn][supercategory][addInQuadratureAs][nSyst, :] = True
-                    if envelopeAs:
-                        assert "$" not in envelopeAs, "Unresolved symbol in envelopeAs '{}' from '{}'".format(envelopeAs, syst)
-                        if envelopeAs not in npMasks[pn][supercategory]:
-                            npMasks[pn][supercategory][envelopeAs] = np.ones_like(False, shape=(nSysts +2, nBins + 2), dtype=bool)
-                        npMasks[pn][supercategory][envelopeAs][nSyst, :] = True
                     if skipSystematics is not None:
                         if "all" in skipSystematics or "All" in skipSystematics or "ALL" in skipSystematics:
                             continue
@@ -2508,69 +2517,87 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                                       normalizeToNominal=normalizeToNominal, smoothing=smoothing, 
                                                                                                       zeroingThreshold=zeroingThreshold, differentialScale=differentialScale,
                                                                                                       nominalCache=CanCache["subplots/supercategories"][-1],
-                                                                                                  ))                            
-                    for supercategory, scHisto in CanCache["subplots/supercategories/systematics"][syst][pn]['Supercategories/hists'].items():
-                        if "data" in supercategory.lower(): continue                        
-                        # npValues[pn][supercategory][nSyst, :] = np.asarray(map(lambda l: l[0].GetBinContent(l[1]), [(scHisto, x) for x in range(nBins + 2)]))
-                        npValues[pn][supercategory][nSyst, :] = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=False)
-                        if drawSystematic == syst.replace("Up", ""):
-                            histDrawSystematicUp[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematic_" + syst)
-                            histDrawSystematicUpRatio[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematicRatio_" + syst)
-                            histDrawSystematicUpRatio[pn][supercategory].Divide(histDrawSystematicNom[pn][supercategory])
-                            histDrawSystematicUp[pn][supercategory].SetLineColor(ROOT.kGreen)
-                            histDrawSystematicUp[pn][supercategory].SetFillColor(0)
-                            histDrawSystematicUp[pn][supercategory].SetLineWidth(1)
-                            histDrawSystematicUp[pn][supercategory].SetLineStyle(1)
-                            histDrawSystematicUpRatio[pn][supercategory].SetLineColor(ROOT.kGreen)
-                            histDrawSystematicUpRatio[pn][supercategory].SetFillColor(0)
-                            histDrawSystematicUpRatio[pn][supercategory].SetLineWidth(1)
-                            histDrawSystematicUpRatio[pn][supercategory].SetLineStyle(1)
-                        if drawSystematic == syst.replace("Down", ""):
-                            histDrawSystematicDown[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematic_" + syst)
-                            histDrawSystematicDownRatio[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematicRatio_" + syst)
-                            histDrawSystematicDownRatio[pn][supercategory].Divide(histDrawSystematicNom[pn][supercategory])
-                            histDrawSystematicDown[pn][supercategory].SetLineColor(ROOT.kBlue)
-                            histDrawSystematicDown[pn][supercategory].SetFillColor(0)
-                            histDrawSystematicDown[pn][supercategory].SetLineWidth(1)
-                            histDrawSystematicDown[pn][supercategory].SetLineStyle(1)
-                            histDrawSystematicDownRatio[pn][supercategory].SetLineColor(ROOT.kBlue)
-                            histDrawSystematicDownRatio[pn][supercategory].SetFillColor(0)
-                            histDrawSystematicDownRatio[pn][supercategory].SetLineWidth(1)
-                            histDrawSystematicDownRatio[pn][supercategory].SetLineStyle(1)
-                #Only calculate the differences once all values are populated for every systematic (and supercategory, since it's nested one level deeper still)
-                for supercategory in npValues[pn].keys():
-                    npDifferences[pn][supercategory] = npValues[pn][supercategory] - npNominal[pn][supercategory]
-                    npDifferences[pn][supercategory][nSysts] = npStatErrorsUp[pn][supercategory]
-                    npDifferences[pn][supercategory][nSysts+1] = - np.abs(npStatErrorsDown[pn][supercategory])
-                    npMasks[pn][supercategory]['R_UpVar'] = npDifferences[pn][supercategory] >= 0
-                    npMasks[pn][supercategory]['R_DownVar'] = npDifferences[pn][supercategory] < 0
-                    npSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                                                                  ))
+                    conglomeration = list(CanCache["subplots/supercategories/systematics"][syst][pn]['Supercategories/hists'].items()) + list(CanCache["subplots/supercategories/systematics"][syst][pn]['Categories/hists'].items())
+                    for categoryorsupercategory, scHisto in conglomeration:
+                        if "data" in categoryorsupercategory.lower(): continue                        
+                        if addInQuadratureAs:
+                            assert "$" not in addInQuadratureAs, "Unresolved symbol in addInQuadratureAs '{}' from '{}'".format(addInQuadratureAs, syst)
+                            if addInQuadratureAs not in npMasks[pn][categoryorsupercategory]:
+                                npMasks[pn][categoryorsupercategory][addInQuadratureAs] = np.ones_like(False, shape=(nSysts + 2, nBins + 2), dtype=bool)
+                            npMasks[pn][categoryorsupercategory][addInQuadratureAs][nSyst, :] = True
+                        if envelopeAs:
+                            assert "$" not in envelopeAs, "Unresolved symbol in envelopeAs '{}' from '{}'".format(envelopeAs, syst)
+                            if envelopeAs not in npMasks[pn][categoryorsupercategory]:
+                                npMasks[pn][categoryorsupercategory][envelopeAs] = np.ones_like(False, shape=(nSysts +2, nBins + 2), dtype=bool)
+                            npMasks[pn][categoryorsupercategory][envelopeAs][nSyst, :] = True
+                        # npValues[pn][categoryorsupercategory][nSyst, :] = np.asarray(map(lambda l: l[0].GetBinContent(l[1]), [(scHisto, x) for x in range(nBins + 2)]))
+                        npValues[pn][categoryorsupercategory][nSyst, :] = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=False)
+                        if categoryorsupercategory in CanCache["subplots/supercategories/systematics"][syst][pn]['Supercategories/hists']:
+                            if drawSystematic == syst.replace("Up", ""):
+                                histDrawSystematicUp[pn][categoryorsupercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematic_" + syst)
+                                histDrawSystematicUpRatio[pn][categoryorsupercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematicRatio_" + syst)
+                                histDrawSystematicUpRatio[pn][categoryorsupercategory].Divide(histDrawSystematicNom[pn][categoryorsupercategory])
+                                histDrawSystematicUp[pn][categoryorsupercategory].SetLineColor(ROOT.kGreen)
+                                histDrawSystematicUp[pn][categoryorsupercategory].SetFillColor(0)
+                                histDrawSystematicUp[pn][categoryorsupercategory].SetLineWidth(1)
+                                histDrawSystematicUp[pn][categoryorsupercategory].SetLineStyle(1)
+                                histDrawSystematicUpRatio[pn][categoryorsupercategory].SetLineColor(ROOT.kGreen)
+                                histDrawSystematicUpRatio[pn][categoryorsupercategory].SetFillColor(0)
+                                histDrawSystematicUpRatio[pn][categoryorsupercategory].SetLineWidth(1)
+                                histDrawSystematicUpRatio[pn][categoryorsupercategory].SetLineStyle(1)
+                            if drawSystematic == syst.replace("Down", ""):
+                                histDrawSystematicDown[pn][categoryorsupercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematic_" + syst)
+                                histDrawSystematicDownRatio[pn][categoryorsupercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematicRatio_" + syst)
+                                histDrawSystematicDownRatio[pn][categoryorsupercategory].Divide(histDrawSystematicNom[pn][categoryorsupercategory])
+                                histDrawSystematicDown[pn][categoryorsupercategory].SetLineColor(ROOT.kBlue)
+                                histDrawSystematicDown[pn][categoryorsupercategory].SetFillColor(0)
+                                histDrawSystematicDown[pn][categoryorsupercategory].SetLineWidth(1)
+                                histDrawSystematicDown[pn][categoryorsupercategory].SetLineStyle(1)
+                                histDrawSystematicDownRatio[pn][categoryorsupercategory].SetLineColor(ROOT.kBlue)
+                                histDrawSystematicDownRatio[pn][categoryorsupercategory].SetFillColor(0)
+                                histDrawSystematicDownRatio[pn][categoryorsupercategory].SetLineWidth(1)
+                                histDrawSystematicDownRatio[pn][categoryorsupercategory].SetLineStyle(1)
+                #Only calculate the differences once all values are populated for every systematic (and categoryorsupercategory, since it's nested one level deeper still)
+                for categoryorsupercategory in npValues[pn].keys():
+                    npDifferences[pn][categoryorsupercategory] = npValues[pn][categoryorsupercategory] - npNominal[pn][categoryorsupercategory]
+                    npDifferences[pn][categoryorsupercategory][nSysts] = npStatErrorsUp[pn][categoryorsupercategory]
+                    npDifferences[pn][categoryorsupercategory][nSysts+1] = - np.abs(npStatErrorsDown[pn][categoryorsupercategory])
+                    npMasks[pn][categoryorsupercategory]['R_UpVar'] = npDifferences[pn][categoryorsupercategory] >= 0
+                    npMasks[pn][categoryorsupercategory]['R_DownVar'] = npDifferences[pn][categoryorsupercategory] < 0
+                    npSystematicErrorsUp[pn][categoryorsupercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][categoryorsupercategory], 
                                                                                       2, 
                                                                                       out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                                                                      where=npMasks[pn][supercategory]['R_Systematic'] & 
-                                                                                      npMasks[pn][supercategory]['R_UpVar']), axis=0))
-                    npSystematicErrorsDown[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                                                      where=npMasks[pn][categoryorsupercategory]['R_Systematic'] & 
+                                                                                      npMasks[pn][categoryorsupercategory]['R_UpVar']), axis=0))
+                    npSystematicErrorsDown[pn][categoryorsupercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][categoryorsupercategory], 
                                                                                         2, 
                                                                                         out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                                                                        where=npMasks[pn][supercategory]['R_Systematic'] & 
-                                                                                        npMasks[pn][supercategory]['R_DownVar']), axis=0))
-                    npStatSystematicErrorsUp[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                                                        where=npMasks[pn][categoryorsupercategory]['R_Systematic'] & 
+                                                                                        npMasks[pn][categoryorsupercategory]['R_DownVar']), axis=0))
+                    npStatSystematicErrorsUp[pn][categoryorsupercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][categoryorsupercategory], 
                                                                                           2, 
                                                                                           out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                                                                          where=npMasks[pn][supercategory]['R_UpVar']), axis=0))
-                    npStatSystematicErrorsDown[pn][supercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][supercategory], 
+                                                                                          where=npMasks[pn][categoryorsupercategory]['R_UpVar']), axis=0))
+                    npStatSystematicErrorsDown[pn][categoryorsupercategory] = np.sqrt(np.sum(np.power(npDifferences[pn][categoryorsupercategory], 
                                                                                             2, 
                                                                                             out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
-                                                                                            where=npMasks[pn][supercategory]['R_DownVar']), axis=0))
+                                                                                            where=npMasks[pn][categoryorsupercategory]['R_DownVar']), axis=0))
+                
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/systematicErrors'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/systematicErrors/ratio'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors/ratio'] = dict()
-            for supercategory in CanCache["subplots/supercategories"][pn]['Supercategories/hists']:
+            for categoryorsupercategory in CanCache["subplots/supercategories"][pn]['Supercategories/hists']:
                 if "data" in supercategory.lower(): continue
-                if supercategory not in npDifferences[pn].keys(): continue #More hacks, because my time has been stolen...
+                #More hacks, because my time has been stolen...
+                if categoryorsupercategory not in npDifferences[pn].keys():
+                    continue
+                if categoryorsupercategory not in CanCache["subplots/supercategories"][pn]['Supercategories/hists'].keys(): 
+                    continue 
+                supercategory = categoryorsupercategory #Explicitly note we only do supercategories now
                 handle = CanCache["subplots/supercategories"][pn]
                 #For fill stye, see https://root.cern.ch/doc/master/classTAttFill.html
                 #Stat error
