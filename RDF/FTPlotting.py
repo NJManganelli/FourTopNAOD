@@ -2583,6 +2583,26 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                             2, 
                                                                                             out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
                                                                                             where=npMasks[pn][categoryorsupercategory]['R_DownVar']), axis=0))
+                    for addInQuadratureAs, mask in npMasks[pn][categoryorsupercategory].items():
+                        differenceUp = np.sqrt(np.sum(np.power(npDifferences[pn][categoryorsupercategory], 
+                                                               2, 
+                                                               out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                                               where=npMasks[pn][categoryorsupercategory][addInQuadratureAs] & 
+                                                               npMasks[pn][categoryorsupercategory]['R_UpVar']), axis=0))
+                        differenceDown = -np.sqrt(np.sum(np.power(npDifferences[pn][categoryorsupercategory], 
+                                                                  2, 
+                                                                  out=np.zeros((nSysts + 2, nBins + 2), dtype=float),
+                                                                  where=npMasks[pn][categoryorsupercategory][addInQuadratureAs] & 
+                                                                  npMasks[pn][categoryorsupercategory]['R_DownVar']), axis=0))
+                    for envelopeAs, mask in npMasks[pn][categoryorsupercategory].items():
+                        differenceUp = np.max(npDifferences[pn][categoryorsupercategory], 
+                                              where=npMasks[pn][categoryorsupercategory][envelopeAs] & 
+                                              npMasks[pn][categoryorsupercategory]['R_UpVar'], 
+                                              axis=0)
+                        differenceDown = np.min(npDifferences[pn][categoryorsupercategory], 
+                                                where=npMasks[pn][categoryorsupercategory][envelopeAs] & 
+                                                npMasks[pn][categoryorsupercategory]['R_DownVar'],
+                                                axis=0)
                 
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'] = dict()
