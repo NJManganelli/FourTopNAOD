@@ -27,6 +27,7 @@ OSDL_RunII_ttH_xsec                      lnN     -               -              
 OSDL_RunII_ttVJets_xsec                  lnN     -               -               -               -               1.20            -               -               -
 OSDL_RunII_ttultrarare_xsec              lnN     -               -               -               -               -               1.50            -               -
 OSDL_RunII_ewk_xsec                      lnN     -               -               -               -               -               -               1.038           -
+OSDL_$ERA_HEM                            shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_ST         $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
 OSDL_$ERA_jesTotal                       shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_ST         $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
 OSDL_$ERA_jer                            shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_ST         $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
 OSDL_$ERA_pileup                         shape   1               1               1               1               1               1               1               1
