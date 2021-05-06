@@ -128,6 +128,9 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
                 if ("OSDL_RunII_hdamp" in outputline or "OSDL_RunII_ue" in outputline) and "lnN" in outputline:
                     disabledSystematics.append("hdamp/ue asymmetric lnN-type")
                     outputline = "# " + outputline
+                if (era == "2016" or era == "2017") and "HEM" in outputline:
+                    disabledSystematics.append("HEM (2016 or 2017)")
+                    outputline = "# " + outputline
                 outFile.write(outputline)
             print("Finished writing output for category {}".format(category))
             print("Disabled systematics:", set(disabledSystematics))
