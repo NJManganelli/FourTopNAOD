@@ -2297,20 +2297,20 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     #Define blinded regions here, each sublist with multiple elements must have matches for BOTH to mark the category as blinded
     blindings = [["nMedium{tag}2".format(tag=tagger), "nJet7"],
                  ["nMedium{tag}2".format(tag=tagger), "nJet8+"],
-                 ["nMedium{tag}3".format(tag=tagger), "nJet4"],
+                 # ["nMedium{tag}3".format(tag=tagger), "nJet4"],
                  ["nMedium{tag}3".format(tag=tagger), "nJet5"],
                  ["nMedium{tag}3".format(tag=tagger), "nJet6"],
                  ["nMedium{tag}3".format(tag=tagger), "nJet7"],
                  ["nMedium{tag}3".format(tag=tagger), "nJet8+"],
-                 ["nMedium{tag}4+".format(tag=tagger), "nJet4"],
+                 # ["nMedium{tag}4+".format(tag=tagger), "nJet4"],
                  ["nMedium{tag}4+".format(tag=tagger), "nJet5"],
                  ["nMedium{tag}4+".format(tag=tagger), "nJet6"],
                  ["nMedium{tag}4+".format(tag=tagger), "nJet7"],
                  ["nMedium{tag}4+".format(tag=tagger), "nJet8+"],
                  ["nJet7"],
                  ["nJet8+"],
-                 ["nMedium{tag}3".format(tag=tagger)],
-                 ["nMedium{tag}4+".format(tag=tagger)],
+                 # ["nMedium{tag}3".format(tag=tagger)],
+                 # ["nMedium{tag}4+".format(tag=tagger)],
              ]
     combineHistoTemplate = []    
     #Variables to save for Combine when doCombineHistosOnly=True
