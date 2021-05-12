@@ -2571,24 +2571,46 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                     aIQA_CD[categoryorsupercategory].Reset("ICESM")
                         if envelopeAs:
                             assert "$" not in envelopeAs, "Unresolved symbol in envelopeAs '{}' from '{}'".format(envelopeAs, syst)
-                            eA_S = CanCache["subplots/supercategories/systematics"][envelopeAs][pn]['Supercategories/hists']
-                            eA_C = CanCache["subplots/supercategories/systematics"][envelopeAs][pn]['Categories/hists']
-                            if envelopeAs not in npEnvelopes[pn][categoryorsupercategory]:
-                                npEnvelopes[pn][categoryorsupercategory][envelopeAs] = np.ones_like(False, shape=(nSysts +2, nBins + 2), dtype=bool)
-                            npEnvelopes[pn][categoryorsupercategory][envelopeAs][nSyst, :] = True
+                            eA_SU = CanCache["subplots/supercategories/systematics"][envelopeAs + "Up"][pn]['Supercategories/hists']
+                            eA_SD = CanCache["subplots/supercategories/systematics"][envelopeAs + "Down"][pn]['Supercategories/hists']
+                            eA_CU = CanCache["subplots/supercategories/systematics"][envelopeAs + "Up"][pn]['Categories/hists']
+                            eA_CD = CanCache["subplots/supercategories/systematics"][envelopeAs + "Down"][pn]['Categories/hists']
+                            if envelopeAs not in npAddInQuads[pn][categoryorsupercategory]:
+                                npAddInQuads[pn][categoryorsupercategory][envelopeAs] = np.ones_like(False, shape=(nSysts + 2, nBins + 2), dtype=bool)
+                            npAddInQuads[pn][categoryorsupercategory][envelopeAs][nSyst, :] = True
                             if categoryorsupercategory in conglom_supercats:
-                                if categoryorsupercategory not in eA_S:
-                                    eA_S[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs]))
-                                    eA_S[categoryorsupercategory].Reset("ICESM")
+                                if categoryorsupercategory not in eA_SU:
+                                    eA_SU[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs + "Up"]))
+                                    eA_SU[categoryorsupercategory].Reset("ICESM")
+                                if categoryorsupercategory not in eA_SD:
+                                    eA_SD[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs + "Down"]))
+                                    eA_SD[categoryorsupercategory].Reset("ICESM")
                             if categoryorsupercategory in conglom_cats:
-                                if categoryorsupercategory not in eA_C:
-                                    eA_C[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs]))
-                                    eA_C[categoryorsupercategory].Reset("ICESM")
+                                if categoryorsupercategory not in eA_CU:
+                                    eA_CU[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs + "Up"]))
+                                    eA_CU[categoryorsupercategory].Reset("ICESM")
+                                if categoryorsupercategory not in eA_CD:
+                                    eA_CD[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs + "Down"]))
+                                    eA_CD[categoryorsupercategory].Reset("ICESM")
+                            # eA_S = CanCache["subplots/supercategories/systematics"][envelopeAs][pn]['Supercategories/hists']
+                            # eA_C = CanCache["subplots/supercategories/systematics"][envelopeAs][pn]['Categories/hists']
+                            # if envelopeAs not in npEnvelopes[pn][categoryorsupercategory]:
+                            #     npEnvelopes[pn][categoryorsupercategory][envelopeAs] = np.ones_like(False, shape=(nSysts +2, nBins + 2), dtype=bool)
+                            # npEnvelopes[pn][categoryorsupercategory][envelopeAs][nSyst, :] = True
+                            # if categoryorsupercategory in conglom_supercats:
+                            #     if categoryorsupercategory not in eA_S:
+                            #         eA_S[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs]))
+                            #         eA_S[categoryorsupercategory].Reset("ICESM")
+                            # if categoryorsupercategory in conglom_cats:
+                            #     if categoryorsupercategory not in eA_C:
+                            #         eA_C[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs]))
+                            #         eA_C[categoryorsupercategory].Reset("ICESM")
                         # npValues[pn][categoryorsupercategory][nSyst, :] = np.asarray(map(lambda l: l[0].GetBinContent(l[1]), [(scHisto, x) for x in range(nBins + 2)]))
-                        print(nSyst, categoryorsupercategory, root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=False))
-                        if categoryorsupercategory in ["ttother"]:
-                            for bin in range(scHisto.GetNbinsX()):
-                                print(bin, scHisto.GetBinContent(bin))
+                        #FIXME
+                        # print(nSyst, categoryorsupercategory, root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=False))
+                        # if categoryorsupercategory in ["ttother"]:
+                        #     for bin in range(scHisto.GetNbinsX()):
+                        #         print(bin, scHisto.GetBinContent(bin))
                         npValues[pn][categoryorsupercategory][nSyst, :] = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=False)
                         if categoryorsupercategory in CanCache["subplots/supercategories/systematics"][syst][pn]['Supercategories/hists']:
                             if drawSystematic == syst.replace("Up", ""):
