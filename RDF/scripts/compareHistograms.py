@@ -2,6 +2,7 @@
 import os
 import pdb
 import argparse
+from tqdm import tqdm
 import ROOT
 
 def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keywords, findReplace, skipNull, verbose=False):
@@ -11,8 +12,8 @@ def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keywords,
         raise IOError("Input 2 ({}) does not exist".format(input2))
     f1 = ROOT.TFile.Open(input1, "read")
     f2 = ROOT.TFile.Open(input2, "read")
-    k1 = [kk.GetName() for kk in f1.GetListOfKeys() if kk.GetClassName() in ['TH1I', 'TH1F', 'TH1D', 'TH2I', 'TH2F', 'TH2D', 'TH3I', 'TH3F', 'TH3D']]
-    k2 = [kk.GetName() for kk in f2.GetListOfKeys() if kk.GetClassName() in ['TH1I', 'TH1F', 'TH1D', 'TH2I', 'TH2F', 'TH2D', 'TH3I', 'TH3F', 'TH3D']]
+    k1 = [kk.GetName() for kk in tqdm(f1.GetListOfKeys()) if kk.GetClassName() in ['TH1I', 'TH1F', 'TH1D', 'TH2I', 'TH2F', 'TH2D', 'TH3I', 'TH3F', 'TH3D']]
+    k2 = [kk.GetName() for kk in tqdm(f2.GetListOfKeys()) if kk.GetClassName() in ['TH1I', 'TH1F', 'TH1D', 'TH2I', 'TH2F', 'TH2D', 'TH3I', 'TH3F', 'TH3D']]
     kAll = k1 + k2
     kNotKeyworded = []
     keywords2 = keywords
@@ -25,8 +26,8 @@ def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keywords,
                     keyword2 = keyword2.replace(mapping.split("==")[0], mapping.split("==")[1])
                 keywords2.append(keyword2)
         print(keywords, keywords2)
-        k1 = dict([(kk, kk) for kk in k1 if all([keyword in kk for keyword in keywords])])
-        k2temp = dict([(kk, kk) for kk in k2 if all([keyword in kk for keyword in keywords2])])
+        k1 = dict([(kk, kk) for kk in tqdm(k1) if all([keyword in kk for keyword in keywords])])
+        k2temp = dict([(kk, kk) for kk in tqdm(k2) if all([keyword in kk for keyword in keywords2])])
         if isinstance(findReplace, list):
             k2 = dict()
             for key, value in k2temp.items():
@@ -38,10 +39,10 @@ def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keywords,
         else:
             k2 = k2temp
     else:
-        k1 = dict([(kk, kk) for kk in k1])
-        k2 = dict([(kk, kk) for kk in k2])
+        k1 = dict([(kk, kk) for kk in tqdm(k1)])
+        k2 = dict([(kk, kk) for kk in tqdm(k2)])
     kAll = list(k1.keys()) + list(k2.keys())
-    kNotKeyworded = list(set([kk for kk in kAll if kk not in list(k1.keys()) + list(k2.keys())]))
+    kNotKeyworded = list(set([kk for kk in tqdm(kAll) if kk not in list(k1.keys()) + list(k2.keys())]))
     kOnlyInOne = set(k1.keys()) - set(k2.keys())
     kOnlyInTwo = set(k2.keys()) - set(k1.keys())
     kInBoth = set(k1.keys()).intersection(set(k2.keys()))
@@ -54,7 +55,7 @@ def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keywords,
     Integrals1 = {}
     Integrals2 = {}
     NullResults = {}
-    for kk in kInBoth:
+    for kk in tqdm(kInBoth):
         norm1 = f1.Get(k1[kk]).Integral()
         norm2 = f2.Get(k2[kk]).Integral()
         if skipNull:
@@ -80,7 +81,7 @@ def main(input1, input2, Ch22Maximum, KSMinimum, sort_key, maxResults, keywords,
                                                                                                                                len([vv for vv in NullResults.values() if vv.lower() == "input2"]),
                                                                                                                            )
           )
-    Results = [(kk, KSTestResults[kk], Chi2TestResults[kk], IntegralResults[kk], Integrals1[kk], Integrals2[kk]) for kk in kInBoth if (not skipNull or kk not in NullResults.keys())]
+    Results = [(kk, KSTestResults[kk], Chi2TestResults[kk], IntegralResults[kk], Integrals1[kk], Integrals2[kk]) for kk in tqdm(kInBoth) if (not skipNull or kk not in NullResults.keys())]
     sort_function = None
     if sort_key == 'Chi2':
         Results = sorted(Results, key=lambda k: k[2], reverse=True)
