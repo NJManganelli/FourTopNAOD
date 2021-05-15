@@ -48,11 +48,11 @@ def configureLatex(channel, limits, significance, XS, sigfigs=3):
     lps = "+" if up > 0 else ""
 
     #limits on mu
-    result += str(round_to_n(central, sigfigs)) + "_{" + str(round_to_n(down, sigfigs)) + "}^{" + lps + str(round_to_n(up, sigfigs)) + "}$ & "
+    result += "$" + str(round_to_n(central, sigfigs)) + "_{" + str(round_to_n(down, sigfigs)) + "}^{" + lps + str(round_to_n(up, sigfigs)) + "}$ & "
     #limits on cross-section
-    result += str(round_to_n(XS * central, sigfigs)) + "_{" + str(round_to_n(XS * down, sigfigs)) + "}^{" + lps + str(round_to_n(XS * up, sigfigs)) + "}$ & "
+    result += "$" + str(round_to_n(XS * central, sigfigs)) + "_{" + str(round_to_n(XS * down, sigfigs)) + "}^{" + lps + str(round_to_n(XS * up, sigfigs)) + "}$ & "
     #significance
-    result += "$" + str(round_to_n(significance, sigfigs)) + " \\sigma$ \\\\"
+    result += "$" + str(round_to_n(significance, sigfigs-1)) + " \\sigma$ \\\\"
 
     return result
 # $\PGm\PGm$\rule[-2mm]{0mm}{6mm}  & $7.28_{-3.61}^{+7.97}$ & $87.4_{-43.3}^{+95.6}$     & $0.31 \sigma$ \\
