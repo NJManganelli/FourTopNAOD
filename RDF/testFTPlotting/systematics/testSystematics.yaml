@@ -1,0 +1,237 @@
+$NOMINAL:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  isNominal: true
+  systematicSet:
+  - nominal
+  # commonWeights:
+  #   pwgt_LSF___nom: "(FTALepton$LEP_POSTFIX_SF_nom.size() > 1 ? FTALepton$LEP_POSTFIX_SF_nom.at(0) * FTALepton$LEP_POSTFIX_SF_nom.at(1) : FTALepton$LEP_POSTFIX_SF_nom.at(0))"
+  #   pwgt_Z_vtx___nom: "(Int_t)1;"
+  #   # top_parton_pt_data_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
+  #   # top_parton_sf_data_nlo: "sqrt(exp(0.0615-0.0005 * Where(top_parton_pt_data_nlo < 500.0, top_parton_pt_data_nlo, static_cast<float>(500.0))))"
+  #   # pwgt_top_pT_data_nlo: "top_parton_sf_data_nlo.at(0, 1.0) * top_parton_sf_data_nlo.at(1, 1.0)"
+  #   top_parton_pt_nnlo_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
+  #   top_parton_sf_nnlo_nlo: "sqrt(0.103*exp(-0.0118 * top_parton_pt_nnlo_nlo) - 0.000134 * top_parton_pt_nnlo_nlo + 0.973)"
+  #   pwgt_top_pT_nnlo_nlo: "top_parton_sf_nnlo_nlo.at(0, 1.0) * top_parton_sf_nnlo_nlo.at(1, 1.0)"
+  #   pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+  #   prewgt___nom: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo" #Top pT is disabled by default, and only applies to ttbar (non-ttbb); replaced by 1.0 everywhere else
+  #   pwgt_btagSF_common: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  # finalWeights:
+  #   wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+envA1_1:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  isNominal: false
+  systematicSet:
+  - envelope
+  envelopeAs: envA1
+envA1_2:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  isNominal: false
+  systematicSet:
+  - envelope
+  envelopeAs: envA1
+envA2_1:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  isNominal: false
+  systematicSet:
+  - envelope
+  envelopeAs: envA2
+envA2_2:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  isNominal: false
+  systematicSet:
+  - envelope
+  envelopeAs: envA2
+envB1_1:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  isNominal: false
+  systematicSet:
+  - envelope
+  envelopeAs: envB1
+envB1_2:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  isNominal: false
+  systematicSet:
+  - envelope
+  envelopeAs: envB1
+envB1_3:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  isNominal: false
+  systematicSet:
+  - envelope
+  envelopeAs: envB1
+quadS1_1:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  isNominal: false
+  systematicSet:
+  - quadrature
+  addInQuadratureAs: quadS1
+quadS1_2:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  isNominal: false
+  systematicSet:
+  - quadrature
+  addInQuadratureAs: quadS1
+quadS1_3:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  isNominal: false
+  systematicSet:
+  - quadrature
+  addInQuadratureAs: quadS1
+quadS1_4:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  isNominal: false
+  systematicSet:
+  - quadrature
+  addInQuadratureAs: quadS1
+quadS1_5:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  isNominal: false
+  systematicSet:
+  - quadrature
+  addInQuadratureAs: quadS1
+quadS1_6:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  isNominal: false
+  systematicSet:
+  - quadrature
+  addInQuadratureAs: quadS1

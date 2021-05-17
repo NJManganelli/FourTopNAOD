@@ -1,0 +1,63 @@
+{
+    "Plot_HT500_nMediumDeepJetB0_nJet4___HT": {
+        "Files": "2018___testFile.root",
+        "Rebin": null,
+        "Projection": null,
+        "Title": "DefaultPlotTitle",
+        "Yaxis": null,
+        "Unblind": false,
+        "Xaxis": null,
+        "Type": "PlotConfig"
+    },
+    "Canvas_nJet_nBtag0_HT": {
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "Projection": null,
+        "Title": "H_{T} (0 b-tagged jets)",
+        "YAxisTitle": "Events / bin",
+        "Labels": [
+            "e#mu nB=0 nJ=4"
+        ],
+        "YPixels": 1000,
+        "DoMountainrange": true,
+        "XAxisTitle": "H_{T}",
+        "DoRatio": true,
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB0_nJet4___HT"
+        ],
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Type": "CanvasConfig",
+        "doLogY": false
+    },
+    "DefaultCanvas": {
+        "XPixels": 800,
+        "Title": "DefaultCanvasTitle",
+        "Plots": null,
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "DoRatio": false,
+        "Type": "DefaultCanvas",
+        "YPixels": 800,
+        "DoMountainrange": false
+    },
+    "DefaultPlot": {
+        "Files": null,
+        "Rebin": null,
+        "RatioYMin": 0.5,
+        "RatioYMax": 1.5,
+        "Title": "DefaultPlotTitle",
+        "Unblind": false,
+        "Type": "DefaultPlot"
+    }
+}

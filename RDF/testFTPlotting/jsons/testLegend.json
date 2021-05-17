@@ -1,0 +1,84 @@
+{
+    "DefaultLegend": {
+        "Header": "{lumi} fb^{{-1}} (13 TeV)",
+        "HeaderPosition": 0.25,
+        "Supercategories": {
+            "Signal": {
+                "Draw": "L",
+                "Names": [
+                    "SignalA"
+                ],
+                "Stack": false
+            },
+            "Data": {
+                "Draw": "PE1",
+                "Names": [
+                    "Data"
+                ],
+                "Stack": false
+            },
+            "Background": {
+                "Draw": "HIST",
+                "Names": [
+                    "BackgroundA",
+                    "BackgroundB"
+                ],
+                "Stack": true
+            }
+        },
+        "nColumns": 2,
+        "Ratios": {
+            "Data/MC": {
+                "Style": "Marker",
+                "MarkerStyle": 20,
+                "Draw": "PXE1",
+                "Denominator": "Background",
+                "Numerator": "Data"
+            }
+        },
+        "Systematics": [],
+        "Type": "DefaultLegend",
+        "Coordinates": [
+            0.75,
+            0.5,
+            1.0,
+            0.8
+        ],
+        "Categories": {
+            "BackgroundA": {
+                "Color": "#00A88F",
+                "Style": "Fill",
+                "Names": [
+                    "2018___BackgroundA1___ElMu___ZWindowMET0Width0",
+                    "2018___BackgroundA2___ElMu___ZWindowMET0Width0"
+                ]
+            },
+            "BackgroundB": {
+                "Color": [
+                    155,
+                    152,
+                    204
+                ],
+                "Style": "Fill",
+                "Names": [
+                    "2018___BackgroundB1___ElMu___ZWindowMET0Width0"
+                ]
+            },
+            "SignalA": {
+                "Color": 864,
+                "Style": "Line",
+                "Names": [
+                    "2018___SignalA1___ElMu___ZWindowMET0Width0"
+                ]
+            },
+            "Data": {
+                "Color": 1,
+                "Style": "Marker",
+                "MarkerStyle": 20,
+                "Names": [
+                    "2018___Data1___ElMu___ZWindowMET0Width0"
+                ]
+            }
+        }
+    }
+}
