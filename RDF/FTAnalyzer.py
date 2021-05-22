@@ -39,6 +39,8 @@ else:
 #Load functions, can eventually be changed to ROOT.gInterpreter.Declare(#include "someheader.h")
 #WARNING! Do not rerun this cell without restarting the kernel, it will kill it!
 ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way #Extra note, this is completely irrelevant, since ROOT 6 all histograms that have a (non-unitary) weight provided for filling 
+#Declare random number generator
+ROOT.gInterpreter.Declare("TRandom3 rng = TRandom3();")
 print("FIXME? Consider removing even unitary weight from data histogram filling, due to the bug in ROOT where Sumw2 is impossible to disable using the documented method")
 print("FIXME: Hardcoded FTFunctions.cpp path, needs fixin'...")
 ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
@@ -800,8 +802,21 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfL
         
     #Set up channel bits for selection and baseline. Separation not necessary in this stage, but convenient for loops
     Chan = {}
-    print("FATAL LOGIC ERROR: MISSING LEPTONS!!!!\n\n\n\n")
-    # if era == "2018":
+    print("\n\nLOGIC ERROR: wrong bitset for 2018, fix for later\n\n\n\n\n")
+    if era == "2017" or era == "2018":
+        Chan["ElMu"] = 24576
+        Chan["MuMu"] = 6144
+        Chan["ElEl"] = 512
+        Chan["ElEl_LowMET"] = Chan["ElEl"]
+        Chan["ElEl_HighMET"] = Chan["ElEl"]
+        Chan["Mu"] = 128
+        Chan["El"] = 64
+        Chan["ElMu_baseline"] = 24576
+        Chan["MuMu_baseline"] = 6144
+        Chan["ElEl_baseline"] = 512
+        Chan["Mu_baseline"] = 128
+        Chan["El_baseline"] = 64
+    # elif era == "2018":
     #     Chan["ElMu"] = 20480
     #     Chan["MuMu"] = 2048
     #     Chan["ElEl"] = 512
@@ -814,22 +829,8 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfL
     #     Chan["ElEl_baseline"] = 512
     #     Chan["Mu_baseline"] = 256
     #     Chan["El_baseline"] = 128
-    # elif era == "2017":
-    Chan["ElMu"] = 24576
-    Chan["MuMu"] = 6144
-    Chan["ElEl"] = 512
-    Chan["ElEl_LowMET"] = Chan["ElEl"]
-    Chan["ElEl_HighMET"] = Chan["ElEl"]
-    Chan["Mu"] = 128
-    Chan["El"] = 64
-    Chan["selection"] = Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"] + Chan["El"]
-    Chan["ElMu_baseline"] = 24576
-    Chan["MuMu_baseline"] = 6144
-    Chan["ElEl_baseline"] = 512
-    Chan["Mu_baseline"] = 128
-    Chan["El_baseline"] = 64
-    # else:
-    #     raise ValueError("other eras not supported right now")
+    else:
+        raise ValueError("other eras not supported right now")
     Chan["selection"] = Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"] + Chan["El"]
     Chan["baseline"] = Chan["ElMu_baseline"] + Chan["MuMu_baseline"] + Chan["ElEl_baseline"] + Chan["Mu_baseline"] + Chan["El_baseline"]
     b = {}
@@ -1112,9 +1113,14 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
     #z will be a list of tuples to define, so that we can do cleaner error handling and checks
     z = []
     if era == "2018":
-        z.append(("Jet_pt_hem_down", "auto hem_mask = Jet_phi > -1.57 && Jet_phi < -0.87 && Jet_eta > -2.5 && Jet_eta < -1.3;"\
+        #HEM affects 38.6/fb of lumi, and not the first 21.1/fb. As such, do a binomial draw with p=38.6/59.7 (mean p * ntot = p * 1) and apply hem shift
+        z.append(("Jet_pt_hem_down", "if(rng.Binomial(1, 0.6465) > 0){"\
+                                     "auto hem_mask = Jet_phi > -1.57 && Jet_phi < -0.87 && Jet_eta > -2.5 && Jet_eta < -1.3;"\
                                      "ROOT::VecOps::RVec<float> Jet_pt_hem = 0.8 * Jet_pt_nom;"\
-                                     "return ROOT::VecOps::Where(hem_mask, Jet_pt_hem, Jet_pt);"))
+                                     "return ROOT::VecOps::Where(hem_mask, Jet_pt_hem, Jet_pt);"\
+                                     "} else {"\
+                                     "return Jet_pt;}"\
+              ))
     for sysVarRaw, sysDict in sysVariations.items():
         #skip systematic variations on data, only do the nominal
         if isData and sysVarRaw != "$NOMINAL": 
