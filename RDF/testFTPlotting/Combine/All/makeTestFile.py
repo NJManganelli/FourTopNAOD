@@ -21,7 +21,10 @@ names = {"BackgroundA1": ["nom", "envA1_1", "envA1_2", "envA1VerifyUp", "envA1Ve
 for name, systs in names.items():
     nbins = 5
     for syst in systs:
-        h[name + "___" + syst] = ROOT.TH1D("2018___"+name+"___ElMu___ZWindowMET0Width0___HT500_nMediumDeepJetB0_nJet4___HT"+"___"+syst, name+"___"+syst, nbins, 0, 5)
+        if syst != "nom":
+            h[name + "___" + syst] = "2018___"+name+"___ElMu___ZWindowMET0Width0___HT500_nMediumDeepJetB0_nJet4___HT"+"___"+syst
+        else:
+            h[name + "___" + syst] = ROOT.TH1D("2018___"+name+"___ElMu___ZWindowMET0Width0___HT500_nMediumDeepJetB0_nJet4___HT"+"___"+syst, name+"___"+syst, nbins, 0, 5)
 
 
 
@@ -48,6 +51,10 @@ stackLast = stack.GetStack().Last()
 for name, systs in names.items():
     nbins = 5
     for syst in systs:
+        if syst != "nom":
+            #Need the same number of entries on these made-up systematics, or they get blinded by the FTPlotting.py script1
+            h[name + "___" + syst] = h[name + "___" + "nom"].Clone("2018___"+name+"___ElMu___ZWindowMET0Width0___HT500_nMediumDeepJetB0_nJet4___HT"+"___"+syst)
+            h[name + "___" + syst].SetTitle(name+"___"+syst)
         if "BackgroundA1" in name:
             h[name + "___" + syst].SetLineColor(ROOT.kRed-1)
             # MC: 10000 entries with weight distributed about 0.1 (gaussian)
@@ -130,6 +137,9 @@ for name, systs in names.items():
 drawn = False
 for name, hist in h.items():
     print(name)
+    print(hist.GetEntries())
+    hist.ResetStats()
+    print(hist.GetEntries())
     hist.Write()
     if True:
     # if "nom" in name:
