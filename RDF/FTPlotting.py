@@ -10,6 +10,7 @@ import collections
 import pprint
 import math
 import numpy as np
+np.set_printoptions(precision=3, threshold=None, edgeitems=None, linewidth=120, suppress=None, nanstr=None, infstr=None, formatter=None, sign=None, floatmode=None, legacy=None)
 import root_numpy
 import array
 import json
@@ -2492,6 +2493,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 for nSyst, syst in enumerate(sorted(sorted(systematics, key = lambda l: l[-2:] == "Up", reverse=True), 
                                                     key = lambda l: l.replace("Down", "").replace("Up", "")
                                                 )):
+                    print(syst)
                     if nSyst < nSystsEnd:
                         print("*", end="")
                     else:
@@ -2553,7 +2555,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             aIQA_CU = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Up"][pn]['Categories/hists']
                             aIQA_CD = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Down"][pn]['Categories/hists']
                             if addInQuadratureAs not in npAddInQuads[pn][categoryorsupercategory]:
-                                npAddInQuads[pn][categoryorsupercategory][addInQuadratureAs] = np.ones_like(False, shape=(nSysts + 2, nBins + 2), dtype=bool)
+                                npAddInQuads[pn][categoryorsupercategory][addInQuadratureAs] = np.full_like(None, False, shape=(nSysts + 2, nBins + 2), dtype=bool)
                             npAddInQuads[pn][categoryorsupercategory][addInQuadratureAs][nSyst, :] = True
                             if categoryorsupercategory in conglom_supercats:
                                 if categoryorsupercategory not in aIQA_SU:
@@ -2575,9 +2577,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             eA_SD = CanCache["subplots/supercategories/systematics"][envelopeAs + "Down"][pn]['Supercategories/hists']
                             eA_CU = CanCache["subplots/supercategories/systematics"][envelopeAs + "Up"][pn]['Categories/hists']
                             eA_CD = CanCache["subplots/supercategories/systematics"][envelopeAs + "Down"][pn]['Categories/hists']
-                            if envelopeAs not in npAddInQuads[pn][categoryorsupercategory]:
-                                npAddInQuads[pn][categoryorsupercategory][envelopeAs] = np.ones_like(False, shape=(nSysts + 2, nBins + 2), dtype=bool)
-                            npAddInQuads[pn][categoryorsupercategory][envelopeAs][nSyst, :] = True
+                            if envelopeAs not in npEnvelopes[pn][categoryorsupercategory]:
+                                npEnvelopes[pn][categoryorsupercategory][envelopeAs] = np.full_like(None, False, shape=(nSysts + 2, nBins + 2), dtype=bool)
+                            npEnvelopes[pn][categoryorsupercategory][envelopeAs][nSyst, :] = True
                             if categoryorsupercategory in conglom_supercats:
                                 if categoryorsupercategory not in eA_SU:
                                     eA_SU[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs + "Up"]))
@@ -2592,25 +2594,6 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                 if categoryorsupercategory not in eA_CD:
                                     eA_CD[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs + "Down"]))
                                     eA_CD[categoryorsupercategory].Reset("ICESM")
-                            # eA_S = CanCache["subplots/supercategories/systematics"][envelopeAs][pn]['Supercategories/hists']
-                            # eA_C = CanCache["subplots/supercategories/systematics"][envelopeAs][pn]['Categories/hists']
-                            # if envelopeAs not in npEnvelopes[pn][categoryorsupercategory]:
-                            #     npEnvelopes[pn][categoryorsupercategory][envelopeAs] = np.ones_like(False, shape=(nSysts +2, nBins + 2), dtype=bool)
-                            # npEnvelopes[pn][categoryorsupercategory][envelopeAs][nSyst, :] = True
-                            # if categoryorsupercategory in conglom_supercats:
-                            #     if categoryorsupercategory not in eA_S:
-                            #         eA_S[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs]))
-                            #         eA_S[categoryorsupercategory].Reset("ICESM")
-                            # if categoryorsupercategory in conglom_cats:
-                            #     if categoryorsupercategory not in eA_C:
-                            #         eA_C[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs]))
-                            #         eA_C[categoryorsupercategory].Reset("ICESM")
-                        # npValues[pn][categoryorsupercategory][nSyst, :] = np.asarray(map(lambda l: l[0].GetBinContent(l[1]), [(scHisto, x) for x in range(nBins + 2)]))
-                        #FIXME
-                        # print(nSyst, categoryorsupercategory, root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=False))
-                        # if categoryorsupercategory in ["ttother"]:
-                        #     for bin in range(scHisto.GetNbinsX()):
-                        #         print(bin, scHisto.GetBinContent(bin))
                         npValues[pn][categoryorsupercategory][nSyst, :] = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=False)
                         if categoryorsupercategory in CanCache["subplots/supercategories/systematics"][syst][pn]['Supercategories/hists']:
                             if drawSystematic == syst.replace("Up", ""):
@@ -2681,13 +2664,15 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             histUp = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Up"][pn]['Supercategories/hists'][categoryorsupercategory]
                         elif categoryorsupercategory in CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Up"][pn]['Categories/hists']:
                             histUp = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Up"][pn]['Categories/hists'][categoryorsupercategory]
-                        _ = root_numpy.array2hist(differenceUp, histUp)
+                        _ = root_numpy.array2hist(differenceUp + npNominal[pn][categoryorsupercategory], histUp)
+                        histUp.ResetStats()
                         histDown = None
                         if categoryorsupercategory in CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Down"][pn]['Supercategories/hists']:
                             histDown = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Down"][pn]['Supercategories/hists'][categoryorsupercategory]
                         elif categoryorsupercategory in CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Down"][pn]['Categories/hists']:
                             histDown = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Down"][pn]['Categories/hists'][categoryorsupercategory]
-                        _ = root_numpy.array2hist(differenceDown, histDown)
+                        _ = root_numpy.array2hist(differenceDown + npNominal[pn][categoryorsupercategory], histDown)
+                        histDown.ResetStats()
                     for envelopeAs, mask in npEnvelopes[pn][categoryorsupercategory].items():
                         differenceUp = np.max(npDifferences[pn][categoryorsupercategory], 
                                               initial=0.0,
@@ -2704,14 +2689,15 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             histUp = CanCache["subplots/supercategories/systematics"][envelopeAs + "Up"][pn]['Supercategories/hists'][categoryorsupercategory]
                         elif categoryorsupercategory in CanCache["subplots/supercategories/systematics"][envelopeAs + "Up"][pn]['Categories/hists']:
                             histUp = CanCache["subplots/supercategories/systematics"][envelopeAs + "Up"][pn]['Categories/hists'][categoryorsupercategory]
-                        _ = root_numpy.array2hist(differenceUp, histUp)
+                        _ = root_numpy.array2hist(differenceUp + npNominal[pn][categoryorsupercategory], histUp)
+                        histUp.ResetStats()
                         histDown = None
                         if categoryorsupercategory in CanCache["subplots/supercategories/systematics"][envelopeAs + "Down"][pn]['Supercategories/hists']:
                             histDown = CanCache["subplots/supercategories/systematics"][envelopeAs + "Down"][pn]['Supercategories/hists'][categoryorsupercategory]
                         elif categoryorsupercategory in CanCache["subplots/supercategories/systematics"][envelopeAs + "Down"][pn]['Categories/hists']:
                             histDown = CanCache["subplots/supercategories/systematics"][envelopeAs + "Down"][pn]['Categories/hists'][categoryorsupercategory]
-                        _ = root_numpy.array2hist(differenceDown, histDown)
-                
+                        _ = root_numpy.array2hist(differenceDown + npNominal[pn][categoryorsupercategory], histDown)
+                        histDown.ResetStats()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/systematicErrors'] = dict()
@@ -3576,9 +3562,15 @@ if __name__ == '__main__':
     elif args.differentialScale:
         print("differentialScale will set bin contents to the average over the bin width. This is not compatible with the combineInput option, as the templates will no longer be absolute in scale. Disabled")
 
-    lumiDict = {"2017": 41.53,
-                "2018": 59.97}
-    lumi = lumiDict.get(era, "N/A")
+    lumiDict = {"2016": {"non-UL": 36.33,
+                         "UL": 36.33},
+                "2017": {"non-UL": 41.53,
+                         "UL": 41.48},
+                "2018": {"non-UL": 59.74,
+                         "UL": 59.83},
+                "RunII": {"non-UL": 137.60,
+                          "UL": 137.65}
+    lumi = lumiDict.get(era, "N/A").get("non-UL", "N/A")
 if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepare-combine':    
     plotConfig = args.plotCard.replace("$ADIR", analysisDir).replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHANNEL", channel).replace("$ERA", era).replace("//", "/")
     legendConfig = args.legendCard.replace("$ADIR", analysisDir).replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHANNEL", channel).replace("$ERA", era).replace("//", "/")
