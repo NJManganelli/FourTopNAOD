@@ -442,8 +442,8 @@
     "DefaultPlot": {
         "Files": null, 
         "Rebin": null, 
-        "RatioYMin": 0.5, 
-        "RatioYMax": 1.5, 
+        "RatioYMin": 0.0, 
+        "RatioYMax": 2.0, 
         "Title": "DefaultPlotTitle", 
         "Unblind": false, 
         "Type": "DefaultPlot"
