@@ -17,6 +17,7 @@ import json
 import copy
 import argparse
 import uuid
+from tqdm import tqdm
 from FourTopNAOD.RDF.tools.toolbox import load_yaml_cards, write_yaml_cards, configure_template_systematics, configure_template_systematics_dict
 from FourTopNAOD.RDF.combine.templating import write_combine_cards
 # from ruamel.yaml import YAML
@@ -2490,14 +2491,13 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     npXErrorsDown[pn][category] = np.append(np.insert(binWidths/2, 0, halfBinMin), halfBinMin)
                     npValues[pn][category][nSysts + 0, :] = npNominal[pn][category] + npStatErrorsUp[pn][category]
                     npValues[pn][category][nSysts + 1, :] = npNominal[pn][category] - npStatErrorsDown[pn][category]
-                for nSyst, syst in enumerate(sorted(sorted(systematics, key = lambda l: l[-2:] == "Up", reverse=True), 
-                                                    key = lambda l: l.replace("Down", "").replace("Up", "")
-                                                )):
-                    print(syst)
-                    if nSyst < nSystsEnd:
-                        print("*", end="")
-                    else:
-                        print("*")
+                for nSyst, syst in enumerate(tqdm(sorted(sorted(systematics, key = lambda l: l[-2:] == "Up", reverse=True), 
+                                                              key = lambda l: l.replace("Down", "").replace("Up", "")
+                                                          ))):
+                    # if nSyst < nSystsEnd:
+                    #     print("*", end="")
+                    # else:
+                    #     print("*")
                     #prepare masks for creation of systematics added in quadrature, enveloped, and so on
                     addInQuadratureAs = systematicsDict[syst].get("addInQuadratureAs", False)
                     envelopeAs = systematicsDict[syst].get("envelopeAs", False)
@@ -3497,7 +3497,7 @@ if __name__ == '__main__':
                         help='input plotting configuration, defaulting to "$ADIR/Histograms/All/plots.json"')
     parser.add_argument('-l', '--legendCard', dest='legendCard', action='store', type=str, default="$ADIR/Histograms/All/legend.json",
                         help='input legend configuration, defaulting to "$ADIR/Histograms/All/legend.json". This card controls the grouping of histograms into categories and supercategories, colors, stacking, sample-scaling, etc.')
-    parser.add_argument('--era', dest='era', type=str, default="NOERA", choices=["2017", "2018"],
+    parser.add_argument('--era', dest='era', type=str, default="NOERA", choices=["2017", "2018", "RunII"],
                         help='era for plotting, lumi, systematics deduction')
     parser.add_argument('--vars', '--variables', dest='variables', action='store', default=None, type=str, nargs='*',
                         help='List of variables for generating a plotCard')
@@ -3568,8 +3568,11 @@ if __name__ == '__main__':
                          "UL": 41.48},
                 "2018": {"non-UL": 59.74,
                          "UL": 59.83},
-                "RunII": {"non-UL": 137.60,
-                          "UL": 137.65}
+                "RunII": {"non-UL": 101.2, 
+                          "UL": -999999999999999999.9}
+                # "RunII": {"non-UL": 137.60,
+                #           "UL": 137.65}
+            }
     lumi = lumiDict.get(era, "N/A").get("non-UL", "N/A")
 if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepare-combine':    
     plotConfig = args.plotCard.replace("$ADIR", analysisDir).replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHANNEL", channel).replace("$ERA", era).replace("//", "/")
