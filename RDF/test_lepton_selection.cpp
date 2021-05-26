@@ -576,12 +576,19 @@ std::pair<ROOT::RDF::RNode, ROOT::VecOps::RVec<int>> applyTriggerSelection(ROOT:
 			   // 	     << " Decision 2L: " << twoLeptons; 
 			   // std::cout << " Decision CF: " << correctFlavors << std::endl;
 			   if(cutLowMassResonances){
+			     if(Muon_p4[Muon_preselection].size() == 2 && 
+			     	(Muon_p4[Muon_preselection].at(0) + Muon_p4[Muon_preselection].at(1)).M() >= 20.0)
+			       return true;
+			     else if(Electron_p4[Electron_preselection].size() == 2 && 
+			     	     (Electron_p4[Electron_preselection].at(0) + Electron_p4[Electron_preselection].at(1)).M() >= 20.0)
+			       return true;
 			     //figure resonance cut
-			     return false;
+			     else
+			       return false;
 			   }
-			   else{
+			   else
 			     return true;
-			   }
+			   
 			 }
 		       }
 		     }
@@ -607,12 +614,26 @@ std::pair<ROOT::RDF::RNode, ROOT::VecOps::RVec<int>> applyTriggerSelection(ROOT:
 			   // std::cout << " Decision CF: " << correctFlavors << std::endl;
 			   if(cutZResonance){
 			     if(invertZWindow){
-			       //figure Z cut
-			       return false;
+			       //mass within 15GeV of the Z boson
+			       if(Muon_p4[Muon_preselection].size() == 2 && 
+				  std::fabs( (Muon_p4[Muon_preselection].at(0) + Muon_p4[Muon_preselection].at(1)).M() - 91.0 ) <= 15.0)
+				 return true;
+			       else if(Electron_p4[Electron_preselection].size() == 2 && 
+				       std::fabs( (Electron_p4[Electron_preselection].at(0) + Electron_p4[Electron_preselection].at(1)).M() - 91.0 ) <= 15.0)
+				 return true;
+			       else
+				 return false;
 			     }
 			     else{
-			       //figure Z cut
-			       return false;
+			       //mass outside 15GeV of the Z boson
+			       if(Muon_p4[Muon_preselection].size() == 2 && 
+				  std::fabs( (Muon_p4[Muon_preselection].at(0) + Muon_p4[Muon_preselection].at(1)).M() - 91.0 ) > 15.0)
+				 return true;
+			       else if(Electron_p4[Electron_preselection].size() == 2 && 
+				       std::fabs( (Electron_p4[Electron_preselection].at(0) + Electron_p4[Electron_preselection].at(1)).M() - 91.0 ) > 15.0)
+				 return true;
+			       else
+				 return false;
 			     }
 			   }
 			   else
