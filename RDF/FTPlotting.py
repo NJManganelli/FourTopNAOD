@@ -1474,11 +1474,20 @@ def setGStyle(nDivisions=105):
     ROOT.gStyle.SetTitleSize(0.10, "XYZ")
     ROOT.gStyle.SetTitleXOffset(1.00)
     ROOT.gStyle.SetTitleYOffset(1.60)
+    # ROOT.gStyle.SetTitleColor(1, "XYZ")
+    # ROOT.gStyle.SetTitleFont(43, "XYZ")
+    # ROOT.gStyle.SetTitleSize(50, "XYZ")
+    # ROOT.gStyle.SetTitleXOffset(1.00)
+    # ROOT.gStyle.SetTitleYOffset(1.60)
 
     ROOT.gStyle.SetLabelColor(1, "XYZ")
     ROOT.gStyle.SetLabelFont(42, "XYZ")
     ROOT.gStyle.SetLabelOffset(0.007, "XYZ")
     ROOT.gStyle.SetLabelSize(0.04, "XYZ")
+    # ROOT.gStyle.SetLabelColor(1, "XYZ")
+    # ROOT.gStyle.SetLabelFont(43, "XYZ")
+    # ROOT.gStyle.SetLabelOffset(0.007, "XYZ")
+    # ROOT.gStyle.SetLabelSize(0.04, "XYZ")
     
     ROOT.gStyle.SetAxisColor(1, "XYZ")
     ROOT.gStyle.SetStripDecimals(True)
@@ -2178,7 +2187,7 @@ def makeStack_Prototype(histFile, histList=None, legendConfig=None, rootName=Non
 
 @profile(output_file="function_profile.txt", sort_by="cumulative", lines_to_print=500, strip_dirs=True)
 def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Cache=None, histogramDirectory = ".", batchOutput=False, closeFiles=True, 
-                     analysisDirectory=None, tag=None, plotCard=None, drawSystematic=None,
+                     analysisDirectory=None, tag=None, plotCard=None, drawSystematic=None, drawLegends=True, drawNormalized=False,
                      plotDir=None, pdfOutput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
                      combineOutput=None, combineInput=None, combineCards=False,
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
@@ -2345,6 +2354,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["subplots/labels"] = []
         CanCache["subplots/maxima"] = []
         CanCache["subplots/minima"] = []
+        CanCache["subplots/stringintegrals"] = []
         CanCache["subplots/integrals"] = []
         CanCache["subplots/integraltables"] = []
         
@@ -2395,6 +2405,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             CanCache["subplots/rebins"].append(subplot_dict.get("Rebin"))
             CanCache["subplots/setrangeuser"].append(subplot_dict.get("SetRangeUser", can_dict.get("SetRangeUser", None)))
             CanCache["subplots/projections"].append(subplot_dict.get("Projection"))
+            CanCache["subplots/stringintegrals"].append(collections.OrderedDict())
             CanCache["subplots/integrals"].append(collections.OrderedDict())
             #Call makeSuperCategories with the very same file [pn] referenced, plus the legendConfig
             # filteredHistKeys = [fkey for fkey in CanCache["subplots/files/keys"][pn] if fkey.split(separator)[-1] in ["$NOMINAL", "nom"]]
@@ -2850,15 +2861,19 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                    key=lambda x: legendConfig["Supercategories"][x[0]]["Stack"], reverse=True):
                 #Blinding is done via the keyword "BLIND" insterted into the supercategory histogram name, propragated up from the addHists method, etc. 
                 if "data" in super_cat_name.lower() and "blind" in drawable.GetName().lower() and subplot_dict.get("Unblind", False) == False:
-                    thisIntegral = "(blind)"
+                    thisStrIntegral = "(blind)"
+                    thisIntegral = -9876.54321
                     pass
                 else:
                     thisMax = max(thisMax, drawable.GetMaximum())
                     thisMin = min(thisMin, drawable.GetMinimum())
                     if isinstance(drawable, (ROOT.TH1)):
-                        thisIntegral = str("{:4.3f}".format(drawable.Integral()))
+                        thisStrIntegral = str("{:4.3f}".format(drawable.Integral()))
+                        thisIntegral = drawable.Integral()
                     elif isinstance(drawable, (ROOT.THStack)):
-                        thisIntegral = str("{:4.3f}".format(drawable.GetStack().Last().Integral()))
+                        thisStrIntegral = str("{:4.3f}".format(drawable.GetStack().Last().Integral()))
+                        thisIntegral = drawable.GetStack().Last().Integral()
+                CanCache["subplots/stringintegrals"][pn][super_cat_name] = thisStrIntegral
                 CanCache["subplots/integrals"][pn][super_cat_name] = thisIntegral
 
                 #Find and store the maxima/minima for each histogram
@@ -2913,7 +2928,10 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 if "data" in super_cat_name.lower() and "blind" in drawable.GetName().lower() and subplot_dict.get("Unblind", False) == False:
                     pass
                 else:
-                    drawable.Draw(draw_command)
+                    if drawNormalized and not isinstance(drawable, ROOT.THStack):
+                        drawable.DrawNormalized(draw_command, max([float(ival) for ival in CanCache["subplots/integrals"][pn].values()]))
+                    else:
+                        drawable.Draw(draw_command)
                     if CanCache["subplots/setrangeuser"][pn]:
                         if len(CanCache["subplots/setrangeuser"][pn]) != 2:
                             raise ValueError("SetRangeUser must be a list or tuple with 2 values, floats equal to x-axis minimum and maximum in real units.")
@@ -2953,22 +2971,23 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 scaleText = 2.0
                 offsetText = 0
             #Legends are only created in the dictionary for pad 0, so do not lookup pn but [0]
-            if doLogY:
-                if nXPads == 1:
-                    CanCache["subplots/supercategories"][0]["Legend"].Draw()
+            if drawLegends:
+                if doLogY:
+                    if nXPads == 1:
+                        CanCache["subplots/supercategories"][0]["Legend"].Draw()
+                    else:
+                        if pn == 0:    
+                            CanCache["subplots/supercategories"][0]["Legend2"].Draw()
+                        elif pn == 1:
+                            CanCache["subplots/supercategories"][0]["Legend1"].Draw()
                 else:
-                    if pn == 0:    
-                        CanCache["subplots/supercategories"][0]["Legend2"].Draw()
-                    elif pn == 1:
-                        CanCache["subplots/supercategories"][0]["Legend1"].Draw()
-            else:
-                if nXPads == 1:
-                    CanCache["subplots/supercategories"][0]["Legend"].Draw()
-                else:
-                    if pn == nXPads - 2:
-                        CanCache["subplots/supercategories"][0]["Legend1"].Draw()
-                    elif pn == nXPads - 1:
-                        CanCache["subplots/supercategories"][0]["Legend2"].Draw()
+                    if nXPads == 1:
+                        CanCache["subplots/supercategories"][0]["Legend"].Draw()
+                    else:
+                        if pn == nXPads - 2:
+                            CanCache["subplots/supercategories"][0]["Legend1"].Draw()
+                        elif pn == nXPads - 1:
+                            CanCache["subplots/supercategories"][0]["Legend2"].Draw()
                 
             #Create the subpad label, to be drawn. Text stored in CanCache["sublabels"] which should be a list, possibly a list of tuples in the future
             CanCache["subplots/labels"].append(ROOT.TLatex())
@@ -3065,11 +3084,11 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         if drawYields:
             padWidth = (1.0 - CanCache["canvas/bordersL"] - CanCache["canvas/bordersR"])/nXPads
             drawPoint = CanCache["canvas/marginL"]*0.33
-            for pn in range(len(CanCache["subplots/integrals"])):
+            for pn in range(len(CanCache["subplots/stringintegrals"])):
                 tmp = ROOT.TLatex()
                 tmp.SetTextSize(0.016)
                 tmpString = "#splitline"
-                for super_cat_name, str_integral in CanCache["subplots/integrals"][pn].items():
+                for super_cat_name, str_integral in CanCache["subplots/stringintegrals"][pn].items():
                     if "data" in super_cat_name.lower(): continue
                     tmpString += "{" + "{} : {}".format(super_cat_name, str_integral) + "}"
                 tmp.DrawLatexNDC(drawPoint, 0.02, tmpString)
@@ -3103,28 +3122,42 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["canvas_upper_yaxis"].SetTextSize(35)
         CanCache["canvas_upper_yaxis"].SetTextAlign(33)
         CanCache["canvas_upper_yaxis"].SetTextAngle(90)
-        CanCache["canvas_upper_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 1-0.550*CanCache["canvas/marginT"], 
-                                                    "< " + str(yAxisTitle).replace("bin", "GeV") + " >" if differentialScale else str(yAxisTitle))
+        differentialTitle = "< "
+        differentialTitle += str(yAxisTitle).replace("bin", "GeV") if "GeV" in str(xAxisTitle) else str(yAxisTitle)
+        differentialTitle += " >"
+        if doRatio:
+            CanCache["canvas_upper_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 1-0.550*CanCache["canvas/marginT"], 
+                                                        differentialTitle if differentialScale else str(yAxisTitle))
+        else:
+            CanCache["canvas_upper_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 1-1.00*CanCache["canvas/marginT"], 
+                                                        differentialTitle if differentialScale else str(yAxisTitle))
         CanCache["canvas_upper_yaxis"].Draw()        
 
-        CanCache["canvas_lower_yaxis"] = ROOT.TLatex()
-        CanCache["canvas_lower_yaxis"].SetNDC(True)
-        CanCache["canvas_lower_yaxis"].SetTextFont(43)
-        CanCache["canvas_lower_yaxis"].SetTextSize(35)
-        CanCache["canvas_lower_yaxis"].SetTextAlign(33)
-        CanCache["canvas_lower_yaxis"].SetTextAngle(90)
-        CanCache["canvas_lower_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 0+1.0*CanCache["canvas/marginB"], str(CanCache["ratioTitle"]))
-        CanCache["canvas_lower_yaxis"].Draw()        
-
+        if doRatio:
+            CanCache["canvas_lower_yaxis"] = ROOT.TLatex()
+            CanCache["canvas_lower_yaxis"].SetNDC(True)
+            CanCache["canvas_lower_yaxis"].SetTextFont(43)
+            CanCache["canvas_lower_yaxis"].SetTextSize(35)
+            CanCache["canvas_lower_yaxis"].SetTextAlign(33)
+            CanCache["canvas_lower_yaxis"].SetTextAngle(90)
+            CanCache["canvas_lower_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 0+1.0*CanCache["canvas/marginB"], str(CanCache["ratioTitle"]))
+            CanCache["canvas_lower_yaxis"].Draw()        
+            
         CanCache["canvas_xaxis"] = ROOT.TLatex()
         CanCache["canvas_xaxis"].SetNDC(True)
         CanCache["canvas_xaxis"].SetTextFont(43)
         CanCache["canvas_xaxis"].SetTextSize(35)
         CanCache["canvas_xaxis"].SetTextAlign(33)
         if nXPads > 1:
-            CanCache["canvas_xaxis"].DrawLatexNDC(1 - 0.17*CanCache["canvas/marginR"], 0.22*CanCache["canvas/marginB"], str(xAxisTitle))
+            if doRatio:
+                CanCache["canvas_xaxis"].DrawLatexNDC(1 - 0.17*CanCache["canvas/marginR"], 0.22*CanCache["canvas/marginB"], str(xAxisTitle))
+            else:
+                CanCache["canvas_xaxis"].DrawLatexNDC(1 - 0.17*CanCache["canvas/marginR"], 0.15*CanCache["canvas/marginB"], str(xAxisTitle))
         else:
-            CanCache["canvas_xaxis"].DrawLatexNDC(1 - 1.0*CanCache["canvas/marginR"], 0.22*CanCache["canvas/marginB"], str(xAxisTitle))
+            if doRatio:
+                CanCache["canvas_xaxis"].DrawLatexNDC(1 - 1.0*CanCache["canvas/marginR"], 0.22*CanCache["canvas/marginB"], str(xAxisTitle))
+            else:
+                CanCache["canvas_xaxis"].DrawLatexNDC(1 - 1.0*CanCache["canvas/marginR"], 0.22*CanCache["canvas/marginB"], str(xAxisTitle))
         CanCache["canvas_xaxis"].Draw()        
 
         CanCache["canvas_label"] = ROOT.TLatex()
@@ -3524,6 +3557,8 @@ if __name__ == '__main__':
                         help='For drawing the MC stat + systematic uncertainties on the main histogram plot')
     parser.add_argument('--noRatioUncertainties', dest='ratioUncertainties', action='store_false',
                         help='For drawing the MC stat + systematic uncertainties on the ratio plot')
+    parser.add_argument('--disableLegends', dest='drawLegends', action='store_false',
+                        help='Disable the drawing of legends.')
     parser.add_argument('--orderReverse', dest='orderReverse', action='store_true',
                         help='For reversing the order of samples in the THStacks')
     parser.add_argument('--forceIntegerBinning', dest='forceBinning', action='store', type=int,
@@ -3534,6 +3569,8 @@ if __name__ == '__main__':
                         help='Force LogY axis plotting')
     parser.add_argument('--forceWIP', dest='forceWIP', action='store_true',
                         help='Force Work In Progress header on plots')
+    parser.add_argument('--drawNormalized', dest='drawNormalized', action='store_true',
+                        help='use DrawNormalized for plotting')
     
 
     #Parse the arguments
@@ -3672,7 +3709,8 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                 if v.get("Type") == "CanvasConfig":
                     v["Label"] = "#bf{CMS} #it{Work In Progress}"
         resultsDict = loopPlottingJSON(loadedPlotConfig, era=args.era, channel=args.channel, systematicCards=args.systematics_cards,
-                                       Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, drawSystematic=args.drawSystematic,
+                                       Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, drawSystematic=args.drawSystematic, drawLegends=args.drawLegends,
+                                       drawNormalized=args.drawNormalized,
                                        analysisDirectory=analysisDir, tag=tag, plotCard=plotCard, macroOutput=macroOutput, pngOutput=pngOutput,
                                        pdfOutput=pdfOutput, combineOutput=combineOut, combineInput=combineInput, combineCards=combineCards,
                                        nominalPostfix=nominalPostfix, separator="___", lumi=lumi, useCanvasMax=useCanvasMax,
