@@ -12,12 +12,15 @@
 #include <TMath.h>
 #include "ROOT/RDF/RInterface.hxx"
 #include "ROOT/RVec.hxx"
+#include "Math/GenVector/PtEtaPhiM4D.h"
 
 //const and by reference means no copies, no pointer handling, etc.
 using VecF_t = const ROOT::RVec<float>&;
 using VecI_t = const ROOT::RVec<int>&;
 using VecUC_t = const ROOT::RVec<UChar_t>&;
 using VecB_t = const ROOT::RVec<bool>&;
+// using VecP4_t = const ROOT::RVec<ROOT::Math::PtEtaPhiM4D<double>>&;
+using VecP4_t = const ROOT::VecOps::RVec< ROOT::Math::LorentzVector< ROOT::Math::PtEtaPhiM4D<double> > >&;
 // class myFunctorClass
 // {
 // public:
@@ -83,25 +86,32 @@ private:
 };
 
 std::pair<ROOT::RDF::RNode, ROOT::VecOps::RVec<int>> applyTriggerSelection(ROOT::RDF::RNode df, std::string era, std::string triggerChannel, std::string decayChannel, 
-									   bool isData, std::string subera, std::string ElectronID, std::string MuonID, bool verbose=false){
+									   bool isData, std::string subera, std::string ElectronID, std::string MuonID, 
+									   bool applyLowMassResonanceCut=true, bool invertZWindow=false, bool verbose=false){
   std::map< std::string, std::vector<int> > triggerIDs;
   std::map< std::string, ROOT::VecOps::RVec<double> > triggers;
   std::map< std::string, int> triggerBit;
   std::vector<std::string> vetoTriggers;
   ROOT::VecOps::RVec<int> decayChannelIDs = {};
   bool cutLowMassResonances = false;
+  bool cutZResonance = false;
   ROOT::VecOps::RVec<int> channelTriggerBits = {};
   if(decayChannel == "ElMu"){
     decayChannelIDs = {13, 11};
   }
   else if(decayChannel == "ElEl"){
     decayChannelIDs = {11, 11};
-    cutLowMassResonances = true;
+    cutLowMassResonances = applyLowMassResonanceCut;
+    cutZResonance = true;
   }
   else if(decayChannel == "MuMu"){
     decayChannelIDs = {13, 13};
-    cutLowMassResonances = true;
+    cutLowMassResonances = applyLowMassResonanceCut;
+    cutZResonance = true;
   }
+  std::string stringCutLowMassResonances = cutLowMassResonances ? "true" : "false";
+  std::string stringCutZResonance = cutZResonance ? "true" : "false";
+  std::string stringInvertZWindow = invertZWindow ? "true": "false";
   if(isData){
     assert (subera == "A" || subera == "B" || subera == "C" || subera == "D" || subera == "E" || subera == "F");
   }
@@ -402,11 +412,17 @@ std::pair<ROOT::RDF::RNode, ROOT::VecOps::RVec<int>> applyTriggerSelection(ROOT:
   if(MuonID == "Medium") MuonIDEnum = 3;
   if(MuonID == "Tight") MuonIDEnum = 4;
 
+  auto constructP4 = [](VecF_t pts, VecF_t etas, VecF_t phis, VecF_t masses){
+    auto fourVecs = ROOT::VecOps::Construct<ROOT::Math::PtEtaPhiMVector>(pts, etas, phis, masses); 
+    return fourVecs;
+  };
   preselectElectrons pIsoElectrons(ElectronIDEnum, false);
   preselectMuons pIsoMuons(MuonIDEnum, false);
+  ret = ret.Define("Electron_p4", constructP4, {"Electron_pt", "Electron_phi", "Electron_eta", "Electron_mass"});
   ret = ret.Define("Electron_preselection", pIsoElectrons, {"Electron_pt", "Electron_eta", "Electron_phi",
 	"Electron_ip3d", "Electron_dz", "Electron_charge",
 	"Electron_cutBased"});
+  ret = ret.Define("Muon_p4", constructP4, {"Muon_pt", "Muon_phi", "Muon_eta", "Muon_mass"});
   ret = ret.Define("Muon_preselection", pIsoMuons, {"Muon_pt", "Muon_eta", "Muon_phi", 
 	"Muon_ip3d", "Muon_dz", "Muon_charge", 
 	"Muon_looseId", "Muon_mediumId", "Muon_tightId", "Muon_pfIsoId"});
@@ -543,6 +559,72 @@ std::pair<ROOT::RDF::RNode, ROOT::VecOps::RVec<int>> applyTriggerSelection(ROOT:
 		   }, 
 		   {"Muon_pdgId", "Muon_charge", "Muon_preselection", "Electron_pdgId", "Electron_charge", "Electron_preselection", "rdfentry_"},
 		   "Correct lepton flavor");
+  ret = ret.Filter([decayChannelIDs, cutLowMassResonances](VecI_t Muon_pdgId, VecI_t Muon_charge, VecP4_t Muon_p4, VecI_t Muon_preselection,
+							   VecI_t Electron_pdgId, VecI_t Electron_charge, VecP4_t Electron_p4, VecI_t Electron_preselection, 
+							   ULong64_t rdfentry_){
+		     // std::cout << rdfentry_ << "  -->  ";
+		     bool twoLeptons = (Sum(Muon_preselection) + Sum(Electron_preselection) == 2);
+		     auto Lepton_absflavor = ROOT::VecOps::abs(ROOT::VecOps::Concatenate(Muon_pdgId[Muon_preselection], Electron_pdgId[Electron_preselection]));
+		     auto Lepton_charge = ROOT::VecOps::Concatenate(Muon_charge[Muon_preselection], Electron_charge[Electron_preselection]);
+		     // std::cout << Lepton_absflavor.size() << "   " << Lepton_charge.size() << "   " << decayChannelIDs.size() << "   ";
+		     if(twoLeptons){
+		       bool correctFlavors = ROOT::VecOps::All(Lepton_absflavor == decayChannelIDs);
+		       if(Lepton_charge.at(0) * Lepton_charge.at(1) < 0){
+			 if(correctFlavors){
+			   // std::cout << rdfentry_ << " Selected IDs: " << Lepton_absflavor
+			   // 	     << "  Decay IDs: (" << decayChannelIDs.size() << ") " << decayChannelIDs
+			   // 	     << " Decision 2L: " << twoLeptons; 
+			   // std::cout << " Decision CF: " << correctFlavors << std::endl;
+			   if(cutLowMassResonances){
+			     //figure resonance cut
+			     return false;
+			   }
+			   else{
+			     return true;
+			   }
+			 }
+		       }
+		     }
+		     return false;
+		   }, 
+		   {"Muon_pdgId", "Muon_charge", "Muon_p4", "Muon_preselection", "Electron_pdgId", "Electron_charge", "Electron_p4", "Electron_preselection", "rdfentry_"},
+		   "Pass low mass resonance cut (applied = " + stringCutLowMassResonances + ")" );
+  ret = ret.Filter([decayChannelIDs, cutZResonance, invertZWindow](VecI_t Muon_pdgId, VecI_t Muon_charge, VecP4_t Muon_p4, VecI_t Muon_preselection, 
+								   VecI_t Electron_pdgId, VecI_t Electron_charge, VecP4_t Electron_p4, VecI_t Electron_preselection, 
+								   ULong64_t rdfentry_){
+		     // std::cout << rdfentry_ << "  -->  ";
+		     bool twoLeptons = (Sum(Muon_preselection) + Sum(Electron_preselection) == 2);
+		     auto Lepton_absflavor = ROOT::VecOps::abs(ROOT::VecOps::Concatenate(Muon_pdgId[Muon_preselection], Electron_pdgId[Electron_preselection]));
+		     auto Lepton_charge = ROOT::VecOps::Concatenate(Muon_charge[Muon_preselection], Electron_charge[Electron_preselection]);
+		     // std::cout << Lepton_absflavor.size() << "   " << Lepton_charge.size() << "   " << decayChannelIDs.size() << "   ";
+		     if(twoLeptons){
+		       bool correctFlavors = ROOT::VecOps::All(Lepton_absflavor == decayChannelIDs);
+		       if(Lepton_charge.at(0) * Lepton_charge.at(1) < 0){
+			 if(correctFlavors){
+			   // std::cout << rdfentry_ << " Selected IDs: " << Lepton_absflavor
+			   // 	     << "  Decay IDs: (" << decayChannelIDs.size() << ") " << decayChannelIDs
+			   // 	     << " Decision 2L: " << twoLeptons; 
+			   // std::cout << " Decision CF: " << correctFlavors << std::endl;
+			   if(cutZResonance){
+			     if(invertZWindow){
+			       //figure Z cut
+			       return false;
+			     }
+			     else{
+			       //figure Z cut
+			       return false;
+			     }
+			   }
+			   else
+			     //no Z cut, pass through
+			     return true;
+			 }
+		       }
+		     }
+		     return false;
+		   }, 
+		   {"Muon_pdgId", "Muon_charge", "Muon_p4", "Muon_preselection", "Electron_pdgId", "Electron_charge", "Electron_p4", "Electron_preselection", "rdfentry_"},
+		   "Z mass window (applied = " + stringCutZResonance + ", inverted = " + stringInvertZWindow + ")" );
   // ret = ret.Filter([](VecI_t Muon_pdgId, VecI_t Muon_pdgId, VecI_t Muon_preselection, VecI_t Electron_charge, VecI_t Electron_preselection){
   //Goal: For events that at least have 2 isolated leptons, then check the valid trigger paths, first vetoing higher tier triggers with a filter,
   //then only using a Define to store the concurrent trigger path decisions in an int value (-1 vetoed, 0 failed, 1 passed) and the matching lepton selection masks in two additional arrays
