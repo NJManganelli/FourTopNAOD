@@ -82,14 +82,15 @@ private:
   bool _invertIsolation;
 };
 
-ROOT::RDF::RNode applyTriggerSelection(ROOT::RDF::RNode df, std::string era, std::string triggerChannel, std::string decayChannel, 
-				       bool isData, std::string subera, std::string ElectronID, std::string MuonID, bool verbose=false){
+std::pair<ROOT::RDF::RNode, ROOT::VecOps::RVec<int>> applyTriggerSelection(ROOT::RDF::RNode df, std::string era, std::string triggerChannel, std::string decayChannel, 
+									   bool isData, std::string subera, std::string ElectronID, std::string MuonID, bool verbose=false){
   std::map< std::string, std::vector<int> > triggerIDs;
   std::map< std::string, ROOT::VecOps::RVec<double> > triggers;
   std::map< std::string, int> triggerBit;
   std::vector<std::string> vetoTriggers;
   ROOT::VecOps::RVec<int> decayChannelIDs = {};
   bool cutLowMassResonances = false;
+  ROOT::VecOps::RVec<int> channelTriggerBits = {};
   if(decayChannel == "ElMu"){
     decayChannelIDs = {13, 11};
   }
@@ -108,36 +109,48 @@ ROOT::RDF::RNode applyTriggerSelection(ROOT::RDF::RNode df, std::string era, std
     //ElMu
     triggerBit["HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ"] = 14;
     triggerBit["HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ"] = 13;
+    if(triggerChannel == "ElMu") channelTriggerBits = {14, 13};
     //MuMu
     triggerBit["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ"] = 12;
     triggerBit["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8"] = 11;
+    if(triggerChannel == "MuMu") channelTriggerBits = {12, 11};
     //ElEl
     triggerBit["HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL"] = 9;
+    if(triggerChannel == "ElEl") channelTriggerBits = {9};
     //Mu
     triggerBit["HLT_IsoMu27"] = 7;
+    if(triggerChannel == "Mu") channelTriggerBits = {7};
     //El
     triggerBit["HLT_Ele35_WPTight_Gsf"] = 6;
+    if(triggerChannel == "El") channelTriggerBits = {6};
     //MET
     triggerBit["HLT_PFMET200_NotCleaned"] = 3;
     triggerBit["HLT_PFMET200_HBHECleaned"] = 2;
     triggerBit["HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned"] = 1;
+    if(triggerChannel == "MET") channelTriggerBits = {3, 2, 1};
   }
   else if(era == "2018"){
     //ElMu
     triggerBit["HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ"] = 14; // why the reversal? Maa ika
     triggerBit["HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ"] = 12;
+    if(triggerChannel == "ElMu") channelTriggerBits = {14, 12};
     //MuMu
     triggerBit["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8"] = 11;
+    if(triggerChannel == "MuMu") channelTriggerBits = {11};
     //ElEl
     triggerBit["HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL"] = 9;
+    if(triggerChannel == "ElEl") channelTriggerBits = {9};
     //Mu
     triggerBit["HLT_IsoMu24"] = 8;
+    if(triggerChannel == "Mu") channelTriggerBits = {8};
     //El
     triggerBit["HLT_Ele32_WPTight_Gsf"] = 4;
+    if(triggerChannel == "El") channelTriggerBits = {4};
     //MET
     triggerBit["HLT_PFMET200_NotCleaned"] = 3;
     triggerBit["HLT_PFMET200_HBHECleaned"] = 2;
     triggerBit["HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned"] = 1;
+    if(triggerChannel == "MET") channelTriggerBits = {3, 2, 1};
   }
   if(decayChannel == "ElMu"){
     if(era == "2017"){
@@ -408,20 +421,30 @@ ROOT::RDF::RNode applyTriggerSelection(ROOT::RDF::RNode df, std::string era, std
 		     auto Lepton_absflavor = ROOT::VecOps::abs(ROOT::VecOps::Concatenate(Muon_pdgId[Muon_preselection], Electron_pdgId[Electron_preselection]));
 		     auto Lepton_charge = ROOT::VecOps::Concatenate(Muon_charge[Muon_preselection], Electron_charge[Electron_preselection]);
 		     // std::cout << Lepton_absflavor.size() << "   " << Lepton_charge.size() << "   " << decayChannelIDs.size() << "   ";
-		     if(rdfentry_ == -899){
-		     }
 		     if(twoLeptons){
 		       bool correctFlavors = ROOT::VecOps::All(Lepton_absflavor == decayChannelIDs);
 		       if(Lepton_charge.at(0) * Lepton_charge.at(1) < 0){
 			 if(correctFlavors){
-			   std::cout << rdfentry_ << " Selected IDs: " << Lepton_absflavor
-				     << "  Decay IDs: (" << decayChannelIDs.size() << ") " << decayChannelIDs
-				     << " Decision 2L: " << twoLeptons; 
-			   std::cout << " Decision CF: " << correctFlavors << std::endl;
+			   // std::cout << rdfentry_ << " Selected IDs: " << Lepton_absflavor
+			   // 	     << "  Decay IDs: (" << decayChannelIDs.size() << ") " << decayChannelIDs
+			   // 	     << " Decision 2L: " << twoLeptons; 
+			   // std::cout << " Decision CF: " << correctFlavors << std::endl;
 			   return true;
 			 }
+			 //failed correct flavors?
+			 // else{
+			 //   std::cout << "Flav mismatch: " << Lepton_absflavor << " " << decayChannelIDs << " " << correctFlavors << std::endl;
+			 // }
 		       }
+		       //failed opposite charge
+		       // else{
+		       // 	 std::cout << "Charge mismatch: " << Lepton_charge << std::endl;
+		       // }
 		     }
+		     //failed two leptons
+		     // else{
+		     //   std::cout << "Dilepton mismatch: " << Muon_preselection << " " << Electron_preselection << " " << twoLeptons << std::endl;
+		     // }
 		     return false;
 		   }, 
 		   {"Muon_pdgId", "Muon_charge", "Muon_preselection", "Electron_pdgId", "Electron_charge", "Electron_preselection", "rdfentry_"},
@@ -471,11 +494,11 @@ ROOT::RDF::RNode applyTriggerSelection(ROOT::RDF::RNode df, std::string era, std
 			       VecF_t Electron_pt, VecI_t Electron_preselection, ULong64_t rdfentry_){
 		       auto Lepton_pt = ROOT::VecOps::Concatenate(Muon_pt[Muon_preselection], Electron_pt[Electron_preselection]);
 		       if(thresh.size() == 2){
-			 return (Lepton_pt > thresh);
+			 return 1 * ROOT::VecOps::All(Lepton_pt > thresh);
 		       }
 		       else if(thresh.size() == 0){
 			 ROOT::VecOps::RVec<double> generic = {25.0, 15.0};
-			 return (ROOT::VecOps::Reverse(ROOT::VecOps::Sort(Lepton_pt)) > generic);
+			 return 1 * ROOT::VecOps::All(ROOT::VecOps::Reverse(ROOT::VecOps::Sort(Lepton_pt)) > generic);
 		       }
 		       else
 			 throw runtime_error("Thresholds must either have 2 double values representing the Muon and Electron or highest then lowest pt thresholds, or have length 0");
@@ -519,7 +542,7 @@ ROOT::RDF::RNode applyTriggerSelection(ROOT::RDF::RNode df, std::string era, std
 		       {tb_iter->first, "Electron_preselection"});
     }
   }//end iteration over triggerBits
-  return ret;
+  return std::pair<ROOT::RDF::RNode, ROOT::VecOps::RVec<int>>(ret, channelTriggerBits);
   // ROOT::Detail::RDF::ColumnNames_t flags = {};
 }
     
