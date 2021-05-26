@@ -70,10 +70,10 @@ public:
       Muon_premask = Muon_premask && Muon_tightId == true;
     }
     if(_invertIsolation){
-      Muon_premask = Muon_premask && Muon_pfIsoId >= 4;
+      Muon_premask = Muon_premask && Muon_pfIsoId < 4;
     }
     else{
-      Muon_premask = Muon_premask && Muon_pfIsoId < 3;
+      Muon_premask = Muon_premask && Muon_pfIsoId >= 4;
     }
     return Muon_premask;
   }
@@ -410,10 +410,104 @@ std::pair<ROOT::RDF::RNode, ROOT::VecOps::RVec<int>> applyTriggerSelection(ROOT:
   ret = ret.Define("Muon_preselection", pIsoMuons, {"Muon_pt", "Muon_eta", "Muon_phi", 
 	"Muon_ip3d", "Muon_dz", "Muon_charge", 
 	"Muon_looseId", "Muon_mediumId", "Muon_tightId", "Muon_pfIsoId"});
+  ret = ret.Define("junkPrinterE", "if(ROOT::VecOps::Any(e_mask != Electron_preselection)){"
+		   "auto diff_mask = (e_mask != Electron_preselection);"
+		   "std::cout << \"Difference found\" << std::endl;"
+		   "std::cout << \"Eleectron pt  \" << Electron_pt[diff_mask] << std::endl;"
+		   "std::cout << \"Eleectron eta \" << Electron_eta[diff_mask] << std::endl;"
+		   "std::cout << \"Eleectron phi \" << Electron_phi[diff_mask] << std::endl;"
+		   "std::cout << \"Eleectron ip3d\" << Electron_ip3d[diff_mask] << std::endl;"
+		   "std::cout << \"Eleectron dz  \" << Electron_dz[diff_mask] << std::endl;"
+		   "std::cout << \"Eleectron chg \" << Electron_charge[diff_mask] << std::endl;"
+		   "std::cout << \"Eleectron ID  \" << Electron_cutBased[diff_mask] << std::endl << std::endl;}"
+		   "return false;");
+  ret = ret.Define("junkPrinterM", "if(ROOT::VecOps::Any(mu_mask != Muon_preselection)){"
+		   "auto diff_mask = (mu_mask != Muon_preselection);"
+		   "std::cout << \"Difference found\" << std::endl;"
+		   "std::cout << \"Muon pt  \" << Muon_pt[diff_mask] << std::endl;"
+		   "std::cout << \"Muon eta \" << Muon_eta[diff_mask] << std::endl;"
+		   "std::cout << \"Muon phi \" << Muon_phi[diff_mask] << std::endl;"
+		   "std::cout << \"Muon ip3d\" << Muon_ip3d[diff_mask] << std::endl;"
+		   "std::cout << \"Muon dz  \" << Muon_dz[diff_mask] << std::endl;"
+		   "std::cout << \"Muon chg \" << Muon_charge[diff_mask] << std::endl;"
+		   "std::cout << \"Muon L   \" << Muon_looseId[diff_mask] << std::endl;"
+		   "std::cout << \"Muon M   \" << Muon_mediumId[diff_mask] << std::endl;"
+		   "std::cout << \"Muon T   \" << Muon_tightId[diff_mask] << std::endl;"
+		   "std::cout << \"Muon iso \" << Muon_pfIsoId[diff_mask] << \"Old \" << Muon_pfIsoId[mu_mask] << \"New \" << Muon_pfIsoId[Muon_preselection] << std::endl << std::endl;}"
+		   "return false;");
+// \"old v new \" << Muon_pfIsoId[mu_mask] << \" \" << Muon_pfIsoId[Muon_preselection] << std::end;}"
   
   //filter out tertiary leptons and match the decayChannel expectations, leaving only the pt thresholds to ensure correctness
   //Need to capture by value. If we capture by reference, no copy is made, but the local variable decayChannelIDs can go out of scope. Then we're referencing a variable that
   //no longer exists. Voila. 
+  // ret = ret.Filter([decayChannelIDs](VecI_t Muon_pdgId, VecI_t Muon_charge, VecI_t Muon_preselection, 
+  // 				      VecI_t Electron_pdgId, VecI_t Electron_charge, VecI_t Electron_preselection, ULong64_t rdfentry_){
+  // 		     // std::cout << rdfentry_ << "  -->  ";
+  // 		     bool twoLeptons = (Sum(Muon_preselection) + Sum(Electron_preselection) == 2);
+  // 		     auto Lepton_absflavor = ROOT::VecOps::abs(ROOT::VecOps::Concatenate(Muon_pdgId[Muon_preselection], Electron_pdgId[Electron_preselection]));
+  // 		     auto Lepton_charge = ROOT::VecOps::Concatenate(Muon_charge[Muon_preselection], Electron_charge[Electron_preselection]);
+  // 		     // std::cout << Lepton_absflavor.size() << "   " << Lepton_charge.size() << "   " << decayChannelIDs.size() << "   ";
+  // 		     if(twoLeptons){
+  // 		       bool correctFlavors = ROOT::VecOps::All(Lepton_absflavor == decayChannelIDs);
+  // 		       if(Lepton_charge.at(0) * Lepton_charge.at(1) < 0){
+  // 			 if(correctFlavors){
+  // 			   // std::cout << rdfentry_ << " Selected IDs: " << Lepton_absflavor
+  // 			   // 	     << "  Decay IDs: (" << decayChannelIDs.size() << ") " << decayChannelIDs
+  // 			   // 	     << " Decision 2L: " << twoLeptons; 
+  // 			   // std::cout << " Decision CF: " << correctFlavors << std::endl;
+  // 			   return true;
+  // 			 }
+  // 			 //failed correct flavors?
+  // 			 // else{
+  // 			 //   std::cout << "Flav mismatch: " << Lepton_absflavor << " " << decayChannelIDs << " " << correctFlavors << std::endl;
+  // 			 // }
+  // 		       }
+  // 		       //failed opposite charge
+  // 		       // else{
+  // 		       // 	 std::cout << "Charge mismatch: " << Lepton_charge << std::endl;
+  // 		       // }
+  // 		     }
+  // 		     //failed two leptons
+  // 		     // else{
+  // 		     //   std::cout << "Dilepton mismatch: " << Muon_preselection << " " << Electron_preselection << " " << twoLeptons << std::endl;
+  // 		     // }
+  // 		     return false;
+  // 		   }, 
+  // 		   {"Muon_pdgId", "Muon_charge", "Muon_preselection", "Electron_pdgId", "Electron_charge", "Electron_preselection", "rdfentry_"},
+  // 		   "Exactly 2 isolated, opposite-sign leptons of correct flavor");
+  ret = ret.Filter([decayChannelIDs](VecI_t Muon_pdgId, VecI_t Muon_charge, VecI_t Muon_preselection, 
+				      VecI_t Electron_pdgId, VecI_t Electron_charge, VecI_t Electron_preselection, ULong64_t rdfentry_){
+		     // std::cout << rdfentry_ << "  -->  ";
+		     bool twoLeptons = (Sum(Muon_preselection) + Sum(Electron_preselection) == 2);
+		     auto Lepton_absflavor = ROOT::VecOps::abs(ROOT::VecOps::Concatenate(Muon_pdgId[Muon_preselection], Electron_pdgId[Electron_preselection]));
+		     auto Lepton_charge = ROOT::VecOps::Concatenate(Muon_charge[Muon_preselection], Electron_charge[Electron_preselection]);
+		     // std::cout << Lepton_absflavor.size() << "   " << Lepton_charge.size() << "   " << decayChannelIDs.size() << "   ";
+		     if(twoLeptons){
+		       return true;
+		     }
+		     //failed two leptons
+		     return false;
+		   }, 
+		   {"Muon_pdgId", "Muon_charge", "Muon_preselection", "Electron_pdgId", "Electron_charge", "Electron_preselection", "rdfentry_"},
+		   "Exactly 2 isolated leptons");
+  ret = ret.Filter([decayChannelIDs](VecI_t Muon_pdgId, VecI_t Muon_charge, VecI_t Muon_preselection, 
+				      VecI_t Electron_pdgId, VecI_t Electron_charge, VecI_t Electron_preselection, ULong64_t rdfentry_){
+		     // std::cout << rdfentry_ << "  -->  ";
+		     bool twoLeptons = (Sum(Muon_preselection) + Sum(Electron_preselection) == 2);
+		     auto Lepton_absflavor = ROOT::VecOps::abs(ROOT::VecOps::Concatenate(Muon_pdgId[Muon_preselection], Electron_pdgId[Electron_preselection]));
+		     auto Lepton_charge = ROOT::VecOps::Concatenate(Muon_charge[Muon_preselection], Electron_charge[Electron_preselection]);
+		     // std::cout << Lepton_absflavor.size() << "   " << Lepton_charge.size() << "   " << decayChannelIDs.size() << "   ";
+		     if(twoLeptons){
+		       bool correctFlavors = ROOT::VecOps::All(Lepton_absflavor == decayChannelIDs);
+		       if(Lepton_charge.at(0) * Lepton_charge.at(1) < 0){
+			   return true;
+		       }
+		       //failed opposite charge
+		     }
+		     return false;
+		   }, 
+		   {"Muon_pdgId", "Muon_charge", "Muon_preselection", "Electron_pdgId", "Electron_charge", "Electron_preselection", "rdfentry_"},
+		   "Opposite-sign leptons");
   ret = ret.Filter([decayChannelIDs](VecI_t Muon_pdgId, VecI_t Muon_charge, VecI_t Muon_preselection, 
 				      VecI_t Electron_pdgId, VecI_t Electron_charge, VecI_t Electron_preselection, ULong64_t rdfentry_){
 		     // std::cout << rdfentry_ << "  -->  ";
@@ -448,7 +542,7 @@ std::pair<ROOT::RDF::RNode, ROOT::VecOps::RVec<int>> applyTriggerSelection(ROOT:
 		     return false;
 		   }, 
 		   {"Muon_pdgId", "Muon_charge", "Muon_preselection", "Electron_pdgId", "Electron_charge", "Electron_preselection", "rdfentry_"},
-		   "Exactly 2 isolated, opposite-sign leptons of correct flavor");
+		   "Correct lepton flavor");
   // ret = ret.Filter([](VecI_t Muon_pdgId, VecI_t Muon_pdgId, VecI_t Muon_preselection, VecI_t Electron_charge, VecI_t Electron_preselection){
   //Goal: For events that at least have 2 isolated leptons, then check the valid trigger paths, first vetoing higher tier triggers with a filter,
   //then only using a Define to store the concurrent trigger path decisions in an int value (-1 vetoed, 0 failed, 1 passed) and the matching lepton selection masks in two additional arrays
