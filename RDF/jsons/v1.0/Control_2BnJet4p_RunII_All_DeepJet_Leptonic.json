@@ -1,0 +1,174 @@
+{
+    "Plot_HT500_nMediumDeepJetB2_nJet4+___dRll": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "RunII___Control___2BnJet4p.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_dRll": {
+        "Type": "CanvasConfig",
+        "Title": "#DeltaR_{#it{ll} } (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4+___dRll"
+        ],
+        "Labels": [
+            "#font[33]{ll} Control Regions"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "#DeltaR_{#it{ll} }",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4+___nLooseFTALepton": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "RunII___Control___2BnJet4p.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_nLooseFTALepton": {
+        "Type": "CanvasConfig",
+        "Title": "Loose ID Leptons (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4+___nLooseFTALepton"
+        ],
+        "Labels": [
+            "#font[33]{ll} Control Regions"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "Loose ID Leptons",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4+___nMediumFTALepton": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "RunII___Control___2BnJet4p.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_nMediumFTALepton": {
+        "Type": "CanvasConfig",
+        "Title": "Medium ID Leptons (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4+___nMediumFTALepton"
+        ],
+        "Labels": [
+            "#font[33]{ll} Control Regions"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "Medium ID Leptons",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4+___nTightFTALepton": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "RunII___Control___2BnJet4p.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_nTightFTALepton": {
+        "Type": "CanvasConfig",
+        "Title": "Tight ID Leptons (2 DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB2_nJet4+___nTightFTALepton"
+        ],
+        "Labels": [
+            "#font[33]{ll} Control Regions"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "Tight ID Leptons",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "DefaultPlot": {
+        "Type": "DefaultPlot",
+        "Title": "DefaultPlotTitle",
+        "Rebin": null,
+        "Files": null,
+        "Unblind": false,
+        "RatioYMin": 0.0,
+        "RatioYMax": 2.0
+    },
+    "DefaultCanvas": {
+        "Type": "DefaultCanvas",
+        "Title": "DefaultCanvasTitle",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Plots": null,
+        "XPixels": 800,
+        "YPixels": 800,
+        "DoRatio": false,
+        "DoMountainrange": false
+    }
+}
