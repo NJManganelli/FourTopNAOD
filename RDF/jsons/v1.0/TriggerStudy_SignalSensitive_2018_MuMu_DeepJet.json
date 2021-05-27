@@ -1,5 +1,5 @@
 {
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon1_eta": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon1_eta": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -20,7 +20,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon1_eta"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon1_eta"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -36,7 +36,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon2_eta": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon2_eta": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -57,7 +57,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon2_eta"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon2_eta"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -73,7 +73,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon_pfRelIso03_chg": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon_pfRelIso03_chg": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -94,7 +94,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon_pfRelIso03_chg"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon_pfRelIso03_chg"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -110,7 +110,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon_pfRelIso03_all": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon_pfRelIso03_all": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -131,7 +131,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon_pfRelIso03_all"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon_pfRelIso03_all"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -147,7 +147,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___MET_pt": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___MET_pt": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -168,7 +168,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___MET_pt"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___MET_pt"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -184,7 +184,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon1_pt": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon1_pt": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -205,7 +205,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon1_pt"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon1_pt"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -221,7 +221,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon_dz": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon_dz": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -243,7 +243,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon_dz"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon_dz"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -259,7 +259,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon_ip3d": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon_ip3d": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -281,7 +281,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon_ip3d"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon_ip3d"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -297,7 +297,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon2_pt": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon2_pt": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -318,7 +318,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___Muon2_pt"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon2_pt"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -334,7 +334,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___HT": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___HT": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -344,7 +344,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___dRll": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___dRll": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -365,7 +365,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___dRll"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___dRll"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -381,7 +381,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___nLooseFTAMuon": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___nLooseFTAMuon": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -402,7 +402,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___nLooseFTAMuon"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___nLooseFTAMuon"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -418,7 +418,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___nMediumFTAMuon": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___nMediumFTAMuon": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -439,7 +439,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___nMediumFTAMuon"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___nMediumFTAMuon"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -455,7 +455,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___nTightFTAMuon": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___nTightFTAMuon": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -476,7 +476,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___nTightFTAMuon"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___nTightFTAMuon"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -492,7 +492,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___nLooseFTALepton": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___nLooseFTALepton": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -513,7 +513,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___nLooseFTALepton"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___nLooseFTALepton"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -529,7 +529,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___nMediumFTALepton": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___nMediumFTALepton": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -550,7 +550,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___nMediumFTALepton"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___nMediumFTALepton"
         ],
         "Labels": [
             "#mu#mu Control Regions"
@@ -566,7 +566,7 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB2_nJet4+___nTightFTALepton": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet7+___nTightFTALepton": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
@@ -587,7 +587,7 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB2_nJet4+___nTightFTALepton"
+            "Plot_HT500_nMediumDeepJetB3+_nJet7+___nTightFTALepton"
         ],
         "Labels": [
             "#mu#mu Control Regions"
