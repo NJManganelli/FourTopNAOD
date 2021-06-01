@@ -2339,6 +2339,16 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     combineHistoTemplate = []    
     #Variables to save for Combine when doCombineHistosOnly=True
     # combineHistoTemplate = ["HT{bpf}"]
+    TriggerStudyTemplates = ["FTALepton_dRll",
+                             "FTAMET{bpf}_pt",
+                             "FTAMuon_dz",
+                             "FTAMuon_ip3d",
+                             "FTAElectron_dz",
+                             "FTAElectron_ip3d",
+                             "nLooseFTAMuon", "nMediumFTAMuon", "nTightFTAMuon",
+                             "nLooseFTAElectron", "nMediumFTAElectron", "nTightFTAElectron",
+                             "nLooseFTALepton", "nMediumFTALepton", "nTightFTALepton",
+                         ]
     StudyTemplates = ["FTAScalarRecoilTotal{bpf}_pt",
                       "FTAScalarRecoilAverage{bpf}_pt",
                       "FTAVectorRecoil{bpf}_pt",
@@ -2414,6 +2424,13 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
     ]
     HTOnlyTemplates = ["HT{bpf}",]
     if channel == "MuMu":
+        TriggerStudyTemplates += ["FTAMuon1_pt",
+                                  "FTAMuon2_pt",
+                                  "FTAMuon1_eta",
+                                  "FTAMuon2_eta",
+                                  "FTAMuon_pfRelIso03_chg",
+                                  "FTAMuon_pfRelIso03_all",
+                              ]
         ControlTemplates += ["FTAMuon1_pt",
                              "FTAMuon2_pt",
                              "FTAMuon1_eta",
@@ -2425,6 +2442,15 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                               "FTAMuon2_pt",
         ]        
     elif channel == "ElMu":
+        TriggerStudyTemplates += ["FTAMuon1_pt",
+                                  "FTAElectron1_pt",
+                                  "FTAMuon1_eta",
+                                  "FTAElectron1_eta",
+                                  "FTAMuon_pfRelIso03_chg",
+                                  "FTAMuon_pfRelIso03_all",
+                                  "FTAElectron_pfRelIso03_chg",
+                                  "FTAElectron_pfRelIso03_all",
+                              ]
         ControlTemplates += ["FTAMuon1_pt",
                              "FTAElectron1_pt",
                              "FTAMuon1_eta",
@@ -2438,6 +2464,13 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                               "FTAElectron1_pt",
         ]
     elif channel == "ElEl":
+        TriggerStudyTemplates += ["FTAElectron1_pt",
+                                  "FTAElectron2_pt",
+                                  "FTAElectron1_eta",
+                                  "FTAElectron2_eta",
+                                  "FTAElectron_pfRelIso03_chg",
+                                  "FTAElectron_pfRelIso03_all",
+                              ]
         ControlTemplates += ["FTAElectron1_pt",
                              "FTAElectron2_pt",
                              "FTAElectron1_eta",
@@ -2464,6 +2497,9 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         combineHistoTemplate = ControlTemplates
     elif variableSet == "Study":
         combineHistoTemplate = StudyTemplates
+    elif variableSet == "TriggerStudy":
+        combineHistoTemplate = TriggerStudyTemplates
+
     else:
         raise RuntimeError("Unrecognized variableSet {}".format(variableSet))
 
@@ -2727,6 +2763,25 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     # filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                     #     ("nMedium{tag}{bpf} >= 1".format(tag=tagger, bpf=branchpostfix), "1+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}1+".format(tag=tagger, bpf=branchpostfix), None))
 
+                    if categorySet == "SignalSensitive":
+                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                            ("nMedium{tag}{bpf} >= 3".format(tag=tagger, bpf=branchpostfix), 
+                             "3+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                             eraAndSampleName, 
+                             decayChannel, 
+                             None, 
+                             "nMedium{tag}3+".format(tag=tagger, bpf=branchpostfix), 
+                             None)
+                        )
+
+                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                            ("nFTAJet{bpf} >= 7".format(bpf=branchpostfix), 
+                             "7+ Jets ({bpf})".format(bpf=branchpostfix),
+                             eraAndSampleName, 
+                             decayChannel, 
+                             None, 
+                             None, 
+                             "nJet7+".format(bpf=branchpostfix)))
                     if categorySet == "2BnJet4p":
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                             ("nMedium{tag}{bpf} == 2".format(tag=tagger, bpf=branchpostfix), 
@@ -5792,10 +5847,10 @@ if __name__ == '__main__':
                                                                     'hadd-combine'],
                         help='analysis stage to be produced')
     parser.add_argument('--varSet', '--variableSet', dest='variableSet', action='store',
-                        type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study'], default='HTOnly',
+                        type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study', 'TriggerStudy'], default='HTOnly',
                         help='Variable set to include in filling templates')
     parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
-                        type=str, choices=['5x5', '5x3', '5x1', '2BnJet4p', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
+                        type=str, choices=['5x5', '5x3', '5x1', '2BnJet4p', 'SignalSensitive', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
                         help='Variable set to include in filling templates')
     parser.add_argument('--systematicSet', dest='systematicSet', action='store', nargs='*',
                         type=str, choices=['ALL', 'nominal', 'pu', 'pf', 'btag', 'jerc', 'ps', 'rf',
