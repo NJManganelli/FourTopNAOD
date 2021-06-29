@@ -4,7 +4,7 @@
 	"HeaderPosition": 0.25,
         "Supercategories": {
             "Signal": {
-                "Draw": "L", 
+                "Draw": "HIST", 
                 "Names": [
                     "tttt"
                 ], 
@@ -270,7 +270,7 @@
 	"HeaderPosition": 0.25,
         "Supercategories": {
             "Signal": {
-                "Draw": "L", 
+                "Draw": "HIST", 
                 "Names": [
                     "tttt"
                 ], 
