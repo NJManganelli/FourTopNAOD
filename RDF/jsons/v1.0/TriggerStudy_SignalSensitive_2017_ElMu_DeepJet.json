@@ -1,4 +1,4 @@
-!{
+{
     "Plot_HT500_nMediumDeepJetB3+_nJet7+___Muon1_eta": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
