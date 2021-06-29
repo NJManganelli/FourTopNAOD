@@ -50,9 +50,19 @@
             1.0, 
             0.8
         ], 
+	 "ColorCycler": {"ttH": "#163d4e", 
+			 "tttt": "#1e6542",
+			 "ttV": "#54792f", 
+			 "ttultrarare": "#a1794a",
+			 "EWK": "#d07e93", 
+			 "ttnobb": "#cf9ddb", 
+			 "QCD": "#c1caf3", 
+			 "ttbb": "#d3eeef", 
+			 "singletop": "#1a142f"
+			},
         "Categories": {
             "ttH": {
-                "Color": "#00A88F", 
+                "Color": "#163d4e", 
                 "Style": "Fill", 
                 "Names": [
                     "2017___ttH_SL-bb___ElMu___ZWindowMET0Width0",
@@ -70,8 +80,9 @@
                 ]
             }, 
             "tttt": {
-                "Color": "#007E92", 
+                "Color": 1, 
                 "Style": "Line", 
+		"Hatch": 3,
                 "Names": [
                     "2017___tttt___ElMu___ZWindowMET0Width0",
                     "2018___tttt___ElMu___ZWindowMET0Width0",
@@ -82,7 +93,7 @@
                 ]
             }, 
             "ttVJets": {
-                "Color": "#9B98CC", 
+                "Color": "#54792f", 
                 "Style": "Fill", 
                 "Names": [
                     "2017___ttWJets___ElMu___ZWindowMET0Width0", 
@@ -100,7 +111,7 @@
                 ]
             }, 
             "EWK": {
-                "Color": "#DDD92F", 
+                "Color": "#d07e93", 
                 "Style": "Fill", 
                 "Names": [
                     "2017___DYJets_DL-HT100___ElMu___ZWindowMET0Width0",
@@ -350,7 +361,7 @@
                 ]
             }, 
             "ttbb": {
-                "Color": "#64C0E8", 
+                "Color": "#d3eeef", 
                 "Style": "Fill", 
                 "Names": [
                     "2017___ttbb_DL_fr___ElMu___ZWindowMET0Width0", 
@@ -398,7 +409,7 @@
                 ]
             }, 
             "ttother": {
-                "Color": "#BF2229", 
+                "Color": "#cf9ddb", 
                 "Style": "Fill", 
                 "Names": [
                     "2017___ttother_DL_fr___ElMu___ZWindowMET0Width0",
@@ -446,7 +457,7 @@
                 ]
             }, 
             "QCD": {
-                "Color": 950, 
+                "Color": "#c1caf3", 
                 "Style": "Fill", 
                 "Names": [
                     "2017___QCD_HT200___ElMu___ZWindowMET0Width0", 
@@ -494,7 +505,7 @@
                 ]
             }, 
             "singletop": {
-                "Color": "#FACAFF", 
+                "Color": "#1a142f", 
                 "Style": "Fill", 
                 "Names": [
                     "2017___ST_tW-NoFHad___ElMu___ZWindowMET0Width0", 
@@ -512,7 +523,7 @@
                 ]
             }, 
             "ttultrarare": {
-                "Color": "#F8CE68", 
+                "Color": "#a1794a", 
                 "Style": "Fill", 
                 "Names": [
                     "2017___ttWW___ElMu___ZWindowMET0Width0", 

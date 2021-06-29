@@ -27,15 +27,15 @@
         "Title": "H_{T} (Most Sensitive Categories)", 
         "YAxisTitle": "Events / bin", 
         "Labels": [
-            "#font[33]{ll} nB=2 nJ#geq8", 
-            "#font[33]{ll} nB=3 nJ=7", 
-            "#font[33]{ll} nB=3 nJ#geq8",
-            "#font[33]{ll} nB#geq4 nJ=7", 
-            "#font[33]{ll} nB#geq4 nJ#geq8"
+            "#font[33]{ll} n_{btags}=2 n_{jets}#geq8", 
+            "#font[33]{ll} n_{btags}=3 n_{jets}=7", 
+            "#font[33]{ll} n_{btags}=3 n_{jets}#geq8",
+            "#font[33]{ll} n_{btags}#geq4 n_{jets}=7", 
+            "#font[33]{ll} n_{btags}#geq4 n_{jets}#geq8"
         ], 
         "YPixels": 1000, 
         "DoMountainrange": true, 
-        "XAxisTitle": "H_{T}", 
+        "XAxisTitle": "H_{T} (GeV)", 
         "DoRatio": false, 
         "Coordinates": [], 
         "Plots": [
