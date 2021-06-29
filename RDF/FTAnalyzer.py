@@ -802,8 +802,7 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfL
         
     #Set up channel bits for selection and baseline. Separation not necessary in this stage, but convenient for loops
     Chan = {}
-    print("\n\nLOGIC ERROR: wrong bitset for 2018, fix for later\n\n\n\n\n")
-    if era == "2017" or era == "2018":
+    if era == "2017":# or era == "2018":
         Chan["ElMu"] = 24576
         Chan["MuMu"] = 6144
         Chan["ElEl"] = 512
@@ -816,19 +815,19 @@ def defineLeptons(input_df, input_lvl_filter=None, isData=True, era="2017", rdfL
         Chan["ElEl_baseline"] = 512
         Chan["Mu_baseline"] = 128
         Chan["El_baseline"] = 64
-    # elif era == "2018":
-    #     Chan["ElMu"] = 20480
-    #     Chan["MuMu"] = 2048
-    #     Chan["ElEl"] = 512
-    #     Chan["ElEl_LowMET"] = Chan["ElEl"]
-    #     Chan["ElEl_HighMET"] = Chan["ElEl"]
-    #     Chan["Mu"] = 256
-    #     Chan["El"] = 128
-    #     Chan["ElMu_baseline"] = 20480
-    #     Chan["MuMu_baseline"] = 2048
-    #     Chan["ElEl_baseline"] = 512
-    #     Chan["Mu_baseline"] = 256
-    #     Chan["El_baseline"] = 128
+    elif era == "2018":
+        Chan["ElMu"] = 20480
+        Chan["MuMu"] = 2048
+        Chan["ElEl"] = 512
+        Chan["ElEl_LowMET"] = Chan["ElEl"]
+        Chan["ElEl_HighMET"] = Chan["ElEl"]
+        Chan["Mu"] = 256
+        Chan["El"] = 128
+        Chan["ElMu_baseline"] = 20480
+        Chan["MuMu_baseline"] = 2048
+        Chan["ElEl_baseline"] = 512
+        Chan["Mu_baseline"] = 256
+        Chan["El_baseline"] = 128
     else:
         raise ValueError("other eras not supported right now")
     Chan["selection"] = Chan["ElMu"] + Chan["MuMu"] + Chan["ElEl"] + Chan["Mu"] + Chan["El"]
