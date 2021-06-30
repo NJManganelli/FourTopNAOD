@@ -1,0 +1,369 @@
+!!omap
+- ST_tW_mtop1695:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 35.83
+    sumWeights2: 11791930647.416348
+    sumWeights: 334874722.2088431
+    nEvents: 9598000
+    nEventsPositive: 9575956
+    nEventsNegative: 22044
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_top_5f_inclusiveDecays_mtop1695_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 11.0
+    genEventCount: 9598000.0
+    genEventSumw: 334874722.2088431
+    genEventSumw2: 11791930647.416348
+    nLHEScaleSumw: 99.0
+    LHEScaleSumw: 99.0296580490376
+    nLHEPdfSumw: 363.0
+    LHEPdfSumw: 380.6581696943253
+    totalEvents: 9598000
+- ST_tW_mtop1715:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 35.83
+    sumWeights2: 11791930647.416348
+    sumWeights: 334874722.2088431
+    nEvents: 9598000
+    nEventsPositive: 9575956
+    nEventsNegative: 22044
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_top_5f_inclusiveDecays_mtop1715_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 11.0
+    genEventCount: 9598000.0
+    genEventSumw: 334874722.2088431
+    genEventSumw2: 11791930647.416348
+    nLHEScaleSumw: 99.0
+    LHEScaleSumw: 99.0296580490376
+    nLHEPdfSumw: 363.0
+    LHEPdfSumw: 380.6581696943253
+    totalEvents: 9598000
+- ST_tW_mtop1735:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 35.83
+    sumWeights2: 11791930647.416348
+    sumWeights: 334874722.2088431
+    nEvents: 9598000
+    nEventsPositive: 9575956
+    nEventsNegative: 22044
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_top_5f_inclusiveDecays_mtop1735_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 11.0
+    genEventCount: 9598000.0
+    genEventSumw: 334874722.2088431
+    genEventSumw2: 11791930647.416348
+    nLHEScaleSumw: 99.0
+    LHEScaleSumw: 99.0296580490376
+    nLHEPdfSumw: 363.0
+    LHEPdfSumw: 380.6581696943253
+    totalEvents: 9598000
+- ST_tW_mtop1755:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 35.83
+    sumWeights2: 11791930647.416348
+    sumWeights: 334874722.2088431
+    nEvents: 9598000
+    nEventsPositive: 9575956
+    nEventsNegative: 22044
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_top_5f_inclusiveDecays_mtop1755_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 11.0
+    genEventCount: 9598000.0
+    genEventSumw: 334874722.2088431
+    genEventSumw2: 11791930647.416348
+    nLHEScaleSumw: 99.0
+    LHEScaleSumw: 99.0296580490376
+    nLHEPdfSumw: 363.0
+    LHEPdfSumw: 380.6581696943253
+    totalEvents: 9598000
+- ST_tbarW_mtop1695:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 35.83
+    sumWeights: 263114694.7407968
+    sumWeights2: 9282110537.182339
+    nEvents: 7527000
+    nEventsPositive: 7509810
+    nEventsNegative: 17190
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_antitop_5f_inclusiveDecays_mtop1695_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 9.0
+    genEventCount: 7527000.0
+    genEventSumw: 263114694.7407968
+    genEventSumw2: 9282110537.182339
+    nLHEScaleSumw: 81.0
+    LHEScaleSumw: 81.02455313636783
+    nLHEPdfSumw: 297.0
+    LHEPdfSumw: 311.1661371391787
+    totalEvents: 7527000
+- ST_tbarW_mtop1715:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 35.83
+    sumWeights: 263114694.7407968
+    sumWeights2: 9282110537.182339
+    nEvents: 7527000
+    nEventsPositive: 7509810
+    nEventsNegative: 17190
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_antitop_5f_inclusiveDecays_mtop1715_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 9.0
+    genEventCount: 7527000.0
+    genEventSumw: 263114694.7407968
+    genEventSumw2: 9282110537.182339
+    nLHEScaleSumw: 81.0
+    LHEScaleSumw: 81.02455313636783
+    nLHEPdfSumw: 297.0
+    LHEPdfSumw: 311.1661371391787
+    totalEvents: 7527000
+- ST_tbarW_mtop1735:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 35.83
+    sumWeights: 263114694.7407968
+    sumWeights2: 9282110537.182339
+    nEvents: 7527000
+    nEventsPositive: 7509810
+    nEventsNegative: 17190
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_antitop_5f_inclusiveDecays_mtop1735_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 9.0
+    genEventCount: 7527000.0
+    genEventSumw: 263114694.7407968
+    genEventSumw2: 9282110537.182339
+    nLHEScaleSumw: 81.0
+    LHEScaleSumw: 81.02455313636783
+    nLHEPdfSumw: 297.0
+    LHEPdfSumw: 311.1661371391787
+    totalEvents: 7527000
+- ST_tbarW_mtop1755:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 35.83
+    sumWeights: 263114694.7407968
+    sumWeights2: 9282110537.182339
+    nEvents: 7527000
+    nEventsPositive: 7509810
+    nEventsNegative: 17190
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_antitop_5f_inclusiveDecays_mtop1755_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 9.0
+    genEventCount: 7527000.0
+    genEventSumw: 263114694.7407968
+    genEventSumw2: 9282110537.182339
+    nLHEScaleSumw: 81.0
+    LHEScaleSumw: 81.02455313636783
+    nLHEPdfSumw: 297.0
+    LHEPdfSumw: 311.1661371391787
+    totalEvents: 7527000
+- ST_tW-NoFHad_mtop1695:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 19.553
+    sumWeights2: 9382552454.095861
+    sumWeights: 266461860.6748265
+    nEvents: 7636887
+    nEventsPositive: 7619494
+    nEventsNegative: 17393
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_top_5f_NoFullyHadronicDecays_mtop1695_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 18.0
+    genEventCount: 7636887.0
+    genEventSumw: 266461860.6748265
+    genEventSumw2: 9382552454.095861
+    nLHEScaleSumw: 162.0
+    LHEScaleSumw: 162.0499970718793
+    nLHEPdfSumw: 594.0
+    LHEPdfSumw: 622.8741475780039
+    totalEvents: 7636887
+- ST_tW-NoFHad_mtop1715:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 19.553
+    sumWeights2: 9382552454.095861
+    sumWeights: 266461860.6748265
+    nEvents: 7636887
+    nEventsPositive: 7619494
+    nEventsNegative: 17393
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_top_5f_NoFullyHadronicDecays_mtop1715_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 18.0
+    genEventCount: 7636887.0
+    genEventSumw: 266461860.6748265
+    genEventSumw2: 9382552454.095861
+    nLHEScaleSumw: 162.0
+    LHEScaleSumw: 162.0499970718793
+    nLHEPdfSumw: 594.0
+    LHEPdfSumw: 622.8741475780039
+    totalEvents: 7636887
+- ST_tW-NoFHad_mtop1735:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 19.553
+    sumWeights2: 9382552454.095861
+    sumWeights: 266461860.6748265
+    nEvents: 7636887
+    nEventsPositive: 7619494
+    nEventsNegative: 17393
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_top_5f_NoFullyHadronicDecays_mtop1735_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 18.0
+    genEventCount: 7636887.0
+    genEventSumw: 266461860.6748265
+    genEventSumw2: 9382552454.095861
+    nLHEScaleSumw: 162.0
+    LHEScaleSumw: 162.0499970718793
+    nLHEPdfSumw: 594.0
+    LHEPdfSumw: 622.8741475780039
+    totalEvents: 7636887
+- ST_tW-NoFHad_mtop1755:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 19.553
+    sumWeights2: 9382552454.095861
+    sumWeights: 266461860.6748265
+    nEvents: 7636887
+    nEventsPositive: 7619494
+    nEventsNegative: 17393
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_top_5f_NoFullyHadronicDecays_mtop1755_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 18.0
+    genEventCount: 7636887.0
+    genEventSumw: 266461860.6748265
+    genEventSumw2: 9382552454.095861
+    nLHEScaleSumw: 162.0
+    LHEScaleSumw: 162.0499970718793
+    nLHEPdfSumw: 594.0
+    LHEPdfSumw: 622.8741475780039
+    totalEvents: 7636887
+- ST_tbarW-NoFHad_mtop1695:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 19.553
+    sumWeights: 203553870.0718795
+    sumWeights2: 7181219942.970168
+    nEvents: 5823328
+    nEventsPositive: 5809921
+    nEventsNegative: 13407
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_mtop1695_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 15.0
+    genEventCount: 5823328.0
+    genEventSumw: 203553870.0718795
+    genEventSumw2: 7181219942.970168
+    nLHEScaleSumw: 135.0
+    LHEScaleSumw: 135.04166408790735
+    nLHEPdfSumw: 495.0
+    LHEPdfSumw: 518.5759281714693
+    totalEvents: 5823328
+- ST_tbarW-NoFHad_mtop1715:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 19.553
+    sumWeights: 203553870.0718795
+    sumWeights2: 7181219942.970168
+    nEvents: 5823328
+    nEventsPositive: 5809921
+    nEventsNegative: 13407
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_mtop1715_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 15.0
+    genEventCount: 5823328.0
+    genEventSumw: 203553870.0718795
+    genEventSumw2: 7181219942.970168
+    nLHEScaleSumw: 135.0
+    LHEScaleSumw: 135.04166408790735
+    nLHEPdfSumw: 495.0
+    LHEPdfSumw: 518.5759281714693
+    totalEvents: 5823328
+- ST_tbarW-NoFHad_mtop1735:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 19.553
+    sumWeights: 203553870.0718795
+    sumWeights2: 7181219942.970168
+    nEvents: 5823328
+    nEventsPositive: 5809921
+    nEventsNegative: 13407
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_mtop1735_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 15.0
+    genEventCount: 5823328.0
+    genEventSumw: 203553870.0718795
+    genEventSumw2: 7181219942.970168
+    nLHEScaleSumw: 135.0
+    LHEScaleSumw: 135.04166408790735
+    nLHEPdfSumw: 495.0
+    LHEPdfSumw: 518.5759281714693
+    totalEvents: 5823328
+- ST_tbarW-NoFHad_mtop1755:
+    era: '2018'
+    isData: false
+    isSignal: false
+    crossSection: 19.553
+    sumWeights: 203553870.0718795
+    sumWeights2: 7181219942.970168
+    nEvents: 5823328
+    nEventsPositive: 5809921
+    nEventsNegative: 13407
+    channels:
+    - All
+    source:
+      NANOv7: dbs:/ST_tW_antitop_5f_NoFullyHadronicDecays_mtop1755_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    run: 15.0
+    genEventCount: 5823328.0
+    genEventSumw: 203553870.0718795
+    genEventSumw2: 7181219942.970168
+    nLHEScaleSumw: 135.0
+    LHEScaleSumw: 135.04166408790735
+    nLHEPdfSumw: 495.0
+    LHEPdfSumw: 518.5759281714693
+    totalEvents: 5823328
