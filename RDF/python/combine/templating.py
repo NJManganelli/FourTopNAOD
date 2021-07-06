@@ -12,7 +12,8 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
     with open(template, "r") as inFile:
         for line in inFile:
             outputLines.append(line)
-    keymapping = {"DATA": "data_obs", "TTNOBB": "ttnobb", "TTBB": "ttbb", "ST": "singletop", "TTV": "ttVJets", "TTRARE": "ttultrarare", "TTH": "ttH", "EWK": "EWK", "TTTT": "tttt"}
+    # keymapping = {"DATA": "data_obs", "TTNOBB": "ttnobb", "TTBB": "ttbb", "ST": "singletop", "TTV": "ttVJets", "TTRARE": "ttultrarare", "TTH": "ttH", "EWK": "EWK", "TTTT": "tttt"}
+    keymapping = {"DATA": "data_obs", "TTNOBB": "ttnobb", "TTBB": "ttbb", "TTV": "ttVJets", "TTRARE": "ttultrarare", "TTH": "ttH", "EWK": "EWK", "TTTT": "tttt"}
     normkeys = ["OSDL_RunII_hdampUp", "OSDL_RunII_hdampDown", "OSDL_RunII_ueUp", "OSDL_RunII_ueDown"]
     for category in categories:
         rate = {}
@@ -128,8 +129,11 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
                 if ("OSDL_RunII_hdamp" in outputline or "OSDL_RunII_ue" in outputline) and "lnN" in outputline:
                     disabledSystematics.append("hdamp/ue asymmetric lnN-type")
                     outputline = "# " + outputline
-                if (era == "2016" or era == "2017") and "HEM" in outputline:
-                    disabledSystematics.append("HEM (2016 or 2017)")
+                # if (era == "2016" or era == "2017") and "HEM" in outputline:
+                #     disabledSystematics.append("HEM (2016 or 2017)")
+                #     outputline = "# " + outputline
+                if "HEM" in outputline:
+                    disabledSystematics.append("HEM entirely disabled")
                     outputline = "# " + outputline
                 outFile.write(outputline)
             print("Finished writing output for category {}".format(category))
