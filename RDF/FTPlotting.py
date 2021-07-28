@@ -2240,6 +2240,14 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                            'OSDL_2016_pileupUp', 'OSDL_2016_pileupDown', 'OSDL_2016APV_pileupUp', 'OSDL_2016APV_pileupDown',
                                            'OSDL_2017_pileupUp', 'OSDL_2017_pileupDown', 'OSDL_2018_pileupUp', 'OSDL_2018_pileupDown', 
                                            'OSDL_RunII_pdfUp', 'OSDL_RunII_pdfDown',
+                                           'OSDL_RunII_pdf1', 'OSDL_RunII_pdf2', 'OSDL_RunII_pdf3', 'OSDL_RunII_pdf4',
+                                           'OSDL_RunII_pdf5', 'OSDL_RunII_pdf6', 'OSDL_RunII_pdf7', 'OSDL_RunII_pdf8',
+                                           'OSDL_RunII_pdf9', 'OSDL_RunII_pdf10', 'OSDL_RunII_pdf11', 'OSDL_RunII_pdf12',
+                                           'OSDL_RunII_pdf13', 'OSDL_RunII_pdf14', 'OSDL_RunII_pdf15', 'OSDL_RunII_pdf16',
+                                           'OSDL_RunII_pdf17', 'OSDL_RunII_pdf18', 'OSDL_RunII_pdf19', 'OSDL_RunII_pdf20',
+                                           'OSDL_RunII_pdf21', 'OSDL_RunII_pdf22', 'OSDL_RunII_pdf23', 'OSDL_RunII_pdf24',
+                                           'OSDL_RunII_pdf25', 'OSDL_RunII_pdf26', 'OSDL_RunII_pdf27', 'OSDL_RunII_pdf28',
+                                           'OSDL_RunII_pdf29', 'OSDL_RunII_pdf30',
                                        ],
                      normalizeAllUncertaintiesForProcess=[],
 ):
@@ -3571,6 +3579,8 @@ if __name__ == '__main__':
                         help='Force LogY axis plotting')
     parser.add_argument('--forceWIP', dest='forceWIP', action='store_true',
                         help='Force Work In Progress header on plots')
+    parser.add_argument('--unblind', dest='unblind', action='store_true',
+                        help='force unblinding of histograms')
     parser.add_argument('--drawNormalized', dest='drawNormalized', action='store_true',
                         help='use DrawNormalized for plotting')
     
@@ -3695,6 +3705,11 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                 print("pdfOutput = {}".format(pdfOutput))
         else:
             combineOut = None
+        if args.unblind:
+            print("Unblinding all cards")
+            for k, v in loadedPlotConfig.items():
+                if "Unblind" in v.keys():
+                    v["Unblind"] = True
         if args.forceBinning:
             print("Enforcing new binning: {}".format(args.forceBinning))
             for k, v in loadedPlotConfig.items():
