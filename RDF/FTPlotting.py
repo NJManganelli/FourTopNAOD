@@ -3265,14 +3265,15 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                            combCategory.replace("+", "p"), 
                                            combVariable, 
                                            combSystematic])
-                    if "BLIND" in combProcess:
-                        print("Blinding histogram for Combine")
-                        combHist = hist.Clone(hist.GetName().replace("Data", "data_obs").replace("+", "p").replace("BLIND", ""))
-                        combHist.SetDirectory(0)
-                        for combBin in range(combHist.GetNbinsX() + 2):
-                            combHist.SetBinContent(combBin, 0); combHist.SetBinError(combBin, 0)
-                    else:
-                        combHist = hist.Clone(histName)
+                    # if "BLIND" in combProcess:
+                    #     print("Blinding histogram for Combine")
+                    #     combHist = hist.Clone(hist.GetName().replace("Data", "data_obs").replace("+", "p").replace("BLIND", ""))
+                    #     combHist.SetDirectory(0)
+                    #     for combBin in range(combHist.GetNbinsX() + 2):
+                    #         combHist.SetBinContent(combBin, 0); combHist.SetBinError(combBin, 0)
+                    # else:
+                    #     combHist = hist.Clone(histName)
+                    combHist = hist.Clone(histName)
                     #Remove negative weight bins if the option is selected
                     normalizationDict[combHist.GetName()] = combHist.Integral()
                     if removeNegativeBins:
