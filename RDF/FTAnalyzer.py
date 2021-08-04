@@ -1201,6 +1201,13 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
         z.append(("FTAJet{pf}_puId".format(pf=postfix), "Jet_puId[{jm}]".format(jm=jetMask)))
         if isData == False:
             z.append(("FTAJet{pf}_genJetIdx".format(pf=postfix), "Jet_genJetIdx[{jm}]".format(jm=jetMask)))
+            z.append(("FTAJet{pf}_genpt".format(pf=postfix), "ROOT::VecOps::RVec<Float_t> temp;"\
+                      "for(int i=0; i < FTAJet{pf}_genJetIdx.size(); ++i){{"\
+                      "if(FTAJet{pf}_genJetIdx.at(i) > -1 && FTAJet{pf}_genJetIdx.at(i) < GenJet_pt.size())"\
+                      "{{ temp.push_back(GenJet_pt.at(FTAJet{pf}_genJetIdx.at(i)));}}"\
+                      "else{{temp.push_back(0.0);}}"\
+                      "}}"\
+                      "return temp;".format(pf=postfix)))
             z.append(("nFTAJet{pf}_genMatched".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_genJetIdx[FTAJet{pf}_genJetIdx >= 0].size())".format(pf=postfix)))
             z.append(("nFTAJet{pf}_puIdLoose".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_genJetIdx[(FTAJet{pf}_puId >= 4 || FTAJet{pf}_pt >= 50)].size())".format(pf=postfix)))
             z.append(("nFTAJet{pf}_genMatched_puIdLoose".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_genJetIdx[FTAJet{pf}_genJetIdx >= 0 && (FTAJet{pf}_puId >= 4 || FTAJet{pf}_pt >= 50)].size())".format(pf=postfix)))
@@ -1252,7 +1259,9 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
             z.append(("FTAJet{pf}_mass_bsrt".format(pf=postfix), "Take(FTAJet{pf}_mass, FTAJet{pf}_deepjetsort)".format(pf=postfix)))
         z.append(("FTAJet{pf}_P_bsrt".format(pf=postfix), "FTAJet{pf}_pt_bsrt * ROOT::VecOps::cosh(FTAJet{pf}_eta_bsrt)".format(pf=postfix)))
         z.append(("ST{pf}".format(pf=postfix), "Sum(FTAJet{pf}_pt) + Sum(FTALepton{lpf}_pt)".format(pf=postfix, lpf=leppostfix)))
+        z.append(("GenMatchedHT{pf}".format(pf=postfix), "Sum(FTAJet{pf}_genpt)".format(pf=postfix)))
         z.append(("HT{pf}".format(pf=postfix), "Sum(FTAJet{pf}_pt)".format(pf=postfix)))
+        z.append(("HTminusGenMatchedHT{pf}".format(pf=postfix), "HT{pf}-GenMatchedHT{pf}".format(pf=postfix)))
         z.append(("HT2M{pf}".format(pf=postfix), "FTAJet{pf}_pt_bsrt.size() > 2 ? Sum(Take(FTAJet{pf}_pt_bsrt, (2 - FTAJet{pf}_pt_bsrt.size()))) : -0.1".format(pf=postfix)))
         z.append(("HTNum{pf}".format(pf=postfix), "FTAJet{pf}_pt_bsrt.size() > 2 ? Sum(Take(FTAJet{pf}_pt_bsrt, 2)) : -0.1".format(pf=postfix)))
         z.append(("HTRat{pf}".format(pf=postfix), "FTAJet{pf}_pt_bsrt.size() > 2 ? (HT2M{pf} / HT{pf}) : -0.1".format(pf=postfix)))
@@ -2271,7 +2280,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
 
 def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="All", isData=True, era="2017", variableSet="HTOnly", categorySet="5x3", histosDict=None,
                doCategorized=False, doDiagnostics=True, doCombineHistosOnly=False, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
-               HTBins=100, HTCut=500, METCut=0.0, ZMassMETWindow=[15.0, 10000.0], verbose=False,
+               HTBins=50, HTCut=500, METCut=0.0, ZMassMETWindow=[15.0, 10000.0], verbose=False,
                triggers=[],
                sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
                                            "lep_postfix": "",
@@ -2358,6 +2367,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                       "FTAJet9{bpf}_pt", 
                   ]
     ControlTemplates = ["HT{bpf}",
+                        "GenMatchedHT{bpf}",
+                        "HTminusGenMatchedHT{bpf}",
                         "HTH{bpf}",
                         "HTRat{bpf}",
                         "HTb{bpf}",
@@ -3178,6 +3189,15 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HT{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "", HTBins,400,2000), "HT{bpf}".format(bpf=branchpostfix), wgtVar))
+                    if isData == False:
+                        defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___GenMatchedHT{hpf}"\
+                                                                             .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                             ";H_{T};H_{T}^{Gen}", HTBins,400,2000, HTBins,400,2000), "HT{bpf}".format(bpf=branchpostfix),
+                                                                            "GenMatchedHT{bpf}".format(bpf=branchpostfix), wgtVar))
+                        defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HTminusGenMatchedHT{hpf}"\
+                                                                             .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                             ";H_{T};H_{T}-H_{T}^{Gen}", HTBins,400,2000,100, -100, 100), "HT{bpf}".format(bpf=branchpostfix),
+                                                                            "HTminusGenMatchedHT{bpf}".format(bpf=branchpostfix), wgtVar))
                     if not isWeightVariation:
                         defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HTUnweighted{hpf}"\
                                                                         .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
@@ -5868,7 +5888,7 @@ if __name__ == '__main__':
                         help='Float value for the minimum Jet pt in GeV, defaulting to 30.0')
     parser.add_argument('--jetPUId', dest='jetPUId', action='store', default='L', nargs='?', const='L', type=str, choices=['N', 'L', 'M', 'T'],
                         help='Apply Jet PU Id to the selected jets, with choices of None ("N"), Loose ("L"), Medium ("M"), or Tight ("T") using the 94X and 102X training in NanoAODv7.')
-    parser.add_argument('--HTBins', dest='HTBins', action='store', default=100, type=int,
+    parser.add_argument('--HTBins', dest='HTBins', action='store', default=50, type=int,
                         help='Number of bins in the HT distribution to use, defaulting to 100')
     parser.add_argument('--HTCut', dest='HTCut', action='store', default=500, type=float,
                         help='Float value for the HT cut for filled histograms in GeV, defaulting to 500')
