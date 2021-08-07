@@ -1259,9 +1259,11 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
             z.append(("FTAJet{pf}_mass_bsrt".format(pf=postfix), "Take(FTAJet{pf}_mass, FTAJet{pf}_deepjetsort)".format(pf=postfix)))
         z.append(("FTAJet{pf}_P_bsrt".format(pf=postfix), "FTAJet{pf}_pt_bsrt * ROOT::VecOps::cosh(FTAJet{pf}_eta_bsrt)".format(pf=postfix)))
         z.append(("ST{pf}".format(pf=postfix), "Sum(FTAJet{pf}_pt) + Sum(FTALepton{lpf}_pt)".format(pf=postfix, lpf=leppostfix)))
-        z.append(("GenMatchedHT{pf}".format(pf=postfix), "Sum(FTAJet{pf}_genpt)".format(pf=postfix)))
+        if isData == False:
+            z.append(("GenMatchedHT{pf}".format(pf=postfix), "Sum(FTAJet{pf}_genpt)".format(pf=postfix)))
         z.append(("HT{pf}".format(pf=postfix), "Sum(FTAJet{pf}_pt)".format(pf=postfix)))
-        z.append(("HTminusGenMatchedHT{pf}".format(pf=postfix), "HT{pf}-GenMatchedHT{pf}".format(pf=postfix)))
+        if isData == False:
+            z.append(("HTminusGenMatchedHT{pf}".format(pf=postfix), "HT{pf}-GenMatchedHT{pf}".format(pf=postfix)))
         z.append(("HT2M{pf}".format(pf=postfix), "FTAJet{pf}_pt_bsrt.size() > 2 ? Sum(Take(FTAJet{pf}_pt_bsrt, (2 - FTAJet{pf}_pt_bsrt.size()))) : -0.1".format(pf=postfix)))
         z.append(("HTNum{pf}".format(pf=postfix), "FTAJet{pf}_pt_bsrt.size() > 2 ? Sum(Take(FTAJet{pf}_pt_bsrt, 2)) : -0.1".format(pf=postfix)))
         z.append(("HTRat{pf}".format(pf=postfix), "FTAJet{pf}_pt_bsrt.size() > 2 ? (HT2M{pf} / HT{pf}) : -0.1".format(pf=postfix)))
@@ -2305,6 +2307,16 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
 
     METCut = cut on MET everywhere outside the ZWindow
     """
+    #35, 45, 55 resolution
+    # HTArray = array.array('d', [500, 535, 570, 605, 640, 675, 710,
+    #                             755, 800, 845, 890, 935, 980,
+    #                             1035, 1090, 1145, 1200, 1255, 1310, 1365, 1420, 1475, 1530, 1585, 1640, 1695, 1750, 1805, 1860, 1915, 1970, 2025, 2080])
+    #30, 40, 50 resolution
+    HTArray = array.array('d', [500, 530, 560, 590, 620, 650, 680,
+                                720, 760, 800, 840, 880, 920, 960, 1000,
+                                1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000])
+    nHTArray = len(HTArray)-1
+    # print(HTArray[1:] - HTArray[:-1])
     
 
     if doCategorized == False and doDiagnostics == False:
@@ -2366,9 +2378,10 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                       "FTAJet8{bpf}_pt", 
                       "FTAJet9{bpf}_pt", 
                   ]
+    ResolutionStudyTemplates = ["GenMatchedHT{bpf}",
+                                "HTminusGenMatchedHT{bpf}",
+                       ]
     ControlTemplates = ["HT{bpf}",
-                        "GenMatchedHT{bpf}",
-                        "HTminusGenMatchedHT{bpf}",
                         "HTH{bpf}",
                         "HTRat{bpf}",
                         "HTb{bpf}",
@@ -2509,7 +2522,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         combineHistoTemplate = StudyTemplates
     elif variableSet == "TriggerStudy":
         combineHistoTemplate = TriggerStudyTemplates
-
+    elif variableSet == "ResolutionStudy":
+        combineHistoTemplate = ResolutionStudyTemplates
     else:
         raise RuntimeError("Unrecognized variableSet {}".format(variableSet))
 
@@ -2825,6 +2839,11 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
                             ("nFTAJet{bpf} >= 4 && ( nMedium{tag}{bpf} == 2 || (nMedium{tag}{bpf} == 3 && nFTAJet{bpf} < 7) || (nMedium{tag}{bpf} >= 4 && nFTAJet{bpf} < 6))".format(tag=tagger, bpf=branchpostfix), 
                              "4+ Jets ({bpf})".format(bpf=branchpostfix), eraAndSampleName, decayChannel, None, None, "nJet4+".format(bpf=branchpostfix)))
+                    if categorySet == "2Bp":
+                        #add the 2+ b tag category
+                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                            ("nMedium{tag}{bpf} >= 2".format(tag=tagger, bpf=branchpostfix), "2 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                             eraAndSampleName, decayChannel, None, "nMedium{tag}2+".format(tag=tagger, bpf=branchpostfix), None))
                     if categorySet == "5x1":
                         #add the 2 b tag categorie
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
@@ -2849,7 +2868,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                             ("nMedium{tag}{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), "4+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
                              eraAndSampleName, decayChannel, None, "nMedium{tag}4+".format(tag=tagger, bpf=branchpostfix), None))
-                    if categorySet in ["5x1", "5x3", "5x5"]:
+                    if categorySet in ["5x1", "5x3", "5x5", "2Bp"]:
                         #Add the 5 usual jet categories, 4, 5, 6, 7, 8+
                         filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
                             ("nFTAJet{bpf} == 4".format(bpf=branchpostfix), "4 Jets ({bpf})".format(bpf=branchpostfix),
@@ -3188,7 +3207,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                                                     "", 100,400,2000), "ST{bpf}".format(bpf=branchpostfix), wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HT{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
-                                                                    "", HTBins,400,2000), "HT{bpf}".format(bpf=branchpostfix), wgtVar))
+                                                                         "", nHTArray, HTArray), "HT{bpf}".format(bpf=branchpostfix), wgtVar))
                     if isData == False:
                         defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___GenMatchedHT{hpf}"\
                                                                              .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
@@ -3196,12 +3215,12 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                                                             "GenMatchedHT{bpf}".format(bpf=branchpostfix), wgtVar))
                         defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HTminusGenMatchedHT{hpf}"\
                                                                              .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
-                                                                             ";H_{T};H_{T}-H_{T}^{Gen}", HTBins,400,2000,100, -100, 100), "HT{bpf}".format(bpf=branchpostfix),
+                                                                             ";H_{T};H_{T}-H_{T}^{Gen}", 300,500,2000, 100,-100,100), "HT{bpf}".format(bpf=branchpostfix),
                                                                             "HTminusGenMatchedHT{bpf}".format(bpf=branchpostfix), wgtVar))
                     if not isWeightVariation:
                         defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HTUnweighted{hpf}"\
                                                                         .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
-                                                                        "", HTBins,400,2000), "HT{bpf}".format(bpf=branchpostfix)))
+                                                                             "", nHTArray, HTArray), "HT{bpf}".format(bpf=branchpostfix)))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___H{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "", 130,400,3000), "H{bpf}".format(bpf=branchpostfix), wgtVar))
@@ -5866,10 +5885,10 @@ if __name__ == '__main__':
                                                                     'hadd-combine'],
                         help='analysis stage to be produced')
     parser.add_argument('--varSet', '--variableSet', dest='variableSet', action='store',
-                        type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study', 'TriggerStudy'], default='HTOnly',
+                        type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study', 'TriggerStudy', 'ResolutionStudy'], default='HTOnly',
                         help='Variable set to include in filling templates')
     parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
-                        type=str, choices=['5x5', '5x3', '5x1', '2BnJet4p', 'SignalSensitive', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
+                        type=str, choices=['5x5', '5x3', '5x1', '2Bp', '2BnJet4p', 'SignalSensitive', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
                         help='Variable set to include in filling templates')
     parser.add_argument('--systematicSet', dest='systematicSet', action='store', nargs='*',
                         type=str, choices=['ALL', 'nominal', 'pu', 'pf', 'btag', 'jerc', 'ps', 'rf',
