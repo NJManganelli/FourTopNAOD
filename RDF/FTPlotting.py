@@ -1832,14 +1832,18 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
         #print(addHistoName)
         scaleArray = config.get("ScaleArray", None)
         scaleList = [] if scaleArray != None else None
+        successCounter = 0
+        attemptedName = None
         for nn, subCatName in enumerate(config["Names"]):
             expectedName = subCatName + separator + expectedBaseName
             fallbackName = subCatName + separator + fallbackBaseName
+            attemptedName = (expectedName,fallbackName)
             if debug: print("Creating addHistoName {}".format(addHistoName))
             #Skip plots that contain neither the systematic requested nor the nominal histogram
             # if expectedName in histKeys:
             if expectedName in unblindedKeys:
                 #Append the histo to a list which will be added using a dedicated function
+                successCounter += 1
                 histoList.append(histFile.Get(unblindedKeys[expectedName]))
                 nominalList.append(histFile.Get(unblindedKeys[fallbackName]))
                 if scaleList != None:
@@ -1847,6 +1851,7 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
             # elif fallbackName in histKeys:
             elif fallbackName in unblindedKeys:
                 #Append the histo to a list which will be added using a dedicated function
+                successCounter += 1
                 histoList.append(histFile.Get(unblindedKeys[fallbackName]))
                 nominalList.append(None)
                 if scaleList != None:
@@ -1857,6 +1862,8 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
                     print("for {} and histNameCommon {}, makeCombinationHists failed to find a histogram (systematic or nominal) corresponding to {}\n\t{}\n\t{}"\
                           .format(histFile.GetName(), histNameCommon, subCatName, expectedName, fallbackName))
                 continue
+        if successCounter == 0:
+            raise RuntimeError("Found no working keys, a pair of attempted keys were {}, and the list of unblinded keys were {}".format(attemptedName, unblindedKeys))
 
         for nHist, hist in enumerate(histoList):
             #Normalize to the nominal, if applicable
@@ -2966,6 +2973,10 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         else:
                             if isinstance(CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name], (ROOT.TGraphAsymmErrors)):
                                 CanCache["subplots/supercategories"][pn]['Supercategories/statSystematicErrors'][super_cat_name].Draw("5")
+                if super_cat_name in histDrawSystematicDown[pn].keys():
+                        histDrawSystematicDown[pn][super_cat_name].Draw("HIST SAME")
+                if super_cat_name in histDrawSystematicUp[pn].keys():
+                        histDrawSystematicUp[pn][super_cat_name].Draw("HIST SAME")
                 #Eliminate bin labels if there's a ratio plot just below
                 if doRatio and "SAME" not in draw_command:
                     for bin in range(drawable.GetXaxis().GetNbins()):
@@ -3560,6 +3571,8 @@ if __name__ == '__main__':
                         help='List of systematics to skip')
     parser.add_argument('--drawSystematic', dest='drawSystematic', action='store', default=None, type=str,
                         help='Single systematic name to be drawn on plots, besides the total statistical and systematic + statistical errors')
+    parser.add_argument('--nominalPostfix', dest='nominalPostfix', action='store', default="nom", type=str,
+                        help='name of the nominal systematic, default "nom"')
     parser.add_argument('--zeroingThreshold', dest='zeroingThreshold', action='store', type=int, default=50,
                         help='Threshold for Entries in grouped histograms, below which the contents will be reset. To disable, set equal or less than 0')
     parser.add_argument('--differentialScale', dest='differentialScale', action='store_true',
@@ -3632,7 +3645,7 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
     plotCard = plotCardName.replace(".json", "")
     legendCardName = legendConfig.split("/")[-1]
     legendcard = legendCardName.replace(".json", "")
-    nominalPostfix = "nom"
+    nominalPostfix = args.nominalPostfix
 
     if os.path.isdir(analysisDir):
         jsonDir = "$ADIR/jsons".replace("$ADIR", analysisDir).replace("//", "/")
