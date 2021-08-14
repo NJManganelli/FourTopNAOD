@@ -78,8 +78,12 @@ def main(analysisDir, inputs):
         print(fLim, fSig, XS, era, channel, var)
         if os.path.isfile(os.path.join(analysisDir, "Combine", fLim)):
             limits = getLimits(os.path.join(analysisDir, "Combine", fLim))
+        else:
+            print(str(os.path.join(analysisDir, "Combine", fLim) + "not found"))
         if os.path.isfile(os.path.join(analysisDir, "Combine", fSig)):
             significance = getSignificance(os.path.join(analysisDir, "Combine", fSig))
+        else:
+            print(str(os.path.join(analysisDir, "Combine", fSig) + "not found"))
         
         print(configureLatex(channel, limits, significance, XS, sigfigs=3))
 
