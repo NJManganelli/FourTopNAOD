@@ -21,6 +21,7 @@ import ROOT
 import ruamel.yaml as yaml
 from FourTopNAOD.RDF.tools.toolbox import getFiles, load_yaml_cards, write_yaml_cards, filter_systematics
 from FourTopNAOD.RDF.analyzer.histogram import fill_histos_ndim
+from tqdm import tqdm
 #from IPython.display import Image, display, SVG
 #import graphviz
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -1337,6 +1338,10 @@ def defineWeights(name, input_df_or_nodes, era, splitProcess=None, isData=False,
         for wgtKey, wgtDef in sysDict.get("finalWeights", {}).items():
             zFin.append((wgtKey.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix).replace("$SAMPLE", make_cpp_safe_name(name)),
                          wgtDef.replace("$SYSTEMATIC", sysVar).replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", leppostfix).replace("$SAMPLE", make_cpp_safe_name(name))))
+            finalKey = zFin[-1][0]
+            presumedNominal = "wgt___nom"
+            zFin.append(("weightLogAbsoluteRelative___$SYSTEMATIC".replace("$SYSTEMATIC", sysVar), "std::log(std::fabs({}/{} + 0.000000000001))".format(finalKey, presumedNominal)))
+                
     
     #Load the initial or final definitions
     if final:
@@ -2294,7 +2299,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                            "weightVariation": False},
                                      },
                sysFilter=["$NOMINAL"],
-               skipNominalHistos=False
+               skipNominalHistos=False,
+               options=None
 ):
     """Method to fill histograms given an input RDataFrame, input sample/dataset name, input histogram dictionaries.
     Has several options of which histograms to fill, such as Leptons, Jets, Weights, EventVars, etc.
@@ -2446,6 +2452,7 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                             "FTALepton2_eta",
     ]
     HTOnlyTemplates = ["HT{bpf}",]
+    WeightStudyTemplates = ["weightLogAbsoluteRelative{spf}",]
     if channel == "MuMu":
         TriggerStudyTemplates += ["FTAMuon1_pt",
                                   "FTAMuon2_pt",
@@ -2524,6 +2531,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         combineHistoTemplate = TriggerStudyTemplates
     elif variableSet == "ResolutionStudy":
         combineHistoTemplate = ResolutionStudyTemplates
+    elif variableSet == "WeightStudy":
+        combineHistoTemplate = WeightStudyTemplates
     else:
         raise RuntimeError("Unrecognized variableSet {}".format(variableSet))
 
@@ -2586,7 +2595,11 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         else:
             branchpostfix = "__" + sysVar
         leppostfix = sysDict.get("lep_postfix", "") #No variation on this yet, but just in case
-        combineHistoVariables += [templateVar.format(bpf=branchpostfix, tag=tagger) for templateVar in combineHistoTemplate]
+        if variableSet == "WeightStudy":
+            combineHistoVariables += [templateVar.format(spf=syspostfix, tag=tagger) for templateVar in combineHistoTemplate]
+        else:
+            combineHistoVariables += [templateVar.format(bpf=branchpostfix, tag=tagger) for templateVar in combineHistoTemplate]
+        
 
         
         fillJet = "FTAJet{bpf}".format(bpf=branchpostfix)
@@ -2992,7 +3005,12 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
 
             for decayChannel in nodes[eraAndSampleName]:
                 if decayChannel.lower() == "basenode": continue
-                for category, categoryNode in nodes[eraAndSampleName][decayChannel].items():
+                if hasattr(options, 'noProgressBar') and options.noProgressBar:
+                    this_iterable = nodes[eraAndSampleName][decayChannel].items()
+                else:
+                    this_iterable = tqdm(nodes[eraAndSampleName][decayChannel].items(), 
+                                         desc='Appending define tuples for channel {}'.format(decayChannel))
+                for category, categoryNode in this_iterable:
                     if category.lower() == "basenode": continue
 
                     #IMPORTANT: Skip nodes that belong to other systematic variations, since it's a dictionary!
@@ -3221,6 +3239,11 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HTUnweighted{hpf}"\
                                                                         .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                              "", nHTArray, HTArray), "HT{bpf}".format(bpf=branchpostfix)))
+                    if isWeightVariation and isData == False: 
+                        defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___weightLogAbsoluteRelative{hpf}"\
+                                                                        .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                             "", 48, -6, 6), "weightLogAbsoluteRelative{spf}".format(spf=syspostfix)))
+                        
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___H{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "", 130,400,3000), "H{bpf}".format(bpf=branchpostfix), wgtVar))
@@ -3466,7 +3489,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                             for i in range(1, len(dnode)):
                                 if dnode[i] not in listOfColumns and dnode[i] != "1":
                                     raise RuntimeError("This histogram's variable/weight is not defined:"\
-                                                       "eraAndSampleName - {}\t decayChannel - {}\t variable/weight - {}".format(eraAndSampleName, decayChannel, dnode[i]))
+                                                       "eraAndSampleName - {}\t decayChannel - {}\t variable/weight - {}\t dnode - {}"\
+                                                       .format(eraAndSampleName, decayChannel, dnode[i], dnode))
 
                             guessDim = 0
                             if len(dnode) == 2:
@@ -3475,28 +3499,32 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                 if doCombineHistosOnly and dnode[1] not in combineHistoVariables: 
                                     # print("Skipping histogram filling with {}".format(dnode[1]))
                                     continue
-                                histoNodes[eraAndSampleName][decayChannel][defHName] = categoryNode.Histo1D(dnode[0], dnode[1])
+                                if defHName not in histoNodes[eraAndSampleName][decayChannel].keys():
+                                    histoNodes[eraAndSampleName][decayChannel][defHName] = categoryNode.Histo1D(dnode[0], dnode[1])
                             elif len(dnode) == 3:
                                 guessDim = 1
                                 # if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables: 
                                 if doCombineHistosOnly and dnode[1] not in combineHistoVariables: 
                                     # print("Skipping histogram filling with {}".format(dnode[1]))
                                     continue
-                                histoNodes[eraAndSampleName][decayChannel][defHName] = categoryNode.Histo1D(dnode[0], dnode[1], dnode[2])
+                                if defHName not in histoNodes[eraAndSampleName][decayChannel].keys():
+                                    histoNodes[eraAndSampleName][decayChannel][defHName] = categoryNode.Histo1D(dnode[0], dnode[1], dnode[2])
                             elif len(dnode) == 4:
                                 guessDim = 2
                                 # if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables and dnode[2].split("__")[0] not in combineHistoVariables: 
                                 if doCombineHistosOnly and dnode[1] not in combineHistoVariables and dnode[2] not in combineHistoVariables: 
                                     # print("Skipping histogram filling with {} and {}".format(dnode[1], dnode[2]))
                                     continue
-                                histoNodes[eraAndSampleName][decayChannel][defHName] = categoryNode.Histo2D(dnode[0], dnode[1], dnode[2], dnode[3])
+                                if defHName not in histoNodes[eraAndSampleName][decayChannel].keys():
+                                    histoNodes[eraAndSampleName][decayChannel][defHName] = categoryNode.Histo2D(dnode[0], dnode[1], dnode[2], dnode[3])
                             elif len(dnode) == 4:
                                 guessDim = 3
                                 # if doCombineHistosOnly and dnode[1].split("__")[0] not in combineHistoVariables and dnode[2].split("__")[0] not in combineHistoVariables and dnode[3].split("__")[0] not in combineHistoVariables: 
                                 if doCombineHistosOnly and dnode[1] not in combineHistoVariables and dnode[2] not in combineHistoVariables and dnode[3] not in combineHistoVariables: 
                                     # print("Skipping histogram filling with {}, {} and {}".format(dnode[1], dnode[2], dnode[3]))
                                     continue
-                                histoNodes[eraAndSampleName][decayChannel][defHName] = categoryNode.Histo3D(dnode[0], dnode[1], dnode[2], dnode[3], dnode[4])
+                                if defHName not in histoNodes[eraAndSampleName][decayChannel].keys():
+                                    histoNodes[eraAndSampleName][decayChannel][defHName] = categoryNode.Histo3D(dnode[0], dnode[1], dnode[2], dnode[3], dnode[4])
 
     packedNodes = {}
     packedNodes["filterNodes"] = filterNodes
@@ -4849,9 +4877,9 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
          useDeltaR=False, jetPtMin=30.0, jetPUId=None, 
          HTBins=100, HTCut=500, METCut=0.0, ZMassMETWindow=[15.0, 10000.0],
          disableNjetMultiplicityCorrection=False, enableTopPtReweighting=False,
-         excludeSampleNames=None, verbose=False, quiet=False, checkMeta=True,
+         excludeSampleNames=None, verbose=False, checkMeta=True,
          testVariables=False, categorySet="5x3", variableSet="HTOnly", systematicSet="All", nThreads=8,
-         redirector=None, recreateFileList=False, doRDFReport=False
+         redirector=None, recreateFileList=False, doRDFReport=False, options=None
      ):
 
     ##################################################
@@ -5306,8 +5334,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     if vals.get("isData", True):
                         print("Halting execution on real data")
                         continue
-                    if quiet:
-                        print("Going Quiet")
+                    if hasattr(options, 'noProgressBar') and options.noProgressBar:
+                        print("Not preparing progress bars")
                         booktrigger = base[name].Count()
                     else:
                         print("Booking progress bar")
@@ -5339,8 +5367,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     continue                    
                 elif lvl == "BOOKKEEPING":
                     #We just need the info printed on this one... book a Count node with progress bar if not quiet
-                    if quiet:
-                        print("Going Quiet")
+                    if hasattr(options, 'noProgressBar') and options.noProgressBar:
+                        print("Not preparing progress bars")
                         booktrigger = base[name].Count()
                     else:
                         print("Booking progress bar")
@@ -5530,8 +5558,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 if testVariables:
                     skipTestVariables += testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=skipTestVariables,
                                                                 allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
-                if quiet:
-                    print("Going Quiet")
+                if hasattr(options, 'noProgressBar') and options.noProgressBar:
+                    print("Not preparing progress bars")
                     counts[name][lvl] = the_df[name][lvl].Count()
                 else:
                     print("Booking progress bar")
@@ -5675,7 +5703,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                             METCut=METCut,
                                                             ZMassMETWindow=ZMassMETWindow,
                                                             skipNominalHistos=skipNominalHistos, 
-                                                            verbose=verb)
+                                                            verbose=verb,
+                                                            options=options)
                 if doDiagnostics:
                     packedNodes[name][lvl] = fillHistos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
                                                         era = vals["era"], triggers = triggers, categorySet=categorySet, 
@@ -5885,7 +5914,7 @@ if __name__ == '__main__':
                                                                     'hadd-combine'],
                         help='analysis stage to be produced')
     parser.add_argument('--varSet', '--variableSet', dest='variableSet', action='store',
-                        type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study', 'TriggerStudy', 'ResolutionStudy'], default='HTOnly',
+                        type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study', 'TriggerStudy', 'ResolutionStudy', 'WeightStudy'], default='HTOnly',
                         help='Variable set to include in filling templates')
     parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
                         type=str, choices=['5x5', '5x3', '5x1', '2Bp', '2BnJet4p', 'SignalSensitive', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
@@ -5901,8 +5930,6 @@ if __name__ == '__main__':
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
                         help='output directory path defaulting to "."')
-    parser.add_argument('--quiet', dest='quiet', action='store_true',
-                        help='Disable progress bars')
     parser.add_argument('--jetPtMin', dest='jetPtMin', action='store', default=30.0, type=float,
                         help='Float value for the minimum Jet pt in GeV, defaulting to 30.0')
     parser.add_argument('--jetPUId', dest='jetPUId', action='store', default='L', nargs='?', const='L', type=str, choices=['N', 'L', 'M', 'T'],
@@ -5959,6 +5986,7 @@ if __name__ == '__main__':
                         help='number of threads for implicit multithreading (0 or 1 to disable)')
     parser.add_argument('--report', dest='report', action='store_true',
                         help='Toggle the RDataFrame Filter Report')
+    parser.add_argument('--noProgressBar', dest='noProgressBar', action='store_true', help='Toggle off the tqdm progress bars')
 
     #Parse the arguments
     args = parser.parse_args()
@@ -6000,7 +6028,6 @@ if __name__ == '__main__':
     useAggregate = not args.noAggregate
     useHTOnly = args.useHTOnly
     useNJetOnly = args.useNJetOnly
-    quiet = args.quiet
     test = args.test
     nThreads = args.nThreads
     if nThreads > 1:
@@ -6043,7 +6070,6 @@ if __name__ == '__main__':
     print("Redirector used (overridden if '/eos/' is in the file path!): ".format(args.redir))
     print("cached fileLists will be recreated, if they exist: {}".format(args.recreateFileList))
     print("Verbose option: {verb}".format(verb=verb))
-    print("Quiet option: {qt}".format(qt=quiet))
     print("Variable set: {vS}".format(vS=variableSet))
     print("Category set: {cS}".format(cS=categorySet))
     print("Systematic Set: {sS}".format(sS=systematicSet))    
@@ -6058,9 +6084,9 @@ if __name__ == '__main__':
                       BTaggingYieldsAggregate=useAggregate, useDeltaR=useDeltaR, jetPtMin=jetPtMin, jetPUId=jetPUId, 
                       HTBins=HTBins, HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
-                      printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, 
+                      printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, 
                       testVariables=test, categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
-                      recreateFileList=args.recreateFileList, doRDFReport=args.report)
+                      recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
         #      verbose=False)
         # packed = main(analysisDir, source, channel, bTagger=bTagger, doDiagnostics=False, doHistos=False, doBTaggingYields=True, 
@@ -6105,9 +6131,9 @@ if __name__ == '__main__':
                       HTBins=HTBins, HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useDeltaR=useDeltaR, 
                       useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList,  
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
-                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, testVariables=test,
                       categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
-                      recreateFileList=args.recreateFileList, doRDFReport=args.report)
+                      recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=True, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
@@ -6115,27 +6141,27 @@ if __name__ == '__main__':
                       HTBins=HTBins, HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList,  
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
-                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, testVariables=test,
                       categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
-                      recreateFileList=args.recreateFileList, doRDFReport=args.report)
+                      recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, sampleCards, source, "BOOKKEEPING", bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, 
                       HTBins=HTBins, HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList,  
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
-                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, testVariables=test,
                       categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
-                      recreateFileList=args.recreateFileList, doRDFReport=args.report)
+                      recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     elif stage == 'pileup':
         packed = main(analysisDir, sampleCards, source, "PILEUP", bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, 
                       HTBins=HTBins, HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList,  
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
-                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, testVariables=test,
                       categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
-                      recreateFileList=args.recreateFileList, doRDFReport=args.report)
+                      recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     elif stage == 'fill-histograms':
         #filling ntuples is also possible with the option --doNtuples
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, 
@@ -6144,9 +6170,9 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, HTBins=HTBins, HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
-                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, testVariables=test,
                       categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
-                      recreateFileList=args.recreateFileList, doRDFReport=args.report)
+                      recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     elif stage == 'fill-combine':
         #filling ntuples is also possible with the option --doNtuples
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, 
@@ -6155,9 +6181,9 @@ if __name__ == '__main__':
                       jetPtMin=jetPtMin, jetPUId=jetPUId, HTBins=HTBins, HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
-                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, quiet=quiet, testVariables=test,
+                      includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, testVariables=test,
                       categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
-                      recreateFileList=args.recreateFileList, doRDFReport=args.report)
+                      recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     elif stage == 'hadd-histograms' or stage == 'hadd-combine':
         print("Combining root files for plotting")
         if stage == 'hadd-histograms':
@@ -6194,8 +6220,8 @@ if __name__ == '__main__':
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, 
-                      quiet=quiet, testVariables=test, categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, 
-                      nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report)
+                      testVariables=test, categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, 
+                      nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     else:
         print("stage {stag} is not yet prepared, please update the FTAnalyzer".format(stag))
 
