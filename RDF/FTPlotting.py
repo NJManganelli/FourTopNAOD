@@ -1862,8 +1862,10 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
                     print("for {} and histNameCommon {}, makeCombinationHists failed to find a histogram (systematic or nominal) corresponding to {}\n\t{}\n\t{}"\
                           .format(histFile.GetName(), histNameCommon, subCatName, expectedName, fallbackName))
                 continue
-        if successCounter == 0:
-            raise RuntimeError("Found no working keys, a pair of attempted keys were {}, and the list of unblinded keys were {}".format(attemptedName, unblindedKeys))
+        # Need to make this work with e.g. QCD which isn't there...
+        # if successCounter == 0:
+        #     maxLength = min(len(unblindedKeys), 100)
+        #     raise RuntimeError("Found no working keys, a pair of attempted keys were {}, and the list of unblinded keys were {}".format(attemptedName, list(unblindedKeys.keys())[:maxLength]))
 
         for nHist, hist in enumerate(histoList):
             #Normalize to the nominal, if applicable
