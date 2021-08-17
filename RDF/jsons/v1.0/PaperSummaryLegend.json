@@ -22,7 +22,6 @@
                 "Names": [
                     "ttbb", 
 		    "ttother",
-                    "singletop", 
                     "ttH", 
                     "ttVJets", 
                     "ttultrarare", 
@@ -412,6 +411,18 @@
                 "Color": "#cf9ddb", 
                 "Style": "Fill", 
                 "Names": [
+                    "2017___ST_tW-NoFHad___ElMu___ZWindowMET0Width0", 
+                    "2017___ST_tbarW-NoFHad___ElMu___ZWindowMET0Width0",
+                    "2018___ST_tW-NoFHad___ElMu___ZWindowMET0Width0", 
+                    "2018___ST_tbarW-NoFHad___ElMu___ZWindowMET0Width0",
+                    "2017___ST_tW-NoFHad___MuMu___ZWindowMET0p0Width15p0", 
+                    "2017___ST_tbarW-NoFHad___MuMu___ZWindowMET0p0Width15p0",
+                    "2018___ST_tW-NoFHad___MuMu___ZWindowMET0p0Width15p0", 
+                    "2018___ST_tbarW-NoFHad___MuMu___ZWindowMET0p0Width15p0",
+                    "2017___ST_tW-NoFHad___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ST_tbarW-NoFHad___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ST_tW-NoFHad___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ST_tbarW-NoFHad___ElEl___ZWindowMET0p0Width15p0",
                     "2017___ttother_DL_fr___ElMu___ZWindowMET0Width0",
                     "2017___ttother_SL_fr___ElMu___ZWindowMET0Width0", 
                     "2017___ttother_DL_nr___ElMu___ZWindowMET0Width0",
@@ -508,18 +519,6 @@
                 "Color": "#1a142f", 
                 "Style": "Fill", 
                 "Names": [
-                    "2017___ST_tW-NoFHad___ElMu___ZWindowMET0Width0", 
-                    "2017___ST_tbarW-NoFHad___ElMu___ZWindowMET0Width0",
-                    "2018___ST_tW-NoFHad___ElMu___ZWindowMET0Width0", 
-                    "2018___ST_tbarW-NoFHad___ElMu___ZWindowMET0Width0",
-                    "2017___ST_tW-NoFHad___MuMu___ZWindowMET0p0Width15p0", 
-                    "2017___ST_tbarW-NoFHad___MuMu___ZWindowMET0p0Width15p0",
-                    "2018___ST_tW-NoFHad___MuMu___ZWindowMET0p0Width15p0", 
-                    "2018___ST_tbarW-NoFHad___MuMu___ZWindowMET0p0Width15p0",
-                    "2017___ST_tW-NoFHad___ElEl___ZWindowMET0p0Width15p0", 
-                    "2017___ST_tbarW-NoFHad___ElEl___ZWindowMET0p0Width15p0",
-                    "2018___ST_tW-NoFHad___ElEl___ZWindowMET0p0Width15p0", 
-                    "2018___ST_tbarW-NoFHad___ElEl___ZWindowMET0p0Width15p0"
                 ]
             }, 
             "ttultrarare": {
