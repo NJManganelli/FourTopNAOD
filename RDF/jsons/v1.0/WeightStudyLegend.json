@@ -7,10 +7,7 @@
                 "Draw": "HIST", 
                 "Names": [
                     "tt_DL-GF",
-                    "tt_DL",
-                    "tt_SL-GF",
-                    "tt_SL",
-		    "singletop"
+                    "tt_DL"
                 ], 
                 "Stack": true
             }
@@ -43,7 +40,7 @@
                     "2017___ttbb_SL-GF_fr___MuMu___ZWindowMET0p0Width15p0",
                     "2018___ttbb_SL-GF_fr___MuMu___ZWindowMET0p0Width15p0",
                     "2017___ttbb_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0",
-                    "2018___ttbb_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0"
+                    "2018___ttbb_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0",
                     "2017___ttother_SL-GF_fr___ElMu___ZWindowMET0Width0",
                     "2018___ttother_SL-GF_fr___ElMu___ZWindowMET0Width0",
                     "2017___ttother_SL-GF_fr___MuMu___ZWindowMET0p0Width15p0",
@@ -129,25 +126,7 @@
                     "2017___ttbb_DL-GF_fr___ElEl___ZWindowMET0p0Width15p0", 
                     "2018___ttbb_DL-GF_fr___ElEl___ZWindowMET0p0Width15p0"
                 ]
-            }, 
-            "singletop": {
-                "Color": [248, 206, 104], 
-                "Style": "Fill", 
-                "Names": [
-                    "2017___ST_tW-NoFHad___ElMu___ZWindowMET0Width0", 
-                    "2017___ST_tbarW-NoFHad___ElMu___ZWindowMET0Width0",
-                    "2018___ST_tW-NoFHad___ElMu___ZWindowMET0Width0", 
-                    "2018___ST_tbarW-NoFHad___ElMu___ZWindowMET0Width0",
-                    "2017___ST_tW-NoFHad___MuMu___ZWindowMET0p0Width15p0", 
-                    "2017___ST_tbarW-NoFHad___MuMu___ZWindowMET0p0Width15p0",
-                    "2018___ST_tW-NoFHad___MuMu___ZWindowMET0p0Width15p0", 
-                    "2018___ST_tbarW-NoFHad___MuMu___ZWindowMET0p0Width15p0",
-                    "2017___ST_tW-NoFHad___ElEl___ZWindowMET0p0Width15p0", 
-                    "2017___ST_tbarW-NoFHad___ElEl___ZWindowMET0p0Width15p0",
-                    "2018___ST_tW-NoFHad___ElEl___ZWindowMET0p0Width15p0", 
-                    "2018___ST_tbarW-NoFHad___ElEl___ZWindowMET0p0Width15p0"
-                ]
-            }
+            } 
         }
     },
      "NoSTLegend": {
