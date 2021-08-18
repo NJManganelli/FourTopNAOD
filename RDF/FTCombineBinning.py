@@ -17,8 +17,11 @@ import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 ROOT.gROOT.SetBatch(True)
-def getRelUncertaintyBinning(entryArray, edgesArray, relUncertainty, includeOverflow=False):
-    start = 1 #Don't include underflow
+def getRelUncertaintyBinning(entryArray, edgesArray, relUncertainty, includeOverflow=False, includeUnderflow=False, verbose=False):
+    if includeUnderflow:
+        start = 0
+    else:
+        start = 1 #Don't include underflow
     stop = start + 1 #Initialize so that we start with checking the singular bin
     if includeOverflow:
         end = len(edgesArray) - 1 #nBinsX + 1 #one less since edgesArray is 1 greater than the entryArray in the same dimension
@@ -55,6 +58,38 @@ def getRelUncertaintyBinning(entryArray, edgesArray, relUncertainty, includeOver
             print("Binning Array: {}".format(binningArray))
             print("Numpy Entry Array: {}".format(entryArray))
     ret = edgesArray[np.array(binningArray, dtype=np.int32)]
+    return ret
+
+def getEquiprobableBinning(entryArray, edgesArray, nEquiprobableBins, includeOverflow=False, includeUnderflow=False, verbose=False):
+    if includeUnderflow:
+        start = 0
+    else:
+        start = 1 #Don't include underflow
+    stop = start + 1 #Initialize so that we start with checking the singular bin
+    if includeOverflow:
+        end = len(edgesArray) - 1 #nBinsX + 1 #one less since edgesArray is 1 greater than the entryArray in the same dimension
+    else:
+        end = len(edgesArray) - 2
+    binningArray = []
+    with np.errstate(divide='ignore'):
+        cdf = np.cumsum(entryArray, axis=1)
+        if start > 0:
+            cdf = cdf - cdf[:, 0] #adjust according to underflow selection
+        target = cdf[:, end] / np.int64(nEquiprobableBins)
+        #Only use the 0th systematic (nominal) to calculate things
+        binningArray.append(start)
+        for x in range(1, nEquiprobableBins):
+            targetBin = np.argmin(np.abs(cdf[0, :] - x * target))
+            binningArray.append(min(end-1, max(binningArray[-1]+1, targetBin)))
+        binningArray.append(end)
+        # print(binningArray)
+        if verbose: 
+            print("Binning Array: {}".format(binningArray))
+            print("Numpy Entry Array: {}".format(entryArray))
+    ret = edgesArray[np.array(binningArray, dtype=np.int32)]
+    # print(ret)
+    temp = cdf[0, np.array(binningArray, dtype=np.int32)]
+    # print("integrals:", temp[1:] - temp[:-1])
     return ret
     
 def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outDir, sourceVariable = "HT", HTCut="500", 
@@ -173,7 +208,10 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outD
                                 edgesArray[nbin] = hists[systematic].GetBinLowEdge(nbin)
                         if nsyst == 0:
                             edgesArray[lastBin] = hists[systematic].GetBinLowEdge(lastBin)
-                    npEdgesArray = getRelUncertaintyBinning(entryArray, edgesArray, relUncertainty, includeOverflow=includeOverflow)
+                    if nEquiprobableBins:
+                        npEdgesArray = getEquiprobableBinning(entryArray, edgesArray, nEquiprobableBins, includeOverflow=includeOverflow)
+                    else:
+                        npEdgesArray = getRelUncertaintyBinning(entryArray, edgesArray, relUncertainty, includeOverflow=includeOverflow)
                     rebinningEdges = npEdgesArray.tolist()
                 replacements = []
                 if jsonInput:
@@ -224,7 +262,7 @@ if __name__ == '__main__':
     parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
                         type=str, choices=['5x5', '5x3', '5x1', '2BnJet4p', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
                         help='Variable set to include in filling templates')
-    parser.add_argument('--nEquiprobableBins', dest='nEquiprobableBins', default=None, help='number of equiprobable bins to divide each category into')
+    parser.add_argument('--nEquiprobableBins', dest='nEquiprobableBins', type=int, default=None, help='number of equiprobable bins to divide each category into')
     parser.add_argument('--excludeSystematics', '--systematicsToExclude', dest='systematicsToExclude', action='append',
                         default=["OSDL_RunII_hdampUp", "OSDL_RunII_hdampDown", "OSDL_RunII_ueUp", "OSDL_RunII_ueDown"],
                         help='List of systematics to not consider when rebinning, scale variations only, e.g. OSDL_RunII_hdampDown')
@@ -247,4 +285,4 @@ if __name__ == '__main__':
     channel = args.channel
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday).replace("$CHAN", channel)
     verbose = args.verbose
-    main(stage, analysisDir, channel, args.era, args.relUncertainty, args.json, ".", args.variable, args.HTCut, args.variableSet, args.categorySet, args.merge, args.bTagger, args.systematicsToExclude, verbose=verbose)
+    main(stage, analysisDir, channel, args.era, args.relUncertainty, args.json, ".", args.variable, args.HTCut, args.variableSet, args.categorySet, args.merge, args.bTagger, args.systematicsToExclude, nEquiprobableBins=args.nEquiprobableBins, verbose=verbose)
