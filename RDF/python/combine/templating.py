@@ -8,6 +8,30 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
     corr1718lumi = {"2016": "-      ", "2017": "1.006  ", "2018": "1.002  "}[era] #replace $CL1718
     hdampstr = {"2017": "0.93/1.10", "2018": "0.93/1.10"}[era] #Uncertainty per year, derived from inclusive check of channels, btag and jet categories, ttbar subprocesses
     uestr = {"2017": "0.99/1.01", "2018": "0.99/1.01"}[era] #Uncertainty per year, derived from inclusive check of channels, btag and jet categories, ttbar subprocesses
+    ttbbisrall = {"nJet4": "1.02/0.99", 
+                  "nJet5": "1.06/0.98", 
+                  "nJet6": "1.12/0.97", 
+                  "nJet7": "1.15/0.96", 
+                  "nJet8p": "1.16/0.96",
+    }
+    ttnobbisrall = {"nJet4": "1.01/1.00", 
+                  "nJet5": "1.05/0.98", 
+                  "nJet6": "1.10/0.96", 
+                  "nJet7": "1.13/0.95", 
+                  "nJet8p": "1.14/0.94",
+    }
+    ttbbfsrall = {"nJet4": "1.05/0.95", 
+                  "nJet5": "1.11/0.94", 
+                  "nJet6": "1.14/0.94", 
+                  "nJet7": "1.18/0.93", 
+                  "nJet8p": "1.186/0.92",
+    }
+    ttnobbfsrall = {"nJet4": "0.95/1.05", 
+                  "nJet5": "0.97/1.04", 
+                  "nJet6": "0.99/1.03", 
+                  "nJet7": "1.02/1.00", 
+                  "nJet8p": "1.07/0.98",
+    }
     outputLines = []
     with open(template, "r") as inFile:
         for line in inFile:
@@ -22,6 +46,10 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
         twoSidedSystematics = set()
         oneSidedSystematics = set()
         if category in counts:
+            ttbbisr = ttbbisrall[category.split("_")[-1]]
+            ttbbfsr = ttbbsrall[category.split("_")[-1]]
+            ttnobbisr = ttnobbisrall[category.split("_")[-1]]
+            ttnobbfsr = ttnobbfsrall[category.split("_")[-1]]
             for kword, kproc in keymapping.items():
                 twoSidedSystematics = twoSidedSystematics.union(set([syst.replace("Up", "").replace("Down", "") for syst in 
                                                                      counts.get(category).get(kproc, {}).keys() if syst.endswith("Up") or syst.endswith("Down")]))
@@ -61,7 +89,11 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
                                  .replace("$CL161718", corr161718lumi)\
                                  .replace("$CL1718", corr1718lumi)\
                                  .replace("$HDAMP   ", hdampstr)\
-                                 .replace("$UE      ", uestr)
+                                 .replace("$UE      ", uestr)\
+                                 .replace("$TTBBISR ", ttbbisr)\
+                                 .replace("$TTBBFSR ", ttbbfsr)\
+                                 .replace("$TTNOBISR", ttnobbisr)\
+                                 .replace("$TTNOBFSR", ttnobbfsr)
                 for kword in rate.keys():
                     if "$R_" + kword in outputline:
                         outputline = outputline.replace("{:16s}".format("$R_" + kword), "{:16s}".format(rate[kword]))
