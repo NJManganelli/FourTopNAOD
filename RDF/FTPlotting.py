@@ -2078,6 +2078,11 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
         pprint.pprint(retDict["Categories/hists"])
     #Create an ordered list of tuples using either the integral of each category histogram or just the name (for consistency)
     orderingList = []
+    if len(retDict["Categories/hists"].keys()) < 1:
+        print("Failed to find any working keys in the makeSueprCategories method. Printing first 10 searched-for keys...")
+        for cat_name, cat_dict in enumerate(retDict["Categories/theUnfound"].items()):
+            print(cat_name)
+            print(cat_dict)
     for cat_name, cat_hist in retDict["Categories/hists"].items():
         #Perform smoothing post-aggregation and rebinning, if requested
         if nominalCache is not None and isinstance(smoothing, int) and smoothing > 0:
@@ -2447,6 +2452,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 try:
                     nBins = list(CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values())[0].GetNbinsX()
                 except:
+                    print("Failed to find any working key combinations...")
                     pdb.set_trace()
                 sD = dict() #systematic dictionary for lookup into numpy array
                 sD['statisticsUp'] = nSysts + 0
@@ -3398,7 +3404,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         if combineCards:
             with open(os.path.join(analysisDir, "Combine", "Counts_"+era+"_"+channel+"_"+combineInput+".json"), "w") as countfile: 
                 countfile.write(json.dumps(combCounts, indent=4))
-            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV15_mergeST.txt", counts=combCounts)
+            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV16.txt", counts=combCounts)
             print("Wrote combine cards")
         # cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
         # # print(cmd)
