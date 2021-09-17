@@ -24,7 +24,7 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
                   "nJet5": "1.11/0.94", 
                   "nJet6": "1.14/0.94", 
                   "nJet7": "1.18/0.93", 
-                  "nJet8p": "1.186/0.92",
+                  "nJet8p": "1.19/0.92",
     }
     ttnobbfsrall = {"nJet4": "0.95/1.05", 
                   "nJet5": "0.97/1.04", 
@@ -46,10 +46,10 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
         twoSidedSystematics = set()
         oneSidedSystematics = set()
         if category in counts:
-            ttbbisr = ttbbisrall[category.split("_")[-1]]
-            ttbbfsr = ttbbsrall[category.split("_")[-1]]
-            ttnobbisr = ttnobbisrall[category.split("_")[-1]]
-            ttnobbfsr = ttnobbfsrall[category.split("_")[-1]]
+            ttbbisr = ttbbisrall.get(category.split("_")[-1], "$NOTFOUND")
+            ttbbfsr = ttbbfsrall.get(category.split("_")[-1], "$NOTFOUND")
+            ttnobbisr = ttnobbisrall.get(category.split("_")[-1], "$NOTFOUND")
+            ttnobbfsr = ttnobbfsrall.get(category.split("_")[-1], "$NOTFOUND")
             for kword, kproc in keymapping.items():
                 twoSidedSystematics = twoSidedSystematics.union(set([syst.replace("Up", "").replace("Down", "") for syst in 
                                                                      counts.get(category).get(kproc, {}).keys() if syst.endswith("Up") or syst.endswith("Down")]))
