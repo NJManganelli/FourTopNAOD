@@ -11,6 +11,7 @@ import json
 import copy
 import argparse
 import uuid
+import tqdm
 import pdb
 import numpy as np
 import ROOT
@@ -117,8 +118,7 @@ def main(analysisDirectory, era, variable, mergeCats="BTags", variableSet="HTOnl
         for msample, subsubmerge in submerge.items():
             print("Writing results for {}".format(msample))
             for mvariable, subsubsubmerge in subsubmerge.items():
-                for msyst, subsubsubsubmerge in subsubsubmerge.items():
-                    print("*", end="")
+                for msyst, subsubsubsubmerge in tqdm.tqdm(subsubsubmerge.items()):
                     for mcat, subsubsubsubsubmerge in subsubsubsubmerge.items():
                         if mergeCats.lower() == "btags":    
                             mergeName = "___".join([mera, msample, "All", "ZWindow", "MergedChannelsBTags_" + mcat, mvariable, msyst])
