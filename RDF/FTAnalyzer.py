@@ -2285,7 +2285,7 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
     return prePackedNodes
 
 
-def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="All", isData=True, era="2017", variableSet="HTOnly", categorySet="5x3", histosDict=None,
+def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="All", isData=True, era="2017", variableSet="HTOnly",variableList=None, categorySet="5x3", histosDict=None,
                doCategorized=False, doDiagnostics=True, doCombineHistosOnly=False, debugInfo=True, nJetsToHisto=10, bTagger="DeepCSV",
                HTBins=50, HTCut=500, METCut=0.0, ZMassMETWindow=[15.0, 10000.0], verbose=False,
                triggers=[],
@@ -2533,6 +2533,8 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         combineHistoTemplate = ResolutionStudyTemplates
     elif variableSet == "WeightStudy":
         combineHistoTemplate = WeightStudyTemplates
+    elif variableList is not None:
+        combineHistoTemplate = variableList
     else:
         raise RuntimeError("Unrecognized variableSet {}".format(variableSet))
 
@@ -4878,9 +4880,17 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
          HTBins=100, HTCut=500, METCut=0.0, ZMassMETWindow=[15.0, 10000.0],
          disableNjetMultiplicityCorrection=False, enableTopPtReweighting=False,
          excludeSampleNames=None, verbose=False, checkMeta=True,
-         testVariables=False, categorySet="5x3", variableSet="HTOnly", systematicSet="All", nThreads=8,
+         testVariables=False, categorySet="5x3", variableSet="HTOnly", variableList=None, systematicSet="All", nThreads=8,
          redirector=None, recreateFileList=False, doRDFReport=False, options=None
      ):
+    ########################################################
+    ########################################################
+    ### Override variableSet if variableList is not None ###
+    ########################################################
+    ########################################################
+    if variableList is not None:
+        print("Overriding variableSet ({vS}) with variableList ({vL})".format(vS=variableSet,vL=variableList))
+        variableSet = "__".join(variableList)
 
     ##################################################
     ##################################################
@@ -5688,6 +5698,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                             era = vals["era"], 
                                                             triggers = triggers, 
                                                             variableSet=variableSet,
+                                                            variableList=variableList,
                                                             categorySet=categorySet, 
                                                             sampleName=name, 
                                                             channel=lvl.replace("_selection", "").replace("_baseline", ""), 
@@ -5916,6 +5927,9 @@ if __name__ == '__main__':
     parser.add_argument('--varSet', '--variableSet', dest='variableSet', action='store',
                         type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study', 'TriggerStudy', 'ResolutionStudy', 'WeightStudy'], default='HTOnly',
                         help='Variable set to include in filling templates')
+    parser.add_argument('--varList', '--variableList', dest='variableList', action='store', nargs='*',
+                        type=str, default=None,
+                        help='Variable list to include in filling templates, must include {bpf} if it is sensitive to JEC variations, e.g. HT{bpf}')
     parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
                         type=str, choices=['5x5', '5x3', '5x1', '2Bp', '2BnJet4p', 'SignalSensitive', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
                         help='Variable set to include in filling templates')
@@ -6003,6 +6017,7 @@ if __name__ == '__main__':
     sampleCards = args.sample_cards
     systematicCards = args.systematics_cards
     variableSet = args.variableSet
+    variableList = args.variableList
     categorySet = args.categorySet
     systematicSet = args.systematicSet
     channel = args.channel
@@ -6071,6 +6086,7 @@ if __name__ == '__main__':
     print("cached fileLists will be recreated, if they exist: {}".format(args.recreateFileList))
     print("Verbose option: {verb}".format(verb=verb))
     print("Variable set: {vS}".format(vS=variableSet))
+    print("Variable list: {vL}".format(vL=variableList))
     print("Category set: {cS}".format(cS=categorySet))
     print("Systematic Set: {sS}".format(sS=systematicSet))    
     print("\n\nFIXME: Need to fix the btagging yields access, properly close file after the histograms are loaded...\n\n")
@@ -6085,7 +6101,7 @@ if __name__ == '__main__':
                       HTBins=HTBins, HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, 
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       printBookkeeping = False, triggers=TriggerList, includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, 
-                      testVariables=test, categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
+                      testVariables=test, categorySet=categorySet, variableSet=variableSet, variableList=variableList, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
                       recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
         # main(analysisDir=analysisDir, channel=channel, doBTaggingYields=True, doHistos=False, BTaggingYieldsFile="{}", source=source, 
         #      verbose=False)
@@ -6132,7 +6148,7 @@ if __name__ == '__main__':
                       useHTOnly=useHTOnly, useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList,  
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, testVariables=test,
-                      categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
+                      categorySet=categorySet, variableSet=variableSet, variableList=variableList, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
                       recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     elif stage == 'fill-diagnostics':
         print("This method needs some to-do's checked off. Work on it.")
@@ -6142,7 +6158,7 @@ if __name__ == '__main__':
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList,  
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, testVariables=test,
-                      categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
+                      categorySet=categorySet, variableSet=variableSet, variableList=variableList, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
                       recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     elif stage == 'bookkeeping':
         packed = main(analysisDir, sampleCards, source, "BOOKKEEPING", bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
@@ -6151,7 +6167,7 @@ if __name__ == '__main__':
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList,  
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, testVariables=test,
-                      categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
+                      categorySet=categorySet, variableSet=variableSet, variableList=variableList, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
                       recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     elif stage == 'pileup':
         packed = main(analysisDir, sampleCards, source, "PILEUP", bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
@@ -6160,7 +6176,7 @@ if __name__ == '__main__':
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList,  
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, testVariables=test,
-                      categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
+                      categorySet=categorySet, variableSet=variableSet, variableList=variableList, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
                       recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     elif stage == 'fill-histograms':
         #filling ntuples is also possible with the option --doNtuples
@@ -6171,7 +6187,7 @@ if __name__ == '__main__':
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, testVariables=test,
-                      categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
+                      categorySet=categorySet, variableSet=variableSet, variableList=variableList, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
                       recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     elif stage == 'fill-combine':
         #filling ntuples is also possible with the option --doNtuples
@@ -6182,7 +6198,7 @@ if __name__ == '__main__':
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, testVariables=test,
-                      categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
+                      categorySet=categorySet, variableSet=variableSet, variableList=variableList, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
                       recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     elif stage == 'hadd-histograms' or stage == 'hadd-combine':
         print("Combining root files for plotting")
@@ -6220,7 +6236,7 @@ if __name__ == '__main__':
                       disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
                       useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList, 
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, 
-                      testVariables=test, categorySet=categorySet, variableSet=variableSet, systematicSet=systematicSet, 
+                      testVariables=test, categorySet=categorySet, variableSet=variableSet, variableList=variableList, systematicSet=systematicSet, 
                       nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
     else:
         print("stage {stag} is not yet prepared, please update the FTAnalyzer".format(stag))
