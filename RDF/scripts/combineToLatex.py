@@ -27,7 +27,11 @@ def getSignificance(significanceFile):
     return "No file found"
 
 def round_to_n(x, sigfigs):
-    return round(x, -int(math.floor(math.log10(abs(x)))) + sigfigs - 1)
+    abs_x = abs(x)
+    if float(abs_x) == 0.0:
+        return "0." + "0"*(sigfigs-1)
+    else:
+        return round(x, -int(math.floor(math.log10(abs_x))) + sigfigs - 1)
 
 def configureLatex(channel, limits, significance, XS, sigfigs=3):
     result = ""
