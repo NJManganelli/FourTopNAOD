@@ -103,12 +103,22 @@ def main(stage, analysisDirectory, channel, era, relUncertainty, jsonInput, outD
                          'ttother_SL_nr', 'ttother_SL_fr', 'ttother_SL-GF_fr', 'ttother_DL_nr', 'ttother_DL_fr', 'ttother_DL-GF_fr', #'ttother_AH'
     ]
     if merge.lower() == "btags":
-        histogramFile = "$ADIR/Combine/All/$ERA___MergedChannelsBTags_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", sourceVariable).replace("//", "/") # 
+        histogramFile = "$ADIR/Combine/All/$ERA___$VARSET___$CATSET___MergedChannelsBTags_$VAR.root".replace("$ADIR", analysisDir)\
+                                                                                               .replace("$VARSET", variableSet)\
+                                                                                               .replace("$CATSET", categorySet)\
+                                                                                               .replace("$ERA", era)\
+                                                                                               .replace("$VAR", sourceVariable)\
+                                                                                               .replace("//", "/") # 
         categoriesOfInterest = ['MergedChannelsBTags_nJet4', 'MergedChannelsBTags_nJet5', 'MergedChannelsBTags_nJet6',
                                 'MergedChannelsBTags_nJet7', 'MergedChannelsBTags_nJet8+',
         ]
     elif merge.lower() == "jets":
-        histogramFile = "$ADIR/Combine/All/$ERA___MergedChannelsJets_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", sourceVariable).replace("//", "/") # 
+        histogramFile = "$ADIR/Combine/All/$ERA___$VARSET___$CATSET___MergedChannelsJets_$VAR.root".replace("$ADIR", analysisDir)\
+                                                                                              .replace("$VARSET", variableSet)\
+                                                                                              .replace("$CATSET", categorySet)\
+                                                                                              .replace("$ERA", era)\
+                                                                                              .replace("$VAR", sourceVariable)\
+                                                                                              .replace("//", "/") # 
         categoriesOfInterest = ['MergedChannelsJets_nMedium{tagger}B2', 'MergedChannelsJets_nMedium{tagger}B3', 'MergedChannelsJets_nMedium{tagger}B4+',
         ]
     else:
@@ -251,7 +261,7 @@ if __name__ == '__main__':
     parser.add_argument('--json', '-j', dest='json', action='store', default=None, type=str,
                         help='path to json file plotcard to overwrite "Rebin" categories with those determined here. Output determined by --out argument')
     parser.add_argument('--merge', dest='merge', action='store', type=str, nargs='?', const="btags", default="", choices = ["BTags", "Jets"],
-                        help='Check for the $ERA___MergedChannels$MERGE_$VAR.root file in the Combine/All subdirectory, a product of FTMergeChannels$MERGE.py for systematic studies, where $MERGE = BTags, Jets')
+                        help='Check for the $ERA___MergedChannels$MERGE_$VAR.root file in the Combine/All subdirectory, a product of FTMergeChannels.py for systematic studies')
     parser.add_argument('--bTagger', dest='bTagger', action='store', type=str, choices = ["DeepJet", "DeepCSV"], required=True,
                         help='b tagging algorithm to be used')
     parser.add_argument('--HTCut', dest='HTCut', action='store', type=str, default="500",
