@@ -2204,7 +2204,7 @@ def makeStack_Prototype(histFile, histList=None, legendConfig=None, rootName=Non
 def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Cache=None, histogramDirectory = ".", batchOutput=False, closeFiles=True, 
                      analysisDirectory=None, tag=None, plotCard=None, drawSystematic=None, drawLegends=True, drawNormalized=False,
                      plotDir=None, pdfOutput=None, macroOutput=None, pngOutput=None, useCanvasMax=False,
-                     combineOutput=None, combineInput=None, combineCards=False,
+                     combineOutput=None, combineInput=None, combineCards=False, combineInputList=None,
                      nominalPostfix="nom", separator="___", skipSystematics=None, verbose=False, 
                      debug=False, nDivisions=105, lumi="N/A", drawYields=False,
                      zeroingThreshold=0, differentialScale=False, histogramUncertainties=False, ratioUncertainties=False,
@@ -2411,6 +2411,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         #Get the variables that will go into the plots, prefilter the histogram keys
         subplot_variables = [subplot_name.split(separator)[-1] for subplot_name in CanCache["subplots"]]
         subplot_categories = [subplot_name.split(separator)[0].replace("Plot_", "", 1).replace("blind_", "") for subplot_name in CanCache["subplots"]]
+        if not any([x in combineInputList for x in subplot_variables]):
+            print("Skipping",subplot_variables,"Since they're not in ",combineInputList)
+            continue
         for pn, subplot_name in enumerate(CanCache["subplots"]):
             subplot_dict = plots["{}".format(subplot_name)]
             nice_name = subplot_name.replace("Plot_", "").replace("Plot", "").replace("blind_", "").replace("BLIND", "")
@@ -3255,7 +3258,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             print("\tDrew {}".format(can_name))
 
         #Save histograms for Combine, this is a hacked first attempt, might be cleaner to create a dictionary of histograms with keys from the histogram name to avoid duplicates/cycle numbers in the root files.
-        if combineOutput is not None and (combineInput in can_name):
+        if combineOutput is not None:
             if "signalSensitive_HT" in can_name: continue
             # if "nBtag2p" in can_name: continue
             normalizationDict = {}
@@ -3270,12 +3273,14 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         combCategories[processName] = []
                     if processName not in combHistograms:
                         combHistograms[processName] = []
-                    #BLINDData___HT500_nMediumDeepJetB4+_nJet8+___HT___nom
                     combProcess, combCategory, combVariable, combSystematic = hist.GetName().split(separator)
                     if "_stack_" in combSystematic:
                         combSystematic = combSystematic.split("_stack_")[0]
                     for iName, oName in [("ttother", "ttnobb")]:
                         combProcess = combProcess.replace(iName, oName)
+                    if combVariable not in combineInputList:
+                        print("Not writing histograms for {} ({},{},{})".format(combVariable,combProcess,combCategory,combSystematic))
+                        continue
                     combSystematics[processName].append(combSystematic)
                     #combProcess.replace("BLIND", "").replace("Data", "data_obs")
                     combVariables[processName].append(combVariable)
@@ -3384,28 +3389,29 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         combCategories[processName] = list(set(combCategories[processName]))
         combHistogramsFinal[processName] = dict([(h.GetName(), h) for h in combHistograms[processName]])
     if combineOutput is not None:
-        print("Opening file for combine input templates: {}".format(combineOutput))
-        combFile = ROOT.TFile.Open(combineOutput, "recreate")
-        combCounts = dict()
-        print("Writing histograms to {}".format(combineOutput))
-        for processName, processDict in tqdm(combHistogramsFinal.items()):
-            for histName, hist in processDict.items():
-                countsProc, countsHTandCategory, countsVar, countsSyst = histName.split("___")
-                # countsCategory = countsHTandCategory.replace("HT500_", "")
-                if countsVar == combineInput:
-                    if countsHTandCategory not in combCounts:
-                        combCounts[countsHTandCategory] = dict()
-                    if countsProc not in combCounts[countsHTandCategory]:
-                        combCounts[countsHTandCategory][countsProc] = dict()
-                    combCounts[countsHTandCategory][countsProc][countsSyst] = hist.Integral()
-                hist.Write()
-        combFile.Close()
-        print("Wrote file for combine input templates")
-        if combineCards:
-            with open(os.path.join(analysisDir, "Combine", "Counts_"+era+"_"+channel+"_"+combineInput+".json"), "w") as countfile: 
-                countfile.write(json.dumps(combCounts, indent=4))
-            write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, combineInput, list(combCounts.keys()), template="TTTT_templateV16.txt", counts=combCounts)
-            print("Wrote combine cards")
+        for can_var in combineInputList:
+            print("Opening file for combine input templates: {}".format(combineOutput))
+            combFile = ROOT.TFile.Open(combineOutput.replace("$VAR", can_var), "recreate")
+            combCounts = dict()
+            print("Writing histograms to {}".format(combineOutput.replace("$VAR", can_var)))
+            for processName, processDict in tqdm(combHistogramsFinal.items()):
+                for histName, hist in processDict.items():
+                    countsProc, countsHTandCategory, countsVar, countsSyst = histName.split("___")
+                    # countsCategory = countsHTandCategory.replace("HT500_", "")
+                    if countsVar == can_var:
+                        if countsHTandCategory not in combCounts:
+                            combCounts[countsHTandCategory] = dict()
+                        if countsProc not in combCounts[countsHTandCategory]:
+                            combCounts[countsHTandCategory][countsProc] = dict()
+                        combCounts[countsHTandCategory][countsProc][countsSyst] = hist.Integral()
+                        hist.Write()
+            combFile.Close()
+            print("Wrote file for combine input templates")
+            if combineCards:
+                with open(os.path.join(analysisDir, "Combine", "Counts_"+era+"_"+channel+"_"+can_var+".json"), "w") as countfile: 
+                    countfile.write(json.dumps(combCounts, indent=4))
+                write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, can_var, list(combCounts.keys()), template="TTTT_templateV17.txt", counts=combCounts)
+                print("Wrote combine cards for {}".format(can_var))
         # cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
         # # print(cmd)
         # spo = subprocess.Popen(args="{}".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))
@@ -3548,10 +3554,10 @@ if __name__ == '__main__':
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('--systematics_cards', dest='systematics_cards', action='store', nargs='*', type=str,
                         help='path and name of the systematics card(s) to be used')
-    parser.add_argument('-ci', '--combineInput', dest='combineInput', action='store', type=str, default=None, choices=['HT',],
+    parser.add_argument('-ci', '--combineInputList', dest='combineInputList', action='store', type=str, nargs='*', default=None,
                         help='Variable to be used as input to Higgs Combine. If None, output histograms will not be produced')
     parser.add_argument('--combineCards', dest='combineCards', action='store_true',
-                        help='If --combineInput is active as well, write out combine card templates')
+                        help='If --combineInputList is active as well, write out combine card templates')
     parser.add_argument('-d', '--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
                         help='analysis directory where btagging yields, histograms, etc. are stored')
     parser.add_argument('-f', '--formats', dest='formats', action='store', choices=['pdf', 'C', 'png'], nargs="*",
@@ -3584,7 +3590,7 @@ if __name__ == '__main__':
     parser.add_argument('--zeroingThreshold', dest='zeroingThreshold', action='store', type=int, default=50,
                         help='Threshold for Entries in grouped histograms, below which the contents will be reset. To disable, set equal or less than 0')
     parser.add_argument('--differentialScale', dest='differentialScale', action='store_true',
-                        help='For variable width binning, set the bin errors and contents equal to the average over the bin width. Not compatible with --combineInput option')
+                        help='For variable width binning, set the bin errors and contents equal to the average over the bin width. Not compatible with --combineInputList option')
     parser.add_argument('--noHistogramUncertainties', dest='histogramUncertainties', action='store_false',
                         help='For drawing the MC stat + systematic uncertainties on the main histogram plot')
     parser.add_argument('--noRatioUncertainties', dest='ratioUncertainties', action='store_false',
@@ -3615,7 +3621,7 @@ if __name__ == '__main__':
     dateToday = datetime.date.today().strftime("%b-%d-%Y")
     stage = args.stage
     channel = args.channel
-    combineInput = args.combineInput
+    combineInputList = args.combineInputList
     combineCards = args.combineCards
     era = args.era
     variables = args.variables
@@ -3628,10 +3634,10 @@ if __name__ == '__main__':
     skipSystematics = args.skipSystematics
     zeroingThreshold=args.zeroingThreshold
     differentialScale = False
-    if combineInput is None:
+    if combineInputList is None:
         differentialScale=args.differentialScale
     elif args.differentialScale:
-        print("differentialScale will set bin contents to the average over the bin width. This is not compatible with the combineInput option, as the templates will no longer be absolute in scale. Disabled")
+        print("differentialScale will set bin contents to the average over the bin width. This is not compatible with the combineInputList option, as the templates will no longer be absolute in scale. Disabled")
 
     lumiDict = {"2016": {"non-UL": 36.33,
                          "UL": 36.33},
@@ -3721,8 +3727,9 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
             pngOutput = True
         else:
             pngOutput = False
-        if combineInput is not None:
-            combineOut = "$ADIR/Combine/CI_$ERA_$CHANNEL_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", combineInput).replace("$TAG", tag).replace("$PLOTCARD", plotCard).replace("$CHANNEL", channel).replace("//", "/")
+        if combineInputList is not None:
+            # combineOut = "$ADIR/Combine/CI_$ERA_$CHANNEL_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$VAR", combineInput).replace("$TAG", tag).replace("$PLOTCARD", plotCard).replace("$CHANNEL", channel).replace("//", "/")
+            combineOut = "$ADIR/Combine/CI_$ERA_$CHANNEL_$VAR.root".replace("$ADIR", analysisDir).replace("$ERA", era).replace("$TAG", tag).replace("$PLOTCARD", plotCard).replace("$CHANNEL", channel).replace("//", "/")
             if verb:
                 print("pdfOutput = {}".format(pdfOutput))
         else:
@@ -3751,7 +3758,8 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                                        Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, drawSystematic=args.drawSystematic, drawLegends=args.drawLegends,
                                        drawNormalized=args.drawNormalized,
                                        analysisDirectory=analysisDir, tag=tag, plotCard=plotCard, macroOutput=macroOutput, pngOutput=pngOutput,
-                                       pdfOutput=pdfOutput, combineOutput=combineOut, combineInput=combineInput, combineCards=combineCards,
+                                       pdfOutput=pdfOutput, combineOutput=combineOut, combineInputList=combineInputList,
+                                       combineCards=combineCards,
                                        nominalPostfix=nominalPostfix, separator="___", lumi=lumi, useCanvasMax=useCanvasMax,
                                        skipSystematics=skipSystematics, verbose=verb,
                                        zeroingThreshold=zeroingThreshold, differentialScale=differentialScale, histogramUncertainties=args.histogramUncertainties,
