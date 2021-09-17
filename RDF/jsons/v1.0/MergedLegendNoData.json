@@ -4,7 +4,7 @@
 	"HeaderPosition": 0.25,
         "Supercategories": {
             "Signal": {
-                "Draw": "L", 
+                "Draw": "HIST", 
                 "Names": [
                     "tttt"
                 ], 
@@ -27,12 +27,12 @@
         }, 
         "nColumns": 2, 
         "Ratios": {
-            "MC/MC": {
+            "Background/Background": {
                 "Style": "Marker", 
 		"MarkerStyle": 20,
 		"Draw": "PXE1",
                 "Denominator": "Background", 
-                "Numerator": "Signal"
+                "Numerator": "Background"
             }
         }, 
         "Systematics": [], 
