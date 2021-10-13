@@ -1081,7 +1081,7 @@
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
         "Yaxis": null,
-        "Rebin": 5,
+        "Rebin": 2,
         "Files": "2017___Control___2BnJet4p.root",
         "Projection": null,
         "Unblind": false
