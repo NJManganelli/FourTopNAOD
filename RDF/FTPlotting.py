@@ -2411,7 +2411,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         #Get the variables that will go into the plots, prefilter the histogram keys
         subplot_variables = [subplot_name.split(separator)[-1] for subplot_name in CanCache["subplots"]]
         subplot_categories = [subplot_name.split(separator)[0].replace("Plot_", "", 1).replace("blind_", "") for subplot_name in CanCache["subplots"]]
-        if not any([x in combineInputList for x in subplot_variables]):
+        if combineInputList and not any([x in combineInputList for x in subplot_variables]):
             print("Skipping",subplot_variables,"Since they're not in ",combineInputList)
             continue
         for pn, subplot_name in enumerate(CanCache["subplots"]):
