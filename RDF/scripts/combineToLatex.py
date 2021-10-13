@@ -4,6 +4,7 @@ import argparse
 
 def getLimits(limitsFile):
     doAppend = False
+    doObserved = False
     results = []
     with open(limitsFile, "r") as lf:
         for line in lf:
@@ -12,7 +13,9 @@ def getLimits(limitsFile):
                 results.append(float(line.split(" ")[-1]))
             if "-- AsymptoticLimits ( CLs ) --" in line: 
                 doAppend = True
-            if len(results) == 5:
+            if "Observed Limit:" in line:
+                doObserved = True
+            if (doObserved and len(results) == 6) or (not doObserved and len(results) == 5):
                 doAppend = False
         return results
     return "No file found"
@@ -46,14 +49,23 @@ def configureLatex(channel, limits, significance, XS, sigfigs=3):
     else:
         raise ValueError("channel not recognized: {}".format(channel))
 
-    central = limits[2]
-    up = limits[4] - limits[2]
-    down = limits[0] - limits[2]
+    #Is the first observed or do we only have the 5 expected limit values?
+    observed = None
+    if len(limits) == 6:
+        observed = limits[0]
+        result += "$" + str(round_to_n(observed, sigfigs)) + "$ & "
+        result += "$" + str(round_to_n(XS * observed, sigfigs)) + "$ & "
+        offset = 1
+    else:
+        offset = 0
+    central = limits[offset+2]
+    up = limits[offset+4] - limits[offset+2]
+    down = limits[offset+0] - limits[offset+2]
     lps = "+" if up > 0 else ""
 
-    #limits on mu
+    #limits in mu
     result += "$" + str(round_to_n(central, sigfigs)) + "_{" + str(round_to_n(down, sigfigs)) + "}^{" + lps + str(round_to_n(up, sigfigs)) + "}$ & "
-    #limits on cross-section
+    #limits in fb
     result += "$" + str(round_to_n(XS * central, sigfigs)) + "_{" + str(round_to_n(XS * down, sigfigs)) + "}^{" + lps + str(round_to_n(XS * up, sigfigs)) + "}$ & "
     #significance
     result += "$" + str(round_to_n(significance, sigfigs-1)) + " \\sigma$ \\\\"
