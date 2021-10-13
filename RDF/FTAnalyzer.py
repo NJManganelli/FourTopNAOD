@@ -2840,6 +2840,25 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                              None, 
                              None, 
                              "nJet4+".format(bpf=branchpostfix)))
+                    if categorySet == "3pBnJet4p":
+                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                            ("nMedium{tag}{bpf} > 2".format(tag=tagger, bpf=branchpostfix), 
+                             "3+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                             eraAndSampleName, 
+                             decayChannel, 
+                             None, 
+                             "nMedium{tag}3+".format(tag=tagger, bpf=branchpostfix), 
+                             None)
+                        )
+
+                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                            ("nFTAJet{bpf} >= 4".format(bpf=branchpostfix), 
+                             "4+ Jets ({bpf})".format(bpf=branchpostfix),
+                             eraAndSampleName, 
+                             decayChannel, 
+                             None, 
+                             None, 
+                             "nJet4+".format(bpf=branchpostfix)))
                     if categorySet == "FullyInclusive":
                         filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
                             ("nMedium{tag}{bpf} >= 2".format(tag=tagger, bpf=branchpostfix), "2+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}2+".format(tag=tagger, bpf=branchpostfix), None))
@@ -5931,7 +5950,7 @@ if __name__ == '__main__':
                         type=str, default=None,
                         help='Variable list to include in filling templates, must include {bpf} if it is sensitive to JEC variations, e.g. HT{bpf}')
     parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
-                        type=str, choices=['5x5', '5x3', '5x1', '2Bp', '2BnJet4p', 'SignalSensitive', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
+                        type=str, choices=['5x5', '5x3', '5x1', '2Bp', '2BnJet4p', '3pBnJet4p', 'SignalSensitive', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
                         help='Variable set to include in filling templates')
     parser.add_argument('--systematicSet', dest='systematicSet', action='store', nargs='*',
                         type=str, choices=['ALL', 'nominal', 'pu', 'pf', 'btag', 'jerc', 'ps', 'rf',
