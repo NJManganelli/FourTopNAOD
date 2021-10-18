@@ -1,0 +1,111 @@
+{
+    "Plot_MergedChannelsBTags_nJet4___nPVsGood": {
+        "Files": "2018___nPVs___5x5___MergedChannelsBTags_nPVsGood.root", 
+        "Rebin": 5,
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_MergedChannelsBTags_nJet5___nPVsGood": {
+        "Files": "2018___nPVs___5x5___MergedChannelsBTags_nPVsGood.root", 
+        "Rebin": 5,
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_MergedChannelsBTags_nJet6___nPVsGood": {
+        "Files": "2018___nPVs___5x5___MergedChannelsBTags_nPVsGood.root", 
+        "Rebin": 5,
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_MergedChannelsBTags_nJet7___nPVsGood": {
+        "Files": "2018___nPVs___5x5___MergedChannelsBTags_nPVsGood.root", 
+        "Rebin": 5,
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_MergedChannelsBTags_nJet8+___nPVsGood": {
+        "Files": "2018___nPVs___5x5___MergedChannelsBTags_nPVsGood.root", 
+        "Rebin": 5,
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    },
+    "Canvas_nJet_nPVsGood": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "n_{PV}^{good} (2+ b-tagged jets)", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{l}#it{l} nB=2+ nJ=4", 
+            "#it{l}#it{l} nB=2+ nJ=5", 
+            "#it{l}#it{l} nB=2+ nJ=6", 
+            "#it{l}#it{l} nB=2+ nJ=7", 
+            "#it{l}#it{l} nB=2+ nJ=8+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "n_{PV}^{good}", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_MergedChannelsBTags_nJet4___nPVsGood", 
+            "Plot_MergedChannelsBTags_nJet5___nPVsGood", 
+            "Plot_MergedChannelsBTags_nJet6___nPVsGood", 
+            "Plot_MergedChannelsBTags_nJet7___nPVsGood", 
+            "Plot_MergedChannelsBTags_nJet8+___nPVsGood"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "DefaultCanvas": {
+        "XPixels": 800, 
+        "Title": "DefaultCanvasTitle", 
+        "Plots": null, 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "DoRatio": false, 
+        "Type": "DefaultCanvas", 
+        "YPixels": 800, 
+        "DoMountainrange": false
+    }, 
+    "DefaultPlot": {
+        "Files": null, 
+        "Rebin": null, 
+        "RatioYMin": 0.0, 
+        "RatioYMax": 2.0, 
+        "Title": "DefaultPlotTitle", 
+        "Unblind": false, 
+        "Type": "DefaultPlot"
+    }
+}

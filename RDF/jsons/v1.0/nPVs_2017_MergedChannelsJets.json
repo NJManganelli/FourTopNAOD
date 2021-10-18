@@ -1,0 +1,87 @@
+{
+    "Plot_MergedChannelsJets_nMediumDeepJetB2___nPVsGood": {
+        "Files": "2017___nPVs___5x5___MergedChannelsJets_nPVsGood.root", 
+        "Rebin": 5,
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_MergedChannelsJets_nMediumDeepJetB3___nPVsGood": {
+        "Files": "2017___nPVs___5x5___MergedChannelsJets_nPVsGood.root", 
+        "Rebin": 5,
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    }, 
+    "Plot_MergedChannelsJets_nMediumDeepJetB4+___nPVsGood": {
+        "Files": "2017___nPVs___5x5___MergedChannelsJets_nPVsGood.root", 
+        "Rebin": 5,
+        "Projection": null, 
+        "Title": "DefaultPlotTitle", 
+        "Yaxis": null, 
+        "Unblind": false, 
+        "Xaxis": null, 
+        "Type": "PlotConfig"
+    },
+    "Canvas_nMediumDeepJetB_nPVsGood": {
+        "Legend": "DefaultLegend", 
+        "Rebin": null, 
+        "XPixels": 1200, 
+        "Projection": null, 
+        "Title": "n_{PV}^{good} (4+ jets)", 
+        "YAxisTitle": "Events/bin", 
+        "Labels": [
+            "#it{l}#it{l} nB=2 nJ=4+", 
+            "#it{l}#it{l} nB=3 nJ=4+", 
+            "#it{l}#it{l} nB=4+ nJ=4+"
+        ], 
+        "YPixels": 1000, 
+        "DoMountainrange": true, 
+        "XAxisTitle": "n_{PV}^{good}", 
+        "DoRatio": true, 
+        "Coordinates": [], 
+        "Plots": [
+            "Plot_MergedChannelsJets_nMediumDeepJetB2___nPVsGood", 
+            "Plot_MergedChannelsJets_nMediumDeepJetB3___nPVsGood", 
+            "Plot_MergedChannelsJets_nMediumDeepJetB4+___nPVsGood"
+        ], 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "Type": "CanvasConfig", 
+        "doLogY": false
+    }, 
+    "DefaultCanvas": {
+        "XPixels": 800, 
+        "Title": "DefaultCanvasTitle", 
+        "Plots": null, 
+        "Margins": [
+            0.1, 
+            0.1, 
+            0.1, 
+            0.1
+        ], 
+        "DoRatio": false, 
+        "Type": "DefaultCanvas", 
+        "YPixels": 800, 
+        "DoMountainrange": false
+    }, 
+    "DefaultPlot": {
+        "Files": null, 
+        "Rebin": null, 
+        "RatioYMin": 0.0, 
+        "RatioYMax": 2.0, 
+        "Title": "DefaultPlotTitle", 
+        "Unblind": false, 
+        "Type": "DefaultPlot"
+    }
+}
