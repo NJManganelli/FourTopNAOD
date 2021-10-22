@@ -23,7 +23,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron2_eta"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -60,7 +60,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron1_eta"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -97,7 +97,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron_pfRelIso03_chg"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -134,7 +134,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron_pfRelIso03_all"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -171,7 +171,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet1_pt"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -208,7 +208,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet1_eta"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -245,7 +245,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet1_DeepJetB"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -282,7 +282,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet1_DeepJetB_sortedjet"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -319,7 +319,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet2_pt"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -356,7 +356,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet2_eta"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -393,7 +393,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet2_DeepJetB"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -430,7 +430,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet2_DeepJetB_sortedjet"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -467,7 +467,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet3_pt"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -504,7 +504,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet3_eta"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -541,7 +541,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet3_DeepJetB"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -579,7 +579,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet3_DeepJetB_sortedjet"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -616,7 +616,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet4_pt"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -653,7 +653,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet4_eta"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -690,7 +690,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet4_DeepJetB"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -728,7 +728,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet4_DeepJetB_sortedjet"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -765,7 +765,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nJet"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -802,7 +802,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nJet_MediumDeepJet"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -839,7 +839,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___MET_pt"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -876,7 +876,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___MET_phi"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -913,7 +913,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron2_pt"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -950,7 +950,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron1_pt"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -988,7 +988,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron_dz"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1026,7 +1026,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron_ip3d"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1063,7 +1063,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___MTofMETandEl"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1100,7 +1100,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___HT"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1137,7 +1137,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___H"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1174,7 +1174,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___HT2M"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1211,7 +1211,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___H2M"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1248,7 +1248,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___HTb"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1285,7 +1285,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___HTH"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1322,7 +1322,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___HTRat"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1359,7 +1359,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___dRbb"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1396,7 +1396,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___dRll"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1433,7 +1433,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nLooseFTAElectron"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1470,7 +1470,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nMediumFTAElectron"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1507,7 +1507,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nTightFTAElectron"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1544,7 +1544,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nLooseFTALepton"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1581,7 +1581,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nMediumFTALepton"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1618,7 +1618,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nTightFTALepton"
         ],
         "Labels": [
-            "ee Control Regions"
+            "ee Contol/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,

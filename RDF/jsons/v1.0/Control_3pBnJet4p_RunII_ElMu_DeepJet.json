@@ -5,7 +5,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -23,7 +23,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Muon1_eta"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -36,19 +36,19 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB3+_nJet4+___Muon2_eta": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron1_eta": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Muon2_eta": {
+    "Canvas_nMediumDeepJetB2p_Electron1_eta": {
         "Type": "CanvasConfig",
-        "Title": "Subleading Muon #eta (3+ DeepJet b tags)",
+        "Title": "Leading Electron #eta (3+ DeepJet b tags)",
         "Margins": [
             0.1,
             0.1,
@@ -57,16 +57,16 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB3+_nJet4+___Muon2_eta"
+            "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron1_eta"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
         "XPixels": 1200,
         "YPixels": 1000,
-        "XAxisTitle": "Subleading Muon #eta",
+        "XAxisTitle": "Leading Electron #eta",
         "YAxisTitle": "Events / bin",
         "Projection": null,
         "DoRatio": true,
@@ -79,7 +79,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -97,7 +97,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Muon_pfRelIso03_chg"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -116,7 +116,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -134,7 +134,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Muon_pfRelIso03_all"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -147,13 +147,87 @@
         "doLogY": false,
         "DoMountainrange": true
     },
+    "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron_pfRelIso03_chg": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "RunII___Control___3pBnJet4p.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_Electron_pfRelIso03_chg": {
+        "Type": "CanvasConfig",
+        "Title": "Electron pfRelIso03_chg (3+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron_pfRelIso03_chg"
+        ],
+        "Labels": [
+            "e#mu Control/Signal Regions"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "Electron pfRelIso03_chg",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron_pfRelIso03_all": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "RunII___Control___3pBnJet4p.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_Electron_pfRelIso03_all": {
+        "Type": "CanvasConfig",
+        "Title": "Electron pfRelIso03_all (3+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron_pfRelIso03_all"
+        ],
+        "Labels": [
+            "e#mu Control/Signal Regions"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "Electron pfRelIso03_all",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
     "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet1_pt": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -171,7 +245,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet1_pt"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -190,7 +264,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -208,7 +282,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet1_eta"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -227,7 +301,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -245,7 +319,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet1_DeepJetB"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -264,7 +338,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -282,7 +356,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet1_DeepJetB_sortedjet"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -301,7 +375,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -319,7 +393,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet2_pt"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -338,7 +412,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -356,7 +430,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet2_eta"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -375,7 +449,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -393,7 +467,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet2_DeepJetB"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -412,7 +486,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -430,7 +504,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet2_DeepJetB_sortedjet"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -449,7 +523,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -467,7 +541,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet3_pt"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -486,7 +560,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -504,7 +578,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet3_eta"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -523,7 +597,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -541,7 +615,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet3_DeepJetB"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -560,7 +634,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
 	"SetRangeUser": [-0.05, 0.50],
         "Projection": null,
         "Unblind": false
@@ -579,7 +653,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet3_DeepJetB_sortedjet"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -598,7 +672,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -616,7 +690,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet4_pt"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -635,7 +709,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -653,7 +727,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet4_eta"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -672,7 +746,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -690,7 +764,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet4_DeepJetB"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -709,7 +783,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
 	"SetRangeUser": [-0.05, 0.50],
         "Projection": null,
         "Unblind": false
@@ -728,7 +802,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Jet4_DeepJetB_sortedjet"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -747,7 +821,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -765,7 +839,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nJet"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -784,7 +858,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -802,7 +876,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nJet_MediumDeepJet"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -821,7 +895,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -839,7 +913,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___MET_pt"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -858,7 +932,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -876,7 +950,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___MET_phi"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -895,7 +969,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -913,7 +987,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Muon1_pt"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -932,7 +1006,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
 	"SetRangeUser": [-0.03, 0.03],
         "Unblind": false
@@ -951,7 +1025,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Muon_dz"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -970,7 +1044,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
 	"SetRangeUser": [-0.005, 0.05],
         "Projection": null,
         "Unblind": false
@@ -989,7 +1063,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___Muon_ip3d"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1008,7 +1082,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1026,7 +1100,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___MTofMETandMu"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1039,19 +1113,19 @@
         "doLogY": false,
         "DoMountainrange": true
     },
-    "Plot_HT500_nMediumDeepJetB3+_nJet4+___Muon2_pt": {
+    "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron1_pt": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Muon2_pt": {
+    "Canvas_nMediumDeepJetB2p_Electron1_pt": {
         "Type": "CanvasConfig",
-        "Title": "Subleading Muon p_{T} (3+ DeepJet b tags)",
+        "Title": "Leading Electron p_{T} (3+ DeepJet b tags)",
         "Margins": [
             0.1,
             0.1,
@@ -1060,10 +1134,10 @@
         ],
         "Coordinates": [],
         "Plots": [
-            "Plot_HT500_nMediumDeepJetB3+_nJet4+___Muon2_pt"
+            "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron1_pt"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1076,13 +1150,126 @@
         "doLogY": false,
         "DoMountainrange": true
     },
+    "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron_dz": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "RunII___Control___3pBnJet4p.root",
+	"SetRangeUser": [-0.03, 0.03],
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_Electron_dz": {
+        "Type": "CanvasConfig",
+        "Title": "Electron dz (3+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron_dz"
+        ],
+        "Labels": [
+            "e#mu Control/Signal Regions"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "Electron dz",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron_ip3d": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "RunII___Control___3pBnJet4p.root",
+	"SetRangeUser": [-0.005, 0.05],
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_Electron_ip3d": {
+        "Type": "CanvasConfig",
+        "Title": "Electron ip3d (3+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB3+_nJet4+___Electron_ip3d"
+        ],
+        "Labels": [
+            "e#mu Control/Signal Regions"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "ip3d",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB3+_nJet4+___MTofMETandEl": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": 5,
+        "Files": "RunII___Control___3pBnJet4p.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_MTofMETandEl": {
+        "Type": "CanvasConfig",
+        "Title": "MT(MET,e) (3+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB3+_nJet4+___MTofMETandEl"
+        ],
+        "Labels": [
+            "e#mu Control/Signal Regions"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "MT(MET,e) (GeV)",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
     "Plot_HT500_nMediumDeepJetB3+_nJet4+___HT": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 2,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1100,7 +1287,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___HT"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1119,7 +1306,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1137,7 +1324,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___H"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1156,7 +1343,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1174,7 +1361,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___HT2M"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1193,7 +1380,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1211,7 +1398,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___H2M"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1230,7 +1417,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1248,7 +1435,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___HTb"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1267,7 +1454,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1285,7 +1472,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___HTH"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1304,7 +1491,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1322,7 +1509,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___HTRat"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1341,7 +1528,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1359,7 +1546,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___dRbb"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1378,7 +1565,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": 5,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1396,7 +1583,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___dRll"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1415,7 +1602,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1433,7 +1620,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nLooseFTAMuon"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1452,7 +1639,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1470,7 +1657,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nMediumFTAMuon"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1489,7 +1676,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1507,7 +1694,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nTightFTAMuon"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1520,13 +1707,124 @@
         "doLogY": false,
         "DoMountainrange": true
     },
+    "Plot_HT500_nMediumDeepJetB3+_nJet4+___nLooseFTAElectron": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "RunII___Control___3pBnJet4p.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_nLooseFTAElectron": {
+        "Type": "CanvasConfig",
+        "Title": "Loose ID Electrons (3+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB3+_nJet4+___nLooseFTAElectron"
+        ],
+        "Labels": [
+            "e#mu Control/Signal Regions"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "Loose ID Electrons",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB3+_nJet4+___nMediumFTAElectron": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "RunII___Control___3pBnJet4p.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_nMediumFTAElectron": {
+        "Type": "CanvasConfig",
+        "Title": "Medium ID Electrons (3+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB3+_nJet4+___nMediumFTAElectron"
+        ],
+        "Labels": [
+            "e#mu Control/Signal Regions"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "Medium ID Electrons",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB3+_nJet4+___nTightFTAElectron": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "RunII___Control___3pBnJet4p.root",
+        "Projection": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_nTightFTAElectron": {
+        "Type": "CanvasConfig",
+        "Title": "Tight ID Electrons (3+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+            "Plot_HT500_nMediumDeepJetB3+_nJet4+___nTightFTAElectron"
+        ],
+        "Labels": [
+            "e#mu Control/Signal Regions"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "Tight ID Electrons",
+        "YAxisTitle": "Events / bin",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
     "Plot_HT500_nMediumDeepJetB3+_nJet4+___nLooseFTALepton": {
         "Type": "PlotConfig",
         "Title": "DefaultPlotTitle",
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1544,7 +1842,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nLooseFTALepton"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1563,7 +1861,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1581,7 +1879,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nMediumFTALepton"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,
@@ -1600,7 +1898,7 @@
         "Xaxis": null,
         "Yaxis": null,
         "Rebin": null,
-        "Files": "2017___Control___3pBnJet4p.root",
+        "Files": "RunII___Control___3pBnJet4p.root",
         "Projection": null,
         "Unblind": false
     },
@@ -1618,7 +1916,7 @@
             "Plot_HT500_nMediumDeepJetB3+_nJet4+___nTightFTALepton"
         ],
         "Labels": [
-            "#mu#mu Control/Signal Regions"
+            "e#mu Control/Signal Regions"
         ],
         "Legend": "DefaultLegend",
         "Rebin": null,

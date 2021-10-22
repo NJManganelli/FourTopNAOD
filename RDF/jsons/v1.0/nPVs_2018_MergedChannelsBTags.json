@@ -5,7 +5,7 @@
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
-        "Unblind": false, 
+        "Unblind": true, 
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
@@ -15,7 +15,7 @@
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
-        "Unblind": false, 
+        "Unblind": true, 
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
@@ -25,7 +25,7 @@
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
-        "Unblind": false, 
+        "Unblind": true, 
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
@@ -35,7 +35,7 @@
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
-        "Unblind": false, 
+        "Unblind": true, 
         "Xaxis": null, 
         "Type": "PlotConfig"
     }, 
@@ -45,7 +45,7 @@
         "Projection": null, 
         "Title": "DefaultPlotTitle", 
         "Yaxis": null, 
-        "Unblind": false, 
+        "Unblind": true, 
         "Xaxis": null, 
         "Type": "PlotConfig"
     },
