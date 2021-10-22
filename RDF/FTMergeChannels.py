@@ -19,7 +19,7 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 ROOT.gROOT.SetBatch(True)
 
-def main(analysisDirectory, era, variable, mergeCats="BTags", variableSet="HTOnly", categorySet="5x5", verbose=False):
+def main(analysisDirectory, era, variable, mergeCats="BTags", variableSet="HTOnly", categorySet="5x5", verbose=False, unblind=False):
     categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4', 'HT500_nMediumDeepJetB2_nJet5', 'HT500_nMediumDeepJetB2_nJet6',
                             'HT500_nMediumDeepJetB2_nJet7', 'HT500_nMediumDeepJetB2_nJet8+',
                             'HT500_nMediumDeepJetB3_nJet4', 'HT500_nMediumDeepJetB3_nJet5', 'HT500_nMediumDeepJetB3_nJet6',
@@ -86,7 +86,7 @@ def main(analysisDirectory, era, variable, mergeCats="BTags", variableSet="HTOnl
     mergingName = "FailedToParseMergingName"
     for key in keys:
         mera, msample, mchannel, mwindow, mcategory, mvariable, msyst = key.split("___")
-        if mvariable not in [variable, variable + "Unweighted"] or mera != era or mcategory not in categoriesOfInterest:
+        if mvariable not in [variable, variable + "Unweighted"] or mera != era or mcategory.replace("BLIND", "") not in categoriesOfInterest:
             continue
         if mergeCats.lower() == "btags":
             #this is the category that is UNMERGED: nJet
@@ -119,7 +119,11 @@ def main(analysisDirectory, era, variable, mergeCats="BTags", variableSet="HTOnl
             print("Writing results for {}".format(msample))
             for mvariable, subsubsubmerge in subsubmerge.items():
                 for msyst, subsubsubsubmerge in tqdm.tqdm(subsubsubmerge.items()):
-                    for mcat, subsubsubsubsubmerge in subsubsubsubmerge.items():
+                    for mcatRaw, subsubsubsubsubmerge in subsubsubsubmerge.items():
+                        if unblind:
+                            mcat = mcatRaw.replace("BLIND", "")
+                        else:
+                            mcat = mcatRaw
                         if mergeCats.lower() == "btags":    
                             mergeName = "___".join([mera, msample, "All", "ZWindow", "MergedChannelsBTags_" + mcat, mvariable, msyst])
                         elif mergeCats.lower() == "jets":
@@ -137,7 +141,7 @@ def main(analysisDirectory, era, variable, mergeCats="BTags", variableSet="HTOnl
                                     hist = rootobj.Clone(mergeName)
                                 else:
                                     hist.Add(rootobj)
-                        if blind:
+                        if blind and not unblind:
                             for bin in range(hist.GetNbinsX() + 2):
                                 hist.SetBinContent(bin, 0)
                                 hist.SetBinError(bin, 0)
@@ -156,7 +160,7 @@ if __name__ == '__main__':
     parser.add_argument('--variable', dest='variable', type=str, default="HT", required=True,
                         help='Variable to be merged across channels and BTag categories')
     parser.add_argument('--varSet', '--variableSet', dest='variableSet', action='store',
-                        type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study'], default='HTOnly',
+                        type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study', 'nPVs'], default='HTOnly',
                         help='Variable set to include in filling templates')
     parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
                         type=str, choices=['5x5', '5x3', '5x1', '2BnJet4p', 'FullyInclusive', 'BackgroundDominant'], default='5x5',
@@ -165,6 +169,8 @@ if __name__ == '__main__':
                         help='Produce the $ERA___MergedChannels$MERGE_$VAR.root file in Combine/All subdirectory, where $MERGE = BTags, Jets, BTagsJets')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Enable more verbose output during actions')
+    parser.add_argument('--unblind', dest='unblind', action='store_true',
+                        help='Unblind any data flagged with BLIND in the category name')
 
     #Parse the arguments
     args = parser.parse_args()
@@ -173,4 +179,4 @@ if __name__ == '__main__':
     dateToday = datetime.date.today().strftime("%b-%d-%Y")
     analysisDir = args.analysisDirectory.replace("$USER", uname).replace("$U", uinitial).replace("$DATE", dateToday)
     verbose = args.verbose
-    main(analysisDir, era=args.era, variable=args.variable, mergeCats=args.merge, variableSet=args.variableSet, categorySet=args.categorySet, verbose=verbose)
+    main(analysisDir, era=args.era, variable=args.variable, mergeCats=args.merge, variableSet=args.variableSet, categorySet=args.categorySet, verbose=verbose, unblind=args.unblind)
