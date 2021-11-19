@@ -1199,6 +1199,17 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
         z.append(("FTAJet{pf}_phi".format(pf=postfix), "Jet_phi[{jm}]".format(jm=jetMask)))
         z.append(("FTAJet{pf}_mass".format(pf=postfix), "{jms}[{jm}]".format(jms=jetMass, jm=jetMask)))
         z.append(("FTAJet{pf}_jetId".format(pf=postfix), "Jet_jetId[{jm}]".format(jm=jetMask)))
+        z.append(("FTAJet{pf}_nConstituents".format(pf=postfix), "Jet_nConstituents[{jm}]".format(jm=jetMask)))
+        z.append(("FTAJet{pf}_muEF".format(pf=postfix), "Jet_muEF[{jm}]".format(jm=jetMask)))
+        z.append(("FTAJet{pf}_chEmEF".format(pf=postfix), "Jet_chEmEF[{jm}]".format(jm=jetMask)))
+        z.append(("FTAJet{pf}_chHEF".format(pf=postfix), "Jet_chHEF[{jm}]".format(jm=jetMask)))
+        z.append(("FTAJet{pf}_neEmEF".format(pf=postfix), "Jet_neEmEF[{jm}]".format(jm=jetMask)))
+        z.append(("FTAJet{pf}_neHEF".format(pf=postfix), "Jet_neHEF[{jm}]".format(jm=jetMask)))
+        z.append(("FTAJet{pf}_chFPV0EF".format(pf=postfix), "Jet_chFPV0EF[{jm}]".format(jm=jetMask)))
+        z.append(("FTAJet{pf}_chFPV1EF".format(pf=postfix), "Jet_chFPV1EF[{jm}]".format(jm=jetMask)))
+        z.append(("FTAJet{pf}_chFPV2EF".format(pf=postfix), "Jet_chFPV2EF[{jm}]".format(jm=jetMask)))
+        z.append(("FTAJet{pf}_chFPV3EF".format(pf=postfix), "Jet_chFPV3EF[{jm}]".format(jm=jetMask)))
+        z.append(("FTAJet{pf}_puIdDisc".format(pf=postfix), "Jet_puIdDisc[{jm}]".format(jm=jetMask)))
         z.append(("FTAJet{pf}_puId".format(pf=postfix), "Jet_puId[{jm}]".format(jm=jetMask)))
         if isData == False:
             z.append(("FTAJet{pf}_genJetIdx".format(pf=postfix), "Jet_genJetIdx[{jm}]".format(jm=jetMask)))
@@ -1210,6 +1221,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
                       "}}"\
                       "return temp;".format(pf=postfix)))
             z.append(("nFTAJet{pf}_genMatched".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_genJetIdx[FTAJet{pf}_genJetIdx >= 0].size())".format(pf=postfix)))
+            z.append(("nFTAJet{pf}_nonGenMatched".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_genJetIdx[FTAJet{pf}_genJetIdx < 0].size())".format(pf=postfix)))
             z.append(("nFTAJet{pf}_puIdLoose".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_genJetIdx[(FTAJet{pf}_puId >= 4 || FTAJet{pf}_pt >= 50)].size())".format(pf=postfix)))
             z.append(("nFTAJet{pf}_genMatched_puIdLoose".format(pf=postfix), "static_cast<Int_t>(FTAJet{pf}_genJetIdx[FTAJet{pf}_genJetIdx >= 0 && (FTAJet{pf}_puId >= 4 || FTAJet{pf}_pt >= 50)].size())".format(pf=postfix)))
         z.append(("FTAJet{pf}_DeepCSVB".format(pf=postfix), "Jet_btagDeepB[{jm}]".format(jm=jetMask)))
@@ -2452,6 +2464,26 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                             "FTALepton2_eta",
     ]
     HTOnlyTemplates = ["HT{bpf}",]
+    nPVGoodTemplates = ["PV_npvsGood",]
+    nTruePileupTemplates = ["Pileup_nTrueInt"]
+    PileupTemplates = ["FTAJet{bpf}_nConstituents",
+                       "FTAJet{bpf}_muEF",
+                       "FTAJet{bpf}_chEmEF",
+                       "FTAJet{bpf}_chHEF",
+                       "FTAJet{bpf}_neEmEF",
+                       "FTAJet{bpf}_neHEF",
+                       "FTAJet{bpf}_chFPV0EF",
+                       "FTAJet{bpf}_chFPV1EF",
+                       "FTAJet{bpf}_chFPV2EF",
+                       "FTAJet{bpf}_chFPV3EF",
+                       "FTAJet{bpf}_puIdDisc",
+                       'fixedGridRhoFastjetAll',
+                       'fixedGridRhoFastjetCentral',
+                       'fixedGridRhoFastjetCentralCalo',
+                       'fixedGridRhoFastjetCentralChargedPileUp',
+                       'fixedGridRhoFastjetCentralNeutral',
+                       'nFTAJet{bpf}_genMatched',
+                       'nFTAJet{bpf}_nonGenMatched']
     WeightStudyTemplates = ["weightLogAbsoluteRelative{spf}",]
     if channel == "MuMu":
         TriggerStudyTemplates += ["FTAMuon1_pt",
@@ -2533,6 +2565,12 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
         combineHistoTemplate = ResolutionStudyTemplates
     elif variableSet == "WeightStudy":
         combineHistoTemplate = WeightStudyTemplates
+    elif variableSet == "nPVs":
+        combineHistoTemplate = nPVGoodTemplates
+    elif variableSet == "nTruePileup":
+        combineHistoTemplate = nTruePileupTemplates
+    elif variableSet == "Pileup":
+        combineHistoTemplate = PileupTemplates
     elif variableList is not None:
         combineHistoTemplate = variableList
     else:
@@ -2848,6 +2886,61 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                              decayChannel, 
                              None, 
                              "nMedium{tag}3+".format(tag=tagger, bpf=branchpostfix), 
+                             None)
+                        )
+
+                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                            ("nFTAJet{bpf} >= 4".format(bpf=branchpostfix), 
+                             "4+ Jets ({bpf})".format(bpf=branchpostfix),
+                             eraAndSampleName, 
+                             decayChannel, 
+                             None, 
+                             None, 
+                             "nJet4+".format(bpf=branchpostfix)))
+                    if categorySet == "nBTag":
+                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                            ("nMedium{tag}{bpf} == 0".format(tag=tagger, bpf=branchpostfix), 
+                             "0 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                             eraAndSampleName, 
+                             decayChannel, 
+                             None, 
+                             "nMedium{tag}0".format(tag=tagger, bpf=branchpostfix), 
+                             None)
+                        )
+                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                            ("nMedium{tag}{bpf} == 1".format(tag=tagger, bpf=branchpostfix), 
+                             "1 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                             eraAndSampleName, 
+                             decayChannel, 
+                             None, 
+                             "nMedium{tag}1".format(tag=tagger, bpf=branchpostfix), 
+                             None)
+                        )
+                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                            ("nMedium{tag}{bpf} == 2".format(tag=tagger, bpf=branchpostfix), 
+                             "2 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                             eraAndSampleName, 
+                             decayChannel, 
+                             None, 
+                             "nMedium{tag}2".format(tag=tagger, bpf=branchpostfix), 
+                             None)
+                        )
+                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                            ("nMedium{tag}{bpf} == 3".format(tag=tagger, bpf=branchpostfix), 
+                             "3 nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                             eraAndSampleName, 
+                             decayChannel, 
+                             None, 
+                             "nMedium{tag}3".format(tag=tagger, bpf=branchpostfix), 
+                             None)
+                        )
+                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                            ("nMedium{tag}{bpf} >= 4".format(tag=tagger, bpf=branchpostfix), 
+                             "4+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),
+                             eraAndSampleName, 
+                             decayChannel, 
+                             None, 
+                             "nMedium{tag}4+".format(tag=tagger, bpf=branchpostfix), 
                              None)
                         )
 
@@ -3256,6 +3349,12 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                                                                              .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                              ";H_{T};H_{T}-H_{T}^{Gen}", 300,500,2000, 100,-100,100), "HT{bpf}".format(bpf=branchpostfix),
                                                                             "HTminusGenMatchedHT{bpf}".format(bpf=branchpostfix), wgtVar))
+                        defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___nJetGenMatchedvnJet{hpf}"\
+                                                                             .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                             "", 12,0,12, 12,0,12), "n{fj}".format(fj=fillJet), "n{fj}_genMatched".format(fj=fillJet), wgtVar))
+                        defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___nJetNonGenMatchedvnJet{hpf}"\
+                                                                             .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                             "", 12,0,12, 12,0,12), "n{fj}".format(fj=fillJet), "n{fj}_nonGenMatched".format(fj=fillJet), wgtVar))
                     if not isWeightVariation:
                         defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HTUnweighted{hpf}"\
                                                                         .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
@@ -3264,7 +3363,63 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___weightLogAbsoluteRelative{hpf}"\
                                                                         .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                              "", 48, -6, 6), "weightLogAbsoluteRelative{spf}".format(spf=syspostfix)))
-                        
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTAJet_puIdDisc{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 10,-1,1), "FTAJet{bpf}_puIdDisc".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTAJet_nConstituents{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 10,0,80), "FTAJet{bpf}_nConstituents".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTAJet_muEF{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 10,0,1.0), "FTAJet{bpf}_muEF".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTAJet_chEmEF{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 10,0,1.0), "FTAJet{bpf}_chEmEF".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTAJet_chHEF{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 10,0,1.0), "FTAJet{bpf}_chHEF".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTAJet_neEmEF{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 10,0,1.0), "FTAJet{bpf}_neEmEF".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTAJet_neHEF{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 10,0,1.0), "FTAJet{bpf}_neHEF".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTAJet_chFPV0EF{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 10,0,1.0), "FTAJet{bpf}_chFPV0EF".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTAJet_chFPV1EF{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 10,0,1.0), "FTAJet{bpf}_chFPV1EF".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTAJet_chFPV2EF{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 10,0,1.0), "FTAJet{bpf}_chFPV2EF".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTAJet_chFPV3EF{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 10,0,1.0), "FTAJet{bpf}_chFPV3EF".format(bpf=branchpostfix), wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___fixedGridRhoFastjetAllvPV_npvsGood{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 20,0,80, 20,0,50), "PV_npvsGood", "fixedGridRhoFastjetAll", wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___fixedGridRhoFastjetCentralvPV_npvsGood{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 20,0,80, 20,0,50), "PV_npvsGood", "fixedGridRhoFastjetCentral", wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___fixedGridRhoFastjetCentralChargedPileUpvPV_npvsGood{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 20,0,40, 20,0,50), "PV_npvsGood", "fixedGridRhoFastjetCentralChargedPileUp", wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___fixedGridRhoFastjetAll{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 20,0,80), "fixedGridRhoFastjetAll", wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___fixedGridRhoFastjetCentral{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 20,0,80), "fixedGridRhoFastjetCentral", wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___fixedGridRhoFastjetCentralCalo{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 20,0,40), "fixedGridRhoFastjetCentralCalo", wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___fixedGridRhoFastjetCentralChargedPileUp{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 20,0,40), "fixedGridRhoFastjetCentralChargedPileUp", wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___fixedGridRhoFastjetCentralNeutral{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 20,0,20), "fixedGridRhoFastjetCentralNeutral", wgtVar))
                     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___H{hpf}"\
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                     "", 130,400,3000), "H{bpf}".format(bpf=branchpostfix), wgtVar))
@@ -3461,6 +3616,9 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                     # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg_vs_MET{hpf}"\
                     #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                     #                                                 ";pfRelIso03_chg;MET", 100, 0, 0.2, 100,30,1030), "FTAElectron{lpf}_pfRelIso03_chg", "fillMET_pt", wgtVar))
+                    defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___nPVsGood{hpf}"\
+                                                                    .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                         "", 100, 0, 100), "PV_npvsGood", wgtVar))
                     if isData == False:
                         defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_genMatched_puIdLoose{hpf}"\
                                                                         .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
@@ -3468,6 +3626,9 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___nJet_genMatched{hpf}"\
                                                                         .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                         "", 14, 0, 14), "n{fj}_genMatched".format(fj=fillJet), wgtVar))
+                        defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___nTruePileup{hpf}"\
+                                                                        .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                             "", 100, 0, 100), "Pileup_nTrueInt".format(fj=fillJet), wgtVar))
                         # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___test1{hpf}"
                         #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                         #                                                 ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAMuon{lpf}_pfRelIso03_all", "PV_npvsGood", wgtVar))
@@ -3477,9 +3638,9 @@ def fillHistos(input_df_or_nodes, splitProcess=False, sampleName=None, channel="
                         # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nTrueInttest{hpf}"
                         #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                         #                                                ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "FTAElectron{lpf}_pfRelIso03_all", "MET_pt_flat", wgtVar))
-                        defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nTrueInt{hpf}"\
-                                                                        .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
-                                                                        ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvsGood", wgtVar))
+                        # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nTrueInt{hpf}"\
+                        #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                        #                                                 ";nTrueInt;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nTrueInt", "PV_npvsGood", wgtVar))
                         # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_nPU{hpf}"\
                         #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                         #                                                 ";nPU;npvsGood", 150, 0, 150, 150, 0, 150), "Pileup_nPU", "PV_npvsGood", wgtVar))
@@ -5618,6 +5779,16 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                                 allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
                 #Inject the flat and flattened variables for saving in ntuples through the 'inputNtupleVariables'
                 #Split the process based on sample-specific flags in its vals dictionary, some of which was parsed above i.e. splitProcessConfig, inclusive...
+                if options.defines is not None:
+                    for define in options.defines:
+                        cut_var = define[:define.index("=")]
+                        cut_defn = define[define.index("=")+1:]
+                        the_def[name][lvl] = the_def[name][lvl].Define(cut_var, cut_defn)
+                if options.filters is not None:
+                    for ncut, cut in enumerate(options.filters):
+                        cut_name = cut[:cut.index("=")]
+                        cut_defn = cut[cut.index("=")+1:]
+                        the_def[name][lvl] = the_def[name][lvl].Filter(cut_defn, cut_name)
                 prePackedNodes = splitProcess(the_df[name][lvl], 
                                               splitProcess = splitProcessConfig,
                                               inputNtupleVariables=flatteningDict[name][lvl]["ntupleVariables"],
@@ -5944,13 +6115,13 @@ if __name__ == '__main__':
                                                                     'hadd-combine'],
                         help='analysis stage to be produced')
     parser.add_argument('--varSet', '--variableSet', dest='variableSet', action='store',
-                        type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study', 'TriggerStudy', 'ResolutionStudy', 'WeightStudy'], default='HTOnly',
-                        help='Variable set to include in filling templates')
+                        type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study', 'TriggerStudy', 'ResolutionStudy', 'WeightStudy', 'nPVs', 'Pileup', 'nTruePileup'], 
+                        default='HTOnly', help='Variable set to include in filling templates')
     parser.add_argument('--varList', '--variableList', dest='variableList', action='store', nargs='*',
                         type=str, default=None,
                         help='Variable list to include in filling templates, must include {bpf} if it is sensitive to JEC variations, e.g. HT{bpf}')
     parser.add_argument('--categorySet', '--categorySet', dest='categorySet', action='store',
-                        type=str, choices=['5x5', '5x3', '5x1', '2Bp', '2BnJet4p', '3pBnJet4p', 'SignalSensitive', 'FullyInclusive', 'BackgroundDominant'], default='5x3',
+                        type=str, choices=['5x5', '5x3', '5x1', '2Bp', '2BnJet4p', '3pBnJet4p', 'SignalSensitive', 'FullyInclusive', 'BackgroundDominant', 'nBTag'], default='5x3',
                         help='Variable set to include in filling templates')
     parser.add_argument('--systematicSet', dest='systematicSet', action='store', nargs='*',
                         type=str, choices=['ALL', 'nominal', 'pu', 'pf', 'btag', 'jerc', 'ps', 'rf',
@@ -6007,8 +6178,6 @@ if __name__ == '__main__':
                         help='path and name of the sample card(s) to be used')
     parser.add_argument('--systematics_cards', dest='systematics_cards', action='store', nargs='*', type=str,
                         help='path and name of the systematics card(s) to be used')
-    # parser.add_argument('--filter', dest='filter', action='store', type=str, default=None,
-    #                     help='string to filter samples while checking events or generating configurations')
     parser.add_argument('--redirector', dest='redir', action='store', type=str, nargs='?', default=None, const='root://cms-xrd-global.cern.ch/',
                         help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
     parser.add_argument('--recreateFileList', dest='recreateFileList', action='store_true',
@@ -6020,6 +6189,10 @@ if __name__ == '__main__':
     parser.add_argument('--report', dest='report', action='store_true',
                         help='Toggle the RDataFrame Filter Report')
     parser.add_argument('--noProgressBar', dest='noProgressBar', action='store_true', help='Toggle off the tqdm progress bars')
+    parser.add_argument('--define', dest='defines', action='append', type=str, default=None, #nargs='*'
+                        help='list of new variables with syntax variable_name=variable_definition, where both are valid C++ variable names and code, respectively. Wrap each individual define in single quotes to prevent shell parsing them as commands, i.e. \'nGoodMuons=return Sum(Muon_pt > 30 && Muon_looseId == true);\'')
+    parser.add_argument('--filter', dest='filters', action='append', type=str, default=None, #nargs='*'
+                        help='list of filters with syntax filter_name=filter_cut, where the former is any text and the latter is valid C++ code. Wrap each individual filter in single quotes to prevent shell parsing them as commands')
 
     #Parse the arguments
     args = parser.parse_args()
