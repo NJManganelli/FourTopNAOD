@@ -11,7 +11,6 @@ import pprint
 import math
 import numpy as np
 np.set_printoptions(precision=3, threshold=None, edgeitems=None, linewidth=120, suppress=None, nanstr=None, infstr=None, formatter=None, sign=None, floatmode=None, legacy=None)
-import root_numpy
 import array
 import json
 import copy
@@ -1394,6 +1393,52 @@ def json_loads_byteified(json_text):
 #     # if it's anything else, return it in its original form
 #     return data
 
+def uproot_hist_hist2array(pyroot_obj, flow=True):
+    intermediate = uproot.pyroot.from_pyroot(pyroot_obj).to_hist()
+    return np.copy(intermediate.values(flow=flow)), [np.copy(axis.edges) for axis in intermediate.axes]
+
+def root_numpy_hist2array(pyroot_obj, flow=True):
+    vals, edgesTup = root_numpy.hist2array(pyroot_obj, include_overflow=flow, copy=True, return_edges=True)
+    return vals, edgesTup
+
+def pyroot_hist2array(pyroot_obj, flow=True):
+    if not isinstance(pyroot_obj, (ROOT.TH1, ROOT.TProfile)):
+        raise NotImplementedError("Only 1-dimensional types supported for now")
+    start, end = (0, pyroot_obj.GetXaxis().GetNbins()+2) if flow else (1, pyroot_obj.GetXaxis().GetNbins()+1)
+    vals = []
+    edges = []
+    for x in range(start, end):
+        vals.append(pyroot_obj.GetBinContent(x))
+        if x > 0 and x < pyroot_obj.GetXaxis().GetNbins()+2:
+            edges.append(pyroot_obj.GetBinLowEdge(x))
+    return np.array(vals), [np.array(edges)]
+    
+try:
+    import root_numpy
+    wrapped_hist2array = root_numpy_hist2array
+except:
+    try:
+        import uproot
+        wrapped_hist2array = uproot_hist_hist2array
+    except:
+        wrapped_hist2array = pyroot_hist2array
+
+#prototyping the array2hist construction... but is it necessary?
+# h6 = Hist(hist.axis.Variable(root_numpy.hist2array(h3, return_edges=True)[1][0], label="x", flow=True))
+# >>> h6.view()[:] = root_numpy.hist2array(h3, return_edges=True, include_overflow=True)[0]
+# Traceback (most recent call last):
+#   File "<stdin>", line 1, in <module>
+# ValueError: could not broadcast input array from shape (7) into shape (5)
+# >>> h6.view(flow=True)[:] = root_numpy.hist2array(h3, return_edges=True, include_overflow=True)[0]
+# >>> h6
+# Hist(Variable([0, 1, 2, 3, 4, 5]), storage=Double()) # Sum: 1000.0
+# >>> hs.values(flow=True)
+# Traceback (most recent call last):
+#   File "<stdin>", line 1, in <module>
+# NameError: name 'hs' is not defined
+# >>> h6.values(flow=True)
+# array([  0., 692., 253.,  51.,   3.,   1.,   0.])
+
 def cartesianProductList(name_format="$NUM_$LET_$SYM", name_tuples=[("$NUM", ["1", "2"]), ("$LET", ["A", "B", "C"]), ("$SYM", ["*", "@"])]):
     """Take as input a string <name_format> and list of tuples <name_tuple> where a cartesian product of the tuples is formed.
     The tuples contain a key-string (also present in the name_format string) and value-list with the replacements to cycle through.
@@ -1791,7 +1836,7 @@ def addHists(inputHists, name, scaleArray = None, blind=False):
 
 # @profile(output_file="makeCategoryHists_profile.txt", sort_by="cumulative", lines_to_print=500, strip_dirs=True)
 def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systematic=None, rebin=None, setRangeUser=None, projection=None, 
-                      separator="___", nominalPostfix="nom", verbose=False, debug=False, pn=None, 
+                      profile=None, separator="___", nominalPostfix="nom", verbose=False, debug=False, pn=None, 
                       normalizeToNominal=False, smoothing=0, zeroingThreshold=50, differentialScale=False):
     """Function tailored to using a legendConfig to create histograms.
     
@@ -1939,6 +1984,26 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
                 else:
                     print("Error, projection not possible for input type in [histo_category: {} ]: {}".format(addHistoName, type(rebin)))
 
+            #do profiling, akin to projection
+            if profile == None:
+                pass
+            elif isinstance(profile, str):
+                pre_profile_name = retHists[sampleCat].GetName()
+                # if "ROOT.TH2" in str(type(retHists[sampleCat])):
+                if isinstance(retHists[sampleCat], ROOT.TH2):
+                    retHists[sampleCat].SetName(pre_profile_name + "_preProfile")
+                    if profile == "X":
+                        retHists[sampleCat] = retHists[sampleCat].ProfileX().ProjectionX(pre_profile_name)
+                    elif profile == "Y":
+                        retHists[sampleCat] = retHists[sampleCat].ProfileY().ProjectionX(pre_profile_name)
+                    else:
+                        print("Error, {} is not a valid profile axis for TH2".format(profile))
+                # elif "ROOT.TH3" in str(type(retHists[sampleCat])):
+                elif isinstance(retHists[sampleCat], ROOT.TH3):
+                    raise NotImplementedError("profile option not implemented for TH3")
+                else:
+                    print("Error, projection not possible for input type in [histo_category: {} ]: {}".format(addHistoName, type(rebin)))
+
             #Zero templates that are below the threshold for entries
             if 0 < retHists[sampleCat].GetEntries() < zeroingThreshold and "data" not in sampleCat.lower():
                 if systematic is None:
@@ -1986,6 +2051,12 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
             if config["Style"] == "Fill":
                 retHists[sampleCat].SetFillColor(thisFillColor)
                 retHists[sampleCat].SetLineColor(thisLineColor)
+                #hack for profiles...
+                if profile in ["Y", "X"]:
+                    retHists[sampleCat].SetMarkerStyle(config.get("MarkerStyle", 2))
+                    retHists[sampleCat].SetMarkerSize(0.3)
+                    retHists[sampleCat].SetMarkerColor(thisFillColor)
+                    retHists[sampleCat].SetLineColor(thisLineColor)
             elif config["Style"] == "FillAlpha":
                 retHists[sampleCat].SetFillColorAlpha(thisFillColor, config.get("Alpha", 0.5))
                 retHists[sampleCat].SetLineColor(thisLineColor)
@@ -2011,7 +2082,7 @@ def makeCategoryHists(histFile, histKeys, legendConfig, histNameCommon, systemat
 
 def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, systematic=None, nominalPostfix="nom", 
                         separator="___", orderByIntegral=True, orderReverse=False, rebin=None, setRangeUser=None, projection=None, 
-                        verbose=False, debug=False, pn=None, doLogY=False, smoothing=0, 
+                        profile=profile, verbose=False, debug=False, pn=None, doLogY=False, smoothing=0, 
                         normalizeToNominal=False, zeroingThreshold=50, differentialScale=False,
                         nominalCache=None,):
     """histFile is an open ROOT file containing histograms without subdirectories, legendConfig contains 'Categories'
@@ -2070,7 +2141,7 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
     filteredHistKeys = histKeys #[fkey for fkey in histKeys if histNameCommon in fkey]
     retDict["Categories/hists"], retDict["Categories/theUnfound"] = makeCategoryHists(histFile, filteredHistKeys, legendConfig, histNameCommon,
                                                                                       systematic=systematic, rebin=rebin, setRangeUser=setRangeUser, projection=projection,
-                                                                                      nominalPostfix=nominalPostfix, separator=separator,
+                                                                                      profile=profile, nominalPostfix=nominalPostfix, separator=separator,
                                                                                       verbose=verbose, debug=debug, pn=pn, normalizeToNominal=normalizeToNominal, 
                                                                                       smoothing=smoothing, zeroingThreshold=zeroingThreshold, differentialScale=differentialScale)
     if debug:
@@ -2139,11 +2210,14 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
                         #Assume Marker style
                         legendCode = "P"
                     #Add the legend entry
-                    leg.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
+                    if tup[1] not in [lx.GetLabel() for lx in leg.GetListOfPrimitives()]:
+                        leg.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
                     if (ntup % 2) == 0:
-                        leg1.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
+                        if tup[1] not in [lx.GetLabel() for lx in leg1.GetListOfPrimitives()]:
+                            leg1.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
                     else:
-                        leg2.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
+                        if tup[1] not in [lx.GetLabel() for lx in leg2.GetListOfPrimitives()]:
+                            leg2.AddEntry(tup[2], tup[1] + "(blind)" if "blind" in tup[2].GetName().lower() else tup[1], legendCode)
                 #Add the category histogram to the stack
                 retDict["Supercategories"][super_cat_name].Add(tup[2])
             #Acquire the stats for the finished stack and store it in the dictionary, but we only half-prepare this, since the histogram must be 'drawn' before a stats object is created
@@ -2175,7 +2249,6 @@ def makeSuperCategories(histFile, histKeys, legendConfig, histNameCommon, system
             retDict["Supercategories/hists"][super_cat_name] = retDict["Supercategories"][super_cat_name]#.GetListOfFunctions().FindObject("stats")
     #Modify the number of columns based on actual filled Categories
     nColumns = int(math.floor(math.sqrt(nFilledCategories)))
-           
     return retDict
 
 def makeStack_Prototype(histFile, histList=None, legendConfig=None, rootName=None, systematic=None, orderByIntegral=True):
@@ -2213,56 +2286,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                      unusedNormalizationUncertainties=[
                                            'OSDL_RunII_ttmuRFcorrelatedDown', 'OSDL_RunII_ttmuRFcorrelatedUp', 
                      ],
-                     smootheUncertainties=['OSDL_2016_jesTotalUp', 'OSDL_2016_jesTotalDown', 'OSDL_2016APV_jesTotalUp', 'OSDL_2016APV_jesTotalDown',
-                                           'OSDL_2017_jesTotalUp', 'OSDL_2017_jesTotalDown', 'OSDL_2018_jesTotalUp', 'OSDL_2018_jesTotalDown', 
-                                           'OSDL_RunII_ewkISRUp', 'OSDL_RunII_ewkISRDown', 'OSDL_RunII_ewkFSRUp', 'OSDL_RunII_ewkFSRDown', 
-                                           'OSDL_RunII_singletopISRUp', 'OSDL_RunII_singletopISRDown', 'OSDL_RunII_singletopFSRUp', 'OSDL_RunII_singletopFSRDown', 
-                                           'OSDL_RunII_ttVJetsISRUp', 'OSDL_RunII_ttVJetsISRDown', 'OSDL_RunII_ttVJetsFSRUp', 'OSDL_RunII_ttVJetsFSRDown', 
-                                           'OSDL_RunII_ttHISRUp', 'OSDL_RunII_ttHISRDown', 'OSDL_RunII_ttHFSRUp', 'OSDL_RunII_ttHFSRDown', 
-                                           'OSDL_RunII_ttultrarareISRUp', 'OSDL_RunII_ttultrarareISRDown', 'OSDL_RunII_ttultrarareFSRUp', 'OSDL_RunII_ttultrarareFSRDown', 
-                                           'OSDL_RunII_ttISRUp', 'OSDL_RunII_ttISRDown', 'OSDL_RunII_ttFSRUp', 'OSDL_RunII_ttFSRDown', 
-                                           'OSDL_RunII_ttttISRUp', 'OSDL_RunII_ttttISRDown', 'OSDL_RunII_ttttFSRUp', 'OSDL_RunII_ttttFSRDown', 
-                                           'OSDL_RunII_hdampUp', 'OSDL_RunII_hdampDown', 'OSDL_RunII_ueUp', 'OSDL_RunII_ueDown',
-                                           'OSDL_RunII_btagSF_shape_hfUp', 'OSDL_RunII_btagSF_shape_hfDown',
-                                           'OSDL_RunII_btagSF_shape_lfUp', 'OSDL_RunII_btagSF_shape_lfDown', 
-                                           'OSDL_RunII_btagSF_shape_cferr1Up', 'OSDL_RunII_btagSF_shape_cferr1Down',
-                                           'OSDL_RunII_btagSF_shape_cferr2Up', 'OSDL_RunII_btagSF_shape_cferr2Down', 
-                                           'OSDL_2017_btagSF_shape_hfstats1Up', 'OSDL_2017_btagSF_shape_hfstats1Down',
-                                           'OSDL_2017_btagSF_shape_hfstats2Up', 'OSDL_2017_btagSF_shape_hfstats2Down',
-                                           'OSDL_2017_btagSF_shape_lfstats1Up', 'OSDL_2017_btagSF_shape_lfstats1Down',
-                                           'OSDL_2017_btagSF_shape_lfstats2Up', 'OSDL_2017_btagSF_shape_lfstats2Down',
-                                           'OSDL_2018_btagSF_shape_hfstats1Up', 'OSDL_2018_btagSF_shape_hfstats1Down',
-                                           'OSDL_2018_btagSF_shape_hfstats2Up', 'OSDL_2018_btagSF_shape_hfstats2Down',
-                                           'OSDL_2018_btagSF_shape_lfstats1Up', 'OSDL_2018_btagSF_shape_lfstats1Down',
-                                           'OSDL_2018_btagSF_shape_lfstats2Up', 'OSDL_2018_btagSF_shape_lfstats2Down',
-                                           'OSDL_2016_jerUp', 'OSDL_2016_jerDown', 'OSDL_2016APV_jerUp', 'OSDL_2016APV_jerDown',
-                                           'OSDL_2017_jerUp', 'OSDL_2017_jerDown', 'OSDL_2018_jerUp', 'OSDL_2018_jerDown', 
-                                           'OSDL_RunII_ttmuRNomFDown', 'OSDL_RunII_ttmuRNomFUp', 'OSDL_RunII_ttmuFNomRDown', 'OSDL_RunII_ttmuFNomRUp', 
-                                           'OSDL_RunII_ttVJetsmuRNomFDown', 'OSDL_RunII_ttVJetsmuRNomFUp', 
-                                           'OSDL_RunII_ttVJetsmuFNomRDown', 'OSDL_RunII_ttVJetsmuFNomRUp', 
-                                           'OSDL_RunII_ttVJetsmuRFcorrelatedDown', 'OSDL_RunII_ttVJetsmuRFcorrelatedUp', 
-                                           'OSDL_RunII_singletopmuRNomFDown', 'OSDL_RunII_singletopmuRNomFUp', 
-                                           'OSDL_RunII_singletopmuFNomRDown', 'OSDL_RunII_singletopmuFNomRUp', 
-                                           'OSDL_RunII_singletopmuRFcorrelatedDown', 'OSDL_RunII_singletopmuRFcorrelatedUp', 
-                                           'OSDL_RunII_ttultrararemuRNomFDown', 'OSDL_RunII_ttultrararemuRNomFUp', 
-                                           'OSDL_RunII_ttultrararemuFNomRDown', 'OSDL_RunII_ttultrararemuFNomRUp', 
-                                           'OSDL_RunII_ttultrararemuRFcorrelatedDown', 'OSDL_RunII_ttultrararemuRFcorrelatedUp', 
-                                           'OSDL_RunII_ttHmuRNomFDown', 'OSDL_RunII_ttHmuRNomFUp', 'OSDL_RunII_ttHmuFNomRDown', 'OSDL_RunII_ttHmuFNomRUp', 
-                                           'OSDL_RunII_ttHmuRFcorrelatedDown', 'OSDL_RunII_ttHmuRFcorrelatedUp', 
-                                           'OSDL_RunII_ttttmuRNomFDown', 'OSDL_RunII_ttttmuRNomFUp', 'OSDL_RunII_ttttmuFNomRDown', 'OSDL_RunII_ttttmuFNomRUp', 
-                                           'OSDL_RunII_ttttmuRFcorrelatedDown', 'OSDL_RunII_ttttmuRFcorrelatedUp', 
-                                           'OSDL_2016_pileupUp', 'OSDL_2016_pileupDown', 'OSDL_2016APV_pileupUp', 'OSDL_2016APV_pileupDown',
-                                           'OSDL_2017_pileupUp', 'OSDL_2017_pileupDown', 'OSDL_2018_pileupUp', 'OSDL_2018_pileupDown', 
-                                           'OSDL_RunII_pdfUp', 'OSDL_RunII_pdfDown',
-                                           'OSDL_RunII_pdf1', 'OSDL_RunII_pdf2', 'OSDL_RunII_pdf3', 'OSDL_RunII_pdf4',
-                                           'OSDL_RunII_pdf5', 'OSDL_RunII_pdf6', 'OSDL_RunII_pdf7', 'OSDL_RunII_pdf8',
-                                           'OSDL_RunII_pdf9', 'OSDL_RunII_pdf10', 'OSDL_RunII_pdf11', 'OSDL_RunII_pdf12',
-                                           'OSDL_RunII_pdf13', 'OSDL_RunII_pdf14', 'OSDL_RunII_pdf15', 'OSDL_RunII_pdf16',
-                                           'OSDL_RunII_pdf17', 'OSDL_RunII_pdf18', 'OSDL_RunII_pdf19', 'OSDL_RunII_pdf20',
-                                           'OSDL_RunII_pdf21', 'OSDL_RunII_pdf22', 'OSDL_RunII_pdf23', 'OSDL_RunII_pdf24',
-                                           'OSDL_RunII_pdf25', 'OSDL_RunII_pdf26', 'OSDL_RunII_pdf27', 'OSDL_RunII_pdf28',
-                                           'OSDL_RunII_pdf29', 'OSDL_RunII_pdf30',
-                                       ],
+                     smootheUncertainties=[],
                      normalizeAllUncertaintiesForProcess=[],
 ):
     """Loop through a JSON encoded plotCard to draw plots based on root files containing histograms.
@@ -2372,8 +2396,11 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["subplots/channels"] = []
         CanCache["subplots/stats"] = []
         CanCache["subplots/rebins"] = []
+        CanCache["subplots/draw_override"] = []
+        CanCache["subplots/draw_extra"] = []
         CanCache["subplots/setrangeuser"] = []
         CanCache["subplots/projections"] = []
+        CanCache["subplots/profiles"] = []
         CanCache["subplots/labels"] = []
         CanCache["subplots/maxima"] = []
         CanCache["subplots/minima"] = []
@@ -2425,12 +2452,16 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 # CanCache["subplots/files/keys"].append([fkey for fkey in fileDictKeys[plotFileName] if subplot_variables[pn] in fkey and fkey.split(separator)[-2] == subplot_variables[pn]])
                 CanCache["subplots/files/keys"].append([fkey for fkey in fileDictKeys[plotFileName] if subplot_variables[pn] in fkey and subplot_categories[pn] in fkey])
                 if len(CanCache["subplots/files/keys"][-1]) < 1:
-                    raise RuntimeError("No matching keys found for subplot variables {} and categories {}".format(subplot_variables[pn], subplot_categories[pn]))
+                    raise RuntimeError("No matching keys found for subplot variables {} and categories {}, some available keys: {}"\
+                                       .format(subplot_variables[pn], subplot_categories[pn], fileDictKeys[plotFileName][0:min(10, len(fileDictKeys[plotFileName]))]))
             else:
                 raise RuntimeError("File not available, was it stored in a list or something?")
             CanCache["subplots/rebins"].append(subplot_dict.get("Rebin"))
+            CanCache["subplots/draw_extra"].append(subplot_dict.get("Draw_extra", False))
+            CanCache["subplots/draw_override"].append(subplot_dict.get("Draw", False))
             CanCache["subplots/setrangeuser"].append(subplot_dict.get("SetRangeUser", can_dict.get("SetRangeUser", None)))
             CanCache["subplots/projections"].append(subplot_dict.get("Projection"))
+            CanCache["subplots/profiles"].append(subplot_dict.get("Profile", None))
             CanCache["subplots/stringintegrals"].append(collections.OrderedDict())
             CanCache["subplots/integrals"].append(collections.OrderedDict())
             #Call makeSuperCategories with the very same file [pn] referenced, plus the legendConfig
@@ -2438,9 +2469,11 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             CanCache["subplots/supercategories"].append(makeSuperCategories(CanCache["subplots/files"][pn], CanCache["subplots/files/keys"][pn], legendConfig, nice_name, 
                                                                             systematic=None, orderByIntegral=True, orderReverse=orderReverse, 
                                                                             rebin=CanCache["subplots/rebins"][pn], setRangeUser=CanCache["subplots/setrangeuser"][pn],
-                                                                            projection=CanCache["subplots/projections"][pn], 
+                                                                            projection=CanCache["subplots/projections"][pn], profile=CanCache["subplots/profiles"][pn],
                                                                             nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, debug=False, pn=pn, doLogY=doLogY,
-                                                                            normalizeToNominal=False, smoothing=0, zeroingThreshold=zeroingThreshold, differentialScale=differentialScale))
+                                                                            normalizeToNominal=False, smoothing=0, zeroingThreshold=zeroingThreshold, 
+                                                                            differentialScale=differentialScale)
+            )
             #This is not sufficient for skipping undone histograms
             # if len(list(CanCache["subplots/supercategories"][pn]['Supercategories/hists'].values())) == 0:
             #     print("No histograms found for '{}', skipping".format(nice_name))
@@ -2485,7 +2518,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     if "data" in supercategory.lower(): continue
                     histoArrays = [(scHisto.GetBinErrorLow(x), scHisto.GetBinErrorUp(x)) for x in range(nBins + 2)]
                     histDrawSystematicNom[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematic_" + "nom")
-                    npNominal[pn][supercategory], edgesTuple = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=True)
+                    npNominal[pn][supercategory], edgesTuple = wrapped_hist2array(scHisto, flow=True)
                     # npValues[pn][supercategory] = np.zeros((nSysts + 2, nBins + 2), dtype=float)
                     npValues[pn][supercategory] = npNominal[pn][supercategory].reshape((1,nBins+2)) * np.ones_like(1.0, shape=(nSysts + 2, nBins + 2), dtype=float)
                     #npAddInQuads, npEnvelopes, npMasks contains various arrays for only getting positive entries, negative entries
@@ -2512,7 +2545,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     if "data" in category.lower(): continue
                     histoArrays = [(catHisto.GetBinErrorLow(x), catHisto.GetBinErrorUp(x)) for x in range(nBins + 2)]
                     #### histDrawSystematicNom[pn][category] = catHisto.Clone(catHisto.GetName() + "_drawSystematic_" + "nom")
-                    npNominal[pn][category], edgesTuple = root_numpy.hist2array(catHisto, include_overflow=True, copy=True, return_edges=True)
+                    npNominal[pn][category], edgesTuple = wrapped_hist2array(catHisto, flow=True)
                     npValues[pn][category] = npNominal[pn][category].reshape((1,nBins+2)) * np.ones_like(1.0, shape=(nSysts + 2, nBins + 2), dtype=float)
                     npAddInQuads[pn][category] = dict()
                     npEnvelopes[pn][category] = dict()
@@ -2562,6 +2595,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                                                                                       rebin=CanCache["subplots/rebins"][pn], 
                                                                                                       setRangeUser=CanCache["subplots/setrangeuser"][pn],
                                                                                                       projection=CanCache["subplots/projections"][pn], 
+                                                                                                      profile=CanCache["subplots/profiles"][pn],
                                                                                                       nominalPostfix=nominalPostfix, separator=separator, verbose=verbose, 
                                                                                                       debug=False, pn=pn, doLogY=doLogY,
                                                                                                       normalizeToNominal=normalizeToNominal, smoothing=smoothing, 
@@ -2632,7 +2666,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                 if categoryorsupercategory not in eA_CD:
                                     eA_CD[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs + "Down"]))
                                     eA_CD[categoryorsupercategory].Reset("ICESM")
-                        npValues[pn][categoryorsupercategory][nSyst, :] = root_numpy.hist2array(scHisto, include_overflow=True, copy=True, return_edges=False)
+                        npValues[pn][categoryorsupercategory][nSyst, :], _ = wrapped_hist2array(scHisto, flow=True)
                         if categoryorsupercategory in CanCache["subplots/supercategories/systematics"][syst][pn]['Supercategories/hists']:
                             if drawSystematic == syst.replace("Up", ""):
                                 histDrawSystematicUp[pn][categoryorsupercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematic_" + syst)
@@ -2864,13 +2898,15 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 if "tttt" in supercategory.lower() or "signal" in supercategory.lower(): continue
                 if pn == 0:
                     if ratioUncertainties:
-                        CanCache["subplots/supercategories"][0]["Legend"].AddEntry(handle['Supercategories/statErrors'][supercategory], "stat err", "F")
-                        CanCache["subplots/supercategories"][0]["Legend1"].AddEntry(handle['Supercategories/statErrors'][supercategory], "stat err", "F")
-                        CanCache["subplots/supercategories"][0]["Legend"].AddEntry(handle['Supercategories/statSystematicErrors'][supercategory], "stat+syst err", "F")
-                        CanCache["subplots/supercategories"][0]["Legend2"].AddEntry(handle['Supercategories/statSystematicErrors'][supercategory], "stat+syst err", "F")
+                        if "stat err" not in [x.GetLabel() for x in CanCache["subplots/supercategories"][0]["Legend"].GetListOfPrimitives()]:
+                            CanCache["subplots/supercategories"][0]["Legend"].AddEntry(handle['Supercategories/statErrors'][supercategory], "stat err", "F")
+                            CanCache["subplots/supercategories"][0]["Legend1"].AddEntry(handle['Supercategories/statErrors'][supercategory], "stat err", "F")
+                            CanCache["subplots/supercategories"][0]["Legend"].AddEntry(handle['Supercategories/statSystematicErrors'][supercategory], "stat+syst err", "F")
+                            CanCache["subplots/supercategories"][0]["Legend2"].AddEntry(handle['Supercategories/statSystematicErrors'][supercategory], "stat+syst err", "F")
                     if histogramUncertainties:
-                        CanCache["subplots/supercategories"][0]["Legend"].AddEntry(handle['Supercategories/systematicErrors'][supercategory], "syst err", "F")
-                        CanCache["subplots/supercategories"][0]["Legend2"].AddEntry(handle['Supercategories/systematicErrors'][supercategory], "syst err", "F")
+                        if "syst err" not in [x.GetLabel() for x in CanCache["subplots/supercategories"][0]["Legend"].GetListOfPrimitives()]:
+                            CanCache["subplots/supercategories"][0]["Legend"].AddEntry(handle['Supercategories/systematicErrors'][supercategory], "syst err", "F")
+                            CanCache["subplots/supercategories"][0]["Legend2"].AddEntry(handle['Supercategories/systematicErrors'][supercategory], "syst err", "F")
 
             CanCache["canvas/upperPads"][pn].cd()
             if doLogY:
@@ -2922,7 +2958,12 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     else: #handle TH2, graphs?
                         pass
                 #Draw SAME if not the first item, using options present in legend configuration
-                draw_command = legendConfig["Supercategories"][super_cat_name]["Draw"]
+                if isinstance(CanCache["subplots/draw_override"][pn], str):
+                    draw_command = CanCache["subplots/draw_override"][pn]
+                else:
+                    draw_command = legendConfig["Supercategories"][super_cat_name]["Draw"]
+                if isinstance(CanCache["subplots/draw_extra"][pn], str):
+                    draw_command += " " + CanCache["subplots/draw_extra"][pn]
                 if dn > 0:
                     draw_command += " SAME"
                 #Append the drawable to a list for later modification of the maxima/minima... messy for deletion if that has to be done, though!
@@ -2951,8 +2992,25 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 #Give up on setting the titles here... draw them 'by hand'
                 drawable.SetTitle(";;{}".format(""))
 
+                #Set the color
+                color_input = legendConfig["Supercategories"][super_cat_name].get("Color", None)
+                if color_input is not None:
+                    if isinstance(color_input, int): 
+                        color = ROOT.TColor.GetColor(int(color_input))
+                    elif isinstance(color_input, str): 
+                        color = ROOT.TColor.GetColor(color_input)
+                    elif isinstance(color_input, list):
+                        color = ROOT.TColor.GetColor(*color_input)
+                    else:
+                        raise ValueError("Unhandled process color encoding: type {}, value {}".format(type(color_input), color_input))
+                    if not isinstance(drawable, ROOT.THStack):
+                        drawable.SetLineColor(color)
+                        drawable.SetMarkerColor(color)
+
                 #increment our counter
                 if "data" in super_cat_name.lower() and "blind" in drawable.GetName().lower() and subplot_dict.get("Unblind", False) == False:
+                    pass
+                elif not isinstance(drawable, (ROOT.TH1, ROOT.TH2, ROOT.TH3, ROOT.TProfile, ROOT.THStack, ROOT.TGraph)):
                     pass
                 else:
                     if drawNormalized and not isinstance(drawable, ROOT.THStack):
@@ -3003,6 +3061,32 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 offsetText = 0
             #Legends are only created in the dictionary for pad 0, so do not lookup pn but [0]
             if drawLegends:
+                #######fix legends after-the-fect
+                nl_entries = [x for x in CanCache["subplots/supercategories"][0]["Legend"].GetListOfPrimitives()]
+                nl_left = 0.1
+                nl_right = 0.9
+                if doLogY:
+                    #Plan to paint it in the leftmost pads, in the bulk of the histogram
+                    nl_top = 0.45
+                else:
+                    #plan to paint it above the lower yield histograms of the rightmost pads
+                    nl_top = 0.7
+                nl_bottom = nl_top - len(nl_entries) * 0.07 #4 = number of samples in this legend
+                # newLegend = ROOT.TLegend(nl_left, nl_bottom, nl_right, nl_top)
+                # for x in nl_entries:
+                #     newLegend.AddEntry(x)
+                temp = CanCache["subplots/supercategories"][0]["Legend"]
+
+                # temp.SetX1(nl_left)
+                # temp.SetX2(nl_right)
+                # temp.SetY1(nl_bottom)
+                # temp.SetY2(nl_top)
+
+                # CanCache["subplots/supercategories"][0]["Legend"].SetX1NDC(nl_left)
+                # CanCache["subplots/supercategories"][0]["Legend"].SetX1NDC(nl_right)
+                #######
+                
+                
                 if doLogY:
                     if nXPads == 1:
                         CanCache["subplots/supercategories"][0]["Legend"].Draw()
@@ -3044,7 +3128,15 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     num_hist = CanCache["subplots/supercategories"][pn]["Supercategories/hists"].get(num)
                     den = aRatio["Denominator"]
                     den_hist = CanCache["subplots/supercategories"][pn]["Supercategories/hists"].get(den)
-                    color = aRatio.get("Color", None)
+                    color_input = aRatio.get("Color", 1)
+                    if isinstance(color_input, int): 
+                        color = ROOT.TColor.GetColor(int(color_input))
+                    elif isinstance(color_input, str): 
+                        color = ROOT.TColor.GetColor(color_input)
+                    elif isinstance(color_input, list):
+                        color = ROOT.TColor.GetColor(*color_input)
+                    else:
+                        raise ValueError("Unhandled process color encoding: type {}, value {}".format(type(color_input), color_input))
                     style = aRatio.get("Style", None)
                     markerStyle = aRatio.get("MarkerStyle", 20)
                     alpha = aRatio.get("Alpha", 0.5)
@@ -3064,7 +3156,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     ratio_draw_command = aRatio.get("Draw", "PXE1")
                     if rdn > 0:
                         ratio_draw_command += " SAME"
-                    CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].Draw(ratio_draw_command)
+                    if isinstance(CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"], (ROOT.TH1, ROOT.TH2, ROOT.TH3, ROOT.TProfile, ROOT.THStack, ROOT.TGraph)):
+                        CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].Draw(ratio_draw_command)
                     #Fix label sizes
                     if "SAME" not in ratio_draw_command:
                         for bin in range(CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].GetXaxis().GetNbins()):
@@ -3090,7 +3183,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         #     if isinstance(scGraph, (ROOT.TGraphAsymmErrors)):
                         #         scGraph.Draw("2")
                         #         redraw = True
-                    if redraw:
+                    if redraw and isinstance(CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"], (ROOT.TH1, ROOT.TH2, ROOT.TH3, ROOT.TProfile, ROOT.THStack, ROOT.TGraph)):
                         CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].Draw(ratio_draw_command + "SAME")
                         
                     if den in histDrawSystematicDownRatio[pn].keys():
@@ -3301,7 +3394,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     #Remove negative weight bins if the option is selected
                     normalizationDict[combHist.GetName()] = combHist.Integral()
                     if removeNegativeBins:
-                        negativeBins = np.nonzero(root_numpy.hist2array(hist, include_overflow=True, copy=True, return_edges=False) < 0)[0]
+                        negativeBins = np.nonzero(wrapped_hist2array(hist, flow=True)[0] < 0)[0]
                         for bin in negativeBins:
                             combHist.SetBinContent(int(bin), 0)
                             combHist.SetBinError(int(bin), 0)
@@ -3353,7 +3446,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         #Remove negative weight bins if the option is selected
                         systIntegral = combHist.Integral()
                         if removeNegativeBins:
-                            negativeBins = np.nonzero(root_numpy.hist2array(combHist, include_overflow=True, copy=True, return_edges=False) < 0)[0]
+                            negativeBins = np.nonzero(wrapped_hist2array(combHist, flow=True)[0] < 0)[0]
                             for bin in negativeBins:
                                 combHist.SetBinContent(int(bin), 0)
                                 combHist.SetBinError(int(bin), 0)
@@ -3410,7 +3503,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             if combineCards:
                 with open(os.path.join(analysisDir, "Combine", "Counts_"+era+"_"+channel+"_"+can_var+".json"), "w") as countfile: 
                     countfile.write(json.dumps(combCounts, indent=4))
-                write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, can_var, list(combCounts.keys()), template="TTTT_templateV17.txt", counts=combCounts)
+                write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, can_var, list(combCounts.keys()), template="TTTT_templateV18.txt", counts=combCounts)
                 print("Wrote combine cards for {}".format(can_var))
         # cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
         # # print(cmd)
@@ -3550,7 +3643,7 @@ if __name__ == '__main__':
                         help='maximum relative uncertainty (sqrt(N)/N) per bin used as the criteria for merging, should be on unweighted histograms')
     parser.add_argument('-c', '--channel', dest='channel', action='store', type=str, default="ElMu", choices=['ElMu', 'ElEl', 'MuMu', 'ElEl_LowMET', 
                                                                                                               'ElEl_HighMET', 'MuMu_ElMu','MuMu_ElMu_ElEl', 
-                                                                                                              'All', 'Merged', 'DL', 'SL', 'AH'],
+                                                                                                              'All', 'Merged', 'DL', 'SL', 'AH', 'SameFlavor'],
                         help='Decay channel for opposite-sign dilepton analysis')
     parser.add_argument('--systematics_cards', dest='systematics_cards', action='store', nargs='*', type=str,
                         help='path and name of the systematics card(s) to be used')
@@ -3607,6 +3700,8 @@ if __name__ == '__main__':
                         help='Force LogY axis plotting')
     parser.add_argument('--forceWIP', dest='forceWIP', action='store_true',
                         help='Force Work In Progress header on plots')
+    parser.add_argument('--noSmoothing', dest='noSmoothing', action='store_true',
+                        help='Disable smoothing of systematics')
     parser.add_argument('--unblind', dest='unblind', action='store_true',
                         help='force unblinding of histograms')
     parser.add_argument('--drawNormalized', dest='drawNormalized', action='store_true',
@@ -3754,6 +3849,60 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
             for k, v in loadedPlotConfig.items():
                 if v.get("Type") == "CanvasConfig":
                     v["Label"] = "#bf{CMS} #it{Work In Progress}"
+
+        smootheUncertainties=['OSDL_2016_jesTotalUp', 'OSDL_2016_jesTotalDown', 'OSDL_2016APV_jesTotalUp', 'OSDL_2016APV_jesTotalDown',
+                              'OSDL_2017_jesTotalUp', 'OSDL_2017_jesTotalDown', 'OSDL_2018_jesTotalUp', 'OSDL_2018_jesTotalDown', 
+                              'OSDL_RunII_ewkISRUp', 'OSDL_RunII_ewkISRDown', 'OSDL_RunII_ewkFSRUp', 'OSDL_RunII_ewkFSRDown', 
+                              'OSDL_RunII_singletopISRUp', 'OSDL_RunII_singletopISRDown', 'OSDL_RunII_singletopFSRUp', 'OSDL_RunII_singletopFSRDown', 
+                              'OSDL_RunII_ttVJetsISRUp', 'OSDL_RunII_ttVJetsISRDown', 'OSDL_RunII_ttVJetsFSRUp', 'OSDL_RunII_ttVJetsFSRDown', 
+                              'OSDL_RunII_ttHISRUp', 'OSDL_RunII_ttHISRDown', 'OSDL_RunII_ttHFSRUp', 'OSDL_RunII_ttHFSRDown', 
+                              'OSDL_RunII_ttultrarareISRUp', 'OSDL_RunII_ttultrarareISRDown', 'OSDL_RunII_ttultrarareFSRUp', 'OSDL_RunII_ttultrarareFSRDown', 
+                              'OSDL_RunII_ttISRUp', 'OSDL_RunII_ttISRDown', 'OSDL_RunII_ttFSRUp', 'OSDL_RunII_ttFSRDown', 
+                              'OSDL_RunII_ttttISRUp', 'OSDL_RunII_ttttISRDown', 'OSDL_RunII_ttttFSRUp', 'OSDL_RunII_ttttFSRDown', 
+                              'OSDL_RunII_hdampUp', 'OSDL_RunII_hdampDown', 'OSDL_RunII_ueUp', 'OSDL_RunII_ueDown',
+                              'OSDL_RunII_btagSF_shape_hfUp', 'OSDL_RunII_btagSF_shape_hfDown',
+                              'OSDL_RunII_btagSF_shape_lfUp', 'OSDL_RunII_btagSF_shape_lfDown', 
+                              'OSDL_RunII_btagSF_shape_cferr1Up', 'OSDL_RunII_btagSF_shape_cferr1Down',
+                              'OSDL_RunII_btagSF_shape_cferr2Up', 'OSDL_RunII_btagSF_shape_cferr2Down', 
+                              'OSDL_2017_btagSF_shape_hfstats1Up', 'OSDL_2017_btagSF_shape_hfstats1Down',
+                              'OSDL_2017_btagSF_shape_hfstats2Up', 'OSDL_2017_btagSF_shape_hfstats2Down',
+                              'OSDL_2017_btagSF_shape_lfstats1Up', 'OSDL_2017_btagSF_shape_lfstats1Down',
+                              'OSDL_2017_btagSF_shape_lfstats2Up', 'OSDL_2017_btagSF_shape_lfstats2Down',
+                              'OSDL_2018_btagSF_shape_hfstats1Up', 'OSDL_2018_btagSF_shape_hfstats1Down',
+                              'OSDL_2018_btagSF_shape_hfstats2Up', 'OSDL_2018_btagSF_shape_hfstats2Down',
+                              'OSDL_2018_btagSF_shape_lfstats1Up', 'OSDL_2018_btagSF_shape_lfstats1Down',
+                              'OSDL_2018_btagSF_shape_lfstats2Up', 'OSDL_2018_btagSF_shape_lfstats2Down',
+                              'OSDL_2016_jerUp', 'OSDL_2016_jerDown', 'OSDL_2016APV_jerUp', 'OSDL_2016APV_jerDown',
+                              'OSDL_2017_jerUp', 'OSDL_2017_jerDown', 'OSDL_2018_jerUp', 'OSDL_2018_jerDown', 
+                              'OSDL_RunII_ttmuRNomFDown', 'OSDL_RunII_ttmuRNomFUp', 'OSDL_RunII_ttmuFNomRDown', 'OSDL_RunII_ttmuFNomRUp', 
+                              'OSDL_RunII_ttVJetsmuRNomFDown', 'OSDL_RunII_ttVJetsmuRNomFUp', 
+                              'OSDL_RunII_ttVJetsmuFNomRDown', 'OSDL_RunII_ttVJetsmuFNomRUp', 
+                              'OSDL_RunII_ttVJetsmuRFcorrelatedDown', 'OSDL_RunII_ttVJetsmuRFcorrelatedUp', 
+                              'OSDL_RunII_singletopmuRNomFDown', 'OSDL_RunII_singletopmuRNomFUp', 
+                              'OSDL_RunII_singletopmuFNomRDown', 'OSDL_RunII_singletopmuFNomRUp', 
+                              'OSDL_RunII_singletopmuRFcorrelatedDown', 'OSDL_RunII_singletopmuRFcorrelatedUp', 
+                              'OSDL_RunII_ttultrararemuRNomFDown', 'OSDL_RunII_ttultrararemuRNomFUp', 
+                              'OSDL_RunII_ttultrararemuFNomRDown', 'OSDL_RunII_ttultrararemuFNomRUp', 
+                              'OSDL_RunII_ttultrararemuRFcorrelatedDown', 'OSDL_RunII_ttultrararemuRFcorrelatedUp', 
+                              'OSDL_RunII_ttHmuRNomFDown', 'OSDL_RunII_ttHmuRNomFUp', 'OSDL_RunII_ttHmuFNomRDown', 'OSDL_RunII_ttHmuFNomRUp', 
+                              'OSDL_RunII_ttHmuRFcorrelatedDown', 'OSDL_RunII_ttHmuRFcorrelatedUp', 
+                              'OSDL_RunII_ttttmuRNomFDown', 'OSDL_RunII_ttttmuRNomFUp', 'OSDL_RunII_ttttmuFNomRDown', 'OSDL_RunII_ttttmuFNomRUp', 
+                              'OSDL_RunII_ttttmuRFcorrelatedDown', 'OSDL_RunII_ttttmuRFcorrelatedUp', 
+                              'OSDL_2016_pileupUp', 'OSDL_2016_pileupDown', 'OSDL_2016APV_pileupUp', 'OSDL_2016APV_pileupDown',
+                              'OSDL_2017_pileupUp', 'OSDL_2017_pileupDown', 'OSDL_2018_pileupUp', 'OSDL_2018_pileupDown', 
+                              'OSDL_RunII_pdfUp', 'OSDL_RunII_pdfDown',
+                              'OSDL_RunII_pdf1', 'OSDL_RunII_pdf2', 'OSDL_RunII_pdf3', 'OSDL_RunII_pdf4',
+                              'OSDL_RunII_pdf5', 'OSDL_RunII_pdf6', 'OSDL_RunII_pdf7', 'OSDL_RunII_pdf8',
+                              'OSDL_RunII_pdf9', 'OSDL_RunII_pdf10', 'OSDL_RunII_pdf11', 'OSDL_RunII_pdf12',
+                              'OSDL_RunII_pdf13', 'OSDL_RunII_pdf14', 'OSDL_RunII_pdf15', 'OSDL_RunII_pdf16',
+                              'OSDL_RunII_pdf17', 'OSDL_RunII_pdf18', 'OSDL_RunII_pdf19', 'OSDL_RunII_pdf20',
+                              'OSDL_RunII_pdf21', 'OSDL_RunII_pdf22', 'OSDL_RunII_pdf23', 'OSDL_RunII_pdf24',
+                              'OSDL_RunII_pdf25', 'OSDL_RunII_pdf26', 'OSDL_RunII_pdf27', 'OSDL_RunII_pdf28',
+                              'OSDL_RunII_pdf29', 'OSDL_RunII_pdf30',
+        ],
+        if args.noSmoothing:
+            smootheUncertainties=[]
+        
         resultsDict = loopPlottingJSON(loadedPlotConfig, era=args.era, channel=args.channel, systematicCards=args.systematics_cards,
                                        Cache=None, histogramDirectory=histogramDir, batchOutput=doBatch, drawSystematic=args.drawSystematic, drawLegends=args.drawLegends,
                                        drawNormalized=args.drawNormalized,
@@ -3761,6 +3910,7 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                                        pdfOutput=pdfOutput, combineOutput=combineOut, combineInputList=combineInputList,
                                        combineCards=combineCards,
                                        nominalPostfix=nominalPostfix, separator="___", lumi=lumi, useCanvasMax=useCanvasMax,
+                                       smootheUncertainties=smootheUncertainties,
                                        skipSystematics=skipSystematics, verbose=verb,
                                        zeroingThreshold=zeroingThreshold, differentialScale=differentialScale, histogramUncertainties=args.histogramUncertainties,
                                        ratioUncertainties=args.ratioUncertainties, orderReverse=args.orderReverse
