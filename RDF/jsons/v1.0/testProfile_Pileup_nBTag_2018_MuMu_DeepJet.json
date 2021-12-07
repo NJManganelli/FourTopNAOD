@@ -1,0 +1,236 @@
+{
+    "Plot_HT500_nMediumDeepJetB2_nJet4+___fixedGridRhoFastjetAllvPV_npvsGood": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "2018___Pileup___nBTag.root",
+        "Projection": null,
+        "Profile": "Y",
+	"Draw": "NOSTACK PE1",
+	"Draw_extra": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB3_nJet4+___fixedGridRhoFastjetAllvPV_npvsGood": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "2018___Pileup___nBTag.root",
+        "Projection": null,
+        "Profile": "Y",
+	"Draw": "NOSTACK PE1",
+	"Draw_extra": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB4+_nJet4+___fixedGridRhoFastjetAllvPV_npvsGood": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "2018___Pileup___nBTag.root",
+        "Projection": null,
+        "Profile": "Y",
+	"Draw": "NOSTACK PE1",
+	"Draw_extra": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_fixedGridRhoFastjetAll": {
+        "Type": "CanvasConfig",
+        "Title": "<#rho_{All}^{fixedGridFastJet}> (2+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+	    "Plot_HT500_nMediumDeepJetB2_nJet4+___fixedGridRhoFastjetAllvPV_npvsGood",
+	    "Plot_HT500_nMediumDeepJetB3_nJet4+___fixedGridRhoFastjetAllvPV_npvsGood",
+	    "Plot_HT500_nMediumDeepJetB4+_nJet4+___fixedGridRhoFastjetAllvPV_npvsGood"
+        ],
+        "Labels": [
+            "#mu#mu 2 Btags",
+            "#mu#mu 3 Btags",
+            "#mu#mu 4+ Btags"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "N_{PV}^{good}",
+        "YAxisTitle": "<#rho_{All}^{fixedGridFastJet}>",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4+___fixedGridRhoFastjetCentralvPV_npvsGood": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "2018___Pileup___nBTag.root",
+        "Projection": null,
+        "Profile": "Y",
+	"Draw": "NOSTACK PE1",
+	"Draw_extra": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB3_nJet4+___fixedGridRhoFastjetCentralvPV_npvsGood": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "2018___Pileup___nBTag.root",
+        "Projection": null,
+        "Profile": "Y",
+	"Draw": "NOSTACK PE1",
+	"Draw_extra": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB4+_nJet4+___fixedGridRhoFastjetCentralvPV_npvsGood": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "2018___Pileup___nBTag.root",
+        "Projection": null,
+        "Profile": "Y",
+	"Draw": "NOSTACK PE1",
+	"Draw_extra": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_fixedGridRhoFastjetCentral": {
+        "Type": "CanvasConfig",
+        "Title": "<#rho_{Central}^{fixedGridFastJet}> (2+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+	    "Plot_HT500_nMediumDeepJetB2_nJet4+___fixedGridRhoFastjetCentralvPV_npvsGood",
+	    "Plot_HT500_nMediumDeepJetB3_nJet4+___fixedGridRhoFastjetCentralvPV_npvsGood",
+	    "Plot_HT500_nMediumDeepJetB4+_nJet4+___fixedGridRhoFastjetCentralvPV_npvsGood"
+        ],
+        "Labels": [
+            "#mu#mu 2 Btags",
+            "#mu#mu 3 Btags",
+            "#mu#mu 4+ Btags"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "N_{PV}^{good}",
+        "YAxisTitle": "<#rho_{Central}^{fixedGridFastJet}>",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "Plot_HT500_nMediumDeepJetB2_nJet4+___fixedGridRhoFastjetCentralChargedPileUpvPV_npvsGood": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "2018___Pileup___nBTag.root",
+        "Projection": null,
+        "Profile": "Y",
+	"Draw": "NOSTACK PE1",
+	"Draw_extra": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB3_nJet4+___fixedGridRhoFastjetCentralChargedPileUpvPV_npvsGood": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "2018___Pileup___nBTag.root",
+        "Projection": null,
+        "Profile": "Y",
+	"Draw": "NOSTACK PE1",
+	"Draw_extra": null,
+        "Unblind": false
+    },
+    "Plot_HT500_nMediumDeepJetB4+_nJet4+___fixedGridRhoFastjetCentralChargedPileUpvPV_npvsGood": {
+        "Type": "PlotConfig",
+        "Title": "DefaultPlotTitle",
+        "Xaxis": null,
+        "Yaxis": null,
+        "Rebin": null,
+        "Files": "2018___Pileup___nBTag.root",
+        "Projection": null,
+        "Profile": "Y",
+	"Draw": "NOSTACK PE1",
+	"Draw_extra": null,
+        "Unblind": false
+    },
+    "Canvas_nMediumDeepJetB2p_fixedGridRhoFastjetCentralChargedPileUp": {
+        "Type": "CanvasConfig",
+        "Title": "<#rho_{CentralChargedPileUp}^{fixedGridFastJet}> (2+ DeepJet b tags)",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Coordinates": [],
+        "Plots": [
+	    "Plot_HT500_nMediumDeepJetB2_nJet4+___fixedGridRhoFastjetCentralChargedPileUpvPV_npvsGood",
+	    "Plot_HT500_nMediumDeepJetB3_nJet4+___fixedGridRhoFastjetCentralChargedPileUpvPV_npvsGood",
+	    "Plot_HT500_nMediumDeepJetB4+_nJet4+___fixedGridRhoFastjetCentralChargedPileUpvPV_npvsGood"
+        ],
+        "Labels": [
+            "#mu#mu 2 Btags",
+            "#mu#mu 3 Btags",
+            "#mu#mu 4+ Btags"
+        ],
+        "Legend": "DefaultLegend",
+        "Rebin": null,
+        "XPixels": 1200,
+        "YPixels": 1000,
+        "XAxisTitle": "N_{PV}^{good}",
+        "YAxisTitle": "<#rho_{CentralChargedPileUp}^{fixedGridFastJet}>",
+        "Projection": null,
+        "DoRatio": true,
+        "doLogY": false,
+        "DoMountainrange": true
+    },
+    "DefaultPlot": {
+        "Type": "DefaultPlot",
+        "Title": "DefaultPlotTitle",
+        "Rebin": null,
+        "Files": null,
+        "Unblind": false,
+        "RatioYMin": 0.0,
+        "RatioYMax": 2.0
+    },
+    "DefaultCanvas": {
+        "Type": "DefaultCanvas",
+        "Title": "DefaultCanvasTitle",
+        "Margins": [
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "Plots": null,
+        "XPixels": 800,
+        "YPixels": 800,
+        "DoRatio": false,
+        "DoMountainrange": false
+    }
+}
