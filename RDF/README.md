@@ -1,58 +1,103 @@
 Setup Requirements
 Source the cms default environment to enable access to the dasgoclient
-Source the LCG stack for software, RDataFrame requires a root version > 6.14, 6.20 recommended
+Source the LCG stack for software, RDataFrame requires a recent root version, 6.24/04 or higher recommended
 Source the standalone setup scripts for the FourTopNAOD/Kai and PhysicsTools/nanoAOD-tools repositories, i.e.
 ```
-#Source the basic software, example release with gcc800 compiler and ROOT 6.20
-source /cvmfs/sft.cern.ch/lcg/views/LCG_97rc4/x86_64-centos7-gcc8-opt/setup.sh
+#Add this function to your .zshrc, then source it or login to the node again, and every time call 'rdf <version>' such as 'rdf 100'
+rdf(){
+# source /cvmfs/sft.cern.ch/lcg/releases/LCG_87/gcc/4.9.3/x86_64-slc6/setup.sh
+    ulimit -s 14000
+    export SCRAM_ARCH=slc7_amd64_gcc830
+    export XRDPARALLELEVTLOOP=16 #This might only work in development environments, but should increase the throughput...
+    if [ ${1} = "101gcc10" ];
+    then
+	print /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/setup.sh;
+	source /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/setup.sh;
+	export LHAPDF_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_101swan/MCGenerators/lhapdf/6.3.0/x86_64-centos7-gcc10-opt
+	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LHAPDF_PATH/lib/
+	export LHAPDF_DATA_PATH=/cvmfs/sft.cern.ch/lcg/external/lhapdfsets/current/:${LHAPDF_PATH}/share/LHAPDF
+	export PYTHONPATH=/afs/cern.ch/user/n/nmangane/.local/lib/python3.9/site-packages/:$PYTHONPATH
+    elif [ ${1} = "101" ];
+    then
+	print /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc8-opt/setup.sh;
+	source /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc8-opt/setup.sh;
+	export LHAPDF_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_101swan/MCGenerators/lhapdf/6.3.0/x86_64-centos7-gcc8-opt
+	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LHAPDF_PATH/lib/
+	export LHAPDF_DATA_PATH=/cvmfs/sft.cern.ch/lcg/external/lhapdfsets/current/:${LHAPDF_PATH}/share/LHAPDF
+	export PYTHONPATH=/afs/cern.ch/user/n/nmangane/.local/lib/python3.9/site-packages/:$PYTHONPATH
+    elif [ ${1} = "100" ];
+    then
+	# print /cvmfs/sft.cern.ch/lcg/views/dev3/${1}/x86_64-centos7-gcc8-opt/setup.sh
+	# source /cvmfs/sft.cern.ch/lcg/views/dev3/${1}/x86_64-centos7-gcc8-opt/setup.sh
+	print /cvmfs/sft.cern.ch/lcg/views/LCG_100/x86_64-centos7-gcc8-opt/setup.sh
+	source /cvmfs/sft.cern.ch/lcg/views/LCG_100/x86_64-centos7-gcc8-opt/setup.sh;
+	export LHAPDF_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_100/MCGenerators/lhapdf/6.3.0/x86_64-centos7-gcc8-opt
+	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LHAPDF_PATH/lib/
+	export LHAPDF_DATA_PATH=/cvmfs/sft.cern.ch/lcg/external/lhapdfsets/current/:${LHAPDF_PATH}/share/LHAPDF
+	export PYTHONPATH=/afs/cern.ch/user/n/nmangane/.local/lib/python3.8/site-packages/:$PYTHONPATH
+    else;
+	# print /cvmfs/sft.cern.ch/lcg/views/dev3/${1}/x86_64-centos7-gcc8-opt/setup.sh
+	# source /cvmfs/sft.cern.ch/lcg/views/dev3/${1}/x86_64-centos7-gcc8-opt/setup.sh
+	print /cvmfs/sft.cern.ch/lcg/views/dev3/${1}/x86_64-centos7-gcc8-opt/setup.sh
+	source /cvmfs/sft.cern.ch/lcg/views/dev3/${1}/x86_64-centos7-gcc8-opt/setup.sh
+	export LHAPDF_PATH=/cvmfs/sft.cern.ch/lcg/releases/dev3/${1}/MCGenerators/lhapdf/6.3.0/x86_64-centos7-gcc8-opt
+	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LHAPDF_PATH/lib/
+	export LHAPDF_DATA_PATH=/cvmfs/sft.cern.ch/lcg/external/lhapdfsets/current/:${LHAPDF_PATH}/share/LHAPDF
+	export PYTHONPATH=/afs/cern.ch/user/n/nmangane/.local/lib/python3.8/site-packages/:$PYTHONPATH
+    fi
+    voms-proxy-init -voms cms --valid 192:00
+    cd ~/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/RDF
+    source ~/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/RDF/standalone/env_standalone.zsh
+    if [ $(source ~/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/RDF/standalone/env_standalone.zsh | grep -c build) -gt 0 ];
+    then 
+	source ~/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/Kai/standalone/env_standalone.zsh build
+	source ~/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/RDF/standalone/env_standalone.zsh build
+	source ~/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/RDF/standalone/env_standalone.zsh
+    fi
+}
+```
+Then call this function on each login (if freshly added to your .zshrc, make certain you source the .zshrc so the function is defined
+```
+rdf 101
 
-#Get valid grid proxy
-voms-proxy-init -voms cms --valid 192:00
-
-#Setup PYTHONPATH for modules to load
-source FourTopNAOD/RDF/standalone/env_standalone.sh (or .zsh)
-
+Some checks to ensure you have expected write access using KRB5
+```
+```
 #get KRB5 credentials if eosuser redirector not working (may be issue with registration of grid proxy with EOS
 kinit <username>@CERN.CH #kinit <username>@FNAL.GOV
-
 touch /eos/user/<userinitial>/<username>/test.txt
 xrdcp root://eosuser.cern.ch//eos/user/<userinitial>/<username>/test.txt xrdtest.txt
+```
+A test run over just a few samples:
+```
 
-#Run the analyzer on just the tttt sample in the ElMu channel
-python -u FTAnalyzer.py fill-yields --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory> --include tttt --channel ElMu
-python -u FTAnalyzer.py combine-yields --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory> --include tttt --channel ElMu
-python -u FTAnalyzer.py fill-histograms --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory> --include tttt --channel ElMu
+#Run the analyzer on just the tttt and tt_DL-GF samples in the ElMu channel
+#zsh loop to fill yields maps for btagging weights
+#These renorm maps are needed for ALL final plots or templating, and must be re-run if any systematics are either changed or added to. Code will fail if a map does not exist for a sample/systematic combo that is later requested for histograms.
+tagger=DeepJet puid=T; for e in 2018; for c in ElMu; for s in $(less standardmc.txt | grep 'tttt\|tt_DL-GF'); do tag=MyTestCampaign_${e} && python -u FTAnalyzer.py fill-yields --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory>/${tag} --noAggregate --channel ${c} --bTagger ${tagger} --jetPUId ${puid} --include ${s} --nThreads 4 --source NANOv7_CorrNov__${c} --sample_cards '../Kai/python/samplecards/'${e}'_NanoAODv7.yaml' '../Kai/python/samplecards/'${e}'_NanoAODv7_additional.yaml' --systematics_cards '../Kai/python/samplecards/'${e}'_systematics_NanoV7_V6_controlledFullPDF.yaml' --era ${e} --recreateFileList; done
 
-#Tag v0.8 workflow
+#Combine the yields to get the renormalizations
+for e in 2018; for c in ElMu; for tag in MyTestCampaign_${e}; do python -u FTAnalyzer.py combine-yields --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory>/${tag} --channel ${c} --bTagger DeepJet --exclude $(less yieldexclusionlist.txt) --era ${e}; done
 
-#The analysis directory needs to be writeable by you after kinit/voms proxy are run
-#If necessary, run the bookkeeping step to populate the splitProcess information for e.g. TTToSemiLeptonic*, TTTo2L2Nu* samples
-python -u FTAnalyzer.py bookkeeping --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory> --source <sourcekey> --include <split-process-1> <split-process-2> ...
-python -u FTAnalyzer.py bookkeeping --analysisDirectory /eos/user/n/nmangane/analysis/TEST --source NANOv5 --include tt_DL-GF tt_DL tt_SL-GF tt_SL
+#Fill the HT templates in all regions for all systematics
+e=2018 tagger=DeepJet puid=L; for c in ElMu;do tag=MyTestCampaign_${e}; for s in $(less standardmc.txt | grep 'tttt\|tt_DL-GF') $(less datalist.txt); do print ${s} && python -u FTAnalyzer.py fill-combine --variableSet HTOnly --categorySet 5x5 --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory>/${tag} --noAggregate --channel ${c} --bTagger ${tagger} --jetPUId ${puid} --include ${s} --nThreads 2 --source NANOv7_CorrNov__${c} --sample_cards '../Kai/python/samplecards/'${e}'_NanoAODv7.yaml' '../Kai/python/samplecards/'${e}'_NanoAODv7_additional.yaml' --systematics_cards '../Kai/python/samplecards/'${e}'_systematics_NanoV7_V6_controlledFullPDF.yaml' --era ${e} --recreateFileList; done; done
 
-#Run the btagging yields and then combine them for later stages
-#Note, an explicit channel is necessary, i.e ElMu MuMu ElEl
-python -u FTAnalyzer.py fill-yields --analysisDirectory /eos/user/n/nmangane/analysis/TEST --channel ElMu
-python -u FTAnalyzer.py combine-yields --analysisDirectory /eos/user/n/nmangane/analysis/TEST --channel ElMu
+#Check all outputs are available for the 5x5 HTOnly sets run, which should be 50 per channel in 2017 and 49 in 2018:
+for e in 2017 2018; for c in ElMu ElEl MuMu; do print ${c} ${e} && ls -ltr /eos/user/<userinitial>/<username>/<analysisdirectory>/MyTestCampaign_${e}/Combine/${c} | grep -c HTOnly___5x5; done
 
-#Fill the histograms
-python -u FTAnalyzer.py fill-histograms --analysisDirectory /eos/user/n/nmangane/analysis/TEST --channel ElMu
+#If they are all there, hadd, since unfortunately some templating and plotting options require access to multiple years and channels together:
+for e in 2017; for tag in MyTestCampaign_${e}; do python -u FTAnalyzer.py hadd-combine --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory>/${tag} --verbose --era ${e} --variableSet HTOnly --categorySet 5x5; done
 
-#Manually handle the output combination, note that the file in "All" should be the hadd of ElMu, MuMu, and ElEl channels if they're all produced
-cd /eos/user/n/nmangane/analysis/TEST/Histograms
-mkdir All
-cd ElMu
-hadd -f ../All/2017___Combined.root 2017___ttWH.root 2017___tt_SL-GF.root 2017___ttbb_SL-GF_fr.root 2017___ttother_SL-GF_fr.root 2017___tt_DL-GF.root 2017___ttother_DL-GF_fr.root 2017___ttbb_DL-GF_fr.root 2017___ST_tbarW.root 2017___ttWZ.root 2017___tttt.root 2017___ttWJets.root 2017___ttother_DL_nr.root 2017___tt_DL.root 2017___ttother_DL_fr.root 2017___ttbb_DL_fr.root 2017___ttbb_DL_nr.root 2017___ttHH.root 2017___ttWW.root 2017___ST_tW.root 2017___DYJets_DL.root 2017___ttZH.root 2017___ttZJets.root 2017___ttH.root 2017___tttW.root 2017___ttZZ.root 2017___tt_SL.root 2017___ttother_SL_nr.root 2017___ttbb_SL_nr.root 2017___ttbb_SL_fr.root 2017___ttother_SL_fr.root 2017___tttJ.root 2017___ElMu.root
+#Warning: FTPlotting.py currently requires root_numpy, removed from LCG > 100, so this should be run with that until it's replaced with uproot implementation in full.
+#Run templating UNBLINDED (blinding policy is set inside the FTAnalyzer.py script using an additional tag in histogram names, applying strictly to data. 
+#The --zerioingThreshold sets how many events must be contributed by a template in order to not be zeroed out (given a lack of trust in the template at this point).
+for e in 2018; for t in MyTestCampaign_${e}; for c in ElMu; do python -u FTPlotting.py prepare-combine --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory>/${t} --era ${e} --channel ${c} --combineCards --combineInputList HT --formats pdf --json 'HTCombine_5x5_$ERA_$CHANNEL_DeepJet.json' --legendCard 'jsons/v1.0/$CHANNELLegend_mergeST.json' --systematics_cards '../Kai/python/samplecards/'${e}'_systematics_NanoV7_V6_controlledFullPDF.yaml' --zeroingThreshold 10 --unblind; done
 
-#Finally, run the plotting script using plotcards and legendcards. Parsing of histograms is done through a combination of the key for a "Plot_" in the plotcard
-#and the "Names" inside the legendcard 'Categories', which are in turn combined into the 'Supercategories' which are actually stacked/plotted. The Canvas containing potentially
-#several histograms points to plotcards. Optional parameters allow for rebinning (variable or nBin), changing labels, etc. Some of these are still WIP. 
-#Methods exist inside Plotting.py to generate default plotcards using parameters for channel, variables, categories, etc. but these are not yet exposed to the CL-interface
-python Plotting.py plot-histograms -d /eos/user/n/nmangane/analysis/TEST --era 2017 -f pdf -c ElMu -p 'jsons/v0.8/Event_All_2pB.json' -l 'jsons/v0.8/ElMuLegend.json'
+#In order to prepare control regions and plot them:
+e=2018 tagger=DeepJet puid=L; for c in ElMu;do tag=MyTestCampaign_${e}; for s in $(less standardmc.txt | grep 'tttt\|tt_DL-GF') $(less datalist.txt) ; do print ${s} && python -u FTAnalyzer.py fill-combine --variableSet Control --categorySet 2BnJet4p --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory>/${tag} --noAggregate --channel ${c} --bTagger ${tagger} --jetPUId ${puid} --include ${s} --nThreads 4 --source NANOv7_CorrNov__${c} --sample_cards '../Kai/python/samplecards/'${e}'_NanoAODv7.yaml' '../Kai/python/samplecards/'${e}'_NanoAODv7_additional.yaml' --systematics_cards '../Kai/python/samplecards/'${e}'_systematics_NanoV7_V6_controlledFullPDF.yaml' --era ${e} --recreateFileList; done; done
 
-#Looping through many such categories, channels, etc using (zsh) loops
-for d in Event MET El Mu Jet; for b in 0pB 1pB 2pB; for c in MuMu_ElMu MuMu; do python Plotting.py plot-histograms -d /eos/user/n/nmangane/analysis/TEST --era 2017 -f pdf -c ${c} -p 'jsons/v0.8/'${d}'_All_'${b}'.json' -l 'jsons/v0.8/$CHANLegend.json';done
-
+#Plot the control regions:
+e=2017; for t in MyTestCampaign_${e}; for c in ElMu; do python -u FTPlotting.py prepare-combine --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory>/${t} --era ${e} --channel ${c} --formats pdf --json 'jsons/v1.0/Control_2BnJet4p_$ERA_$CHANNEL_DeepJet.json' --legendCard 'jsons/v1.0/$CHANNELLegend_mergeST.json' --systematics_cards '../Kai/python/samplecards/'${e}'_systematics_NanoV7_V6_controlledFullPDF.yaml' --zeroingThreshold 10 --unblind; done
 ```
 
 Using the compareEvents.py script to write events and variables to json files (for overlap comparisons with other channels; original version of script by Melissa Q of UCSB)
