@@ -1,11 +1,11 @@
-Setup Requirements
-Source the cms default environment to enable access to the dasgoclient
-Source the LCG stack for software, RDataFrame requires a recent root version, 6.24/04 or higher recommended
-Source the standalone setup scripts for the FourTopNAOD/Kai and PhysicsTools/nanoAOD-tools repositories, i.e.
+# Setup Requirements
+## Source the LCG stack for software, RDataFrame requires a recent root version, 6.24/04 or higher recommended
+## Source the standalone setup scripts for the FourTopNAOD/Kai and PhysicsTools/nanoAOD-tools repositories, i.e.
+
+# Setup convenience function
 ```
-#Add this function to your .zshrc, then source it or login to the node again, and every time call 'rdf <version>' such as 'rdf 100'
+#Add this function to your .zshrc, then source it or login to the node again
 rdf(){
-# source /cvmfs/sft.cern.ch/lcg/releases/LCG_87/gcc/4.9.3/x86_64-slc6/setup.sh
     ulimit -s 14000
     export SCRAM_ARCH=slc7_amd64_gcc830
     export XRDPARALLELEVTLOOP=16 #This might only work in development environments, but should increase the throughput...
@@ -56,18 +56,20 @@ rdf(){
     fi
 }
 ```
-Then call this function on each login (if freshly added to your .zshrc, make certain you source the .zshrc so the function is defined
+
+Then call this function on each login, e.g.
 ```
 rdf 101
+```
 
 Some checks to ensure you have expected write access using KRB5
-```
 ```
 #get KRB5 credentials if eosuser redirector not working (may be issue with registration of grid proxy with EOS
 kinit <username>@CERN.CH #kinit <username>@FNAL.GOV
 touch /eos/user/<userinitial>/<username>/test.txt
 xrdcp root://eosuser.cern.ch//eos/user/<userinitial>/<username>/test.txt xrdtest.txt
 ```
+
 A test run over just a few samples:
 ```
 
