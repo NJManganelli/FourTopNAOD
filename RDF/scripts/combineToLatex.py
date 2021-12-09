@@ -92,6 +92,8 @@ def main(analysisDir, inputs):
         era, channel, _, var, *other = fLim.split("_")
         var = var.split(".")[0]
         print(fLim, fSig, XS, era, channel, var)
+        limits = None
+        significance = None
         if os.path.isfile(os.path.join(analysisDir, "Combine", fLim)):
             limits = getLimits(os.path.join(analysisDir, "Combine", fLim))
         else:
@@ -100,7 +102,8 @@ def main(analysisDir, inputs):
             significance = getSignificance(os.path.join(analysisDir, "Combine", fSig))
         else:
             print(str(os.path.join(analysisDir, "Combine", fSig) + "not found"))
-        
+        if limits is None or significance is None:
+            raise ValueError(f"Failed to find limits or significance: limits={limits} significance={significance}")
         print(configureLatex(channel, limits, significance, XS, sigfigs=3))
 
 
