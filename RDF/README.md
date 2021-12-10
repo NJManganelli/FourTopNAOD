@@ -76,7 +76,7 @@ A test run over just a few samples:
 #Run the analyzer on just the tttt and tt_DL-GF samples in the ElMu channel
 #zsh loop to fill yields maps for btagging weights
 #These renorm maps are needed for ALL final plots or templating, and must be re-run if any systematics are either changed or added to. Code will fail if a map does not exist for a sample/systematic combo that is later requested for histograms.
-tagger=DeepJet puid=T; for e in 2018; for c in ElMu; for s in $(less standardmc.txt | grep 'tttt\|tt_DL-GF'); do tag=MyTestCampaign_${e} && python -u FTAnalyzer.py fill-yields --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory>/${tag} --noAggregate --channel ${c} --bTagger ${tagger} --jetPUId ${puid} --include ${s} --nThreads 4 --source NANOv7_CorrNov__${c} --sample_cards '../Kai/python/samplecards/'${e}'_NanoAODv7.yaml' '../Kai/python/samplecards/'${e}'_NanoAODv7_additional.yaml' --systematics_cards '../Kai/python/samplecards/'${e}'_systematics_NanoV7_V6_controlledFullPDF.yaml' --era ${e} --recreateFileList; done
+tagger=DeepJet puid=L; for e in 2018; for c in ElMu; for s in $(less standardmc.txt | grep 'tttt\|tt_DL-GF'); do tag=MyTestCampaign_${e} && python -u FTAnalyzer.py fill-yields --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory>/${tag} --noAggregate --channel ${c} --bTagger ${tagger} --jetPUId ${puid} --include ${s} --nThreads 4 --source NANOv7_CorrNov__${c} --sample_cards '../Kai/python/samplecards/'${e}'_NanoAODv7.yaml' '../Kai/python/samplecards/'${e}'_NanoAODv7_additional.yaml' --systematics_cards '../Kai/python/samplecards/'${e}'_systematics_NanoV7_V6_controlledFullPDF.yaml' --era ${e} --recreateFileList; done
 
 #Combine the yields to get the renormalizations
 for e in 2018; for c in ElMu; for tag in MyTestCampaign_${e}; do python -u FTAnalyzer.py combine-yields --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory>/${tag} --channel ${c} --bTagger DeepJet --exclude $(less yieldexclusionlist.txt) --era ${e}; done
@@ -116,4 +116,20 @@ python RDF/scripts/scripts/compareEvents.py -v event run luminosityBlock -t Even
 # Check overlap between the two samples, saving to text file
 # Note the first file is still 'composed' of the sample tag and output file name, (-s, -o), $(sample)_$(output) format
 python RDF/scripts/compareEvents.py -b 'event > 0' -s TTTT -o 2017ElMu.json -c TTTT_2017MuMu.json > MuMu_ElMu.txt
+```
+
+Description of the required and optional arguments:
+```
+--analysisDirectory: head directory to store results in, should be unique to an analysis run (some choice of tagger, jet pt, systematics implementation, etc)
+--noAggregate: should be by default, relates to how btag shape reweighting is used, never 'use' the Aggregate
+--channel: ElMu, ElEl, MuMu for the channel. Multiple channels can be done in the same analysisDirectory, but NOT multiple eras
+--bTagger: DeepJet is default, can also use DeepCSV
+--jetPUId: L, M, T to impose jet pileup ID on jets between 20 and 50GeV at this WP
+--include: specifies which sample in the card to actually run, should match exactly the name, e.g. 'tt_DL' or 'tttt' or 'ElMu_B' (run period B data from the MuonEG datastream)
+--nThreads: number of threads to run. memory usage scales with threads, so 4 usually is good; tt_DL and tt_SL samples scale harder than others, so may have to go to 1 or 2 threads if the process gets killed
+--source: specifies the input data 'tier', which are inside the samplecards. Usually NANOv7 would be the raw NanoAOD (limited support since lacking in corrections), or NANOv7_CorrNov for the corrected versions at T2_BE_IIHE, but usually the more heavily channel-skimmed version of the NANOv7_CorrNov, which are NANOv7_CorrNov__{ElMu,MuMu,ElEl}
+--sample_cards: yaml samplecard specifying all the information about the input
+--systematics_cards: yaml card specifying names of systematics, what versions of jet_pt and MET_pt to use, how to calculate weights, etc. The nominal one must ALWAYS be present in the card, with the special name '$NOMINAL'
+--era: which year, e.g. 2017 or 2018 
+--recreateFileList: will recreate the filelist inside the specified analysisDirectory. Usually on by default, but if you expect DAS to go down you can remove it and either rely on the lists inside the directory or copy them from an older one
 ```
