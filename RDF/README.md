@@ -118,8 +118,15 @@ python RDF/scripts/scripts/compareEvents.py -v event run luminosityBlock -t Even
 python RDF/scripts/compareEvents.py -b 'event > 0' -s TTTT -o 2017ElMu.json -c TTTT_2017MuMu.json > MuMu_ElMu.txt
 ```
 
-Description of the required and optional arguments:
+Description of the required and optional arguments for FTAnalyzer.py:
 ```
+
+stages:
+    fill-yields: compute yields for btagging, must be run over all systematic variations that will be used
+    combine-yields: must be computed once all samples are run, producees a single root file with all the btag shape renormalization yields for all samples and all systematic variations
+    fill-combine: fill templates for combine (to either be fit or used in postfit-plot production via Combine/Harvester). 
+        Should be combined with --categorySet and --variableSet options
+    hadd-combine: run after all samples are run through fill-combine stage, also specify --categorySet and --variableSet, make a single root file for next stage
 --analysisDirectory: head directory to store results in, should be unique to an analysis run (some choice of tagger, jet pt, systematics implementation, etc)
 --noAggregate: should be by default, relates to how btag shape reweighting is used, never 'use' the Aggregate
 --channel: ElMu, ElEl, MuMu for the channel. Multiple channels can be done in the same analysisDirectory, but NOT multiple eras
