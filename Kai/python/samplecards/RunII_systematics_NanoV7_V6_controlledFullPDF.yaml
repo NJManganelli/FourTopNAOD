@@ -1,0 +1,2463 @@
+$NOMINAL:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  isNominal: true
+  systematicSet:
+  - nominal
+  commonWeights:
+    pwgt_LSF___nom: "(FTALepton$LEP_POSTFIX_SF_nom.size() > 1 ? FTALepton$LEP_POSTFIX_SF_nom.at(0) * FTALepton$LEP_POSTFIX_SF_nom.at(1) : FTALepton$LEP_POSTFIX_SF_nom.at(0))"
+    pwgt_Z_vtx___nom: "(Int_t)1;"
+    # top_parton_pt_data_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
+    # top_parton_sf_data_nlo: "sqrt(exp(0.0615-0.0005 * Where(top_parton_pt_data_nlo < 500.0, top_parton_pt_data_nlo, static_cast<float>(500.0))))"
+    # pwgt_top_pT_data_nlo: "top_parton_sf_data_nlo.at(0, 1.0) * top_parton_sf_data_nlo.at(1, 1.0)"
+    top_parton_pt_nnlo_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
+    top_parton_sf_nnlo_nlo: "sqrt(0.103*exp(-0.0118 * top_parton_pt_nnlo_nlo) - 0.000134 * top_parton_pt_nnlo_nlo + 0.973)"
+    pwgt_top_pT_nnlo_nlo: "top_parton_sf_nnlo_nlo.at(0, 1.0) * top_parton_sf_nnlo_nlo.at(1, 1.0)"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___nom: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo" #Top pT is disabled by default, and only applies to ttbar (non-ttbb); replaced by 1.0 everywhere else
+    pwgt_btagSF_common: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_jesTotalUp:
+  jet_mask: jet_mask_$SYSTEMATIC
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_jesTotalUp
+  jet_mass_var: Jet_mass_jesTotalUp
+  met_pt_var: MET_T1_pt_jesTotalUp
+  met_phi_var: MET_T1_phi_jesTotalUp
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_jes
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_jes
+    DeepJet: Jet_btagSF_deepjet_shape_up_jes
+  weightVariation: false
+  systematicSet:
+  - jerc
+  notes: Corresponds to jec_13TeV_R2017Up most likely...
+  preWeights:
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_jesTotalDown:
+  jet_mask: jet_mask_$SYSTEMATIC
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_jesTotalDown
+  jet_mass_var: Jet_mass_jesTotalDown
+  met_pt_var: MET_T1_pt_jesTotalDown
+  met_phi_var: MET_T1_phi_jesTotalDown
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_jes
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_jes
+    DeepJet: Jet_btagSF_deepjet_shape_down_jes
+  weightVariation: false
+  systematicSet:
+  - jerc
+  notes: Corresponds to jec_13TeV_R2017Down most likely...
+  preWeights:
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_HEMUp:
+  jet_mask: jet_mask_$SYSTEMATIC
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  systematicSet:
+  - jerc
+  preWeights:
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_HEMDown:
+  jet_mask: jet_mask_$SYSTEMATIC
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_hem_down
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  systematicSet:
+  - jerc
+  preWeights:
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_pileupUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - pu
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeightUp * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_pileupDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - pu
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeightDown * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_jerUp:
+  jet_mask: jet_mask_$SYSTEMATIC
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_jerUp
+  jet_mass_var: Jet_mass_jerUp
+  met_pt_var: MET_T1_pt_jerUp
+  met_phi_var: MET_T1_phi_jerUp
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  systematicSet:
+  - jerc
+  preWeights:
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_jerDown:
+  jet_mask: jet_mask_$SYSTEMATIC
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_jerDown
+  jet_mass_var: Jet_mass_jerDown
+  met_pt_var: MET_T1_pt_jerDown
+  met_phi_var: MET_T1_phi_jerDown
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  systematicSet:
+  - jerc
+  preWeights:
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_jesTotalUp:
+  jet_mask: jet_mask_$SYSTEMATIC
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_jesTotalUp
+  jet_mass_var: Jet_mass_jesTotalUp
+  met_pt_var: METFixEE2017_T1_pt_jesTotalUp
+  met_phi_var: METFixEE2017_T1_phi_jesTotalUp
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_jes
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_jes
+    DeepJet: Jet_btagSF_deepjet_shape_up_jes
+  weightVariation: false
+  systematicSet:
+  - jerc
+  notes: Corresponds to jec_13TeV_R2017Up most likely...
+  preWeights:
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_jesTotalDown:
+  jet_mask: jet_mask_$SYSTEMATIC
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_jesTotalDown
+  jet_mass_var: Jet_mass_jesTotalDown
+  met_pt_var: METFixEE2017_T1_pt_jesTotalDown
+  met_phi_var: METFixEE2017_T1_phi_jesTotalDown
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_jes
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_jes
+    DeepJet: Jet_btagSF_deepjet_shape_down_jes
+  weightVariation: false
+  systematicSet:
+  - jerc
+  notes: Corresponds to jec_13TeV_R2017Down most likely...
+  preWeights:
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_pileupUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - pu
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeightUp * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_pileupDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - pu
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeightDown * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_prefireUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - pf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Up * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_prefireDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - pf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Dn * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_jerUp:
+  jet_mask: jet_mask_$SYSTEMATIC
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_jerUp
+  jet_mass_var: Jet_mass_jerUp
+  met_pt_var: METFixEE2017_T1_pt_jerUp
+  met_phi_var: METFixEE2017_T1_phi_jerUp
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  systematicSet:
+  - jerc
+  preWeights:
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_jerDown:
+  jet_mask: jet_mask_$SYSTEMATIC
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_jerDown
+  jet_mass_var: Jet_mass_jerDown
+  met_pt_var: METFixEE2017_T1_pt_jerDown
+  met_phi_var: METFixEE2017_T1_phi_jerDown
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  systematicSet:
+  - jerc
+  preWeights:
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_btagSF_shape_hfUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_hf
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_hf
+    DeepJet: Jet_btagSF_deepjet_shape_up_hf
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_btagSF_shape_hfDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_hf
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_hf
+    DeepJet: Jet_btagSF_deepjet_shape_down_hf
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_btagSF_shape_hfstats1Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_hfstats1
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_hfstats1
+    DeepJet: Jet_btagSF_deepjet_shape_up_hfstats1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_btagSF_shape_hfstats1Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_hfstats1
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_hfstats1
+    DeepJet: Jet_btagSF_deepjet_shape_down_hfstats1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_btagSF_shape_hfstats2Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_hfstats2
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_hfstats2
+    DeepJet: Jet_btagSF_deepjet_shape_up_hfstats2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_btagSF_shape_hfstats2Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_hfstats2
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_hfstats2
+    DeepJet: Jet_btagSF_deepjet_shape_down_hfstats2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_btagSF_shape_hfstats1Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_hfstats1
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_hfstats1
+    DeepJet: Jet_btagSF_deepjet_shape_up_hfstats1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_btagSF_shape_hfstats1Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_hfstats1
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_hfstats1
+    DeepJet: Jet_btagSF_deepjet_shape_down_hfstats1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_btagSF_shape_hfstats2Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_hfstats2
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_hfstats2
+    DeepJet: Jet_btagSF_deepjet_shape_up_hfstats2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_btagSF_shape_hfstats2Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_hfstats2
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_hfstats2
+    DeepJet: Jet_btagSF_deepjet_shape_down_hfstats2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_hf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_btagSF_shape_cferr1Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_cferr1
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_cferr1
+    DeepJet: Jet_btagSF_deepjet_shape_up_cferr1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_other
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_btagSF_shape_cferr1Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_cferr1
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_cferr1
+    DeepJet: Jet_btagSF_deepjet_shape_down_cferr1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_other
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_btagSF_shape_cferr2Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_cferr2
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_cferr2
+    DeepJet: Jet_btagSF_deepjet_shape_up_cferr2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_other
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_btagSF_shape_cferr2Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_cferr2
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_cferr2
+    DeepJet: Jet_btagSF_deepjet_shape_down_cferr2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_other
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_btagSF_shape_lfUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_lf
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_lf
+    DeepJet: Jet_btagSF_deepjet_shape_up_lf
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_btagSF_shape_lfDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_lf
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_lf
+    DeepJet: Jet_btagSF_deepjet_shape_down_lf
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_btagSF_shape_lfstats1Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_lfstats1
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_lfstats1
+    DeepJet: Jet_btagSF_deepjet_shape_up_lfstats1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_btagSF_shape_lfstats1Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_lfstats1
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_lfstats1
+    DeepJet: Jet_btagSF_deepjet_shape_down_lfstats1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_btagSF_shape_lfstats2Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_lfstats2
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_lfstats2
+    DeepJet: Jet_btagSF_deepjet_shape_up_lfstats2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2018_btagSF_shape_lfstats2Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_lfstats2
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_lfstats2
+    DeepJet: Jet_btagSF_deepjet_shape_down_lfstats2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_btagSF_shape_lfstats1Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_lfstats1
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_lfstats1
+    DeepJet: Jet_btagSF_deepjet_shape_up_lfstats1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_btagSF_shape_lfstats1Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_lfstats1
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_lfstats1
+    DeepJet: Jet_btagSF_deepjet_shape_down_lfstats1
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_btagSF_shape_lfstats2Up:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_up_lfstats2
+    DeepCSV: Jet_btagSF_deepcsv_shape_up_lfstats2
+    DeepJet: Jet_btagSF_deepjet_shape_up_lfstats2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_2017_btagSF_shape_lfstats2Down:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape_down_lfstats2
+    DeepCSV: Jet_btagSF_deepcsv_shape_down_lfstats2
+    DeepJet: Jet_btagSF_deepjet_shape_down_lfstats2
+  weightVariation: true
+  systematicSet:
+  - btag
+  - btag_lf
+  preWeights:
+    prewgt___$SYSTEMATIC: "pwgt_btagSF_common" 
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_ISRDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - ps
+  sampleRemapping:
+    OSDL_RunII_ewkISRDown:
+    - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
+    OSDL_RunII_ttISRDown:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_AH
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_AH
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    OSDL_RunII_ttultrarareISRDown:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    OSDL_RunII_ttVJetsISRDown:
+    - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
+    - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
+    OSDL_RunII_ttHISRDown:
+    - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
+    OSDL_RunII_singletopISRDown:
+    - ST_tW
+    - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
+    OSDL_RunII_ttttISRDown:
+    - tttt
+  preWeights:
+    pwgt_$SYSTEMATIC: "nPSWeight == 4 ? PSWeight.at(0) : 0"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_$SYSTEMATIC * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_ISRUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - ps
+  preWeights:
+    pwgt_$SYSTEMATIC: "nPSWeight == 4 ? PSWeight.at(2) : 0"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_$SYSTEMATIC * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+  sampleRemapping:
+    OSDL_RunII_ewkISRUp:
+    - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
+    OSDL_RunII_ttISRUp:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_AH
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_AH
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    OSDL_RunII_ttultrarareISRUp:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    OSDL_RunII_ttVJetsISRUp:
+    - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
+    - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
+    OSDL_RunII_ttHISRUp:
+    - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
+    OSDL_RunII_singletopISRUp:
+    - ST_tW
+    - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
+    OSDL_RunII_ttttISRUp:
+    - tttt
+OSDL_RunII_FSRDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - ps
+  preWeights:
+    pwgt_$SYSTEMATIC: "nPSWeight == 4 ? PSWeight.at(1) : 0"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_$SYSTEMATIC * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+  sampleRemapping:
+    OSDL_RunII_ewkFSRDown:
+    - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
+    OSDL_RunII_ttFSRDown:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_AH
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_AH
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    OSDL_RunII_ttultrarareFSRDown:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    OSDL_RunII_ttVJetsFSRDown:
+    - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
+    - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
+    OSDL_RunII_ttHFSRDown:
+    - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
+    OSDL_RunII_singletopFSRDown:
+    - ST_tW
+    - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
+    OSDL_RunII_ttttFSRDown:
+    - tttt
+OSDL_RunII_FSRUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - ps
+  preWeights:
+    pwgt_$SYSTEMATIC: "nPSWeight == 4 ? PSWeight.at(3) : 0"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_$SYSTEMATIC * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+  sampleRemapping:
+    OSDL_RunII_ewkFSRUp:
+    - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
+    OSDL_RunII_ttFSRUp:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_AH
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_AH
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    OSDL_RunII_ttultrarareFSRUp:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    OSDL_RunII_ttVJetsFSRUp:
+    - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
+    - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
+    OSDL_RunII_ttHFSRUp:
+    - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
+    OSDL_RunII_singletopFSRUp:
+    - ST_tW
+    - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
+    OSDL_RunII_ttttFSRUp:
+    - tttt
+OSDL_RunII_muFNomRDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - rf
+  requires:
+  - LHEScaleWeight
+  preWeights:
+    pwgt_RenormalizationDownFactorizationNominal: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(1) : 0"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationNominal / $SAMPLE_LHESCaleSumw.at(1, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+  sampleRemapping:
+    OSDL_RunII_ewkmuFNomRDown:
+    - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
+    OSDL_RunII_ttmuFNomRDown:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_AH
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_AH
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    OSDL_RunII_ttultrararemuFNomRDown:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    OSDL_RunII_ttVJetsmuFNomRDown:
+    - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
+    - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
+    OSDL_RunII_ttHmuFNomRDown:
+    - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
+    OSDL_RunII_singletopmuFNomRDown:
+    - ST_tW
+    - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
+    OSDL_RunII_ttttmuFNomRDown:
+    - tttt
+OSDL_RunII_muFNomRUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - rf
+  requires:
+  - LHEScaleWeight
+  preWeights:
+    pwgt_RenormalizationUpFactorizationNominal: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(7) : 0"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationNominal / $SAMPLE_LHESCaleSumw.at(7, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+  sampleRemapping:
+    OSDL_RunII_ewkmuFNomRUp:
+    - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
+    OSDL_RunII_ttmuFNomRUp:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_AH
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_AH
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    OSDL_RunII_ttultrararemuFNomRUp:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    OSDL_RunII_ttVJetsmuFNomRUp:
+    - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
+    - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
+    OSDL_RunII_ttHmuFNomRUp:
+    - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
+    OSDL_RunII_singletopmuFNomRUp:
+    - ST_tW
+    - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
+    OSDL_RunII_ttttmuFNomRUp:
+    - tttt
+OSDL_RunII_muRNomFDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - rf
+  requires:
+  - LHEScaleWeight
+  preWeights:
+    pwgt_RenormalizationNominalFactorizationDown: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(3) : 0"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationNominalFactorizationDown / $SAMPLE_LHESCaleSumw.at(3, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+  sampleRemapping:
+    OSDL_RunII_ewkmuRNomFDown:
+    - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
+    OSDL_RunII_ttmuRNomFDown:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_AH
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_AH
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    OSDL_RunII_ttultrararemuRNomFDown:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    OSDL_RunII_ttVJetsmuRNomFDown:
+    - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
+    - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
+    OSDL_RunII_ttHmuRNomFDown:
+    - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
+    OSDL_RunII_singletopmuRNomFDown:
+    - ST_tW
+    - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
+    OSDL_RunII_ttttmuRNomFDown:
+    - tttt
+OSDL_RunII_muRNomFUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - rf
+  requires:
+  - LHEScaleWeight
+  preWeights:
+    pwgt_RenormalizationNominalFactorizationUp: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(5) : 0"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationNominalFactorizationUp / $SAMPLE_LHESCaleSumw.at(5, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+  sampleRemapping:
+    OSDL_RunII_ewkmuRNomFUp:
+    - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
+    OSDL_RunII_ttmuRNomFUp:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_AH
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_AH
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    OSDL_RunII_ttultrararemuRNomFUp:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    OSDL_RunII_ttVJetsmuRNomFUp:
+    - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
+    - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
+    OSDL_RunII_ttHmuRNomFUp:
+    - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
+    OSDL_RunII_singletopmuRNomFUp:
+    - ST_tW
+    - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
+    OSDL_RunII_ttttmuRNomFUp:
+    - tttt
+OSDL_RunII_muRFcorrelatedUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - rf
+  requires:
+  - LHEScaleWeight
+  preWeights:
+    pwgt_RenormalizationUpFactorizationUp: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(8) : 0"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationUp / $SAMPLE_LHESCaleSumw.at(8, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+  sampleRemapping:
+    OSDL_RunII_ewkmuRFcorrelatedUp:
+    - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
+    OSDL_RunII_ttmuRFcorrelatedUp:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_AH
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_AH
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    OSDL_RunII_ttultrararemuRFcorrelatedUp:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    OSDL_RunII_ttVJetsmuRFcorrelatedUp:
+    - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
+    - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
+    OSDL_RunII_ttHmuRFcorrelatedUp:
+    - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
+    OSDL_RunII_singletopmuRFcorrelatedUp:
+    - ST_tW
+    - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
+    OSDL_RunII_ttttmuRFcorrelatedUp:
+    - tttt
+OSDL_RunII_muRFcorrelatedDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  systematicSet:
+  - rf
+  requires:
+  - LHEScaleWeight
+  preWeights:
+    pwgt_RenormalizationDownFactorizationDown: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(0) : 0"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationDown / $SAMPLE_LHESCaleSumw.at(0, -1) * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+  sampleRemapping:
+    OSDL_RunII_ewkmuRFcorrelatedDown:
+    - DYJets_DL
+    - DYJets_DL-HT100
+    - DYJets_DL-HT200
+    - DYJets_DL-HT400
+    - DYJets_DL-HT600
+    - DYJets_DL-HT800
+    - DYJets_DL-HT1200
+    - DYJets_DL-HT2500
+    - WJets_SL
+    - WJets_SL-HT100
+    - WJets_SL-HT200
+    - WJets_SL-HT400
+    - WJets_SL-HT600
+    - WJets_SL-HT800
+    - WJets_SL-HT1200
+    - WJets_SL-HT2500
+    - WW
+    - WZ
+    - ZZ
+    OSDL_RunII_ttmuRFcorrelatedDown:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
+    - ttbb_AH
+    - ttbb_SL_fr
+    - ttbb_SL_nr
+    - ttother_SL_fr
+    - ttother_SL_nr
+    - ttnobb_SL_fr
+    - ttnobb_SL_nr
+    - ttbb_DL_fr
+    - ttbb_DL_nr
+    - ttother_AH
+    - ttother_DL_fr
+    - ttother_DL_nr
+    - ttnobb_DL_fr
+    - ttnobb_DL_nr
+    - ttbb_SL-GF_fr
+    - ttother_SL-GF_fr
+    - ttnobb_SL-GF_fr
+    - ttbb_DL-GF_fr
+    - ttother_DL-GF_fr
+    - ttnobb_DL-GF_fr
+    OSDL_RunII_ttultrararemuRFcorrelatedDown:
+    - tttJ
+    - tttW
+    - ttWW
+    - ttWZ
+    - ttWH
+    - ttZZ
+    - ttZH
+    - ttHH
+    OSDL_RunII_ttVJetsmuRFcorrelatedDown:
+    - ttWJets
+    - ttWJets_QQ
+    - ttWJets_LNu
+    - ttZJets
+    - ttZ_DL-M10
+    - ttZ_DL-M1to10
+    - ttZ_QQ
+    OSDL_RunII_ttHmuRFcorrelatedDown:
+    - ttH
+    - ttH_SL-bb
+    - ttH_DL-bb
+    OSDL_RunII_singletopmuRFcorrelatedDown:
+    - ST_tW
+    - ST_tbarW
+    - ST_tW-NoFHad
+    - ST_tbarW-NoFHad
+    - ST_s-channel
+    - ST_t_t-channel
+    - ST_tbar_t-channel
+    OSDL_RunII_ttttmuRFcorrelatedDown:
+    - tttt
+OSDL_RunII_ueUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  isNominal: false
+  isSystematicForSample:
+  - tt_AH-TuneCP5up
+  - tt_SL-TuneCP5up
+  - tt_SL-GF-TuneCP5up
+  - tt_DL-TuneCP5up
+  - tt_DL-GF-TuneCP5up
+  systematicSet:
+  - ue
+  commonWeights:
+    pwgt_LSF___nom: "(FTALepton$LEP_POSTFIX_SF_nom.size() > 1 ? FTALepton$LEP_POSTFIX_SF_nom.at(0) * FTALepton$LEP_POSTFIX_SF_nom.at(1) : FTALepton$LEP_POSTFIX_SF_nom.at(0))"
+    pwgt_Z_vtx___nom: "(Int_t)1;"
+    top_parton_pt_nnlo_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
+    top_parton_sf_nnlo_nlo: "sqrt(0.103*exp(-0.0118 * top_parton_pt_nnlo_nlo) - 0.000134 * top_parton_pt_nnlo_nlo + 0.973)"
+    pwgt_top_pT_nnlo_nlo: "top_parton_sf_nnlo_nlo.at(0, 1.0) * top_parton_sf_nnlo_nlo.at(1, 1.0)"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+    pwgt_btagSF_common: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_ueDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  isNominal: false
+  isSystematicForSample:
+  - tt_AH-TuneCP5down
+  - tt_SL-TuneCP5down
+  - tt_SL-GF-TuneCP5down
+  - tt_DL-TuneCP5down
+  - tt_DL-GF-TuneCP5down
+  systematicSet:
+  - ue
+  commonWeights:
+    pwgt_LSF___nom: "(FTALepton$LEP_POSTFIX_SF_nom.size() > 1 ? FTALepton$LEP_POSTFIX_SF_nom.at(0) * FTALepton$LEP_POSTFIX_SF_nom.at(1) : FTALepton$LEP_POSTFIX_SF_nom.at(0))"
+    pwgt_Z_vtx___nom: "(Int_t)1;"
+    top_parton_pt_nnlo_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
+    top_parton_sf_nnlo_nlo: "sqrt(0.103*exp(-0.0118 * top_parton_pt_nnlo_nlo) - 0.000134 * top_parton_pt_nnlo_nlo + 0.973)"
+    pwgt_top_pT_nnlo_nlo: "top_parton_sf_nnlo_nlo.at(0, 1.0) * top_parton_sf_nnlo_nlo.at(1, 1.0)"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+    pwgt_btagSF_common: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_hdampUp:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  isNominal: false
+  isSystematicForSample:
+  - tt_AH-HDAMPup
+  - tt_SL-HDAMPup
+  - tt_SL-GF-HDAMPup
+  - tt_DL-HDAMPup
+  - tt_DL-GF-HDAMPup
+  systematicSet:
+  - hdamp
+  commonWeights:
+    pwgt_LSF___nom: "(FTALepton$LEP_POSTFIX_SF_nom.size() > 1 ? FTALepton$LEP_POSTFIX_SF_nom.at(0) * FTALepton$LEP_POSTFIX_SF_nom.at(1) : FTALepton$LEP_POSTFIX_SF_nom.at(0))"
+    pwgt_Z_vtx___nom: "(Int_t)1;"
+    top_parton_pt_nnlo_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
+    top_parton_sf_nnlo_nlo: "sqrt(0.103*exp(-0.0118 * top_parton_pt_nnlo_nlo) - 0.000134 * top_parton_pt_nnlo_nlo + 0.973)"
+    pwgt_top_pT_nnlo_nlo: "top_parton_sf_nnlo_nlo.at(0, 1.0) * top_parton_sf_nnlo_nlo.at(1, 1.0)"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+    pwgt_btagSF_common: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_hdampDown:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  jet_mass_var: Jet_mass_nom
+  met_pt_var: MET_T1_pt
+  met_phi_var: MET_T1_phi
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: false
+  isNominal: false
+  isSystematicForSample:
+  - tt_AH-HDAMPdown
+  - tt_SL-HDAMPdown
+  - tt_SL-GF-HDAMPdown
+  - tt_DL-HDAMPdown
+  - tt_DL-GF-HDAMPdown
+  systematicSet:
+  - hdamp
+  commonWeights:
+    pwgt_LSF___nom: "(FTALepton$LEP_POSTFIX_SF_nom.size() > 1 ? FTALepton$LEP_POSTFIX_SF_nom.at(0) * FTALepton$LEP_POSTFIX_SF_nom.at(1) : FTALepton$LEP_POSTFIX_SF_nom.at(0))"
+    pwgt_Z_vtx___nom: "(Int_t)1;"
+    top_parton_pt_nnlo_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
+    top_parton_sf_nnlo_nlo: "sqrt(0.103*exp(-0.0118 * top_parton_pt_nnlo_nlo) - 0.000134 * top_parton_pt_nnlo_nlo + 0.973)"
+    pwgt_top_pT_nnlo_nlo: "top_parton_sf_nnlo_nlo.at(0, 1.0) * top_parton_sf_nnlo_nlo.at(1, 1.0)"
+    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 0.8427494039; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
+    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+    pwgt_btagSF_common: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
+OSDL_RunII_pdf1:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(1, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(1, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf2:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(2, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(2, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf3:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(3, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(3, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf4:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(4, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(4, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf5:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(5, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(5, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf6:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(6, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(6, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf7:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(7, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(7, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf8:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(8, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(8, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf9:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(9, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(9, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf10:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(10, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(10, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf11:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(11, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(11, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf12:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(12, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(12, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf13:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(13, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(13, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf14:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(14, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(14, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf15:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(15, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(15, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf16:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(16, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(16, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf17:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(17, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(17, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf18:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(18, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(18, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf19:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(19, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(19, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf20:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(20, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(20, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf21:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(21, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(21, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf22:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(22, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(22, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf23:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(23, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(23, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf24:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(24, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(24, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf25:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(25, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(25, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf26:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(26, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(26, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf27:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(27, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(27, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf28:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(28, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(28, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf29:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(29, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(29, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf30:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  addInQuadratureAs: OSDL_RunII_pdf
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(30, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(30, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf31:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  envelopeAs: OSDL_RunII_alphaS
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(31, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(31, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+OSDL_RunII_pdf32:
+  jet_mask: jet_mask
+  lep_postfix: ''
+  jet_pt_var: Jet_pt_nom
+  btagSF:
+    CSVv2: Jet_btagSF_csvv2_shape
+    DeepCSV: Jet_btagSF_deepcsv_shape
+    DeepJet: Jet_btagSF_deepjet_shape
+  weightVariation: true
+  envelopeAs: OSDL_RunII_alphaS
+  systematicSet:
+  - pdf
+  requires:
+  - LHEPdfWeight
+  preWeights:
+    prewgt___$SYSTEMATIC: "return prewgt___$NOMINAL * (std::fmax(0.333, std::fmin(3, LHEPdfWeight.at(32, -1) / LHEPdfWeight.at(0, -1) * $SAMPLE_LHEPdfSumw.at(0, -1) / $SAMPLE_LHEPdfSumw.at(32, -1))));"
+  finalWeights:
+    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+# OSDL_RunII_pdfUp:
+#   jet_mask: jet_mask
+#   lep_postfix: ''
+#   jet_pt_var: Jet_pt_nom
+#   btagSF:
+#     CSVv2: Jet_btagSF_csvv2_shape
+#     DeepCSV: Jet_btagSF_deepcsv_shape
+#     DeepJet: Jet_btagSF_deepjet_shape
+#   weightVariation: true
+#   systematicSet:
+#   - pdf
+#   requires:
+#   - LHEPdfWeight
+#   prewgt___$SYSTEMATIC: "double temp = Max(LHEPdfWeight)/Mean(LHEPdfWeight); return prewgt___$NOMINAL * std::fmax(0.0, std::fmin(2.0, temp));"
+#   preWeights:
+#     prewgt___$SYSTEMATIC: "prewgt___$NOMINAL * (Max(LHEPdfWeight)/Mean(LHEPdfWeight));"
+#   finalWeights:
+#     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC* pwgt_btag___$SYSTEMATIC" 
+# OSDL_RunII_pdfDown:
+#   jet_mask: jet_mask
+#   lep_postfix: ''
+#   jet_pt_var: Jet_pt_nom
+#   btagSF:
+#     CSVv2: Jet_btagSF_csvv2_shape
+#     DeepCSV: Jet_btagSF_deepcsv_shape
+#     DeepJet: Jet_btagSF_deepjet_shape
+#   weightVariation: true
+#   systematicSet:
+#   - pdf
+#   requires:
+#   - LHEPdfWeight
+#   prewgt___$SYSTEMATIC: "double temp = Min(LHEPdfWeight)/Mean(LHEPdfWeight); return prewgt___$NOMINAL * std::fmin(2.0, std::fmax(0.0, temp));"
+#   preWeights:
+#     prewgt___$SYSTEMATIC: "prewgt___$NOMINAL * (Min(LHEPdfWeight)/Mean(LHEPdfWeight));"
+#   finalWeights:
+#     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC" 
+# OSDL_RunII_top_pTUp:
+#   jet_mask: jet_mask
+#   lep_postfix: ''
+#   jet_pt_var: Jet_pt_nom
+#   btagSF:
+#     CSVv2: Jet_btagSF_csvv2_shape
+#     DeepCSV: Jet_btagSF_deepcsv_shape
+#     DeepJet: Jet_btagSF_deepjet_shape
+#   weightVariation: true
+#   systematicSet:
+#   - top
+#   preWeights:
+#     top_parton_pt_data_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
+#     top_parton_sf_data_nlo: "sqrt(exp(0.0615-0.0005 * Where(top_parton_pt_data_nlo < 500.0, top_parton_pt_data_nlo, static_cast<float>(500.0))))"
+#     pwgt_top_pT_data_nlo: "top_parton_sf_data_nlo.at(0, 1.0) * top_parton_sf_data_nlo.at(1, 1.0)"
+#     prewgt___$SYSTEMATIC: "prewgt___$NOMINAL * pwgt_top_pT_data_nlo"
+#   finalWeights:
+#     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC" 
+# OSDL_RunII_top_pTDown:
+#   jet_mask: jet_mask
+#   lep_postfix: ''
+#   jet_pt_var: Jet_pt_nom
+#   btagSF:
+#     CSVv2: Jet_btagSF_csvv2_shape
+#     DeepCSV: Jet_btagSF_deepcsv_shape
+#     DeepJet: Jet_btagSF_deepjet_shape
+#   weightVariation: true
+#   systematicSet:
+#   - top
+#   preWeights:
+#     top_parton_pt_nnlo_nlo: "GenPart_pt[abs(GenPart_pdgId) == 6 && (GenPart_statusFlags & 8192) > 0]"
+#     top_parton_sf_nnlo_nlo: "sqrt(0.103*exp(-0.0118 * top_parton_pt_nnlo_nlo) - 0.000134 * top_parton_pt_nnlo_nlo + 0.973)"
+#     pwgt_top_pT_nnlo_nlo: "top_parton_sf_nnlo_nlo.at(0, 1.0) * top_parton_sf_nnlo_nlo.at(1, 1.0)"
+#     prewgt___$SYSTEMATIC: "prewgt___$NOMINAL * pwgt_top_pT_nnlo_nlo"
+#   finalWeights:
+#     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC" 
+# if "muRFanticorrelatedUp" in sysVariations.keys():
+#     zFin.append(("wgt___muRFanticorrelatedUp: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationUp * pwgt_btag___muRFanticorrelatedUp * pwgt_Z_vtx___nom"))
+#     zPre.append(("pwgt_RenormalizationDownFactorizationUp: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(2) : 0"))
+#     zPre.append(("prewgt___muRFanticorrelatedUp: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationDownFactorizationUp * pwgt_Z_vtx___nom"))
+# if "muRFanticorrelatedDown" in sysVariations.keys():
+#     zFin.append(("wgt___muRFanticorrelatedDown: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationDown * pwgt_btag___muRFanticorrelatedDown * pwgt_Z_vtx___nom"))
+#     zPre.append(("pwgt_RenormalizationUpFactorizationDown: "nLHEScaleWeight == 9 ? LHEScaleWeight.at(6) : 0"))
+#     zPre.append(("prewgt___muRFanticorrelatedDown: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_RenormalizationUpFactorizationDown * pwgt_Z_vtx___nom"))
