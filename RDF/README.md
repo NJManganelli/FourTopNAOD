@@ -90,6 +90,12 @@ for e in 2017 2018; for c in ElMu ElEl MuMu; do print ${c} ${e} && ls -ltr /eos/
 #If they are all there, hadd, since unfortunately some templating and plotting options require access to multiple years and channels together:
 for e in 2017; for tag in MyTestCampaign_${e}; do python -u FTAnalyzer.py hadd-combine --analysisDirectory /eos/user/<userinitial>/<username>/<analysisdirectory>/${tag} --verbose --era ${e} --variableSet HTOnly --categorySet 5x5; done
 
+#Determine the binning to be used with a 30% per-bin threshold on the main ttbar background MC:
+for e in 2017 2018; for t in MyTestCampaign_${e}; for c in ElMu MuMu ElEl; do python FTCombineBinning.py determine-binning --analysisDirectory /eos/user/n/nmangane/analysis/${t} --channel ${c} --era ${e} --relUncertainty 0.30 --json 'jsons/v1.0/HTCombine_5x5_$ERA_$CHANNEL_DeepJet.json' --variableSet HTOnly --categorySet 5x5 --bTagger DeepJet; done
+
+#Alternatively, determine binning with an equi-width scheme, in this case 5:
+for e in 2017 2018; for t in MyTestCampaign_${e}; for c in ElMu MuMu ElEl; do python FTCombineBinning.py determine-binning --analysisDirectory /eos/user/n/nmangane/analysis/${t} --channel ${c} --era ${e} --relUncertainty 0.30 --nEquiprobableBins 5 --json 'jsons/v1.0/HTCombine_5x5_$ERA_$CHANNEL_DeepJet.json' --variableSet HTOnly --categorySet 5x5 --bTagger DeepJet; done
+
 #Warning: FTPlotting.py currently requires root_numpy, removed from LCG > 100, so this should be run with that until it's replaced with uproot implementation in full.
 #Run templating UNBLINDED (blinding policy is set inside the FTAnalyzer.py script using an additional tag in histogram names, applying strictly to data. 
 #The --zerioingThreshold sets how many events must be contributed by a template in order to not be zeroed out (given a lack of trust in the template at this point).
