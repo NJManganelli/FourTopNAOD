@@ -78,9 +78,8 @@ f = "root://cms-xrd-global.cern.ch//store/mc/RunIISummer20UL18NanoAODv9/TTTo2L2N
 
 #Common part of dataframe
 #Make masks for isolated and jpsi-candidate muons, mutually exclusive via 'iso_mu_mask == false' part
-rdf = ROOT.ROOT.RDataFrame("Events", f)
-# rdf = rdf.Define(
-rdf = rdf.Define("iso_mu_mask", "Muon_pt > 30 && abs(Muon_eta) <= 2.4 && Muon_mediumId == true && Muon_pfIsoId >= 4")
+rdf_base = ROOT.ROOT.RDataFrame("Events", f)
+rdf = rdf_base.Define("iso_mu_mask", "Muon_pt > 30 && abs(Muon_eta) <= 2.4 && Muon_mediumId == true && Muon_pfIsoId >= 4")
 rdf = rdf.Define("jpsi_cand_mu_mask", "Muon_pt > 3 && abs(Muon_eta) <= 2.4 && Muon_mediumId == true && iso_mu_mask == false")
 #Make sure there are at least two jpsi candidate muons for combinatorics... some functions crash otherwise
 rdf = rdf.Filter("Sum(jpsi_cand_mu_mask) > 1", "At least two jpsi candidate muons to make one candidate, prior to charge or mass criteria")
@@ -166,6 +165,6 @@ c.SaveAs("jpsitest.pdf")
 
 #Save the graph and convert it, so we see just what happened (and some things will be pruned since they're not put into Histogram/Sum/Mean/Max/AsNumpy calls, i.e. unusedBranch1 stuff 
 
-ROOT.RDF.SaveGraph(rdf, "jpsitest_graph.dot")
+ROOT.RDF.SaveGraph(rdf_base, "jpsitest_graph.dot")
 #On the command line, call 
-os.system("dot -Tpdf jpsitest_graph.dot > jpsitest_graph")
+os.system("dot -Tpdf jpsitest_graph.dot > jpsitest_graph.pdf")
