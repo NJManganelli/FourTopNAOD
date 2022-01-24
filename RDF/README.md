@@ -1,3 +1,7 @@
+# Methodology
+See the FourTopNAOD/Kai Readme for instructions on producing NanoAOD samples with corrections applied via nanoAOD-tools PostProcessor. 
+After CRAB has been used to make them, they may be skimmed into channel-specific tiers and processed on-the-fly with the RDF Analyzer scripts, described in this README.
+
 # Setup Requirements
 ## Source the LCG stack for software, RDataFrame requires a recent root version, 6.24/04 or higher recommended
 ## Source the standalone setup scripts for the FourTopNAOD/Kai and PhysicsTools/nanoAOD-tools repositories, i.e.
