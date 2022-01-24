@@ -226,15 +226,21 @@ def buildMonoTable(nested, feature="rate-lim"):
     if feature == "rate-lim":
         lines.append("\\begin{tabular}{lcccc}")
         #lines.append("%  \\hline")
-        lines.append("Era  &  Channel  &  Apriori limit [$\\times \\sigmattttsm$]  &  Aposteriori limit [$\\times \\sigmattttsm$]  &  Observed Limit [$\\times \\sigmattttsm$]")
+        # lines.append("Era  &  Channel  &  Apriori limit [$\\times \\sigmattttsm$]  &  Aposteriori limit [$\\times \\sigmattttsm$]  &  Observed Limit [$\\times \\sigmattttsm$]  \\\\")
+        lines.append("Era  &  Channel  &  Apriori limit  &  Aposteriori limit  &  Observed Limit  \\\\")
+        lines.append("  &  &  [$\\times \\sigmattttsm$]  &  [$\\times \\sigmattttsm$]  &  [$\\times \\sigmattttsm$]  \\\\")
     elif feature == "fb-lim":
         lines.append("\\begin{tabular}{lcccc}")
         #lines.append("%  \\hline")
-        lines.append("Era  &  Channel  &  Apriori limit [fb]  &  Aposteriori limit [fb]  &  Observed Limit  [fb]  \\\\")
+        # lines.append("Era  &  Channel  &  Apriori limit [fb]  &  Aposteriori limit [fb]  &  Observed Limit  [fb]  \\\\")
+        lines.append("Era  &  Channel  &  Apriori limit  &  Aposteriori limit  &  Observed Limit  \\\\")
+        lines.append("  &  &  [fb]  &  [fb]  &  [fb]  \\\\")
     elif feature == "sig":
         lines.append("\\begin{tabular}{lccc}")
         #lines.append("%  \\hline")
-        lines.append("Era  &  Channel  &  Apriori significance [Std. Dev.] &  Observed significance [Std. Dev.]  \\\\")
+        # lines.append("Era  &  Channel  &  Apriori significance [Std. Dev.] &  Observed significance [Std. Dev.]  \\\\")
+        lines.append("Era  &  Channel  &  Apriori significance &  Observed significance  \\\\")
+        lines.append("  &   &  [Std. Dev.] &  [Std. Dev.]  \\\\")
 
 
     for era in eras:
@@ -255,7 +261,7 @@ def buildMonoTable(nested, feature="rate-lim"):
                                     ]) )
     lines.append("\\hline")
     lines.append("\\end{tabular}")
-    lines.append("\\label{table:limits-" + feature + "-HT")
+    lines.append("\\label{table:limits-" + feature + "-HT}")
     lines.append("\\vskip -4mm")
     lines.append("\\end{table}")
     return lines
