@@ -9,7 +9,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Muon1_eta": {
+    "Canvas_nMediumDeepJetB2_Muon1_eta": {
         "Type": "CanvasConfig",
         "Title": "Leading Muon #eta (2 DeepJet b tags)",
         "Margins": [
@@ -46,7 +46,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Muon2_eta": {
+    "Canvas_nMediumDeepJetB2_Muon2_eta": {
         "Type": "CanvasConfig",
         "Title": "Subleading Muon #eta (2 DeepJet b tags)",
         "Margins": [
@@ -83,7 +83,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Muon_pfRelIso03_chg": {
+    "Canvas_nMediumDeepJetB2_Muon_pfRelIso03_chg": {
         "Type": "CanvasConfig",
         "Title": "Muon pfRelIso03_chg (2 DeepJet b tags)",
         "Margins": [
@@ -120,7 +120,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Muon_pfRelIso03_all": {
+    "Canvas_nMediumDeepJetB2_Muon_pfRelIso03_all": {
         "Type": "CanvasConfig",
         "Title": "Muon pfRelIso03_all (2 DeepJet b tags)",
         "Margins": [
@@ -157,7 +157,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet1_pt": {
+    "Canvas_nMediumDeepJetB2_Jet1_pt": {
         "Type": "CanvasConfig",
         "Title": "Leading Jet pt (2 DeepJet b tags)",
         "Margins": [
@@ -194,7 +194,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet1_eta": {
+    "Canvas_nMediumDeepJetB2_Jet1_eta": {
         "Type": "CanvasConfig",
         "Title": "Leading Jet #eta (2 DeepJet b tags)",
         "Margins": [
@@ -231,7 +231,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet1_DeepJetB": {
+    "Canvas_nMediumDeepJetB2_Jet1_DeepJetB": {
         "Type": "CanvasConfig",
         "Title": "Leading p_{T} Jet DeepJet Disriminant (2 DeepJet b tags)",
         "Margins": [
@@ -268,7 +268,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet1_DeepJetB_sortedjet": {
+    "Canvas_nMediumDeepJetB2_Jet1_DeepJetB_sortedjet": {
         "Type": "CanvasConfig",
         "Title": "Leading b tagged Jet discriminant (2 DeepJet b tags)",
         "Margins": [
@@ -305,7 +305,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet2_pt": {
+    "Canvas_nMediumDeepJetB2_Jet2_pt": {
         "Type": "CanvasConfig",
         "Title": "Subleading Jet pt (2 DeepJet b tags)",
         "Margins": [
@@ -342,7 +342,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet2_eta": {
+    "Canvas_nMediumDeepJetB2_Jet2_eta": {
         "Type": "CanvasConfig",
         "Title": "Subleading Jet #eta (2 DeepJet b tags)",
         "Margins": [
@@ -379,7 +379,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet2_DeepJetB": {
+    "Canvas_nMediumDeepJetB2_Jet2_DeepJetB": {
         "Type": "CanvasConfig",
         "Title": "Subleading p_{T} Jet DeepJet Disriminant (2 DeepJet b tags)",
         "Margins": [
@@ -416,7 +416,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet2_DeepJetB_sortedjet": {
+    "Canvas_nMediumDeepJetB2_Jet2_DeepJetB_sortedjet": {
         "Type": "CanvasConfig",
         "Title": "Subleading b tagged Jet discriminant (2 DeepJet b tags)",
         "Margins": [
@@ -453,7 +453,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet3_pt": {
+    "Canvas_nMediumDeepJetB2_Jet3_pt": {
         "Type": "CanvasConfig",
         "Title": "3rd Jet pt (2 DeepJet b tags)",
         "Margins": [
@@ -490,7 +490,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet3_eta": {
+    "Canvas_nMediumDeepJetB2_Jet3_eta": {
         "Type": "CanvasConfig",
         "Title": "3rd Jet #eta (2 DeepJet b tags)",
         "Margins": [
@@ -527,7 +527,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet3_DeepJetB": {
+    "Canvas_nMediumDeepJetB2_Jet3_DeepJetB": {
         "Type": "CanvasConfig",
         "Title": "3rd p_{T} Jet DeepJet Disriminant (2 DeepJet b tags)",
         "Margins": [
@@ -565,7 +565,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet3_DeepJetB_sortedjet": {
+    "Canvas_nMediumDeepJetB2_Jet3_DeepJetB_sortedjet": {
         "Type": "CanvasConfig",
         "Title": "3rd b tagged Jet discriminant (2 DeepJet b tags)",
         "Margins": [
@@ -602,7 +602,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet4_pt": {
+    "Canvas_nMediumDeepJetB2_Jet4_pt": {
         "Type": "CanvasConfig",
         "Title": "4th Jet pt (2 DeepJet b tags)",
         "Margins": [
@@ -639,7 +639,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet4_eta": {
+    "Canvas_nMediumDeepJetB2_Jet4_eta": {
         "Type": "CanvasConfig",
         "Title": "4th Jet #eta (2 DeepJet b tags)",
         "Margins": [
@@ -676,7 +676,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet4_DeepJetB": {
+    "Canvas_nMediumDeepJetB2_Jet4_DeepJetB": {
         "Type": "CanvasConfig",
         "Title": "4th p_{T} Jet DeepJet Disriminant (2 DeepJet b tags)",
         "Margins": [
@@ -714,7 +714,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Jet4_DeepJetB_sortedjet": {
+    "Canvas_nMediumDeepJetB2_Jet4_DeepJetB_sortedjet": {
         "Type": "CanvasConfig",
         "Title": "4th b tagged Jet discriminant (2 DeepJet b tags)",
         "Margins": [
@@ -751,7 +751,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_nJet": {
+    "Canvas_nMediumDeepJetB2_nJet": {
         "Type": "CanvasConfig",
         "Title": "nJet (2 DeepJet b tags)",
         "Margins": [
@@ -788,7 +788,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_nJet_MediumDeepJet": {
+    "Canvas_nMediumDeepJetB2_nJet_MediumDeepJet": {
         "Type": "CanvasConfig",
         "Title": "Medium DeepJet b tagged Jets (2 DeepJet b tags)",
         "Margins": [
@@ -825,7 +825,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_MET_pt": {
+    "Canvas_nMediumDeepJetB2_MET_pt": {
         "Type": "CanvasConfig",
         "Title": "Missing Transverse Energy (2 DeepJet b tags)",
         "Margins": [
@@ -862,7 +862,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_MET_phi": {
+    "Canvas_nMediumDeepJetB2_MET_phi": {
         "Type": "CanvasConfig",
         "Title": "#phi_{MET} (2 DeepJet b tags)",
         "Margins": [
@@ -899,7 +899,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Muon1_pt": {
+    "Canvas_nMediumDeepJetB2_Muon1_pt": {
         "Type": "CanvasConfig",
         "Title": "Leading Muon p_{T} (2 DeepJet b tags)",
         "Margins": [
@@ -937,7 +937,7 @@
 	"SetRangeUser": [-0.03, 0.03],
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Muon_dz": {
+    "Canvas_nMediumDeepJetB2_Muon_dz": {
         "Type": "CanvasConfig",
         "Title": "Muon dz (2 DeepJet b tags)",
         "Margins": [
@@ -975,7 +975,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Muon_ip3d": {
+    "Canvas_nMediumDeepJetB2_Muon_ip3d": {
         "Type": "CanvasConfig",
         "Title": "Muon ip3d (2 DeepJet b tags)",
         "Margins": [
@@ -1012,7 +1012,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_MTofMETandMu": {
+    "Canvas_nMediumDeepJetB2_MTofMETandMu": {
         "Type": "CanvasConfig",
         "Title": "MT(MET,#mu) (2 DeepJet b tags)",
         "Margins": [
@@ -1049,7 +1049,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_Muon2_pt": {
+    "Canvas_nMediumDeepJetB2_Muon2_pt": {
         "Type": "CanvasConfig",
         "Title": "Subleading Muon p_{T} (2 DeepJet b tags)",
         "Margins": [
@@ -1086,7 +1086,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_HT": {
+    "Canvas_nMediumDeepJetB2_HT": {
         "Type": "CanvasConfig",
         "Title": "H_{T} (2 DeepJet b tags)",
         "Margins": [
@@ -1123,7 +1123,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_H": {
+    "Canvas_nMediumDeepJetB2_H": {
         "Type": "CanvasConfig",
         "Title": "H (2 DeepJet b tags)",
         "Margins": [
@@ -1160,7 +1160,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_HT2M": {
+    "Canvas_nMediumDeepJetB2_HT2M": {
         "Type": "CanvasConfig",
         "Title": "H_{T}^{2M} (2 DeepJet b tags)",
         "Margins": [
@@ -1197,7 +1197,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_H2M": {
+    "Canvas_nMediumDeepJetB2_H2M": {
         "Type": "CanvasConfig",
         "Title": "H^{2M} (2 DeepJet b tags)",
         "Margins": [
@@ -1234,7 +1234,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_HTb": {
+    "Canvas_nMediumDeepJetB2_HTb": {
         "Type": "CanvasConfig",
         "Title": "H_{T}^{b} (2 DeepJet b tags)",
         "Margins": [
@@ -1271,7 +1271,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_HTH": {
+    "Canvas_nMediumDeepJetB2_HTH": {
         "Type": "CanvasConfig",
         "Title": "HTH (2 DeepJet b tags)",
         "Margins": [
@@ -1308,7 +1308,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_HTRat": {
+    "Canvas_nMediumDeepJetB2_HTRat": {
         "Type": "CanvasConfig",
         "Title": "HTRat (2 DeepJet b tags)",
         "Margins": [
@@ -1345,7 +1345,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_dRbb": {
+    "Canvas_nMediumDeepJetB2_dRbb": {
         "Type": "CanvasConfig",
         "Title": "#DeltaR_{bb} (2 DeepJet b tags)",
         "Margins": [
@@ -1382,7 +1382,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_dRll": {
+    "Canvas_nMediumDeepJetB2_dRll": {
         "Type": "CanvasConfig",
         "Title": "#DeltaR_{#it{ll}} (2 DeepJet b tags)",
         "Margins": [
@@ -1419,7 +1419,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_nLooseFTAMuon": {
+    "Canvas_nMediumDeepJetB2_nLooseFTAMuon": {
         "Type": "CanvasConfig",
         "Title": "Loose ID Muons (2 DeepJet b tags)",
         "Margins": [
@@ -1456,7 +1456,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_nMediumFTAMuon": {
+    "Canvas_nMediumDeepJetB2_nMediumFTAMuon": {
         "Type": "CanvasConfig",
         "Title": "Medium ID Muons (2 DeepJet b tags)",
         "Margins": [
@@ -1493,7 +1493,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_nTightFTAMuon": {
+    "Canvas_nMediumDeepJetB2_nTightFTAMuon": {
         "Type": "CanvasConfig",
         "Title": "Tight ID Muons (2 DeepJet b tags)",
         "Margins": [
@@ -1530,7 +1530,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_nLooseFTALepton": {
+    "Canvas_nMediumDeepJetB2_nLooseFTALepton": {
         "Type": "CanvasConfig",
         "Title": "Loose ID Leptons (2 DeepJet b tags)",
         "Margins": [
@@ -1567,7 +1567,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_nMediumFTALepton": {
+    "Canvas_nMediumDeepJetB2_nMediumFTALepton": {
         "Type": "CanvasConfig",
         "Title": "Medium ID Leptons (2 DeepJet b tags)",
         "Margins": [
@@ -1604,7 +1604,7 @@
         "Projection": null,
         "Unblind": false
     },
-    "Canvas_nMediumDeepJetB2p_nTightFTALepton": {
+    "Canvas_nMediumDeepJetB2_nTightFTALepton": {
         "Type": "CanvasConfig",
         "Title": "Tight ID Leptons (2 DeepJet b tags)",
         "Margins": [
