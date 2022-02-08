@@ -23,8 +23,8 @@ from FourTopNAOD.RDF.tools.toolbox import getFiles, load_yaml_cards, write_yaml_
 from FourTopNAOD.RDF.analyzer.histogram import fill_histos, fill_histos_ndim
 from FourTopNAOD.RDF.analyzer.cpp import declare_cpp_constants, make_cpp_safe_name
 from FourTopNAOD.RDF.analyzer.core import METXYCorr, defineJets, defineWeights, defineLeptons, splitProcess
-from FourTopNAOD.RDF.io.ntupler import getNtupleVariables, delegateFlattening, flattenVariable, writeNtuples
-from FourTopNAOD.RDF.io.root import writeHistos, bookSnapshot #, writeHistosForCombine, writeHistosV1
+from FourTopNAOD.RDF.io.ntupler import getNtupleVariables, delegateFlattening, flattenVariable, writeNtuples, delegateSnapshots
+from FourTopNAOD.RDF.io.root import writeHistos, bookSnapshot#, writeHistosForCombine, writeHistosV1
 from tqdm import tqdm
 #from IPython.display import Image, display, SVG
 #import graphviz
@@ -2143,7 +2143,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
         #Did we not chooose to do incompatible actions at the same time?
         if doBTaggingYields and (doHistos or doDiagnostics or printBookkeeping or doLeptonSelection):
             raise RuntimeError("Cannot calculate BTaggingYields and Fill Histograms simultaneously, choose only one mode")
-        elif not doHistos and not doBTaggingYields and not doDiagnostics and not printBookkeeping and not doLeptonSelection and not doNtuples:
+        elif not doHistos and not doBTaggingYields and not doDiagnostics and not printBookkeeping and not doLeptonSelection and not doNtuples and not options.stage == 'fill-nano':
             raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics and not printing Bookkeeping and not checking lepton selection, there is no work to be done.")
     
         #These are deprecated for now!
@@ -2927,6 +2927,11 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                         os.makedirs(subNtupleDir)
                     writeNtuples(prePackedNodes, subNtupleDir)
                     print("Wrote Ntuples for {} to this directory:\n{}".format(name, subNtupleDir))
+                if options.stage == 'fill-nano':
+                    nanoDir = analysisDir + f"/Nano/{options.channel}"
+                    if not os.path.isdir(nanoDir):
+                        os.makedirs(nanoDir)
+                    fn_handles, fn_columns = delegateSnapshots(prePackedNodes, nanoDir, options.branchselection)
     
                 #The ntuple writing will trigger the loop first, if that path is taken, but this is still safe to do always
                 processed[name][lvl] = counts[name][lvl].GetValue()
@@ -3113,7 +3118,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
     parser.add_argument('stage', action='store', type=str, choices=['bookkeeping', 'pileup', 'fill-yields', 'combine-yields', 'lepton-selection', 'fill-diagnostics', 
                                                                     'fill-histograms', 'hadd-histograms', 'fill-ntuples', 'fill-combine',
-                                                                    'hadd-combine'],
+                                                                    'hadd-combine', 'fill-nano'],
                         help='analysis stage to be produced')
     parser.add_argument('--varSet', '--variableSet', dest='variableSet', action='store',
                         type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study', 'TriggerStudy', 'ResolutionStudy', 'WeightStudy', 'nPVs', 'Pileup', 'nTruePileup'], 
@@ -3194,6 +3199,8 @@ if __name__ == '__main__':
                         help='list of new variables with syntax variable_name=variable_definition, where both are valid C++ variable names and code, respectively. Wrap each individual define in single quotes to prevent shell parsing them as commands, i.e. \'nGoodMuons=return Sum(Muon_pt > 30 && Muon_looseId == true);\'')
     parser.add_argument('--filter', dest='filters', action='append', type=str, default=None, #nargs='*'
                         help='list of filters with syntax filter_name=filter_cut, where the former is any text and the latter is valid C++ code. Wrap each individual filter in single quotes to prevent shell parsing them as commands')
+    parser.add_argument('--branchselection', dest='branchselection', action='store', type=str, default=None,
+                        help='Name of file for branchselection when calling stage fill-nano, using the NanoAOD-tools syntax of keep, drop, keepmatch, and keepdrop')
 
     #Parse the arguments
     args = parser.parse_args()
@@ -3421,7 +3428,7 @@ if __name__ == '__main__':
         # print(cmd)
         spo = subprocess.Popen(args="{}".format(cmd), shell=True, executable="/bin/zsh", env=dict(os.environ))
         spo.communicate()
-    elif stage == 'fill-ntuples':
+    elif stage == 'fill-ntuples' or 'fill-nano':
         packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, 
                       doNtuples=doNtuples, 
                       doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 

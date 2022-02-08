@@ -1,5 +1,7 @@
 import ROOT
 from FourTopNAOD.RDF.io.root import bookSnapshot
+from FourTopNAOD.RDF.tools.branchselection import BranchSelection
+
 def getNtupleVariables(vals, isData=True, channel="all", era=None, sysVariations=None, sysFilter=["$NOMINAL"],bTagger="DeepJet"):
     if era is None:
         raise ValueError
@@ -246,3 +248,39 @@ def writeNtuples(packedNodes, ntupledir, nJetMin=4, HTMin=350, bTagger="DeepJet"
                                                      columnList=packedNodes["ntupleVariables"][eraAndSampleName], 
                                                      treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
     print("Finished executing event loop for writeNtuples()")
+
+def delegateSnapshots(packedNodes, ntupledir, branchselfile):
+    """Lazily book snapshots for all nodes with snapshotPriority > 0, saving the selected columns."""
+    #Lazily book snapshots for all the nodes with snapshot priority > 0, which previously ordered things to keep caches small. 
+    #Now we depend on simultaneous snapshotting to work
+    # Use reversed order to cycle from highest priority level to lowest
+    snapshotTrigger = sorted([p for p in packedNodes["snapshotPriority"].values() if p > 0])
+    if len(snapshotTrigger) > 0:
+        snapshotTrigger = snapshotTrigger[0]
+    else:
+        #There is only the inclusive process...
+        snapshotTrigger = -1
+
+    handles = dict()
+    columns = dict()
+    br_selector = BranchSelection(branchselfile)
+    for eraAndSampleName, spriority in sorted(packedNodes["snapshotPriority"].items(), key=lambda x: x[1], reverse=True):
+        sval = packedNodes["nodes"][eraAndSampleName]
+        if eraAndSampleName == "BaseNode": continue #Skip the pre-split node
+        snapshotPriority = packedNodes["snapshotPriority"][eraAndSampleName]
+        if snapshotPriority <= 0:
+            continue
+        else:
+            columns[eraAndSampleName] = br_selector.selectBranches(packedNodes["nodes"][eraAndSampleName]["BaseNode"])
+            print(columns)
+            handles[eraAndSampleName] = bookSnapshot(packedNodes["nodes"][eraAndSampleName]["BaseNode"],
+                                                     f"{ntupledir}/{eraAndSampleName}.root", 
+                                                     lazy=True,
+                                                     columnList=columns[eraAndSampleName], 
+                                                     treename="Events", 
+                                                     mode="RECREATE", 
+                                                     compressionAlgo="ZSTD", 
+                                                     compressionLevel=6, 
+                                                     splitLevel=99,
+                                                 )
+    return handles, columns
