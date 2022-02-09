@@ -1,5 +1,5 @@
 import re
-
+import pdb
 
 class BranchSelection():
     def __init__(self, filename):
@@ -40,13 +40,21 @@ class BranchSelection():
         select_columns = []
         for bre, stat in self._ops:
             if type(bre) == re.Pattern:
-                for n in rdf_columns:
-                    if re.match(bre, n) and stat == 1:
-                        #keepmatch
-                        select_columns.append(n)
-                    elif re.match(bre, n) and stat == 0:
-                        select_columns = [brnch for brnch in select_columns if not re.match(bre, n)]
-                        pass
+                if stat == 1:
+                    for n in rdf_columns:
+                        if re.match(bre, n):
+                            select_columns.append(n)
+                else: #stat == 0
+                    select_columns = [n for n in select_columns if not re.match(bre, n)]
+                        
+                # for n in rdf_columns:
+                #     if re.match(bre, n) and stat == 1:
+                #         #keepmatch
+                #         select_columns.append(n)
+                #     elif re.match(bre, n) and stat == 0:
+                #         pdb.set_trace()
+                #         select_columns = [brnch for brnch in select_columns if not re.match(bre, n)]
+                #         pass
             else:
                 if stat == 1:
                     #keep
@@ -59,8 +67,9 @@ class BranchSelection():
                     if bre == '*':
                         select_columns = []
                     else:
-                        try:
-                            select_columns.pop(select_columns.index(bre))
-                        except Exception:
-                            pass
+                        select_columns = [n for n in select_columns if not bre == n]
+                        # try:
+                        #     select_columns.pop(select_columns.index(bre))
+                        # except Exception:
+                        #     pass
         return select_columns
