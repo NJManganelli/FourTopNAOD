@@ -1,0 +1,22 @@
+drop *
+keep run
+keep event
+keep luminosityBlock
+keep genTtbarId
+keep genWeight
+keep dsid1k
+keepmatch FTAMET.*_(pt|phi)
+keepmatch n?FTAMuon.*(pt|eta|phi|mass|Id|InvariantMass).*
+keepmatch n?FTAElectron.*(pt|eta|phi|mass|cutBased|InvariantMass).*
+keepmatch n?FTALepton.*(pt|eta|phi|mass|dRll).*
+keepmatch n?FTAJet\D*(pt|eta|phi|mass|Deep).*
+keepmatch n(Medium|Tight|Loose)Deep(Jet|CSV)B.*
+# keepmatch p?(re)?wgt.*
+keepmatch wgt.*
+keepmatch [HS]T?(2M|Rat|M|H|b)?__.*
+keepmatch dRbb.*
+
+
+# variables_list = ["FTALepton{}_pt".format(i) for i in [1, 2]] + ["FTALepton{}_eta".format(i) for i in [1, 2]] + ["FTALepton{}_phi".format(i) for i in [1, 2]] 
+# variables_list = variables_list + ["FTAJet{}__nom_pt".format(i) for i in range(1, JETS_TO_RECORD + 1)] + ["FTAJet{}__nom_eta".format(i) for i in range(1, JETS_TO_RECORD + 1)] + ["FTAJet{}__nom_phi".format(i) for i in range(1, JETS_TO_RECORD + 1)] + ["FTAJet{}__nom_DeepJetB".format(i) for i in range(1, JETS_TO_RECORD + 1)] + ["FTAJet{}__nom_mass".format(i) for i in range(1, JETS_TO_RECORD + 1)]
+# variables_list = variables_list + ["ST__nom", "HT__nom", "HT2M__nom", "HTRat__nom", "dRbb__nom", "FTALepton_dRll", "H__nom", "H2M__nom", "HTH__nom", "HTb__nom", "nMediumDeepJetB__nom", "nFTAJet__nom"]

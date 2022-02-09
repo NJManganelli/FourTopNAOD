@@ -35,17 +35,23 @@ class BranchSelection():
                 )
         self._ops = ops
 
-    def selectBranches(self, rdf_node):
+    def selectBranches(self, rdf_node, verbose=False):
         rdf_columns = [str(name) for name in rdf_node.GetColumnNames()]
         select_columns = []
         for bre, stat in self._ops:
             if type(bre) == re.Pattern:
                 if stat == 1:
+                    before = len(select_columns)
                     for n in rdf_columns:
                         if re.match(bre, n):
                             select_columns.append(n)
+                    change = len(select_columns) - before
+                    if verbose: print(f"pattern keepmatch {bre} added {change} branches")
                 else: #stat == 0
+                    before = len(select_columns)
                     select_columns = [n for n in select_columns if not re.match(bre, n)]
+                    change = before - len(select_columns)
+                    if verbose: print(f"pattern dropmatch {bre} dropped {change} branches")
                         
                 # for n in rdf_columns:
                 #     if re.match(bre, n) and stat == 1:

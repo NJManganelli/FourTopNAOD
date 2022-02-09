@@ -249,7 +249,7 @@ def writeNtuples(packedNodes, ntupledir, nJetMin=4, HTMin=350, bTagger="DeepJet"
                                                      treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
     print("Finished executing event loop for writeNtuples()")
 
-def delegateSnapshots(packedNodes, ntupledir, branchselfile):
+def delegateSnapshots(packedNodes, ntupledir, branchselfile, verbose=False):
     """Lazily book snapshots for all nodes with snapshotPriority > 0, saving the selected columns."""
     #Lazily book snapshots for all the nodes with snapshot priority > 0, which previously ordered things to keep caches small. 
     #Now we depend on simultaneous snapshotting to work
@@ -271,8 +271,7 @@ def delegateSnapshots(packedNodes, ntupledir, branchselfile):
         if snapshotPriority <= 0:
             continue
         else:
-            columns[eraAndSampleName] = br_selector.selectBranches(packedNodes["nodes"][eraAndSampleName]["BaseNode"])
-            print(columns)
+            columns[eraAndSampleName] = br_selector.selectBranches(packedNodes["nodes"][eraAndSampleName]["BaseNode"], verbose=verbose)
             handles[eraAndSampleName] = bookSnapshot(packedNodes["nodes"][eraAndSampleName]["BaseNode"],
                                                      f"{ntupledir}/{eraAndSampleName}.root", 
                                                      lazy=True,
@@ -283,4 +282,6 @@ def delegateSnapshots(packedNodes, ntupledir, branchselfile):
                                                      compressionLevel=6, 
                                                      splitLevel=99,
                                                  )
+    print(len(list(columns.values())[0]))
+    print("Taking columns:", list(columns.values())[0])
     return handles, columns

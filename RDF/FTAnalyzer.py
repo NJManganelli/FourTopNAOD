@@ -2592,7 +2592,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                                   }}}
                         pprint.pprint(inclusiveProcessConfig)
                         print("Updated meta information for process based on discrepancy in inputsample card and loaded files from source ", source_level)
-                    prePackedNodes = splitProcess(base[name], 
+                    #define Dataset Identifier for splitting MC by train/test percentages
+                    prePackedNodes = splitProcess(base[name].Define("dsid1k", "return rdfentry_%1000;"), 
                                                   splitProcess = splitProcessConfig, 
                                                   inclusiveProcess = inclusiveProcessConfig,
                                                   sampleName = name, 
