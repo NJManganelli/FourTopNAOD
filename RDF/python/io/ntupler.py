@@ -260,7 +260,6 @@ def delegateSnapshots(packedNodes, ntupledir, branchselfile, verbose=False):
     else:
         #There is only the inclusive process...
         snapshotTrigger = -1
-
     handles = dict()
     columns = dict()
     br_selector = BranchSelection(branchselfile)
@@ -268,9 +267,8 @@ def delegateSnapshots(packedNodes, ntupledir, branchselfile, verbose=False):
         sval = packedNodes["nodes"][eraAndSampleName]
         if eraAndSampleName == "BaseNode": continue #Skip the pre-split node
         snapshotPriority = packedNodes["snapshotPriority"][eraAndSampleName]
-        if snapshotPriority <= 0:
-            continue
-        else:
+        if snapshotPriority > 0 or (len(packedNodes["snapshotPriority"].values()) == 1 and snapshotPriority < 0):
+            #we'll snapshot priority != 0 nodes, -1 if it's the only one or all greater than 0 (since this indicates the priority -1 is the inclusive version)
             columns[eraAndSampleName] = br_selector.selectBranches(packedNodes["nodes"][eraAndSampleName]["BaseNode"], verbose=verbose)
             handles[eraAndSampleName] = bookSnapshot(packedNodes["nodes"][eraAndSampleName]["BaseNode"],
                                                      f"{ntupledir}/{eraAndSampleName}.root", 
