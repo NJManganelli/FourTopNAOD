@@ -20,7 +20,7 @@ import psutil #psutil.Process().memory_info() for info...
 import ROOT
 import ruamel.yaml as yaml
 from FourTopNAOD.RDF.tools.toolbox import getFiles, load_yaml_cards, write_yaml_cards, filter_systematics
-from FourTopNAOD.RDF.analyzer.histogram import fill_histos, fill_histos_ndim
+from FourTopNAOD.RDF.analyzer.histogram import fill_histos, fill_histos_ndim, fill_histos_ndim_categorized
 from FourTopNAOD.RDF.analyzer.cpp import declare_cpp_constants, make_cpp_safe_name
 from FourTopNAOD.RDF.analyzer.core import METXYCorr, defineJets, defineWeights, defineLeptons, splitProcess
 from FourTopNAOD.RDF.io.ntupler import getNtupleVariables, delegateFlattening, flattenVariable, writeNtuples, delegateSnapshots
@@ -2681,7 +2681,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     #     print(k, v)
         
                     #Finished verification that new bitset channelFilterCode produces same output as old b, swapping in and deprecating the old one.
-                    filtered[name][lvl] = base[name].Filter(channelFilterCode[lvl], lvl)
+                    filtered[name][lvl] = base[name].Define("dsid1k", "return rdfentry_%1000;").Filter(channelFilterCode[lvl], lvl)
                 #Add the MET corrections, creating a consistently named branch incorporating the systematics loaded
                 the_df[name][lvl] = METXYCorr(filtered[name][lvl],
                                               run_branch="run",
@@ -2864,6 +2864,29 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     skipNominalHistos = False
                 if doHistos:
                     if False:
+                        fill_histos_ndim_categorized(prePackedNodes, 
+                                                     splitProcess=splitProcessConfig, 
+                                                     sampleName=name, 
+                                                     channel=lvl.replace("_selection", "").replace("_baseline", ""), 
+                                                     isData = vals["isData"], 
+                                                     era = vals["era"], 
+                                                     variableSet=variableSet,
+                                                     variableList=variableList,
+                                                     sysVariations=sysVariationsForHistos, 
+                                                     sysFilter=allSystematics, 
+                                                     histosDict=histos, 
+                                                     debugInfo=True, 
+                                                     nJetsToHisto=10, #REMOVE
+                                                     bTagger=bTagger, 
+                                                     HTBins=HTBins,
+                                                     HTCut=HTCut,
+                                                     METCut=METCut,
+                                                     ZMassMETWindow=ZMassMETWindow,
+                                                     verbose=verb,
+                                                     skipNominalHistos=skipNominalHistos, 
+                                                     options=options
+                                                 )
+                    elif False:
                         print("\n\nDOING NDIM HISTOGRAMS")
                         fill_histos_ndim(prePackedNodes, 
                                          splitProcess=splitProcessConfig, 
@@ -2884,6 +2907,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                          verbose=verb,
                         )
                     else:
+                        # ROOT.RDF.SaveGraph(base[name], name + "pre_histo_graph.dot")
+                        # os.system(f"dot -Tpdf {name + 'pre_histo_graph.dot'} > {'name + pre_histo_graph.pdf'}")
                         packedNodes[name][lvl] = fill_histos(prePackedNodes, 
                                                             splitProcess=splitProcessConfig, 
                                                             isData = vals["isData"], 
@@ -2908,6 +2933,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                             skipNominalHistos=skipNominalHistos, 
                                                             verbose=verb,
                                                             options=options)
+                        # ROOT.RDF.SaveGraph(base[name], name + "post_histo_graph.dot")
+                        # os.system(f"dot -Tpdf {name + 'post_histo_graph.dot'} > {'name + post_histo_graph.pdf'}")
                 if doDiagnostics:
                     packedNodes[name][lvl] = fill_histos(prePackedNodes, splitProcess=splitProcessConfig, isData = vals["isData"], 
                                                         era = vals["era"], triggers = triggers, categorySet=categorySet, 
