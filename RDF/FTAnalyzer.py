@@ -2785,12 +2785,12 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     for define in options.defines:
                         cut_var = define[:define.index("=")]
                         cut_defn = define[define.index("=")+1:]
-                        the_def[name][lvl] = the_def[name][lvl].Define(cut_var, cut_defn)
+                        the_df[name][lvl] = the_df[name][lvl].Define(cut_var, cut_defn)
                 if options.filters is not None:
                     for ncut, cut in enumerate(options.filters):
                         cut_name = cut[:cut.index("=")]
                         cut_defn = cut[cut.index("=")+1:]
-                        the_def[name][lvl] = the_def[name][lvl].Filter(cut_defn, cut_name)
+                        the_df[name][lvl] = the_df[name][lvl].Filter(cut_defn, cut_name)
                 prePackedNodes = splitProcess(the_df[name][lvl], 
                                               splitProcess = splitProcessConfig,
                                               inputNtupleVariables=flatteningDict[name][lvl]["ntupleVariables"],
