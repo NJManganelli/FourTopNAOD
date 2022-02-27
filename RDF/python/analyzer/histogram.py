@@ -1049,14 +1049,15 @@ def fill_histos(input_df_or_nodes, splitProcess=False, sampleName=None, channel=
                                                                     .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                          "", nHTArray, HTArray), "HT{bpf}".format(bpf=branchpostfix), wgtVar))
                     if isData == False:
-                        defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___GenMatchedHT{hpf}"\
-                                                                             .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
-                                                                             ";H_{T};H_{T}^{Gen}", HTBins,400,2000, HTBins,400,2000), "HT{bpf}".format(bpf=branchpostfix),
-                                                                            "GenMatchedHT{bpf}".format(bpf=branchpostfix), wgtVar))
-                        defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HTminusGenMatchedHT{hpf}"\
-                                                                             .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
-                                                                             ";H_{T};H_{T}-H_{T}^{Gen}", 300,500,2000, 100,-100,100), "HT{bpf}".format(bpf=branchpostfix),
-                                                                            "HTminusGenMatchedHT{bpf}".format(bpf=branchpostfix), wgtVar))
+                        if variableSet != "HTOnly":
+                            defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___GenMatchedHT{hpf}"\
+                                                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                                 ";H_{T};H_{T}^{Gen}", HTBins,400,2000, HTBins,400,2000), "HT{bpf}".format(bpf=branchpostfix),
+                                                                                "GenMatchedHT{bpf}".format(bpf=branchpostfix), wgtVar))
+                            defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HTminusGenMatchedHT{hpf}"\
+                                                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                                                                                 ";H_{T};H_{T}-H_{T}^{Gen}", 300,500,2000, 100,-100,100), "HT{bpf}".format(bpf=branchpostfix),
+                                                                                "HTminusGenMatchedHT{bpf}".format(bpf=branchpostfix), wgtVar))
                         defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___nJetGenMatchedvnJet{hpf}"\
                                                                              .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
                                                                              "", 12,0,12, 12,0,12), "n{fj}".format(fj=fillJet), "n{fj}_genMatched".format(fj=fillJet), wgtVar))
@@ -1424,6 +1425,902 @@ def fill_histos(input_df_or_nodes, splitProcess=False, sampleName=None, channel=
     packedNodes["nodes"] = nodes
     return packedNodes
 
+def fill_histos_ndim_categorized(input_df_or_nodes, 
+                                 splitProcess=False, 
+                                 sampleName=None, 
+                                 channel="All", 
+                                 isData=True, 
+                                 era="2017", 
+                                 variableSet="HTOnly",
+                                 variableList=None, 
+                                 histosDict=None,
+                                 debugInfo=True, 
+                                 nJetsToHisto=10, #REMOVE
+                                 bTagger="DeepCSV",
+                                 HTBins=50, 
+                                 HTCut=500, 
+                                 METCut=0.0, 
+                                 ZMassMETWindow=[15.0, 10000.0], 
+                                 verbose=False,
+                                 sysVariations={"$NOMINAL": {"jet_mask": "jet_mask",
+                                                             "lep_postfix": "",
+                                                             "jet_pt_var": "Jet_pt",
+                                                             "jet_mass_var": "Jet_mass",
+                                                             "met_pt_var": "METFixEE2017_pt",
+                                                             "met_phi_var": "METFixEE2017_phi",
+                                                             "btagSF": "Jet_btagSF_deepcsv_shape",
+                                                             "weightVariation": False},
+                                     },
+                                 sysFilter=["$NOMINAL"],
+                                 skipNominalHistos=False,
+                                 options=None
+                             ):
+    #35, 45, 55 resolution
+    # HTArray = array.array('d', [500, 535, 570, 605, 640, 675, 710,
+    #                             755, 800, 845, 890, 935, 980,
+    #                             1035, 1090, 1145, 1200, 1255, 1310, 1365, 1420, 1475, 1530, 1585, 1640, 1695, 1750, 1805, 1860, 1915, 1970, 2025, 2080])
+    #30, 40, 50 resolution
+    HTArray = array.array('d', [500, 530, 560, 590, 620, 650, 680,
+                                720, 760, 800, 840, 880, 920, 960, 1000,
+                                1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000])
+    nJetArray=[3,4,5,6,7,8,20]
+    nBTagArray=[0,1,2,3,4,5,10]
+    HTArr = array.array('d', HTArray)
+    nJetArr = array.array('d', nJetArray)
+    nBTagArr = array.array('d', nBTagArray)
+    pi = ROOT.TMath.Pi()
+
+    if splitProcess:
+        print("Using packedEventID to categorize events into (sub)sample names and channel")
+    elif sampleName != None and channel != None:
+        print("Using input sampleName and channel to categorize events in histograms dictionary: {} - {}".format(sampleName, channel))
+    else:
+        raise RuntimeError("fill_histos() must be configured with the sampleName and channel or to deduce these internally based upon packedEventID (higher precedence)")
+
+    if bTagger.lower() == "deepcsv":
+        tagger = "DeepCSVB"
+    elif bTagger.lower() == "deepjet":
+        tagger = "DeepJetB"
+    elif bTagger.lower() == "csvv2":
+        tagger = "CSVv2B"
+    else:
+        raise RuntimeError("{} is not a supported bTagger option in fill_histos()".format(bTagger))
+
+    combineHistoTemplate = []    
+    #Variables to save for Combine when doCombineHistosOnly=True
+    # combineHistoTemplate = ["HT{bpf}"]
+    TriggerStudyTemplates = [("FTALepton_dRll", [n*pi/20 for n in range(31)]),
+                             ("FTAMET{bpf}_pt", (10, 0, 400)),
+                             ("FTAMuon_dz", (10, 0, 0.5)),
+                             ("FTAMuon_ip3d", (10, 0, 0.5)),
+                             ("FTAElectron_dz", (10, -0.5, 0.5)),
+                             ("FTAElectron_ip3d", (10, -0.5, 0.5)),
+                             ("nLooseFTAMuon", (3, 0, 3)),
+                             ("nMediumFTAMuon", (3, 0, 3)),
+                             ("nTightFTAMuon", (3, 0, 3)),
+                             ("nLooseFTAElectron", (3, 0, 3)),
+                             ("nMediumFTAElectron", (3, 0, 3)),
+                             ("nTightFTAElectron", (3, 0, 3)),
+                             ("nLooseFTALepton", (3, 0, 3)),
+                             ("nMediumFTALepton", (3, 0, 3)),
+                             ("nTightFTALepton", (3, 0, 3)),
+                         ]
+    StudyTemplates = [("FTAScalarRecoilTotal{bpf}_pt", (10, 0, 5)),
+                      ("FTAScalarRecoilAverage{bpf}_pt", (10, 0, 5)),
+                      ("FTAVectorRecoil{bpf}_pt", (10, 0, 5)),
+                      ("FTAJet5{bpf}_pt", (10, 0, 5)), 
+                      ("FTAJet6{bpf}_pt", (10, 0, 5)), 
+                      ("FTAJet7{bpf}_pt", (10, 0, 5)), 
+                      ("FTAJet8{bpf}_pt", (10, 0, 5)), 
+                      ("FTAJet9{bpf}_pt", (10, 0, 5)), 
+                  ]
+    ResolutionStudyTemplates = [("GenMatchedHT{bpf}", (10, 0, 5)),
+                                ("HTminusGenMatchedHT{bpf}", (10, 0, 5)),
+                       ]
+    ControlTemplates = [("HT{bpf}", (10, 0, 5)),
+                        ("HTH{bpf}", (10, 0, 5)),
+                        ("HTRat{bpf}", (10, 0, 5)),
+                        ("HTb{bpf}", (10, 0, 5)),
+                        ("HT2M{bpf}", (10, 0, 5)),
+                        ("H{bpf}", (10, 0, 5)),
+                        ("H2M{bpf}", (10, 0, 5)),
+                        ("dRbb{bpf}", [n*pi/20 for n in range(31)]),
+                        ("FTALepton_dRll", [n*pi/20 for n in range(31)]),
+                        ("FTAMET{bpf}_pt", (10, 0, 5)),
+                        ("FTAMET{bpf}_phi", (10, 0, 5)),
+                        ("MTofMETandMu{bpf}", [n*200/20 for n in range(20)]),
+                        ("MTofMETandEl{bpf}", [n*200/20 for n in range(20)]),
+                        ("MTofElandMu{bpf}", [n*200/20 for n in range(20)]),
+                        ("nFTAJet{bpf}", [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]), 
+                        ("nMedium{tag}{bpf}", [0, 1, 2, 3, 4, 8]),
+                        ("FTAJet1{bpf}_pt", (10, 0, 5)), 
+                        ("FTAJet2{bpf}_pt", (10, 0, 5)),
+                        ("FTAJet3{bpf}_pt", (10, 0, 5)),
+                        ("FTAJet4{bpf}_pt", (10, 0, 5)),
+                        ("FTAJet1{bpf}_eta", (10, 0, 5)),
+                        ("FTAJet2{bpf}_eta", (10, 0, 5)),
+                        ("FTAJet3{bpf}_eta", (10, 0, 5)),
+                        ("FTAJet4{bpf}_eta", (10, 0, 5)),
+                        ("FTAJet1{bpf}_DeepJetB", (10, 0, 5)),
+                        ("FTAJet2{bpf}_DeepJetB", (10, 0, 5)),
+                        ("FTAJet1{bpf}_DeepJetB_sorted", (10, 0, 5)),
+                        ("FTAJet2{bpf}_DeepJetB_sorted", (10, 0, 5)),
+                        ("FTAJet3{bpf}_DeepJetB_sorted", (10, 0, 5)),
+                        ("FTAJet4{bpf}_DeepJetB_sorted", (10, 0, 5)),
+                        ("FTAMuon_dz", (10, 0, 5)),
+                        ("FTAMuon_ip3d", (10, 0, 5)),
+                        ("FTAElectron_dz", (10, 0, 5)),
+                        ("FTAElectron_ip3d", (10, 0, 5)),
+                        ("FTAJet3{bpf}_DeepJetB", (10, 0, 5)),
+                        ("FTAJet4{bpf}_DeepJetB", (10, 0, 5)),
+                        ("nLooseFTAMuon", (10, 0, 5)),
+                        ("nMediumFTAMuon", (10, 0, 5)),
+                        ("nTightFTAMuon", (10, 0, 5)),
+                        ("nLooseFTAElectron", (10, 0, 5)),
+                        ("nMediumFTAElectron", (10, 0, 5)),
+                        ("nTightFTAElectron", (10, 0, 5)),
+                        ("nLooseFTALepton", (10, 0, 5)),
+                        ("nMediumFTALepton", (10, 0, 5)),
+                        ("nTightFTALepton", (10, 0, 5)),
+                    ]
+    MVAInputTemplates = [("HT{bpf}", (10, 0, 5)),
+                         ("HTH{bpf}", (10, 0, 5)),
+                         ("HTRat{bpf}", (10, 0, 5)),
+                         ("HTb{bpf}", (10, 0, 5)),
+                         # "FTALepton1_pt", (10, 0, 5)), #Not working
+                         # "FTALepton2_pt", (10, 0, 5)),
+                         ("FTAJet1{bpf}_pt", (10, 0, 5)), 
+                         ("FTAJet2{bpf}_pt", (10, 0, 5)),
+                         ("FTAJet3{bpf}_pt", (10, 0, 5)),
+                         ("FTAJet4{bpf}_pt", (10, 0, 5)),
+                         ("FTAJet1{bpf}_DeepJetB_sorted", (10, 0, 5)),
+                         ("FTAJet2{bpf}_DeepJetB_sorted", (10, 0, 5)),
+                         ("FTAJet3{bpf}_DeepJetB_sorted", (10, 0, 5)),
+                         ("FTAJet4{bpf}_DeepJetB_sorted", (10, 0, 5)),
+                         ("nFTAJet{bpf}", (10, 0, 5)), 
+                         #Need Sphericity calculation as well
+    ]
+    AdditionalTemplates = [    
+                            ("FTAMuon_InvariantMass", (10, 0, 5)),
+                            ("FTAElectron_InvariantMass", (10, 0, 5)),
+                            ("ST{bpf}", (10, 0, 5)),
+                            ("FTALepton1_eta", (10, 0, 5)),
+                            ("FTALepton2_eta", (10, 0, 5)),
+    ]
+    HTOnlyTemplates = [("HT{bpf}", (10, 0, 5)),]
+    nPVGoodTemplates = [("PV_npvsGood", (10, 0, 5)),]
+    nTruePileupTemplates = [("Pileup_nTrueInt", (10, 0, 5))]
+    PileupTemplates = [("FTAJet{bpf}_nConstituents", (10, 0, 5)),
+                       ("FTAJet{bpf}_muEF", (10, 0, 5)),
+                       ("FTAJet{bpf}_chEmEF", (10, 0, 5)),
+                       ("FTAJet{bpf}_chHEF", (10, 0, 5)),
+                       ("FTAJet{bpf}_neEmEF", (10, 0, 5)),
+                       ("FTAJet{bpf}_neHEF", (10, 0, 5)),
+                       ("FTAJet{bpf}_chFPV0EF", (10, 0, 5)),
+                       ("FTAJet{bpf}_chFPV1EF", (10, 0, 5)),
+                       ("FTAJet{bpf}_chFPV2EF", (10, 0, 5)),
+                       ("FTAJet{bpf}_chFPV3EF", (10, 0, 5)),
+                       ("FTAJet{bpf}_puIdDisc", (10, 0, 5)),
+                       ("fixedGridRhoFastjetAll", (10, 0, 5)),
+                       ("fixedGridRhoFastjetCentral", (10, 0, 5)),
+                       ("fixedGridRhoFastjetCentralCalo", (10, 0, 5)),
+                       ("fixedGridRhoFastjetCentralChargedPileUp", (10, 0, 5)),
+                       ("fixedGridRhoFastjetCentralNeutral", (10, 0, 5)),
+                       ("nFTAJet{bpf}_genMatched", (10, 0, 5)),
+                       ("nFTAJet{bpf}_nonGenMatched", (10, 0, 5))]
+    WeightStudyTemplates = [("weightLogAbsoluteRelative{spf}", (10, 0, 5)),]
+    if channel == "MuMu":
+        TriggerStudyTemplates += [("FTAMuon1_pt", (10, 0, 5)),
+                                  ("FTAMuon2_pt", (10, 0, 5)),
+                                  ("FTAMuon1_eta", (10, 0, 5)),
+                                  ("FTAMuon2_eta", (10, 0, 5)),
+                                  ("FTAMuon_pfRelIso03_chg", (10, 0, 5)),
+                                  ("FTAMuon_pfRelIso03_all", (10, 0, 5)),
+                              ]
+        ControlTemplates += [("FTAMuon1_pt", (10, 0, 5)),
+                             ("FTAMuon2_pt", (10, 0, 5)),
+                             ("FTAMuon1_eta", (10, 0, 5)),
+                             ("FTAMuon2_eta", (10, 0, 5)),
+                             ("FTAMuon_pfRelIso03_chg", (10, 0, 5)),
+                             ("FTAMuon_pfRelIso03_all", (10, 0, 5)),
+        ]
+        MVAInputTemplates += [("FTAMuon1_pt", (10, 0, 5)),
+                              ("FTAMuon2_pt", (10, 0, 5)),
+        ]        
+    elif channel == "ElMu":
+        TriggerStudyTemplates += [("FTAMuon1_pt", (10, 0, 5)),
+                                  ("FTAElectron1_pt", (10, 0, 5)),
+                                  ("FTAMuon1_eta", (10, 0, 5)),
+                                  ("FTAElectron1_eta", (10, 0, 5)),
+                                  ("FTAMuon_pfRelIso03_chg", (10, 0, 5)),
+                                  ("FTAMuon_pfRelIso03_all", (10, 0, 5)),
+                                  ("FTAElectron_pfRelIso03_chg", (10, 0, 5)),
+                                  ("FTAElectron_pfRelIso03_all", (10, 0, 5)),
+                              ]
+        ControlTemplates += [("FTAMuon1_pt", (10, 0, 5)),
+                             ("FTAElectron1_pt", (10, 0, 5)),
+                             ("FTAMuon1_eta", (10, 0, 5)),
+                             ("FTAElectron1_eta", (10, 0, 5)),
+                             ("FTAMuon_pfRelIso03_chg", (10, 0, 5)),
+                             ("FTAMuon_pfRelIso03_all", (10, 0, 5)),
+                             ("FTAElectron_pfRelIso03_chg", (10, 0, 5)),
+                             ("FTAElectron_pfRelIso03_all", (10, 0, 5)),
+        ]
+        MVAInputTemplates += [("FTAMuon1_pt", (10, 0, 5)),
+                              ("FTAElectron1_pt", (10, 0, 5)),
+        ]
+    elif channel == "ElEl":
+        TriggerStudyTemplates += [("FTAElectron1_pt", (10, 0, 5)),
+                                  ("FTAElectron2_pt", (10, 0, 5)),
+                                  ("FTAElectron1_eta", (10, 0, 5)),
+                                  ("FTAElectron2_eta", (10, 0, 5)),
+                                  ("FTAElectron_pfRelIso03_chg", (10, 0, 5)),
+                                  ("FTAElectron_pfRelIso03_all", (10, 0, 5)),
+                              ]
+        ControlTemplates += [("FTAElectron1_pt", (10, 0, 5)),
+                             ("FTAElectron2_pt", (10, 0, 5)),
+                             ("FTAElectron1_eta", (10, 0, 5)),
+                             ("FTAElectron2_eta", (10, 0, 5)),
+                             ("FTAElectron_pfRelIso03_chg", (10, 0, 5)),
+                             ("FTAElectron_pfRelIso03_all", (10, 0, 5)),
+        ]
+        MVAInputTemplates += [("FTAElectron1_pt", (10, 0, 5)),
+                              ("FTAElectron2_pt", (10, 0, 5)),
+        ]
+
+    if bTagger.lower() == "deepjet":
+        MVAInputTemplates += [("nLooseDeepJetB{bpf}", (10, 0, 5)),
+                            ("nMediumDeepJetB{bpf}", (10, 0, 5)),
+                            ("nTightDeepJetB{bpf}", (10, 0, 5)),]
+    elif bTagger.lower() == "deepcsv":
+        MVAInputTemplates += [("nLooseDeepCSVB{bpf}", (10, 0, 5)),
+                            ("nMediumDeepCSVB{bpf}", (10, 0, 5)),
+                            ("nTightDeepCSVB{bpf}", (10, 0, 5)),]
+    elif bTagger.lower() == "csvv2":
+        MVAInputTemplates += [("nLooseCSVv2B{bpf}", (10, 0, 5)),
+                            ("nMediumCSVv2B{bpf}", (10, 0, 5)),
+                            ("nTightCSVv2B{bpf}", (10, 0, 5)),]
+
+    if variableSet == "HTOnly":
+        combineHistoTemplate = HTOnlyTemplates
+    elif variableSet == "MVAInput":
+        combineHistoTemplate = MVAInputTemplates
+    elif variableSet == "Control":
+        combineHistoTemplate = ControlTemplates
+    elif variableSet == "Study":
+        combineHistoTemplate = StudyTemplates
+    elif variableSet == "TriggerStudy":
+        combineHistoTemplate = TriggerStudyTemplates
+    elif variableSet == "ResolutionStudy":
+        combineHistoTemplate = ResolutionStudyTemplates
+    elif variableSet == "WeightStudy":
+        combineHistoTemplate = WeightStudyTemplates
+    elif variableSet == "nPVs":
+        combineHistoTemplate = nPVGoodTemplates
+    elif variableSet == "nTruePileup":
+        combineHistoTemplate = nTruePileupTemplates
+    elif variableSet == "Pileup":
+        combineHistoTemplate = PileupTemplates
+    elif variableList is not None:
+        combineHistoTemplate = variableList
+    else:
+        raise RuntimeError("Unrecognized variableSet {}".format(variableSet))
+
+    #Fill this list with variables for each branchpostfix
+    combineHistoVariables = [] 
+    #Get the list of defined columns for checks
+    histoNodes = histosDict #Inherit this from initiliazation, this is where the histograms will actually be stored
+    if isinstance(input_df_or_nodes, (dict, collections.OrderedDict)):
+        filterNodes = input_df_or_nodes.get("filterNodes")
+        nodes = input_df_or_nodes.get("nodes")
+        defineNodes = input_df_or_nodes.get("defineNodes")
+        diagnosticNodes = input_df_or_nodes.get("diagnosticNodes")
+        countNodes = input_df_or_nodes.get("countNodes")
+    else:
+        filterNodes = collections.OrderedDict()
+        nodes = collections.OrderedDict()
+        defineNodes = collections.OrderedDict()
+        diagnosticNodes = collections.OrderedDict()
+        countNodes = collections.OrderedDict()
+        eraAndSampleName = era + "___" + sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
+        nodes["BaseNode"] = input_df_or_nodes #Always store the base node we'll build upon in the next level
+        #The below references branchpostfix since we only need nodes for these types of scale variations...
+        if eraAndSampleName not in nodes:
+            #L-2 filter, should be the packedEventID filter in that case
+            filterNodes[eraAndSampleName] = collections.OrderedDict()
+            filterNodes[eraAndSampleName]["BaseNode"] = ("return true;", "{}".format(eraAndSampleName), eraAndSampleName, None, None, None, None)
+            nodes[eraAndSampleName] = collections.OrderedDict()
+            nodes[eraAndSampleName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[eraAndSampleName]["BaseNode"][0], filterNodes[eraAndSampleName]["BaseNode"][1])
+            countNodes[eraAndSampleName] = collections.OrderedDict()
+            countNodes[eraAndSampleName]["BaseNode"] = nodes[eraAndSampleName]["BaseNode"].Count()
+            diagnosticNodes[eraAndSampleName] = collections.OrderedDict()
+            defineNodes[eraAndSampleName] = collections.OrderedDict()
+
+
+    #Make sure the nominal is done first so that categorization is successful
+    for sysVarRaw, sysDict in sorted(sysVariations.items(), key=lambda x: "$NOMINAL" in x[0], reverse=True):
+        #skip systematic variations on data, only do the nominal
+        if isData and sysVarRaw != "$NOMINAL": 
+            continue
+        #Only do systematics that are in the filter list (storing raw systematic names...
+        if sysVarRaw not in sysFilter:
+            continue
+        #get final systematic name
+        sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
+        #skip making MET corrections unless it is: Nominal or a scale variation (i.e. JES up...)
+        isWeightVariation = sysDict.get("weightVariation", False)
+        #jetMask = sysDict.get("jet_mask").replace("$SYSTEMATIC", sysVar).replace("$LEP_POSTFIX", sysDict.get('lep_postfix', ''))
+        #jetPt = sysDict.get("jet_pt_var")
+        #jetMass = sysDict.get("jet_mass_var")
+        #Name histograms with their actual systematic variation postfix, using the convention that HISTO_NAME__nom is
+        # the nominal and HISTO_NAME__$SYSTEMATIC is the variation, like so:
+        syspostfix = "___nom" if sysVarRaw == "$NOMINAL" else "___{}".format(sysVar)
+        #Rename systematics on a per-sample basis, rest of code in the eraAndSampleName cycle
+        systematicRemapping = sysDict.get("sampleRemapping", None)
+        #name branches for filling with the nominal postfix if weight variations, and systematic postfix if scale variation (jes_up, etc.)
+        branchpostfix = None
+        if isWeightVariation:
+            branchpostfix = "__nom"
+        else:
+            branchpostfix = "__" + sysVar
+        leppostfix = sysDict.get("lep_postfix", "") #No variation on this yet, but just in case
+        if variableSet == "WeightStudy":
+            combineHistoVariables += [(templateVar[0].format(spf=syspostfix, tag=tagger), templateVar[1]) for templateVar in combineHistoTemplate]
+        else:
+            combineHistoVariables += [(templateVar[0].format(bpf=branchpostfix, tag=tagger), templateVar[1]) for templateVar in combineHistoTemplate]
+        
+
+        
+        fillJet = "FTAJet{bpf}".format(bpf=branchpostfix)
+        fillJetEnumerated = "FTAJet{{n}}{bpf}".format(bpf=branchpostfix)
+        fillJet_pt = "FTAJet{bpf}_pt".format(bpf=branchpostfix)
+        fillJet_phi = "FTAJet{bpf}_phi".format(bpf=branchpostfix)
+        fillJet_eta = "FTAJet{bpf}_eta".format(bpf=branchpostfix)
+        fillJet_mass = "FTAJet{bpf}_mass".format(bpf=branchpostfix)
+        fillMET_pt = "FTAMET{bpf}_pt".format(bpf=branchpostfix)
+        fillMET_phi = "FTAMET{bpf}_phi".format(bpf=branchpostfix)
+        fillMET_uncorr_pt = sysDict.get("met_pt_var", "MET_pt")
+        fillMET_uncorr_phi = sysDict.get("met_phi_var", "MET_phi")
+
+        if verbose:
+            print("Systematic: {spf} \n\t - Branch: {bpf}\n\t - Jets: {fj}=({fjp}, {fji}, {fje}"\
+                  ", {fjm})\n\t - MET: ({mpt}, {mph})".format(spf=syspostfix,
+                                                              bpf=branchpostfix,
+                                                              fj=fillJet,
+                                                              fjp=fillJet_pt,
+                                                              fji=fillJet_phi,
+                                                              fje=fillJet_eta,
+                                                              fjm=fillJet_mass,
+                                                              mpt=fillMET_pt,
+                                                              mph=fillMET_phi)
+              )
+            
+
+        #Get the appropriate weight defined in defineFinalWeights function
+        # wgtVar = sysDict.get("wgt_final", "wgt__nom")
+        wgtVar = "wgt{spf}".format(spf=syspostfix)
+        print("{} chosen as the weight for {} variation (pre systematic re-mapping)".format(wgtVar, syspostfix.replace("___", "")))
+
+        #We need to create filters that depend on scale variations like jesUp/Down, i.e. HT and Jet Pt can and will change
+        #Usually weight variations will be based upon the _nom (nominal) calculations/filters,
+        #Scale variations will usually have a special branch defined. Exeption is sample-based variations like ttbar hdamp, where the nominal branch is used for calculations
+        #but even there, the inputs should be tailored to point to 'nominal' jet pt
+        if not isWeightVariation:
+            #cycle through processes here, should we have many packed together in the sample (ttJets -> lepton decay channel, heavy flavor, light flavor, etc.
+            for eraAndSampleName in nodes:
+                if eraAndSampleName.lower() == "basenode": continue
+                if eraAndSampleName not in histoNodes:
+                    histoNodes[eraAndSampleName] = dict()
+                listOfColumns = nodes[eraAndSampleName]["BaseNode"].GetColumnNames()
+
+                #Guard against wgtVar not being in place
+                if wgtVar not in listOfColumns:
+                    print("{} not found as a valid weight variation, no backup solution implemented".format(wgtVar))
+                    raise RuntimeError("Couldn't find a valid fallback weight variation in fill_histos()")
+
+                #potentially add other channels here, like "IsoMuNonisoEl", etc. for QCD studies, or lpf-dependency
+                #NOTE: we append an extra underscore (postfixes should always have 1 to begin with) to enable use of split("__") to re-deduce postfix outside this 
+                #deeply nested loop
+                for decayChannel in ["ElMu{lpf}".format(lpf=leppostfix), 
+                                     "MuMu{lpf}".format(lpf=leppostfix),
+                                     "ElEl{lpf}".format(lpf=leppostfix),
+                                     "ElEl_LowMET{lpf}".format(lpf=leppostfix),
+                                     "ElEl_HighMET{lpf}".format(lpf=leppostfix),
+                                     ]:
+                    testInputChannel = channel.lower().replace("_baseline", "").replace("_selection", "")
+                    testLoopChannel = decayChannel.lower().replace("{lpf}".format(lpf=leppostfix), "").replace("_baseline", "").replace("_selection", "")
+                    if testInputChannel == "all": 
+                        pass
+                    elif testInputChannel != testLoopChannel: 
+                        if verbose:
+                            print("Skipping channel {chan} in process {proc} for systematic {spf}".format(chan=decayChannel, 
+                                                                                                          proc=eraAndProcessName, 
+                                                                                                          spf=syspostfix.replace("___", "")
+                                                                                                      )
+                            )
+                        continue
+                    #Regarding keys: we'll insert the systematic when we insert all th L0 X L1 X L2 keys in the dictionaries, not here in the L($N) keys
+                    # print("Filtering events with ST >= 500, and removing HT cut!")
+                    if decayChannel == "ElMu{lpf}".format(lpf=leppostfix):
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 1 && nFTAElectron{lpf}== 1".format(lpf=leppostfix)
+                        channelFiltName = "1 el, 1 mu ({lpf})".format(lpf=leppostfix)
+                        L0String = "HT{bpf} >= {htc} && {met} >= {metcut}".format(bpf=branchpostfix, htc=HTCut, met=fillMET_pt, metcut=METCut)
+                        L0Name = "HT{bpf} >= {htc}"\
+                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        L0Key = "ZWindowMET{metwindow}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                                                                                      metwindow=str("0"),
+                                                                                      # metwindow=str(0).replace(".", "p"), 
+                                                                                      zwidth=0)
+                    elif decayChannel == "MuMu{lpf}".format(lpf=leppostfix):
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAMuon{lpf} == 2".format(lpf=leppostfix)
+                        channelFiltName = "2 mu ({lpf})".format(lpf=leppostfix)
+                        L0String = "HT{bpf} >= {htc} && FTAMuon{lpf}_InvariantMass > 20 && ( ({met} >= {metcut} && abs(FTAMuon{lpf}_InvariantMass - 91.2) > {zwidth})"\
+                                   " || ({met} >= {metwindow} && abs(FTAMuon{lpf}_InvariantMass - 91.2) <= {zwidth}))"\
+                            .format(lpf=leppostfix, met=fillMET_pt, metcut=METCut, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                        L0Name = "HT{bpf} >= {htc}, {met} >= {metcut}, Di-Muon Resonance > 20GeV and outside {zwidth}GeV Z Window or inside with {met} >= {metwindow}"\
+                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=METCut, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        L0Key = "ZWindowMET{metwindow}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                                                                                   metwindow=str("0p0"),
+                                                                                   # metwindow=str(ZMassMETWindow[1]).replace(".", "p"), 
+                                                                                   zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
+                        # L0String = "ST{bpf} >= {htc} && {met} >= {metwindow} && FTAMuon{lpf}_InvariantMass > 20 && abs(FTAMuon{lpf}_InvariantMass - 91.2) > {zwidth}"\
+                        #     .format(lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                        # L0Name = "ST{bpf} >= {htc}, {met} >= {metwindow}, Di-Muon Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                        #     .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        # L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                        #                                                          metwindow=str(ZMassMETWindow[1]).replace(".", "p"), 
+                        #                                                          zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
+                    elif decayChannel == "ElEl{lpf}".format(lpf=leppostfix):
+                        channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
+                        # print("\n\n2MediumElectron test in ElEl Channel\n\n")
+                        # channelFilter = "nFTALepton{lpf} == 2 && nMediumFTAElectron{lpf}== 2".format(lpf=leppostfix)
+                        channelFiltName = "2 el ({lpf})".format(lpf=leppostfix)
+                        L0String = "HT{bpf} >= {htc} && FTAElectron{lpf}_InvariantMass > 20 && ( ({met} >= {metcut} && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth})"\
+                                   " || ({met} >= {metwindow} && abs(FTAElectron{lpf}_InvariantMass - 91.2) <= {zwidth}))"\
+                            .format(lpf=leppostfix, met=fillMET_pt, metcut=METCut, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                        L0Name = "HT{bpf} >= {htc}, {met} >= {metcut}, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                            .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metcut=METCut, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        L0Key = "ZWindowMET{metwindow}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                                                                                      metwindow=str("0p0"),
+                                                                                      # metcut=str(METCut).replace(".", "p"), 
+                                                                                      zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
+                        # L0String = "ST{bpf} >= {htc} && {met} >= {metwindow} && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
+                        #     .format(lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                        # L0Name = "ST{bpf} >= {htc}, {met} >= {metwindow}, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                        #     .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                        # L0Key = "ZWindowMET{metcut}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                        #                                                          metcut=str(METCut).replace(".", "p"), 
+                        #                                                          zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
+                    #THESE NEED THE MET CUT/WINDOW DIVISION INTRODUCED, DON'T REENABLE OTHERWISE
+                    # elif decayChannel == "ElEl_LowMET{lpf}".format(lpf=leppostfix):
+                    #     channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
+                    #     channelFiltName = "2 el, Low MET ({lpf})".format(lpf=leppostfix)
+                    #     L0String = "HT{bpf} >= {htc} && {met} < 50 && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
+                    #         .format(lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                    #     L0Name = "HT{bpf} >= {htc}, {met} < 50, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                    #         .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                    #     L0Key = "ZWindowMET0to50Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                    #                                                              metwindow=str(ZMassMETWindow[1]).replace(".", "p"), 
+                    #                                                              zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
+                    # elif decayChannel == "ElEl_HighMET{lpf}".format(lpf=leppostfix):
+                    #     channelFilter = "nFTALepton{lpf} == 2 && nFTAElectron{lpf}== 2".format(lpf=leppostfix)
+                    #     channelFiltName = "2 el, High MET ({lpf})".format(lpf=leppostfix)
+                    #     L0String = "HT{bpf} >= {htc} && {met} >= 50 && FTAElectron{lpf}_InvariantMass > 20 && abs(FTAElectron{lpf}_InvariantMass - 91.2) > {zwidth}"\
+                    #         .format(lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0], bpf=branchpostfix, htc=HTCut)
+                    #     L0Name = "HT{bpf} >= {htc}, {met} >= 50, Di-Electron Resonance > 20GeV and outside {zwidth}GeV Z Window"\
+                    #         .format(bpf=branchpostfix, htc=HTCut, lpf=leppostfix, met=fillMET_pt, metwindow=ZMassMETWindow[1], zwidth=ZMassMETWindow[0])
+                    #     L0Key = "ZWindowMET50Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                    #                                                              metwindow=str(ZMassMETWindow[1]).replace(".", "p"), 
+                    #                                                              zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
+                    else:
+                        raise NotImplementedError("No definition for decayChannel = {} yet".format(decayChannel))
+                    #filter define, filter name, process, channel, L0 (HT/ZWindow <cross> SCALE variations), L1 (nBTags), L2 (nJet)
+                    #This is the layer -1 key, insert and proceed to layer 0
+                    if decayChannel not in nodes[eraAndSampleName]: 
+                        #protect against overwriting, as these nodes will be shared amongst non-weight variations!
+                        #There will be only one basenode per decay channel
+                        # filterNodes[eraAndSampleName][decayChannel] = collections.OrderedDict()
+                        filterNodes[eraAndSampleName][decayChannel] = collections.OrderedDict()
+                        filterNodes[eraAndSampleName][decayChannel]["BaseNode"] = (channelFilter, channelFiltName, eraAndSampleName, decayChannel, None, None, None) #L-1 filter
+                        print(filterNodes[eraAndSampleName][decayChannel]["BaseNode"])
+                        # nodes[eraAndSampleName][decayChannel] = collections.OrderedDict()
+                        nodes[eraAndSampleName][decayChannel] = collections.OrderedDict()
+                        nodes[eraAndSampleName][decayChannel]["BaseNode"] = nodes[eraAndSampleName]["BaseNode"].Filter(filterNodes[eraAndSampleName][decayChannel]["BaseNode"][0],
+                                                                                                             filterNodes[eraAndSampleName][decayChannel]["BaseNode"][1])
+                        # countNodes[eraAndSampleName][decayChannel] = collections.OrderedDict()
+                        countNodes[eraAndSampleName][decayChannel] = collections.OrderedDict()
+                        countNodes[eraAndSampleName][decayChannel]["BaseNode"] = nodes[eraAndSampleName][decayChannel]["BaseNode"].Count()
+
+                        #more freeform diagnostic nodes
+                        diagnosticNodes[eraAndSampleName][decayChannel] = dict()
+
+                        #Make some key for the histonodes, lets stop at decayChannel for now for the tuples, but keep a dict with histoName as key for histos...
+                        defineNodes[eraAndSampleName][decayChannel] = []
+                    if decayChannel not in histoNodes[eraAndSampleName]:
+                        histoNodes[eraAndSampleName][decayChannel] = collections.OrderedDict()
+
+                    #NOTE: This structure requires no dependency of L0 and higher nodes upon eraAndSampleName, leppostfix... potential problem later if that changes
+                    #The layer 0 key filter, this is where we intend to start doing histograms (plus subsequently nested nodes on layers 1 and 2
+                    if "L0Nodes" not in filterNodes[eraAndSampleName][decayChannel]:
+                        filterNodes[eraAndSampleName][decayChannel]["L0Nodes"] = []
+                        filterNodes[eraAndSampleName][decayChannel]["L1Nodes"] = []
+                        filterNodes[eraAndSampleName][decayChannel]["L2Nodes"] = [] 
+
+        
+                    #We need some indices to be able to sub-select the filter nodes we need to apply, this makes it more automated when we add different nodes
+                    #These indicate the start for slicing i.e list[start:stop]
+                    L0start = len(filterNodes[eraAndSampleName][decayChannel]["L0Nodes"])
+                    L1start = len(filterNodes[eraAndSampleName][decayChannel]["L1Nodes"])
+                    L2start = len(filterNodes[eraAndSampleName][decayChannel]["L2Nodes"])
+                        
+                    #L0 nodes must reference the process, decay chanel, and this L0Key, which will form the first 3 nested keys in nodes[...]
+                    #We'll create one of these for each decay channel, since this filter depends directly on the channel, and since it also depends on
+                    #scale variation, it necessarily depends on the process, since that process may or may not have such a scale variation to be applied
+                    filterNodes[eraAndSampleName][decayChannel]["L0Nodes"].append((L0String, L0Name, eraAndSampleName, decayChannel, L0Key, None, None)) #L0 filter
+                    #Tuple format: (filter code, filter name, process, channel, L0 key, L1 key, L2 key) where only one of L0, L1, L2 keys are non-None!
+                    
+                    # filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                    #     ("return true;".format(tag=tagger, bpf=branchpostfix), "0+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix),eraAndSampleName, decayChannel, None, "nMedium{tag}0+".format(tag=tagger, bpf=branchpostfix), None))
+                    # filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                    #     ("nMedium{tag}{bpf} >= 1".format(tag=tagger, bpf=branchpostfix), "1+ nMedium{tag}({bpf})".format(tag=tagger, bpf=branchpostfix), eraAndSampleName, decayChannel, None, "nMedium{tag}1+".format(tag=tagger, bpf=branchpostfix), None))
+
+                    #Hack for now, we no longer categorize 1D histograms
+                    filterNodes[eraAndSampleName][decayChannel]["L1Nodes"].append(
+                        ("return true;", 
+                         "passthrough L1 node",
+                         eraAndSampleName, 
+                         decayChannel, 
+                         None, 
+                         "nMedium{tag}3+".format(tag=tagger, bpf=branchpostfix), 
+                         None)
+                    )
+                    filterNodes[eraAndSampleName][decayChannel]["L2Nodes"].append(
+                        ("nFTAJet{bpf} >= 7".format(bpf=branchpostfix), 
+                         "7+ Jets ({bpf})".format(bpf=branchpostfix),
+                         eraAndSampleName, 
+                         decayChannel, 
+                         None, 
+                         None, 
+                         "nJet7+".format(bpf=branchpostfix))
+                    )
+
+                    #We need some indices to be able to sub-select the filter nodes we need to apply, this makes it more automated when we add different nodes
+                    #These indicate the end for slicing
+                    L0stop = len(filterNodes[eraAndSampleName][decayChannel]["L0Nodes"])
+                    L1stop = len(filterNodes[eraAndSampleName][decayChannel]["L1Nodes"])
+                    L2stop = len(filterNodes[eraAndSampleName][decayChannel]["L2Nodes"])
+
+                    #To avoid any additional complexity, since this is too far from KISS as is, continue applying the filters right after defining them (same depth)
+                    #unpack the tuple using lower case l prefix
+                    for l0Tuple in filterNodes[eraAndSampleName][decayChannel]["L0Nodes"][L0start:L0stop]:
+                        l0Code = l0Tuple[0]
+                        l0Name = l0Tuple[1]
+                        l0Proc = l0Tuple[2]
+                        l0Chan = l0Tuple[3]
+                        l0Key = l0Tuple[4]
+                        l0l1Key = l0Tuple[5]
+                        l0l2Key = l0Tuple[6]
+                        assert l0Proc == eraAndSampleName, "eraAndSampleName mismatch, was it formatted correctly?\n{}".format(l0Tuple)
+                        assert l0Chan == decayChannel, "decayChannel mismatch, was it formatted correctly?\n{}".format(l0Tuple)
+                        assert l0l1Key == None, "non-None key in tuple for L1, was it added in the correct place?\n{}".format(l0Tuple)
+                        assert l0l2Key == None, "non-None key in tuple for L2, was it added in the correct place?\n{}".format(l0Tuple)
+
+                        #Here we begin the complication of flattening the key-value structure. We do not nest any deeper, but instead
+                        #form keys as combinations of l0Key, l1Key, l2Key... 
+                        #Here, form the cross key, and note the reference key it must use
+                        crossl0Key = "{l0}{spf}".format(l0=l0Key, spf=syspostfix)
+                        referencel0Key = "BaseNode" #L0 Filters are applied to 'BaseNode' of the nodes[proc][chan] dictionary of dataframes
+                        if crossl0Key in nodes[eraAndSampleName][decayChannel]:
+                            raise RuntimeError("Tried to redefine rdf node due to use of the same key: {}".format(crossl0Key))
+                        nodes[eraAndSampleName][decayChannel][crossl0Key] = nodes[eraAndSampleName][decayChannel][referencel0Key].Filter(l0Code, l0Name)
+                        countNodes[eraAndSampleName][decayChannel][crossl0Key] = nodes[eraAndSampleName][decayChannel][crossl0Key].Count()
+
+                                # crossl0l1l2Key = "{l0}_CROSS_{l1}_CROSS_{l2}{spf}".format(l0=l0Key, l1=l1Key, l2=l2Key, spf=syspostfix)
+                                # referencel0l1l2Key = "{}".format(crossl0l1Key)#L2 Filters are applied to L1 filters, so this is the nodes[proc][chan][reference] to build upon
+                                # if crossl0l1l2Key in nodes[eraAndSampleName][decayChannel]:
+                                #     raise RuntimeError("Tried to redefine rdf node due to use of the same key: {}".format(crossl0l1l2Key))
+                                # nodes[eraAndSampleName][decayChannel][crossl0l1l2Key] = nodes[eraAndSampleName][decayChannel][referencel0l1l2Key].Filter(l2Code, l2Name)
+
+        #Regarding naming conventions:
+        #Since category can use __ as a separator between branchpostfix and the rest, extend to ___ to separate further... ugly, but lets
+        #try sticking with valid C++ variable names (alphanumeric + _). Also note that {spf} will result in 3 underscores as is currently defined
+        #CYCLE THROUGH CATEGORIES in the nodes that exist now, nodes[eraAndSampleName][decayChannel][CATEGORIES]
+        #We are inside the systematics variation, so we cycle through everything else (nominal nodes having been created first!)
+        if skipNominalHistos and sysVar.lower() in ["nom", "nominal", "$nominal"]:
+            print("Skipping histograms and diagnostics for the nominal due to skipNominalHistos=True flag")
+            continue
+        for eraAndSampleName in nodes:
+            if eraAndSampleName.lower() == "basenode": continue
+            eraAndProcessName = eraAndSampleName.replace("-HDAMPdown", "").replace("-HDAMPup", "").replace("-TuneCP5down", "").replace("-TuneCP5up", "")
+            histopostfix = None
+            if systematicRemapping is None:
+                histopostfix = syspostfix
+            else:
+                for systRemap, remapSamples in systematicRemapping.items():
+                    if eraAndSampleName.split("___")[-1] in remapSamples:
+                        histopostfix = "___{}".format(systRemap)
+            if histopostfix is None:
+                raise RuntimeError("Systematic {syst}'s remapping dictionary does not contain process {proc}.".format(syst=sysVar, proc=eraAndProcessName))
+
+            for decayChannel in nodes[eraAndSampleName]:
+                if decayChannel.lower() == "basenode": continue
+                if hasattr(options, 'noProgressBar') and options.noProgressBar:
+                    this_iterable = nodes[eraAndSampleName][decayChannel].items()
+                else:
+                    this_iterable = tqdm.tqdm(nodes[eraAndSampleName][decayChannel].items(), 
+                                              desc='Appending define tuples for channel {}'.format(decayChannel))
+                for category, categoryNode in this_iterable:
+                    if category.lower() == "basenode": continue
+
+                    #IMPORTANT: Skip nodes that belong to other systematic variations, since it's a dictionary!
+                    # if verbose:
+                    #     print("for category {} and branchpostfix {} we are skipping {}".format(category.split("___")[-1], 
+                    #                                                                            branchpostfix.replace("__", ""), 
+                    #                                                                            category.split("___")[-1] != branchpostfix.replace("__", "")))
+                    if category.split("___")[-1] != branchpostfix.replace("__", ""): 
+                        continue 
+                        
+                    isBlinded = False
+                    # crossSeparated = "___".join(category.split("___")[:-1]).split("_CROSS_")#Strip the systematic name from the branch by taking all but the last element
+                    # categoryName = "_".join(crossSeparated) #No extra references to (lep/branch/sys)postfixes...
+                    categoryName = "ZWindowMET{metwindow}Width{zwidth}___HT{htc}".format(spf=syspostfix, htc=str(HTCut).replace(".", "p"), 
+                                                                                         metwindow=str("0p0"),
+                                                                                         zwidth=str(ZMassMETWindow[0]).replace(".", "p"))
+                    #This will be easier to deal with in plotting than prepending "blind_"
+                    if verbose:
+                        print("blind={}\n{}\n{}\n\n".format(isBlinded, crossSeparated, categoryName))
+
+                    #Append histogram tuples for HistoND() methods to the list, the list should overall contain each set grouped by systematic variation
+                    Hstart = len(defineNodes[eraAndSampleName][decayChannel])
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTACrossCleanedJet_diffptraw{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "(Jet - Raw) p_{{T}} (CCJet)({hpf});(Raw - Jet) p_{{T}}(CC LeadLep); Events".format(hpf=histopostfix.replace("__", "")), 
+                    #                                                 100,-300,300), "FTACrossCleanedJet{bpf}_diffptraw".format(bpf=branchpostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTACrossCleanedJet_diffptrawinverted{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "(Raw - Jet) p_{{T}} (non-CCJets)({hpf});(Raw - Jet) p_{{T}}(CC LeadLep); Events".format(hpf=histopostfix.replace("__", "")), 
+                    #                                                 100,-300,300), "FTACrossCleanedJet{bpf}_diffptrawinverted".format(bpf=branchpostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTACrossCleanedJet_diffpt{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "(Jet - LeadLep) p_{{T}} (CCJet)({hpf});(Jet - LeadLep) p_{{T}}(CC LeadLep); Events".format(hpf=histopostfix.replace("__", "")), 
+                    #                                                 100,-300,300), "FTACrossCleanedJet{bpf}_diffpt".format(bpf=branchpostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTACrossCleanedJet_pt{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "Jet p_{{T}} (CCJet)({hpf});Jet p_{{T}}(CC LeadLep); Events".format(hpf=histopostfix.replace("__", "")), 
+                    #                                                 100,0,300), "FTACrossCleanedJet{bpf}_pt".format(bpf=branchpostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTACrossCleanedJet_rawpt{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "Jet Raw p_{{T}} (CCJet)({hpf});Jet Raw p_{{T}}(CC LeadLep); Events".format(hpf=histopostfix.replace("__", "")), 
+                    #                                                 100,0,300), "FTACrossCleanedJet{bpf}_rawpt".format(bpf=branchpostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___FTACrossCleanedJet_leppt{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "Lead Lep p_{{T}} (CCJet)({hpf});Lead Lep p_{{T}}(CC Jet); Events".format(hpf=histopostfix.replace("__", "")), 
+                    #                                                 100,0,300), "FTACrossCleanedJet{bpf}_leppt".format(bpf=branchpostfix), wgtVar))
+                    # for x in range(nJetsToHisto):
+                    #     thisFillJet = fillJetEnumerated.format(n=x+1)
+                    #     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Jet{n}_pt{hpf}"\
+                    #                                                     .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                     "Jet_{n} p_{{T}} ({hpf}); p_{{T}}; Events"\
+                    #                                                     .format(n=x+1, hpf=histopostfix.replace("__", "")), 140, 0, 700),
+                    #                                                    "{tfj}_pt".format(tfj=thisFillJet, n=x+1), wgtVar))
+                    #     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Jet{n}_eta{hpf}"\
+                    #                                                     .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                     "Jet_{n} #eta ({hpf}); #eta; Events"\
+                    #                                                     .format(n=x+1, hpf=histopostfix.replace("__", "")), 100, -2.6, 2.6),
+                    #                                                    "{tfj}_eta".format(tfj=thisFillJet, n=x+1), wgtVar))
+                    #     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Jet{n}_phi{hpf}"\
+                    #                                                     .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix),
+                    #                                                     "Jet_{n} #phi ({hpf}); #phi; Events".format(n=x+1, hpf=histopostfix.replace("__", "")), 100, -pi, pi),
+                    #                                                    "{tfj}_phi".format(tfj=thisFillJet, n=x+1), wgtVar))
+                    #     if bTagger.lower() == "deepcsv":
+                    #         defineNodes[eraAndSampleName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet{n}_DeepCSVB{hpf}"\
+                    #                                                               .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix),
+                    #                                                               "Jet_{n} (p_{{T}} sorted) DeepCSV B Discriminant ({hpf}); Discriminant; Events"\
+                    #                                                               .format(n=x+1, hpf=histopostfix.replace("__", "")), 120, -0.1, 1.1),
+                    #                                                              "{tfj}_DeepCSVB".format(tfj=thisFillJet, n=x+1), wgtVar))
+                    #         defineNodes[eraAndSampleName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet{n}_DeepCSVB_sorted{hpf}"\
+                    #                                                               .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix),
+                    #                                                               "Jet_{n} (DeepCSVB sorted) DeepCSV B Discriminant ({hpf}); Discriminant; Events"\
+                    #                                                               .format(n=x+1, hpf=histopostfix.replace("__", "")), 120, -0.1, 1.1),
+                    #                                                              "{tfj}_DeepCSVB_sorted".format(tfj=thisFillJet, n=x+1), wgtVar))
+                    #     if bTagger.lower() == "deepjet":
+                    #         defineNodes[eraAndSampleName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet{n}_DeepJetB{hpf}"\
+                    #                                                               .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix),
+                    #                                                               "Jet_{n} (p_{{T}} sorted) DeepJet B Discriminant ({hpf}); Discriminant; Events"\
+                    #                                                               .format(n=x+1, hpf=histopostfix.replace("__", "")), 120, -0.1, 1.1),
+                    #                                                              "{tfj}_DeepJetB".format(tfj=thisFillJet, n=x+1), wgtVar))
+
+                    #         defineNodes[eraAndSampleName][decayChannel].append( (("{proc}___{chan}___{cat}___Jet{n}_DeepJetB_sortedjet{hpf}"\
+                    #                                                               .format(proc=eraAndProcessName, n=x+1, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                               "Jet_{n} (DeepJetB sorted) DeepJet B Discriminant ({hpf}); Discriminant; Events"\
+                    #                                                               .format(n=x+1, hpf=histopostfix.replace("__", "")), 120, -0.1, 1.1),
+                    #                                                              "{tfj}_DeepJetB_sorted".format(tfj=thisFillJet, n=x+1), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___MET_pt{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "MET ({hpf}); Magnitude (GeV); Events".format(hpf=histopostfix.replace("__", "")), 
+                    #                                                 100,0,1000), fillMET_pt, wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___MET_phi{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix),
+                    #                                                 "MET #phi({hpf}); #phi; Events".format(hpf=histopostfix.replace("__", "")), 
+                    #                                                 100,-pi,pi), fillMET_phi, wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___MET_uncorr_pt{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "Uncorrected MET", 100,0,1000), fillMET_uncorr_pt, wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___MET_uncorr_phi{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "", 100,-pi,pi), fillMET_uncorr_phi, wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_dz{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "", 500, -0.25, 0.25), "FTAMuon{lpf}_dz".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_ip3d{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "", 300, -0.1, 0.2), "FTAMuon{lpf}_ip3d".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_all{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_LeadLep{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix, lpf=leppostfix), 
+                    #                                                 "", 100, 10, 510), "FTAMuon{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_pt_SubleadLep{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix, lpf=leppostfix), 
+                    #                                                 "", 100, 10, 510), "FTAMuon{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_eta_LeadLep{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix, lpf=leppostfix), 
+                    #                                                 "", 100, -2.5, 2.5), "FTAMuon{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_eta_SubleadLep{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix, lpf=leppostfix), 
+                    #                                                 "", 100, -2.5, 2.5), "FTAMuon{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_phi_LeadLep{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix, lpf=leppostfix), 
+                    #                                                 "", 100, -pi, pi), "FTAMuon{lpf}_phi_LeadLep".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon{lpf}_phi_SubleadLep{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix, lpf=leppostfix), 
+                    #                                                 "", 100, -pi, pi), "FTAMuon{lpf}_phi_SubleadLep".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso03_chg{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Muon_pfRelIso04_all{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix),
+                    #                                                 "", 100, 0, 0.2), "FTAMuon{lpf}_pfRelIso04_all".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_dz{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "", 500, -0.25, 0.25), "FTAElectron{lpf}_dz".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_ip3d{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "", 300, -0.1, 0.2), "FTAElectron{lpf}_ip3d".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_LeadLep{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix, lpf=leppostfix), 
+                    #                                                 "", 100, 10, 510), "FTAElectron{lpf}_pt_LeadLep".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_pt_SubleadLep{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix, lpf=leppostfix), 
+                    #                                                 "", 100, 10, 510), "FTAElectron{lpf}_pt_SubleadLep".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_eta_LeadLep{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix, lpf=leppostfix), 
+                    #                                                 "", 100, -2.5, 2.5), "FTAElectron{lpf}_eta_LeadLep".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_eta_SubleadLep{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix, lpf=leppostfix), 
+                    #                                                 "", 100, -2.5, 2.5), "FTAElectron{lpf}_eta_SubleadLep".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_phi_LeadLep{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix, lpf=leppostfix), 
+                    #                                                 "", 100, -pi, pi), "FTAElectron{lpf}_phi_LeadLep".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron{lpf}_phi_SubleadLep{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix, lpf=leppostfix), 
+                    #                                                 "", 100, -pi, pi), "FTAElectron{lpf}_phi_SubleadLep".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_all{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_all".format(lpf=leppostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___Electron_pfRelIso03_chg{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "", 100, 0, 0.2), "FTAElectron{lpf}_pfRelIso03_chg".format(lpf=leppostfix), wgtVar))
+                    # # # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___npvsGood_vs_HT{hpf}"\
+                    # # #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    # # #                                                 ";npvsGood;HT", 100, 400, 2000, 20, 0, 100), "PV_npvsGood", "HT{bpf}".format(bpf=branchpostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___ScalarRecoilTotal{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "", 100,0,3000), "FTAScalarRecoilTotal{bpf}_pt".format(bpf=branchpostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___ScalarRecoilAverage{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "", 100,0,3000), "FTAScalarRecoilAverage{bpf}_pt".format(bpf=branchpostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___VectorRecoilTotal{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "", 100,0,3000), "FTAScalarRecoilAverage{bpf}_pt".format(bpf=branchpostfix), wgtVar))
+                    # defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___ST{hpf}"\
+                    #                                                 .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                 "", 100,400,2000), "ST{bpf}".format(bpf=branchpostfix), wgtVar))
+                    # if isData == False:
+                    #     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___GenMatchedHT{hpf}"\
+                    #                                                          .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                          ";H_{T};H_{T}^{Gen}", HTBins,400,2000, HTBins,400,2000), "HT{bpf}".format(bpf=branchpostfix),
+                    #                                                         "GenMatchedHT{bpf}".format(bpf=branchpostfix), wgtVar))
+                    #     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___HTminusGenMatchedHT{hpf}"\
+                    #                                                          .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                          ";H_{T};H_{T}-H_{T}^{Gen}", 300,500,2000, 100,-100,100), "HT{bpf}".format(bpf=branchpostfix),
+                    #                                                         "HTminusGenMatchedHT{bpf}".format(bpf=branchpostfix), wgtVar))
+                    #     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___nJetGenMatchedvnJet{hpf}"\
+                    #                                                          .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                          "", 12,0,12, 12,0,12), "n{fj}".format(fj=fillJet), "n{fj}_genMatched".format(fj=fillJet), wgtVar))
+                    #     defineNodes[eraAndSampleName][decayChannel].append((("{proc}___{chan}___{cat}___nJetNonGenMatchedvnJet{hpf}"\
+                    #                                                          .format(proc=eraAndProcessName, chan=decayChannel, cat=categoryName,  hpf=histopostfix), 
+                    #                                                          "", 12,0,12, 12,0,12), "n{fj}".format(fj=fillJet), "n{fj}_nonGenMatched".format(fj=fillJet), wgtVar))
+                    if variableSet == "HTOnly":
+                        HT_Model = ROOT.RDF.TH3DModel(f"{eraAndProcessName}___{decayChannel}___{categoryName}___HT{histopostfix}",
+                                                      f"H_{{T}} ({histopostfix[3:]}); Jet Multiplicity; Medium b-Tagged Jet Multiplicity; H_{{T}}",
+                                                      len(nJetArr)-1, nJetArr, len(nBTagArr)-1, nBTagArr, len(HTArr)-1, HTArr)
+                        defineNodes[eraAndSampleName][decayChannel].append(
+                            (HT_Model, 
+                             f"n{fillJet}", 
+                             f"nMedium{tagger}{branchpostfix}",
+                             f"HT{branchpostfix}", 
+                             wgtVar)
+                        )
+                        if not isWeightVariation:
+                            HTUnweighted_Model = ROOT.RDF.TH3DModel(f"{eraAndProcessName}___{decayChannel}___{categoryName}___HTUnweighted{histopostfix}",
+                                                                    f"H_{{T}}^{{Unweighted}} ({histopostfix[3:]}); Jet Multiplicity; Medium b-Tagged Jet Multiplicity; H_{{T}}",
+                                                                    len(nJetArr)-1, nJetArr, len(nBTagArr)-1, nBTagArr, len(HTArr)-1, HTArr)
+                            defineNodes[eraAndSampleName][decayChannel].append(
+                                (HTUnweighted_Model, 
+                                 f"n{fillJet}", 
+                                 f"nMedium{tagger}{branchpostfix}", 
+                                 f"HT{branchpostfix}"
+                                 )
+                            ) #No weight!
+                    else:
+                        for templatevartup in tqdm.tqdm(combineHistoTemplate,
+                                                     desc=f'Appending histogram templates for {decayChannel} {category}'
+                        ):
+                            #HERE
+                            templatevar = templatevartup[0].replace(bpf=branchpostfix)
+                            varname = templatevartup[0].replace(bpf="")                            
+                            zArr = array.array('d', templatevartup[1])
+                            thismodel = ROOT.RDF.TH3DModel(f"{eraAndProcessName}___{decayChannel}___{categoryName}___{templatevar}",
+                                                           f"{varname}; Jet Multiplicity; Medium b-Tagged Jet Multiplicity; {varname}",
+                                                           len(nJetArr)-1, nJetArr, len(nBTagArr)-1, nBTagArr, len(zArr), zArr
+                                                       )
+                            defineNodes[eraAndSampleName][decayChannel].append(
+                                (thismodel, 
+                                 f"n{fillJet}", 
+                                 f"nMedium{tagger}{branchpostfix}", 
+                                 templatevar, 
+                                 wgtVar)
+                            )
+
+                    #End of definitions for this process + channel + category, now define the histoNodes based upon this categoryNode (nodes[proc][chan][category + branchpostfix]
+                    Hstop = len(defineNodes[eraAndSampleName][decayChannel])
+                    #OLD fill_histos code
+                    # Guard against histogram names already included (via keys in histNodes) as well as variables that aren't present in branches
+                    # print("==============================> {} {} start: {} stop: {}".format(eraAndSampleName, decayChannel, Hstart, Hstop)) 
+                    # catTest = categoryName.lower()
+                    # if "njet" not in catTest and ("nmedium" not in catTest or "ntight" not in catTest and "nloose" not in catTest):
+                    #     continue
+                    #     if verbose:
+                    #         print("Skipping category nodes without btag and njet categorization")
+                    for dnode in defineNodes[eraAndSampleName][decayChannel][Hstart:Hstop]:
+                        model = dnode[0]
+                        defHName = model.fName
+                        if isData:
+                            variables = dnode[1:-1] # throw out the weight in the tuple definition
+                        else:
+                            variables = dnode[1:]
+                        #Need to determine which kind of histo function to use... have to be careful, this guess will be wrong if anyone ever does an unweighted histo!
+                        if defHName in histoNodes[eraAndSampleName][decayChannel]:
+                            raise RuntimeError(f"This histogram name ({defHName}) already exists in memory or is intentionally being overwritten"\
+                                               " {eraAndSampleName} - {decayChannel}")
+                        else:
+                            try:
+                                histoNodes[eraAndSampleName][decayChannel][defHName] = categoryNode.Histo3D(model, *variables)
+                            except Exception:
+                                for variable in variables:
+                                    if variable not in listOfColumns:
+                                        print(f"variable {variable} is not available in the columns being histogrammed for {eraAndSampleName} - {decayChannel}")
+
+    packedNodes = {}
+    packedNodes["filterNodes"] = filterNodes
+    packedNodes["defineNodes"] = defineNodes
+    packedNodes["countNodes"] = countNodes
+    packedNodes["diagnosticNodes"] = diagnosticNodes
+    packedNodes["nodes"] = nodes
+    return packedNodes
+
 def fill_histos_ndim(input_df_or_nodes, splitProcess, 
                      sampleName=None, 
                      channel="All", 
@@ -1458,7 +2355,10 @@ def fill_histos_ndim(input_df_or_nodes, splitProcess,
     ZMassMETWindow = [<invariant mass halfwidth>, <METCut>] - If in the same-flavor dilepton channel, require 
     abs(DileptonInvMass - ZMass) < ZWindowHalfWidth and MET >= METCut
     """
-    
+    RMM, Rpatch = ROOT.__version__.split("/")
+    RMajor, RMinor = RMM.split(".")
+    if int(RMinor) < 26:
+        raise RuntimeError(f"ROOT Version 6.26+ is required for fill_histos_ndim function to work, version {ROOT.__version__} detected")
 
     if bTagger.lower() == "deepcsv":
         tagger = "DeepCSVB"
@@ -1469,23 +2369,6 @@ def fill_histos_ndim(input_df_or_nodes, splitProcess,
     else:
         raise RuntimeError("{} is not a supported bTagger option in fill_histos()".format(bTagger))
     combineHistoTemplate = []    
-    #Variables to save for Combine when doCombineHistosOnly=True
-    # combineHistoTemplate = ["HT{bpf}"]
-    # combineHistoTemplate = ["HT{bpf}", "ST{bpf}", "HTH{bpf}", "HTRat{bpf}", "HTb{bpf}", "HT2M{bpf}", "H{bpf}", "H2M{bpf}", "dRbb{bpf}", 
-    #                          # "FTALepton_dRll", 
-    #                          "FTALepton1_pt", "FTALepton1_eta",
-    #                          "FTALepton2_pt", "FTALepton2_eta", 
-    #                          "FTAMuon_InvariantMass", "FTAElectron_InvariantMass",
-    #                          "MTofMETandMu{bpf}", "MTofMETandEl{bpf}", "MTofElandMu{bpf}"
-    #                          "nFTAJet{bpf}", 
-    #                          "FTAJet1{bpf}_pt", "FTAJet1{bpf}_eta", "FTAJet1{bpf}_DeepJetB", 
-    #                          "FTAJet2{bpf}_pt", "FTAJet2{bpf}_eta", "FTAJet2{bpf}_DeepJetB", 
-    #                          "FTAJet3{bpf}_pt", "FTAJet3{bpf}_eta", "FTAJet3{bpf}_DeepJetB", 
-    #                          "FTAJet4{bpf}_pt", "FTAJet4{bpf}_eta", "FTAJet4{bpf}_DeepJetB",
-    #                          # "nLooseFTAMuon", "nMediumFTAMuon", "nTightFTAMuon",
-    #                          # "nLooseFTAElectron", "nMediumFTAElectron", "nTightFTAElectron",
-    #                          # "nLooseFTALepton", "nMediumFTALepton", "nTightFTALepton",
-    #                      ]
     if bTagger.lower() == "deepjet":
         combineHistoTemplate += ["nLooseDeepJetB{bpf}", "nMediumDeepJetB{bpf}", "nTightDeepJetB{bpf}",]
     elif bTagger.lower() == "deepcsv":
@@ -1505,13 +2388,11 @@ def fill_histos_ndim(input_df_or_nodes, splitProcess,
         filterNodes = input_df_or_nodes.get("filterNodes")
         nodes = input_df_or_nodes.get("nodes")
         defineNodes = input_df_or_nodes.get("defineNodes")
-        diagnosticNodes = input_df_or_nodes.get("diagnosticNodes")
         countNodes = input_df_or_nodes.get("countNodes")
     else:
         filterNodes = collections.OrderedDict()
         nodes = collections.OrderedDict()
         defineNodes = collections.OrderedDict()
-        diagnosticNodes = collections.OrderedDict()
         countNodes = collections.OrderedDict()
         eraAndSampleName = era + "___" + sampleName #Easy case without on-the-fly ttbb, ttcc, etc. categorization
         nodes["BaseNode"] = input_df_or_nodes #Always store the base node we'll build upon in the next level
@@ -1524,7 +2405,6 @@ def fill_histos_ndim(input_df_or_nodes, splitProcess,
             nodes[eraAndSampleName]["BaseNode"] = nodes["BaseNode"].Filter(filterNodes[eraAndSampleName]["BaseNode"][0], filterNodes[eraAndSampleName]["BaseNode"][1])
             countNodes[eraAndSampleName] = collections.OrderedDict()
             countNodes[eraAndSampleName]["BaseNode"] = nodes[eraAndSampleName]["BaseNode"].Count()
-            diagnosticNodes[eraAndSampleName] = collections.OrderedDict()
             defineNodes[eraAndSampleName] = collections.OrderedDict()
 
 
@@ -1677,9 +2557,6 @@ def fill_histos_ndim(input_df_or_nodes, splitProcess,
                         countNodes[eraAndSampleName][decayChannel] = collections.OrderedDict()
                         countNodes[eraAndSampleName][decayChannel]["BaseNode"] = nodes[eraAndSampleName][decayChannel]["BaseNode"].Count()
 
-                        #more freeform diagnostic nodes
-                        diagnosticNodes[eraAndSampleName][decayChannel] = dict()
-
                         #Make some key for the histonodes, lets stop at decayChannel for now for the tuples, but keep a dict with histoName as key for histos...
                         defineNodes[eraAndSampleName][decayChannel] = []
                     if decayChannel not in histoNodes[eraAndSampleName]:
@@ -1775,27 +2652,6 @@ def fill_histos_ndim(input_df_or_nodes, splitProcess,
                     if category.split("___")[-1] != branchpostfix.replace("__", ""): 
                         continue 
 
-                    diagnosticNodes[eraAndSampleName][decayChannel][category] = dict()
-                    # if doDiagnostics:
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["nLooseMuon"] = categoryNode.Stats("nLooseFTAMuon{lpf}".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Muon_pfIsoId"] = categoryNode.Stats("FTAMuon{lpf}_pfIsoId".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Muon_pt"] = categoryNode.Stats("FTAMuon{lpf}_pt".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Muon_eta"] = categoryNode.Stats("FTAMuon{lpf}_eta".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Muon_charge"] = categoryNode.Stats("FTAMuon{lpf}_charge".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Muon_dz"] = categoryNode.Stats("FTAMuon{lpf}_dz".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Muon_dxy"] = categoryNode.Stats("FTAMuon{lpf}_dxy".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Muon_d0"] = categoryNode.Stats("FTAMuon{lpf}_d0".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Muon_ip3d"] = categoryNode.Stats("FTAMuon{lpf}_ip3d".format(lpf=leppostfix))
-    
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["nLooseElectron"] = categoryNode.Stats("nLooseFTAElectron{lpf}".format(lpf=leppostfix))
-                    #     # diagnosticNodes[eraAndSampleName][decayChannel][category]["Electron_pfIsoId"] = categoryNode.Stats("FTAElectron{lpf}_pfIsoId".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Electron_pt"] = categoryNode.Stats("FTAElectron{lpf}_pt".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Electron_eta"] = categoryNode.Stats("FTAElectron{lpf}_eta".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Electron_charge"] = categoryNode.Stats("FTAElectron{lpf}_charge".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Electron_dz"] = categoryNode.Stats("FTAElectron{lpf}_dz".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Electron_dxy"] = categoryNode.Stats("FTAElectron{lpf}_dxy".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Electron_d0"] = categoryNode.Stats("FTAElectron{lpf}_d0".format(lpf=leppostfix))
-                    #     diagnosticNodes[eraAndSampleName][decayChannel][category]["Electron_ip3d"] = categoryNode.Stats("FTAElectron{lpf}_ip3d".format(lpf=leppostfix))
                         
                     crossSeparated = "___".join(category.split("___")[:-1]).split("_CROSS_")#Strip the systematic name from the branch by taking all but the last element
                     #Hack for nDim to put the tagger and nJet into the category name... might be best to handle a different weay
@@ -2207,6 +3063,6 @@ def fill_histos_ndim(input_df_or_nodes, splitProcess,
     packedNodes["filterNodes"] = filterNodes
     packedNodes["defineNodes"] = defineNodes
     packedNodes["countNodes"] = countNodes
-    packedNodes["diagnosticNodes"] = diagnosticNodes
+    packedNodes["diagnosticNodes"] = None #Get rid of this
     packedNodes["nodes"] = nodes
     return packedNodes
