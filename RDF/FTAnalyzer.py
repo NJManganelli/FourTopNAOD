@@ -2453,6 +2453,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             allSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=True, baseColumns=baseColumns)
             # print("scale systematics: {}\nall systematics: {}".format(scaleSystematics, allSystematics))
             #Now do the btagging LUTs
+            fill_nano_filter = "(nFTAJet__nom > 3 && HT__nom >= 500)"
             for sysVarRaw, sysDict in sysVariationsAll.items():
                 if vals.get("isData", True):
                     continue
@@ -2463,6 +2464,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
                 isWeightVariation = sysDict.get("weightVariation")
                 slimbranchpostfix = "nom" if isWeightVariation else sysVar #branch postfix for identifying input branch variation
+                if slimbranchpostfix != "nom":
+                    fill_nano_filter += f" || (nFTAJet__{slimbranchpostfix} > 3 && HT__{slimbranchpostfix} >= {HTCut})"
                 earlySplitProcess = vals.get("splitProcess", None)
                 if isinstance(earlySplitProcess, (dict)):
                     # df_with_IDs = input_df
@@ -2959,7 +2962,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     nanoDir = analysisDir + f"/Nano/{options.channel}"
                     if not os.path.isdir(nanoDir):
                         os.makedirs(nanoDir)
-                    fn_handles, fn_columns = delegateSnapshots(prePackedNodes, nanoDir, options.branchselection)
+                    fn_handles, fn_columns , cnt_handles = delegateSnapshots(prePackedNodes, nanoDir, options.branchselection, node_filter=fill_nano_filter)
     
                 #The ntuple writing will trigger the loop first, if that path is taken, but this is still safe to do always
                 processed[name][lvl] = counts[name][lvl].GetValue()
@@ -3014,6 +3017,10 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 print(processedSamples)
                 print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theTime//60, theTime%60, theTime, processed[name][lvl], 
                              name, lvl, "".join(["\_/"]*25)))
+                if options.stage == 'fill-nano':
+                    for name, cnt_handle in cnt_handles.items():
+                        print(f"Wrote {(cnt_handle.GetValue())} events for {name} snapshot")
+
         # Benchmark.Summary()
         if channel in ["BOOKKEEPING"]:
             # sort_order = ["filter", "fractionalContribution", "effectiveCrossSection", "snapshotPriority", 
