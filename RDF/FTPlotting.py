@@ -2738,6 +2738,13 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             histUp = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Up"][pn]['Supercategories/hists'][categoryorsupercategory]
                         elif categoryorsupercategory in CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Up"][pn]['Categories/hists']:
                             histUp = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Up"][pn]['Categories/hists'][categoryorsupercategory]
+                        # pdb.set_trace()
+                        # histUpTest = histUp.Clone() # TEST
+                        # _, edgesTest = wrapped_hist2array(histUpTest, flow=True)
+                        # edgesTest = np.asarray(edgesTest)
+                        # binCentersTest = (edgesTest[1:] + edgesTest[:-1])/2
+                        # histUpTest.FillN(len(differenceUp), binCentersTest, differenceUp + npNominal[pn][categoryorsupercategory])
+                        # histUpTest.ResetStats()
                         _ = root_numpy.array2hist(differenceUp + npNominal[pn][categoryorsupercategory], histUp)
                         histUp.ResetStats()
                         histDown = None
@@ -3534,7 +3541,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             if combineCards:
                 with open(os.path.join(analysisDir, "Combine", "Counts_"+era+"_"+channel+"_"+can_var+".json"), "w") as countfile: 
                     countfile.write(json.dumps(combCounts, indent=4))
-                write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, can_var, list(combCounts.keys()), template="TTTT_templateV18.txt", counts=combCounts)
+                write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, can_var, list(combCounts.keys()), template="TTTT_templateV19.txt", counts=combCounts)
                 print("Wrote combine cards for {}".format(can_var))
         # cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
         # # print(cmd)
