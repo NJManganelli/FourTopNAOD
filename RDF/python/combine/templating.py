@@ -8,6 +8,8 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
     corr1718lumi = {"2016": "-      ", "2017": "1.006  ", "2018": "1.002  "}[era] #replace $CL1718
     hdampstr = {"2017": "0.93/1.10", "2018": "0.93/1.10"}[era] #Uncertainty per year, derived from inclusive check of channels, btag and jet categories, ttbar subprocesses
     uestr = {"2017": "0.99/1.01", "2018": "0.99/1.01"}[era] #Uncertainty per year, derived from inclusive check of channels, btag and jet categories, ttbar subprocesses
+    elesf = {"ElEl": "1.03  ", "ElMu": "1.015 ", "MuMu": "-     "}[channel]
+    muosf = {"ElEl": "-     ", "ElMu": "1.015 ", "MuMu": "1.03  "}[channel]
     ttbbisrall = {"nJet4": "1.02/0.99", 
                   "nJet5": "1.06/0.98", 
                   "nJet6": "1.12/0.97", 
@@ -93,7 +95,9 @@ def write_combine_cards(analysisDirectory, era, channel, variable, categories, t
                                  .replace("$TTBBISR ", ttbbisr)\
                                  .replace("$TTBBFSR ", ttbbfsr)\
                                  .replace("$TTNOBISR", ttnobbisr)\
-                                 .replace("$TTNOBFSR", ttnobbfsr)
+                                 .replace("$TTNOBFSR", ttnobbfsr)\
+                                 .replace("$ELESF", elesf)\
+                                 .replace("$MUOSF", muosf)
                 for kword in rate.keys():
                     if "$R_" + kword in outputline:
                         outputline = outputline.replace("{:16s}".format("$R_" + kword), "{:16s}".format(rate[kword]))
