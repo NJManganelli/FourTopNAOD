@@ -2518,6 +2518,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                                             "fractionalContribution": 1,
                                                                             "sumWeights": vals.get("sumWeights", -1.0),
                                                                             "effectiveCrossSection": vals.get("crossSection", 0),
+                                                                            "phaseSpaceFactor": 1,
                                                                             "snapshotPriority": -1,
                                                                   }}}
                 pprint.pprint(inclusiveProcessConfig)
@@ -2591,6 +2592,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                                             "fractionalContribution": 1,
                                                                             "sumWeights": inputSampleCardYaml[name].get("sumWeights", -1.0),
                                                                             "effectiveCrossSection": inputSampleCardYaml[name].get("crossSection", 0),
+                                                                            "phaseSpaceFactor": 1,
                                                                             "snapshotPriority": -1,
                                                                   }}}
                         pprint.pprint(inclusiveProcessConfig)
