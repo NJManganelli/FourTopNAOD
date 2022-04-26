@@ -2868,7 +2868,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     sysVariationsForHistos = sysVariationsAll
                     skipNominalHistos = False
                 if doHistos:
-                    if False:
+                    if options.fill_histos_ndim_categorized:
                         fill_histos_ndim_categorized(prePackedNodes, 
                                                      splitProcess=splitProcessConfig, 
                                                      sampleName=name, 
@@ -3238,6 +3238,8 @@ if __name__ == '__main__':
                         help='list of filters with syntax filter_name=filter_cut, where the former is any text and the latter is valid C++ code. Wrap each individual filter in single quotes to prevent shell parsing them as commands')
     parser.add_argument('--branchselection', dest='branchselection', action='store', type=str, default=None,
                         help='Name of file for branchselection when calling stage fill-nano, using the NanoAOD-tools syntax of keep, drop, keepmatch, and keepdrop')
+    parser.add_argument('--fill_histos_ndim_categorized', dest='fill_histos_ndim_categorized', action='store_true',
+                        help='Switch to the multidimensional categorized histograms (supports HTOnly atm)')
 
     #Parse the arguments
     args = parser.parse_args()
