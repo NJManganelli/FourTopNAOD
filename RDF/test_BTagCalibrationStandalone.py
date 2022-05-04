@@ -3,6 +3,8 @@ import pdb
 from itertools import chain
 import os
 import time
+import pickle
+import hashlib
 import numpy as np
 
 def is_relevant_syst_for_shape_corr(flavor_btv, syst, era, jesSystsForShape=["jes"]):
@@ -190,6 +192,63 @@ class btagSFProducer():
                         '_' + central_or_syst
             self.branchNames_central_and_systs[wp] = branchNames
 
+    def load_or_create_calibrator(self, cache=True):
+        if hasattr(self, "calibration") and self.calibration is not None:
+            return self.calibration
+        cache_name = "btag_calibration"+str(hashlib.md5(self.calib_decl.encode()).hexdigest())+".pkl"
+        # hash_object = hashlib.md5(mystring.encode())
+        # print(hash_object.hexdigest())
+        # cache_name = "btag_calibration.pkl"
+        if os.path.exists(cache_name):
+            print("CALIBRATOR CACHE EXISTS")
+            try:
+                with open(cache_name, "rb") as pkl_calib:
+                    ret = pickle.load(pkl_calib)
+                    return ret
+            except:
+                print("Failed to load pickle-calibrator, instantiating new one")
+        ROOT.gInterpreter.Declare(self.calib_decl)
+        ret = getattr(ROOT, self.calib_name)
+        if cache:
+            try:
+                print("PICKLING RICK CALIBRATOR")
+                pickle.dump(ret, open(cache_name, "wb"))
+                print("PICKLING COMPLETE")
+            except:
+                print("Failed to pickle calibrator")
+        return ret
+
+    def load_or_create_reader(self, wp, cache=True):
+        if hasattr(self, "reader_init") and wp in self.reader_init:
+            return self.reader_init[wp]
+        cache_name = "btag_reader"+str(hashlib.md5(self.reader_decls[wp].encode()).hexdigest())+".pkl"
+        if os.path.exists(cache_name):
+            print("READER CACHE EXISTS")
+            try:
+                with open(cache_name, "rb") as pkl:
+                    ret = pickle.load(pkl)
+                    return ret
+            except:
+                print("Failed to load pickle-reader, instantiating new one")
+        this_time = time.time()
+        self.calibration = self.load_or_create_calibrator(cache=cache)
+        print(f"took {(time.time() - this_time)}s to load the calibration")
+        ROOT.gInterpreter.Declare(self.reader_decls[wp])
+        ret = getattr(ROOT, self.reader_names[wp])
+        for flavor_btv in [0, 1, 2]:
+            if wp.lower() == "shape_corr":
+                ret.load(self.calibration, flavor_btv, 'iterativefit')
+            else:
+                ret.load(self.calibration, flavor_btv, self.measurement_types[flavor_btv])
+        if cache:
+            try:
+                print("PICKLING RICK READER")
+                pickle.dump(ret, open(cache_name, "wb"))
+                print("PICKLING COMPLETE")
+            except:
+                print("Failed to pickle reader")
+        return ret        
+
     def initializeReaders(self, rdf=None):
         # initialize BTagCalibrationReader
         # (cf. https://twiki.cern.ch/twiki/bin/viewauth/CMS/BTagCalibration )
@@ -211,10 +270,7 @@ class btagSFProducer():
         self.max_readers = rdf.GetNSlots() if rdf else 1
         self.calib_name = f"bTagCalib_{self.algo}"
         self.calib_decl = f'const BTagCalibration <<name>>("{self.algo}", "{os.path.join(self.inputFilePath, self.inputFileName)}");'.replace("<<name>>", self.calib_name)
-        ROOT.gInterpreter.Declare(self.calib_decl)
-        self.calibration = getattr(ROOT, self.calib_name)
-        # self.calibration = ROOT.BTagCalibration(
-        #     self.algo, os.path.join(self.inputFilePath, self.inputFileName))
+        # self.calibration = self.load_or_create_calibrator(cache=True)
         self.reader_names = {}
         self.reader_decls = {}
         self.readers = {}
@@ -233,27 +289,25 @@ class btagSFProducer():
             wp_translation = {"l": "LOOSE", "m": "MEDIUM", "t": "TIGHT", "shape_corr": "RESHAPING"}[wp.lower()]
             self.reader_decls[wp] = 'BTagCalibrationReader <<name>>(BTagEntry::OP_{0}, "{1}", {{ {2} }} );'\
                 .format(wp_translation, "central", ", ".join(f'"{sv}"' for sv in systs)).replace("<<name>>", self.reader_names[wp])
-            ROOT.gInterpreter.Declare(self.reader_decls[wp])
-            self.reader_init[wp] = getattr(ROOT, self.reader_names[wp])
-            for flavor_btv in [0, 1, 2]:
-                if wp.lower() == "shape_corr":
-                    self.reader_init[wp].load(self.calibration, flavor_btv, 'iterativefit')
-                else:
-                    self.reader_init[wp].load(self.calibration, flavor_btv,
-                                              self.measurement_types[flavor_btv])
+            this_time = time.time()
+            self.reader_init[wp] = self.load_or_create_reader(wp, cache=True)
+            print(f"took {(time.time() - this_time)}s to load the reader for wp {wp}")
             readervec_name = f"btagCalibReaderVec_{self.algo}_{wp}"
             ROOT.gInterpreter.Declare(f"std::vector<BTagCalibrationReader> {readervec_name} = {{}};")
             self.readervec[wp][readervec_name] = getattr(ROOT, readervec_name)
-            
+            this_time = time.time()
             for x in range(self.max_readers):
                 # Copy Construct the initialized and configured readers, lets see if we can cheat here...
                 self.readervec[wp][readervec_name].push_back(ROOT.BTagCalibrationReader(self.reader_init[wp]))
+            print(f"took {(time.time() - this_time)}s to load the vectorize the reader")
         # pdb.set_trace()
-        # for wp_test in self.readervec.keys():
-        #     for readervec_name in self.readervec[wp_test].keys():
-        #         for x_test in range(len(self.readervec[wp_test][readervec_name])):
-        #             print(self.readervec[wp_test][readervec_name][x_test])
-        #             print(self.readervec[wp_test][readervec_name][x_test].eval_auto_bounds("up_jesRelativeBal", 2, 1.3, 74, 0.23))
+        for wp_test in self.readervec.keys():
+            for readervec_name in self.readervec[wp_test].keys():
+                for x_test in range(len(self.readervec[wp_test][readervec_name])):
+                    print(self.readervec[wp_test][readervec_name][x_test])
+                    print('self.readervec[wp_test][readervec_name][x_test].eval_auto_bounds("up_jesRelativeBal", 2, 1.3, 74, 0.23)')
+                    print(self.readervec[wp_test][readervec_name][x_test].eval_auto_bounds("up_jesRelativeBal", 2, 1.3, 74, 0.23))
+        print("TOTAL SETUP", (time.time() - this_time)/60); this_time = time.time()
 
     def callDefines(self, rdf):
         """Append Define calls to the given RDataFrame node"""
@@ -467,7 +521,7 @@ elif era == "2018":
 # import bamboo.treefunctions as op
 # self.reader = op.extVar("BTagCalibrationReader", readerName)
 
-ROOT.gInterpreter.ProcessLine(".L BTagCalibrationStandalone.cpp")
+ROOT.gInterpreter.ProcessLine(".L BTagCalibrationStandalone.cpp+")
 # btagSF2017 = btagSFProducer(era="2017", algo="deepjet", selectedWPs=["shape_corr"], sfFileName=None, jesSystsForShape="Reduced")
 btagSF2017 = btagSFProducer(era="2017", algo="deepjet", selectedWPs=["shape_corr"], sfFileName=None)
 # rdf = ROOT.ROOT.RDataFrame("Events", "root://cms-xrd-global.cern.ch//store/mc/RunIIAutumn18NanoAODv7/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21_ext2-v1/240000/B1E3DEC5-B787-A746-8486-58428EDD3FDC.root")
@@ -519,3 +573,11 @@ for br, val in diffs.items():
 # reader_copy_internal = getattr(ROOT, reader_name+"_copy")
 
 
+# >>> btvjson = correctionlib.CorrectionSet.from_file("correctionlibtest.json.gz")
+# >>> for x in btvjson:
+# ...   print(x)
+# ...
+# DeepJet_2017LegacySF
+# DeepJet_2018LegacySF
+# >>> btvjson["DeepJet_2017LegacySF"].evaluate("up_jesRelativeBal", "2", 1.3, 74., 0.23)
+# 1.2268110362069653
