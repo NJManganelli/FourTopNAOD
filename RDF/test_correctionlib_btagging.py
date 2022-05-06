@@ -85,19 +85,6 @@ def build_etabinning(sf):
     )
 
 
-# def build_flavor(sf):
-#     keys = sorted(sf["jetFlavor"].unique())
-#     return Category.parse_obj(
-#         {
-#             "nodetype": "category",
-#             "input": "flavor",
-#             "content": [
-#                 {"key": key, "value": build_etabinning(sf[sf["jetFlavor"] == key])}
-#                 for key in keys
-#             ],
-#         }
-#     )
-
 def build_flavor(sf):
     keys = sorted(sf["jetFlavor"].unique())
     return Category.parse_obj(
@@ -105,11 +92,24 @@ def build_flavor(sf):
             "nodetype": "category",
             "input": "flavor",
             "content": [
-                {"key": str(key), "value": build_etabinning(sf[sf["jetFlavor"] == key])}
+                {"key": key, "value": build_etabinning(sf[sf["jetFlavor"] == key])}
                 for key in keys
             ],
         }
     )
+
+# def build_flavor(sf):
+#     keys = sorted(sf["jetFlavor"].unique())
+#     return Category.parse_obj(
+#         {
+#             "nodetype": "category",
+#             "input": "flavor",
+#             "content": [
+#                 {"key": str(key), "value": build_etabinning(sf[sf["jetFlavor"] == key])}
+#                 for key in keys
+#             ],
+#         }
+#     )
 
 
 def build_systs(sf):
@@ -142,8 +142,8 @@ for era, sf_file in [
                 {"name": "systematic", "type": "string"},
                 {
                     "name": "flavor",
-                    # "type": "int", #FIXME
-                    "type": "string",
+                    "type": "int", #FIXME
+                    # "type": "string",
                     "description": "BTV flavor definiton: 0=b, 1=c, 2=udsg",
                 },
                 {"name": "abseta", "type": "real"},
