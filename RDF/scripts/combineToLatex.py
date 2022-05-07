@@ -236,11 +236,12 @@ def buildMonoTable(nested, feature="rate-lim"):
         lines.append("Era  &  Channel  &  Apriori limit  &  Aposteriori limit  &  Observed Limit  \\\\")
         lines.append("  &  &  [fb]  &  [fb]  &  [fb]  \\\\")
     elif feature == "sig":
-        lines.append("\\begin{tabular}{lccc}")
+        lines.append("\\begin{tabular}{lcccc}")
         #lines.append("%  \\hline")
         # lines.append("Era  &  Channel  &  Apriori significance [Std. Dev.] &  Observed significance [Std. Dev.]  \\\\")
-        lines.append("Era  &  Channel  &  Apriori significance &  Observed significance  \\\\")
-        lines.append("  &   &  [Std. Dev.] &  [Std. Dev.]  \\\\")
+        # lines.append("Era  &  Channel  &  Apriori significance &  Observed significance  \\\\")
+        lines.append("Era  &  Channel  &  Apriori significance  &  Aposteriori significance  &  Observed significance  \\\\")
+        lines.append("  &   &  [Std. Dev.] &  [Std. Dev.]  &  [Std. Dev.]  \\\\")
 
 
     for era in eras:
@@ -257,6 +258,7 @@ def buildMonoTable(nested, feature="rate-lim"):
                 lines.append( "  &  ".join([era, 
                                         nested["rows"][channel], 
                                         nested[feature]["apriori"][era][channel], 
+                                        nested[feature]["aposteriori"][era][channel],                                             
                                         nested[feature]["observed"][era][channel] + "  \\\\",
                                     ]) )
     lines.append("\\hline")
@@ -280,6 +282,7 @@ def main2(opts):
     res["fb-lim"]["aposteriori"] = dict()
     res["fb-lim"]["observed"] = dict()
     res["sig"]["apriori"] = dict()
+    res["sig"]["aposteriori"] = dict()
     res["sig"]["observed"] = dict()
 
     
@@ -298,13 +301,14 @@ def main2(opts):
         res["fb-lim"]["aposteriori"][era] = dict()
         res["fb-lim"]["observed"][era] = dict()
         res["sig"]["apriori"][era] = dict()
+        res["sig"]["aposteriori"][era] = dict()
         res["sig"]["observed"][era] = dict()
         for channel in args.channels:
             #TemplateSubPath
             tsp_lim = copy.copy(args.subpath)
 
             #Apriori results
-            tsp_lim_apriori = tsp_lim.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.apriori).replace("$LIMSIG", "limit")
+            tsp_lim_apriori = tsp_lim.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.apriori[0]).replace("$LIMSIG", "limit")
             try:
                 path = os.path.join(opts.analysisDirectory, tsp_lim_apriori)
                 tmp = getLimits(path)
@@ -316,7 +320,7 @@ def main2(opts):
                 res["fb-lim"]["apriori"][era][channel] = tmp
 
             #Aposteriori results
-            tsp_lim_aposteriori = tsp_lim.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.aposteriori).replace("$LIMSIG", "limit")
+            tsp_lim_aposteriori = tsp_lim.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.observed).replace("$LIMSIG", "limit")
             try:
                 path = os.path.join(opts.analysisDirectory, tsp_lim_aposteriori)
                 tmp = getLimits(path)
@@ -333,7 +337,7 @@ def main2(opts):
 
             #Significances
             tsp_sig = copy.copy(args.subpath)
-            tsp_sig_apriori = tsp_sig.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.apriori).replace("$LIMSIG", "significance")
+            tsp_sig_apriori = tsp_sig.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.apriori[-1]).replace("$LIMSIG", "significance")
             try:
                 path = os.path.join(opts.analysisDirectory, tsp_sig_apriori)
                 tmp = getSignificance(path)
@@ -345,6 +349,15 @@ def main2(opts):
             tsp_sig_aposteriori = tsp_sig.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.aposteriori).replace("$LIMSIG", "significance")
             try:
                 path = os.path.join(opts.analysisDirectory, tsp_sig_aposteriori)
+                tmp = getSignificance(path)
+                tmp = significanceToLatex(tmp, sigfigs=opts.sigfigs, blind=opts.blind)
+                res["sig"]["aposteriori"][era][channel] = tmp
+            except:
+                tmp = "$?.?? \sigma$"
+                res["sig"]["aposteriori"][era][channel] = tmp
+            tsp_sig_observed = tsp_sig.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.observed).replace("$LIMSIG", "significance")
+            try:
+                path = os.path.join(opts.analysisDirectory, tsp_sig_observed)
                 tmp = getSignificance(path)
                 tmp = significanceToLatex(tmp, sigfigs=opts.sigfigs, blind=opts.blind)
                 res["sig"]["observed"][era][channel] = tmp
@@ -376,10 +389,12 @@ if __name__ == '__main__':
                         help='eras to be run over')
     parser.add_argument('--channels', dest='channels', action='store', nargs='*', type=str, default=['MuMu', 'ElMu', 'ElEl', 'AllChan'],
                         help='channels to be run over')
-    parser.add_argument('--apriori', dest='apriori', action='store', type=str, default = "Asimov",
-                        help='apriori flag for replacement of $PREPOST flag in subpath')
-    parser.add_argument('--aposteriori', dest='aposteriori', action='store', type=str, default = "Unblinded",
-                        help='aposteriori flag for replacement of $PREPOST flag in subpath')
+    parser.add_argument('--apriori', dest='apriori', action='store', nargs='*', type=str, default = ["Asimov", "Asimov_Apriori"],
+                        help='apriori flags for replacement of $PREPOST flag in subpath for limits and significance, respectively')
+    parser.add_argument('--aposteriori', dest='aposteriori', action='store', type=str, default = "Asimov_Aposteriori",
+                        help='aposteriori flag for replacement of $PREPOST flag in subpath when running significance')
+    parser.add_argument('--observed', dest='observed', action='store', type=str, default = "Unblinded",
+                        help='observed flag for replacement of $PREPOST flag in subpath (also aposteriori for limits)')
     parser.add_argument('--XS', dest='XS', action='store', type=float, default = 12.0,
                         help='Signal cross-section [fb] for converting limits from rate parameter to femtobarns')
     parser.add_argument('--unblind', dest='blind', action='store_false', default=True,
