@@ -2238,6 +2238,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
         btagging = dict() #For btagging efficiencies
         cat_df = dict() #Categorization node dictionary, returned by fill_histos method
         masterstart = time.perf_counter()#Timers...
+        predefinestart = dict()
         substart = dict()
         subfinish = dict()
         processed = dict()
@@ -2502,11 +2503,13 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             flatteningDict[name] = dict()
             # btagging[name] = dict()
             cat_df[name] = dict()
+            predefinestart[name] = dict()
             substart[name] = dict()
             subfinish[name] = dict()
             processed[name] = dict()
             #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
             for lvl in levelsOfInterest:
+                predefinestart[name][lvl] = time.perf_counter()
                 #########################
                 ### Split proc config ###
                 #########################
@@ -2949,6 +2952,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                         skipNominalHistos=skipNominalHistos, verbose=verb)
     
                 #Trigger the loop either by hitting the count/progressbar node or calling for a (Non-lazy) snapshot
+                if options.save_graph:
+                    ROOT.RDF.SaveGraph(base[name], f"{analysisDir}/{name}_{lvl}_{options.stage}_graph.dot")
                 print("\nSTARTING THE EVENT LOOP")
                 substart[name][lvl] = time.perf_counter()
                 Benchmark.Start("{}/{}".format(name, lvl))
@@ -2972,7 +2977,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 print("ROOT Benchmark stats...")
                 Benchmark.Show("{}/{}".format(name, lvl))
                 subfinish[name][lvl] = time.perf_counter()
-                theTime = subfinish[name][lvl] - substart[name][lvl]
+                theSetupTime = substart[name][lvl] - predefinestart[name][lvl]
+                theProcessingTime = subfinish[name][lvl] - substart[name][lvl]
                 if doRDFReport:
                     print("\nPrinting the report...")
                     reports[name].Print()
@@ -3017,8 +3023,19 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 for n in processedSampleList:
                     processedSamples += "{} ".format(n)
                 print(processedSamples)
-                print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theTime//60, theTime%60, theTime, processed[name][lvl], 
-                             name, lvl, "".join(["\_/"]*25)))
+                print("Took {}m {}s ({}s) to finish setup on the graph from sample {} in channel {}\n".format(theSetupTime//60, 
+                                                                                                              theSetupTime%60, 
+                                                                                                              theSetupTime,
+                                                                                                              name, lvl
+                                                                                                          )
+                )
+                print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theProcessingTime//60, 
+                                                                                                            theProcessingTime%60, 
+                                                                                                            theProcessingTime, 
+                                                                                                            processed[name][lvl], 
+                                                                                                            name, lvl, "".join(["\_/"]*25)
+                                                                                                        )
+                )
                 if options.stage == 'fill-nano':
                     for name, cnt_handle in cnt_handles.items():
                         print(f"Wrote {(cnt_handle.GetValue())} events for {name} snapshot")
@@ -3240,6 +3257,8 @@ if __name__ == '__main__':
                         help='Name of file for branchselection when calling stage fill-nano, using the NanoAOD-tools syntax of keep, drop, keepmatch, and keepdrop')
     parser.add_argument('--fill_histos_ndim_categorized', dest='fill_histos_ndim_categorized', action='store_true',
                         help='Switch to the multidimensional categorized histograms (supports HTOnly atm)')
+    parser.add_argument('--save_graph', dest='save_graph', action='store_true',
+                        help='Save a .dot file of the Computation Graph, viewable via os.system(f"dot -Tpdf graph.dot > graph.pdf")')
 
     #Parse the arguments
     args = parser.parse_args()
