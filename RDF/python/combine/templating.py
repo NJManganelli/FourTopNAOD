@@ -1,6 +1,6 @@
 import pdb
 import math
-def write_combine_cards(analysisDirectory, era, channel, variable, categories, template="TTTT_templateV9.txt", counts = dict(), options = dict()): 
+def write_combine_cards(analysisDirectory, era, channel, variable, categories, template=None, counts = dict(), options = dict()): 
     lumistr = {"2016": "1.012", "2017": "1.023", "2018": "1.025"}[era] #Uncertainty per year with old, uncorrelated recommendation
     #For recommendations from https://twiki.cern.ch/twiki/bin/view/CMS/TopSystematics#Luminosity, applicable to TTTT_templateV14.txt and after
     uncorrlumi = {"2016": "1.010", "2017": "1.020", "2018": "1.015"}[era] #replace $ULUM
