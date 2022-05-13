@@ -240,14 +240,18 @@ ROOT::RDF::RNode apply_btv_sfs(ROOT::RDF::RNode df,
       throw std::invalid_argument("something happened, somewhere, sometime");  
     auto cMap = cSet->at(cMapName);
     for (auto &syst : relev_systs){
-      auto lambdaShape =  [cMap,relev_jes, syst, eta_max](ROOT::VecOps::RVec<int> hadronFlavour, 
-							  ROOT::VecOps::RVec<float> eta,
-							  ROOT::VecOps::RVec<float> pt,
-							  ROOT::VecOps::RVec<float> disc){
+      std::map<int, std::string> fast_relevant_syst_for_shape_corr;
+      for(int i_flav = 0; i_flav < 6; i_flav++){
+	fast_relevant_syst_for_shape_corr[i_flav] = relevant_syst_for_shape_corr(i_flav, syst, relev_jes);
+      }
+      auto lambdaShape =  [cMap, fast_relevant_syst_for_shape_corr, syst, eta_max](ROOT::VecOps::RVec<int> hadronFlavour, 
+										   ROOT::VecOps::RVec<float> eta,
+										   ROOT::VecOps::RVec<float> pt,
+										   ROOT::VecOps::RVec<float> disc){
 	ROOT::VecOps::RVec<double> sf = {};
 	for(int i = 0; i < hadronFlavour.size(); ++i){
 	  std::vector<std::variant<int,double,std::string>> inputs = {};
-	  inputs.emplace_back(relevant_syst_for_shape_corr(hadronFlavour.at(i), syst, relev_jes));
+	  inputs.emplace_back(fast_relevant_syst_for_shape_corr.at(hadronFlavour.at(i)));
 	  inputs.emplace_back(hadronFlavour.at(i));
 	  inputs.emplace_back(std::clamp(abs(static_cast<double>(eta.at(i))), 0., eta_max-0.001)); //copy nanoAOD-tools clamping, but give it the proper eta max... eps=1.e-3
 	  inputs.emplace_back(std::clamp(static_cast<double>(pt.at(i)), 20.0001, 9999.9999)); //need to parse the corrector to get the true pt bounds...eps=1.e-4
