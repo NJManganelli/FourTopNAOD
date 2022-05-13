@@ -455,6 +455,12 @@ OSDL_RunII_ISRDown:
     - WW
     - WZ
     - ZZ
+    OSDL_RunII_ttISRDown:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
     OSDL_RunII_ttnobbISRDown:
     - ttother_SL_fr
     - ttother_SL_nr
@@ -554,12 +560,13 @@ OSDL_RunII_ISRUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbISRUp:
+    OSDL_RunII_ttISRUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbISRUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -653,12 +660,13 @@ OSDL_RunII_FSRDown:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbFSRDown:
+    OSDL_RunII_ttFSRDown:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbFSRDown:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -752,12 +760,13 @@ OSDL_RunII_FSRUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbFSRUp:
+    OSDL_RunII_ttFSRUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbFSRUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -853,12 +862,13 @@ OSDL_RunII_muFNomRDown:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuFNomRDown:
+    OSDL_RunII_ttmuFNomRDown:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuFNomRDown:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -954,12 +964,13 @@ OSDL_RunII_muFNomRUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuFNomRUp:
+    OSDL_RunII_ttmuFNomRUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuFNomRUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1055,12 +1066,13 @@ OSDL_RunII_muRNomFDown:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuRNomFDown:
+    OSDL_RunII_ttmuRNomFDown:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuRNomFDown:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1156,12 +1168,13 @@ OSDL_RunII_muRNomFUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuRNomFUp:
+    OSDL_RunII_ttmuRNomFUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuRNomFUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1257,12 +1270,13 @@ OSDL_RunII_muRFcorrelatedUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuRFcorrelatedUp:
+    OSDL_RunII_ttmuRFcorrelatedUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuRFcorrelatedUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1358,12 +1372,13 @@ OSDL_RunII_muRFcorrelatedDown:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuRFcorrelatedDown:
+    OSDL_RunII_ttmuRFcorrelatedDown:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuRFcorrelatedDown:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr

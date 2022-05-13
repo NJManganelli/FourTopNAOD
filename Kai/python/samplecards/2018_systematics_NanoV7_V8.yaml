@@ -27,13 +27,13 @@ $NOMINAL:
     pwgt_btagSF_common: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2018_jesAbsoluteDown:
+OSDL_RunII_jesAbsoluteDown:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesAbsoluteDown
   jet_mass_var: Jet_mass_jesAbsoluteDown
-  met_pt_var: METFixEE2017_T1_pt_jesAbsoluteDown
-  met_phi_var: METFixEE2017_T1_phi_jesAbsoluteDown
+  met_pt_var: MET_T1_pt_jesAbsoluteDown
+  met_phi_var: MET_T1_phi_jesAbsoluteDown
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_down_jesAbsolute
     DeepCSV: Jet_btagSF_deepcsv_shape_down_jesAbsolute
@@ -46,13 +46,13 @@ OSDL_2018_jesAbsoluteDown:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2018_jesAbsoluteUp:
+OSDL_RunII_jesAbsoluteUp:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesAbsoluteUp
   jet_mass_var: Jet_mass_jesAbsoluteUp
-  met_pt_var: METFixEE2017_T1_pt_jesAbsoluteUp
-  met_phi_var: METFixEE2017_T1_phi_jesAbsoluteUp
+  met_pt_var: MET_T1_pt_jesAbsoluteUp
+  met_phi_var: MET_T1_phi_jesAbsoluteUp
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_up_jesAbsolute
     DeepCSV: Jet_btagSF_deepcsv_shape_up_jesAbsolute
@@ -70,8 +70,8 @@ OSDL_2018_jesAbsoluteDown:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesAbsolute_2018Down
   jet_mass_var: Jet_mass_jesAbsolute_2018Down
-  met_pt_var: METFixEE2017_T1_pt_jesAbsolute_2018Down
-  met_phi_var: METFixEE2017_T1_phi_jesAbsolute_2018Down
+  met_pt_var: MET_T1_pt_jesAbsolute_2018Down
+  met_phi_var: MET_T1_phi_jesAbsolute_2018Down
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_down_jesAbsolute_2018
     DeepCSV: Jet_btagSF_deepcsv_shape_down_jesAbsolute_2018
@@ -89,8 +89,8 @@ OSDL_2018_jesAbsoluteUp:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesAbsolute_2018Up
   jet_mass_var: Jet_mass_jesAbsolute_2018Up
-  met_pt_var: METFixEE2017_T1_pt_jesAbsolute_2018Up
-  met_phi_var: METFixEE2017_T1_phi_jesAbsolute_2018Up
+  met_pt_var: MET_T1_pt_jesAbsolute_2018Up
+  met_phi_var: MET_T1_phi_jesAbsolute_2018Up
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_up_jesAbsolute_2018
     DeepCSV: Jet_btagSF_deepcsv_shape_up_jesAbsolute_2018
@@ -103,13 +103,13 @@ OSDL_2018_jesAbsoluteUp:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2018_jesBBEC1Down:
+OSDL_RunII_jesBBEC1Down:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesBBEC1Down
   jet_mass_var: Jet_mass_jesBBEC1Down
-  met_pt_var: METFixEE2017_T1_pt_jesBBEC1Down
-  met_phi_var: METFixEE2017_T1_phi_jesBBEC1Down
+  met_pt_var: MET_T1_pt_jesBBEC1Down
+  met_phi_var: MET_T1_phi_jesBBEC1Down
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_down_jesBBEC1
     DeepCSV: Jet_btagSF_deepcsv_shape_down_jesBBEC1
@@ -122,13 +122,13 @@ OSDL_2018_jesBBEC1Down:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2018_jesBBEC1Up:
+OSDL_RunII_jesBBEC1Up:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesBBEC1Up
   jet_mass_var: Jet_mass_jesBBEC1Up
-  met_pt_var: METFixEE2017_T1_pt_jesBBEC1Up
-  met_phi_var: METFixEE2017_T1_phi_jesBBEC1Up
+  met_pt_var: MET_T1_pt_jesBBEC1Up
+  met_phi_var: MET_T1_phi_jesBBEC1Up
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_up_jesBBEC1
     DeepCSV: Jet_btagSF_deepcsv_shape_up_jesBBEC1
@@ -146,8 +146,8 @@ OSDL_2018_jesBBEC1Down:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesBBEC1_2018Down
   jet_mass_var: Jet_mass_jesBBEC1_2018Down
-  met_pt_var: METFixEE2017_T1_pt_jesBBEC1_2018Down
-  met_phi_var: METFixEE2017_T1_phi_jesBBEC1_2018Down
+  met_pt_var: MET_T1_pt_jesBBEC1_2018Down
+  met_phi_var: MET_T1_phi_jesBBEC1_2018Down
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_down_jesBBEC1_2018
     DeepCSV: Jet_btagSF_deepcsv_shape_down_jesBBEC1_2018
@@ -165,8 +165,8 @@ OSDL_2018_jesBBEC1Up:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesBBEC1_2018Up
   jet_mass_var: Jet_mass_jesBBEC1_2018Up
-  met_pt_var: METFixEE2017_T1_pt_jesBBEC1_2018Up
-  met_phi_var: METFixEE2017_T1_phi_jesBBEC1_2018Up
+  met_pt_var: MET_T1_pt_jesBBEC1_2018Up
+  met_phi_var: MET_T1_phi_jesBBEC1_2018Up
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_up_jesBBEC1_2018
     DeepCSV: Jet_btagSF_deepcsv_shape_up_jesBBEC1_2018
@@ -179,13 +179,13 @@ OSDL_2018_jesBBEC1Up:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2018_jesEC2Down:
+OSDL_RunII_jesEC2Down:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesEC2Down
   jet_mass_var: Jet_mass_jesEC2Down
-  met_pt_var: METFixEE2017_T1_pt_jesEC2Down
-  met_phi_var: METFixEE2017_T1_phi_jesEC2Down
+  met_pt_var: MET_T1_pt_jesEC2Down
+  met_phi_var: MET_T1_phi_jesEC2Down
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_down_jesEC2
     DeepCSV: Jet_btagSF_deepcsv_shape_down_jesEC2
@@ -198,13 +198,13 @@ OSDL_2018_jesEC2Down:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2018_jesEC2Up:
+OSDL_RunII_jesEC2Up:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesEC2Up
   jet_mass_var: Jet_mass_jesEC2Up
-  met_pt_var: METFixEE2017_T1_pt_jesEC2Up
-  met_phi_var: METFixEE2017_T1_phi_jesEC2Up
+  met_pt_var: MET_T1_pt_jesEC2Up
+  met_phi_var: MET_T1_phi_jesEC2Up
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_up_jesEC2
     DeepCSV: Jet_btagSF_deepcsv_shape_up_jesEC2
@@ -222,8 +222,8 @@ OSDL_2018_jesEC2Down:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesEC2_2018Down
   jet_mass_var: Jet_mass_jesEC2_2018Down
-  met_pt_var: METFixEE2017_T1_pt_jesEC2_2018Down
-  met_phi_var: METFixEE2017_T1_phi_jesEC2_2018Down
+  met_pt_var: MET_T1_pt_jesEC2_2018Down
+  met_phi_var: MET_T1_phi_jesEC2_2018Down
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_down_jesEC2_2018
     DeepCSV: Jet_btagSF_deepcsv_shape_down_jesEC2_2018
@@ -241,8 +241,8 @@ OSDL_2018_jesEC2Up:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesEC2_2018Up
   jet_mass_var: Jet_mass_jesEC2_2018Up
-  met_pt_var: METFixEE2017_T1_pt_jesEC2_2018Up
-  met_phi_var: METFixEE2017_T1_phi_jesEC2_2018Up
+  met_pt_var: MET_T1_pt_jesEC2_2018Up
+  met_phi_var: MET_T1_phi_jesEC2_2018Up
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_up_jesEC2_2018
     DeepCSV: Jet_btagSF_deepcsv_shape_up_jesEC2_2018
@@ -260,8 +260,8 @@ OSDL_RunII_jesFlavorQCDDown:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesFlavorQCDDown
   jet_mass_var: Jet_mass_jesFlavorQCDDown
-  met_pt_var: METFixEE2017_T1_pt_jesFlavorQCDDown
-  met_phi_var: METFixEE2017_T1_phi_jesFlavorQCDDown
+  met_pt_var: MET_T1_pt_jesFlavorQCDDown
+  met_phi_var: MET_T1_phi_jesFlavorQCDDown
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_down_jesFlavorQCD
     DeepCSV: Jet_btagSF_deepcsv_shape_down_jesFlavorQCD
@@ -279,8 +279,8 @@ OSDL_RunII_jesFlavorQCDUp:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesFlavorQCDUp
   jet_mass_var: Jet_mass_jesFlavorQCDUp
-  met_pt_var: METFixEE2017_T1_pt_jesFlavorQCDUp
-  met_phi_var: METFixEE2017_T1_phi_jesFlavorQCDUp
+  met_pt_var: MET_T1_pt_jesFlavorQCDUp
+  met_phi_var: MET_T1_phi_jesFlavorQCDUp
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_up_jesFlavorQCD
     DeepCSV: Jet_btagSF_deepcsv_shape_up_jesFlavorQCD
@@ -293,13 +293,13 @@ OSDL_RunII_jesFlavorQCDUp:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2018_jesHFDown:
+OSDL_RunII_jesHFDown:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesHFDown
   jet_mass_var: Jet_mass_jesHFDown
-  met_pt_var: METFixEE2017_T1_pt_jesHFDown
-  met_phi_var: METFixEE2017_T1_phi_jesHFDown
+  met_pt_var: MET_T1_pt_jesHFDown
+  met_phi_var: MET_T1_phi_jesHFDown
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_down_jesHF
     DeepCSV: Jet_btagSF_deepcsv_shape_down_jesHF
@@ -312,13 +312,13 @@ OSDL_2018_jesHFDown:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2018_jesHFUp:
+OSDL_RunII_jesHFUp:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesHFUp
   jet_mass_var: Jet_mass_jesHFUp
-  met_pt_var: METFixEE2017_T1_pt_jesHFUp
-  met_phi_var: METFixEE2017_T1_phi_jesHFUp
+  met_pt_var: MET_T1_pt_jesHFUp
+  met_phi_var: MET_T1_phi_jesHFUp
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_up_jesHF
     DeepCSV: Jet_btagSF_deepcsv_shape_up_jesHF
@@ -336,8 +336,8 @@ OSDL_2018_jesHFDown:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesHF_2018Down
   jet_mass_var: Jet_mass_jesHF_2018Down
-  met_pt_var: METFixEE2017_T1_pt_jesHF_2018Down
-  met_phi_var: METFixEE2017_T1_phi_jesHF_2018Down
+  met_pt_var: MET_T1_pt_jesHF_2018Down
+  met_phi_var: MET_T1_phi_jesHF_2018Down
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_down_jesHF_2018
     DeepCSV: Jet_btagSF_deepcsv_shape_down_jesHF_2018
@@ -355,8 +355,8 @@ OSDL_2018_jesHFUp:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesHF_2018Up
   jet_mass_var: Jet_mass_jesHF_2018Up
-  met_pt_var: METFixEE2017_T1_pt_jesHF_2018Up
-  met_phi_var: METFixEE2017_T1_phi_jesHF_2018Up
+  met_pt_var: MET_T1_pt_jesHF_2018Up
+  met_phi_var: MET_T1_phi_jesHF_2018Up
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_up_jesHF_2018
     DeepCSV: Jet_btagSF_deepcsv_shape_up_jesHF_2018
@@ -374,8 +374,8 @@ OSDL_RunII_jesRelativeBalDown:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesRelativeBalDown
   jet_mass_var: Jet_mass_jesRelativeBalDown
-  met_pt_var: METFixEE2017_T1_pt_jesRelativeBalDown
-  met_phi_var: METFixEE2017_T1_phi_jesRelativeBalDown
+  met_pt_var: MET_T1_pt_jesRelativeBalDown
+  met_phi_var: MET_T1_phi_jesRelativeBalDown
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_down_jesRelativeBal
     DeepCSV: Jet_btagSF_deepcsv_shape_down_jesRelativeBal
@@ -393,8 +393,8 @@ OSDL_RunII_jesRelativeBalUp:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesRelativeBalUp
   jet_mass_var: Jet_mass_jesRelativeBalUp
-  met_pt_var: METFixEE2017_T1_pt_jesRelativeBalUp
-  met_phi_var: METFixEE2017_T1_phi_jesRelativeBalUp
+  met_pt_var: MET_T1_pt_jesRelativeBalUp
+  met_phi_var: MET_T1_phi_jesRelativeBalUp
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_up_jesRelativeBal
     DeepCSV: Jet_btagSF_deepcsv_shape_up_jesRelativeBal
@@ -412,8 +412,8 @@ OSDL_2018_jesRelativeSampleDown:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesRelativeSample_2018Down
   jet_mass_var: Jet_mass_jesRelativeSample_2018Down
-  met_pt_var: METFixEE2017_T1_pt_jesRelativeSample_2018Down
-  met_phi_var: METFixEE2017_T1_phi_jesRelativeSample_2018Down
+  met_pt_var: MET_T1_pt_jesRelativeSample_2018Down
+  met_phi_var: MET_T1_phi_jesRelativeSample_2018Down
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_down_jesRelativeSample_2018
     DeepCSV: Jet_btagSF_deepcsv_shape_down_jesRelativeSample_2018
@@ -431,8 +431,8 @@ OSDL_2018_jesRelativeSampleUp:
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesRelativeSample_2018Up
   jet_mass_var: Jet_mass_jesRelativeSample_2018Up
-  met_pt_var: METFixEE2017_T1_pt_jesRelativeSample_2018Up
-  met_phi_var: METFixEE2017_T1_phi_jesRelativeSample_2018Up
+  met_pt_var: MET_T1_pt_jesRelativeSample_2018Up
+  met_phi_var: MET_T1_phi_jesRelativeSample_2018Up
   btagSF:
     CSVv2: Jet_btagSF_csvv2_shape_up_jesRelativeSample_2018
     DeepCSV: Jet_btagSF_deepcsv_shape_up_jesRelativeSample_2018
@@ -443,46 +443,6 @@ OSDL_2018_jesRelativeSampleUp:
   preWeights:
     pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 1.0; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
-  finalWeights:
-    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_$ERA_jesTotalUp:
-  jet_mask: jet_mask_$SYSTEMATIC
-  lep_postfix: ''
-  jet_pt_var: Jet_pt_jesTotalUp
-  jet_mass_var: Jet_mass_jesTotalUp
-  met_pt_var: MET_T1_pt_jesTotalUp
-  met_phi_var: MET_T1_phi_jesTotalUp
-  btagSF:
-    CSVv2: Jet_btagSF_csvv2_shape_up_jes
-    DeepCSV: Jet_btagSF_deepcsv_shape_up_jes
-    DeepJet: Jet_btagSF_deepjet_shape_up_jes
-  weightVariation: false
-  systematicSet:
-  - jerc
-  notes: Corresponds to jec_13TeV_R2017Up most likely...
-  preWeights:
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 1.0; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
-    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
-  finalWeights:
-    wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_$ERA_jesTotalDown:
-  jet_mask: jet_mask_$SYSTEMATIC
-  lep_postfix: ''
-  jet_pt_var: Jet_pt_jesTotalDown
-  jet_mass_var: Jet_mass_jesTotalDown
-  met_pt_var: MET_T1_pt_jesTotalDown
-  met_phi_var: MET_T1_phi_jesTotalDown
-  btagSF:
-    CSVv2: Jet_btagSF_csvv2_shape_down_jes
-    DeepCSV: Jet_btagSF_deepcsv_shape_down_jes
-    DeepJet: Jet_btagSF_deepjet_shape_down_jes
-  weightVariation: false
-  systematicSet:
-  - jerc
-  notes: Corresponds to jec_13TeV_R2017Down most likely...
-  preWeights:
-    pwgt_ttbar_njet_multiplicity___$SYSTEMATIC: "return 1.0; // * (nFTAJet__$SYSTEMATIC >= 8 ? 1.179 : nFTAJet__$SYSTEMATIC == 7 ? 1.054 : nFTAJet__$SYSTEMATIC == 6 ? 0.980 : nFTAJet__$SYSTEMATIC == 5 ? 0.991 : nFTAJet__$SYSTEMATIC == 4 ? 0.996 : 1.0);"
-    prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
 OSDL_$ERA_HEMUp:
@@ -882,12 +842,13 @@ OSDL_RunII_ISRDown:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbISRDown:
+    OSDL_RunII_ttISRDown:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbISRDown:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -985,12 +946,13 @@ OSDL_RunII_ISRUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbISRUp:
+    OSDL_RunII_ttISRUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbISRUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1083,12 +1045,13 @@ OSDL_RunII_FSRDown:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbFSRDown:
+    OSDL_RunII_ttFSRDown:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbFSRDown:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1181,12 +1144,13 @@ OSDL_RunII_FSRUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbFSRUp:
+    OSDL_RunII_ttFSRUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbFSRUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1281,12 +1245,13 @@ OSDL_RunII_muFNomRDown:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuFNomRDown:
+    OSDL_RunII_ttmuFNomRDown:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuFNomRDown:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1381,12 +1346,13 @@ OSDL_RunII_muFNomRUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuFNomRUp:
+    OSDL_RunII_ttmuFNomRUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuFNomRUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1481,12 +1447,13 @@ OSDL_RunII_muRNomFDown:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuRNomFDown:
+    OSDL_RunII_ttmuRNomFDown:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuRNomFDown:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1581,12 +1548,13 @@ OSDL_RunII_muRNomFUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuRNomFUp:
+    OSDL_RunII_ttmuRNomFUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuRNomFUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1681,12 +1649,13 @@ OSDL_RunII_muRFcorrelatedUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuRFcorrelatedUp:
+    OSDL_RunII_ttmuRFcorrelatedUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuRFcorrelatedUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1781,12 +1750,13 @@ OSDL_RunII_muRFcorrelatedDown:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuRFcorrelatedDown:
+    OSDL_RunII_ttmuRFcorrelatedDown:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuRFcorrelatedDown:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr

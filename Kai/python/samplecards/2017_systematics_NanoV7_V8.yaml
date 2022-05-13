@@ -26,7 +26,7 @@ $NOMINAL:
     pwgt_btagSF_common: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2017_jesAbsoluteDown:
+OSDL_RunII_jesAbsoluteDown:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesAbsoluteDown
@@ -45,7 +45,7 @@ OSDL_2017_jesAbsoluteDown:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2017_jesAbsoluteUp:
+OSDL_RunII_jesAbsoluteUp:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesAbsoluteUp
@@ -102,7 +102,7 @@ OSDL_2017_jesAbsoluteUp:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2017_jesBBEC1Down:
+OSDL_RunII_jesBBEC1Down:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesBBEC1Down
@@ -121,7 +121,7 @@ OSDL_2017_jesBBEC1Down:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2017_jesBBEC1Up:
+OSDL_RunII_jesBBEC1Up:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesBBEC1Up
@@ -178,7 +178,7 @@ OSDL_2017_jesBBEC1Up:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2017_jesEC2Down:
+OSDL_RunII_jesEC2Down:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesEC2Down
@@ -197,7 +197,7 @@ OSDL_2017_jesEC2Down:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2017_jesEC2Up:
+OSDL_RunII_jesEC2Up:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesEC2Up
@@ -292,7 +292,7 @@ OSDL_RunII_jesFlavorQCDUp:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2017_jesHFDown:
+OSDL_RunII_jesHFDown:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesHFDown
@@ -311,7 +311,7 @@ OSDL_2017_jesHFDown:
     prewgt___$SYSTEMATIC: "pwgt___LumiXS * puWeight * L1PreFiringWeight_Nom * pwgt_LSF___nom * pwgt_Z_vtx___nom * pwgt_ttbar_njet_multiplicity___$SYSTEMATIC * pwgt_top_pT_nnlo_nlo"
   finalWeights:
     wgt___$SYSTEMATIC: "prewgt___$SYSTEMATIC * pwgt_btag___$SYSTEMATIC"
-OSDL_2017_jesHFUp:
+OSDL_RunII_jesHFUp:
   jet_mask: jet_mask_$SYSTEMATIC
   lep_postfix: ''
   jet_pt_var: Jet_pt_jesHFUp
@@ -833,6 +833,12 @@ OSDL_RunII_ISRDown:
     - WW
     - WZ
     - ZZ
+    OSDL_RunII_ttISRDown:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
     OSDL_RunII_ttnobbISRDown:
     - ttother_SL_fr
     - ttother_SL_nr
@@ -932,12 +938,13 @@ OSDL_RunII_ISRUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbISRUp:
+    OSDL_RunII_ttISRUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbISRUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1031,12 +1038,13 @@ OSDL_RunII_FSRDown:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbFSRDown:
+    OSDL_RunII_ttFSRDown:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbFSRDown:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1130,12 +1138,13 @@ OSDL_RunII_FSRUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbFSRUp:
+    OSDL_RunII_ttFSRUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbFSRUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1231,12 +1240,13 @@ OSDL_RunII_muFNomRDown:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuFNomRDown:
+    OSDL_RunII_ttmuFNomRDown:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuFNomRDown:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1332,12 +1342,13 @@ OSDL_RunII_muFNomRUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuFNomRUp:
+    OSDL_RunII_ttmuFNomRUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuFNomRUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1433,12 +1444,13 @@ OSDL_RunII_muRNomFDown:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuRNomFDown:
+    OSDL_RunII_ttmuRNomFDown:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuRNomFDown:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1534,12 +1546,13 @@ OSDL_RunII_muRNomFUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuRNomFUp:
+    OSDL_RunII_ttmuRNomFUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuRNomFUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1635,12 +1648,13 @@ OSDL_RunII_muRFcorrelatedUp:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuRFcorrelatedUp:
+    OSDL_RunII_ttmuRFcorrelatedUp:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuRFcorrelatedUp:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1736,12 +1750,13 @@ OSDL_RunII_muRFcorrelatedDown:
     - WW
     - WZ
     - ZZ
-    OSDL_RunII_ttnobbmuRFcorrelatedDown:
+    OSDL_RunII_ttmuRFcorrelatedDown:
     - tt_AH
     - tt_SL
     - tt_DL
     - tt_SL-GF
     - tt_DL-GF
+    OSDL_RunII_ttnobbmuRFcorrelatedDown:
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
