@@ -555,6 +555,11 @@ OSDL_RunII_ISRUp:
     - WZ
     - ZZ
     OSDL_RunII_ttnobbISRUp:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -649,6 +654,11 @@ OSDL_RunII_FSRDown:
     - WZ
     - ZZ
     OSDL_RunII_ttnobbFSRDown:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -743,6 +753,11 @@ OSDL_RunII_FSRUp:
     - WZ
     - ZZ
     OSDL_RunII_ttnobbFSRUp:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -839,6 +854,11 @@ OSDL_RunII_muFNomRDown:
     - WZ
     - ZZ
     OSDL_RunII_ttnobbmuFNomRDown:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -935,6 +955,11 @@ OSDL_RunII_muFNomRUp:
     - WZ
     - ZZ
     OSDL_RunII_ttnobbmuFNomRUp:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1031,6 +1056,11 @@ OSDL_RunII_muRNomFDown:
     - WZ
     - ZZ
     OSDL_RunII_ttnobbmuRNomFDown:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1127,6 +1157,11 @@ OSDL_RunII_muRNomFUp:
     - WZ
     - ZZ
     OSDL_RunII_ttnobbmuRNomFUp:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1223,6 +1258,11 @@ OSDL_RunII_muRFcorrelatedUp:
     - WZ
     - ZZ
     OSDL_RunII_ttnobbmuRFcorrelatedUp:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
@@ -1319,6 +1359,11 @@ OSDL_RunII_muRFcorrelatedDown:
     - WZ
     - ZZ
     OSDL_RunII_ttnobbmuRFcorrelatedDown:
+    - tt_AH
+    - tt_SL
+    - tt_DL
+    - tt_SL-GF
+    - tt_DL-GF
     - ttother_SL_fr
     - ttother_SL_nr
     - ttnobb_SL_fr
