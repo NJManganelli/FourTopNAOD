@@ -21,8 +21,6 @@ def btv_sfs(
         is_ultra_legacy: bool = True,
         pre_post_VFP: str | None = None,
 ) -> Any:
-    rdf = input_df
-    isUL = str(is_ultra_legacy).lower()
     year = str(era)
     if is_ultra_legacy and era == "2016":
         if pre_post_VFP == "preVFP":
@@ -36,64 +34,70 @@ def btv_sfs(
 
     if is_mc:
         corrector_file = None
-        if algo == "deepjet":
+        if algo.lower() == "deepjet":
             if year == "2017":
                 corrector_file = loc / "DeepFlavour_94XSF_V4_B_F_JESreduced.json"
             elif year == "2018":
                 corrector_file = loc / "DeepJet_102XSF_V2_JESreduced.json"
             else:
-                raise NotImplementedError("Yeah...")
+                raise NotImplementedError(f"{algo} has no matching file for {era}")
         else:
-            raise NotImplementedError("Yeah...")
+            raise NotImplementedError(f"{algo} has no matching file for {era}")
+        corrector_file = str(corrector_file)
         jes_total = False
         jes_reduced = False
         jes_complete = False
-        if "total" in jes_systematics:
-            jes_total = True
-        if "reduced" in jes_systematics:
-            jes_reduced = True
-        if "complete" in jes_systematics:
-            jes_complete = True
-        rdf = ROOT.apply_btv_sfs(ROOT.RDF.AsRnode(df,
-                                                  wp,
-                                                  era,
-                                                  corrector_file,
-                                                  algo,
-                                                  input_collection,
-                                                  jes_total,
-                                                  jes_reduced,
-                                                  jes_complete,
-                                              )
+        for jes in jes_systematics:
+            jl = jes.lower()
+            if jl == "total":
+                jes_total = True
+            if jl == "reduced":
+                jes_reduced = True
+            if jl == "complete":
+                jes_complete = True
+        rdf = ROOT.apply_btv_sfs(ROOT.RDF.AsRNode(input_df),
+                                 wp,
+                                 era,
+                                 corrector_file,
+                                 algo.lower(),
+                                 input_collection,
+                                 jes_total,
+                                 jes_reduced,
+                                 jes_complete,
+        )
         return rdf
     else:
         return input_df
 
-rdf = ROOT.ROOT.RDataFrame("Events", "root://cms-xrd-global.cern.ch//pnfs/iihe/cms//store/group/fourtop/NoveCampaign/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/NoveCampaign/201126_034536/0000/tree_1.root").Filter("rdfentry_<2000;")
+rdf = ROOT.ROOT.RDataFrame("Events", "root://cms-xrd-global.cern.ch//pnfs/iihe/cms//store/group/fourtop/NoveCampaign/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/NoveCampaign/201126_034536/0000/tree_1.root")
 
-# r = ROOT.apply_btv_sfs(ROOT.RDF.AsRNode(rdf), 
-#                        "shape_corr", #std::string wp, 
-#                        "2018", #std::string era, 
-#                        "correctionlibtest_v2.json.gz", #std::string corrector_file,
-#                        "Jet", #std::string input_collection = "Jet",
-#                        "hadronFlavour", #std::string flav_name = "hadronFlavour", 
-#                        "eta", #std::string eta_name = "eta", 
-#                        "pt", #std::string pt_name = "pt",
-#                        "btagDeepFlavB", #std::string disc_name = "btagDeepFlavB",
-#                        True, #bool jes_total = false, 
-#                        True, #bool jes_reduced = false, 
-#                        False, #bool jes_complete = false, 
-#                        False, #bool verbose=false
-#                    )
+era = "2018"
 r = btv_sfs(rdf,
-            era,
+            "2018",
             is_mc = True,
             wp = "shape_corr",
             algo = "deepjet",
             input_collection = "Jet",
-            jes_systematics = ("reduced"),
+            jes_systematics = ("total", "reduced"),
             is_ultra_legacy = False,
             pre_post_VFP = None,
         )
-print([str(c) for c in r.GetDefinedColumnNames()])
-c = r.Stats("Jet_btagSF_deepjet_shape_up_jesAbsolute")
-print(c.GetMean())
+r2 = btv_sfs(rdf,
+            "2017",
+            is_mc = True,
+            wp = "shape_corr",
+            algo = "deepjet",
+            input_collection = "Jet",
+            jes_systematics = ("total", "reduced"),
+            is_ultra_legacy = False,
+            pre_post_VFP = None,
+        )
+testing = [(col, r.Stats(col)) for col in r.GetDefinedColumnNames()]
+testing2 = [(col, r2.Stats(col)) for col in r2.GetDefinedColumnNames()]
+c = r.Count()
+import time
+start = time.perf_counter()
+print(c.GetValue())
+print("took", time.perf_counter() - start, "s to process", c.GetValue(), "events")
+for col, stats in testing + testing2:
+    print(col, stats.GetMin(), stats.GetMean(), stats.GetMax())
