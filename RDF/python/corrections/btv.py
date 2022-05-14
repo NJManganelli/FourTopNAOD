@@ -1,14 +1,48 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Any
 
 import ROOT
 
+corrections_btv_status = False
+compile_flag, compile_force, compile_gcc = False, False, False
+if os.environ.get('FOURTOPNAOD_COMPILE'):
+    compile_flag = True 
+if os.environ.get('FOURTOPNAOD_FORCE'):
+    compile_force = True 
+if os.environ.get('FOURTOPNAOD_GCC'):
+    compile_gcc = True 
+
 corrections_btv_loc = Path(__file__).parent
+
 if not hasattr(ROOT, "apply_btv_sfs"):
     corrections_btv_src = corrections_btv_loc / "btv.cpp"
-    ROOT.gROOT.ProcessLine(f".L {corrections_btv_src}")
+    corrections_btv_so  = corrections_btv_loc / "btv.so"
+    cmd = ""
+    if compile_flag:
+        do_compile = False
+        if corrections_btv_so.exists():
+            if compile_force or os.path.getmtime(corrections_btv_so) < os.path.getmtime(corrections_btv_src):
+                do_compile = True
+        else:
+            do_compile = True
+        if do_compile:
+            print(f"Compiling shared object library {corrections_btv_so}")
+            comp_cmd = f"g++ -c -fPIC -o {corrections_btv_so} {corrections_btv_src} $(root-config --libs --cflags)"
+            ret_comp = os.system(comp_cmd)
+        decl_cmd = f'#include "{corrections_btv_src}"'
+        load_cmd = f"{corrections_btv_so}"
+        ROOT.gInterpreter.Declare(decl_cmd)
+        ROOT.gSystem.Load(load_cmd)
+    elif compile_gcc:
+        # print("To compile the loaded file, append a '+' to the '.L <file_name>+' line, and to specify gcc as the compile, also add 'g' after that")
+        cmd = f".L {corrections_btv_src}+g"
+        ROOT.gROOT.ProcessLine(cmd)
+    else:
+        cmd = f".L {corrections_btv_src}"
+        ROOT.gROOT.ProcessLine(cmd)
 
 def apply_btv_sfs(
         input_df: Any,
@@ -69,36 +103,4 @@ def apply_btv_sfs(
     else:
         return input_df
 
-# ROOT.EnableImplicitMT(12)
-# rdf = ROOT.ROOT.RDataFrame("Events", "root://cms-xrd-global.cern.ch//pnfs/iihe/cms//store/group/fourtop/NoveCampaign/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/NoveCampaign/201126_034536/0000/tree_1.root")
-
-# era = "2018"
-# r = btv_sfs(rdf,
-#             "2018",
-#             is_mc = True,
-#             wp = "shape_corr",
-#             algo = "deepjet",
-#             input_collection = "Jet",
-#             jes_systematics = ("total", "reduced"),
-#             is_ultra_legacy = False,
-#             pre_post_VFP = None,
-#         )
-# r2 = btv_sfs(rdf,
-#             "2017",
-#             is_mc = True,
-#             wp = "shape_corr",
-#             algo = "deepjet",
-#             input_collection = "Jet",
-#             jes_systematics = ("total", "reduced"),
-#             is_ultra_legacy = False,
-#             pre_post_VFP = None,
-#         )
-# testing = [(col, r.Stats(col)) for col in r.GetDefinedColumnNames()]
-# testing2 = [(col, r2.Stats(col)) for col in r2.GetDefinedColumnNames()]
-# c = r.Count()
-# import time
-# start = time.perf_counter()
-# print(c.GetValue())
-# print("took", time.perf_counter() - start, "s to process", c.GetValue(), "events")
-# for col, stats in testing + testing2:
-#     print(col, stats.GetMin(), stats.GetMean(), stats.GetMax())
+corrections_btv_status = True

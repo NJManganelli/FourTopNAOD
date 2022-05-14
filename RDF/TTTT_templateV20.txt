@@ -1,0 +1,94 @@
+# Datacard template for pre-automated tests
+imax    1 number of bins
+jmax    6 number of processes minus 1
+kmax    * number of nuisance parameters
+--------------------------------------------------------------------------------
+shapes * OSDL_$ERA_$CHANNEL_$CATEGORY CI_$ERA_$CHANNEL_$VAR.root $PROCESS___$CATEGORY___$VAR___nom $PROCESS___$CATEGORY___$VAR___$SYSTEMATIC
+shapes data_obs OSDL_$ERA_$CHANNEL_$CATEGORY CI_$ERA_$CHANNEL_$VAR.root data_obs___$CATEGORY___$VAR___nom
+--------------------------------------------------------------------------------
+bin          OSDL_$ERA_$CHANNEL_$CATEGORY
+observation  $R_DATA          
+--------------------------------------------------------------------------------
+bin                                              OSDL_$ERA_$CHANNEL_$CATEGORY OSDL_$ERA_$CHANNEL_$CATEGORY OSDL_$ERA_$CHANNEL_$CATEGORY OSDL_$ERA_$CHANNEL_$CATEGORY OSDL_$ERA_$CHANNEL_$CATEGORY OSDL_$ERA_$CHANNEL_$CATEGORY OSDL_$ERA_$CHANNEL_$CATEGORY
+process                                          ttnobb          ttbb            ttH             ttVJets         ttultrarare     EWK             tttt 
+process                                          1               2               3               4               5               6               0
+rate                                             $R_TTNOBB       $R_TTBB         $R_TTH          $R_TTV          $R_TTRARE       $R_EWK          $R_TTTT
+--------------------------------------------------------------------------------
+OSDL_$ERA_leptonSFEl                     lnN     $ELESF          $ELESF          $ELESF          $ELESF          $ELESF          $ELESF          $ELESF   
+OSDL_$ERA_leptonSFMu                     lnN     $MUOSF          $MUOSF          $MUOSF          $MUOSF          $MUOSF          $MUOSF          $MUOSF   
+OSDL_$ERA_lumi                           lnN     $ULUM           $ULUM           $ULUM           $ULUM           $ULUM           $ULUM           $ULUM
+OSDL_CL161718_lumi                       lnN     $CL161718       $CL161718       $CL161718       $CL161718       $CL161718       $CL161718       $CL161718
+OSDL_CL1718_lumi                         lnN     $CL1718         $CL1718         $CL1718         $CL1718         $CL1718         $CL1718         $CL1718
+OSDL_RunII_ttHF                          lnN     -               1.080           -               -               -               -               -
+OSDL_RunII_tt_xsec                       lnN     0.911/1.111     0.911/1.111     -               -               -               -               -                #with HDAMP added in quadrature
+OSDL_RunII_tt_ActCorr                    lnN     1.054           -               -               -               -               -               -                
+OSDL_RunII_ttH_xsec                      lnN     -               -               1.20            -               -               -               -
+OSDL_RunII_ttVJets_xsec                  lnN     -               -               -               1.20            -               -               -
+OSDL_RunII_ttultrarare_xsec              lnN     -               -               -               -               1.50            -               -
+OSDL_RunII_ewk_xsec                      lnN     -               -               -               -               -               1.038           -
+OSDL_$ERA_HEM                            shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_RunII_jesAbsolute                   shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_$ERA_jesAbsolute                    shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_RunII_jesBBEC1                      shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_$ERA_jesBBEC1                       shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_RunII_jesEC2                        shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_$ERA_jesEC2                         shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_RunII_jesFlavorQCD                  shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_RunII_jesHF                         shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_$ERA_jesHF                          shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_RunII_jesRelativeBal                shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_$ERA_jesRelativeSample              shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_$ERA_jer                            shape   $ACT_TTNOBB     $ACT_TTBB       $ACT_TTH        $ACT_TTV        $ACT_TTRARE     $ACT_EWK        $ACT_TTTT
+OSDL_$ERA_pileup                         shape   1               1               1               1               1               1               1
+OSDL_$ERA_prefire                        shape   1               1               1               1               1               1               1
+OSDL_RunII_ttnobbmuRNomF                 shape   1               -               -               -               -               -               -
+OSDL_RunII_ttnobbmuFNomR                 shape   1               -               -               -               -               -               -
+OSDL_RunII_ttnobbmuRFcorrelated          shape   1               -               -               -               -               -               -
+OSDL_RunII_ttnobbISR                     lnN     $TTNOBISR       -               -               -               -               -               -
+OSDL_RunII_ttnobbFSR                     lnN     $TTNOBFSR       -               -               -               -               -               -
+OSDL_RunII_ttbbmuRNomF                   shape   -               1               -               -               -               -               -
+OSDL_RunII_ttbbmuFNomR                   shape   -               1               -               -               -               -               -
+OSDL_RunII_ttbbmuRFcorrelated            shape   -               1               -               -               -               -               -
+OSDL_RunII_ttbbISR                       lnN     -               $TTBBISR        -               -               -               -               -
+OSDL_RunII_ttbbFSR                       lnN     -               $TTBBFSR        -               -               -               -               -
+OSDL_RunII_ttHmuRNomF                    shape   -               -               1               -               -               -               -
+OSDL_RunII_ttHmuFNomR                    shape   -               -               1               -               -               -               -
+OSDL_RunII_ttHmuRFcorrelated             shape   -               -               1               -               -               -               -
+OSDL_RunII_ttHISR                        shape   -               -               $ACT_TTH        -               -               -               - #No PSWeights
+OSDL_RunII_ttHFSR                        shape   -               -               $ACT_TTH        -               -               -               -
+OSDL_RunII_ttVJetsmuRNomF                shape   -               -               -               1               -               -               -
+OSDL_RunII_ttVJetsmuFNomR                shape   -               -               -               1               -               -               -
+OSDL_RunII_ttVJetsmuRFcorrelated         shape   -               -               -               1               -               -               -
+OSDL_RunII_ttVJetsISR                    shape   -               -               -               $ACT_TTV        -               -               - #No PSWeights
+OSDL_RunII_ttVJetsFSR                    shape   -               -               -               $ACT_TTV        -               -               -
+OSDL_RunII_ttultrararemuRNomF            shape   -               -               -               -               1               -               -
+OSDL_RunII_ttultrararemuFNomR            shape   -               -               -               -               1               -               -
+OSDL_RunII_ttultrararemuRFcorrelated     shape   -               -               -               -               1               -               -
+OSDL_RunII_ttultrarareISR                shape   -               -               -               -               $ACT_TTRARE     -               -
+OSDL_RunII_ttultrarareFSR                shape   -               -               -               -               $ACT_TTRARE     -               -
+OSDL_RunII_ewkmuRNomF                    shape   -               -               -               -               -               $ACT_EWK        - #No entries, but probably nothing
+OSDL_RunII_ewkmuFNomR                    shape   -               -               -               -               -               $ACT_EWK        -
+OSDL_RunII_ewkmuRFcorrelated             shape   -               -               -               -               -               $ACT_EWK        -
+OSDL_RunII_ewkISR                        shape   -               -               -               -               -               $ACT_EWK        - #No PSWeights
+OSDL_RunII_ewkFSR                        shape   -               -               -               -               -               $ACT_EWK        -
+OSDL_RunII_ttttmuRNomF                   shape   -               -               -               -               -               -               1
+OSDL_RunII_ttttmuFNomR                   shape   -               -               -               -               -               -               1
+OSDL_RunII_ttttmuRFcorrelated            shape   -               -               -               -               -               -               1
+OSDL_RunII_ttttISR                       shape   -               -               -               -               -               -               1 
+OSDL_RunII_ttttFSR                       shape   -               -               -               -               -               -               1
+OSDL_RunII_btagSF_shape_hf    	         shape   1               1               1               1               1               1               1
+OSDL_$ERA_btagSF_shape_hfstats1          shape   1               1               1               1               1               1               1
+OSDL_$ERA_btagSF_shape_hfstats2          shape   1               1               1               1               1               1               1
+OSDL_RunII_btagSF_shape_lf               shape   1               1               1               1               1               1               1
+OSDL_$ERA_btagSF_shape_lfstats1          shape   1               1               1               1               1               1               1
+OSDL_$ERA_btagSF_shape_lfstats2          shape   1               1               1               1               1               1               1
+OSDL_RunII_btagSF_shape_cferr1           shape   1               1               1               1               1               1               1
+OSDL_RunII_btagSF_shape_cferr2           shape   1               1               1               1               1               1               1  
+OSDL_RunII_pdf                           shape   1               1               1               1               1               1               1  
+OSDL_RunII_hdamp                         shape   $ACT_TTNOBB     $ACT_TTBB       -               -               -               -               - 
+OSDL_RunII_ue                            shape   $ACT_TTNOBB     $ACT_TTBB       -               -               -               -               - 
+# OSDL_RunII_hdamp                         lnN     $NORM_TTNOBB    $NORM_TTBB      -               -               -               -               - 
+# OSDL_RunII_ue                            lnN     $NORM_TTNOBB    $NORM_TTBB      -               -               -               -               - 
+OSDL_RunII_hdamp                         lnN     $HDAMP          $HDAMP          -               -               -               -               - 
+OSDL_RunII_ue                            lnN     $UE             $UE             -               -               -               -               - 
+* autoMCStats 1.

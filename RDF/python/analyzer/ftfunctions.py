@@ -14,7 +14,6 @@ if os.environ.get('FOURTOPNAOD_FORCE'):
     compile_force = True 
 if os.environ.get('FOURTOPNAOD_GCC'):
     compile_gcc = True 
-print(compile_flag, compile_force, compile_gcc)
 
 ftfunctions_loc = Path(__file__).parent
 
@@ -53,19 +52,27 @@ if not hasattr(ROOT, "FTA"):
     # if compile_flag:
     #     raise NotImplementedError("Compiling automatically not yet supported.")
     if compile_flag:
-        if compile_force or not ftfunctions_so.exists():
+        do_compile = False
+        if ftfunctions_so.exists():
+            if compile_force or os.path.getmtime(ftfunctions_so) < os.path.getmtime(ftfunctions_src):
+                do_compile = True
+        else:
+            do_compile = True
+        if do_compile:
+            print(f"Compiling shared object library {ftfunctions_so}")
             comp_cmd = f"g++ -c -fPIC -o {ftfunctions_so} {ftfunctions_src} $(root-config --libs --cflags)"
-            decl_cmd = f'#include "{ftfunctions_src}"'
-            load_cmd = f"{ftfunctions_so}"
             ret_comp = os.system(comp_cmd)
-            ROOT.gInterpreter.Declare(decl_cmd)
-            ROOT.gSystem.Load(load_cmd)
-            # g++ -c -fPIC -o FTFunctions.so FTFunctions.cpp $(root-config --libs --cflags)
-            # ROOT.gInterpreter.Declare('#include "FTFunctions.cpp"')
-            # ROOT.gSystem.Load("FTFunctions.so")
+        decl_cmd = f'#include "{ftfunctions_src}"'
+        load_cmd = f"{ftfunctions_so}"
+        ROOT.gInterpreter.Declare(decl_cmd)
+        ROOT.gSystem.Load(load_cmd)
+        # g++ -c -fPIC -o FTFunctions.so FTFunctions.cpp $(root-config --libs --cflags)
+        # ROOT.gInterpreter.Declare('#include "FTFunctions.cpp"')
+        # ROOT.gSystem.Load("FTFunctions.so")
     elif compile_gcc:
         # print("To compile the loaded file, append a '+' to the '.L <file_name>+' line, and to specify gcc as the compile, also add 'g' after that")
         cmd = f".L {ftfunctions_src}+g"
+        ROOT.gROOT.ProcessLine(cmd)
     else:
         cmd = f".L {ftfunctions_src}"
         ROOT.gROOT.ProcessLine(cmd)
