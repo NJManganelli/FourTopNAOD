@@ -8,6 +8,15 @@ source /cvmfs/cms.cern.ch/cmsset_default.sh
 export X509_USER_PROXY=$1
 job_number=$2
 num_cores=$3
+num_threads=${num_cores}
+stage=$4
+era=$5
+channel=$6
+sample=$7
+var_set=$8
+cat_set=$9
+analysis_dir=$10
+
 
 export XRDPARALLELEVTLOOP=16 #This might only work in development environments, but should increase the throughput...
 echo /cvmfs/sft.cern.ch/lcg/views/LCG_100/x86_64-centos7-gcc8-opt/setup.sh
@@ -23,7 +32,8 @@ source ~/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/RDF/standalone/env_standalone
 if [ $2 -eq 0 ]; then
   # echo "using dasgoclient"
   # dasgoclient --query="file dataset=/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv2-106X_upgrade2018_realistic_v15_L1v1-v1/NANOAODSIM"
-    echo "Running the analyzer..."
-    python -u FTAnalyzer.py fill-yields --analysisDirectory /eos/user/n/nmangane/analysis/Sep16_test_condor_2018 --noAggregate --channel ElMu --bTagger DeepJet --jetPUId L --include tttt --nThreads 10 --source NANOv7_CorrNov__ElMu --sample_cards '../Kai/python/samplecards/2018_NanoAODv7.yaml' '../Kai/python/samplecards/2018_NanoAODv7_additional.yaml' --systematics_cards '../Kai/python/samplecards/2018_systematics_NanoV7_V6_controlledFullPDF.yaml' --era 2018 # --recreateFileList
-  # python -u FTAnalyzer.py fill-combine --variableList FTAJet4{bpf}_pt FTAJet4{bpf}_eta --categorySet 5x5 --analysisDirectory /eos/user/n/nmangane/analysis/Sep16_test_condor_2018 --noAggregate --channel ElMu --bTagger DeepJet --jetPUId L --include tttt --nThreads 12 --source NANOv7_CorrNov__ElMu --sample_cards ../Kai/python/samplecards/2018_NanoAODv7.yaml ../Kai/python/samplecards/2018_NanoAODv7_additional.yaml --systematics_cards ../Kai/python/samplecards/2018_systematics_NanoV7_V6_controlledFullPDF.yaml --era 2018 # --recreateFileList
+    # echo "Running the analyzer... filling yields"
+    # python -u FTAnalyzer.py fill-yields --analysisDirectory /eos/user/n/nmangane/analysis/Sep16_test_condor_2018 --noAggregate --channel ${channel} --bTagger DeepJet --jetPUId L --include ${sample} --nThreads ${num_threads} --source NANOv7_CorrNov__${channel} --sample_cards '../Kai/python/samplecards/$ERA_NanoAODv7.yaml' '../Kai/python/samplecards/$ERA_NanoAODv7_additional.yaml' --systematics_cards '../Kai/python/samplecards/$ERA_systematics_NanoV7_V6_controlledFullPDF.yaml' --era ${era} # --recreateFileList
+    echo "Running the analyzer... filling plots"
+    python -u FTAnalyzer.py ${stage} --variableSet ${var_set} --categorySet ${cat_set} --analysisDirectory ${analysis_dir} --noAggregate --channel ${channel} --bTagger DeepJet --jetPUId L --include ${sample} --nThreads ${num_threads} --source NANOv7_CorrNov__${channel} --sample_cards '../Kai/python/samplecards/$ERA_NanoAODv7.yaml' '../Kai/python/samplecards/$ERA_NanoAODv7_additional.yaml' --systematics_cards '../Kai/python/samplecards/$ERA_systematics_NanoV7_V6_controlledFullPDF.yaml' --era ${era} # --recreateFileList
 fi
