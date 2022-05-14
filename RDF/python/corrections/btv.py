@@ -22,20 +22,23 @@ if not hasattr(ROOT, "apply_btv_sfs"):
     corrections_btv_so  = corrections_btv_loc / "btv.so"
     cmd = ""
     if compile_flag:
-        do_compile = False
-        if corrections_btv_so.exists():
-            if compile_force or os.path.getmtime(corrections_btv_so) < os.path.getmtime(corrections_btv_src):
-                do_compile = True
-        else:
-            do_compile = True
-        if do_compile:
-            print(f"Compiling shared object library {corrections_btv_so}")
-            comp_cmd = f"g++ -c -fPIC -o {corrections_btv_so} {corrections_btv_src} $(root-config --libs --cflags)"
-            ret_comp = os.system(comp_cmd)
-        decl_cmd = f'#include "{corrections_btv_src}"'
-        load_cmd = f"{corrections_btv_so}"
-        ROOT.gInterpreter.Declare(decl_cmd)
-        ROOT.gSystem.Load(load_cmd)
+        # Fundamentally broken somehow... do not compile
+        # do_compile = False
+        # if corrections_btv_so.exists():
+        #     if compile_force or os.path.getmtime(corrections_btv_so) < os.path.getmtime(corrections_btv_src):
+        #         do_compile = True
+        # else:
+        #     do_compile = True
+        # if do_compile:
+        #     print(f"Compiling shared object library {corrections_btv_so}")
+        #     comp_cmd = f"g++ -c -fPIC -o {corrections_btv_so} {corrections_btv_src} $(root-config --libs --cflags)"
+        #     ret_comp = os.system(comp_cmd)
+        # decl_cmd = f'#include "{corrections_btv_src}"'
+        # load_cmd = f"{corrections_btv_so}"
+        # ROOT.gInterpreter.Declare(decl_cmd)
+        # ROOT.gSystem.Load(load_cmd)
+        cmd = f".L {corrections_btv_src}"
+        ROOT.gROOT.ProcessLine(cmd)
     elif compile_gcc:
         # print("To compile the loaded file, append a '+' to the '.L <file_name>+' line, and to specify gcc as the compile, also add 'g' after that")
         cmd = f".L {corrections_btv_src}+g"
