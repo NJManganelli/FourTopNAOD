@@ -69,35 +69,36 @@ def btv_sfs(
     else:
         return input_df
 
-rdf = ROOT.ROOT.RDataFrame("Events", "root://cms-xrd-global.cern.ch//pnfs/iihe/cms//store/group/fourtop/NoveCampaign/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/NoveCampaign/201126_034536/0000/tree_1.root")
+# ROOT.EnableImplicitMT(12)
+# rdf = ROOT.ROOT.RDataFrame("Events", "root://cms-xrd-global.cern.ch//pnfs/iihe/cms//store/group/fourtop/NoveCampaign/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/NoveCampaign/201126_034536/0000/tree_1.root")
 
-era = "2018"
-r = btv_sfs(rdf,
-            "2018",
-            is_mc = True,
-            wp = "shape_corr",
-            algo = "deepjet",
-            input_collection = "Jet",
-            jes_systematics = ("total", "reduced"),
-            is_ultra_legacy = False,
-            pre_post_VFP = None,
-        )
-r2 = btv_sfs(rdf,
-            "2017",
-            is_mc = True,
-            wp = "shape_corr",
-            algo = "deepjet",
-            input_collection = "Jet",
-            jes_systematics = ("total", "reduced"),
-            is_ultra_legacy = False,
-            pre_post_VFP = None,
-        )
-testing = [(col, r.Stats(col)) for col in r.GetDefinedColumnNames()]
-testing2 = [(col, r2.Stats(col)) for col in r2.GetDefinedColumnNames()]
-c = r.Count()
-import time
-start = time.perf_counter()
-print(c.GetValue())
-print("took", time.perf_counter() - start, "s to process", c.GetValue(), "events")
-for col, stats in testing + testing2:
-    print(col, stats.GetMin(), stats.GetMean(), stats.GetMax())
+# era = "2018"
+# r = btv_sfs(rdf,
+#             "2018",
+#             is_mc = True,
+#             wp = "shape_corr",
+#             algo = "deepjet",
+#             input_collection = "Jet",
+#             jes_systematics = ("total", "reduced"),
+#             is_ultra_legacy = False,
+#             pre_post_VFP = None,
+#         )
+# r2 = btv_sfs(rdf,
+#             "2017",
+#             is_mc = True,
+#             wp = "shape_corr",
+#             algo = "deepjet",
+#             input_collection = "Jet",
+#             jes_systematics = ("total", "reduced"),
+#             is_ultra_legacy = False,
+#             pre_post_VFP = None,
+#         )
+# testing = [(col, r.Stats(col)) for col in r.GetDefinedColumnNames()]
+# testing2 = [(col, r2.Stats(col)) for col in r2.GetDefinedColumnNames()]
+# c = r.Count()
+# import time
+# start = time.perf_counter()
+# print(c.GetValue())
+# print("took", time.perf_counter() - start, "s to process", c.GetValue(), "events")
+# for col, stats in testing + testing2:
+#     print(col, stats.GetMin(), stats.GetMean(), stats.GetMax())
