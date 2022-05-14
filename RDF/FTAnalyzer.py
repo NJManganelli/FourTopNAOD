@@ -22,7 +22,9 @@ import ruamel.yaml as yaml
 from FourTopNAOD.RDF.tools.toolbox import getFiles, load_yaml_cards, write_yaml_cards, filter_systematics
 from FourTopNAOD.RDF.analyzer.histogram import fill_histos, fill_histos_ndim, fill_histos_ndim_categorized
 from FourTopNAOD.RDF.analyzer.cpp import declare_cpp_constants, make_cpp_safe_name
+from FourTopNAOD.RDF.corrections.btv import apply_btv_sfs
 from FourTopNAOD.RDF.analyzer.core import METXYCorr, defineJets, defineWeights, defineLeptons, splitProcess
+from FourTopNAOD.RDF.analyzer.ftfunctions import ftfunctions_load_status
 from FourTopNAOD.RDF.io.ntupler import getNtupleVariables, delegateFlattening, flattenVariable, writeNtuples, delegateSnapshots
 from FourTopNAOD.RDF.io.root import writeHistos, bookSnapshot#, writeHistosForCombine, writeHistosV1
 from tqdm import tqdm
@@ -44,57 +46,6 @@ else:
 #Load functions, can eventually be changed to ROOT.gInterpreter.Declare(#include "someheader.h")
 #WARNING! Do not rerun this cell without restarting the kernel, it will kill it!
 ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way #Extra note, this is completely irrelevant, since ROOT 6 all histograms that have a (non-unitary) weight provided for filling 
-#Declare random number generator
-ROOT.gInterpreter.Declare("TRandom3 rng = TRandom3();")
-print("FIXME? Consider removing even unitary weight from data histogram filling, due to the bug in ROOT where Sumw2 is impossible to disable using the documented method")
-print("FIXME: Hardcoded FTFunctions.cpp path, needs fixin'...")
-ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
-# print("To compile the loaded file, append a '+' to the '.L <file_name>+' line, and to specify gcc as the compile, also add 'g' after that")
-#https://root-forum.cern.ch/t/saving-root-numba-declare-callables-in-python/44020/2
-#Alternate formulations of loading the functions:
-#1 compile externally and then load it
-# g++ -c -fPIC -o FTFunctions.so FTFunctions.cpp $(root-config --libs --cflags)
-# ROOT.gInterpreter.Declare('#include "FTFunctions.cpp"')
-# ROOT.gSystem.Load("FTFunctions.so")
-#2 compile in ROOT from python, with the first part optionally done externally or previously (it shouldn't recompile if it already exists?), and option 'k' keeps the .so persistent
-# print("Compiling")
-# ROOT.gSystem.CompileMacro("FTFunctions.cpp", "kO")
-# print("Declaring")
-# ROOT.gInterpreter.Declare('#include "FTFunctions.cpp"')
-# print("Loading")
-# ROOT.gInterpreter.Load("FTFunctions_cpp.so")
-# print("Done")
-
-# David Ren-Hwa Yu
-# 22:43
-# In older versions of ROOT, I vaguely remember that you had to load the header files for the libraries, like 
-
-# gInterpreter.Declare("#include \"MyTools/RootUtils/interface/HistogramManager.h\"")
-# gSystem.Load(os.path.expandvars("$CMSSW_BASE/lib/$SCRAM_ARCH/libMyToolsRootUtils.so"))
-# ROOT.gROOT.ProcessLine(".L FTFunctions.cpp+g") #+ compiles, g specifies gcc as the compiler to use instead of whatever ROOT naturally prefers (llvm? clang?)
-ROOT.gInterpreter.Declare("""
-    const UInt_t barWidth = 60;
-    ULong64_t processed = 0, totalEvents = 0;
-    std::string progressBar;
-    std::mutex barMutex; 
-    auto registerEvents = [](ULong64_t nIncrement) {totalEvents += nIncrement;};
-
-    ROOT::RDF::RResultPtr<ULong64_t> AddProgressBar(ROOT::RDF::RNode df, int everyN=10000, int totalN=100000) {
-        registerEvents(totalN);
-        auto c = df.Count();
-        c.OnPartialResultSlot(everyN, [everyN] (unsigned int slot, ULong64_t &cnt){
-            std::lock_guard<std::mutex> l(barMutex);
-            processed += everyN; //everyN captured by value for this lambda
-            progressBar = "[";
-            for(UInt_t i = 0; i < static_cast<UInt_t>(static_cast<Float_t>(processed)/totalEvents*barWidth); ++i){
-                progressBar.push_back('|');
-            }
-            // escape the '\' when defined in python string
-            std::cout << "\\r" << std::left << std::setw(barWidth) << progressBar << "] " << processed << "/" << totalEvents << std::flush;
-        });
-        return c;
-    }
-""")
 
 #Add lumi to the trigger tuple?
 TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
@@ -692,7 +643,8 @@ def BTaggingYields(input_df_or_nodes, sampleName, era, channel="All", isData = T
                     
                 #Skip SFs for which the requisite per-jet SFs are not present...
                 if jetSF not in listOfColumns:
-                    if verbose: print("Skipping {} in BTaggingYields as it is not a valid column name".format(jetSF))
+                    if True: print("Skipping {} in BTaggingYields as it is not a valid column name".format(jetSF))
+                    # if verbose: print("Skipping {} in BTaggingYields as it is not a valid column name".format(jetSF))
                     continue
                         
                 #Check we have the input weight for before btagSF and yield ratio multiplication
@@ -2799,6 +2751,16 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                         cut_name = cut[:cut.index("=")]
                         cut_defn = cut[cut.index("=")+1:]
                         the_df[name][lvl] = the_df[name][lvl].Filter(cut_defn, cut_name)
+                the_df[name][lvl] = apply_btv_sfs(the_df[name][lvl],
+                                                  era=vals["era"],
+                                                  is_mc=(not vals["isData"]),
+                                                  wp = "shape_corr",
+                                                  algo = bTagger.lower(),
+                                                  input_collection = "Jet",
+                                                  jes_systematics = ("total", "reduced"),
+                                                  # is_ultra_legacy = ,
+                                                  # pre_post_VFP = ,
+                                              )
                 prePackedNodes = splitProcess(the_df[name][lvl], 
                                               splitProcess = splitProcessConfig,
                                               inputNtupleVariables=flatteningDict[name][lvl]["ntupleVariables"],

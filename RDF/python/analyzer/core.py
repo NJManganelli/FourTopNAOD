@@ -446,7 +446,7 @@ def defineJets(input_df, era="2017", doAK8Jets=False, jetPtMin=30.0, jetPUIdChoi
         z.append(("FTAVectorRecoil{pf}_pt".format(pf=postfix), "sqrt(pow(FTAVectorRecoil{pf}_px, 2) + pow(FTAVectorRecoil{pf}_py, 2))".format(pf=postfix)))
         z.append(("FTAJet{pf}_deepcsvsort".format(pf=postfix), "Reverse(Argsort(Jet_{btv}[{jm}]))".format(btv=bTagWorkingPointDict[era]["DeepCSV"]["Var"], jm=jetMask)))
         z.append(("FTAJet{pf}_deepjetsort".format(pf=postfix), "Reverse(Argsort(Jet_{btv}[{jm}]))".format(btv=bTagWorkingPointDict[era]["DeepJet"]["Var"], jm=jetMask)))
-        print("FIXME: To be pt-sorted, all corresponding values should be converted from Variable[mask] to Take(Variable, FTAJet{pf}_ptsort)...\".format(pf=postfix)")
+        # print("FIXME: To be pt-sorted, all corresponding values should be converted from Variable[mask] to Take(Variable, FTAJet{pf}_ptsort)...\".format(pf=postfix)")
         z.append(("FTAJet{pf}_idx".format(pf=postfix), "Jet_idx[{jm}]".format(jm=jetMask)))
         z.append(("FTAJet{pf}_pt".format(pf=postfix), "{jpt}[{jm}]".format(jpt=jetPt, jm=jetMask)))
         z.append(("FTAJet{pf}_eta".format(pf=postfix), "Jet_eta[{jm}]".format(jm=jetMask)))
@@ -895,8 +895,6 @@ def splitProcess(input_df, splitProcess=None, sampleName=None, isData=True, era=
                     fractionalContribution = processDict.get("fractionalContribution")
                     phaseSpaceFactor = processDict.get("phaseSpaceFactor")
                     #Calculate XS * Lumi
-                    print("FIXME: Need to modify fractional sample weighting to use the meta info, defaulting to 1.0 right now")
-                    print("OPTIONAL: Need to take the lumi value from the actual sample card era, not the presumed one passed to analyzer")
                     wgtFormula = f"{effectiveCrossSection} * {lumi} * 1000 * genWeight * {fractionalContribution} * {phaseSpaceFactor} / {sumWeights}"
                     if isinstance(inclusiveProcess, (dict,collections.OrderedDict)) and "processes" in inclusiveProcess.keys():
                         formulaForNominalXS = "{nXS:f} * genWeight / {sW:f}".format(nXS=inclusiveDict.get("effectiveCrossSection"),
