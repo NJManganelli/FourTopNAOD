@@ -1,7 +1,7 @@
 executable = condor_jes_FTA.sh
 Proxy_path = /afs/cern.ch/user/n/nmangane/private/x509up
 num_cores = 4
-arguments = $(Proxy_path) $(ProcId) $(num_cores) fill-combine $(era) $(channel) $(sample) $(var_set) $(cat_set) April24_jes_reduced_${era}
+arguments = $(Proxy_path) $(ProcId) $(num_cores) fill-combine $(era) $(channel) $(sample) $(var_set) $(cat_set) April24_jes_reduced
 output                = condor_output/condor_jes_FTA_l1.$(ClusterId).$(ProcId).out
 error                 = condor_error/condor_jes_FTA_l1.$(ClusterId).$(ProcId).err
 log                   = condor_log/condor_jes_FTA_l1.$(ClusterId).log
