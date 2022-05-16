@@ -234,7 +234,9 @@ for x in range(0, len(fileList), args.simultaneous):
                 rdfFinal = rdfFinal.Filter(defn, name)
         rdf_finals[fn] = rdfFinal
         count_finals[fnumber] = rdf_finals[fn].Count()
-        columnList = [str(c) for c in rdf_finals[fn].GetColumnNames() if str(c) in args.keep] if args.keep is not None else None
+        # columnList = [str(c) for c in rdf_finals[fn].GetColumnNames() if str(c) in args.keep] if args.keep is not None else None
+        availableColumns = [str(c) for c in rdf_finals[fn].GetColumnNames()]
+        columnList = [c for c in args.keep if c in availableColumns] if args.keep is not None else None
         if args.write:
             snaphandle = bookSnapshot(rdf_finals[fn], foNameDict[fn]["temp"], columnList, lazy=True, treename="Events", mode="RECREATE", compressionAlgo="LZMA", compressionLevel=9, splitLevel=99, debug=False)
             # booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(), 
