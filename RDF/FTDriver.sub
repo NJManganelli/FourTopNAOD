@@ -1,10 +1,13 @@
 executable = FTDriver.sh
 Proxy_path = /afs/cern.ch/user/n/nmangane/private/x509up
 num_cores = 4
-arguments = $(Proxy_path) $(ProcId) $(num_cores) $(stage) $(era) $(channel) $(sample) $(var_set) $(cat_set) $(analysis_dir_base)
-output                = condor_output/condor_jes_FTA.$(ClusterId).$(ProcId).out
-error                 = condor_error/condor_jes_FTA.$(ClusterId).$(ProcId).err
-log                   = condor_log/condor_jes_FTA.$(ClusterId).log
+#           Proxy_Path    ProcessID Number_Cores Stage    Year   Channel    Sample    Variables  Categories AnalysisDir(w/o era) BtagAlgo JetPUId
+# No Defaults:                                   stage=                               var_set=   cat_set=   analysis_dir_base=
+# Example usage: condor_submit FTDriver.sub stage=fill-combine var_set=Control cat_set=3pBnJet4p analysis_dir_base=/eos/user/n/nmangane/analysis/April24_jes_reduced  (_${era} is automatically appended)
+arguments = $(Proxy_path) $(ProcId) $(num_cores) $(stage) $(era) $(channel) $(sample) $(var_set) $(cat_set) $(analysis_dir_base) DeepJet  L
+output                = condor_output/condor_jes_FTA.$(stage).$(var_set).$(cat_set).$(ClusterId).$(ProcId).out
+error                 = condor_error/condor_jes_FTA.$(stage).$(var_set).$(cat_set).$(ClusterId).$(ProcId).err
+log                   = condor_log/condor_jes_FTA.$(stage).$(var_set).$(cat_set).$(ClusterId).log
 
 RequestCpus = $(num_cores)
 # +MaxRuntime = Number of seconds
@@ -21,8 +24,8 @@ RequestCpus = $(num_cores)
 # Send the job to Held state on failure.
 on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
 
-# Periodically retry the jobs every 10 minutes, up to a maximum of 5 retries.
-periodic_release =  (NumJobStarts < 3) && ((CurrentTime - EnteredCurrentStatus) > 600)
+# Periodically retry the jobs every 5 minutes, up to a maximum of 5 retries.
+periodic_release =  (NumJobStarts < 5) && ((CurrentTime - EnteredCurrentStatus) > 300)
 
 queue era, channel, sample, from (
      2017, ElMu, ElMu_B
