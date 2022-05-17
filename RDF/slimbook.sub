@@ -1,0 +1,27 @@
+executable = slimbook.sh
+Proxy_path = /afs/cern.ch/user/n/nmangane/private/x509up
+num_cores = 4
+arguments = $(Proxy_path) $(ProcId) $(num_cores) 
+output                = condor_output/condor_jes_FTA.slimbook.$(ClusterId).$(ProcId).out
+error                 = condor_error/condor_jes_FTA.slimbook.$(ClusterId).$(ProcId).err
+log                   = condor_log/condor_jes_FTA.slimbook.$(ClusterId).log
+
+RequestCpus = $(num_cores)
+# +MaxRuntime = Number of seconds
+
+# espresso     = 20 minutes
+# microcentury = 1 hour
+# longlunch    = 2 hours
+# workday      = 8 hours
+# tomorrow     = 1 day
+# testmatch    = 3 days
+# nextweek     = 1 week
++JobFlavour = "workday"
+
+# Send the job to Held state on failure.
+on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
+
+# Periodically retry the jobs every 5 minutes, up to a maximum of 5 retries.
+periodic_release =  (NumJobStarts < 5) && ((CurrentTime - EnteredCurrentStatus) > 300)
+
+queue 153
