@@ -130,10 +130,13 @@ parser.add_argument('--redirector', dest='redir', action='store', type=str, narg
                     help='redirector for XRootD, such as "root://cms-xrd-global.cern.ch/"')
 parser.add_argument('--outdir', dest='outdir', action='store', type=str, default='skims/',
                     help='directory to place output in')
+parser.add_argument('--tempdir', dest='tempdir', action='store', type=str,
+                    help='directory to place temporary output in, before moving to outdir')
 parser.add_argument('--prefetch', dest='prefetch', action='store_true',
                     help='Prefetch files locally before processing and then deleting upon successful completion')
 parser.add_argument('--longTermCache', dest='longTermCache', action='store_true',
                     help='LongTermCache files, preventing deletion of source files transferred locally')
+parser.add_argument('--noProgressBar', dest='noProgressBar', action='store_true', help='Toggle off the tqdm progress bars')
 # parser.add_argument('--merge', dest='merge', action='store_true',
 #                     help='Merge output files immediately on input, which may be susceptible to problems if requested branches do not align')
 # parser.add_argument('--haddnano', dest='haddnano', action='store_true',
@@ -154,6 +157,11 @@ else:
 print("Inputs: ")
 for fn in fileList:
     print("\t{}".format(fn))
+if not hasattr(args, "tempdir") or getattr(args, "tempdir") is None:
+    args.tempdir = args.outdir
+print("Temporary directory: ", args.tempdir)
+if args.write and not os.path.isdir(args.tempdir):
+    os.makedirs(args.tempdir)
 print("Output directory: ", args.outdir)
 if args.write and not os.path.isdir(args.outdir):
     os.makedirs(args.outdir)
@@ -188,7 +196,7 @@ for x in range(0, len(fileList), args.simultaneous):
             foNameDict[fn] = {}
         foNameDict[fn]["final"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
         foNameDict[fn]["empty"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".empty"))
-        foNameDict[fn]["temp"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", "_temp" + ".root"))
+        foNameDict[fn]["temp"] = os.path.join(args.tempdir, fn.split("/")[-1].replace(".root", "_temp" + ".root"))
         #Skip files that are finished unless overwrite is requested
         if (os.path.isfile(foNameDict[fn]["final"]) or os.path.isfile(foNameDict[fn]["empty"])) and not args.overwrite:
             if os.path.isfile(foNameDict[fn]["final"]):
@@ -211,8 +219,11 @@ for x in range(0, len(fileList), args.simultaneous):
         rdfEntries = tchains[fn].GetEntries()
         rdf_bases[fn] = ROOT.ROOT.RDataFrame(tchains[fn])
         count_bases[fnumber] = rdf_bases[fn].Count()
-        booktriggers[fn] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(rdf_bases[fn]), 
-                                               2000, int(rdfEntries))
+        if args.noProgressBar:
+            booktriggers[fn] = rdf_bases[fn].Count()
+        else:
+            booktriggers[fn] = ROOT.AddProgressBar(ROOT.RDF.AsRNode(rdf_bases[fn]), 
+                                                   2000, int(rdfEntries))
         rdfFinal = rdf_bases[fn] #Placeholder
         if args.defines is not None:
             for define in args.defines:
@@ -242,8 +253,11 @@ for x in range(0, len(fileList), args.simultaneous):
             # booktrigger = ROOT.AddProgressBar(ROOT.RDF.AsRNode(), 
             #                                   2000, int(metainfo[name]["totalEvents"]))
             handles.append(snaphandle)
+    this_start = time.perf_counter()
     print("Writing results for files {} through {}".format(it_begin, it_end-1))
+    ROOT.RDF.RunGraphs(handles[it_begin:it_end])
     results += list(map(getResults, handles[it_begin:it_end]))
+    print("Took {}s to processes subset of results.".format(time.perf_counter() - this_start))
     counts_base += list(map(getResults, [count_bases[it] for it in range(it_begin, it_end)]))
     counts_final += list(map(getResults, [count_finals[it] for it in range(it_begin, it_end)]))
     percent_pass += [100 * counts_final[xx]/counts_base[xx] if (isinstance(counts_base[xx], int) and counts_base[xx] > 0) else -1 for xx in 
