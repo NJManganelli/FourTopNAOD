@@ -38,6 +38,14 @@ def round_to_n(x, sigfigs):
     else:
         return round(x, -int(math.floor(math.log10(abs_x))) + sigfigs - 1)
 
+def str_with_sigfigs(x, sigfigs):
+    x_sfs = round_to_n(x, sigfigs)
+    if isinstance(x_sfs, str):
+        return x_sfs
+    fps = max(0, -int(math.floor(math.log10(abs(x)))) + sigfigs - 1)
+    ret = "{x_sfs:." + str(fps) + "f}"
+    return ret.format(x_sfs=x_sfs)
+
 def configureLatex(channel, limits, significance, XS, sigfigs=3, blind=False):
     if isinstance(XS, str):
         XS = float(XS)
@@ -62,8 +70,8 @@ def configureLatex(channel, limits, significance, XS, sigfigs=3, blind=False):
             result += "$" + "X." + "X"*(sigifigs-1) + "$ & "
         else:
             observed = limits[0] if not blind else None
-            result += "$" + str(round_to_n(observed, sigfigs)) + "$ & "
-            result += "$" + str(round_to_n(XS * observed, sigfigs)) + "$ & "
+            result += "$" + str_with_sigfigs(observed, sigfigs) + "$ & "
+            result += "$" + str_with_sigfigs(XS * observed, sigfigs) + "$ & "
         offset = 1
         aposteriori = True
     else:
@@ -74,11 +82,11 @@ def configureLatex(channel, limits, significance, XS, sigfigs=3, blind=False):
     lps = "+" if up > 0 else ""
 
     #limits in mu
-    result += "$" + str(round_to_n(central, sigfigs)) + "_{" + str(round_to_n(down, sigfigs)) + "}^{" + lps + str(round_to_n(up, sigfigs)) + "}$ & "
+    result += "$" + str_with_sigfigs(central, sigfigs) + "_{" + str_with_sigfigs(down, sigfigs) + "}^{" + lps + str_with_sigfigs(up, sigfigs) + "}$ & "
     #limits in fb
-    result += "$" + str(round_to_n(XS * central, sigfigs)) + "_{" + str(round_to_n(XS * down, sigfigs)) + "}^{" + lps + str(round_to_n(XS * up, sigfigs)) + "}$ & "
+    result += "$" + str_with_sigfigs(XS * central, sigfigs) + "_{" + str_with_sigfigs(XS * down, sigfigs) + "}^{" + lps + str_with_sigfigs(XS * up, sigfigs) + "}$ & "
     #significance
-    result += "$" + str(round_to_n(significance, sigfigs-1)) + " \\sigma$ \\\\"
+    result += "$" + str_with_sigfigs(significance, sigfigs-1) + " \\sigma$ \\\\"
     if aposteriori:
         header = "Channel    & Obs. lim. & Obs. lim. & Exp. lim. & Exp. lim. & Obs. significance \\\\ \n"\
                  "           & [$\\times \sigmattttsm$] & [fb] & [$\\times \sigmattttsm$]  & [fb] & Std. Dev. \\\\"
@@ -183,9 +191,9 @@ def limitsToLatex(limits, XS=None, sigfigs=3, blind=False):
         else:
             observed = limits[0] if not blind else None
             if XS is None:
-                data_result += "$" + str(round_to_n(observed, sigfigs)) + "$"
+                data_result += "$" + str_with_sigfigs(observed, sigfigs) + "$"
             else:
-                data_result += "$" + str(round_to_n(XS * observed, sigfigs)) + "$"
+                data_result += "$" + str_with_sigfigs(XS * observed, sigfigs) + "$"
         offset = 1
     else:
         offset = 0
@@ -198,16 +206,16 @@ def limitsToLatex(limits, XS=None, sigfigs=3, blind=False):
     #If XS is non-None, return in fb
     #limits in mu
     if XS is None:
-        result += "$" + str(round_to_n(central, sigfigs)) + "_{" + lps2 + str(round_to_n(down, sigfigs)) + "}^{" + lps1 + str(round_to_n(up, sigfigs)) + "}$"
+        result += "$" + str_with_sigfigs(central, sigfigs) + "_{" + lps2 + str_with_sigfigs(down, sigfigs) + "}^{" + lps1 + str_with_sigfigs(up, sigfigs) + "}$"
     #limits in fb
     else:
-        result += "$" + str(round_to_n(XS * central, sigfigs)) + "_{" + lps2 + str(round_to_n(XS * down, sigfigs)) + "}^{" + lps1 + str(round_to_n(XS * up, sigfigs)) + "}$"
+        result += "$" + str_with_sigfigs(XS * central, sigfigs) + "_{" + lps2 + str_with_sigfigs(XS * down, sigfigs) + "}^{" + lps1 + str_with_sigfigs(XS * up, sigfigs) + "}$"
     return result, data_result
 
 def significanceToLatex(significance, sigfigs, blind=False):
     #significance
     if not blind:
-        result = "$" + str(round_to_n(significance, sigfigs-1)) + " \\sigma$" # \\\\"
+        result = "$" + str_with_sigfigs(significance, sigfigs-1) + " \\sigma$" # \\\\"
     else:
         result = "$" + "X." + "X"*(sigfigs-1) + "$"
     return result
@@ -362,6 +370,7 @@ def main2(opts):
                 tmp = significanceToLatex(tmp, sigfigs=opts.sigfigs, blind=opts.blind)
                 res["sig"]["observed"][era][channel] = tmp
             except:
+                res["sig"]["observed"][era][channel] = tmp #REMOVE
                 if opts.blind:
                     tmp = "$X.XX \sigma$"
                 else:
