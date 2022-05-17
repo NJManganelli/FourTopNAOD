@@ -1,6 +1,7 @@
 #ruamel may create environment conflicts, proceed with caution:
 # pip install --user 'ruamel.yaml<0.16,>0.15.95' --no-deps
 import ruamel.yaml as yaml
+from FourTopNAOD.RDF.tools.toolbox import getFiles
 def load_yaml_cards(sample_cards):
     SampleList = None
     SampleDict = dict()
@@ -36,9 +37,11 @@ for era in ["2017", "2018"]:
                 # print(inputSampleCardYaml[name].get("source", {}))
                 print("Skipping sample due to lack of source being available:", era, name)
             else:
-                print("if [ $2 -eq " + str(iterator) + " ]; then\n", f"   print Running {era} {name};\n"
+                file_name = f"skimming/{era}_{name}.txt"
+                files = getFiles(inputSampleCardYaml[name].get("source", {}).get("NANOv7"), outFileName=file_name)
+                print("if [ $2 -eq " + str(iterator) + " ]; then\n", f"   echo Running {era} {name};\n"
                       "    python ~/Work/CMSSW_10_2_24_patch1/src/FourTopNAOD/RDF/scripts/nanoframe.py --input", 
-                      "'{}'".format(inputSampleCardYaml[name].get("source", {}).get("NANOv7")), 
+                      f"'list:{file_name}'", 
                       "--simultaneous 8 --nThreads 8 --write --redir root://cms-xrd-global.cern.ch/ --outdir",
                       f"/eos/cms/store/user/nmangane/NANOv7_slimbookkeeping/{era}/{name} --keep",
                       "run event luminosityBlock genWeight genTtbarId nPSWeight PSWeight nLHEReweightingWeight LHEReweightingWeight nLHEScaleWeight LHEScaleWeight LHEWeight nLHEPdfWeight LHEPdfWeight fixedGridRhoFastjetAll fixedGridRhoFastjetCentralCalo fixedGridRhoFastjetCentralChargedPileUp fixedGridRhoFastjetCentralNeutral fixedGridRhoFastjetCentral LHE nLHEPart LHEPart Pileup",
