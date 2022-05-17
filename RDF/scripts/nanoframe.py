@@ -255,7 +255,7 @@ for x in range(0, len(fileList), args.simultaneous):
             handles.append(snaphandle)
     this_start = time.perf_counter()
     print("Writing results for files {} through {}".format(it_begin, it_end-1))
-    ROOT.RDF.RunGraphs(handles[it_begin:it_end])
+    ROOT.RDF.RunGraphs([hnd for hnd in handles[it_begin:it_end] if not isinstance(hnd, dummyResult)])
     results += list(map(getResults, handles[it_begin:it_end]))
     print("Took {}s to processes subset of results.".format(time.perf_counter() - this_start))
     counts_base += list(map(getResults, [count_bases[it] for it in range(it_begin, it_end)]))
