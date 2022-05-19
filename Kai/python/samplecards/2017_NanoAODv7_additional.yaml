@@ -15,6 +15,7 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL/MuMu/*Skim.root
+      NANOv7_SLIMBOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_slimbookkeeping/2017/WJets_SL/*.root
     run: 31.0
     nEvents: 44627200
     genEventCount: 44627200
@@ -85,6 +86,7 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT100/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT100/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT100/MuMu/*Skim.root
+      NANOv7_SLIMBOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_slimbookkeeping/2017/WJets_SL-HT100/*.root
     run: 31.0
     nEvents: 35862893
     genEventCount: 35862893
@@ -155,6 +157,7 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT200/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT200/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT200/MuMu/*Skim.root
+      NANOv7_SLIMBOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_slimbookkeeping/2017/WJets_SL-HT200/*.root
     run: 19.0
     nEvents: 21250517
     genEventCount: 21250517
@@ -225,6 +228,7 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT400/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT400/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT400/MuMu/*Skim.root
+      NANOv7_SLIMBOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_slimbookkeeping/2017/WJets_SL-HT400/*.root
     run: 16.0
     nEvents: 14313274
     genEventCount: 14313274
@@ -295,6 +299,7 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT600/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT600/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT600/MuMu/*Skim.root
+      NANOv7_SLIMBOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_slimbookkeeping/2017/WJets_SL-HT600/*.root
     run: 32.0
     nEvents: 21709087
     genEventCount: 21709087
@@ -365,6 +370,7 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT800/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT800/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT800/MuMu/*Skim.root
+      NANOv7_SLIMBOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_slimbookkeeping/2017/WJets_SL-HT800/*.root
     run: 26.0
     nEvents: 20432728
     genEventCount: 20432728
@@ -435,6 +441,7 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT1200/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT1200/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT1200/MuMu/*Skim.root
+      NANOv7_SLIMBOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_slimbookkeeping/2017/WJets_SL-HT1200/*.root
     run: 32.0
     nEvents: 20258624
     genEventCount: 20258624
@@ -505,6 +512,7 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT2500/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT2500/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WJets_SL-HT2500/MuMu/*Skim.root
+      NANOv7_SLIMBOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_slimbookkeeping/2017/WJets_SL-HT2500/*.root
     run: 36.0
     nEvents: 21495421
     genEventCount: 21495421
@@ -575,6 +583,7 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WW/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WW/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WW/MuMu/*Skim.root
+      NANOv7_SLIMBOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_slimbookkeeping/2017/WW/*.root
     run: 6.0
     nEvents: 7765828
     genEventCount: 7765828
@@ -645,6 +654,7 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WZ/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WZ/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/WZ/MuMu/*Skim.root
+      NANOv7_SLIMBOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_slimbookkeeping/2017/WZ/*.root
     run: 4.0
     nEvents: 3928630
     genEventCount: 3928630
@@ -715,6 +725,7 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/ZZ/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/ZZ/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/ZZ/MuMu/*Skim.root
+      NANOv7_SLIMBOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_slimbookkeeping/2017/ZZ/*.root
     run: 5.0
     nEvents: 1949768
     genEventCount: 1949768
@@ -785,6 +796,7 @@
       NANOv7_CorrNov__ElEl: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tttt_badNPartonInBorn/ElEl/*Skim.root
       NANOv7_CorrNov__ElMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tttt_badNPartonInBorn/ElMu/*Skim.root
       NANOv7_CorrNov__MuMu: glob:/eos/user/n/nmangane/files/NANOv7_CorrNov/skims/2017/tttt_badNPartonInBorn/MuMu/*Skim.root
+      NANOv7_SLIMBOOKKEEPING: glob:/eos/cms/store/user/nmangane/NANOv7_slimbookkeeping/2017/tttt_badNPartonInBorn/*.root
     run: 21.0
     nEvents: 2273928
     genEventCount: 2273928
