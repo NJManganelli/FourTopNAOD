@@ -20,7 +20,8 @@ OSDL_$ERA_lumi                           lnN     $ULUM           $ULUM          
 OSDL_CL161718_lumi                       lnN     $CL161718       $CL161718       $CL161718       $CL161718       $CL161718       $CL161718       $CL161718
 OSDL_CL1718_lumi                         lnN     $CL1718         $CL1718         $CL1718         $CL1718         $CL1718         $CL1718         $CL1718
 OSDL_RunII_ttHF                          lnN     -               1.080           -               -               -               -               -
-OSDL_RunII_tt_xsec                       lnN     0.911/1.111     0.911/1.111     -               -               -               -               -                #with HDAMP added in quadrature
+OSDL_RunII_ttnobb_xsec                   lnN     0.911/1.111     -               -               -               -               -               -                #with HDAMP added in quadrature
+OSDL_RunII_ttbb_xsec                     lnN     -               0.911/1.111     -               -               -               -               -                #with HDAMP added in quadrature
 OSDL_RunII_tt_ActCorr                    lnN     1.054           -               -               -               -               -               -                
 OSDL_RunII_ttH_xsec                      lnN     -               -               1.20            -               -               -               -
 OSDL_RunII_ttVJets_xsec                  lnN     -               -               -               1.20            -               -               -
