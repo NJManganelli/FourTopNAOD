@@ -106,6 +106,36 @@ def bookSnapshot(input_df, filename, columnList, lazy=True, treename="Events", m
 
     return handle
 
+def is_file_present(name_dict, xrdcp=False):
+    test = False
+    final = None
+    if xrdcp:
+        try:
+            tmp_open = ROOT.ROOT.RDataFrame("Events", name_dict["final"])
+            a = tmp_open.GetColumnNames()
+            if len(a) > 0:
+                final = True
+                test = True
+        except:
+            try:
+                tmp_open = ROOT.ROOT.RDataFrame("Events", name_dict["empty"])
+                a = tmp_open.GetColumnNames()
+                if len(a) > 0:
+                    test = True
+            except:
+                pass
+    else:
+        if os.path.isfile(name_dict["final"]):
+            test = True
+            final = True
+        elif os.path.isfile(name_dict["empty"]):
+            test = True
+            final = False
+        else:
+            pass
+
+    return test, final
+
 
 parser = argparse.ArgumentParser(description='nanovisor.py is a lightweight tool leveraging root\'s RDataFrame to quickly make skims and very basic plots or stats')
 parser.add_argument('--input', dest='input', action='store', type=str, required=True,
@@ -137,6 +167,8 @@ parser.add_argument('--prefetch', dest='prefetch', action='store_true',
 parser.add_argument('--longTermCache', dest='longTermCache', action='store_true',
                     help='LongTermCache files, preventing deletion of source files transferred locally')
 parser.add_argument('--noProgressBar', dest='noProgressBar', action='store_true', help='Toggle off the tqdm progress bars')
+parser.add_argument('--xrdcp', dest='xrdcp', action='store_true',
+                    help='Use xrdcp for the final file transfer, for e.g. condor')
 # parser.add_argument('--merge', dest='merge', action='store_true',
 #                     help='Merge output files immediately on input, which may be susceptible to problems if requested branches do not align')
 # parser.add_argument('--haddnano', dest='haddnano', action='store_true',
@@ -195,13 +227,20 @@ for x in range(0, len(fileList), args.simultaneous):
         if fn not in foNameDict.keys(): 
             foNameDict[fn] = {}
         foNameDict[fn]["final"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".root"))
+        if args.xrdcp and foNameDict[fn]["final"].startswith("/eos/"):
+            foNameDict[fn]["final"] = "root://eosuser.cern.ch/" + foNameDict[fn]["final"]
         foNameDict[fn]["empty"] = os.path.join(args.outdir, fn.split("/")[-1].replace(".root", args.postfix + ".empty"))
+        if args.xrdcp and foNameDict[fn]["empty"].startswith("/eos/"):
+            foNameDict[fn]["empty"] = "root://eosuser.cern.ch/" + foNameDict[fn]["empty"]
         foNameDict[fn]["temp"] = os.path.join(args.tempdir, fn.split("/")[-1].replace(".root", "_temp" + ".root"))
         #Skip files that are finished unless overwrite is requested
-        if (os.path.isfile(foNameDict[fn]["final"]) or os.path.isfile(foNameDict[fn]["empty"])) and not args.overwrite:
-            if os.path.isfile(foNameDict[fn]["final"]):
+        test = False
+        final = None
+        test, final = is_file_present(foNameDict[fn], xrdcp=args.xrdcp)
+        if test and not args.overwrite:
+            if final:
                 print("Final file already present, skipping {}".format(foNameDict[fn]["final"]))
-            elif os.path.isfile(foNameDict[fn]["empty"]):
+            elif not final:
                 print("Final EMPTY file already present, skipping {}".format(foNameDict[fn]["empty"]))
             #Put a dummy result in the list to keep array indexing consistent
             if args.write:
@@ -264,7 +303,8 @@ for x in range(0, len(fileList), args.simultaneous):
                     range(it_begin, it_end)]
     for fnumber, fn in enumerate(fileList[it_begin:it_end]):
         fnumber += it_begin
-        if (os.path.isfile(foNameDict[fn]["final"]) or os.path.isfile(foNameDict[fn]["empty"])) and not args.overwrite:            
+        test, _ = is_file_present(foNameDict[fn], xrdcp=args.xrdcp)        
+        if test and not args.overwrite:            
             continue
         if args.write:
             #Handle the rest of the trees
@@ -291,9 +331,13 @@ for x in range(0, len(fileList), args.simultaneous):
             try:
                 if isEmpty:
                     print("Renaming file with empty Events TTree to {}".format(foNameDict[fn]["empty"]))
-                    os.rename(foNameDict[fn]["temp"], foNameDict[fn]["empty"])
+                    target_name = foNameDict[fn]["empty"]
                 else:
-                    os.rename(foNameDict[fn]["temp"], foNameDict[fn]["final"])
+                    target_name = foNameDict[fn]["final"]
+                if args.xrdcp:
+                    subprocess.check_output(["xrdcp", "-N", foNameDict[fn]["temp"], target_name])
+                else:
+                    os.rename(foNameDict[fn]["temp"], target_name)
             except:
                 print("Rename of file {} to {} failed, continuing".format(foNameDict[fn]["temp"], foNameDict[fn]["final"]))
     #Do NOT release foNameDict entries, they are required for final meta info insertion
