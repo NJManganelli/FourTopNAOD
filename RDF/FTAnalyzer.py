@@ -1935,7 +1935,10 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             if os.path.isfile(sampleOutFile) and not recreateFileList:
                 print("Loading filelist from the cached list in this analysis directory: {}".format(sampleOutFile))
                 fileList = getFiles(query="list:{}".format(sampleOutFile), outFileName=None)
-                metaList = copy.copy(fileList)
+                if os.path.isfile(sampleMetaFile) and not recreateFileList:
+                    metaList = getFiles(query="list:{}".format(sampleMetaFile), outFileName=None)
+                else:
+                    metaList = copy.copy(fileList)
             else:
                 if isinstance(redirector, str):
                     redir = redirector
