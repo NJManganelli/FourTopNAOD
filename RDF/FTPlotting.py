@@ -17,7 +17,7 @@ import copy
 import argparse
 import uuid
 from tqdm import tqdm
-from FourTopNAOD.RDF.tools.toolbox import load_yaml_cards, write_yaml_cards, configure_template_systematics, configure_template_systematics_dict
+from FourTopNAOD.RDF.tools.toolbox import get_number_of_labels, load_yaml_cards, write_yaml_cards, configure_template_systematics, configure_template_systematics_dict
 from FourTopNAOD.RDF.combine.templating import write_combine_cards
 # from ruamel.yaml import YAML
 from IPython.display import Image, display, SVG
@@ -1526,9 +1526,9 @@ def setGStyle(nDivisions=105):
     # ROOT.gStyle.SetTitleYOffset(1.60)
 
     ROOT.gStyle.SetLabelColor(1, "XYZ")
-    ROOT.gStyle.SetLabelFont(42, "XYZ")
-    ROOT.gStyle.SetLabelOffset(0.007, "XYZ")
-    ROOT.gStyle.SetLabelSize(0.04, "XYZ")
+    ROOT.gStyle.SetLabelFont(43, "XYZ")
+    # ROOT.gStyle.SetLabelOffset(, "XYZ")
+    ROOT.gStyle.SetLabelSize(25, "XYZ")
     # ROOT.gStyle.SetLabelColor(1, "XYZ")
     # ROOT.gStyle.SetLabelFont(43, "XYZ")
     # ROOT.gStyle.SetLabelOffset(0.007, "XYZ")
@@ -1550,7 +1550,7 @@ def setGStyle(nDivisions=105):
     ROOT.gStyle.SetImageScaling(4.0)
 
 def createRatio(h1, h2, Cache=None, ratioTitle="input 0 vs input 1", ratioColor = None, ratioStyle = None,
-                ratioMarkerStyle = 20, ratioAlpha = 0.5, yMin = 0.1, yMax = 1.9, isBlinded=False, scaleText=2.0, nDivisions=105,):
+                ratioMarkerStyle = 20, ratioAlpha = 0.5, yMin = 0.1, yMax = 1.9, isBlinded=False, xLabelSize=50, yLabelSize=50, nDivisions=105,):
     #h3 = h1.Clone("rat_{}_{}".format(h1.GetName(), ratioTitle.replace(" ", "_")))
     #h3 = h1.Clone("rat_{}".format(h1.GetName()))
     if h1 is None or h2 is None:
@@ -1620,23 +1620,24 @@ def createRatio(h1, h2, Cache=None, ratioTitle="input 0 vs input 1", ratioColor 
     h3.SetMaximum(yMax)
 
     # Adjust y-axis settings
-    y = h3.GetYaxis()
-    y.SetTitle(ratioTitle)
-    y.SetNdivisions(nDivisions)
+    # y = h3.GetYaxis()
+    h3.GetYaxis().SetTitle(ratioTitle)
+    h3.GetYaxis().SetNdivisions(nDivisions)
     #FIXME#y.SetTitleSize(20)
     #FIXME#y.SetTitleFont(43)
     #FIXME#y.SetTitleOffset(2.5) #1.55
-    #y.SetLabelFont(43*nPads)
-    y.SetLabelSize(y.GetLabelSize()*scaleText)
+    h3.GetYaxis().SetLabelFont(43)
+    h3.GetYaxis().SetLabelSize(yLabelSize)
 
     # Adjust x-axis settings
-    x = h3.GetXaxis()
-    x.SetNdivisions(nDivisions)
+    # x = h3.GetXaxis()
+    h3.GetXaxis().SetNdivisions(nDivisions)
     #FIXME#x.SetTitleSize(20)
     #FIXME#x.SetTitleFont(43)
     #FIXME#x.SetTitleOffset(4.0)
-    #x.SetLabelFont(43*nPads)
-    x.SetLabelSize(x.GetLabelSize()*2*scaleText)
+    h3.GetXaxis().SetLabelFont(43)
+    h3.GetXaxis().SetLabelSize(xLabelSize)
+    # h3.GetXaxis().SetLabelOffset(10)
 
     #Do blinding
     if isBlinded:
@@ -1649,8 +1650,8 @@ def createRatio(h1, h2, Cache=None, ratioTitle="input 0 vs input 1", ratioColor 
         Cache = {}
     #These keys will not be sufficient for multiple ratios to be plotted together, #FIXME
     Cache["ratio_hist"] = h3
-    Cache["ratio_Xaxis"] = x
-    Cache["ratio_Yaxis"] = y
+    Cache["ratio_Xaxis"] = h3.Clone().GetXaxis()
+    Cache["ratio_Yaxis"] = h3.Clone().GetYaxis()
     return Cache
 
 
@@ -1717,10 +1718,10 @@ def createCanvasPads(canvasTitle, Cache=None, doRatio=False, doMountainrange=Fal
             padU.SetBottomMargin(marginB)
         if doMountainrange:
             #Only set the margin to 0 if there is at least one pad to the right, which is equal to zlast = nXPads - 1. Don't do the last right margin...
-            # if 0 <= z < nXPads - 1:
-            #     padU.SetRightMargin(0)
-            # else:
-            #     padU.SetRightMargin(marginR)
+            if 0 <= z < nXPads - 1:
+                padU.SetRightMargin(0)
+            else:
+                padU.SetRightMargin(marginR)
             #Set all right margins to 0, so that size is consistented between n-1 pads (the first still being oddly sized by the left margin...)
             if 0 <= z < nXPads:
                 padU.SetRightMargin(0)
@@ -1741,11 +1742,11 @@ def createCanvasPads(canvasTitle, Cache=None, doRatio=False, doMountainrange=Fal
             padL.SetTopMargin(0.02)  # joins upper and lower plot
             padL.SetBottomMargin(marginB)
             if doMountainrange:
-                #Only set the margin to 0 if there is at least one pad to the right, which is equal to zlast = nXPads - 1. Don't do the last right margin...
-                # if 0 <= z < nXPads - 1:
-                #     padL.SetRightMargin(0)
-                # else:
-                #     padL.SetRightMargin(marginR)
+                # Only set the margin to 0 if there is at least one pad to the right, which is equal to zlast = nXPads - 1. Don't do the last right margin...
+                if 0 <= z < nXPads - 1:
+                    padL.SetRightMargin(0)
+                else:
+                    padL.SetRightMargin(marginR)
                 if 0 <= z < nXPads:
                     padL.SetRightMargin(0)
                 #Now do the left margins, only starting with the second pad, should it exist (hence the equality switching versus the right margins)
@@ -2302,7 +2303,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         #Improve png resolution 
         ROOT.gStyle.SetImageScaling(4.0)
         
-    #set default style
+    #set default style, but we'll override nDivisions later based on how many canvases there are...
     setGStyle(nDivisions=nDivisions)
     
     # #Need the output directory to exist
@@ -2385,6 +2386,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         _ = createCanvasPads(can_name, CanCache, doRatio=doRatio, doMountainrange=doMountainrange, setXGrid=False, 
                              setYGrid=False, nXPads=nXPads, topFraction=0.7, bordersLRTB = canCoordinates, 
                              xPixels=xPixels, yPixels=yPixels)
+        # nTheseDivisions = int(nDivisions/nXPads)
         CanCache["subplots/files"] = []
         CanCache["subplots/files/keys"] = []
         CanCache["subplots/supercategories"] = []
@@ -2736,6 +2738,13 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             histUp = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Up"][pn]['Supercategories/hists'][categoryorsupercategory]
                         elif categoryorsupercategory in CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Up"][pn]['Categories/hists']:
                             histUp = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Up"][pn]['Categories/hists'][categoryorsupercategory]
+                        # pdb.set_trace()
+                        # histUpTest = histUp.Clone() # TEST
+                        # _, edgesTest = wrapped_hist2array(histUpTest, flow=True)
+                        # edgesTest = np.asarray(edgesTest)
+                        # binCentersTest = (edgesTest[1:] + edgesTest[:-1])/2
+                        # histUpTest.FillN(len(differenceUp), binCentersTest, differenceUp + npNominal[pn][categoryorsupercategory])
+                        # histUpTest.ResetStats()
                         _ = root_numpy.array2hist(differenceUp + npNominal[pn][categoryorsupercategory], histUp)
                         histUp.ResetStats()
                         histDown = None
@@ -2992,6 +3001,10 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 #Give up on setting the titles here... draw them 'by hand'
                 drawable.SetTitle(";;{}".format(""))
 
+                # SetNdivisions
+                # if not isinstance(drawable, ROOT.THStack):
+                #     drawable.SetNdivisions(nTheseDivisions)
+
                 #Set the color
                 color_input = legendConfig["Supercategories"][super_cat_name].get("Color", None)
                 if color_input is not None:
@@ -3048,16 +3061,19 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         histDrawSystematicUp[pn][super_cat_name].Draw("HIST SAME")
                 #Eliminate bin labels if there's a ratio plot just below
                 if doRatio and "SAME" not in draw_command:
-                    for bin in range(drawable.GetXaxis().GetNbins()):
+                    for bin in range(get_number_of_labels(drawable)+1):
+                    # for bin in range(get_number_of_labels(drawable)+1):
                         # TAxis::ChangeLabel ( Int_t  labNum = 0, Double_t  labAngle = -1., Double_t  labSize = -1.,
                         #                      Int_t  labAlign = -1, Int_t  labColor = -1, Int_t  labFont = -1, TString  labText = "" 
                         #                  ) 
                         drawable.GetXaxis().ChangeLabel(bin, -1, 0, -1, -1, -1, "")
+            xLabelSize = int(yPixels/48)
+            yLabelSize = int(yPixels/48)
             if pn == 0:
-                scaleText = 1.3
+                # xLabelSize = 1.3
                 offsetText = CanCache["canvas/marginL"]
             else:
-                scaleText = 2.0
+                # xLabelSize = 2.0
                 offsetText = 0
             #Legends are only created in the dictionary for pad 0, so do not lookup pn but [0]
             if drawLegends:
@@ -3106,7 +3122,8 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 
             #Create the subpad label, to be drawn. Text stored in CanCache["sublabels"] which should be a list, possibly a list of tuples in the future
             CanCache["subplots/labels"].append(ROOT.TLatex())
-            CanCache["subplots/labels"][-1].SetTextSize(scaleText*0.05)
+            CanCache["subplots/labels"][-1].SetTextFont(43)
+            CanCache["subplots/labels"][-1].SetTextSize(int(yPixels/50))
             CanCache["subplots/labels"][-1].DrawLatexNDC(0.10 + offsetText, 0.78, "{}".format(CanCache["sublabels"][pn]))
 
             #Draw the pad
@@ -3151,7 +3168,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     # _ = createRatio(num_hist, den_hist, Cache = CanCache["subplots/ratios"][-1][aRatioName], ratioTitle = aRatioName, 
                     _ = createRatio(num_hist, den_hist, Cache = CanCache["subplots/ratios"][-1][aRatioName], ratioTitle = "", 
                                     ratioColor = color, ratioStyle = style, ratioMarkerStyle = markerStyle, ratioAlpha = alpha,
-                                    yMin = ratioYMin, yMax = ratioYMax, isBlinded=isBlinded, scaleText=scaleText, nDivisions=nDivisions)
+                                    yMin = ratioYMin, yMax = ratioYMax, isBlinded=isBlinded, xLabelSize=xLabelSize, yLabelSize=yLabelSize, nDivisions=nDivisions)
                     #ratio_draw_command = legendConfig["Supercategories"][num]["Draw"]
                     ratio_draw_command = aRatio.get("Draw", "PXE1")
                     if rdn > 0:
@@ -3159,12 +3176,33 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     if isinstance(CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"], (ROOT.TH1, ROOT.TH2, ROOT.TH3, ROOT.TProfile, ROOT.THStack, ROOT.TGraph)):
                         CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].Draw(ratio_draw_command)
                     #Fix label sizes
-                    if "SAME" not in ratio_draw_command:
-                        for bin in range(CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].GetXaxis().GetNbins()):
+                    # if "SAME" not in ratio_draw_command:
+                    if True:
+                        maxBins = get_number_of_labels(CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"])
+                        # maxBins = CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].GetXaxis().GetNbins()
+                        for bin in range(maxBins+1):
                             # TAxis::ChangeLabel ( Int_t  labNum = 0, Double_t  labAngle = -1., Double_t  labSize = -1.,
                             #                      Int_t  labAlign = -1, Int_t  labColor = -1, Int_t  labFont = -1, TString  labText = "" 
                             #                  ) 
-                            CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].GetXaxis().ChangeLabel(bin, -1, 0.08, -1, -1, -1, "")
+                            # CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].GetXaxis().ChangeLabel(bin, -1, 0.08, -1, -1, -1, "")
+                            # align = 10*HorizontalAlign + VerticalAlign
+                            # For horizontal alignment the following convention applies:
+                            # 1=left adjusted, 2=centered, 3=right adjusted
+                                
+                            # For vertical alignment the following convention applies:
+                            # 1=bottom adjusted, 2=centered, 3=top adjusted
+                            # if (bin < 2):
+                            #     binAlign = 13
+                            #     binAngle = 45
+                            # elif (bin == maxBins):
+                            #     binAlign = 31
+                            #     binAngle = 45
+                            # else:
+                            #     binAlign = 31
+                            #     binAngle = 45
+                            binAngle = 0
+                            binAlign = 11
+                            CanCache["subplots/ratios"][-1][aRatioName]["ratio_hist"].GetXaxis().ChangeLabel(bin, binAngle, xLabelSize, binAlign, -1, 43, "")
                     #Draw ratio graph errors...
                     redraw = False
                     if ratioUncertainties:
@@ -3264,7 +3302,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             CanCache["canvas_lower_yaxis"].SetTextSize(35)
             CanCache["canvas_lower_yaxis"].SetTextAlign(33)
             CanCache["canvas_lower_yaxis"].SetTextAngle(90)
-            CanCache["canvas_lower_yaxis"].DrawLatexNDC(0.13*CanCache["canvas/marginL"], 0+1.0*CanCache["canvas/marginB"], str(CanCache["ratioTitle"]))
+            CanCache["canvas_lower_yaxis"].DrawLatexNDC(0.05*CanCache["canvas/marginL"], 0+1.0*CanCache["canvas/marginB"], str(CanCache["ratioTitle"]))
             CanCache["canvas_lower_yaxis"].Draw()        
             
         CanCache["canvas_xaxis"] = ROOT.TLatex()
@@ -3274,7 +3312,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         CanCache["canvas_xaxis"].SetTextAlign(33)
         if nXPads > 1:
             if doRatio:
-                CanCache["canvas_xaxis"].DrawLatexNDC(1 - 0.17*CanCache["canvas/marginR"], 0.22*CanCache["canvas/marginB"], str(xAxisTitle))
+                CanCache["canvas_xaxis"].DrawLatexNDC(1 - 0.17*CanCache["canvas/marginR"], 0.20*CanCache["canvas/marginB"], str(xAxisTitle))
             else:
                 CanCache["canvas_xaxis"].DrawLatexNDC(1 - 0.17*CanCache["canvas/marginR"], 0.15*CanCache["canvas/marginB"], str(xAxisTitle))
         else:
@@ -3503,7 +3541,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             if combineCards:
                 with open(os.path.join(analysisDir, "Combine", "Counts_"+era+"_"+channel+"_"+can_var+".json"), "w") as countfile: 
                     countfile.write(json.dumps(combCounts, indent=4))
-                write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, can_var, list(combCounts.keys()), template="TTTT_templateV18.txt", counts=combCounts)
+                write_combine_cards(os.path.join(analysisDir, "Combine"), era, channel, can_var, list(combCounts.keys()), template="TTTT_templateV20.txt", counts=combCounts)
                 print("Wrote combine cards for {}".format(can_var))
         # cmd = "hadd -f {wdir}/{era}___Combined.root {ins}".format(wdir=writeDir, era=era, ins=" ".join(f)) 
         # # print(cmd)
@@ -3858,6 +3896,8 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                               'OSDL_RunII_ttHISRUp', 'OSDL_RunII_ttHISRDown', 'OSDL_RunII_ttHFSRUp', 'OSDL_RunII_ttHFSRDown', 
                               'OSDL_RunII_ttultrarareISRUp', 'OSDL_RunII_ttultrarareISRDown', 'OSDL_RunII_ttultrarareFSRUp', 'OSDL_RunII_ttultrarareFSRDown', 
                               'OSDL_RunII_ttISRUp', 'OSDL_RunII_ttISRDown', 'OSDL_RunII_ttFSRUp', 'OSDL_RunII_ttFSRDown', 
+                              'OSDL_RunII_ttnobbISRUp', 'OSDL_RunII_ttnobbISRDown', 'OSDL_RunII_ttnobbFSRUp', 'OSDL_RunII_ttnobbFSRDown', 
+                              'OSDL_RunII_ttbbISRUp', 'OSDL_RunII_ttbbISRDown', 'OSDL_RunII_ttbbFSRUp', 'OSDL_RunII_ttbbFSRDown', 
                               'OSDL_RunII_ttttISRUp', 'OSDL_RunII_ttttISRDown', 'OSDL_RunII_ttttFSRUp', 'OSDL_RunII_ttttFSRDown', 
                               'OSDL_RunII_hdampUp', 'OSDL_RunII_hdampDown', 'OSDL_RunII_ueUp', 'OSDL_RunII_ueDown',
                               'OSDL_RunII_btagSF_shape_hfUp', 'OSDL_RunII_btagSF_shape_hfDown',
@@ -3875,6 +3915,10 @@ if stage == 'plot-histograms' or stage == 'plot-diagnostics' or stage == 'prepar
                               'OSDL_2016_jerUp', 'OSDL_2016_jerDown', 'OSDL_2016APV_jerUp', 'OSDL_2016APV_jerDown',
                               'OSDL_2017_jerUp', 'OSDL_2017_jerDown', 'OSDL_2018_jerUp', 'OSDL_2018_jerDown', 
                               'OSDL_RunII_ttmuRNomFDown', 'OSDL_RunII_ttmuRNomFUp', 'OSDL_RunII_ttmuFNomRDown', 'OSDL_RunII_ttmuFNomRUp', 
+                              'OSDL_RunII_ttnobbmuRNomFDown', 'OSDL_RunII_ttnobbmuRNomFUp', 'OSDL_RunII_ttnobbmuFNomRDown', 'OSDL_RunII_ttnobbmuFNomRUp', 
+                              'OSDL_RunII_ttbbmuRNomFDown', 'OSDL_RunII_ttbbmuRNomFUp', 'OSDL_RunII_ttbbmuFNomRDown', 'OSDL_RunII_ttbbmuFNomRUp', 
+                              # 'OSDL_RunII_ttnobbmuRFcorrelatedDown', 'OSDL_RunII_ttnobbmuRFcorrelatedUp', 
+                              # 'OSDL_RunII_ttbbmuRFcorrelatedDown', 'OSDL_RunII_ttbbmuRFcorrelatedUp', 
                               'OSDL_RunII_ttVJetsmuRNomFDown', 'OSDL_RunII_ttVJetsmuRNomFUp', 
                               'OSDL_RunII_ttVJetsmuFNomRDown', 'OSDL_RunII_ttVJetsmuFNomRUp', 
                               'OSDL_RunII_ttVJetsmuRFcorrelatedDown', 'OSDL_RunII_ttVJetsmuRFcorrelatedUp', 

@@ -207,14 +207,14 @@ processGroups["Data"] = {
 # f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/nJetSF_2018/Combine/All/2018___Combined.root", "read")
 # f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Mar19_Baseline_2017/Combine/All/2017___HTOnly___5x5.root", "read")
 # f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Mar19_Baseline_2018/Combine/All/2018___HTOnly___5x5.root", "read")
-f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Apr8_nJetSF_2017/Combine/All/2017___HTOnly___5x5.root", "read")
-# f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Apr8_nJetSF_2018/Combine/All/2018___HTOnly___5x5.root", "read")
+# f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Apr8_nJetSF_2017/Combine/All/2017___HTOnly___5x5.root", "read")
+f = ROOT.TFile.Open("/eos/user/n/nmangane/analysis/Apr8_nJetSF_2018/Combine/All/2018___HTOnly___5x5.root", "read")
 fkeys = [kk.GetName() for kk in f.GetListOfKeys()]
 histos = dict()
 name_format="$ERA___$PROCESS___$CHANNEL___$WINDOW___$CATEGORY$BLIND___$VARIABLE___$SYSTEMATIC"
 erasDict = {"2018": ["2018"], "2017": ["2017"], "RunII": ["2017", "2018"]}
-era = "2017"
-# era = "2018"
+# era = "2017"
+era = "2018"
 channels = ["ElMu", "MuMu", "ElEl"]
 # channels = ["ElMu"]
 # channels = ["MuMu"]
@@ -226,8 +226,8 @@ syst = "nom"
 tagger="DeepJet"
 htcut="500"
 # htcut="350"
-btagcat="2"
-# btagcat="1"
+# btagcat="2"
+btagcat="1"
 # btagcat="0"
 for k, v in processGroups.items():
     print(k)
@@ -253,7 +253,7 @@ for k, v in processGroups.items():
         print(k, " Blind: ", blind, " Succeeded/Failed to find match: ", len(keys[n]), len(fails))
 
 print("\neras = ", erasDict[era], " channels = ", channels, " syst = ", syst)
-print("nJet,Data,Data-nonttbar/ttbar,Data/Bkg,Data/(Sgnl+Bkg),", ",".join(['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','ewk', 'tttt']))
+print("nJet,Data,Data-nonttbar/ttbar,Data/Bkg,", ",".join(['ttnobb','ttbb','singletop','ttH','ttVJets','ttultrarare','ewk', 'tttt']))
 for n in ['4', '5', '6', '7', '8+']:
     print("{}j,{},{:.4f},{:.4f},{:s}"\
           .format(n, 

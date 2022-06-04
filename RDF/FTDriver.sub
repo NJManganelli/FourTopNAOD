@@ -1,0 +1,280 @@
+executable = FTDriver.sh
+Proxy_path = /afs/cern.ch/user/n/nmangane/private/x509up
+num_cores = 4
+#           Proxy_Path    ProcessID Number_Cores Stage    Year   Channel    Sample    Variables  Categories AnalysisDir(w/o era) BtagAlgo JetPUId
+# No Defaults:                                   stage=                               var_set=   cat_set=   analysis_dir_base=
+# Example usage: condor_submit FTDriver.sub stage=fill-combine var_set=Control cat_set=3pBnJet4p analysis_dir_base=/eos/user/n/nmangane/analysis/April24_jes_reduced  (_${era} is automatically appended)
+arguments = $(Proxy_path) $(ProcId) $(num_cores) $(stage) $(era) $(channel) $(sample) $(var_set) $(cat_set) $(analysis_dir_base) DeepJet  L
+output                = condor_output/condor_jes_FTA.$(stage).$(var_set).$(cat_set).$(ClusterId).$(ProcId).out
+error                 = condor_error/condor_jes_FTA.$(stage).$(var_set).$(cat_set).$(ClusterId).$(ProcId).err
+log                   = condor_log/condor_jes_FTA.$(stage).$(var_set).$(cat_set).$(ClusterId).log
+
+RequestCpus = $(num_cores)
+# +MaxRuntime = Number of seconds
+
+# espresso     = 20 minutes
+# microcentury = 1 hour
+# longlunch    = 2 hours
+# workday      = 8 hours
+# tomorrow     = 1 day
+# testmatch    = 3 days
+# nextweek     = 1 week
++JobFlavour = "longlunch"
+
+# Send the job to Held state on failure.
+on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
+
+# Periodically retry the jobs every 5 minutes, up to a maximum of 5 retries.
+periodic_release =  (NumJobStarts < 5) && ((CurrentTime - EnteredCurrentStatus) > 300)
+
+queue era, channel, sample, from (
+     2017, ElMu, ElMu_B
+     2017, ElMu, ElMu_C
+     2017, ElMu, ElMu_D
+     2017, ElMu, ElMu_E
+     2017, ElMu, ElMu_F
+     2017, MuMu, MuMu_B
+     2017, MuMu, MuMu_C
+     2017, MuMu, MuMu_D
+     2017, MuMu, MuMu_E
+     2017, MuMu, MuMu_F
+     2017, ElEl, ElEl_B
+     2017, ElEl, ElEl_C
+     2017, ElEl, ElEl_D
+     2017, ElEl, ElEl_E
+     2017, ElEl, ElEl_F
+     2018, ElMu, ElMu_A
+     2018, ElMu, ElMu_B
+     2018, ElMu, ElMu_C
+     2018, ElMu, ElMu_D
+     2018, MuMu, MuMu_A
+     2018, MuMu, MuMu_B
+     2018, MuMu, MuMu_C
+     2018, MuMu, MuMu_D
+     2018, ElEl, ElEl_A
+     2018, ElEl, ElEl_B
+     2018, ElEl, ElEl_C
+     2018, ElEl, ElEl_D
+     2017, ElMu, tt_DL
+     2017, ElMu, tt_DL-GF
+     2017, ElMu, tt_SL
+     2017, ElMu, tt_SL-GF
+     2017, ElMu, tttt
+     2017, ElMu, ttH_DL-bb
+     2017, ElMu, ttH_SL-bb
+     2017, ElMu, ttHH
+     2017, ElMu, ttWH
+     2017, ElMu, tttJ
+     2017, ElMu, tttW
+     2017, ElMu, ttWW
+     2017, ElMu, ttWZ
+     2017, ElMu, ttZH
+     2017, ElMu, ttZZ
+     2017, ElMu, ttWJets
+     2017, ElMu, ttZJets
+     2017, ElMu, ST_tW-NoFHad
+     2017, ElMu, ST_tbarW-NoFHad
+     2017, ElMu, DYJets_DL-HT100
+     2017, ElMu, DYJets_DL-HT200
+     2017, ElMu, DYJets_DL-HT400
+     2017, ElMu, DYJets_DL-HT600
+     2017, ElMu, DYJets_DL-HT800
+     2017, ElMu, DYJets_DL-HT1200
+     2017, ElMu, DYJets_DL-HT2500
+     2017, ElMu, WJets_SL
+     2017, ElMu, WJets_SL-HT100
+     2017, ElMu, WJets_SL-HT200
+     2017, ElMu, WJets_SL-HT400
+     2017, ElMu, WJets_SL-HT600
+     2017, ElMu, WJets_SL-HT800
+     2017, ElMu, WJets_SL-HT1200
+     2017, ElMu, WJets_SL-HT2500
+     2017, ElMu, WW
+     2017, ElMu, WZ
+     2017, ElMu, ZZ
+     2017, MuMu, tt_DL
+     2017, MuMu, tt_DL-GF
+     2017, MuMu, tt_SL
+     2017, MuMu, tt_SL-GF
+     2017, MuMu, tttt
+     2017, MuMu, ttH_DL-bb
+     2017, MuMu, ttH_SL-bb
+     2017, MuMu, ttHH
+     2017, MuMu, ttWH
+     2017, MuMu, tttJ
+     2017, MuMu, tttW
+     2017, MuMu, ttWW
+     2017, MuMu, ttWZ
+     2017, MuMu, ttZH
+     2017, MuMu, ttZZ
+     2017, MuMu, ttWJets
+     2017, MuMu, ttZJets
+     2017, MuMu, ST_tW-NoFHad
+     2017, MuMu, ST_tbarW-NoFHad
+     2017, MuMu, DYJets_DL-HT100
+     2017, MuMu, DYJets_DL-HT200
+     2017, MuMu, DYJets_DL-HT400
+     2017, MuMu, DYJets_DL-HT600
+     2017, MuMu, DYJets_DL-HT800
+     2017, MuMu, DYJets_DL-HT1200
+     2017, MuMu, DYJets_DL-HT2500
+     2017, MuMu, WJets_SL
+     2017, MuMu, WJets_SL-HT100
+     2017, MuMu, WJets_SL-HT200
+     2017, MuMu, WJets_SL-HT400
+     2017, MuMu, WJets_SL-HT600
+     2017, MuMu, WJets_SL-HT800
+     2017, MuMu, WJets_SL-HT1200
+     2017, MuMu, WJets_SL-HT2500
+     2017, MuMu, WW
+     2017, MuMu, WZ
+     2017, MuMu, ZZ
+     2017, ElEl, tt_DL
+     2017, ElEl, tt_DL-GF
+     2017, ElEl, tt_SL
+     2017, ElEl, tt_SL-GF
+     2017, ElEl, tttt
+     2017, ElEl, ttH_DL-bb
+     2017, ElEl, ttH_SL-bb
+     2017, ElEl, ttHH
+     2017, ElEl, ttWH
+     2017, ElEl, tttJ
+     2017, ElEl, tttW
+     2017, ElEl, ttWW
+     2017, ElEl, ttWZ
+     2017, ElEl, ttZH
+     2017, ElEl, ttZZ
+     2017, ElEl, ttWJets
+     2017, ElEl, ttZJets
+     2017, ElEl, ST_tW-NoFHad
+     2017, ElEl, ST_tbarW-NoFHad
+     2017, ElEl, DYJets_DL-HT100
+     2017, ElEl, DYJets_DL-HT200
+     2017, ElEl, DYJets_DL-HT400
+     2017, ElEl, DYJets_DL-HT600
+     2017, ElEl, DYJets_DL-HT800
+     2017, ElEl, DYJets_DL-HT1200
+     2017, ElEl, DYJets_DL-HT2500
+     2017, ElEl, WJets_SL
+     2017, ElEl, WJets_SL-HT100
+     2017, ElEl, WJets_SL-HT200
+     2017, ElEl, WJets_SL-HT400
+     2017, ElEl, WJets_SL-HT600
+     2017, ElEl, WJets_SL-HT800
+     2017, ElEl, WJets_SL-HT1200
+     2017, ElEl, WJets_SL-HT2500
+     2017, ElEl, WW
+     2017, ElEl, WZ
+     2017, ElEl, ZZ
+     2018, ElMu, tt_DL
+     2018, ElMu, tt_DL-GF
+     2018, ElMu, tt_SL
+     2018, ElMu, tt_SL-GF
+     2018, ElMu, tttt
+     2018, ElMu, ttH_DL-bb
+     2018, ElMu, ttH_SL-bb
+     2018, ElMu, ttHH
+     2018, ElMu, ttWH
+     2018, ElMu, tttJ
+     2018, ElMu, tttW
+     2018, ElMu, ttWW
+     2018, ElMu, ttWZ
+     2018, ElMu, ttZH
+     2018, ElMu, ttZZ
+     2018, ElMu, ttWJets
+     2018, ElMu, ttZJets
+     2018, ElMu, ST_tW-NoFHad
+     2018, ElMu, ST_tbarW-NoFHad
+     2018, ElMu, DYJets_DL-HT100
+     2018, ElMu, DYJets_DL-HT200
+     2018, ElMu, DYJets_DL-HT400
+     2018, ElMu, DYJets_DL-HT600
+     2018, ElMu, DYJets_DL-HT800
+     2018, ElMu, DYJets_DL-HT1200
+     2018, ElMu, DYJets_DL-HT2500
+     2018, ElMu, WJets_SL
+     2018, ElMu, WJets_SL-HT100
+     2018, ElMu, WJets_SL-HT200
+     2018, ElMu, WJets_SL-HT400
+     2018, ElMu, WJets_SL-HT600
+     2018, ElMu, WJets_SL-HT800
+     2018, ElMu, WJets_SL-HT1200
+     2018, ElMu, WJets_SL-HT2500
+     2018, ElMu, WW
+     2018, ElMu, WZ
+     2018, ElMu, ZZ
+     2018, MuMu, tt_DL
+     2018, MuMu, tt_DL-GF
+     2018, MuMu, tt_SL
+     2018, MuMu, tt_SL-GF
+     2018, MuMu, tttt
+     2018, MuMu, ttH_DL-bb
+     2018, MuMu, ttH_SL-bb
+     2018, MuMu, ttHH
+     2018, MuMu, ttWH
+     2018, MuMu, tttJ
+     2018, MuMu, tttW
+     2018, MuMu, ttWW
+     2018, MuMu, ttWZ
+     2018, MuMu, ttZH
+     2018, MuMu, ttZZ
+     2018, MuMu, ttWJets
+     2018, MuMu, ttZJets
+     2018, MuMu, ST_tW-NoFHad
+     2018, MuMu, ST_tbarW-NoFHad
+     2018, MuMu, DYJets_DL-HT100
+     2018, MuMu, DYJets_DL-HT200
+     2018, MuMu, DYJets_DL-HT400
+     2018, MuMu, DYJets_DL-HT600
+     2018, MuMu, DYJets_DL-HT800
+     2018, MuMu, DYJets_DL-HT1200
+     2018, MuMu, DYJets_DL-HT2500
+     2018, MuMu, WJets_SL
+     2018, MuMu, WJets_SL-HT100
+     2018, MuMu, WJets_SL-HT200
+     2018, MuMu, WJets_SL-HT400
+     2018, MuMu, WJets_SL-HT600
+     2018, MuMu, WJets_SL-HT800
+     2018, MuMu, WJets_SL-HT1200
+     2018, MuMu, WJets_SL-HT2500
+     2018, MuMu, WW
+     2018, MuMu, WZ
+     2018, MuMu, ZZ
+     2018, ElEl, tt_DL
+     2018, ElEl, tt_DL-GF
+     2018, ElEl, tt_SL
+     2018, ElEl, tt_SL-GF
+     2018, ElEl, tttt
+     2018, ElEl, ttH_DL-bb
+     2018, ElEl, ttH_SL-bb
+     2018, ElEl, ttHH
+     2018, ElEl, ttWH
+     2018, ElEl, tttJ
+     2018, ElEl, tttW
+     2018, ElEl, ttWW
+     2018, ElEl, ttWZ
+     2018, ElEl, ttZH
+     2018, ElEl, ttZZ
+     2018, ElEl, ttWJets
+     2018, ElEl, ttZJets
+     2018, ElEl, ST_tW-NoFHad
+     2018, ElEl, ST_tbarW-NoFHad
+     2018, ElEl, DYJets_DL-HT100
+     2018, ElEl, DYJets_DL-HT200
+     2018, ElEl, DYJets_DL-HT400
+     2018, ElEl, DYJets_DL-HT600
+     2018, ElEl, DYJets_DL-HT800
+     2018, ElEl, DYJets_DL-HT1200
+     2018, ElEl, DYJets_DL-HT2500
+     2018, ElEl, WJets_SL
+     2018, ElEl, WJets_SL-HT100
+     2018, ElEl, WJets_SL-HT200
+     2018, ElEl, WJets_SL-HT400
+     2018, ElEl, WJets_SL-HT600
+     2018, ElEl, WJets_SL-HT800
+     2018, ElEl, WJets_SL-HT1200
+     2018, ElEl, WJets_SL-HT2500
+     2018, ElEl, WW
+     2018, ElEl, WZ
+     2018, ElEl, ZZ
+)

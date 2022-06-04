@@ -22,429 +22,22 @@ import ruamel.yaml as yaml
 from FourTopNAOD.RDF.tools.toolbox import getFiles, load_yaml_cards, write_yaml_cards, filter_systematics
 from FourTopNAOD.RDF.analyzer.histogram import fill_histos, fill_histos_ndim, fill_histos_ndim_categorized
 from FourTopNAOD.RDF.analyzer.cpp import declare_cpp_constants, make_cpp_safe_name
+from FourTopNAOD.RDF.corrections.btv import apply_btv_sfs
 from FourTopNAOD.RDF.analyzer.core import METXYCorr, defineJets, defineWeights, defineLeptons, splitProcess
+from FourTopNAOD.RDF.analyzer.ftfunctions import ftfunctions_load_status
+from FourTopNAOD.RDF.analyzer.triggers import TriggerList
 from FourTopNAOD.RDF.io.ntupler import getNtupleVariables, delegateFlattening, flattenVariable, writeNtuples, delegateSnapshots
 from FourTopNAOD.RDF.io.root import writeHistos, bookSnapshot#, writeHistosForCombine, writeHistosV1
 from tqdm import tqdm
+from pathlib import Path
 #from IPython.display import Image, display, SVG
 #import graphviz
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
-useSpark = False #Doesn't seem to work with gcc8 at least...
-if useSpark:
-    import PyRDF
-    PyRDF.use("spark", {'npartitions': '8'}) #was 32 in example
-    RDF = PyRDF.RDataFrame
-else:
-    #print("DISABLING IMT for bebugging branches")
-    # ROOT.ROOT.EnableImplicitMT() #Disabled here, configurable parameter prior to calling main()
-    RS = ROOT.ROOT
-    RDF = RS.RDataFrame
+RS = ROOT.ROOT
+RDF = RS.RDataFrame
 
-#Load functions, can eventually be changed to ROOT.gInterpreter.Declare(#include "someheader.h")
-#WARNING! Do not rerun this cell without restarting the kernel, it will kill it!
-ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way #Extra note, this is completely irrelevant, since ROOT 6 all histograms that have a (non-unitary) weight provided for filling 
-#Declare random number generator
-ROOT.gInterpreter.Declare("TRandom3 rng = TRandom3();")
-print("FIXME? Consider removing even unitary weight from data histogram filling, due to the bug in ROOT where Sumw2 is impossible to disable using the documented method")
-print("FIXME: Hardcoded FTFunctions.cpp path, needs fixin'...")
-ROOT.gROOT.ProcessLine(".L FTFunctions.cpp")
-# print("To compile the loaded file, append a '+' to the '.L <file_name>+' line, and to specify gcc as the compile, also add 'g' after that")
-#https://root-forum.cern.ch/t/saving-root-numba-declare-callables-in-python/44020/2
-#Alternate formulations of loading the functions:
-#1 compile externally and then load it
-# g++ -c -fPIC -o FTFunctions.so FTFunctions.cpp $(root-config --libs --cflags)
-# ROOT.gInterpreter.Declare('#include "FTFunctions.cpp"')
-# ROOT.gSystem.Load("FTFunctions.so")
-#2 compile in ROOT from python, with the first part optionally done externally or previously (it shouldn't recompile if it already exists?), and option 'k' keeps the .so persistent
-# print("Compiling")
-# ROOT.gSystem.CompileMacro("FTFunctions.cpp", "kO")
-# print("Declaring")
-# ROOT.gInterpreter.Declare('#include "FTFunctions.cpp"')
-# print("Loading")
-# ROOT.gInterpreter.Load("FTFunctions_cpp.so")
-# print("Done")
-
-# David Ren-Hwa Yu
-# 22:43
-# In older versions of ROOT, I vaguely remember that you had to load the header files for the libraries, like 
-
-# gInterpreter.Declare("#include \"MyTools/RootUtils/interface/HistogramManager.h\"")
-# gSystem.Load(os.path.expandvars("$CMSSW_BASE/lib/$SCRAM_ARCH/libMyToolsRootUtils.so"))
-# ROOT.gROOT.ProcessLine(".L FTFunctions.cpp+g") #+ compiles, g specifies gcc as the compiler to use instead of whatever ROOT naturally prefers (llvm? clang?)
-ROOT.gInterpreter.Declare("""
-    const UInt_t barWidth = 60;
-    ULong64_t processed = 0, totalEvents = 0;
-    std::string progressBar;
-    std::mutex barMutex; 
-    auto registerEvents = [](ULong64_t nIncrement) {totalEvents += nIncrement;};
-
-    ROOT::RDF::RResultPtr<ULong64_t> AddProgressBar(ROOT::RDF::RNode df, int everyN=10000, int totalN=100000) {
-        registerEvents(totalN);
-        auto c = df.Count();
-        c.OnPartialResultSlot(everyN, [everyN] (unsigned int slot, ULong64_t &cnt){
-            std::lock_guard<std::mutex> l(barMutex);
-            processed += everyN; //everyN captured by value for this lambda
-            progressBar = "[";
-            for(UInt_t i = 0; i < static_cast<UInt_t>(static_cast<Float_t>(processed)/totalEvents*barWidth); ++i){
-                progressBar.push_back('|');
-            }
-            // escape the '\' when defined in python string
-            std::cout << "\\r" << std::left << std::setw(barWidth) << progressBar << "] " << processed << "/" << totalEvents << std::flush;
-        });
-        return c;
-    }
-""")
-
-#Add lumi to the trigger tuple?
-TriggerTuple = collections.namedtuple("TriggerTuple", "trigger era subera uniqueEraBit tier channel leadMuThresh subMuThresh leadElThresh subElThresh nontriggerLepThresh")
-TriggerList = [TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
-                            era="2017",
-                            subera="BCDEF",
-                            uniqueEraBit=14,
-                            tier=0,
-                            channel="ElMu",
-                            leadMuThresh=23,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=12,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
-                            era="2017",
-                            subera="BCDEF",
-                            uniqueEraBit=13,
-                            tier=0,
-                            channel="ElMu",
-                            leadMuThresh=99999,
-                            subMuThresh=12,
-                            leadElThresh=23,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ",
-                            era="2017",
-                            subera="B",
-                            uniqueEraBit=12,
-                            tier=1,
-                            channel="MuMu",
-                            leadMuThresh=17,
-                            subMuThresh=12,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8",
-                            era="2017",
-                            subera="CDEF",
-                            uniqueEraBit=11,
-                            tier=1,
-                            channel="MuMu",
-                            leadMuThresh=17,
-                            subMuThresh=12,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL",
-                            era="2017",
-                            subera="BCDEF",
-                            uniqueEraBit=9,
-                            tier=2,
-                            channel="ElEl",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=23,
-                            subElThresh=12,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_IsoMu27",
-                            era="2017",
-                            subera="BCDEF",
-                            uniqueEraBit=7,
-                            tier=3,
-                            channel="Mu",
-                            leadMuThresh=27,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_Ele35_WPTight_Gsf",
-                            era="2017",
-                            subera="BCDEF",
-                            uniqueEraBit=6,
-                            tier=4,
-                            channel="El",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=35,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_PFMET200_NotCleaned",
-                            era="2017",
-                            subera="BCDEF",
-                            uniqueEraBit=3,
-                            tier=5,
-                            channel="MET",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_PFMET200_HBHECleaned",
-                            era="2017",
-                            subera="BCDEF",
-                            uniqueEraBit=2,
-                            tier=5,
-                            channel="MET",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned",
-                            era="2017",
-                            subera="BCDEF",
-                            uniqueEraBit=1,
-                            tier=5,
-                            channel="MET",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=14,
-                            tier=0,
-                            channel="ElMu",
-                            leadMuThresh=99999,
-                            subMuThresh=12,
-                            leadElThresh=23,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=12,
-                            tier=0,
-                            channel="ElMu",
-                            leadMuThresh=23,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=12,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=11,
-                            tier=1,
-                            channel="MuMu",
-                            leadMuThresh=17,
-                            subMuThresh=12,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=9,
-                            tier=2,
-                            channel="ElEl",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=23,
-                            subElThresh=12,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_IsoMu24",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=8,
-                            tier=3,
-                            channel="Mu",
-                            leadMuThresh=24,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_Ele32_WPTight_Gsf",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=7,
-                            tier=4,
-                            channel="El",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=32,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_PFMET200_NotCleaned",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=3,
-                            tier=5,
-                            channel="MET",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_PFMET200_HBHECleaned",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=2,
-                            tier=5,
-                            channel="MET",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-               TriggerTuple(trigger="HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned",
-                            era="2018",
-                            subera="ABCD",
-                            uniqueEraBit=1,
-                            tier=5,
-                            channel="MET",
-                            leadMuThresh=99999,
-                            subMuThresh=99999,
-                            leadElThresh=99999,
-                            subElThresh=99999,
-                            nontriggerLepThresh=12),
-           ]
-
-# cutoutV2_ToBeFixed = {
-#     "QCD_HT200":{
-#         "era": "2017",
-#         "channels": ["All"],
-#         "isData": False,
-#         "nEvents": 59200263,
-#         "nEventsPositive": 59166789,
-#         "nEventsNegative": 32544,
-#         "sumWeights": 59133315.000000,
-#         "sumWeights2": 59200263.000000,
-#         "isSignal": False,
-#         "crossSection": 1712000.0,
-#         "source": {"NANOv5": "dbs:/QCD_HT200to300_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-#                    "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",
-#                    "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT200_2017_v2*.root",
-#                    "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT200_2017_v2*.root",
-#                    "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT200_2017_v2*.root",
-#                   },
-#         "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT200_2017_v2.root",],
-#     },
-#     "QCD_HT300":{
-#         "era": "2017",
-#         "channels": ["All"],
-#         "isData": False,
-#         "nEvents": 59569132,
-#         "nEventsPositive": 59514373,
-#         "nEventsNegative": 54759,
-#         "sumWeights": 59459614.000000,
-#         "sumWeights2": 59569132.000000,
-#         "isSignal": False,
-#         "crossSection": 347700.0,
-#         "source": {"NANOv5": "dbs:/QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-#                    "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",
-#                    "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT300_2017_v2*.root",
-#                    "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT300_2017_v2*.root",
-#                    "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT300_2017_v2*.root",
-#                   },
-#         "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT300_2017_v2.root",],
-#     },   
-#     "QCD_HT500":{
-#         "era": "2017",
-#         "channels": ["All"],
-#         "isData": False,
-#         "nEvents": 56207744,
-#         "nEventsPositive": 56124381,
-#         "nEventsNegative": 83363,
-#         "sumWeights": 56041018.000000,
-#         "sumWeights2": 56207744.000000,
-#         "isSignal": False,
-#         "crossSection": 32100.0,
-#         "source": {"NANOv5": "dbs:/QCD_HT500to700_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-#                    "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",
-#                    "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT500_2017_v2*.root",
-#                    "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT500_2017_v2*.root",
-#                    "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT500_2017_v2*.root",
-#                   },
-#         "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT500_2017_v2.root",],
-#     },
-#     "QCD_HT700":{
-#         "era": "2017",
-#         "channels": ["All"],
-#         "isData": False,
-#         "nEvents": 46840955,
-#         "nEventsPositive": 46739970,
-#         "nEventsNegative": 100985,
-#         "sumWeights": 46638985.000000,
-#         "sumWeights2": 46840955.000000,
-#         "isSignal": False,
-#         "crossSection": 6831.0,
-#         "source": {"NANOv5": "dbs:/QCD_HT700to1000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-#                    "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",
-#                    "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT700_2017_v2*.root",
-#                    "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT700_2017_v2*.root",
-#                    "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT700_2017_v2*.root",
-#                   },
-#         "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT700_2017_v2.root",],
-#     },
-#     "QCD_HT1000":{
-#         "era": "2017",
-#         "channels": ["All"],
-#         "isData": False,
-#         "nEvents": 16882838,
-#         "nEventsPositive": 16826800,
-#         "nEventsNegative": 56038,
-#         "sumWeights": 16770762.000000,
-#         "sumWeights2": 16882838.000000,
-#         "isSignal": False,
-#         "crossSection": 1207.0,
-#         "source": {"NANOv5": "dbs:/QCD_HT1000to1500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_new_pmx_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-#                    "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",
-#                    "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1000_2017_v2*.root",
-#                    "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1000_2017_v2*.root",
-#                    "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1000_2017_v2*.root",
-#                   },
-#         "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1000_2017_v2.root",],
-#     },
-#     "QCD_HT1500":{
-#         "era": "2017",
-#         "channels": ["All"],
-#         "isData": False,
-#         "nEvents": 11634434,
-#         "nEventsPositive": 11571519,
-#         "nEventsNegative": 62915,
-#         "sumWeights": 11508604.000000,
-#         "sumWeights2": 11634434.000000,
-#         "isSignal": False,
-#         "crossSection": 119.9,
-#         "source": {"NANOv5": "dbs:/QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-#                    "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",
-#                    "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT1500_2017_v2*.root",
-#                    "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT1500_2017_v2*.root",
-#                    "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT1500_2017_v2*.root",
-#                   },
-#         "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT1500_2017_v2.root",],
-#     },
-#     "QCD_HT2000":{
-#         "era": "2017",
-#         "channels": ["All"],
-#         "isData": False,
-#         "nEvents": 5941306,
-#         "nEventsPositive": 5883436,
-#         "nEventsNegative": 57870,
-#         "sumWeights": 5825566.000000,
-#         "sumWeights2": 5941306.000000,
-#         "isSignal": False,
-#         "crossSection": 25.24,
-#         "source": {"NANOv5": "dbs:/QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17NanoAODv5-PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/NANOAODSIM",
-#                    "LJMLogic": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",
-#                    "LJMLogic__ElMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElMu_selection/QCD_HT2000_2017_v2*.root",
-#                    "LJMLogic__MuMu_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/MuMu_selection/QCD_HT2000_2017_v2*.root",
-#                    "LJMLogic__ElEl_selection": "glob:/eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/ElEl_selection/QCD_HT2000_2017_v2*.root",
-#                   },
-#         "sourceSPARK": ["root://eosuser.cern.ch//eos/user/n/nmangane/SWAN_projects/LogicChainRDF/FilesV2/QCD_HT2000_2017_v2.root",],
-#     },
-# }
-
+ROOT.TH1.SetDefaultSumw2() #Make sure errors are done this way #Extra note, this is completely irrelevant, since ROOT 6 all histograms that have a (non-unitary) weight provided 
 
 
 def testVariableProcessing(inputDForNodes, nodes=False, searchMode=True, skipColumns=[],
@@ -692,7 +285,8 @@ def BTaggingYields(input_df_or_nodes, sampleName, era, channel="All", isData = T
                     
                 #Skip SFs for which the requisite per-jet SFs are not present...
                 if jetSF not in listOfColumns:
-                    if verbose: print("Skipping {} in BTaggingYields as it is not a valid column name".format(jetSF))
+                    if True: print("Skipping {} in BTaggingYields as it is not a valid column name".format(jetSF))
+                    # if verbose: print("Skipping {} in BTaggingYields as it is not a valid column name".format(jetSF))
                     continue
                         
                 #Check we have the input weight for before btagSF and yield ratio multiplication
@@ -2143,7 +1737,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
         #Did we not chooose to do incompatible actions at the same time?
         if doBTaggingYields and (doHistos or doDiagnostics or printBookkeeping or doLeptonSelection):
             raise RuntimeError("Cannot calculate BTaggingYields and Fill Histograms simultaneously, choose only one mode")
-        elif not doHistos and not doBTaggingYields and not doDiagnostics and not printBookkeeping and not doLeptonSelection and not doNtuples and not options.stage == 'fill-nano':
+        elif not doHistos and not doBTaggingYields and not doDiagnostics and not printBookkeeping and not doLeptonSelection and not doNtuples and not options.stage in ['fill-nano', 'make-file-lists']:
             raise RuntimeError("If not calculating BTaggingYields and not Filling Histograms and not doing diagnostics and not printing Bookkeeping and not checking lepton selection, there is no work to be done.")
     
         #These are deprecated for now!
@@ -2171,6 +1765,9 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
     
         if channel == "BOOKKEEPING":
             levelsOfInterest=set(["BOOKKEEPING"])
+            theSampleDict = inputSampleCardYaml.keys()
+        elif channel == "SLIMBOOKKEEPING":
+            levelsOfInterest=set(["SLIMBOOKKEEPING"])
             theSampleDict = inputSampleCardYaml.keys()
         elif channel == "PILEUP":
             levelsOfInterest=set(["PILEUP"])
@@ -2238,6 +1835,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
         btagging = dict() #For btagging efficiencies
         cat_df = dict() #Categorization node dictionary, returned by fill_histos method
         masterstart = time.perf_counter()#Timers...
+        predefinestart = dict()
         substart = dict()
         subfinish = dict()
         processed = dict()
@@ -2282,7 +1880,9 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
     
         sysVariationsForBtagging = dict([(sv[0], sv[1]) for sv in sysVariationsAll.items() if len(set(sv[1].get("systematicSet", [""])).intersection(set(systematicSet))) > 0 or sv[0] in ["$NOMINAL", "nominal", "nom"] or "ALL" in systematicSet])
         # for sysVar, sysDict in sysVariationsForBtagging.items():
-        if len(valid_samples) > 1:
+        if options.stage == 'make-file-lists':
+            pass
+        elif len(valid_samples) > 1:
             print("\n\n\n\nFor now, the ability to iterate over multiple samples is broken, so that the GetCorrectorMap can retrieve the right LUTs for that one sample without breaking")
             print("\n\n\nThe clusterfuck of btag yield aggregates leads to another rewrite. In order to handle multiple samples in an FTAnalyzer instance, the GetCorrectorMap would need to change so that the process, systematic, scalepostfix vectors are changed into a map, where the key is the process and the systematic and scalepostfix are paired string vectors in a submap, i.e. input['tt_DL-GF']['systematic_names'] = {'nom', 'btagSF_shape_hfUp', 'jec'}, input['tt_DL-GF']['scale_postfix'] = {'nom', 'nom', 'jec'}")
             raise NotImplementedError("Hahahahahaa")
@@ -2293,8 +1893,11 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             continue
         print("FIXME: hardcoded incorrect btagging top path for the corrector map")
         print("FIXME: hardcoded non-UL/UL and no VFP handling in the corrector map retrieval")
-        BTaggingYieldsTopPath = BTaggingYieldsFile.replace("BTaggingYields.root", "") if BTaggingYieldsFile is not None and channel not in ["BOOKKEEPING", "PILEUP"] else "" #Trigger the null set of correctors for btagging if there's no yields file we're pointing to...
-        # BTaggingYieldsTopPath = ""
+        if BTaggingYieldsFile is not None and channel not in ["BOOKKEEPING", "SLIMBOOKKEEPING", "PILEUP"]:
+            BTaggingYieldsTopPath = str(Path(BTaggingYieldsFile).parent) + "/"
+        else:
+            BTaggingYieldsTopPath = ""
+
         correctorMap = ROOT.FTA.GetCorrectorMap(era, #2017 or 2018 or 2016, as string
                                                 globalisUL, #UL or non_UL
                                                 globalVFP, ##preVFP or postVFP if 2016
@@ -2325,6 +1928,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             if not os.path.isdir(filelistDir):
                 os.makedirs(filelistDir)
             sampleOutFile = "{base}/{era}__{src}__{sample}.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
+            sampleMetaFile = "{base}/{era}__{src}__{sample}.meta".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
             # sampleFriendFile = "{base}/{era}__{src}__{sample}__Friend0.txt".format(base=filelistDir, era=vals["era"], src=source_level, sample=name)
             fileList = []
             metaList = []
@@ -2349,6 +1953,9 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 metaList = copy.copy(fileList)
                 if vals["source"][source_level].startswith("glob:"):
                     metaList += getFiles(query=vals["source"][source_level].replace(".root", ".empty"), redir=redir)
+                    with open(sampleMetaFile, 'w') as out_f:
+                        for line in metaList:
+                            out_f.write(line + "\n")
             transformedFileList = ROOT.std.vector(str)()
             transformedMetaList = ROOT.std.vector(str)()
             for fle in fileList:
@@ -2368,6 +1975,9 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 metaList = fileList
                 if vals["source"][source_level].startswith("glob:"):
                     metaList +=getFiles(query=vals["source"][source_level].replace(".root", ".empty"), redir=redir)
+                    with open(sampleMetaFile, 'w') as out_f:
+                        for line in metaList:
+                            out_f.write(line + "\n")
                 for fle in fileList:
                     transformedFileList.push_back(fle)
                 for fle in metaList:
@@ -2375,6 +1985,10 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 if transformedFileList.size() < 1:
                     print("No files located... skipping sample {}".format(name))
                     continue
+
+            ### YET ANOTHER HACK ###
+            if options.stage == 'make-file-lists':
+                continue
     
             #Construct TChain that we can add friends to potentially, but similarly constructin TChains and adding the chains with AddFriend
             print("Creating TChain for sample {}".format(name))
@@ -2423,10 +2037,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     if mk.startswith("nLHEScaleSumw") or mk.startswith("nLHEPdfSumw") or mk.startswith("genEventCount"):
                         metainfo[name][mk] = int(round(metainfo[name][mk]))
                     if mk == "genEventSumw":
-                        if (abs(1 - vals.get("sumWeights", 0)/metainfo[name]["genEventSumw"]) >= 1e-4):
-                            print("Weight discrepancy found, did you mean to override and run over a subset of files? {}".format(name))
-                        if channel != "BOOKKEEPING":
-                            assert (abs(1 - vals.get("sumWeights", 0)/metainfo[name]["genEventSumw"]) < 1e-4), "Weight discrepancy found, did you mean to override and run over a subset of files? {}".format(name)
+                        if channel not in  ["BOOKKEEPING", "SLIMBOOKKEEPING"]:
+                            assert (abs(1 - vals.get("sumWeights", 0)/metainfo[name]["genEventSumw"]) < 1e-4), f"Weight discrepancy found, did you mean to override and run over a subset of files? {name} expected genEventSumw={vals.get('sumWeights', 0)} found genEventSumw={metainfo[name]['genEventSumw']}"
                     if mk.startswith("LHEPdfSumw") or mk.startswith("LHEScaleSumw"):
                         metainfo[name][mk] /= metainfo[name]["genEventSumw"]
                 declare_cpp_constants(name, 
@@ -2453,6 +2065,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             allSystematics = filter_systematics(sysVariationsAll, era=era, sampleName=name, isSystematicSample=vals.get("isSystematicSampleFor", False), nominal=True, scale=True, weight=True, baseColumns=baseColumns)
             # print("scale systematics: {}\nall systematics: {}".format(scaleSystematics, allSystematics))
             #Now do the btagging LUTs
+            fill_nano_filter = "(nFTAJet__nom > 3 && HT__nom >= 500)"
             for sysVarRaw, sysDict in sysVariationsAll.items():
                 if vals.get("isData", True):
                     continue
@@ -2463,6 +2076,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 sysVar = sysVarRaw.replace("$NOMINAL", "nom").replace("$LEP_POSTFIX", sysDict.get('lep_postfix', '')).replace("$ERA", era)
                 isWeightVariation = sysDict.get("weightVariation")
                 slimbranchpostfix = "nom" if isWeightVariation else sysVar #branch postfix for identifying input branch variation
+                if slimbranchpostfix != "nom":
+                    fill_nano_filter += f" || (nFTAJet__{slimbranchpostfix} > 3 && HT__{slimbranchpostfix} >= {HTCut})"
                 earlySplitProcess = vals.get("splitProcess", None)
                 if isinstance(earlySplitProcess, (dict)):
                     # df_with_IDs = input_df
@@ -2499,11 +2114,13 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             flatteningDict[name] = dict()
             # btagging[name] = dict()
             cat_df[name] = dict()
+            predefinestart[name] = dict()
             substart[name] = dict()
             subfinish[name] = dict()
             processed[name] = dict()
             #counts[name]["baseline"] = filtered[name].Count() #Unnecessary with baseline in levels of interest?
             for lvl in levelsOfInterest:
+                predefinestart[name][lvl] = time.perf_counter()
                 #########################
                 ### Split proc config ###
                 #########################
@@ -2515,6 +2132,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                                             "fractionalContribution": 1,
                                                                             "sumWeights": vals.get("sumWeights", -1.0),
                                                                             "effectiveCrossSection": vals.get("crossSection", 0),
+                                                                            "phaseSpaceFactor": 1,
                                                                             "snapshotPriority": -1,
                                                                   }}}
                 pprint.pprint(inclusiveProcessConfig)
@@ -2557,7 +2175,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     )                    
                     #skip any further calculations for bookkeeping
                     continue                    
-                elif lvl == "BOOKKEEPING":
+                elif lvl in ["BOOKKEEPING", "SLIMBOOKKEEPING"]:
                     #We just need the info printed on this one... book a Count node with progress bar if not quiet
                     if hasattr(options, 'noProgressBar') and options.noProgressBar:
                         print("Not preparing progress bars")
@@ -2588,11 +2206,15 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                                             "fractionalContribution": 1,
                                                                             "sumWeights": inputSampleCardYaml[name].get("sumWeights", -1.0),
                                                                             "effectiveCrossSection": inputSampleCardYaml[name].get("crossSection", 0),
+                                                                            "phaseSpaceFactor": 1,
                                                                             "snapshotPriority": -1,
                                                                   }}}
                         pprint.pprint(inclusiveProcessConfig)
                         print("Updated meta information for process based on discrepancy in inputsample card and loaded files from source ", source_level)
                     #define Dataset Identifier for splitting MC by train/test percentages
+                    fillDiagnosticHistos = False
+                    if lvl == "BOOKKEEPING":
+                        fillDiagnosticHistos = True
                     prePackedNodes = splitProcess(base[name].Define("dsid1k", "return rdfentry_%1000;"), 
                                                   splitProcess = splitProcessConfig, 
                                                   inclusiveProcess = inclusiveProcessConfig,
@@ -2601,7 +2223,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                   era = vals["era"],
                                                   isUL = globalisUL,
                                                   printInfo = True,
-                                                  fillDiagnosticHistos = True,
+                                                  fillDiagnosticHistos = fillDiagnosticHistos,
                                                   inputSampleCard=inputSampleCardYaml,
                     )
                     # print("\n\nDisabled fillDiagnosticHistos temporarily to test speedier baseline number crunching, to be re-enabled for plots...\n\n")
@@ -2610,14 +2232,17 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     print("Finished processing")
                     for k, v in prePackedNodes["diagnosticHistos"].items():
                         print("{} - {}".format(k, v.keys()))
-                    print("Writing diagnostic histos to {}".format(analysisDir + "/Diagnostics"))
-                    writeHistos(prePackedNodes["diagnosticHistos"], 
-                                analysisDir + "/Diagnostics",
-                                channelsOfInterest="All",
-                                samplesOfInterest="All",
-                                dict_keys="All",
-                                mode="RECREATE"
-                    )
+                    if fillDiagnosticHistos:
+                        print("Writing diagnostic histos to {}".format(analysisDir + "/Diagnostics"))
+                        writeHistos(prePackedNodes["diagnosticHistos"], 
+                                    analysisDir + "/Diagnostics",
+                                    channelsOfInterest="All",
+                                    samplesOfInterest="All",
+                                    dict_keys="All",
+                                    mode="RECREATE"
+                                )
+                    else:
+                        print(f"Skipping diagnostic histograms for mode {lvl}")
                     
                     #skip any further calculations for bookkeeping
                     continue
@@ -2676,9 +2301,6 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                             else:
                                 #Do nothing, the code is finished
                                 pass
-                    #Print the filter code for each channel here...
-                    # for k, v in channelFilterCode.items():
-                    #     print(k, v)
         
                     #Finished verification that new bitset channelFilterCode produces same output as old b, swapping in and deprecating the old one.
                     filtered[name][lvl] = base[name].Define("dsid1k", "return rdfentry_%1000;").Filter(channelFilterCode[lvl], lvl)
@@ -2791,6 +2413,16 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                         cut_name = cut[:cut.index("=")]
                         cut_defn = cut[cut.index("=")+1:]
                         the_df[name][lvl] = the_df[name][lvl].Filter(cut_defn, cut_name)
+                the_df[name][lvl] = apply_btv_sfs(the_df[name][lvl],
+                                                  era=vals["era"],
+                                                  is_mc=(not vals["isData"]),
+                                                  wp = "shape_corr",
+                                                  algo = bTagger.lower(),
+                                                  input_collection = "Jet",
+                                                  jes_systematics = ("total", "reduced"),
+                                                  # is_ultra_legacy = ,
+                                                  # pre_post_VFP = ,
+                                              )
                 prePackedNodes = splitProcess(the_df[name][lvl], 
                                               splitProcess = splitProcessConfig,
                                               inputNtupleVariables=flatteningDict[name][lvl]["ntupleVariables"],
@@ -2863,7 +2495,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     sysVariationsForHistos = sysVariationsAll
                     skipNominalHistos = False
                 if doHistos:
-                    if False:
+                    if options.fill_histos_ndim_categorized:
                         fill_histos_ndim_categorized(prePackedNodes, 
                                                      splitProcess=splitProcessConfig, 
                                                      sampleName=name, 
@@ -2944,6 +2576,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                         skipNominalHistos=skipNominalHistos, verbose=verb)
     
                 #Trigger the loop either by hitting the count/progressbar node or calling for a (Non-lazy) snapshot
+                if options.save_graph:
+                    ROOT.RDF.SaveGraph(base[name], f"{analysisDir}/{name}_{lvl}_{options.stage}_graph.dot")
                 print("\nSTARTING THE EVENT LOOP")
                 substart[name][lvl] = time.perf_counter()
                 Benchmark.Start("{}/{}".format(name, lvl))
@@ -2959,7 +2593,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                     nanoDir = analysisDir + f"/Nano/{options.channel}"
                     if not os.path.isdir(nanoDir):
                         os.makedirs(nanoDir)
-                    fn_handles, fn_columns = delegateSnapshots(prePackedNodes, nanoDir, options.branchselection)
+                    fn_handles, fn_columns , cnt_handles = delegateSnapshots(prePackedNodes, nanoDir, options.branchselection, node_filter=fill_nano_filter)
     
                 #The ntuple writing will trigger the loop first, if that path is taken, but this is still safe to do always
                 processed[name][lvl] = counts[name][lvl].GetValue()
@@ -2967,7 +2601,8 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 print("ROOT Benchmark stats...")
                 Benchmark.Show("{}/{}".format(name, lvl))
                 subfinish[name][lvl] = time.perf_counter()
-                theTime = subfinish[name][lvl] - substart[name][lvl]
+                theSetupTime = substart[name][lvl] - predefinestart[name][lvl]
+                theProcessingTime = subfinish[name][lvl] - substart[name][lvl]
                 if doRDFReport:
                     print("\nPrinting the report...")
                     reports[name].Print()
@@ -3012,8 +2647,23 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                 for n in processedSampleList:
                     processedSamples += "{} ".format(n)
                 print(processedSamples)
-                print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theTime//60, theTime%60, theTime, processed[name][lvl], 
-                             name, lvl, "".join(["\_/"]*25)))
+                print("Took {}m {}s ({}s) to finish setup on the graph from sample {} in channel {}\n".format(theSetupTime//60, 
+                                                                                                              theSetupTime%60, 
+                                                                                                              theSetupTime,
+                                                                                                              name, lvl
+                                                                                                          )
+                )
+                print("Took {}m {}s ({}s) to process {} events from sample {} in channel {}\n\n\n{}".format(theProcessingTime//60, 
+                                                                                                            theProcessingTime%60, 
+                                                                                                            theProcessingTime, 
+                                                                                                            processed[name][lvl], 
+                                                                                                            name, lvl, "".join(["\_/"]*25)
+                                                                                                        )
+                )
+                if options.stage == 'fill-nano':
+                    for name, cnt_handle in cnt_handles.items():
+                        print(f"Wrote {(cnt_handle.GetValue())} events for {name} snapshot")
+
         # Benchmark.Summary()
         if channel in ["BOOKKEEPING"]:
             # sort_order = ["filter", "fractionalContribution", "effectiveCrossSection", "snapshotPriority", 
@@ -3023,6 +2673,15 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
             #               "nLep1nJet9GenHT500-550-effectiveXS", "nLep1nJet9pGenHT500p-effectiveXS",]
             with open(inputSampleCardName.replace(".yaml", ".{}.roundtrip.yaml".format(channel)), "w") as of:
                 of.write(yaml.dump(inputSampleCardYaml, Dumper=yaml.RoundTripDumper))
+        if channel in ["SLIMBOOKKEEPING"]:
+            # sort_order = ["filter", "fractionalContribution", "effectiveCrossSection", "snapshotPriority", 
+            #               "nEventsPositive", "nEventsNegative", "sumWeights", "sumWeights2", "nominalXS", "nominalXS2", "effectiveXS", "effectiveXS2",
+            #               "nLep2nJet7GenHT500-550-nominalXS", "nLep2nJet7pGenHT500p-nominalXS", "nLep1nJet9GenHT500-550-nominalXS",
+            #               "nLep1nJet9pGenHT500p-nominalXS", "nLep2nJet7GenHT500-550-effectiveXS", "nLep2nJet7pGenHT500p-effectiveXS",
+            #               "nLep1nJet9GenHT500-550-effectiveXS", "nLep1nJet9pGenHT500p-effectiveXS",]
+            write_yaml_cards({inputSampleCardName: inputSampleCardYaml}, postfix=".roundtripV2")
+            # with open(inputSampleCardName.replace(".yaml", ".{}.roundtrip.yaml".format(channel)), "w") as of:
+            #     of.write(yaml.dump(inputSampleCardYaml, Dumper=yaml.RoundTripDumper))
         return packedNodes
 def otherFuncs():
     """Code stripped from jupyter notebook when converted to script."""
@@ -3144,9 +2803,10 @@ def otherFuncs():
     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FTAnalyzer.py is the main framework for doing the Four Top analysis in Opposite-Sign Dilepton channel after corrections are added with nanoAOD-tools (PostProcessor). Expected corrections are JECs/Systematics, btag SFs, lepton SFs, and pileup reweighting')
-    parser.add_argument('stage', action='store', type=str, choices=['bookkeeping', 'pileup', 'fill-yields', 'combine-yields', 'lepton-selection', 'fill-diagnostics', 
+    parser.add_argument('stage', action='store', type=str, choices=['bookkeeping', 'slimbookkeeping', 'pileup', 'fill-yields', 'combine-yields', 
+                                                                    'lepton-selection', 'fill-diagnostics', 
                                                                     'fill-histograms', 'hadd-histograms', 'fill-ntuples', 'fill-combine',
-                                                                    'hadd-combine', 'fill-nano'],
+                                                                    'hadd-combine', 'fill-nano', 'make-file-lists'],
                         help='analysis stage to be produced')
     parser.add_argument('--varSet', '--variableSet', dest='variableSet', action='store',
                         type=str, choices=['HTOnly', 'MVAInput', 'Control', 'Study', 'TriggerStudy', 'ResolutionStudy', 'WeightStudy', 'nPVs', 'Pileup', 'nTruePileup'], 
@@ -3229,6 +2889,10 @@ if __name__ == '__main__':
                         help='list of filters with syntax filter_name=filter_cut, where the former is any text and the latter is valid C++ code. Wrap each individual filter in single quotes to prevent shell parsing them as commands')
     parser.add_argument('--branchselection', dest='branchselection', action='store', type=str, default=None,
                         help='Name of file for branchselection when calling stage fill-nano, using the NanoAOD-tools syntax of keep, drop, keepmatch, and keepdrop')
+    parser.add_argument('--fill_histos_ndim_categorized', dest='fill_histos_ndim_categorized', action='store_true',
+                        help='Switch to the multidimensional categorized histograms (supports HTOnly atm)')
+    parser.add_argument('--save_graph', dest='save_graph', action='store_true',
+                        help='Save a .dot file of the Computation Graph, viewable via os.system(f"dot -Tpdf graph.dot > graph.pdf")')
 
     #Parse the arguments
     args = parser.parse_args()
@@ -3317,7 +2981,6 @@ if __name__ == '__main__':
     print("Variable list: {vL}".format(vL=variableList))
     print("Category set: {cS}".format(cS=categorySet))
     print("Systematic Set: {sS}".format(sS=systematicSet))    
-    print("\n\nFIXME: Need to fix the btagging yields access, properly close file after the histograms are loaded...\n\n")
 
     #Run algos appropriately for the given configuration
     if stage == 'fill-yields':
@@ -3388,8 +3051,8 @@ if __name__ == '__main__':
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, testVariables=test,
                       categorySet=categorySet, variableSet=variableSet, variableList=variableList, systematicSet=systematicSet, nThreads=nThreads, redirector=args.redir, 
                       recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
-    elif stage == 'bookkeeping':
-        packed = main(analysisDir, sampleCards, source, "BOOKKEEPING", bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
+    elif stage in ['bookkeeping', 'slimbookkeeping']:
+        packed = main(analysisDir, sampleCards, source, stage.upper(), bTagger, systematicCards, TriggerList, doDiagnostics=False, doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", 
                       BTaggingYieldsAggregate=useAggregate, jetPtMin=jetPtMin, jetPUId=jetPUId, 
                       HTBins=HTBins, HTCut=HTCut, METCut=METCut, ZMassMETWindow=[ZWindowWidth, ZWindowMET], useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
                       useNJetOnly=useNJetOnly, printBookkeeping = True, triggers=TriggerList,  
@@ -3466,6 +3129,16 @@ if __name__ == '__main__':
                       includeSampleNames=includeSampleNames, excludeSampleNames=excludeSampleNames, verbose=verb, 
                       testVariables=test, categorySet=categorySet, variableSet=variableSet, variableList=variableList, systematicSet=systematicSet, 
                       nThreads=nThreads, redirector=args.redir, recreateFileList=args.recreateFileList, doRDFReport=args.report, options=args)
+    elif stage == 'make-file-lists':
+        packed = main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, TriggerList, doDiagnostics=False, 
+                      doNtuples=doNtuples, 
+                      doHistos=False, doBTaggingYields=False, BTaggingYieldsFile="{}", BTaggingYieldsAggregate=useAggregate, 
+                      jetPtMin=jetPtMin, jetPUId=jetPUId, useDeltaR=useDeltaR, useHTOnly=useHTOnly, 
+                      disableNjetMultiplicityCorrection=disableNjetMultiplicityCorrection, enableTopPtReweighting=enableTopPtReweighting,
+                      useNJetOnly=useNJetOnly, printBookkeeping = False, triggers=TriggerList,
+                      includeSampleNames=None, excludeSampleNames=None, recreateFileList=True, redirector=args.redir, verbose=verb,
+                      testVariables=test, categorySet=categorySet, variableSet=variableSet, variableList=variableList, systematicSet=systematicSet, 
+                      nThreads=nThreads, doRDFReport=args.report, options=args)
     else:
-        print("stage {stag} is not yet prepared, please update the FTAnalyzer".format(stag))
+        print(f"stage {stage} is not yet prepared, please update the FTAnalyzer")
 

@@ -3,6 +3,27 @@ import glob #For getFiles
 import os, pwd, sys #For getFiles
 import tempfile #For getFiles
 import ruamel.yaml as yaml #for load and write yaml files
+import ROOT
+import ctypes
+
+def get_number_of_labels(hist):
+    xLow = hist.GetXaxis().GetBinLowEdge(1)
+    xHigh = hist.GetXaxis().GetBinLowEdge(hist.GetXaxis().GetNbins()+1)
+    xDivisions = hist.GetXaxis().GetNdivisions() % 100
+
+    if xDivisions < 0:
+        return -xDivisions + 1
+
+    # Setup ctypes to be optimized by THLimitsFinder::Optimize
+    xLowOptimized = ctypes.c_double(0.)
+    xHighOptimized = ctypes.c_double(0.)
+    xDivisionsOptimized = ctypes.c_int(0)
+    xBinWidthOptimized = ctypes.c_double(0.)
+
+    # Run the optimization
+    # Optimize (Double_t A1, Double_t A2, Int_t nold, Double_t &BinLow, Double_t &BinHigh, Int_t &nbins, Double_t &BWID, Option_t *option="")
+    ROOT.THLimitsFinder.Optimize(xLow, xHigh, xDivisions, xLowOptimized, xHighOptimized, xDivisionsOptimized, xBinWidthOptimized, "")
+    return int(xDivisionsOptimized.value % 100) + 1
 
 def getFiles(query, redir="", outFileName=None, globSort=lambda f: int(f.split('_')[-1].replace('.root', '')), doEOSHOME=False, doGLOBAL=False, verbose=False):
     """Use one of several different methods to acquire a list or text file specifying the filenames.

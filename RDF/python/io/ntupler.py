@@ -249,7 +249,7 @@ def writeNtuples(packedNodes, ntupledir, nJetMin=4, HTMin=350, bTagger="DeepJet"
                                                      treename="Events", mode="RECREATE", compressionAlgo="ZSTD", compressionLevel=6, splitLevel=99)
     print("Finished executing event loop for writeNtuples()")
 
-def delegateSnapshots(packedNodes, ntupledir, branchselfile, verbose=False):
+def delegateSnapshots(packedNodes, ntupledir, branchselfile, node_filter=None, verbose=False):
     """Lazily book snapshots for all nodes with snapshotPriority > 0, saving the selected columns."""
     #Lazily book snapshots for all the nodes with snapshot priority > 0, which previously ordered things to keep caches small. 
     #Now we depend on simultaneous snapshotting to work
@@ -262,6 +262,7 @@ def delegateSnapshots(packedNodes, ntupledir, branchselfile, verbose=False):
         snapshotTrigger = -1
     handles = dict()
     columns = dict()
+    counters = dict()
     br_selector = BranchSelection(branchselfile)
     for eraAndSampleName, spriority in sorted(packedNodes["snapshotPriority"].items(), key=lambda x: x[1], reverse=True):
         sval = packedNodes["nodes"][eraAndSampleName]
@@ -270,7 +271,11 @@ def delegateSnapshots(packedNodes, ntupledir, branchselfile, verbose=False):
         if snapshotPriority > 0 or (len(packedNodes["snapshotPriority"].values()) == 1 and snapshotPriority < 0):
             #we'll snapshot priority != 0 nodes, -1 if it's the only one or all greater than 0 (since this indicates the priority -1 is the inclusive version)
             columns[eraAndSampleName] = br_selector.selectBranches(packedNodes["nodes"][eraAndSampleName]["BaseNode"], verbose=verbose)
-            handles[eraAndSampleName] = bookSnapshot(packedNodes["nodes"][eraAndSampleName]["BaseNode"],
+            snapshot_node = packedNodes["nodes"][eraAndSampleName]["BaseNode"]
+            if node_filter is not None:
+                snapshot_node = snapshot_node.Filter(node_filter, node_filter)
+                counters[eraAndSampleName] = snapshot_node.Count()
+            handles[eraAndSampleName] = bookSnapshot(snapshot_node,
                                                      f"{ntupledir}/{eraAndSampleName}.root", 
                                                      lazy=True,
                                                      columnList=columns[eraAndSampleName], 
@@ -280,6 +285,4 @@ def delegateSnapshots(packedNodes, ntupledir, branchselfile, verbose=False):
                                                      compressionLevel=6, 
                                                      splitLevel=99,
                                                  )
-    print(len(list(columns.values())[0]))
-    print("Taking columns:", list(columns.values())[0])
-    return handles, columns
+    return handles, columns, counters

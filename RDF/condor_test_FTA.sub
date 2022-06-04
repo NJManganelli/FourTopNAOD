@@ -1,7 +1,7 @@
 executable = condor_test_FTA.sh
 Proxy_path = /afs/cern.ch/user/n/nmangane/private/x509up
 num_cores = 4
-arguments = $(Proxy_path) $(ProcId) $(num_cores)
+arguments = $(Proxy_path) $(ProcId) $(num_cores) $(era) $(channel) $(sample) $(var_set) $(cat_set)
 output                = condor_test_FTA_l1.$(ClusterId).$(ProcId).out
 error                 = condor_test_FTA_l1.$(ClusterId).$(ProcId).err
 log                   = condor_test_FTA_l1.$(ClusterId).log
@@ -16,7 +16,7 @@ RequestCpus = $(num_cores)
 # tomorrow     = 1 day
 # testmatch    = 3 days
 # nextweek     = 1 week
-+JobFlavour = "longlunch"
++JobFlavour = "workday"
 
 # Send the job to Held state on failure.
 on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
@@ -25,5 +25,10 @@ on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
 periodic_release =  (NumJobStarts < 3) && ((CurrentTime - EnteredCurrentStatus) > 600)
 
 
-queue 1
-
+queue era, channel, sample, var_set, cat_set from (
+      2017, ElMu, tttt, Control, 2BnJet4p
+      2017, ElMu, tt_DL, Control, 2BnJet4p
+      2017, ElMu, tt_DL-GF, Control, 2BnJet4p
+      2017, ElMu, tt_SL, Control, 2BnJet4p
+      2017, ElMu, tt_SL-GF, Control, 2BnJet4p
+)

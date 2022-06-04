@@ -1,0 +1,508 @@
+ {   
+     "DefaultLegend": {
+	"Header": "{lumi} fb^{{-1}} (13 TeV)",
+	"HeaderPosition": 0.25,
+        "Supercategories": {
+            "Signal": {
+                "Draw": "HIST", 
+                "Names": [
+                    "tttt"
+                ], 
+                "Stack": false
+            },
+            "Data": {
+                "Draw": "PE1", 
+                "Names": [
+                    "Data"
+                ], 
+                "Stack": false
+            }, 
+            "Background": {
+                "Draw": "HIST", 
+                "Names": [
+                    "ttbb", 
+		    "ttother",
+                    "ttH", 
+                    "ttVJets", 
+                    "ttultrarare", 
+                    "EWK", 
+                    "QCD"
+                ], 
+                "Stack": true
+            }
+        }, 
+        "nColumns": 2, 
+        "Ratios": {
+            "Data/MC": {
+                "Style": "Marker", 
+		"MarkerStyle": 20,
+		"Draw": "PXE1",
+                "Denominator": "Background", 
+                "Numerator": "Data"
+            }
+        }, 
+        "Systematics": [], 
+        "Type": "DefaultLegend", 
+        "Coordinates": [
+            0.75, 
+            0.5, 
+            1.0, 
+            0.8
+        ], 
+        "Categories": {
+            "ttH": {
+                "Color": "#00A88F", 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttH_SL-bb___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ttH_DL-bb___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ttH_SL-bb___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ttH_DL-bb___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "tttt": {
+                "Color": 864, 
+                "Style": "Line", 
+                "Names": [
+                    "2017___tttt___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___tttt___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "ttVJets": {
+                "Color": [155, 152, 204], 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttWJets___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttZJets___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ttWJets___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttZJets___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "EWK": {
+                "Color": [222, 90, 106], 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___DYJets_DL-HT100___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT200___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT400___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT600___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT800___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT1200___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT2500___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT100___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT200___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT400___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT600___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT800___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT1200___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___WJets_SL-HT2500___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___WW___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___WZ___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ZZ___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT100___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT200___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT400___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT600___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT800___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT1200___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT2500___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT100___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT200___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT400___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT600___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT800___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT1200___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___WJets_SL-HT2500___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___WW___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___WZ___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ZZ___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "Data": {
+                "Color": 1, 
+                "Style": "Marker",
+		"MarkerStyle": 20, 
+                "Names": [
+                    "2017___ElMu_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___El_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___Mu_B___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ElMu_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___El_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___Mu_C___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ElMu_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___El_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___Mu_D___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ElMu_E___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu_E___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl_E___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___El_E___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___Mu_E___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ElMu_F___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu_F___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl_F___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___El_F___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___Mu_F___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ElMu_A___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___MuMu_A___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ElEl_A___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___El_A___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___Mu_A___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ElMu_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___MuMu_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ElEl_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___El_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___Mu_B___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ElMu_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___MuMu_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ElEl_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___El_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___Mu_C___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ElMu_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___MuMu_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ElEl_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___El_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___Mu_D___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "ttbb": {
+                "Color": [100, 192, 232], 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttbb_AH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_DL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_SL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_DL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_SL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_DL-GF_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ttbb_AH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttbb_DL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttbb_SL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttbb_DL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttbb_SL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttbb_DL-GF_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttbb_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0"
+                ],
+		"ScaleArray": [0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785]
+            }, 
+            "ttother": {
+                "Color": "#BF2229", 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ST_tW-NoFHad___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ST_tbarW-NoFHad___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ST_tW-NoFHad___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ST_tbarW-NoFHad___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ttother_AH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_DL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_SL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_DL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_SL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_DL-GF_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ttother_AH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttother_DL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttother_SL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttother_DL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttother_SL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttother_DL-GF_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttother_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0"
+                ],
+		"ScaleArray": [1, 1, 1, 1, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785, 0.785]
+            }, 
+            "QCD": {
+                "Color": 950, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___QCD_HT200___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT300___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT500___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT700___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT1000___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT1500___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT2000___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___QCD_HT200___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___QCD_HT300___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___QCD_HT500___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___QCD_HT700___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___QCD_HT1000___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___QCD_HT1500___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___QCD_HT2000___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "ttultrarare": {
+                "Color": [248, 206, 104], 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttWW___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttWH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttWZ___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttZZ___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttZH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttHH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___tttW___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___tttJ___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ttWW___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttWH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttWZ___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttZZ___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttZH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttHH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___tttW___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___tttJ___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }
+        }
+    },
+     "NoSTLegend": {
+	"Header": "{lumi} fb^{{-1}} (13 TeV)",
+	"HeaderPosition": 0.25,
+        "Supercategories": {
+            "Signal": {
+                "Draw": "HIST", 
+                "Names": [
+                    "tttt"
+                ], 
+                "Stack": false
+            },
+            "Data": {
+                "Draw": "PE1", 
+                "Names": [
+                    "Data"
+                ], 
+                "Stack": false
+            }, 
+            "Background": {
+                "Draw": "HIST", 
+                "Names": [
+                    "ttbb", 
+		    "ttother",
+                    "ttH", 
+                    "ttVJets", 
+                    "ttultrarare", 
+                    "DY", 
+                    "QCD"
+                ], 
+                "Stack": true
+            }
+        }, 
+        "nColumns": 1, 
+        "Ratios": {
+            "Data/MC": {
+                "Style": "Marker", 
+		"MarkerStyle": 20,
+		"Draw": "PXE1",
+                "Denominator": "Background", 
+                "Numerator": "Data"
+            }
+        }, 
+        "Systematics": [], 
+        "Type": "LegendConfig", 
+        "Coordinates": [
+            0.0, 
+            0.1, 
+            0.25, 
+            0.60
+        ], 
+        "Categories": {
+            "ttH": {
+                "Color": 616, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttH_SL-bb___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ttH_DL-bb___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ttH_SL-bb___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ttH_DL-bb___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "tttt": {
+                "Color": 864, 
+                "Style": "Line", 
+                "Names": [
+                    "2017___tttt___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___tttt___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "ttVJets": {
+                "Color": 880, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttWJets___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttZJets___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ttWJets___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttZJets___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "DY": {
+                "Color": 416, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___DYJets_DL-HT100___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT200___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT400___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT600___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT800___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT1200___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___DYJets_DL-HT2500___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT100___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT200___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT400___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT600___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT800___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT1200___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___DYJets_DL-HT2500___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "Data": {
+                "Color": 1, 
+                "Style": "Marker",
+		"MarkerStyle": 20, 
+                "Names": [
+                    "2017___ElMu_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___El_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___Mu_B___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ElMu_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___El_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___Mu_C___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ElMu_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___El_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___Mu_D___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ElMu_E___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu_E___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl_E___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___El_E___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___Mu_E___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___ElMu_F___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___MuMu_F___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ElEl_F___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___El_F___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___Mu_F___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ElMu_A___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___MuMu_A___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ElEl_A___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___El_A___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___Mu_A___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ElMu_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___MuMu_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ElEl_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___El_B___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___Mu_B___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ElMu_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___MuMu_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ElEl_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___El_C___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___Mu_C___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ElMu_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___MuMu_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ElEl_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___El_D___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___Mu_D___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "ttbb": {
+                "Color": 38, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttbb_AH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_DL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_SL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_DL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_SL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_DL-GF_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttbb_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ttbb_AH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttbb_DL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttbb_SL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttbb_DL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttbb_SL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttbb_DL-GF_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttbb_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "ttother": {
+                "Color": 632, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttother_AH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_DL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_SL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_DL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_SL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_DL-GF_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttother_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ttother_AH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttother_DL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttother_SL_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttother_DL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttother_SL_nr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttother_DL-GF_fr___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttother_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "QCD": {
+                "Color": 950, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___QCD_HT200___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT300___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT500___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT700___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT1000___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT1500___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___QCD_HT2000___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___QCD_HT200___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___QCD_HT300___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___QCD_HT500___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___QCD_HT700___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___QCD_HT1000___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___QCD_HT1500___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___QCD_HT2000___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "singletop": {
+                "Color": 400, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ST_tW-NoFHad___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ST_tbarW-NoFHad___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ST_tW-NoFHad___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ST_tbarW-NoFHad___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }, 
+            "ttultrarare": {
+                "Color": 432, 
+                "Style": "Fill", 
+                "Names": [
+                    "2017___ttWW___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttWH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttWZ___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttZZ___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttZH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___ttHH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2017___tttW___ElEl___ZWindowMET0p0Width15p0",
+                    "2017___tttJ___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___ttWW___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttWH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttWZ___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttZZ___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttZH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___ttHH___ElEl___ZWindowMET0p0Width15p0", 
+                    "2018___tttW___ElEl___ZWindowMET0p0Width15p0",
+                    "2018___tttJ___ElEl___ZWindowMET0p0Width15p0"
+                ]
+            }
+        }
+    }
+}

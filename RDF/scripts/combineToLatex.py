@@ -38,6 +38,14 @@ def round_to_n(x, sigfigs):
     else:
         return round(x, -int(math.floor(math.log10(abs_x))) + sigfigs - 1)
 
+def str_with_sigfigs(x, sigfigs):
+    x_sfs = round_to_n(x, sigfigs)
+    if isinstance(x_sfs, str):
+        return x_sfs
+    fps = max(0, -int(math.floor(math.log10(abs(x)))) + sigfigs - 1)
+    ret = "{x_sfs:." + str(fps) + "f}"
+    return ret.format(x_sfs=x_sfs)
+
 def configureLatex(channel, limits, significance, XS, sigfigs=3, blind=False):
     if isinstance(XS, str):
         XS = float(XS)
@@ -62,8 +70,8 @@ def configureLatex(channel, limits, significance, XS, sigfigs=3, blind=False):
             result += "$" + "X." + "X"*(sigifigs-1) + "$ & "
         else:
             observed = limits[0] if not blind else None
-            result += "$" + str(round_to_n(observed, sigfigs)) + "$ & "
-            result += "$" + str(round_to_n(XS * observed, sigfigs)) + "$ & "
+            result += "$" + str_with_sigfigs(observed, sigfigs) + "$ & "
+            result += "$" + str_with_sigfigs(XS * observed, sigfigs) + "$ & "
         offset = 1
         aposteriori = True
     else:
@@ -74,11 +82,11 @@ def configureLatex(channel, limits, significance, XS, sigfigs=3, blind=False):
     lps = "+" if up > 0 else ""
 
     #limits in mu
-    result += "$" + str(round_to_n(central, sigfigs)) + "_{" + str(round_to_n(down, sigfigs)) + "}^{" + lps + str(round_to_n(up, sigfigs)) + "}$ & "
+    result += "$" + str_with_sigfigs(central, sigfigs) + "_{" + str_with_sigfigs(down, sigfigs) + "}^{" + lps + str_with_sigfigs(up, sigfigs) + "}$ & "
     #limits in fb
-    result += "$" + str(round_to_n(XS * central, sigfigs)) + "_{" + str(round_to_n(XS * down, sigfigs)) + "}^{" + lps + str(round_to_n(XS * up, sigfigs)) + "}$ & "
+    result += "$" + str_with_sigfigs(XS * central, sigfigs) + "_{" + str_with_sigfigs(XS * down, sigfigs) + "}^{" + lps + str_with_sigfigs(XS * up, sigfigs) + "}$ & "
     #significance
-    result += "$" + str(round_to_n(significance, sigfigs-1)) + " \\sigma$ \\\\"
+    result += "$" + str_with_sigfigs(significance, sigfigs-1) + " \\sigma$ \\\\"
     if aposteriori:
         header = "Channel    & Obs. lim. & Obs. lim. & Exp. lim. & Exp. lim. & Obs. significance \\\\ \n"\
                  "           & [$\\times \sigmattttsm$] & [fb] & [$\\times \sigmattttsm$]  & [fb] & Std. Dev. \\\\"
@@ -183,9 +191,9 @@ def limitsToLatex(limits, XS=None, sigfigs=3, blind=False):
         else:
             observed = limits[0] if not blind else None
             if XS is None:
-                data_result += "$" + str(round_to_n(observed, sigfigs)) + "$"
+                data_result += "$" + str_with_sigfigs(observed, sigfigs) + "$"
             else:
-                data_result += "$" + str(round_to_n(XS * observed, sigfigs)) + "$"
+                data_result += "$" + str_with_sigfigs(XS * observed, sigfigs) + "$"
         offset = 1
     else:
         offset = 0
@@ -198,16 +206,16 @@ def limitsToLatex(limits, XS=None, sigfigs=3, blind=False):
     #If XS is non-None, return in fb
     #limits in mu
     if XS is None:
-        result += "$" + str(round_to_n(central, sigfigs)) + "_{" + lps2 + str(round_to_n(down, sigfigs)) + "}^{" + lps1 + str(round_to_n(up, sigfigs)) + "}$"
+        result += "$" + str_with_sigfigs(central, sigfigs) + "_{" + lps2 + str_with_sigfigs(down, sigfigs) + "}^{" + lps1 + str_with_sigfigs(up, sigfigs) + "}$"
     #limits in fb
     else:
-        result += "$" + str(round_to_n(XS * central, sigfigs)) + "_{" + lps2 + str(round_to_n(XS * down, sigfigs)) + "}^{" + lps1 + str(round_to_n(XS * up, sigfigs)) + "}$"
+        result += "$" + str_with_sigfigs(XS * central, sigfigs) + "_{" + lps2 + str_with_sigfigs(XS * down, sigfigs) + "}^{" + lps1 + str_with_sigfigs(XS * up, sigfigs) + "}$"
     return result, data_result
 
 def significanceToLatex(significance, sigfigs, blind=False):
     #significance
     if not blind:
-        result = "$" + str(round_to_n(significance, sigfigs-1)) + " \\sigma$" # \\\\"
+        result = "$" + str_with_sigfigs(significance, sigfigs-1) + " \\sigma$" # \\\\"
     else:
         result = "$" + "X." + "X"*(sigfigs-1) + "$"
     return result
@@ -236,11 +244,12 @@ def buildMonoTable(nested, feature="rate-lim"):
         lines.append("Era  &  Channel  &  Apriori limit  &  Aposteriori limit  &  Observed Limit  \\\\")
         lines.append("  &  &  [fb]  &  [fb]  &  [fb]  \\\\")
     elif feature == "sig":
-        lines.append("\\begin{tabular}{lccc}")
+        lines.append("\\begin{tabular}{lcccc}")
         #lines.append("%  \\hline")
         # lines.append("Era  &  Channel  &  Apriori significance [Std. Dev.] &  Observed significance [Std. Dev.]  \\\\")
-        lines.append("Era  &  Channel  &  Apriori significance &  Observed significance  \\\\")
-        lines.append("  &   &  [Std. Dev.] &  [Std. Dev.]  \\\\")
+        # lines.append("Era  &  Channel  &  Apriori significance &  Observed significance  \\\\")
+        lines.append("Era  &  Channel  &  Apriori significance  &  Aposteriori significance  &  Observed significance  \\\\")
+        lines.append("  &   &  [Std. Dev.] &  [Std. Dev.]  &  [Std. Dev.]  \\\\")
 
 
     for era in eras:
@@ -257,6 +266,7 @@ def buildMonoTable(nested, feature="rate-lim"):
                 lines.append( "  &  ".join([era, 
                                         nested["rows"][channel], 
                                         nested[feature]["apriori"][era][channel], 
+                                        nested[feature]["aposteriori"][era][channel],                                             
                                         nested[feature]["observed"][era][channel] + "  \\\\",
                                     ]) )
     lines.append("\\hline")
@@ -280,6 +290,7 @@ def main2(opts):
     res["fb-lim"]["aposteriori"] = dict()
     res["fb-lim"]["observed"] = dict()
     res["sig"]["apriori"] = dict()
+    res["sig"]["aposteriori"] = dict()
     res["sig"]["observed"] = dict()
 
     
@@ -298,13 +309,14 @@ def main2(opts):
         res["fb-lim"]["aposteriori"][era] = dict()
         res["fb-lim"]["observed"][era] = dict()
         res["sig"]["apriori"][era] = dict()
+        res["sig"]["aposteriori"][era] = dict()
         res["sig"]["observed"][era] = dict()
         for channel in args.channels:
             #TemplateSubPath
             tsp_lim = copy.copy(args.subpath)
 
             #Apriori results
-            tsp_lim_apriori = tsp_lim.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.apriori).replace("$LIMSIG", "limit")
+            tsp_lim_apriori = tsp_lim.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.apriori[0]).replace("$LIMSIG", "limit")
             try:
                 path = os.path.join(opts.analysisDirectory, tsp_lim_apriori)
                 tmp = getLimits(path)
@@ -316,7 +328,7 @@ def main2(opts):
                 res["fb-lim"]["apriori"][era][channel] = tmp
 
             #Aposteriori results
-            tsp_lim_aposteriori = tsp_lim.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.aposteriori).replace("$LIMSIG", "limit")
+            tsp_lim_aposteriori = tsp_lim.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.observed).replace("$LIMSIG", "limit")
             try:
                 path = os.path.join(opts.analysisDirectory, tsp_lim_aposteriori)
                 tmp = getLimits(path)
@@ -333,7 +345,7 @@ def main2(opts):
 
             #Significances
             tsp_sig = copy.copy(args.subpath)
-            tsp_sig_apriori = tsp_sig.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.apriori).replace("$LIMSIG", "significance")
+            tsp_sig_apriori = tsp_sig.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.apriori[-1]).replace("$LIMSIG", "significance")
             try:
                 path = os.path.join(opts.analysisDirectory, tsp_sig_apriori)
                 tmp = getSignificance(path)
@@ -347,8 +359,18 @@ def main2(opts):
                 path = os.path.join(opts.analysisDirectory, tsp_sig_aposteriori)
                 tmp = getSignificance(path)
                 tmp = significanceToLatex(tmp, sigfigs=opts.sigfigs, blind=opts.blind)
+                res["sig"]["aposteriori"][era][channel] = tmp
+            except:
+                tmp = "$?.?? \sigma$"
+                res["sig"]["aposteriori"][era][channel] = tmp
+            tsp_sig_observed = tsp_sig.replace("$ERA", era).replace("$CHANNEL", channel).replace("$PREPOST", args.observed).replace("$LIMSIG", "significance")
+            try:
+                path = os.path.join(opts.analysisDirectory, tsp_sig_observed)
+                tmp = getSignificance(path)
+                tmp = significanceToLatex(tmp, sigfigs=opts.sigfigs, blind=opts.blind)
                 res["sig"]["observed"][era][channel] = tmp
             except:
+                res["sig"]["observed"][era][channel] = tmp #REMOVE
                 if opts.blind:
                     tmp = "$X.XX \sigma$"
                 else:
@@ -376,10 +398,12 @@ if __name__ == '__main__':
                         help='eras to be run over')
     parser.add_argument('--channels', dest='channels', action='store', nargs='*', type=str, default=['MuMu', 'ElMu', 'ElEl', 'AllChan'],
                         help='channels to be run over')
-    parser.add_argument('--apriori', dest='apriori', action='store', type=str, default = "Asimov",
-                        help='apriori flag for replacement of $PREPOST flag in subpath')
-    parser.add_argument('--aposteriori', dest='aposteriori', action='store', type=str, default = "Unblinded",
-                        help='aposteriori flag for replacement of $PREPOST flag in subpath')
+    parser.add_argument('--apriori', dest='apriori', action='store', nargs='*', type=str, default = ["Asimov", "Asimov_Apriori"],
+                        help='apriori flags for replacement of $PREPOST flag in subpath for limits and significance, respectively')
+    parser.add_argument('--aposteriori', dest='aposteriori', action='store', type=str, default = "Asimov_Aposteriori",
+                        help='aposteriori flag for replacement of $PREPOST flag in subpath when running significance')
+    parser.add_argument('--observed', dest='observed', action='store', type=str, default = "Unblinded",
+                        help='observed flag for replacement of $PREPOST flag in subpath (also aposteriori for limits)')
     parser.add_argument('--XS', dest='XS', action='store', type=float, default = 12.0,
                         help='Signal cross-section [fb] for converting limits from rate parameter to femtobarns')
     parser.add_argument('--unblind', dest='blind', action='store_false', default=True,
