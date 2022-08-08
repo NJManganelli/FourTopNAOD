@@ -1,0 +1,34 @@
+executable = FTPostFitShapes.sh
+arguments = $(ProcId) $(analysis_dir_base) $(fitcard) $(card) $(type) 
+output                = condor_output/condor_FTPostFitShapes.$(ClusterId).$(ProcId).out
+error                 = condor_error/condor_FTPostFitShapes.$(ClusterId).$(ProcId).err
+log                   = condor_log/condor_FTPostFitShapes.$(ClusterId).log
+
++JobFlavour = "tomorrow"
+
+# Send the job to Held state on failure.
+on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
+
+# Periodically retry the jobs every 10 minutes, up to a maximum of 5 retries.
+periodic_release =  (NumJobStarts < 3) && ((CurrentTime - EnteredCurrentStatus) > 600)
+
+queue card, type from (
+      2017_ElMu_AllSyst_HT, prefit
+      2017_ElMu_AllSyst_HT, bonly
+      2017_ElMu_AllSyst_HT, splusb
+      2017_MuMu_AllSyst_HT, prefit
+      2017_MuMu_AllSyst_HT, bonly
+      2017_MuMu_AllSyst_HT, splusb
+      2017_ElEl_AllSyst_HT, prefit
+      2017_ElEl_AllSyst_HT, bonly
+      2017_ElEl_AllSyst_HT, splusb
+      2018_ElMu_AllSyst_HT, prefit
+      2018_ElMu_AllSyst_HT, bonly
+      2018_ElMu_AllSyst_HT, splusb
+      2018_MuMu_AllSyst_HT, prefit
+      2018_MuMu_AllSyst_HT, bonly
+      2018_MuMu_AllSyst_HT, splusb
+      2018_ElEl_AllSyst_HT, prefit
+      2018_ElEl_AllSyst_HT, bonly
+      2018_ElEl_AllSyst_HT, splusb
+)
