@@ -19,6 +19,7 @@ import uuid
 from tqdm import tqdm
 from FourTopNAOD.RDF.tools.toolbox import get_number_of_labels, load_yaml_cards, write_yaml_cards, configure_template_systematics, configure_template_systematics_dict
 from FourTopNAOD.RDF.combine.templating import write_combine_cards
+from FourTopNAOD.RDF.analyzer.posthist import make_QCDScales_with_rate_tttt, make_QCDScales_envelopes #, make_envelope_hists
 # from ruamel.yaml import YAML
 from IPython.display import Image, display, SVG
 
@@ -1393,13 +1394,36 @@ def json_loads_byteified(json_text):
 #     # if it's anything else, return it in its original form
 #     return data
 
-def uproot_hist_hist2array(pyroot_obj, flow=True):
+def uproot_hist_hist2array(pyroot_obj, flow=True, edges=False):
     intermediate = uproot.pyroot.from_pyroot(pyroot_obj).to_hist()
-    return np.copy(intermediate.values(flow=flow)), [np.copy(axis.edges) for axis in intermediate.axes]
+    if edges:
+        return np.copy(intermediate.values(flow=flow)), [np.copy(axis.edges) for axis in intermediate.axes]
+    else:
+        return np.copy(intermediate.values(flow=flow))
 
-def root_numpy_hist2array(pyroot_obj, flow=True):
+def root_numpy_hist2array(pyroot_obj, flow=True, edges=False):
     vals, edgesTup = root_numpy.hist2array(pyroot_obj, include_overflow=flow, copy=True, return_edges=True)
-    return vals, edgesTup
+    if edges:
+        return vals, edgesTup
+    else:
+        return vals
+
+def root_numpy_array2hist(array, pyroot_obj):
+    root_numpy.array2hist(array2hist, pyroot_obj)
+    return None    
+
+def pythonization_hist2array(pyroot_obj, flow=True, edges=False):
+    vals = pyroot_obj.values(flow=flow)
+    if edges:
+        edgesTup = [np.array([pyroot_obj.GetBinLowEdge(x) for x in range(1, pyroot_obj.GetXaxis().GetNbins()+2)])]
+        return vals, edgesTup
+    else:
+        return edges
+
+def pythonization_array2hist(array, pyroot_obj):
+    pyroot_obj[...] = array
+    # pyroot_obj.set_values(array)
+    return None
 
 def pyroot_hist2array(pyroot_obj, flow=True):
     if not isinstance(pyroot_obj, (ROOT.TH1, ROOT.TProfile)):
@@ -1412,32 +1436,22 @@ def pyroot_hist2array(pyroot_obj, flow=True):
         if x > 0 and x < pyroot_obj.GetXaxis().GetNbins()+2:
             edges.append(pyroot_obj.GetBinLowEdge(x))
     return np.array(vals), [np.array(edges)]
-    
-try:
-    import root_numpy
-    wrapped_hist2array = root_numpy_hist2array
-except:
-    try:
-        import uproot
-        wrapped_hist2array = uproot_hist_hist2array
-    except:
-        wrapped_hist2array = pyroot_hist2array
 
-#prototyping the array2hist construction... but is it necessary?
-# h6 = Hist(hist.axis.Variable(root_numpy.hist2array(h3, return_edges=True)[1][0], label="x", flow=True))
-# >>> h6.view()[:] = root_numpy.hist2array(h3, return_edges=True, include_overflow=True)[0]
-# Traceback (most recent call last):
-#   File "<stdin>", line 1, in <module>
-# ValueError: could not broadcast input array from shape (7) into shape (5)
-# >>> h6.view(flow=True)[:] = root_numpy.hist2array(h3, return_edges=True, include_overflow=True)[0]
-# >>> h6
-# Hist(Variable([0, 1, 2, 3, 4, 5]), storage=Double()) # Sum: 1000.0
-# >>> hs.values(flow=True)
-# Traceback (most recent call last):
-#   File "<stdin>", line 1, in <module>
-# NameError: name 'hs' is not defined
-# >>> h6.values(flow=True)
-# array([  0., 692., 253.,  51.,   3.,   1.,   0.])
+try:
+    from FourTopNAOD.RDF.tools.histogram_pythonization import * #Load pythonization for TH*
+    wrapped_hist2array = pythonization_hist2array
+    wrapped_array2hist = pythonization_array2hist
+except:    
+    try:
+        import root_numpy
+        wrapped_hist2array = root_numpy_hist2array
+        wrapped_array2hist = root_numpy_array2hist
+    except:
+        try:
+            import uproot
+            wrapped_hist2array = uproot_hist_hist2array
+        except:
+            wrapped_hist2array = pyroot_hist2array
 
 def cartesianProductList(name_format="$NUM_$LET_$SYM", name_tuples=[("$NUM", ["1", "2"]), ("$LET", ["A", "B", "C"]), ("$SYM", ["*", "@"])]):
     """Take as input a string <name_format> and list of tuples <name_tuple> where a cartesian product of the tuples is formed.
@@ -2520,7 +2534,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     if "data" in supercategory.lower(): continue
                     histoArrays = [(scHisto.GetBinErrorLow(x), scHisto.GetBinErrorUp(x)) for x in range(nBins + 2)]
                     histDrawSystematicNom[pn][supercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematic_" + "nom")
-                    npNominal[pn][supercategory], edgesTuple = wrapped_hist2array(scHisto, flow=True)
+                    npNominal[pn][supercategory], edgesTuple = wrapped_hist2array(scHisto, flow=True, edges=True)
                     # npValues[pn][supercategory] = np.zeros((nSysts + 2, nBins + 2), dtype=float)
                     npValues[pn][supercategory] = npNominal[pn][supercategory].reshape((1,nBins+2)) * np.ones_like(1.0, shape=(nSysts + 2, nBins + 2), dtype=float)
                     #npAddInQuads, npEnvelopes, npMasks contains various arrays for only getting positive entries, negative entries
@@ -2547,7 +2561,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     if "data" in category.lower(): continue
                     histoArrays = [(catHisto.GetBinErrorLow(x), catHisto.GetBinErrorUp(x)) for x in range(nBins + 2)]
                     #### histDrawSystematicNom[pn][category] = catHisto.Clone(catHisto.GetName() + "_drawSystematic_" + "nom")
-                    npNominal[pn][category], edgesTuple = wrapped_hist2array(catHisto, flow=True)
+                    npNominal[pn][category], edgesTuple = wrapped_hist2array(catHisto, flow=True, edges=True)
                     npValues[pn][category] = npNominal[pn][category].reshape((1,nBins+2)) * np.ones_like(1.0, shape=(nSysts + 2, nBins + 2), dtype=float)
                     npAddInQuads[pn][category] = dict()
                     npEnvelopes[pn][category] = dict()
@@ -2668,7 +2682,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                                 if categoryorsupercategory not in eA_CD:
                                     eA_CD[categoryorsupercategory] = scHisto.Clone(separator.join(scHisto.GetName().split(separator)[:-1] + [envelopeAs + "Down"]))
                                     eA_CD[categoryorsupercategory].Reset("ICESM")
-                        npValues[pn][categoryorsupercategory][nSyst, :], _ = wrapped_hist2array(scHisto, flow=True)
+                        npValues[pn][categoryorsupercategory][nSyst, :] = wrapped_hist2array(scHisto, flow=True)
                         if categoryorsupercategory in CanCache["subplots/supercategories/systematics"][syst][pn]['Supercategories/hists']:
                             if drawSystematic == syst.replace("Up", ""):
                                 histDrawSystematicUp[pn][categoryorsupercategory] = scHisto.Clone(scHisto.GetName() + "_drawSystematic_" + syst)
@@ -2738,21 +2752,14 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             histUp = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Up"][pn]['Supercategories/hists'][categoryorsupercategory]
                         elif categoryorsupercategory in CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Up"][pn]['Categories/hists']:
                             histUp = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Up"][pn]['Categories/hists'][categoryorsupercategory]
-                        # pdb.set_trace()
-                        # histUpTest = histUp.Clone() # TEST
-                        # _, edgesTest = wrapped_hist2array(histUpTest, flow=True)
-                        # edgesTest = np.asarray(edgesTest)
-                        # binCentersTest = (edgesTest[1:] + edgesTest[:-1])/2
-                        # histUpTest.FillN(len(differenceUp), binCentersTest, differenceUp + npNominal[pn][categoryorsupercategory])
-                        # histUpTest.ResetStats()
-                        _ = root_numpy.array2hist(differenceUp + npNominal[pn][categoryorsupercategory], histUp)
+                        _ = wrapped_array2hist(differenceUp + npNominal[pn][categoryorsupercategory], histUp)
                         histUp.ResetStats()
                         histDown = None
                         if categoryorsupercategory in CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Down"][pn]['Supercategories/hists']:
                             histDown = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Down"][pn]['Supercategories/hists'][categoryorsupercategory]
                         elif categoryorsupercategory in CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Down"][pn]['Categories/hists']:
                             histDown = CanCache["subplots/supercategories/systematics"][addInQuadratureAs + "Down"][pn]['Categories/hists'][categoryorsupercategory]
-                        _ = root_numpy.array2hist(differenceDown + npNominal[pn][categoryorsupercategory], histDown)
+                        _ = wrapped_array2hist(differenceDown + npNominal[pn][categoryorsupercategory], histDown)
                         histDown.ResetStats()
                     for envelopeAs, mask in npEnvelopes[pn][categoryorsupercategory].items():
                         differenceUp = np.max(npDifferences[pn][categoryorsupercategory], 
@@ -2770,14 +2777,14 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                             histUp = CanCache["subplots/supercategories/systematics"][envelopeAs + "Up"][pn]['Supercategories/hists'][categoryorsupercategory]
                         elif categoryorsupercategory in CanCache["subplots/supercategories/systematics"][envelopeAs + "Up"][pn]['Categories/hists']:
                             histUp = CanCache["subplots/supercategories/systematics"][envelopeAs + "Up"][pn]['Categories/hists'][categoryorsupercategory]
-                        _ = root_numpy.array2hist(differenceUp + npNominal[pn][categoryorsupercategory], histUp)
+                        _ = wrapped_array2hist(differenceUp + npNominal[pn][categoryorsupercategory], histUp)
                         histUp.ResetStats()
                         histDown = None
                         if categoryorsupercategory in CanCache["subplots/supercategories/systematics"][envelopeAs + "Down"][pn]['Supercategories/hists']:
                             histDown = CanCache["subplots/supercategories/systematics"][envelopeAs + "Down"][pn]['Supercategories/hists'][categoryorsupercategory]
                         elif categoryorsupercategory in CanCache["subplots/supercategories/systematics"][envelopeAs + "Down"][pn]['Categories/hists']:
                             histDown = CanCache["subplots/supercategories/systematics"][envelopeAs + "Down"][pn]['Categories/hists'][categoryorsupercategory]
-                        _ = root_numpy.array2hist(differenceDown + npNominal[pn][categoryorsupercategory], histDown)
+                        _ = wrapped_array2hist(differenceDown + npNominal[pn][categoryorsupercategory], histDown)
                         histDown.ResetStats()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors'] = dict()
             CanCache["subplots/supercategories"][pn]['Supercategories/statErrors/ratio'] = dict()
@@ -3432,7 +3439,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                     #Remove negative weight bins if the option is selected
                     normalizationDict[combHist.GetName()] = combHist.Integral()
                     if removeNegativeBins:
-                        negativeBins = np.nonzero(wrapped_hist2array(hist, flow=True)[0] < 0)[0]
+                        negativeBins = np.nonzero(wrapped_hist2array(hist, flow=True) < 0)[0]
                         for bin in negativeBins:
                             combHist.SetBinContent(int(bin), 0)
                             combHist.SetBinError(int(bin), 0)
@@ -3484,7 +3491,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                         #Remove negative weight bins if the option is selected
                         systIntegral = combHist.Integral()
                         if removeNegativeBins:
-                            negativeBins = np.nonzero(wrapped_hist2array(combHist, flow=True)[0] < 0)[0]
+                            negativeBins = np.nonzero(wrapped_hist2array(combHist, flow=True) < 0)[0]
                             for bin in negativeBins:
                                 combHist.SetBinContent(int(bin), 0)
                                 combHist.SetBinError(int(bin), 0)
