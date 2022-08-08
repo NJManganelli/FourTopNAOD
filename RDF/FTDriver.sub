@@ -1,6 +1,6 @@
 executable = FTDriver.sh
 Proxy_path = /afs/cern.ch/user/n/nmangane/private/x509up
-num_cores = 4
+num_cores = 8
 #           Proxy_Path    ProcessID Number_Cores Stage    Year   Channel    Sample    Variables  Categories AnalysisDir(w/o era) BtagAlgo JetPUId
 # No Defaults:                                   stage=                               var_set=   cat_set=   analysis_dir_base=
 # Example usage: condor_submit FTDriver.sub stage=fill-combine var_set=Control cat_set=3pBnJet4p analysis_dir_base=/eos/user/n/nmangane/analysis/April24_jes_reduced  (_${era} is automatically appended)
@@ -19,7 +19,8 @@ RequestCpus = $(num_cores)
 # tomorrow     = 1 day
 # testmatch    = 3 days
 # nextweek     = 1 week
-+JobFlavour = "longlunch"
+# +JobFlavour = "longlunch"
++JobFlavour = "workday"
 
 # Send the job to Held state on failure.
 on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
