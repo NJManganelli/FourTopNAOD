@@ -1418,7 +1418,7 @@ def pythonization_hist2array(pyroot_obj, flow=True, edges=False):
         edgesTup = [np.array([pyroot_obj.GetBinLowEdge(x) for x in range(1, pyroot_obj.GetXaxis().GetNbins()+2)])]
         return vals, edgesTup
     else:
-        return edges
+        return vals
 
 def pythonization_array2hist(array, pyroot_obj):
     pyroot_obj[...] = array
