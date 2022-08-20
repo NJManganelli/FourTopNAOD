@@ -5,7 +5,6 @@ cd /eos/home-n/nmangane/CMSSW/CMSSW_10_2_22/src
 export SCRAM_ARCH=slc7_amd64_gcc700
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 eval `scramv1 runtime -sh`
-# cd to analysis_dir_base /afs/cern.ch/user/n/nmangane/private/April24_envelopedWithRate_RunII/Combine/
 analysis_dir_base=$2
 fitcard=$3
 card=$4
