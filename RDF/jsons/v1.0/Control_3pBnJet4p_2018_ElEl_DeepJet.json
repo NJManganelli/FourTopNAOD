@@ -561,7 +561,6 @@
         "Yaxis": null,
         "Rebin": 5,
         "Files": "2018___Control___3pBnJet4p.root",
-	"SetRangeUser": [-0.05, 0.50],
         "Projection": null,
         "Unblind": false
     },
@@ -710,7 +709,6 @@
         "Yaxis": null,
         "Rebin": 5,
         "Files": "2018___Control___3pBnJet4p.root",
-	"SetRangeUser": [-0.05, 0.50],
         "Projection": null,
         "Unblind": false
     },

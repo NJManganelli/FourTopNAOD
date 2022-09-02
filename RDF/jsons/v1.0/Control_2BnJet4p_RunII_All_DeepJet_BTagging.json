@@ -191,7 +191,6 @@
         "Yaxis": null,
         "Rebin": 5,
         "Files": "RunII___Control___2BnJet4p.root",
-	"SetRangeUser": [-0.05, 0.50],
         "Projection": null,
         "Unblind": false
     },
@@ -266,7 +265,6 @@
         "Yaxis": null,
         "Rebin": 5,
         "Files": "RunII___Control___2BnJet4p.root",
-	"SetRangeUser": [-0.05, 0.50],
         "Projection": null,
         "Unblind": false
     },
