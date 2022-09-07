@@ -6,7 +6,7 @@
             "Signal": {
                 "Draw": "HIST", 
                 "Names": [
-                    "t#bar{t}t#bar{t}"
+                    "tttt"
                 ], 
                 "Stack": true
             },
@@ -20,11 +20,11 @@
             "Background": {
                 "Draw": "HIST", 
                 "Names": [
-                    "t#bar{t} + b#bar{b}", 
-		    "t#bar{t} + !b#bar{b}",
-                    "t#bar{t} + H", 
-                    "t#bar{t} + V", 
-                    "t#bar{t} + rare", 
+                    "tt + bb", 
+		    "tt + !bb",
+                    "tt + H", 
+                    "tt + V", 
+                    "tt + rare", 
                     "EWK", 
                     "QCD"
                 ], 
@@ -50,7 +50,7 @@
             0.8
         ], 
         "Categories": {
-            "t#bar{t} + H": {
+            "tt + H": {
                 "Color": "#163d4e", 
                 "Style": "Fill", 
                 "Names": [
@@ -68,7 +68,7 @@
                     "2018___ttH_DL-bb___ElEl___ZWindowMET0p0Width15p0"
                 ]
             }, 
-            "t#bar{t}t#bar{t}": {
+            "tttt": {
                 "Color": "#a1794a", 
                 "Style": "Fill", 
                 "Names": [
@@ -80,7 +80,7 @@
                     "2018___tttt___ElEl___ZWindowMET0p0Width15p0"
                 ]
             }, 
-            "t#bar{t} + V": {
+            "tt + V": {
                 "Color": "#54792f", 
                 "Style": "Fill", 
                 "Names": [
@@ -348,7 +348,7 @@
                     "2018___Mu_D___ElEl___ZWindowMET0p0Width15p0"
                 ]
             }, 
-            "t#bar{t} + b#bar{b}": {
+            "tt + bb": {
                 "Color": "#d3eeef", 
                 "Style": "Fill", 
                 "Names": [
@@ -396,7 +396,7 @@
                     "2018___ttbb_SL-GF_fr___ElEl___ZWindowMET0p0Width15p0"
                 ]
             }, 
-            "t#bar{t} + !b#bar{b}": {
+            "tt + !bb": {
                 "Color": "#cf9ddb", 
                 "Style": "Fill", 
                 "Names": [
@@ -510,7 +510,7 @@
                     "2018___QCD_HT2000___ElEl___ZWindowMET0p0Width15p0"
                 ]
             }, 
-            "t#bar{t} + rare": {
+            "tt + rare": {
                 "Color": "#1a142f", 
                 "Style": "Fill", 
                 "Names": [

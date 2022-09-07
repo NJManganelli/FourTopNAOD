@@ -2428,7 +2428,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         #generate the header and label for the canvas, adding them in the cache as 'cms_label' and 'cms_header'
         header = can_dict.get("Header", legendConfig.get("Header", "{lumi} fb^{{-1}} (13 TeV)"))
         header_position = can_dict.get("HeaderPosition", legendConfig.get("HeaderPosition", 0.063))
-        label = can_dict.get("Label", legendConfig.get("Label", "#bf{CMS} #it{Preliminary Supplementary}"))
+        label = can_dict.get("Label", legendConfig.get("Label", "#bf{CMS} #it{Preliminary}"))
         label_position = can_dict.get("LabelPosition", legendConfig.get("LabelPosition", 0.05))        
         histDrawSystematicNom = []
         histDrawSystematicUp = []
@@ -2889,6 +2889,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 # handle['Supercategories/statSystematicErrors'][supercategory].SetFillStyle(3144)
                 handle['Supercategories/statSystematicErrors'][supercategory].SetFillColorAlpha(ROOT.kBlack, 0.5)
                 handle['Supercategories/statSystematicErrors'][supercategory].SetLineColorAlpha(ROOT.kBlack, 0.5)
+                CanCache["subplots/maxima"].append(handle['Supercategories/statSystematicErrors'][supercategory].GetMaximum())
                 handle['Supercategories/statSystematicErrors/ratio'][supercategory] = ROOT.TGraphAsymmErrors(nBins + 2, 
                                                                                                              npBinCenters[pn][supercategory],
                                                                                                              np.divide(npNominal[pn][supercategory],
@@ -2932,8 +2933,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             #Get the maxima and minima, I don't care about efficiency anymore
             thisMax = 0
             thisMin = 10000 #inverted start
-            for super_cat_name, drawable in sorted(CanCache["subplots/supercategories"][pn]["Supercategories"].items(), 
-                                                   key=lambda x: legendConfig["Supercategories"][x[0]]["Stack"], reverse=True):
+            sorted_drawables = sorted(CanCache["subplots/supercategories"][pn]["Supercategories"].items(),
+                                      key=lambda x: legendConfig["Supercategories"][x[0]]["Stack"], reverse=True)
+            for super_cat_name, drawable in sorted_drawables:
                 #Blinding is done via the keyword "BLIND" insterted into the supercategory histogram name, propragated up from the addHists method, etc. 
                 if "data" in super_cat_name.lower() and "blind" in drawable.GetName().lower() and subplot_dict.get("Unblind", False) == False:
                     thisStrIntegral = "(blind)"
@@ -2959,8 +2961,9 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
             # for drawVariation in ["complete"]:
             #Do nasty in-place sorting of the dictionary to get the Stacks drawn first, by getting the key from each key-value pair and getting the "Stack" field value,
             #from the legendConfig, recalling we need the key part of the tuple (tuple[0]) with a reverse to put the Stack == True items up front...
-            for super_cat_name, drawable in sorted(CanCache["subplots/supercategories"][pn]["Supercategories"].items(), 
-                                                   key=lambda x: legendConfig["Supercategories"][x[0]]["Stack"], reverse=True):
+            sorted_drawables = sorted(CanCache["subplots/supercategories"][pn]["Supercategories"].items(), 
+                                                   key=lambda x: legendConfig["Supercategories"][x[0]]["Stack"], reverse=True)
+            for super_cat_name, drawable in sorted_drawables:
                 #Don't draw blinded data...
                 if "data" in super_cat_name.lower() and "blind" in drawable.GetName().lower() and subplot_dict.get("Unblind", False) == False:
                     if isinstance(drawable, ROOT.TH1):
@@ -3109,6 +3112,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 if doLogY:
                     if nXPads == 1:
                         CanCache["subplots/supercategories"][0]["Legend"].Draw()
+                        # CanCache["canvas/upperPads"][pn].BuildLegend()
                     else:
                         if pn == 0:    
                             CanCache["subplots/supercategories"][0]["Legend2"].Draw()
@@ -3117,6 +3121,7 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
                 else:
                     if nXPads == 1:
                         CanCache["subplots/supercategories"][0]["Legend"].Draw()
+                        # CanCache["canvas/upperPads"][pn].BuildLegend()
                     else:
                         if pn == nXPads - 2:
                             CanCache["subplots/supercategories"][0]["Legend1"].Draw()

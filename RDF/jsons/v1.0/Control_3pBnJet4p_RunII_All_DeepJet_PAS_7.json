@@ -49,7 +49,7 @@
     },
     "Canvas_nMediumDeepJetB3p_MTofMETandMu": {
         "Type": "CanvasConfig",
-        "Title": "MT(MET,#mu) (3+ DeepJet b tags)",
+        "Title": "M_{T} (MET,#mu) (3+ DeepJet b tags)",
         "Margins": [
             0.1,
             0.1,
@@ -67,7 +67,7 @@
         "Rebin": null,
         "XPixels": 1200,
         "YPixels": 1000,
-        "XAxisTitle": "MT(MET,#mu) (GeV)",
+        "XAxisTitle": "M_{T} (MET,#mu) (GeV)",
         "YAxisTitle": "Events / bin",
         "Projection": null,
         "DoRatio": true,
