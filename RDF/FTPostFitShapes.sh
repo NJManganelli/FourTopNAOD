@@ -26,8 +26,8 @@ if [ $type = "prefit" ]; then
     PostFitShapesFromWorkspace -d ${card}.txt -w ${rfile} -o ${card}_shapes_prefit.root -m 690
 fi
 if [ $type = "bonly" ]; then
-    PostFitShapesFromWorkspace -d ${card}.txt -w ${rfile} -o ${card}_shapes_bonly.root -m 690 --sampling --print --skip-prefit --postfit --samples 500 --covariance -f $fitcard/fitDiagnostics_${fitcard}_rMin-100_rMax100_strategy0_fitTolerance0p1_signal0_robustHesse.root:fit_b
+    PostFitShapesFromWorkspace -d ${card}.txt -w ${rfile} -o ${card}_shapes_bonly.root -m 690 --sampling --print --skip-prefit --postfit --samples 500 --covariance -f $fitcard/fitDiagnostics_${fitcard}_rMin-100_rMax100_strategy0_fitTolerance0p1_signal1_robustHesse.root:fit_b
 fi
 if [ $type = "splusb" ]; then
-    PostFitShapesFromWorkspace -d ${card}.txt -w ${rfile} -o ${card}_shapes_splusb.root -m 690 --sampling --print --skip-prefit --postfit --samples 500 --covariance -f RunII_AllChan_AllSyst_HT/fitDiagnostics_${fitcard}_rMin-100_rMax100_strategy0_fitTolerance0p1_signal1_robustHesse.root:fit_s
+    PostFitShapesFromWorkspace -d ${card}.txt -w ${rfile} -o ${card}_shapes_splusb.root -m 690 --sampling --print --skip-prefit --postfit --samples 500 --covariance -f $fitcard/fitDiagnostics_${fitcard}_rMin-100_rMax100_strategy0_fitTolerance0p1_signal1_robustHesse.root:fit_s
 fi
