@@ -284,10 +284,12 @@ for category_key in tds:
     category_summary[category][proc] = 0
     category_summary_errors[category][proc] = 0
 
-y = make_yield_summary(category_summary, category_summary_errors, total_categories, "2022August21_Baseline_OSDL_postfit_yields.root")
-x = make_s_sqrt_splusb_plots(all_bins, all_bin_errors, total_bins, "2022August21_Baseline_OSDL_s_over_sqrtsplusb.root")
+yields_filename="2022August21_Baseline_OSDL_postfit_yields.root"
+s_sqrt_splusb_filename="2022August21_Baseline_OSDL_s_over_sqrtsplusb.root"
+y = make_yield_summary(category_summary, category_summary_errors, total_categories, yields_filename)
+x = make_s_sqrt_splusb_plots(all_bins, all_bin_errors, total_bins, s_sqrt_splusb_filename)
 
-f = ROOT.TFile.Open("junktest.root", "read")
+f = ROOT.TFile.Open(yields_filename, "read")
 c = ROOT.TCanvas()
 h1 = f.OSDL_all_yields.ttbb
 h1.SetFillColor(ROOT.kGreen)
