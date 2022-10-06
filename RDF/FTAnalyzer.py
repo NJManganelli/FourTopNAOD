@@ -1659,6 +1659,7 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
          testVariables=False, categorySet="5x3", variableSet="HTOnly", variableList=None, systematicSet="All", nThreads=8,
          redirector=None, recreateFileList=False, doRDFReport=False, options=None
      ):
+    _x = None #Hack!
     ########################################################
     ########################################################
     ### Override variableSet if variableList is not None ###
@@ -2371,6 +2372,16 @@ def main(analysisDir, sampleCards, source, channel, bTagger, systematicCards, Tr
                                                useDeltaR=useDeltaR,
                                                verbose=verbose,
                                               )
+                if options.print_events and vals["isData"]:
+                    the_df[name][lvl] = the_df[name][lvl]\
+                        .Define("_eventPrinter", 
+                                'if(nFTAJet__nom >= 8 && nMediumDeepJetB__nom >= 4){'\
+                                'std::cout << "TTTTCANDIDATEEVENT,' + vals["era"] + ',' + name + '," << run'\
+                                '<< "," << event << "," << luminosityBlock << "," <<'\
+                                'Sum(Take(FTAJet__nom_DeepJetB_sorted, 4)) << ","'\
+                                '<< Mean(Take(FTAJet__nom_DeepJetB_sorted, 4)) << std::endl; return 0;}'\
+                                'return -1;')
+                    _x = the_df[name][lvl].Sum("_eventPrinter")
                 if testVariables:
                     skipTestVariables += testVariableProcessing(the_df[name][lvl], nodes=False, searchMode=True, skipColumns=skipTestVariables,
                                                                 allowedTypes=['int','double','ROOT::VecOps::RVec<int>','float','ROOT::VecOps::RVec<float>','bool'])
@@ -2896,6 +2907,8 @@ if __name__ == '__main__':
                         help='Switch to the multidimensional categorized histograms (supports HTOnly atm)')
     parser.add_argument('--save_graph', dest='save_graph', action='store_true',
                         help='Save a .dot file of the Computation Graph, viewable via os.system(f"dot -Tpdf graph.dot > graph.pdf")')
+    parser.add_argument('--print_events', dest='print_events', action='store_true',
+                        help='Print events with 4+ b-tags and 8+ jets for Event Displays, including some additional info to help rank the events.')
 
     #Parse the arguments
     args = parser.parse_args()
