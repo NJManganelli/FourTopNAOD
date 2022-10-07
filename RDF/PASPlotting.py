@@ -3699,7 +3699,7 @@ if __name__ == '__main__':
                         help='If --combineInputList is active as well, write out combine card templates')
     parser.add_argument('-d', '--analysisDirectory', dest='analysisDirectory', action='store', type=str, default="/eos/user/$U/$USER/analysis/$DATE",
                         help='analysis directory where btagging yields, histograms, etc. are stored')
-    parser.add_argument('-f', '--formats', dest='formats', action='store', choices=['pdf', 'C', 'png'], nargs="*",
+    parser.add_argument('-f', '--formats', dest='formats', action='store', choices=['pdf', 'C', 'png'], nargs="*", default=[],
                         help='Formats to save plots as, supporting subset of ROOT SaveAs() formats: pdf, C macro, png')
     parser.add_argument('--json', '-p', '--plotCard', dest='plotCard', action='store', type=str, default="$ADIR/Histograms/All/plots.json",
                         help='input plotting configuration, defaulting to "$ADIR/Histograms/All/plots.json"')
