@@ -48,7 +48,7 @@ def main(analysisDirectory, era, channel, variable, verbose=False):
         print("Categories: {}".format(categories))
         print("Variables: {}".format(variables))
     print("Systematics: {}".format(systematics))
-    output_file = ROOT.TFile.Open("testtest.root", "update")
+    output_file = ROOT.TFile.Open("prefit___" + histogramFile.split("/")[-1], "recreate")
     for category in categories:
         c_keys = [key for key in keys if category in key]
         for variable in variables:
@@ -94,12 +94,15 @@ def main(analysisDirectory, era, channel, variable, verbose=False):
             if hkey in ["tttt"]:
                 if TotalSig is None:
                     TotalSig = histo.Clone("TotalSig")
+            if hkey in ["data_obs"]:
+                continue
             else:
                 if TotalBkg is None:
                     TotalBkg = histo.Clone("TotalBkg")
                 else:
                     TotalBkg.Add(histo)
         TotalProcs = TotalSig.Clone("TotalProcs")
+        TotalProcs.Add(TotalBkg)
         TotalSig.Write()
         TotalBkg.Write()
         TotalProcs.Write()

@@ -3529,7 +3529,13 @@ def loopPlottingJSON(inputJSON, era=None, channel=None, systematicCards=None, Ca
         combHistogramsFinal[processName] = dict([(h.GetName(), h) for h in combHistograms[processName]])
     if combineOutput is not None:
         for can_var in combineInputList:
-            print("Opening file for combine input templates: {}".format(combineOutput))
+            matching_histos = 0
+            for temp_d in combHistogramsFinal.values():
+                for temp_name in temp_d.keys():
+                    if can_var == temp_name.split("___")[2]:
+                        matching_histos += 1
+            if matching_histos < 1:
+                continue
             combFile = ROOT.TFile.Open(combineOutput.replace("$VAR", can_var), "recreate")
             combCounts = dict()
             print("Writing histograms to {}".format(combineOutput.replace("$VAR", can_var)))
