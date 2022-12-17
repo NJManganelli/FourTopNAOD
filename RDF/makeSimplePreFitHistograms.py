@@ -18,7 +18,7 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 ROOT.gROOT.SetBatch(True)
 
-def main(analysisDirectory, era, channel, variable, verbose=False):
+def main(analysisDirectory, era, channel, variable, verbose=0):
     categoriesOfInterest = ['HT500_nMediumDeepJetB2_nJet4', 'HT500_nMediumDeepJetB2_nJet5', 'HT500_nMediumDeepJetB2_nJet6',
                             'HT500_nMediumDeepJetB2_nJet7', 'HT500_nMediumDeepJetB2_nJet8+',
                             'HT500_nMediumDeepJetB3_nJet4', 'HT500_nMediumDeepJetB3_nJet5', 'HT500_nMediumDeepJetB3_nJet6',
@@ -43,31 +43,34 @@ def main(analysisDirectory, era, channel, variable, verbose=False):
 
     supportedTypes = (ROOT.TH1) #, ROOT.TH2, ROOT.TH3)
 
-    if verbose:
+    if verbose > 0:
         print("Processes: {}".format(processes))
         print("Categories: {}".format(categories))
         print("Variables: {}".format(variables))
-    print("Systematics: {}".format(systematics))
+        print("Systematics: {}".format(systematics))
     output_file = ROOT.TFile.Open("prefit___" + histogramFile.split("/")[-1], "recreate")
     for category in categories:
+        # filter for category
         c_keys = [key for key in keys if category in key]
         for variable in variables:
             dir_name = category + "___" + variable
             output_file.mkdir(dir_name)
             for process in processes:
-                s_keys = [key for key in c_keys if key.startswith(process)]
+                # filter for process and variable, only varying in systematics
+                s_keys = [key for key in c_keys if key.startswith(process) and variable in key]
                 central_histo = f.Get("___".join([process, category, variable, "nom"]))
                 if process == "data_obs":
                     final_histo = central_histo.Clone(central_histo.GetName().replace("___nom", "___TotalWithError"))
                 else:
-                    v_keys = [key for key in c_keys if variable in key and not key.endswith("___nom")]
+                    v_keys = [key for key in s_keys if not key.endswith("___nom")]
                     syst_histos = [f.Get(key) for key in v_keys] + get_xsec_histogram(central_histo, process) + get_lumi_histogram(central_histo, process, era)
                     n_before = len(syst_histos)
                     syst_histos = [h for h in syst_histos if isinstance(h, supportedTypes)]
                     n_after = len(syst_histos)
                     if n_after > n_before:
                         print(process, category, variable, n_after, n_before)
-                    final_histo = compute_quadrature_naive(syst_histos, central_histo)
+                    print(category, variable, process)
+                    final_histo = compute_quadrature_naive(syst_histos, central_histo, verbose=verbose)
                 final_histo.SetDirectory(0)
                 # write the histo
                 # current_dir = ROOT.gDirectory
@@ -91,11 +94,14 @@ def main(analysisDirectory, era, channel, variable, verbose=False):
         for hkey in hkeys:
             histo = curr_dir.Get(hkey)
             histo.SetDirectory(0)
+            # Signal
             if hkey in ["tttt"]:
                 if TotalSig is None:
                     TotalSig = histo.Clone("TotalSig")
-            if hkey in ["data_obs"]:
+            # Data
+            elif hkey in ["data_obs"]:
                 continue
+            # Background
             else:
                 if TotalBkg is None:
                     TotalBkg = histo.Clone("TotalBkg")
@@ -139,7 +145,9 @@ def get_xsec_histogram(histo, process):
         scales = [1, 1]
     else:
         raise ValueError(f"Process {process} not recognized for xsec scaling")
-    return [histo * scales[0], histo * scales[1]]
+    hUP = histo.Clone(histo.GetName().replace("___nom", "___xsecUp"))
+    hDOWN = histo.Clone(histo.GetName().replace("___nom", "___xsecDown"))
+    return [hUP * scales[0], hDOWN * scales[1]]
 
 def get_lumi_histogram(histo, process, era):
     # OSDL_2018_leptonSF                     lnN     1.03
@@ -162,34 +170,43 @@ def get_lumi_histogram(histo, process, era):
         scales = [lumi_2017, 1/lumi_2017]
     else:
         raise ValueError(f"Era {era} not recognized for lumi scaling")
-    return [histo * scales[0], histo * scales[1]]
+    hUP = histo.Clone(histo.GetName().replace("___nom", "___lumiUp"))
+    hDOWN = histo.Clone(histo.GetName().replace("___nom", "___lumiDown"))
+    return [hUP * scales[0], hDOWN * scales[1]]
 
-def compute_quadrature_naive(all_syst_histos, central_histo):
-    diff_histos = [histo - central_histo for histo in all_syst_histos]
+def compute_quadrature_naive(all_syst_histos, central_histo, verbose=0):
+    # diff_histos = [histo - central_histo for histo in all_syst_histos]
     #Add in quadrature all the negative and all the positive shifts, separately per bin, then symmetrize or take the absmax. 
     #Take the central histo for anything but data and add in quadrature this per-bin error (to keep the MC stat uncertainty)
 
     nbins = central_histo.GetNbinsX() + 2
     diff_up = [0] * nbins
     diff_down = [0] * nbins
-    for ndiff, diff_histo in enumerate(diff_histos):
+    # for ndiff, diff_histo in enumerate(diff_histos):
+    for ndiff, diff_histo in enumerate(all_syst_histos):
+        if verbose > 1:
+            print(ndiff, diff_histo.GetName(), diff_histo.Integral() - central_histo.Integral())
         for nbin in range(nbins):
             if ndiff == 0:
+                if verbose > 0:
+                    print("nbin, central, syst, bin_diff, sum(diff_up**2), sum(diff_down**2)")
                 diff_up[nbin] += central_histo.GetBinError(nbin)**2
                 diff_down[nbin] += central_histo.GetBinError(nbin)**2
-            bin_diff = diff_histo.GetBinContent(nbin)
+            # bin_diff = diff_histo.GetBinContent(nbin)
+            bin_diff = diff_histo.GetBinContent(nbin) - central_histo.GetBinContent(nbin)
             if bin_diff >= 0:
                 diff_up[nbin] += bin_diff**2
             else:
                 diff_down[nbin] += bin_diff**2
-    # quad_histo_syst = central_histo.Clone(central_histo.GetName().replace("___nom", "___TotalSystematic"))
+            if nbin == 5 and verbose > 0:
+                print( nbin, central_histo.GetBinContent(nbin), diff_histo.GetBinContent(nbin), bin_diff, diff_up[nbin], diff_down[nbin])
+
     quad_histo = central_histo.Clone(central_histo.GetName().replace("___nom", "___TotalWithError"))
     for nbin in range(nbins):
         diff_up[nbin] = math.sqrt(diff_up[nbin])
         diff_down[nbin] = math.sqrt(diff_down[nbin])
         quad_histo.SetBinContent(nbin, central_histo.GetBinContent(nbin))
         quad_histo.SetBinError(nbin, (diff_up[nbin] + diff_down[nbin]) / 2)
-    
     return quad_histo
 
 
